@@ -1,0 +1,46 @@
+The following Dublin Core metadata can be set for every document:
+
+    * Lang
+    * Title
+    * Subject
+    * Description
+    * Publisher
+    * Rights
+
+In addition MKDoc automatically generates the following Dublin Core metadata for documents:
+
+    * Identifier
+    * Creator
+    * Contributor
+    * Date Created
+    * Date Modified
+    * References
+    * Replaces
+
+http://dublincore.org/documents/dcmi-terms/
+http://dublincore.org/documents/dcmes-xml/
+
+Linking Internal
+
+* To a place /tickets/ or an object {xxxx}
+
+2 main workspaces
+Individual workspaces?
+
+content-live
+content-edit
+design
+system
+
+Requirement develop and test a whole new site section then
+publish in one go.
+
+Embargo
+Withdraw
+Timed Content
+
+Personalisation
+-- if you visited this page show this promo
+
+Tagging to relate content automatically
+-- via lucene?

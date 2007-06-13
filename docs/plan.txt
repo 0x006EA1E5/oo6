@@ -1,0 +1,13 @@
+Development Plan
+
+* Data stores
+* Security
+* Validation
+* Form handling
+* Pulbishing model
+* Service contracts and implementations
+* Interface v1
+* Event model
+* Import/Export with events
+* Scheduler
+* Reporting

@@ -1,0 +1,7 @@
+Interface
+
+Folder Main page
+ -> Default object
+ -> Recbently changed
+ -> Flagged/favourites
+ -> In progress

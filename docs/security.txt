@@ -1,0 +1,8 @@
+Security
+
+Users
+* username (usually email but not always)
+* password (not always...)
+
+JcrUserService
+HibernateUserService
