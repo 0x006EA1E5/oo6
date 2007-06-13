@@ -38,7 +38,7 @@ Anonamised
 NewsStory
 
 - title (string)
-- publishTime (date)
+- publishTime (time)
 - publishDate (date)
 - lastModified (timestamp)
 - content (text/html)
@@ -54,13 +54,25 @@ NewsStory
   - comment (text)
   - postedAt (timestamp)
   
-  
+<site:NewsStory>
+	<title type="string">
+	<title type="string">
+
+</site:NewsStory>
+
+
 Author
+
 -name (string)
 -age (number)
 
 ---------------------
 
+Notes:
+
+has_one : belongs_to  (1 to 1)
+has_many : belongs_to (n to 1)
+has_many_and_belong_to : has_many_and_belong_to (n to m)
 
 urlCode / titile / teaser
 name / label / description

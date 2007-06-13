@@ -1,20 +1,46 @@
 package org.otherobjects.cms.jcr;
 
-import static org.junit.Assert.fail;
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 
-import org.junit.Test;
+import junit.framework.TestCase;
 
-public class BeanCoderImplTest
+import org.otherobjects.cms.model.CmsNode;
+import org.otherobjects.cms.types.PropertyDef;
+import org.otherobjects.cms.types.TypeDef;
+import org.otherobjects.cms.types.TypeService;
+
+public class BeanCoderImplTest extends TestCase
 {
-    @Test
-    public void testConvertFromNode()
+    private TypeService types;
+    private BeanCoder beanCoder;
+    
+    @Override
+    public void setUp()
     {
-        fail("Not yet implemented");
+        types = new TypeService();
+        beanCoder = new BeanCoderImpl();
+        
+        TypeDef td = new TypeDef("site_NewsStory");
+        td.addProperty(new PropertyDef("title","string",null));
+        types.registerType(td);
     }
 
-    @Test
-    public void testConvertToNode()
+    public void testConvertFromNode()
     {
-        fail("Not yet implemented");
+    }
+
+    public void testConvertToNode() throws RepositoryException
+    {
+        CmsNode cNode = new CmsNode("site_NewsStory");
+        cNode.getData().put("title", "Story title");
+        Node node = beanCoder.convertToNode(cNode);
+        assertEquals("StoryTitle", node.getProperty("title"));
+    }
+
+    @Override
+    public void tearDown()
+    {
+
     }
 }

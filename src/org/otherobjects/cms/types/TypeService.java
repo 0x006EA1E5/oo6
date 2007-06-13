@@ -1,6 +1,5 @@
 package org.otherobjects.cms.types;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -27,14 +26,13 @@ public class TypeService
     private void registerFundamentalTypes()
     {
         TypeDef td = new TypeDef("oo_TypeDef");
-        td.getProperties().add(new PropertyDef("name","string",null));
-        td.getProperties().add(new PropertyDef("internal","boolean",null));
+        td.addProperty(new PropertyDef("name","string",null));
         registerType(td);
         
         TypeDef pd = new TypeDef("oo_PropertyDef");
-        pd.getProperties().add(new PropertyDef("name","string",null));
-        pd.getProperties().add(new PropertyDef("type","string",null));
-        pd.getProperties().add(new PropertyDef("relatedType","string",null));
+        pd.addProperty(new PropertyDef("name","string",null));
+        pd.addProperty(new PropertyDef("type","string",null));
+        pd.addProperty(new PropertyDef("relatedType","string",null));
         registerType(pd);
     }
 
@@ -57,15 +55,17 @@ public class TypeService
         return (Collection<TypeDef>) types.values();
     }
     
+    /*
     public Collection<TypeDef> getExternalTypes()
     {
         Collection<TypeDef> t = new ArrayList<TypeDef>();
         for(TypeDef td : (Collection<TypeDef>) types.values())
         {
-            if(!td.isInternal())
+            if(true)
                 t.add(td);
         }
         
         return t;
     }
+    */
 }

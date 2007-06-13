@@ -3,11 +3,13 @@ Development Plan
 * Data stores
 * Security
 * Validation
+* Query API
 * Form handling
 * Pulbishing model
 * Service contracts and implementations
 * Interface v1
 * Event model
+* Templating and tools API
 * Import/Export with events
 * Scheduler
 * Reporting

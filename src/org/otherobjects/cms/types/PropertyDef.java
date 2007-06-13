@@ -5,6 +5,15 @@ public class PropertyDef
     private String name;
     private String type;
     private String relatedType;
+    
+    /** Human friendly name for property. Can be inferred from name */
+    private String label;
+    
+    /** Description for this property. */
+    private String description;
+
+    /** Help text to assist choosing value for this property. */
+    private String help;
 
     public PropertyDef(String name, String propertyType, String relatedType)
     {

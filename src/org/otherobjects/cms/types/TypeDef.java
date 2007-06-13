@@ -4,14 +4,22 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-
 public class TypeDef
 {
-    private boolean internal = false;
+    /** The unique name for this type. */
     private String name;
-    private String validators;
-    private String javaClass;
+    
+    /** Collection of properties for this type. */
     private Map<String, PropertyDef> properties = new LinkedHashMap<String, PropertyDef>();
+
+    /** Human friendly name for type. Can be inferred from name */
+    private String label;
+
+    /** Description for this type. */
+    private String description;
+
+    /** Help text to assist choosing value for this type. */
+    private String help;
 
     public TypeDef(String name)
     {
@@ -37,35 +45,40 @@ public class TypeDef
     {
         return (Collection<PropertyDef>) properties.values();
     }
-
-    public String getJavaClass()
+    
+    public void addProperty(PropertyDef pd)
     {
-        return javaClass;
+        this.properties.put(pd.getName(), pd);
     }
 
-    public void setJavaClass(String javaClass)
+    public String getLabel()
     {
-        this.javaClass = javaClass;
+        return label;
     }
 
-    public String getValidators()
+    public void setLabel(String label)
     {
-        return validators;
+        this.label = label;
     }
 
-    public void setValidators(String validators)
+    public String getDescription()
     {
-        this.validators = validators;
+        return description;
     }
 
-    public boolean isInternal()
+    public void setDescription(String description)
     {
-        return internal;
+        this.description = description;
     }
 
-    public void setInternal(boolean internal)
+    public String getHelp()
     {
-        this.internal = internal;
+        return help;
+    }
+
+    public void setHelp(String help)
+    {
+        this.help = help;
     }
 
 }
