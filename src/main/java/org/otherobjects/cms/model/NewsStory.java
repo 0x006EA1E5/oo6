@@ -4,7 +4,7 @@ public class NewsStory
 {
     private String path;
     private String title;
-    private String cotent;
+    private String content;
 
     public String getPath()
     {
@@ -26,14 +26,14 @@ public class NewsStory
         this.title = title;
     }
 
-    public String getCotent()
+    public String getContent()
     {
-        return cotent;
+        return content;
     }
 
-    public void setCotent(String cotent)
+    public void setContent(String content)
     {
-        this.cotent = cotent;
+        this.content = content;
     }
 
 }

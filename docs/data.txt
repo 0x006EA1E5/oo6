@@ -4,6 +4,10 @@ Data stores
 * Validation for all stores
 * Transactional support across all supporting stores
 
+OCM
+
+http://incubator.apache.org/graffito/jcr-mapping/index.html
+
 CmsNode
 
 

@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jackrabbit-ocm PUBLIC "-//The Apache Software Foundation//DTD Repository//EN" "./configuration/jackrabbit-ocm.dtd">
 
 <jackrabbit-ocm>
 
-	<class-descriptor className="org.otherobjects.cms.model.NewsStory" jcrNodeType="nt:unstructured">
+	<class-descriptor className="org.otherobjects.cms.model.CmsNode" jcrNodeType="nt:unstructured">
+		<!-- 
+			<field-descriptor fieldName="id" uuid="true"/>
+		-->
 		<field-descriptor fieldName="path" path="true" />
-		<field-descriptor fieldName="title" jcrName="title" />
-		<field-descriptor fieldName="content" jcrName="content" />
+		<field-descriptor fieldName="data.title" jcrName="title" converter="org.apache.jackrabbit.ocm.persistence.atomictypeconverter.impl.StringTypeConverterImpl" />
+		<field-descriptor fieldName="data.content" jcrName="content" converter="org.apache.jackrabbit.ocm.persistence.atomictypeconverter.impl.StringTypeConverterImpl" />
 	</class-descriptor>
 
 </jackrabbit-ocm>
