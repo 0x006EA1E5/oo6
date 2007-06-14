@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jackrabbit-ocm>
+
+	<class-descriptor className="org.otherobjects.cms.model.NewsStory" jcrNodeType="nt:unstructured">
+		<field-descriptor fieldName="path" path="true" />
+		<field-descriptor fieldName="title" jcrName="title" />
+		<field-descriptor fieldName="content" jcrName="content" />
+	</class-descriptor>
+
+</jackrabbit-ocm>
