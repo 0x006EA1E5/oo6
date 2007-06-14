@@ -2,3 +2,5 @@ Coding Stadards
 
 Check Styple
 clipse plugins
+http://qalab.sourceforge.net/index.html
+Clover
