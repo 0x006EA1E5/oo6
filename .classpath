@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="tests/java"/>
+	<classpathentry exported="true" kind="var" path="CLOVER_RUNTIME"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/jcr-1.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jackrabbit"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/json"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
