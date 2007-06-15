@@ -1,6 +1,7 @@
 Development Plan
 
 * Data stores
+* Internationalisation and error handling
 * Security
 * Validation
 * Query API

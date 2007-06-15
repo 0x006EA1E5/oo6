@@ -4,6 +4,10 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.derby.impl.sql.compile.DateTypeCompiler;
+import org.apache.jackrabbit.ocm.persistence.atomictypeconverter.impl.Date2LongTypeConverterImpl;
+import org.apache.jackrabbit.ocm.persistence.atomictypeconverter.impl.StringTypeConverterImpl;
+
 
 /**
  * Maintain register of all data types definitions (TypeDef) in the system.
@@ -18,6 +22,15 @@ public class TypeService
 {
     private Map<String, TypeDef> types = new LinkedHashMap<String, TypeDef>();
 
+    private static TypeService instance;
+    
+    public static TypeService getInstance()
+    {
+        if(instance == null)
+            instance = new TypeService();
+        return instance;
+    }
+    
     public TypeService()
     {
         registerFundamentalTypes();
@@ -53,6 +66,14 @@ public class TypeService
     public Collection<TypeDef> getTypes()
     {
         return (Collection<TypeDef>) types.values();
+    }
+    
+    public Object getJcrConverter(String type)
+    {
+        if(type.equals("date"))
+            return new Date2LongTypeConverterImpl();
+        else
+            return new StringTypeConverterImpl();
     }
     
     /*

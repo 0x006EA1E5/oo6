@@ -1,34 +1,83 @@
 package org.otherobjects.cms.model;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import org.otherobjects.cms.types.TypeDef;
+import junit.framework.Assert;
 
+import org.apache.jackrabbit.ocm.persistence.collectionconverter.impl.ManagedHashMap;
+
+@SuppressWarnings("unchecked")
+/**
+ * A CmsNode object represents a data node in the content repository.
+ * 
+ * <p>A node can be uniquely identified in 2 ways: by a GUID or by the jcrPath
+ * (which is the concatenation of path and code).
+ * 
+ * <p>TODO Add support for description, icon and image generators
+ */
 public class CmsNode
 {
+    /** Property to be used an the label for this node. */
+    private static final String LABEL_KEY = "title";
+
     /** GUID */
     private String id;
 
-    /** The path of this node */
+    /** The path of this node's parent. Must end with a forward slash. */
     private String path;
 
-    /* System readable identifier eg filename */
+    /** System readable identifier eg filename */
     private String code;
 
     /* Human readable identifier */
-    private String label;
-
     /* Additional textual information about this item */
-    private String description;
+    /* Icon representing this node */
+    /* Image representing this node */
 
     /** The defining type for this node */
-    private TypeDef typeDef;
+    private String ooType;
 
-    private Map<String, Object> data = new HashMap<String, Object>();
+    private Map<String, Object> data = new ManagedHashMap();
 
     public CmsNode()
     {
+    }
+
+    /**
+     * Return the path of this node for use with JCR. The jcr path is comprised of
+     * the path and the code.
+     * 
+     * @return the jcr path
+     */
+    public String getJcrPath()
+    {
+        if (path == null || code == null)
+            return null;
+
+        Assert.assertTrue("Path must end with a forward slash", path.endsWith("/"));
+        return getPath() + getCode();
+    }
+
+    /**
+     * Sets the JCR path for this node. The path and code will be inferred form this.
+     * 
+     * @param jcrPath
+     */
+    public void setJcrPath(String jcrPath)
+    {
+        if (jcrPath == null)
+        {
+            setCode(null);
+            setPath(null);
+            return;
+        }
+        
+        Assert.assertTrue("jcrPath must contain at least one forward slash", jcrPath.lastIndexOf("/") >= 0);
+        Assert.assertFalse("jcrPath must not end with a forward slash", jcrPath.endsWith("/"));
+
+        int slashPos = jcrPath.lastIndexOf("/");
+        setPath(jcrPath.substring(0, slashPos + 1));
+        setCode(jcrPath.substring(slashPos + 1));
     }
 
     /**
@@ -39,18 +88,23 @@ public class CmsNode
      */
     public CmsNode(String type)
     {
-        //setType(type);
+        setOoType(type);
     }
 
     @Override
     public String toString()
     {
-        return "x";// + getLabel() + " [" + getTypeDef().getName() + "]";
+        return "[" + getOoType() + "] " + getLabel();
     }
 
     public Object get(String name)
     {
         return getData().get(name);
+    }
+
+    public void set(String name, String value)
+    {
+        getData().put(name, value);
     }
 
     public String getId()
@@ -85,35 +139,12 @@ public class CmsNode
 
     public String getLabel()
     {
-        if (this.label == null)
-            return (String) getData().get("title");
-        else
-            return label;
+        return (String) get(LABEL_KEY);
     }
 
     public void setLabel(String label)
     {
-        this.label = label;
-    }
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
-
-    public TypeDef getTypeDef()
-    {
-        return typeDef;
-    }
-
-    public void setTypeDef(TypeDef typeDef)
-    {
-        this.typeDef = typeDef;
+        set(LABEL_KEY, label);
     }
 
     public void set(String key, Object value)
@@ -131,24 +162,14 @@ public class CmsNode
         this.code = code;
     }
 
-    public String getTitle()
+    public String getOoType()
     {
-        return (String) getData().get("title");
+        return ooType;
     }
 
-    public String getContent()
+    public void setOoType(String ooType)
     {
-        return (String) getData().get("content");
-    }
-
-    public void setTitle(String title)
-    {
-        getData().put("title", title);
-    }
-
-    public void setContent(String content)
-    {
-        getData().put("content", content);
+        this.ooType = ooType;
     }
 
 }
