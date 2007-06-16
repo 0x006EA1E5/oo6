@@ -1,13 +1,17 @@
 package org.otherobjects.cms.types;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.derby.impl.sql.compile.DateTypeCompiler;
+import org.apache.jackrabbit.ocm.persistence.atomictypeconverter.AtomicTypeConverter;
+import org.apache.jackrabbit.ocm.persistence.atomictypeconverter.impl.BooleanTypeConverterImpl;
 import org.apache.jackrabbit.ocm.persistence.atomictypeconverter.impl.Date2LongTypeConverterImpl;
+import org.apache.jackrabbit.ocm.persistence.atomictypeconverter.impl.LongTypeConverterImpl;
 import org.apache.jackrabbit.ocm.persistence.atomictypeconverter.impl.StringTypeConverterImpl;
-
+import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.cms.jcr.BigDecimalTypeConverterImpl;
 
 /**
  * Maintain register of all data types definitions (TypeDef) in the system.
@@ -20,62 +24,91 @@ import org.apache.jackrabbit.ocm.persistence.atomictypeconverter.impl.StringType
  */
 public class TypeService
 {
-    private Map<String, TypeDef> types = new LinkedHashMap<String, TypeDef>();
+    private Map<String, AtomicTypeConverter> jcrAtomicConverters;
+    private Map<String, TypeDef> types;
 
     private static TypeService instance;
-    
+
+    private TypeService()
+    {
+    }
+
     public static TypeService getInstance()
     {
-        if(instance == null)
+        if (instance == null)
+        {
             instance = new TypeService();
+            instance.reset();
+        }
         return instance;
     }
-    
-    public TypeService()
+
+    private void registerConverters()
     {
-        registerFundamentalTypes();
+        jcrAtomicConverters = new HashMap<String, AtomicTypeConverter>();
+        jcrAtomicConverters.put("string", new StringTypeConverterImpl());
+        jcrAtomicConverters.put("text", new StringTypeConverterImpl());
+        jcrAtomicConverters.put("date", new Date2LongTypeConverterImpl());
+        jcrAtomicConverters.put("time", new Date2LongTypeConverterImpl());
+        jcrAtomicConverters.put("timestamp", new Date2LongTypeConverterImpl());
+        jcrAtomicConverters.put("boolean", new BooleanTypeConverterImpl());
+        jcrAtomicConverters.put("number", new LongTypeConverterImpl());
+        jcrAtomicConverters.put("decimal", new BigDecimalTypeConverterImpl());
     }
-    
+
     private void registerFundamentalTypes()
     {
+        types = new LinkedHashMap<String, TypeDef>();
         TypeDef td = new TypeDef("oo_TypeDef");
-        td.addProperty(new PropertyDef("name","string",null));
+        td.addProperty(new PropertyDef("name", "string", null));
         registerType(td);
-        
+
         TypeDef pd = new TypeDef("oo_PropertyDef");
-        pd.addProperty(new PropertyDef("name","string",null));
-        pd.addProperty(new PropertyDef("type","string",null));
-        pd.addProperty(new PropertyDef("relatedType","string",null));
+        pd.addProperty(new PropertyDef("name", "string", null));
+        pd.addProperty(new PropertyDef("type", "string", null));
+        pd.addProperty(new PropertyDef("relatedType", "string", null));
         registerType(pd);
     }
 
-    /**
-     * 
-     * @param t
-     */
     public void registerType(TypeDef t)
     {
-        types.put(t.getName(),t);
+        types.put(t.getName(), t);
     }
-    
+
     public TypeDef getType(String name)
     {
         return types.get(name);
     }
-    
+
     public Collection<TypeDef> getTypes()
     {
         return (Collection<TypeDef>) types.values();
     }
-    
+
     public Object getJcrConverter(String type)
     {
-        if(type.equals("date"))
-            return new Date2LongTypeConverterImpl();
-        else
-            return new StringTypeConverterImpl();
+        AtomicTypeConverter atomicTypeConverter = getJcrAtomicConverters().get(type);
+        if (atomicTypeConverter == null)
+            throw new OtherObjectsException("No JCR converter defined for type: " + type);
+        return atomicTypeConverter;
     }
-    
+
+    public Map<String, AtomicTypeConverter> getJcrAtomicConverters()
+    {
+        return jcrAtomicConverters;
+    }
+
+    public void setJcrAtomicConverters(Map<String, AtomicTypeConverter> jcrAtomicConverters)
+    {
+        this.jcrAtomicConverters = jcrAtomicConverters;
+    }
+
+    public void reset()
+    {
+        instance.registerFundamentalTypes();
+        instance.registerConverters();
+    }
+
     /*
     public Collection<TypeDef> getExternalTypes()
     {
