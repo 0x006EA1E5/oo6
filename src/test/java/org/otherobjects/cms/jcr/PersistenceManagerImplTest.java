@@ -1,5 +1,6 @@
 package org.otherobjects.cms.jcr;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -38,12 +39,19 @@ public class PersistenceManagerImplTest extends JcrTestBase
     
     private void setupTypesService()
     {
-        types = new TypeService();
+        types = TypeService.getInstance();
+        types.reset();
 
-        TypeDef td = new TypeDef("site_NewsStory");
-        td.addProperty(new PropertyDef("title", "string", null));
-        td.addProperty(new PropertyDef("content", "string", null));
-        //td.addProperty(new PropertyDef("publicationTimestamp", "date", null));
+        TypeDef td = new TypeDef("site_TestObject");
+        td.addProperty(new PropertyDef("testString", "string", null));
+        td.addProperty(new PropertyDef("testText", "text", null));
+        td.addProperty(new PropertyDef("testDate", "date", null));
+        td.addProperty(new PropertyDef("testTime", "time", null));
+        td.addProperty(new PropertyDef("testTimestamp", "timestamp", null));
+        td.addProperty(new PropertyDef("testNumber", "number", null));
+        td.addProperty(new PropertyDef("testDecimal", "decimal", null));
+        td.addProperty(new PropertyDef("testBoolean", "boolean", null));
+        
         types.registerType(td);        
     }
 
@@ -58,28 +66,45 @@ public class PersistenceManagerImplTest extends JcrTestBase
         PersistenceManagerImpl persistenceManager = (PersistenceManagerImpl) getPersistenceManager(types);
         persistenceManager.setMapper(new TypeServiceMapperImpl(types));
 
-        Date pubDate = Calendar.getInstance().getTime();
-        
-        CmsNode ns = new CmsNode("site_NewsStory");
+        CmsNode ns = new CmsNode("site_TestObject");
         ns.setJcrPath("/news.html");
-        ns.set("title", "News Story 1");
-        ns.set("content", "Content of story");
-        //ns.set("publicationTimestamp", pubDate);
+        ns.set("testString", "News Story 1");
+        ns.set("testText", "Content of story");
+        
+        Calendar date = Calendar.getInstance();
+        date.set(2000, 01, 02, 0, 0, 0);
+        Calendar time = Calendar.getInstance();
+        time.set(0, 0, 0, 03, 04, 05);
+        Calendar timestamp = Calendar.getInstance();
+        timestamp.set(2000, 01, 02, 03, 04, 05);
+        ns.set("testDate", date.getTime());
+        ns.set("testTime", time.getTime());
+        ns.set("testTimestamp", timestamp.getTime());
+
+        ns.set("testNumber", new Long(123456));
+        ns.set("testDecimal", new BigDecimal("19.95"));
+        ns.set("testBoolean", Boolean.TRUE);
 
         persistenceManager.insert(ns);
         persistenceManager.save();
         
         CmsNode ns2 = (CmsNode) persistenceManager.getObject("/news.html");
-        assertEquals(ns.get("title"), ns2.get("title"));
-        //assertEquals(ns.get("publicationTimestamp"), ns2.get("publicationTimestamp"));
+        assertEquals(ns.get("testString"), ns2.get("testString"));
+        assertEquals(ns.get("testText"), ns2.get("testText"));
+        assertEquals(ns.get("testDate"), ns2.get("testDate"));
+        assertEquals(ns.get("testTime"), ns2.get("testTime"));
+        assertEquals(ns.get("testTimestamp"), ns2.get("testTimestamp"));
+        assertEquals(ns.get("testNumber"), ns2.get("testNumber"));
+        assertEquals(ns.get("testDecimal"), ns2.get("testDecimal"));
+        assertEquals(ns.get("testBoolean"), ns2.get("testBoolean"));
         assertNotNull(ns2.getId());
         
-        ns.set("title", "News Story 1.1");
+        ns.set("testString", "News Story 1.1");
         persistenceManager.update(ns);
         persistenceManager.save();
         
         ns2 = (CmsNode) persistenceManager.getObject("/news.html");
-        assertEquals(ns.get("title"), ns2.get("title"));
+        assertEquals(ns.get("testString"), ns2.get("testString"));
     }
 
 }

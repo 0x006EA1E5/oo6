@@ -16,7 +16,7 @@ public class TypeServiceMapperImplTest extends TestCase
     @Override
     public void setUp()
     {
-        types = new TypeService();
+        types = TypeService.getInstance();
         typeMapper = new TypeServiceMapperImpl();
 
         TypeDef td = new TypeDef("site_NewsStory");
