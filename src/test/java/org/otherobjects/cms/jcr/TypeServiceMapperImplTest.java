@@ -20,10 +20,10 @@ public class TypeServiceMapperImplTest extends TestCase
         typeMapper = new TypeServiceMapperImpl();
 
         TypeDef td = new TypeDef("site_NewsStory");
-        td.addProperty(new PropertyDef("data.title", "string", null));
-        td.addProperty(new PropertyDef("data.content", "string", null));
+        td.addProperty(new PropertyDef("data.title", "string", null, null));
+        td.addProperty(new PropertyDef("data.content", "string", null, null));
         types.registerType(td);
-        
+
         typeMapper = new TypeServiceMapperImpl(types);
     }
 
@@ -38,8 +38,8 @@ public class TypeServiceMapperImplTest extends TestCase
         TypeDef typeDef = types.getType("site_NewsStory");
         ClassDescriptor cd = typeMapper.createClassDescriptor(typeDef);
 
-        assertEquals("nt:unstructured", cd.getJcrNodeType());
-        assertEquals(typeDef.getProperties().size() + 4, cd.getFieldDescriptors().size());
+        assertEquals("oo:node", cd.getJcrNodeType());
+        assertEquals(typeDef.getProperties().size() + 3, cd.getFieldDescriptors().size());
 
     }
 

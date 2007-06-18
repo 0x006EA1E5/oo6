@@ -4,7 +4,9 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.jackrabbit.ocm.persistence.collectionconverter.impl.ManagedHashMap;
+import org.otherobjects.cms.OtherObjectsException;
 
 @SuppressWarnings("unchecked")
 /**
@@ -14,6 +16,7 @@ import org.apache.jackrabbit.ocm.persistence.collectionconverter.impl.ManagedHas
  * (which is the concatenation of path and code).
  * 
  * <p>TODO Add support for description, icon and image generators
+ * <p>TODO Equals, hashCode, serialableId builders
  */
 public class CmsNode
 {
@@ -41,6 +44,18 @@ public class CmsNode
 
     public CmsNode()
     {
+        setOoType(getClass().getName());
+    }
+
+    /**
+     * Creates a node of the specified type. The type definition 
+     * in required to ensure that this node conforms.
+     * 
+     * @param type the type name
+     */
+    public CmsNode(String type)
+    {
+        setOoType(type);
     }
 
     /**
@@ -71,7 +86,7 @@ public class CmsNode
             setPath(null);
             return;
         }
-        
+
         Assert.assertTrue("jcrPath must contain at least one forward slash", jcrPath.lastIndexOf("/") >= 0);
         Assert.assertFalse("jcrPath must not end with a forward slash", jcrPath.endsWith("/"));
 
@@ -81,30 +96,40 @@ public class CmsNode
     }
 
     /**
-     * Creates a node of the specified type. The type definition 
-     * in required to ensure that this node conforms.
-     * 
-     * @param type the type name
+     * TODO Add support for nested getting? Via commons property utils? 
+     * @param name
+     * @return
      */
-    public CmsNode(String type)
+    public Object get(String name)
     {
-        setOoType(type);
+        if (name != null && name.indexOf('.') > 0)
+            return getProperty(name);
+        else
+            return getData().get(name);
+    }
+
+    public Object getProperty(String name)
+    {
+        try
+        {
+            // Property values are stored in the data map...
+            return PropertyUtils.getNestedProperty(getData(), name.replaceAll("\\.","\\.data\\."));
+        }
+        catch (Exception e)
+        {
+            throw new OtherObjectsException("Could not fetch property value.", e);
+        }
+    }
+
+    public void set(String name, String value)
+    {
+        getData().put(name, value);
     }
 
     @Override
     public String toString()
     {
         return "[" + getOoType() + "] " + getLabel();
-    }
-
-    public Object get(String name)
-    {
-        return getData().get(name);
-    }
-
-    public void set(String name, String value)
-    {
-        getData().put(name, value);
     }
 
     public String getId()

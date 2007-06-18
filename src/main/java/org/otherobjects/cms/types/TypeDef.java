@@ -9,6 +9,9 @@ public class TypeDef
     /** The unique name for this type. */
     private String name;
     
+    /** The class name of the backing class (if not using CmsNode). */
+    private String className;
+    
     /** Collection of properties for this type. */
     private Map<String, PropertyDef> properties = new LinkedHashMap<String, PropertyDef>();
 
@@ -79,6 +82,16 @@ public class TypeDef
     public void setHelp(String help)
     {
         this.help = help;
+    }
+
+    public String getClassName()
+    {
+        return className;
+    }
+
+    public void setClassName(String className)
+    {
+        this.className = className;
     }
 
 }

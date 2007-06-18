@@ -16,18 +16,15 @@
  */
 package org.otherobjects.cms.jcr;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.ocm.exception.IncorrectPersistentClassException;
 import org.apache.jackrabbit.ocm.exception.InitMapperException;
 import org.apache.jackrabbit.ocm.mapper.Mapper;
+import org.apache.jackrabbit.ocm.mapper.model.BeanDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.ClassDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.FieldDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.MappingDescriptor;
-import org.apache.jackrabbit.ocm.persistence.atomictypeconverter.impl.StringTypeConverterImpl;
+import org.apache.jackrabbit.ocm.persistence.beanconverter.impl.DefaultBeanConverterImpl;
+import org.apache.jackrabbit.ocm.persistence.beanconverter.impl.ReferenceBeanConverterImpl;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
@@ -35,10 +32,9 @@ import org.otherobjects.cms.types.TypeService;
 
 public class TypeServiceMapperImpl implements Mapper
 {
-    private static final Log log = LogFactory.getLog(TypeServiceMapperImpl.class);
+    private TypeService typeService;
 
     private MappingDescriptor mappingDescriptor;
-    private Collection rootClassDescriptors = new ArrayList(); // contains the class descriptor which have not ancestors 
 
     /**
      * No-arg constructor.
@@ -49,10 +45,11 @@ public class TypeServiceMapperImpl implements Mapper
 
     public TypeServiceMapperImpl(TypeService typeService)
     {
-        this.buildMapper(typeService);
+        this.typeService = typeService;
+        buildMapper();
     }
 
-    protected Mapper buildMapper(TypeService typeService)
+    protected Mapper buildMapper()
     {
         if (typeService != null)
         {
@@ -66,7 +63,6 @@ public class TypeServiceMapperImpl implements Mapper
 
             this.mappingDescriptor.setMapper(this);
         }
-
         else
         {
             throw new InitMapperException("No mappings were provided");
@@ -78,40 +74,63 @@ public class TypeServiceMapperImpl implements Mapper
     protected ClassDescriptor createClassDescriptor(TypeDef typeDef)
     {
         ClassDescriptor cd = new ClassDescriptor();
-        cd.setClassName(CmsNode.class.getName());
-        cd.setJcrNodeType("nt:unstructured");
-        
+        if (typeDef.getClassName() != null)
+            cd.setClassName(typeDef.getName());
+        else
+            cd.setClassName(CmsNode.class.getName());
+        cd.setJcrNodeType("oo:node");
+
         // Add standard properties
         FieldDescriptor fd = new FieldDescriptor();
         fd.setFieldName("id");
         fd.setJcrName("id");
-        fd.setUuid(false);
+        fd.setUuid(true);
         cd.addFieldDescriptor(fd);
 
         FieldDescriptor fd2 = new FieldDescriptor();
-        fd2.setFieldName("path");
-        fd2.setJcrName("path");
+        fd2.setFieldName("jcrPath");
+        fd2.setJcrName("jcrPath");
         fd2.setPath(true);
         cd.addFieldDescriptor(fd2);
-        
+
         FieldDescriptor fd3 = new FieldDescriptor();
         fd3.setFieldName("label");
         fd3.setJcrName("label");
         cd.addFieldDescriptor(fd3);
-        
-        FieldDescriptor fd4 = new FieldDescriptor();
-        fd4.setFieldName("description");
-        fd4.setJcrName("description");
-        cd.addFieldDescriptor(fd4);
-        
+
+//        FieldDescriptor fd4 = new FieldDescriptor();
+//        fd4.setFieldName("description");
+//        fd4.setJcrName("description");
+//        cd.addFieldDescriptor(fd4);
+
         // Add custom properties
-        for(PropertyDef propDef : typeDef.getProperties())
+        for (PropertyDef propDef : typeDef.getProperties())
         {
-            FieldDescriptor f = new FieldDescriptor();
-            f.setFieldName("data." + propDef.getName());
-            f.setJcrName(propDef.getName());
-            f.setConverter(StringTypeConverterImpl.class.getName());
-            cd.addFieldDescriptor(f);
+            String propertyType = propDef.getType();
+            if (propertyType.equals("component"))
+            {
+                BeanDescriptor bd = new BeanDescriptor();
+                bd.setFieldName("data." + propDef.getName());
+                bd.setJcrName(propDef.getName());
+                bd.setConverter(DefaultBeanConverterImpl.class.getName());
+                cd.addBeanDescriptor(bd);
+            }
+            else if (propertyType.equals("reference"))
+            {
+                BeanDescriptor bd = new BeanDescriptor();
+                bd.setFieldName("data." + propDef.getName());
+                bd.setJcrName(propDef.getName());
+                bd.setConverter(ReferenceBeanConverterImpl.class.getName());
+                cd.addBeanDescriptor(bd);
+            }
+            else
+            {
+                FieldDescriptor f = new FieldDescriptor();
+                f.setFieldName("data." + propDef.getName());
+                f.setJcrName(propDef.getName());
+                f.setConverter(typeService.getJcrConverter(propertyType).getClass().getName());
+                cd.addFieldDescriptor(f);
+            }
         }
         return cd;
     }
@@ -120,6 +139,7 @@ public class TypeServiceMapperImpl implements Mapper
     *
     * @see org.apache.jackrabbit.ocm.mapper.Mapper#getClassDescriptorByClass(java.lang.Class)
     */
+    @SuppressWarnings("unchecked")
     public ClassDescriptor getClassDescriptorByClass(Class clazz)
     {
         ClassDescriptor descriptor = mappingDescriptor.getClassDescriptorByName(clazz.getName());
@@ -141,6 +161,16 @@ public class TypeServiceMapperImpl implements Mapper
             throw new IncorrectPersistentClassException("Node type: " + jcrNodeType + " has no descriptor.");
         }
         return descriptor;
+    }
+
+    public TypeService getTypeService()
+    {
+        return typeService;
+    }
+
+    public void setTypeService(TypeService typeService)
+    {
+        this.typeService = typeService;
     }
 
 }

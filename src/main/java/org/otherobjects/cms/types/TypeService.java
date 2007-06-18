@@ -1,6 +1,8 @@
 package org.otherobjects.cms.types;
 
+import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -25,6 +27,7 @@ import org.otherobjects.cms.jcr.BigDecimalTypeConverterImpl;
 public class TypeService
 {
     private Map<String, AtomicTypeConverter> jcrAtomicConverters;
+    private Map<String, Class<?>> jcrClassMappings;
     private Map<String, TypeDef> types;
 
     private static TypeService instance;
@@ -55,18 +58,31 @@ public class TypeService
         jcrAtomicConverters.put("number", new LongTypeConverterImpl());
         jcrAtomicConverters.put("decimal", new BigDecimalTypeConverterImpl());
     }
+    
+    private void registerClassMappings()
+    {
+        jcrClassMappings = new HashMap<String, Class<?>>();
+        jcrClassMappings.put("string", String.class);
+        jcrClassMappings.put("text", String.class);
+        jcrClassMappings.put("date", Date.class);
+        jcrClassMappings.put("time", Date.class);
+        jcrClassMappings.put("timestamp", Date.class);
+        jcrClassMappings.put("boolean", Boolean.class);
+        jcrClassMappings.put("number", Long.class);
+        jcrClassMappings.put("decimal", BigDecimal.class);
+    }
 
     private void registerFundamentalTypes()
     {
         types = new LinkedHashMap<String, TypeDef>();
         TypeDef td = new TypeDef("oo_TypeDef");
-        td.addProperty(new PropertyDef("name", "string", null));
+        td.addProperty(new PropertyDef("name", "string", null, null));
         registerType(td);
 
         TypeDef pd = new TypeDef("oo_PropertyDef");
-        pd.addProperty(new PropertyDef("name", "string", null));
-        pd.addProperty(new PropertyDef("type", "string", null));
-        pd.addProperty(new PropertyDef("relatedType", "string", null));
+        pd.addProperty(new PropertyDef("name", "string", null, null));
+        pd.addProperty(new PropertyDef("type", "string", null, null));
+        pd.addProperty(new PropertyDef("relatedType", "string", null, null));
         registerType(pd);
     }
 
@@ -92,6 +108,14 @@ public class TypeService
             throw new OtherObjectsException("No JCR converter defined for type: " + type);
         return atomicTypeConverter;
     }
+    
+    public Class<?> getJcrClassMapping(String type)
+    {
+        Class<?> clazz = getJcrClassMappings().get(type);
+        if (clazz == null)
+            throw new OtherObjectsException("No JCR class defined for type: " + type);
+        return clazz;
+    }
 
     public Map<String, AtomicTypeConverter> getJcrAtomicConverters()
     {
@@ -107,6 +131,17 @@ public class TypeService
     {
         instance.registerFundamentalTypes();
         instance.registerConverters();
+        instance.registerClassMappings();
+    }
+
+    public Map<String, Class<?>> getJcrClassMappings()
+    {
+        return jcrClassMappings;
+    }
+
+    public void setJcrClassMappings(Map<String, Class<?>> jcrClassMappings)
+    {
+        this.jcrClassMappings = jcrClassMappings;
     }
 
     /*

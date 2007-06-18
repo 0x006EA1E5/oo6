@@ -1,35 +1,44 @@
 JCR
 ---
 
-Simple Properties
+Todo
+
+* Finsh mapping all data types
+* Determine mixins: lang, auditInfo, dublinccore?
+* Namespaces better than site_whatever
+
+Properties
 
 * string (DONE)
 * text (DONE)
 * date (DONE -- needs more testing esp search)
 * boolean (DONE)
-* number -- no DP (DONE)
+* number (DONE)
 * decimal (DONE)?
 * html or other mime-type (EVALUATING)
+* calculation -- a la FileMaker (EVALUATING)
+* reference object (DONE) -- could be "any"?
 
-Components
+Component
 
-* map
-* list
-* set/bag ???
+* component object (DONE) 
+ 
+Collections (may be of any of the above properties or component)
 
-Relationships/References
+* list (DONE)
+* set/bag (EVALUATING)
+* map (EVALUATING)
 
-* single
+Notes
 
-Calculated Properties (a la FileMaker)
+Components can be simpler than CmsNode. They don't persist independently and can't be saved 
+or deleted indepently of the CmsNode they belong to. Can be multiple levels deep but circular 
+refereneces should throw an error.
 
-
-Import/Export with events
-Anonamised
 
 ---------------------
 
-NewsStory
+Example: NewsStory
 
 - title (string)
 - publishTime (time)

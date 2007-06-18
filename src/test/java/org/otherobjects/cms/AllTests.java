@@ -32,6 +32,7 @@ public class AllTests extends TestCase
         TestSuite suite = new TestSuite("OTHERobjects Tests");
         suite.addTest(org.otherobjects.cms.jcr.AllTests.suite());
         suite.addTest(org.otherobjects.cms.types.AllTests.suite());
+        suite.addTest(org.otherobjects.cms.model.AllTests.suite());
         return suite;
     }
 }
