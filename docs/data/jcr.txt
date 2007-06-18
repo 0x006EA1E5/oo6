@@ -1,0 +1,70 @@
+JCR
+---
+
+Simple Properties
+
+* string (DONE)
+* text (DONE)
+* date (DONE -- needs more testing esp search)
+* boolean (DONE)
+* number -- no DP (DONE)
+* decimal (DONE)?
+* html or other mime-type (EVALUATING)
+
+Components
+
+* map
+* list
+* set/bag ???
+
+Relationships/References
+
+* single
+
+Calculated Properties (a la FileMaker)
+
+
+Import/Export with events
+Anonamised
+
+---------------------
+
+NewsStory
+
+- title (string)
+- publishTime (time)
+- publishDate (date)
+- lastModified (timestamp)
+- content (text/html)
+- rating (decimal)
+- promoted (boolean)
+- image (related:CmsImage)
+- location (component:Location)
+  - longitde
+  - latitude
+- relatedNews[] (list:related:NewsStory)
+- comments[] (list:component:Comment
+  - email (string)
+  - comment (text)
+  - postedAt (timestamp)
+  
+  
+component or reference
+one or many
+sorted or unosrted
+
+Author
+
+-name (string)
+-age (number)
+
+---------------------
+
+Notes:
+
+has_one : belongs_to  (1 to 1)
+has_many : belongs_to (n to 1)
+has_many_and_belong_to : has_many_and_belong_to (n to m)
+
+urlCode / titile / teaser
+name / label / description

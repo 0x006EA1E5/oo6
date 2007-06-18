@@ -1,0 +1,9 @@
+OTHERobjects Features
+---------------------
+
+Complete list of all implemented features
+
+* Data Storage
+
+Integrated with JCR (using jackrabbit and jackrabbit-ocm) to provide a flexible
+and mutable data store.

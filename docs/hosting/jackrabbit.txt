@@ -1,0 +1,22 @@
+Jackrabbit
+
+http://www.jcp.org/en/jsr/detail?id=170
+http://www.jcp.org/en/jsr/detail?id=283
+
+http://www.nabble.com/Jackrabbit-f361.html
+http://incubator.apache.org/graffito/jcr-mapping/index.html
+
+Clustering
+
+Via shared store ie JDBC
+Can drop nodes in and out?
+Local lucene index
+Local cache (? do we cluster)
+
+L10N
+http://mail-archives.apache.org/mod_mbox/jackrabbit-users/200703.mbox/%3C20070302224449.F2E7B42A4@mail.globant.com%3E
+
+MApping
+
+Apache Graffito
+http://www.openwfe.org/openwfe-jcr-beancoder.html
