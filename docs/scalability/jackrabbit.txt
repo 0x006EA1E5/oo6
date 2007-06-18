@@ -4,6 +4,7 @@ http://www.jcp.org/en/jsr/detail?id=170
 http://www.jcp.org/en/jsr/detail?id=283
 
 http://www.nabble.com/Jackrabbit-f361.html
+http://incubator.apache.org/graffito/jcr-mapping/index.html
 
 Clustering
 

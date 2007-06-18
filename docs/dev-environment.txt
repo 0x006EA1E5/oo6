@@ -2,6 +2,8 @@ Eclipse 3.3
 
 http://www.vasanth.in/2004/01/13/EclipseTipKeepingPluginsAndWorkspaceSeparate.aspx
 
-* Subclipse
-* Clover
-* M2Eclipse 
+* Subclipse (SVN integration)
+* Clover (Test coverage stats)
+* M2Eclipse (Maven integration)
+* Eclipse-cs? (Checksyle integration)
+* Find bugs?

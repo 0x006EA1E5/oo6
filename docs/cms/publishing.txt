@@ -29,11 +29,11 @@ Individual workspaces?
 
 content-live
 content-edit
-design
+design-live
+design-edit
 system
 
-Requirement develop and test a whole new site section then
-publish in one go.
+Requirement: develop and test a whole new site section then publish in one go.
 
 Embargo
 Withdraw
