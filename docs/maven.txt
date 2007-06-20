@@ -7,6 +7,19 @@ Use -U option to make sure plugins are up to date?
 mvn -U install:install-file -Dfile=spring-src.jar -DgroupId=org.springframework -DartifactId=spring -Dversion=2.0.4 -Dclassifier=sources -Dpackaging=jar
 
 
+Reports
+-------
 
+A whole bunch of useful reports (and a project website) can be created by running:
+ 
+ mvn site
+ 
+Then check in target/site/ 
+
+Note: To fix cobertura reports...
+http://www.softonaut.com/2007/05/12/maven-cobertura-plugin-version-21-and-the-100-line-and-branch-coverage-problem/
+ 
+Local repository
+----------------
 
 http://www.jfrog.org/sites/artifactory/latest/
