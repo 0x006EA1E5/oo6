@@ -4,19 +4,19 @@ import junit.framework.TestCase;
 
 import org.apache.jackrabbit.ocm.mapper.model.ClassDescriptor;
 import org.otherobjects.cms.model.CmsNode;
+import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
-import org.otherobjects.cms.types.TypeService;
 
 public class TypeServiceMapperImplTest extends TestCase
 {
     private TypeServiceMapperImpl typeMapper;
-    private TypeService types;
+    private JcrTypeServiceImpl types;
 
     @Override
     public void setUp()
     {
-        types = TypeService.getInstance();
+        types = new JcrTypeServiceImpl();
         typeMapper = new TypeServiceMapperImpl();
 
         TypeDef td = new TypeDef("site_NewsStory");

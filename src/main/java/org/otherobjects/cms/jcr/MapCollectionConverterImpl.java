@@ -47,20 +47,20 @@ import org.apache.jackrabbit.ocm.persistence.collectionconverter.impl.BeanRefere
 import org.apache.jackrabbit.ocm.persistence.collectionconverter.impl.DefaultCollectionConverterImpl;
 import org.apache.jackrabbit.ocm.persistence.collectionconverter.impl.ManagedHashMap;
 import org.apache.jackrabbit.ocm.persistence.collectionconverter.impl.MultiValueCollectionConverterImpl;
-import org.apache.jackrabbit.ocm.persistence.collectionconverter.impl.ReferenceCollectionConverterImpl;
 import org.apache.jackrabbit.ocm.persistence.objectconverter.ObjectConverter;
 import org.apache.jackrabbit.ocm.persistence.objectconverter.impl.ObjectConverterImpl;
+import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.model.CmsNode;
+import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
-import org.otherobjects.cms.types.TypeService;
 
 @SuppressWarnings("unchecked")
 public class MapCollectionConverterImpl extends AbstractCollectionConverterImpl
 {
 
     private AtomicTypeConverterProvider atomicTypeConverterProvider = new DefaultAtomicTypeConverterProvider();
-    private TypeService typeService = TypeService.getInstance();
+    private JcrTypeServiceImpl typeService;
     private ObjectConverter objectConverter = new ObjectConverterImpl(this.mapper, atomicTypeConverterProvider);
 
     /**
@@ -73,6 +73,7 @@ public class MapCollectionConverterImpl extends AbstractCollectionConverterImpl
     public MapCollectionConverterImpl(Map atomicTypeConverters, ObjectConverter objectConverter, Mapper mapper)
     {
         super(atomicTypeConverters, objectConverter, mapper);
+        typeService = (JcrTypeServiceImpl) SingletonBeanLocator.getBean("typeService");
     }
 
     /**
@@ -138,7 +139,6 @@ public class MapCollectionConverterImpl extends AbstractCollectionConverterImpl
         collectionDescriptor.setJcrName(propertyName);
         String propertyType = property.getType();
 
-        
         CollectionConverter collectionConverter = null;
         String elementClassName = null;
         if (propertyType.equals("component"))
@@ -148,15 +148,15 @@ public class MapCollectionConverterImpl extends AbstractCollectionConverterImpl
         }
         else if (propertyType.equals("reference"))
         {
-             collectionConverter = new BeanReferenceCollectionConverterImpl(atomicTypeConverterProvider.getAtomicTypeConverters(), objectConverter, mapper);
-             elementClassName = CmsNode.class.getName();
+            collectionConverter = new BeanReferenceCollectionConverterImpl(atomicTypeConverterProvider.getAtomicTypeConverters(), objectConverter, mapper);
+            elementClassName = CmsNode.class.getName();
         }
         else
         {
             collectionConverter = new MultiValueCollectionConverterImpl(atomicTypeConverterProvider.getAtomicTypeConverters(), objectConverter, mapper);
         }
-        
-        collectionDescriptor.setElementClassName(elementClassName );
+
+        collectionDescriptor.setElementClassName(elementClassName);
         ManageableCollection manageableCollection = ManageableCollectionUtil.getManageableCollection(collection);
         collectionConverter.insertCollection(session, dataNode, collectionDescriptor, manageableCollection);
     }
@@ -275,8 +275,8 @@ public class MapCollectionConverterImpl extends AbstractCollectionConverterImpl
         }
         else if (propertyType.equals("reference"))
         {
-             collectionConverter = new BeanReferenceCollectionConverterImpl(atomicTypeConverterProvider.getAtomicTypeConverters(), objectConverter, mapper);
-             elementClassName = CmsNode.class.getName();
+            collectionConverter = new BeanReferenceCollectionConverterImpl(atomicTypeConverterProvider.getAtomicTypeConverters(), objectConverter, mapper);
+            elementClassName = CmsNode.class.getName();
         }
         else
         {

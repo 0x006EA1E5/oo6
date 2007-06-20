@@ -1,0 +1,12 @@
+How to install source for a project
+-----------------------------------
+
+Note you must have v2.2 of the install-plugin for this to work
+Use -U option to make sure plugins are up to date?
+
+mvn -U install:install-file -Dfile=spring-src.jar -DgroupId=org.springframework -DartifactId=spring -Dversion=2.0.4 -Dclassifier=sources -Dpackaging=jar
+
+
+
+
+http://www.jfrog.org/sites/artifactory/latest/

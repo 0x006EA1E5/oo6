@@ -8,7 +8,6 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.jackrabbit.ocm.persistence.collectionconverter.impl.ManagedHashMap;
 import org.otherobjects.cms.OtherObjectsException;
 
-@SuppressWarnings("unchecked")
 /**
  * A CmsNode object represents a data node in the content repository.
  * 
@@ -18,6 +17,7 @@ import org.otherobjects.cms.OtherObjectsException;
  * <p>TODO Add support for description, icon and image generators
  * <p>TODO Equals, hashCode, serialableId builders
  */
+@SuppressWarnings("unchecked")
 public class CmsNode
 {
     /** Property to be used an the label for this node. */
@@ -95,11 +95,6 @@ public class CmsNode
         setCode(jcrPath.substring(slashPos + 1));
     }
 
-    /**
-     * TODO Add support for nested getting? Via commons property utils? 
-     * @param name
-     * @return
-     */
     public Object get(String name)
     {
         if (name != null && name.indexOf('.') > 0)

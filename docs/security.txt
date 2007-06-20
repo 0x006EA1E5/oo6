@@ -1,4 +1,28 @@
 Security
+--------
+
+Requirements
+
+* Security checks should be based on fine-grained permissions (eg Add Article)
+* Roles confer a group of permissions (eg Editor)
+* Groups define a scope within which a Role is valid (eg International News)
+* A User is assigned a Role sometimes within a Group
+
+* Secured pages always accessed over https (redirect if required)
+* Session id changed after authentication
+
+Examples
+
+ALICE is a EDITOR of INTERNATIONAL_NEWS
+BOB is a CONTRIBUTOR of DOMESTIC_NEWS
+
+EDITOR has permissions APROVE_ARTICLE, REJECT_ARTICLE, CREATE_ARTICLE
+CONTRIBUTOR has permissions CREATE_ARTICLE, UPDATE_ARTICLE
+
+
+
+
+
 
 Users
 * username (usually email but not always)
@@ -6,3 +30,6 @@ Users
 
 JcrUserService
 HibernateUserService
+
+Interesting drupal module: http://drupal.org/node/87679
+

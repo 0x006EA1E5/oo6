@@ -26,13 +26,14 @@ import org.apache.jackrabbit.ocm.mapper.model.MappingDescriptor;
 import org.apache.jackrabbit.ocm.persistence.beanconverter.impl.DefaultBeanConverterImpl;
 import org.apache.jackrabbit.ocm.persistence.beanconverter.impl.ReferenceBeanConverterImpl;
 import org.otherobjects.cms.model.CmsNode;
+import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 
 public class TypeServiceMapperImpl implements Mapper
 {
-    private TypeService typeService;
+    private JcrTypeServiceImpl typeService;
 
     private MappingDescriptor mappingDescriptor;
 
@@ -43,7 +44,7 @@ public class TypeServiceMapperImpl implements Mapper
     {
     }
 
-    public TypeServiceMapperImpl(TypeService typeService)
+    public TypeServiceMapperImpl(JcrTypeServiceImpl typeService)
     {
         this.typeService = typeService;
         buildMapper();
@@ -168,7 +169,7 @@ public class TypeServiceMapperImpl implements Mapper
         return typeService;
     }
 
-    public void setTypeService(TypeService typeService)
+    public void setTypeService(JcrTypeServiceImpl typeService)
     {
         this.typeService = typeService;
     }

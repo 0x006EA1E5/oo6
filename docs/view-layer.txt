@@ -1,0 +1,18 @@
+Velocity (preferred)
+--------------------
+
+Tool conecpt replaced by annotade beans?
+
+@VelocityTool name="format" scope="application"
+Can we restich metod access via proxy?
+
+
+Freemarker
+----------
+
+
+
+JSP/JSF
+-------
+
+If easy

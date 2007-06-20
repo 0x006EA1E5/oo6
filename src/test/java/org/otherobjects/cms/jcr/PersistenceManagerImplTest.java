@@ -13,13 +13,13 @@ import junit.framework.TestSuite;
 
 import org.apache.jackrabbit.ocm.persistence.impl.PersistenceManagerImpl;
 import org.otherobjects.cms.model.CmsNode;
+import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
-import org.otherobjects.cms.types.TypeService;
 
 public class PersistenceManagerImplTest extends JcrTestBase
 {
-    private TypeService types;
+    private JcrTypeServiceImpl types;
 
     public PersistenceManagerImplTest(String testName)
     {
@@ -41,7 +41,7 @@ public class PersistenceManagerImplTest extends JcrTestBase
 
     private void setupTypesService()
     {
-        types = TypeService.getInstance();
+        types = new JcrTypeServiceImpl();
         types.reset();
 
         TypeDef td = new TypeDef("org.otherobjects.cms.jcr.TestObject");
