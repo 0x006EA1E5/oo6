@@ -8,42 +8,25 @@ import java.util.List;
 
 import javax.jcr.RepositoryException;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
-import org.apache.jackrabbit.ocm.persistence.impl.PersistenceManagerImpl;
 import org.otherobjects.cms.model.CmsNode;
-import org.otherobjects.cms.types.JcrTypeServiceImpl;
+import org.otherobjects.cms.test.BaseJcrTestCase;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
+import org.otherobjects.cms.types.TypeService;
 
-public class PersistenceManagerImplTest extends JcrTestBase
+public class PersistenceManagerImplTest extends BaseJcrTestCase
 {
-    private JcrTypeServiceImpl types;
-
-    public PersistenceManagerImplTest(String testName)
-    {
-        super(testName);
-    }
-
-    public static Test suite()
-    {
-        return new RepositoryLifecycleTestSetup(new TestSuite(PersistenceManagerImplTest.class));
-    }
+    private TypeService typeService;
 
     @Override
-    protected void setUp() throws Exception
+    protected void onSetUp() throws Exception
     {
-        super.setUp();
-        cleanUpRepository();
         setupTypesService();
+        super.onSetUp();
     }
-
+    
     private void setupTypesService()
     {
-        types = new JcrTypeServiceImpl();
-        types.reset();
-
         TypeDef td = new TypeDef("org.otherobjects.cms.jcr.TestObject");
         td.addProperty(new PropertyDef("testString", "string", null, null));
         td.addProperty(new PropertyDef("testText", "text", null, null));
@@ -58,30 +41,22 @@ public class PersistenceManagerImplTest extends JcrTestBase
         td.addProperty(new PropertyDef("testStringsList", "string", null, "list"));
         td.addProperty(new PropertyDef("testComponentsList", "component", null, "list"));
         td.addProperty(new PropertyDef("testReferencesList", "reference", null, "list"));
-        types.registerType(td);
+        typeService.registerType(td);
 
         TypeDef td2 = new TypeDef("org.otherobjects.cms.jcr.TestReferenceObject");
         td2.addProperty(new PropertyDef("name", "string", null, null));
-        types.registerType(td2);
+        typeService.registerType(td2);
 
         TypeDef td3 = new TypeDef("org.otherobjects.cms.jcr.TestComponentObject");
         td3.addProperty(new PropertyDef("name", "string", null, null));
         td3.addProperty(new PropertyDef("component", "component", "org.otherobjects.cms.jcr.TestComponentObject", null));
-        types.registerType(td3);
+        typeService.registerType(td3);
 
-    }
-
-    @Override
-    public void tearDown() throws Exception
-    {
-        super.tearDown();
     }
 
     @SuppressWarnings("unchecked")
     public void testSaveCmsNode() throws RepositoryException
     {
-        PersistenceManagerImpl persistenceManager = (PersistenceManagerImpl) getPersistenceManager(types);
-
 //        CmsNode r1 = new TestReferenceObject();
 //        CmsNode c1 = new TestComponentObject();
 //        CmsNode n1 = new TestObject();
@@ -130,10 +105,10 @@ public class PersistenceManagerImplTest extends JcrTestBase
         n1.set("testComponentsList", componentsList);
         n1.set("testReferencesList", referencesList);
 
-        persistenceManager.insert(n1);
-        persistenceManager.save();
+        jcrMappingTemplate.insert(n1);
+        jcrMappingTemplate.save();
 
-        CmsNode ns2 = (CmsNode) persistenceManager.getObject("/news.html");
+        CmsNode ns2 = (CmsNode) jcrMappingTemplate.getObject("/news.html");
         assertEquals(n1.get("testString"), ns2.get("testString"));
         assertEquals(n1.get("testText"), ns2.get("testText"));
         assertEquals(n1.get("testDate"), ns2.get("testDate"));
@@ -145,10 +120,10 @@ public class PersistenceManagerImplTest extends JcrTestBase
         assertNotNull(ns2.getId());
 
         n1.set("testString", "News Story 1.1");
-        persistenceManager.update(n1);
-        persistenceManager.save();
+        jcrMappingTemplate.update(n1);
+        jcrMappingTemplate.save();
 
-        ns2 = (CmsNode) persistenceManager.getObject("/news.html");
+        ns2 = (CmsNode) jcrMappingTemplate.getObject("/news.html");
         assertEquals(n1.get("testString"), ns2.get("testString"));
         assertEquals(c1.get("name"), ns2.get("testComponent.name"));
         assertEquals(c2.get("name"), ns2.get("testComponent.component.name"));
@@ -166,8 +141,8 @@ public class PersistenceManagerImplTest extends JcrTestBase
         CmsNode r = new CmsNode("org.otherobjects.cms.jcr.TestReferenceObject");
         r.setJcrPath("/" + name + ".html");
         r.set("name", name +" Name");
-        persistenceManager.insert(r);
-        r = (CmsNode) persistenceManager.getObject("/" + name + ".html");
+        jcrMappingTemplate.insert(r);
+        r = (CmsNode) jcrMappingTemplate.getObject("/" + name + ".html");
         return r;
     }
 
@@ -176,5 +151,10 @@ public class PersistenceManagerImplTest extends JcrTestBase
         CmsNode c = new CmsNode("org.otherobjects.cms.jcr.TestComponentObject");
         c.set("name", name + " Name");
         return c;
+    }
+
+    public void setTypeService(TypeService typeService)
+    {
+        this.typeService = typeService;
     }
 }

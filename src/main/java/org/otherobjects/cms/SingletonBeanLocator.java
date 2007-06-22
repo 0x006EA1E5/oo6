@@ -14,6 +14,11 @@ public class SingletonBeanLocator implements BeanFactoryAware
         SingletonBeanLocator.beanFactory=beanFactory;
     }
     
+    public static void setStaticBeanFactory(BeanFactory beanFactory) throws BeansException
+    {   
+        SingletonBeanLocator.beanFactory=beanFactory;
+    }
+    
     public static Object getBean(String name)
     {
         Assert.notNull(beanFactory, "BeanFactory not initialised.");

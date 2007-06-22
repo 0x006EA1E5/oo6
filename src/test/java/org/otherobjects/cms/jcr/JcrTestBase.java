@@ -40,8 +40,6 @@ import javax.jcr.nodetype.NodeTypeManager;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.core.nodetype.InvalidNodeTypeDefException;
 import org.apache.jackrabbit.core.nodetype.NodeTypeDef;
 import org.apache.jackrabbit.core.nodetype.NodeTypeManagerImpl;
@@ -55,6 +53,8 @@ import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.apache.jackrabbit.ocm.reflection.ReflectionUtils;
 import org.apache.jackrabbit.ocm.repository.RepositoryUtil;
 import org.otherobjects.cms.types.TypeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.ContentHandler;
 
 /**
@@ -68,10 +68,10 @@ import org.xml.sax.ContentHandler;
 public abstract class JcrTestBase extends TestCase
 {
 
-    private static final String OO_NODE_TYPES_FILE = "./configuration/oo-node-types.conf";
+    
 
-    private final static Log log = LogFactory.getLog(JcrTestBase.class);
-
+    private final Logger logger = LoggerFactory.getLogger(JcrTestBase.class);
+   
     protected Session session;
 
     protected PersistenceManager persistenceManager;
@@ -139,7 +139,6 @@ public abstract class JcrTestBase extends TestCase
             if (persistenceManager == null)
             {
                 initPersistenceManager(types);
-                registerNodeTypes(getSession());
             }
             return persistenceManager;
         }
@@ -151,53 +150,13 @@ public abstract class JcrTestBase extends TestCase
     }
 
     @SuppressWarnings("unchecked")
-    protected void registerNodeTypes(Session session) throws InvalidNodeTypeDefException, RepositoryException, IOException, ParseException
-    {
-        // Register name spaces
-        NamespaceRegistry namespaceRegistry = session.getWorkspace().getNamespaceRegistry();
-        try
-        {
-            namespaceRegistry.getURI("oo");
-        }
-        catch (Exception e)
-        {
-            session.getWorkspace().getNamespaceRegistry().registerNamespace("oo", "http://www.otherobjects.org/system/oo6");
-        }
-
-        // Create a CompactNodeTypeDefReader
-        FileReader fileReader = new FileReader(OO_NODE_TYPES_FILE);
-        CompactNodeTypeDefReader cndReader = new CompactNodeTypeDefReader(fileReader, OO_NODE_TYPES_FILE);
-        List types = cndReader.getNodeTypeDefs();
-
-        Workspace workspace = session.getWorkspace();
-        NodeTypeManager ntMgr = workspace.getNodeTypeManager();
-        NodeTypeRegistry ntReg = ((NodeTypeManagerImpl) ntMgr).getNodeTypeRegistry();
-
-        Iterator i = types.iterator();
-        while (i.hasNext())
-        {
-            NodeTypeDef def = (NodeTypeDef) i.next();
-
-            try
-            {
-                ntReg.getNodeTypeDef(def.getName());
-            }
-            catch (NoSuchNodeTypeException nsne)
-            {
-                // If not already registered then register custom node type
-                ntReg.registerNodeType(def);
-            }
-
-        }
-    }
+    
 
     protected void initPersistenceManager(TypeService types) throws UnsupportedRepositoryOperationException, javax.jcr.RepositoryException, InvalidNodeTypeDefException, IOException, ParseException
     {
         Repository repository = RepositoryUtil.getRepository("repositoryTest");
         String[] files = {"./configuration/jcr-mapping.xml"};
         session = RepositoryUtil.login(repository, "superuser", "superuser");
-        cleanUpRepository();
-        registerNodeTypes(session);
 
 //        TypeServiceMapperImpl mapper = new TypeServiceMapperImpl(types);
 //        DefaultAtomicTypeConverterProvider converterProvider = new DefaultAtomicTypeConverterProvider();
@@ -261,57 +220,6 @@ public abstract class JcrTestBase extends TestCase
     public QueryManager getQueryManager()
     {
         return persistenceManager.getQueryManager();
-    }
-
-    @SuppressWarnings("unchecked")
-    protected boolean contains(Collection result, String path, Class objectClass)
-    {
-        Iterator iterator = result.iterator();
-        while (iterator.hasNext())
-        {
-            Object object = iterator.next();
-            String itemPath = (String) ReflectionUtils.getNestedProperty(object, "path");
-            if (itemPath.equals(path))
-            {
-                if (object.getClass() == objectClass)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-
-            }
-        }
-        return false;
-    }
-
-    protected void cleanUpRepository()
-    {
-        try
-        {
-            Session session = this.getSession();
-
-            if (session != null)
-            {
-                NodeIterator nodeIterator = session.getRootNode().getNodes();
-                while (nodeIterator.hasNext())
-                {
-                    Node node = nodeIterator.nextNode();
-                    if (!node.getName().startsWith("jcr:"))
-                    {
-                        log.debug("tearDown - remove : " + node.getPath());
-                        node.remove();
-                    }
-                }
-                session.save();
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
     }
 
 }

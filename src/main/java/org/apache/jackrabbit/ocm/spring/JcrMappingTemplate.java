@@ -73,7 +73,6 @@ public class JcrMappingTemplate extends JcrTemplate implements JcrMappingOperati
     public JcrMappingTemplate()
     {
         super();
-
     }
 
     /**
@@ -207,6 +206,7 @@ public class JcrMappingTemplate extends JcrTemplate implements JcrMappingOperati
             public Object doInJcrMapping(PersistenceManager manager) throws JcrMappingException
             {
                 manager.insert(object);
+                //manager.save(); // FIXME Nasty hack
                 return null;
             }
         }, true);

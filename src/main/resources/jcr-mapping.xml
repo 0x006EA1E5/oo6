@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+<!DOCTYPE jackrabbit-ocm PUBLIC "-//The Apache Software Foundation//DTD Repository//EN" "jackrabbit-ocm.dtd">
+-->
+<jackrabbit-ocm>
+
+	<!-- 
+		<class-descriptor className="org.otherobjects.cms.model.CmsNode" jcrNodeType="nt:unstructured">
+		<field-descriptor fieldName="path" path="true" />
+		<field-descriptor fieldName="data.title" jcrName="title" converter="org.apache.jackrabbit.ocm.persistence.atomictypeconverter.impl.StringTypeConverterImpl" />
+		<field-descriptor fieldName="data.content" jcrName="content" converter="org.apache.jackrabbit.ocm.persistence.atomictypeconverter.impl.StringTypeConverterImpl" />
+		</class-descriptor>
+	-->
+
+	<class-descriptor className="org.otherobjects.cms.model.CmsNode" jcrNodeType="oo:node">
+		<field-descriptor fieldName="id" uuid="true" />
+		<field-descriptor fieldName="jcrPath" path="true" />
+		<field-descriptor fieldName="ooType" jcrName="ooType"/>
+		<field-descriptor fieldName="label" jcrName="label"/>
+		<collection-descriptor fieldName="data" jcrName="data"  collectionClassName="org.apache.jackrabbit.ocm.persistence.collectionconverter.impl.ManagedHashMap" collectionConverter="org.otherobjects.cms.jcr.MapCollectionConverterImpl"/>
+	</class-descriptor>
+</jackrabbit-ocm>

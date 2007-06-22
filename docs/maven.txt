@@ -1,3 +1,31 @@
+Quick start
+-----------
+
+mvn jetty:run
+  Runs app from source
+
+mvn jetty:run-war
+  Builds war and runs from that
+
+mvn package
+mvn war:war
+  Builds war
+
+mvn site
+  Builds docs in target/site
+
+mvn hibernate3:hbm2ddl
+  Generates and executes db schema
+  
+mvn dbunit:operation
+  Seed database with default data
+  
+mvn clean
+  Remove all generated artifacts
+
+mvn project-info-reports:dependencies
+mvn surefire-report:report
+
 How to install source for a project
 -----------------------------------
 
@@ -19,7 +47,15 @@ Then check in target/site/
 Note: To fix cobertura reports...
 http://www.softonaut.com/2007/05/12/maven-cobertura-plugin-version-21-and-the-100-line-and-branch-coverage-problem/
  
-Local repository
+Repository
 ----------------
 
-http://www.jfrog.org/sites/artifactory/latest/
+http://repo1.maven.org/maven2/
+
+To host your own: http://www.jfrog.org/sites/artifactory/latest/
+
+Todo
+----
+Find out about profiles
+Find out about archtypes
+Create jcr plugin?

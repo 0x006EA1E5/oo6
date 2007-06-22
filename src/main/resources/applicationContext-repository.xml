@@ -7,8 +7,8 @@
 	<!-- Repository -->
 
 	<bean id="repository" class="org.springmodules.jcr.jackrabbit.RepositoryFactoryBean">
-		<property name="configuration" value="configuration/jackrabbit-repo.xml" />
-		<property name="homeDir" value="target/repository" />
+		<property name="configuration" value="${jackrabbit.config.path}" />
+		<property name="homeDir" value="${jackrabbit.repository.path}" />
 	</bean>
 
 	<bean id="jcrSessionFactory" class="org.apache.jackrabbit.ocm.spring.JackrabbitSessionFactory">
@@ -30,7 +30,7 @@
 	<!-- Mapping -->
 
 	<bean id="jcrMappingDescriptor" class="org.apache.jackrabbit.ocm.mapper.impl.DigesterMapperImpl">
-		<constructor-arg index="0" value="configuration/jcr-mapping.xml" />
+		<constructor-arg index="0" value="src/main/resources/jcr-mapping.xml" />
 	</bean>
 
 	<bean id="jcrMappingTemplate" class="org.apache.jackrabbit.ocm.spring.JcrMappingTemplate">
@@ -52,6 +52,21 @@
 			<props>
 				<prop key="*">PROPAGATION_REQUIRED</prop>
 			</props>
+		</property>
+	</bean>
+	
+	
+	<!-- Types service -->
+	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl">
+		<property name="cmsNodeService" ref="cmsNodeService" />
+	</bean>
+
+	<!-- Node service -->
+	<bean id="cmsNodeService" parent="baseTransactionProxy">
+		<property name="target">
+			<bean class="org.otherobjects.cms.jcr.CmsNodeServiceImpl">
+				<property name="template" ref="jcrMappingTemplate" />
+			</bean>
 		</property>
 	</bean>
 

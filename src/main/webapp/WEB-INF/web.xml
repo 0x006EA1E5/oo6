@@ -3,11 +3,15 @@
 
 <web-app>
 
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/otherobjects-servlet.xml</param-value>
-	</context-param>
-
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath*:/applicationContext-resources.xml
+            classpath*:/applicationContext-dao.xml
+            classpath*:/applicationContext-security.xml
+            classpath*:/applicationContext-repository.xml
+        </param-value>
+    </context-param>
 	<filter>
 		<filter-name>Acegi Filter Chain Proxy</filter-name>
 		<filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>

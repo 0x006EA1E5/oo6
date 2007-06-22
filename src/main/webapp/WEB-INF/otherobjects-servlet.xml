@@ -3,12 +3,6 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd">
 
-	<import resource="applicationContext-security.xml" />
-	<import resource="applicationContext-repository.xml" />
-	
-	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl">
-		<property name="cmsNodeService" ref="cmsNodeService" />
-	</bean>
 	
 	<bean name="siteController" class="org.otherobjects.cms.controllers.SiteController">
 		<property name="cmsNodeService" ref="cmsNodeService" />
@@ -55,36 +49,6 @@
 		</property>
 	</bean>
 
-
-	<!-- 
-		
-		<bean id="org.apache.jackrabbit.ocm.spring.test.components.impl.NewsServiceImpl" class="org.apache.jackrabbit.ocm.spring.test.components.impl.NewsServiceImpl">
-		<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
-		</bean>
-		
-		<bean id="org.apache.jackrabbit.ocm.spring.test.components.NewsService" parent="baseTransactionProxy" name="org.apache.jackrabbit.ocm.spring.test.components.NewsService">
-		<property name="proxyInterfaces">
-		<value>org.apache.jackrabbit.ocm.spring.test.components.NewsService</value>
-		</property>
-		<property name="target">
-		<ref bean="org.apache.jackrabbit.ocm.spring.test.components.impl.NewsServiceImpl" />
-		</property>
-		<property name="transactionAttributes">
-		<props>
-		
-		<prop key="*">PROPAGATION_REQUIRED</prop>
-		</props>
-		</property>
-		</bean>
-	-->
-
-	<bean id="cmsNodeService" parent="baseTransactionProxy">
-		<property name="target">
-			<bean class="org.otherobjects.cms.jcr.CmsNodeServiceImpl">
-				<property name="template" ref="jcrMappingTemplate" />
-			</bean>
-		</property>
-	</bean>
 
 
 </beans>

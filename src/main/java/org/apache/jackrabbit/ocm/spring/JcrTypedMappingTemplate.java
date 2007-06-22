@@ -14,30 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.otherobjects.cms.jcr;
+package org.apache.jackrabbit.ocm.spring;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+
+import org.apache.jackrabbit.ocm.exception.JcrMappingException;
+import org.apache.jackrabbit.ocm.persistence.PersistenceManager;
+
 
 /**
- * OCM suite definition. Bundles together all independent and package level test suites.
+ * Template whichs adds mapping support for the Java Content Repository.
+ * <p/>
+ * For PersistenceManagers the template creates internally the set of default converters.
  * 
- * @author <a href='mailto:the_mindstorm[at]evolva[dot]ro'>Alexandru Popescu</a>
+ * 
+ * @see org.apache.portals.graffito.jcr.persistence.PersistenceManager
+ * @author Costin Leau
+ * 
  */
-public class AllTests extends TestCase
+@SuppressWarnings("unchecked")
+public class JcrTypedMappingTemplate extends JcrMappingTemplate implements JcrMappingOperations
 {
-
-    public static Test suite() throws Exception
+    @Override
+    protected PersistenceManager createPersistenceManager(Session session) throws RepositoryException, JcrMappingException
     {
-        return new RepositoryLifecycleTestSetup(buildSuite());
-    }
-
-    public static Test buildSuite() throws Exception
-    {
-        TestSuite suite = new TestSuite("Jackrabbit Tests");
-        suite.addTestSuite(PersistenceManagerImplTest.class);
-        suite.addTestSuite(TypeServiceMapperImplTest.class);
-        return suite;
+        return super.createPersistenceManager(session);
     }
 }

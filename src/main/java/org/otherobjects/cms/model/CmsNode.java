@@ -2,11 +2,10 @@ package org.otherobjects.cms.model;
 
 import java.util.Map;
 
-import junit.framework.Assert;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.jackrabbit.ocm.persistence.collectionconverter.impl.ManagedHashMap;
 import org.otherobjects.cms.OtherObjectsException;
+import org.springframework.util.Assert;
 
 /**
  * A CmsNode object represents a data node in the content repository.
@@ -69,7 +68,7 @@ public class CmsNode
         if (path == null || code == null)
             return null;
 
-        Assert.assertTrue("Path must end with a forward slash", path.endsWith("/"));
+        Assert.isTrue(path.endsWith("/"), "Path must end with a forward slash" );
         return getPath() + getCode();
     }
 
@@ -87,8 +86,8 @@ public class CmsNode
             return;
         }
 
-        Assert.assertTrue("jcrPath must contain at least one forward slash", jcrPath.lastIndexOf("/") >= 0);
-        Assert.assertFalse("jcrPath must not end with a forward slash", jcrPath.endsWith("/"));
+        Assert.isTrue(jcrPath.lastIndexOf("/") >= 0, "jcrPath must contain at least one forward slash");
+        Assert.isTrue(!jcrPath.endsWith("/"), "jcrPath must not end with a forward slash");
 
         int slashPos = jcrPath.lastIndexOf("/");
         setPath(jcrPath.substring(0, slashPos + 1));

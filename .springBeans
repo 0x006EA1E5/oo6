@@ -4,7 +4,6 @@
 		<configExtension>xml</configExtension>
 	</configExtensions>
 	<configs>
-		<config>WEB-INF/applicationContext-repository.xml</config>
 		<config>WEB-INF/applicationContext-security.xml</config>
 		<config>WEB-INF/otherobjects-servlet.xml</config>
 	</configs>
