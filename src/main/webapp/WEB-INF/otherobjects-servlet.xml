@@ -6,6 +6,7 @@
 	
 	<bean name="siteController" class="org.otherobjects.cms.controllers.SiteController">
 		<property name="cmsNodeService" ref="cmsNodeService" />
+		<property name="userDao" ref="userDao" />
 	</bean>
 
 	<bean name="singletonBeanLocator" class="org.otherobjects.cms.SingletonBeanLocator" />

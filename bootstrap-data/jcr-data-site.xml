@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:rep="internal" xmlns:oo="http://www.otherobjects.org/system/oo" xmlns:sv="http://www.jcp.org/jcr/sv/1.0"
+	xmlns:mix="http://www.jcp.org/jcr/mix/1.0" jcr:primaryType="oo:node" label="Site" cssClass="site">
+	<about jcr:primaryType="oo:node" ooType="Folder" label="About">
+		<about-us.html ooType="Article">
+			<data title="About us" content="&lt;p&gt;Main about content here&lt;/p&gt;" />
+		</about-us.html>
+	</about>
+</site>

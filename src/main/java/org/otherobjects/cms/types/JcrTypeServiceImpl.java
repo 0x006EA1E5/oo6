@@ -25,6 +25,21 @@ public class JcrTypeServiceImpl extends AbstactTypeService
     public JcrTypeServiceImpl()
     {
         reset();
+        loadTypes();
+    }
+
+    private void loadTypes()
+    {
+        TypeDef td = new TypeDef("Folder");
+        td.addProperty(new PropertyDef("name", "string", null, null));
+        registerType(td);
+        
+        TypeDef td2 = new TypeDef("Article");
+        td2.addProperty(new PropertyDef("title", "string", null, null));
+        registerType(td2);
+        
+        
+        
     }
 
     public Object getJcrConverter(String type)

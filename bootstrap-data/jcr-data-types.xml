@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<types xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:rep="internal" xmlns:oo="http://www.otherobjects.org/system/oo" xmlns:sv="http://www.jcp.org/jcr/sv/1.0"
+	xmlns:mix="http://www.jcp.org/jcr/mix/1.0" jcr:primaryType="oo:node" label="Data Type" cssClass="datatypes">
+
+	<!--  Site -->
+	<Folder jcr:primaryType="oo:node">
+		<name jcr:primaryType="oo:node" type="string" required="true" />
+		<laber jcr:primaryType="oo:node" type="string" />
+	</Folder>
+	<Article jcr:primaryType="oo:node">
+		<title jcr:primaryType="oo:node" type="string" required="true" />
+		<promoSummary jcr:primaryType="oo:node" type="text" />
+		<content jcr:primaryType="oo:node" type="html" />
+		<tags jcr:primaryType="oo:node" type="text" />
+	</Article>
+	
+</types>

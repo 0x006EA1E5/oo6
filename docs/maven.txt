@@ -26,6 +26,15 @@ mvn clean
 mvn project-info-reports:dependencies
 mvn surefire-report:report
 
+Using our jackrabbit plugin
+---------------------------
+
+svn co maven-jackrabbit-plugin
+cd maven-jackrabbit-plugin
+mvn install
+
+mvn org.otherobjects.maven.plugins:maven-jackrabbit-plugin:export
+
 How to install source for a project
 -----------------------------------
 
@@ -59,3 +68,9 @@ Todo
 Find out about profiles
 Find out about archtypes
 Create jcr plugin?
+
+Creating plugins
+----------------
+
+mvn plugin:xdoc
+  Generate docs

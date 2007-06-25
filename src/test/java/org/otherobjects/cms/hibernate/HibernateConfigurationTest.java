@@ -15,6 +15,7 @@ public class HibernateConfigurationTest extends BaseDaoTestCase {
         this.sessionFactory = sessionFactory;
     }
 
+    @SuppressWarnings("unchecked")
     public void testColumnMapping() throws Exception {
         Session session = sessionFactory.openSession();
         try {

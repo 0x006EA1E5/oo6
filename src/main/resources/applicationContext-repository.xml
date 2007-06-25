@@ -15,7 +15,7 @@
 		<property name="repository" ref="repository" />
 		<property name="credentials">
 			<bean class="javax.jcr.SimpleCredentials">
-				<constructor-arg index="0" value="superuser" />
+				<constructor-arg index="0" value="jackrabbit" />
 				<constructor-arg index="1">
 					<bean factory-bean="password" factory-method="toCharArray" />
 				</constructor-arg>
@@ -24,7 +24,7 @@
 	</bean>
 
 	<bean id="password" class="java.lang.String">
-		<constructor-arg index="0" value="superuser" />
+		<constructor-arg index="0" value="jackrabbit" />
 	</bean>
 
 	<!-- Mapping -->

@@ -6,7 +6,7 @@
 		<property name="locations">
 			<list>
 				<value>classpath:jdbc.properties</value>
-				<value>classpath:jackrabbit.properties</value>
+				<value>file:src/test/resources/jackrabbit.properties</value>
 			</list>
 		</property>
 	</bean>

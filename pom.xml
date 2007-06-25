@@ -21,6 +21,8 @@
 		<jdbc.url><![CDATA[jdbc:postgresql://localhost/oong]]></jdbc.url>
 		<jdbc.username>postgres</jdbc.username>
 		<jdbc.password>postgres</jdbc.password>
+		<jackrabbit.username>jackrabbit</jackrabbit.username>
+		<jackrabbit.password>jackrabbit</jackrabbit.password>
 	</properties>
 	<developers>
 		<developer>
@@ -78,6 +80,10 @@
 			</plugin>
 			<!--  -->
 			<plugin>
+				<groupId>org.otherobjects</groupId>
+				<artifactId>maven-jackrabbit-plugin</artifactId>
+			</plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>hibernate3-maven-plugin</artifactId>
 				<version>2.0-alpha-1</version>
@@ -111,6 +117,7 @@
 						</goals>
 					</execution>
 				</executions>
+
 				<dependencies>
 					<dependency>
 						<groupId>${jdbc.groupId}</groupId>
@@ -129,22 +136,14 @@
 					<username>${jdbc.username}</username>
 					<password>${jdbc.password}</password>
 					<url>${jdbc.url}</url>
-					<src>src/test/resources/sample-data.xml</src>
+					<src>bootstrap-data/jdbc-data-users.xml</src>
 					<type>${dbunit.operation.type}</type>
 					<schema>${dbunit.schema}</schema>
 					<skip>${maven.test.skip}</skip>
 				</configuration>
 				<executions>
 					<execution>
-						<id>test-compile</id>
 						<phase>test-compile</phase>
-						<goals>
-							<goal>operation</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>test</id>
-						<phase>test</phase>
 						<goals>
 							<goal>operation</goal>
 						</goals>
@@ -157,6 +156,26 @@
 						<version>${jdbc.version}</version>
 					</dependency>
 				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.otherobjects.maven.plugins</groupId>
+				<artifactId>maven-jackrabbit-plugin</artifactId>
+				<version>1.0-SNAPSHOT</version>
+				<configuration>
+					<repositoryLocation>src/main/webapp/WEB-INF/repository/</repositoryLocation>
+					<dataFiles>
+						<param>bootstrap-data/jcr-data-types.xml</param>
+						<param>bootstrap-data/jcr-data-site.xml</param>
+					</dataFiles>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>import</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 		<resources>

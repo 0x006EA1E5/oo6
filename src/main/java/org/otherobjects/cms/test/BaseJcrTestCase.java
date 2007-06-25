@@ -41,8 +41,6 @@ import org.springmodules.jcr.JcrCallback;
  */
 public abstract class BaseJcrTestCase extends AbstractTransactionalSpringContextTests
 {
-    private static final String OO_NODE_TYPES_FILE = "classpath:oo-node-types.conf";
-
     protected final Log log = LogFactory.getLog(getClass());
     protected ResourceBundle rb;
     protected JcrMappingTemplate jcrMappingTemplate;
@@ -73,9 +71,8 @@ public abstract class BaseJcrTestCase extends AbstractTransactionalSpringContext
     @Override
     protected void onSetUpInTransaction() throws Exception
     {
-        cleanUpRepository();
-        registerNodeTypes();
-        
+        //cleanUpRepository();
+
         SingletonBeanLocator.setStaticBeanFactory(applicationContext.getBeanFactory());
         super.onSetUpBeforeTransaction();
     }
@@ -130,66 +127,45 @@ public abstract class BaseJcrTestCase extends AbstractTransactionalSpringContext
         }));
     }
 
-    @SuppressWarnings("unchecked")
-    protected void registerNodeTypes()
-    {
-        jcrMappingTemplate.execute((new JcrCallback()
-        {
-            public Object doInJcr(Session session) throws RepositoryException
-            {
-                try
-                {
-                    // Register name spaces
-                    NamespaceRegistry namespaceRegistry = session.getWorkspace().getNamespaceRegistry();
-                    try
-                    {
-                        namespaceRegistry.getURI("oo");
-                    }
-                    catch (Exception e)
-                    {
-                        session.getWorkspace().getNamespaceRegistry().registerNamespace("oo", "http://www.otherobjects.org/system/oo6");
-                    }
-
-                    // Create a CompactNodeTypeDefReader
-
-                    Resource template = applicationContext.getResource(OO_NODE_TYPES_FILE);
-
-                    Reader fileReader = new InputStreamReader(template.getInputStream());
-                    CompactNodeTypeDefReader cndReader = new CompactNodeTypeDefReader(fileReader, OO_NODE_TYPES_FILE);
-                    List types = cndReader.getNodeTypeDefs();
-
-                    Workspace workspace = session.getWorkspace();
-                    NodeTypeManager ntMgr = workspace.getNodeTypeManager();
-                    NodeTypeRegistry ntReg = ((NodeTypeManagerImpl) ntMgr).getNodeTypeRegistry();
-
-                    Iterator i = types.iterator();
-                    while (i.hasNext())
-                    {
-                        NodeTypeDef def = (NodeTypeDef) i.next();
-
-                        try
-                        {
-                            ntReg.getNodeTypeDef(def.getName());
-                        }
-                        catch (NoSuchNodeTypeException nsne)
-                        {
-                            // If not already registered then register custom node type
-                            ntReg.registerNodeType(def);
-                        }
-
-                    }
-                }
-                catch (Exception e)
-                {
-                    throw new RepositoryException(e);
-                }
-                return null;
-            }
-        }));
-    }
+ 
 
     public void setJcrMappingTemplate(JcrMappingTemplate jcrMappingTemplate)
     {
         this.jcrMappingTemplate = jcrMappingTemplate;
     }
+
+//    public void exportDocument(String filePath, String nodePath, boolean skipBinary, boolean noRecurse)
+//    {
+//        try
+//        {
+//            BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(filePath));
+//            ContentHandler handler = null;// new org.apache.xml.serialize.XMLSerializer(os, null).asContentHandler();
+//            session.exportDocumentView(nodePath, handler, skipBinary, noRecurse);
+//            os.flush();
+//            os.close();
+//        }
+//        catch (Exception e)
+//        {
+//            System.out.println("Impossible to export the content from : " + nodePath);
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public void importDocument(String filePath, String nodePath)
+//    {
+//        try
+//        {
+//            BufferedInputStream is = new BufferedInputStream(new FileInputStream(filePath));
+//            session.importXML(nodePath, is, ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW);
+//            session.save();
+//            is.close();
+//        }
+//        catch (Exception e)
+//        {
+//            System.out.println("Impossible to import the content from : " + nodePath);
+//            e.printStackTrace();
+//        }
+//
+//    }
+
 }

@@ -18,6 +18,7 @@ public class RoleDaoHibernate extends GenericDaoHibernate<Role, Long> implements
         super(Role.class);
     }
 
+    @SuppressWarnings("unchecked")
     public Role getRoleByName(String rolename) {
         List roles = getHibernateTemplate().find("from Role where name=?", rolename);
         if (roles.isEmpty()) {
