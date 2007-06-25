@@ -4,9 +4,24 @@
 		<configExtension>xml</configExtension>
 	</configExtensions>
 	<configs>
-		<config>WEB-INF/applicationContext-security.xml</config>
-		<config>WEB-INF/otherobjects-servlet.xml</config>
+		<config>src/main/resources/applicationContext-dao.xml</config>
+		<config>src/main/resources/applicationContext-repository.xml</config>
+		<config>src/main/resources/applicationContext-resources.xml</config>
+		<config>src/main/resources/applicationContext-security.xml</config>
+		<config>src/main/webapp/WEB-INF/otherobjects-servlet.xml</config>
 	</configs>
 	<configSets>
+		<configSet>
+			<name><![CDATA[Main]]></name>
+			<allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
+			<incomplete>false</incomplete>
+			<configs>
+				<config>src/main/resources/applicationContext-dao.xml</config>
+				<config>src/main/resources/applicationContext-repository.xml</config>
+				<config>src/main/resources/applicationContext-resources.xml</config>
+				<config>src/main/resources/applicationContext-security.xml</config>
+				<config>src/main/webapp/WEB-INF/otherobjects-servlet.xml</config>
+			</configs>
+		</configSet>
 	</configSets>
 </beansProjectDescription>

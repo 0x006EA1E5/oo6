@@ -143,7 +143,15 @@
 				</configuration>
 				<executions>
 					<execution>
+						<id>test-compile</id>
 						<phase>test-compile</phase>
+						<goals>
+							<goal>operation</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>test</id>
+						<phase>test</phase>
 						<goals>
 							<goal>operation</goal>
 						</goals>

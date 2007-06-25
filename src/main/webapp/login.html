@@ -1,0 +1,26 @@
+<head>
+    <title>$msg.get("login.title")</title>
+</head>
+<body>
+
+<form method="post" id="loginForm" action="/j_security_check">
+<fieldset>
+<p>
+       <label for="j_username" class="required desc">Username:</label>
+       <input type="text" class="text medium" name="j_username" id="j_username" tabindex="1" />
+</p>
+<p>
+       <label for="j_password" class="required desc">Password:</label>
+       <input type="text" class="text medium" name="j_password" id="j_password" tabindex="2" />
+</p>
+<p>
+  <input type="checkbox" class="checkbox" name="rememberMe" id="rememberMe" tabindex="3"/>
+  <label for="rememberMe" class="choice">Remember me?</label>
+</p>
+<p>
+  <input type="submit" class="button" name="login" value="Login" tabindex="4" />
+</p>
+</fieldset>
+</form>
+
+</body>
