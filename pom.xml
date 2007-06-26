@@ -45,40 +45,40 @@
 		</developer>
 	</developers>
 	<!-- 
-	<repositories>
+		<repositories>
 		<repository>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>fail</checksumPolicy>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>fail</checksumPolicy>
-			</snapshots>
-			<id>otherobjectsRepository</id>
-			<name>OTHERobjects Repository</name>
-			<url>scp://ivy.otherworks.com/data/webroot/ivy-repository/</url>
-			<layout>default</layout>
+		<releases>
+		<enabled>true</enabled>
+		<updatePolicy>always</updatePolicy>
+		<checksumPolicy>fail</checksumPolicy>
+		</releases>
+		<snapshots>
+		<enabled>true</enabled>
+		<updatePolicy>always</updatePolicy>
+		<checksumPolicy>fail</checksumPolicy>
+		</snapshots>
+		<id>otherobjectsRepository</id>
+		<name>OTHERobjects Repository</name>
+		<url>scp://ivy.otherworks.com/data/webroot/ivy-repository/</url>
+		<layout>default</layout>
 		</repository>
-	</repositories>
-	<distributionManagement>
+		</repositories>
+		<distributionManagement>
 		<repository>
-			<uniqueVersion>false</uniqueVersion>
-			<id>otherobjectsRepository</id>
-			<name>OTHERobjects Repository</name>
-			<url>file:///Java/maven-repo</url>
-			<layout>default</layout>
+		<uniqueVersion>false</uniqueVersion>
+		<id>otherobjectsRepository</id>
+		<name>OTHERobjects Repository</name>
+		<url>file:///Java/maven-repo</url>
+		<layout>default</layout>
 		</repository>
 		<snapshotRepository>
-			<uniqueVersion>true</uniqueVersion>
-			<id>otherobjectsRepository</id>
-			<name>OTHERobjects Snapshots</name>
-			<url>file:///Java/maven-repo</url>
-			<layout>default</layout>
+		<uniqueVersion>true</uniqueVersion>
+		<id>otherobjectsRepository</id>
+		<name>OTHERobjects Snapshots</name>
+		<url>file:///Java/maven-repo</url>
+		<layout>default</layout>
 		</snapshotRepository>
-	</distributionManagement>
+		</distributionManagement>
 	-->
 	<scm>
 		<connection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/trunk</connection>
@@ -115,10 +115,6 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.otherobjects.maven.plugins</groupId>
-				<artifactId>maven-jackrabbit-plugin</artifactId>
-			</plugin>
-			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>hibernate3-maven-plugin</artifactId>
 				<version>2.0-alpha-1</version>
@@ -152,7 +148,6 @@
 						</goals>
 					</execution>
 				</executions>
-
 				<dependencies>
 					<dependency>
 						<groupId>${jdbc.groupId}</groupId>
@@ -205,11 +200,11 @@
 				<artifactId>maven-jackrabbit-plugin</artifactId>
 				<version>1.0-SNAPSHOT</version>
 				<configuration>
-					<repositoryLocation>src/main/webapp/WEB-INF/repository/</repositoryLocation>
 					<dataFiles>
 						<param>bootstrap-data/jcr-data-types.xml</param>
 						<param>bootstrap-data/jcr-data-site.xml</param>
 					</dataFiles>
+					<repositoryLocation>src/main/webapp/WEB-INF/repository/</repositoryLocation>
 				</configuration>
 				<executions>
 					<execution>
