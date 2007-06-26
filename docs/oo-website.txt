@@ -1,0 +1,3 @@
+Too much choice is bad. 
+
+Recommend: jetty / glassfish

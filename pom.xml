@@ -44,6 +44,42 @@
 			<timezone>+1</timezone>
 		</developer>
 	</developers>
+	<!-- 
+	<repositories>
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+			<id>otherobjectsRepository</id>
+			<name>OTHERobjects Repository</name>
+			<url>scp://ivy.otherworks.com/data/webroot/ivy-repository/</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+	<distributionManagement>
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>otherobjectsRepository</id>
+			<name>OTHERobjects Repository</name>
+			<url>file:///Java/maven-repo</url>
+			<layout>default</layout>
+		</repository>
+		<snapshotRepository>
+			<uniqueVersion>true</uniqueVersion>
+			<id>otherobjectsRepository</id>
+			<name>OTHERobjects Snapshots</name>
+			<url>file:///Java/maven-repo</url>
+			<layout>default</layout>
+		</snapshotRepository>
+	</distributionManagement>
+	-->
 	<scm>
 		<connection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/trunk</connection>
 		<developerConnection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/trunk</developerConnection>
@@ -78,9 +114,8 @@
 					<wtpversion>1.5</wtpversion>
 				</configuration>
 			</plugin>
-			<!--  -->
 			<plugin>
-				<groupId>org.otherobjects</groupId>
+				<groupId>org.otherobjects.maven.plugins</groupId>
 				<artifactId>maven-jackrabbit-plugin</artifactId>
 			</plugin>
 			<plugin>
@@ -445,29 +480,9 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>javax.jcr</groupId>
-			<artifactId>jcr</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.jackrabbit</groupId>
-			<artifactId>jackrabbit-api</artifactId>
-			<version>1.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.jackrabbit</groupId>
-			<artifactId>jackrabbit-jcr-commons</artifactId>
-			<version>1.3</version>
-		</dependency>
-		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>2.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.jackrabbit</groupId>
-			<artifactId>jackrabbit-core</artifactId>
-			<version>1.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.acegisecurity</groupId>
@@ -503,6 +518,43 @@
 					<artifactId>log4j</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>javax.jcr</groupId>
+			<artifactId>jcr</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jackrabbit</groupId>
+			<artifactId>jackrabbit-core</artifactId>
+			<version>1.3</version>
+			<exclusions>
+				<!-- 
+					<exclusion>
+					<groupId>org.apache.jackrabbit</groupId>
+					<artifactId>jackrabbit-text-extractors</artifactId>
+					</exclusion>
+				-->
+				<exclusion>
+					<groupId>org.apache.derby</groupId>
+					<artifactId>derby</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jackrabbit</groupId>
+			<artifactId>jackrabbit-api</artifactId>
+			<version>1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jackrabbit</groupId>
+			<artifactId>jackrabbit-jcr-commons</artifactId>
+			<version>1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.otherobjects</groupId>
+			<artifactId>jackrabbit-ocm-spring</artifactId>
+			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.jackrabbit</groupId>
