@@ -58,14 +58,14 @@
 	
 	<!-- Types service -->
 	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl">
-		<property name="cmsNodeService" ref="cmsNodeService" />
+		<property name="cmsNodeDao" ref="cmsNodeDao" />
 	</bean>
 
 	<!-- Node service -->
-	<bean id="cmsNodeService" parent="baseTransactionProxy">
+	<bean id="cmsNodeDao" parent="baseTransactionProxy">
 		<property name="target">
-			<bean class="org.otherobjects.cms.jcr.CmsNodeServiceImpl">
-				<property name="template" ref="jcrMappingTemplate" />
+			<bean class="org.otherobjects.cms.dao.CmsNodeDaoJackrabbit">
+				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
 			</bean>
 		</property>
 	</bean>

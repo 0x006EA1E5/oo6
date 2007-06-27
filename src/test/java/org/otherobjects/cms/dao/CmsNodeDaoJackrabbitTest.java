@@ -1,4 +1,4 @@
-package org.otherobjects.cms.jcr;
+package org.otherobjects.cms.dao;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,18 +14,20 @@ import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 
-public class PersistenceManagerImplTest extends BaseJcrTestCase
+public class CmsNodeDaoJackrabbitTest extends BaseJcrTestCase
 {
-    private TypeService typeService;
-
+    private CmsNodeDao cmsNodeDao;
+    
     @Override
     protected void onSetUp() throws Exception
     {
-        setupTypesService();
         super.onSetUp();
+        cmsNodeDao = (CmsNodeDao) getApplicationContext().getBean("cmsNodeDao");
+        TypeService typeService = (TypeService) getApplicationContext().getBean("typeService");
+        setupTypesService(typeService);
     }
-    
-    private void setupTypesService()
+
+    private void setupTypesService(TypeService typeService)
     {
         TypeDef td = new TypeDef("org.otherobjects.cms.jcr.TestObject");
         td.addProperty(new PropertyDef("testString", "string", null, null));
@@ -53,14 +55,49 @@ public class PersistenceManagerImplTest extends BaseJcrTestCase
         typeService.registerType(td3);
 
     }
+    
+    public void testGet()
+    {
+        CmsNode node = cmsNodeDao.getByPath("/site/about/about-us.html");
+        assertNotNull(node);
+        assertEquals("About us", node.get("title"));
+    }
+    
+    public void testRemove()
+    {
+        CmsNode node = cmsNodeDao.getByPath("/site/about/about-us.html");
+        assertNotNull(node);
+        
+        cmsNodeDao.remove(node.getId());
+        assertNull(cmsNodeDao.get(node.getId()));
+    }
+
+    public void testExistsAtPath()
+    {
+        assertTrue(cmsNodeDao.existsAtPath("/site/about/about-us.html"));
+        assertFalse(cmsNodeDao.existsAtPath("/site/about/not-about-us.html"));
+        try
+        {
+            cmsNodeDao.existsAtPath(null);
+            fail();
+        }
+        catch (RuntimeException e)
+        {
+            
+        }
+    }
+    
+    public void testExists()
+    {
+        CmsNode node = cmsNodeDao.getByPath("/site/about/about-us.html");
+        assertTrue(cmsNodeDao.exists(node.getId()));
+        assertFalse(cmsNodeDao.exists(node.getId().replaceAll("a", "b")));
+        assertFalse(cmsNodeDao.exists(null));
+    }
 
     @SuppressWarnings("unchecked")
-    public void testSaveCmsNode() throws RepositoryException
+    public void testSave() throws RepositoryException
     {
-//        CmsNode r1 = new TestReferenceObject();
-//        CmsNode c1 = new TestComponentObject();
-//        CmsNode n1 = new TestObject();
-
         CmsNode r1 = createReference("R1");
         List<CmsNode> referencesList = new ArrayList<CmsNode>();
         referencesList.add(createReference("R3"));
@@ -76,9 +113,8 @@ public class PersistenceManagerImplTest extends BaseJcrTestCase
         componentsList.add(createComponent("C4"));
         componentsList.add(createComponent("C5"));
 
-
         CmsNode n1 = new CmsNode("org.otherobjects.cms.jcr.TestObject");
-        n1.setJcrPath("/news.html");
+        n1.setJcrPath("/site/news.html");
         n1.set("testString", "News Story 1");
         n1.set("testText", "Content of story");
 
@@ -105,10 +141,9 @@ public class PersistenceManagerImplTest extends BaseJcrTestCase
         n1.set("testComponentsList", componentsList);
         n1.set("testReferencesList", referencesList);
 
-        jcrMappingTemplate.insert(n1);
-        jcrMappingTemplate.save();
+        cmsNodeDao.save(n1);
 
-        CmsNode ns2 = (CmsNode) jcrMappingTemplate.getObject("/news.html");
+        CmsNode ns2 = (CmsNode) cmsNodeDao.getByPath("/site/news.html");
         assertEquals(n1.get("testString"), ns2.get("testString"));
         assertEquals(n1.get("testText"), ns2.get("testText"));
         assertEquals(n1.get("testDate"), ns2.get("testDate"));
@@ -120,10 +155,10 @@ public class PersistenceManagerImplTest extends BaseJcrTestCase
         assertNotNull(ns2.getId());
 
         n1.set("testString", "News Story 1.1");
-        jcrMappingTemplate.update(n1);
+        cmsNodeDao.save(n1);
         jcrMappingTemplate.save();
 
-        ns2 = (CmsNode) jcrMappingTemplate.getObject("/news.html");
+        ns2 = (CmsNode) cmsNodeDao.getByPath("/site/news.html");
         assertEquals(n1.get("testString"), ns2.get("testString"));
         assertEquals(c1.get("name"), ns2.get("testComponent.name"));
         assertEquals(c2.get("name"), ns2.get("testComponent.component.name"));
@@ -140,9 +175,9 @@ public class PersistenceManagerImplTest extends BaseJcrTestCase
     {
         CmsNode r = new CmsNode("org.otherobjects.cms.jcr.TestReferenceObject");
         r.setJcrPath("/" + name + ".html");
-        r.set("name", name +" Name");
-        jcrMappingTemplate.insert(r);
-        r = (CmsNode) jcrMappingTemplate.getObject("/" + name + ".html");
+        r.set("name", name + " Name");
+        cmsNodeDao.save(r);
+        r = (CmsNode) cmsNodeDao.getByPath("/" + name + ".html");
         return r;
     }
 
@@ -153,8 +188,4 @@ public class PersistenceManagerImplTest extends BaseJcrTestCase
         return c;
     }
 
-    public void setTypeService(TypeService typeService)
-    {
-        this.typeService = typeService;
-    }
 }

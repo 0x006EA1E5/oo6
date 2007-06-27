@@ -24,7 +24,7 @@ import javax.jcr.Value;
 import javax.jcr.ValueFactory;
 
 import org.apache.jackrabbit.ocm.exception.IncorrectAtomicTypeException;
-import org.apache.jackrabbit.ocm.persistence.atomictypeconverter.AtomicTypeConverter;
+import org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter;
 
 /**
  * BigDecimal Converter 

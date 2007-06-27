@@ -18,7 +18,8 @@ All dependencies are in public repositories except for:
   
   # svn checkout http://svn.apache.org/repos/asf/jackrabbit/trunk/contrib/jackrabbit-jcr-mapping/jcr-mapping jcr-mapping
   # cd jcr-mapping
-  Open pom.xml and replace '1.4-SNAPSHOT' in all jackrabbit artifacts with '1.3'
+  # mv pom.xml pom-old.xml
+  # sed -e 's/1.4-SNAPSHOT/1.3/g' pom-old.xml > pom.xml
   # mvn -Dmaven.test.skip=true -DperformRelease=true install
   
 * jackrabbit-ocm-spring

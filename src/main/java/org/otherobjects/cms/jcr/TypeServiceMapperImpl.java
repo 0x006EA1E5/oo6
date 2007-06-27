@@ -18,13 +18,13 @@ package org.otherobjects.cms.jcr;
 
 import org.apache.jackrabbit.ocm.exception.IncorrectPersistentClassException;
 import org.apache.jackrabbit.ocm.exception.InitMapperException;
+import org.apache.jackrabbit.ocm.manager.beanconverter.impl.DefaultBeanConverterImpl;
+import org.apache.jackrabbit.ocm.manager.beanconverter.impl.ReferenceBeanConverterImpl;
 import org.apache.jackrabbit.ocm.mapper.Mapper;
 import org.apache.jackrabbit.ocm.mapper.model.BeanDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.ClassDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.FieldDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.MappingDescriptor;
-import org.apache.jackrabbit.ocm.persistence.beanconverter.impl.DefaultBeanConverterImpl;
-import org.apache.jackrabbit.ocm.persistence.beanconverter.impl.ReferenceBeanConverterImpl;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.PropertyDef;

@@ -3,7 +3,7 @@ package org.otherobjects.cms.model;
 import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.jackrabbit.ocm.persistence.collectionconverter.impl.ManagedHashMap;
+import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.ManagedHashMap;
 import org.otherobjects.cms.OtherObjectsException;
 import org.springframework.util.Assert;
 

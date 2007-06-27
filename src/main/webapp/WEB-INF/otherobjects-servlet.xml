@@ -5,7 +5,7 @@
 
 	
 	<bean name="siteController" class="org.otherobjects.cms.controllers.SiteController">
-		<property name="cmsNodeService" ref="cmsNodeService" />
+		<property name="cmsNodeDao" ref="cmsNodeDao" />
 		<property name="userDao" ref="userDao" />
 	</bean>
 

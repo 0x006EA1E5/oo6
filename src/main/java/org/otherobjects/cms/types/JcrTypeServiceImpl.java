@@ -6,21 +6,21 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.jackrabbit.ocm.persistence.atomictypeconverter.AtomicTypeConverter;
-import org.apache.jackrabbit.ocm.persistence.atomictypeconverter.impl.BooleanTypeConverterImpl;
-import org.apache.jackrabbit.ocm.persistence.atomictypeconverter.impl.Date2LongTypeConverterImpl;
-import org.apache.jackrabbit.ocm.persistence.atomictypeconverter.impl.LongTypeConverterImpl;
-import org.apache.jackrabbit.ocm.persistence.atomictypeconverter.impl.StringTypeConverterImpl;
+import org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter;
+import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.BooleanTypeConverterImpl;
+import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.Date2LongTypeConverterImpl;
+import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.LongTypeConverterImpl;
+import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.StringTypeConverterImpl;
 import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.cms.dao.CmsNodeDao;
 import org.otherobjects.cms.jcr.BigDecimalTypeConverterImpl;
-import org.otherobjects.cms.jcr.CmsNodeService;
 
 public class JcrTypeServiceImpl extends AbstactTypeService
 {
     private Map<String, AtomicTypeConverter> jcrAtomicConverters;
     private Map<String, Class<?>> jcrClassMappings;
 
-    private CmsNodeService cmsNodeService;
+    private CmsNodeDao cmsNodeDao;
 
     public JcrTypeServiceImpl()
     {
@@ -33,13 +33,11 @@ public class JcrTypeServiceImpl extends AbstactTypeService
         TypeDef td = new TypeDef("Folder");
         td.addProperty(new PropertyDef("name", "string", null, null));
         registerType(td);
-        
+
         TypeDef td2 = new TypeDef("Article");
         td2.addProperty(new PropertyDef("title", "string", null, null));
         registerType(td2);
-        
-        
-        
+
     }
 
     public Object getJcrConverter(String type)
@@ -114,7 +112,7 @@ public class JcrTypeServiceImpl extends AbstactTypeService
     private void registerFundamentalTypes()
     {
         setTypes(new LinkedHashMap<String, TypeDef>());
-        
+
         TypeDef t = new TypeDef("oo_TypeDef");
         t.addProperty(new PropertyDef("name", "string", null, null));
         registerType(t);
@@ -152,13 +150,14 @@ public class JcrTypeServiceImpl extends AbstactTypeService
 
     }
 
-    public CmsNodeService getCmsNodeService()
+    public CmsNodeDao getCmsNodeDao()
     {
-        return cmsNodeService;
+        return cmsNodeDao;
     }
 
-    public void setCmsNodeService(CmsNodeService cmsNodeService)
+    public void setCmsNodeDao(CmsNodeDao cmsNodeDao)
     {
-        this.cmsNodeService = cmsNodeService;
+        this.cmsNodeDao = cmsNodeDao;
     }
+
 }

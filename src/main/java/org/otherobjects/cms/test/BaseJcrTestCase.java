@@ -6,18 +6,12 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.ocm.spring.JcrMappingTemplate;
 import org.otherobjects.cms.SingletonBeanLocator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.test.AbstractTransactionalSpringContextTests;
-import org.springmodules.jcr.JcrCallback;
 
 /**
  * Base class for running Jcr tests. This class extends {@code AbstractTransactionalSpringContextTests} so
@@ -87,40 +81,35 @@ public abstract class BaseJcrTestCase extends AbstractTransactionalSpringContext
 
         return obj;
     }
-
-    /**
-     * FIXME Shouldn't need this if we use transaction via Spring?
-     */
-    protected void cleanUpRepository()
-    {
-        jcrMappingTemplate.execute((new JcrCallback()
-        {
-            public Object doInJcr(Session session) throws RepositoryException
-            {
-
-                NodeIterator nodeIterator = session.getRootNode().getNodes();
-                while (nodeIterator.hasNext())
-                {
-                    Node node = nodeIterator.nextNode();
-                    if (!node.getName().startsWith("jcr:"))
-                    {
-                        logger.debug("tearDown - remove : " + node.getPath());
-                        node.remove();
-                    }
-                }
-                session.save();
-                return null;
-            }
-        }));
-    }
-
- 
-
+    
     public void setJcrMappingTemplate(JcrMappingTemplate jcrMappingTemplate)
     {
-        this.jcrMappingTemplate = jcrMappingTemplate;
+    	this.jcrMappingTemplate = jcrMappingTemplate;
     }
 
+//    protected void cleanUpRepository()
+//    {
+//        jcrMappingTemplate.execute((new JcrCallback()
+//        {
+//            public Object doInJcr(Session session) throws RepositoryException
+//            {
+//
+//                NodeIterator nodeIterator = session.getRootNode().getNodes();
+//                while (nodeIterator.hasNext())
+//                {
+//                    Node node = nodeIterator.nextNode();
+//                    if (!node.getName().startsWith("jcr:"))
+//                    {
+//                        logger.debug("tearDown - remove : " + node.getPath());
+//                        node.remove();
+//                    }
+//                }
+//                session.save();
+//                return null;
+//            }
+//        }));
+//    }
+//
 //    public void exportDocument(String filePath, String nodePath, boolean skipBinary, boolean noRecurse)
 //    {
 //        try
