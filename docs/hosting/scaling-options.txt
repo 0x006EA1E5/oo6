@@ -1,0 +1,32 @@
+Options
+
+App: shared JVM, dedicated JVM, clustered JVM
+Static: embedded, dedicated, clustered
+Database: embedded, dedicated, clustered
+JCR: embedded, (dedicated?), clustered
+
+Need recommended:
+
+App server: Jetty, Glassfish
+JVM clusterer: Terracotta, Glassfish
+LoadBalanacer: LVS, balance?, Glassfish
+Database: H2, Postgres, MySQL?
+JCR: Jackrabbit, Alfresco
+
+Deployment models
+
+Model 1: Small sites (eg Company website)
+
+* Single JVM: Embedded JCR, Embedded DB, Embedded Static
+* One process. Dead easy to configure
+* Nightly backups to shared or network drive
+* Optional Apache frontend forextra config
+
+Model 2: Medium size sites, critical data (eg Medium sized e-commerce)
+
+* Critical transactional data in dedicated DB with hot backup
+
+Model 3: HA sites
+
+* Clustered JVM, Clustered JCR, Clusetered Static, Clustered Database
+

@@ -1,0 +1,6 @@
+How to package otherobjects for use with a site
+-----------------------------------------------
+
+* Would ideally be a single jar file as now
+* Is this fast enough for all the resources neede (ext images etc?). Probably not.
+* But they could be packaged as jar and extract on launch.

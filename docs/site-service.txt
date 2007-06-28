@@ -1,0 +1,33 @@
+Navigation Services
+-------------------
+
+Four types of site area:
+
+1. JCR defined (eg folders and articles)
+2. JDBC defined (eg categories and products)
+3. Workflow defined (eg checkout, my-account, surveys)
+4. Externally defined outside scope (third party forum)
+
+Navigation requirements
+
+* URL to resource
+* Resource to URL (if allowed)
+* SSL enforcement
+* Site map: nav elements inc breadcumbs
+
+Design considerations
+
+* Performance - whole site map could be HUGE eg virgin books 
+* Retain hierarchical path based design
+* Spring handle URL to Resource nicely but not site map generation
+* Resource movement
+* Redirects
+* Analytics
+
+Solution 1
+
+* All OO managed resources have an entry in JCR
+* Even processes like checkout
+* Lazy-loaded and cached for performance
+* Anything 'special' is done via Spring but loose the linking and sitemap features
+* Option to plug in alternate providers at set points

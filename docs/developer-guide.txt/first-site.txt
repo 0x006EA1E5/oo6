@@ -1,0 +1,36 @@
+How to build first site
+-----------------------
+
+Pre-requisites:
+
+* Java 1.5
+* Maven (optional but will need for deployment later)
+* SQL Database (optional?)
+
+1. Download otherobjects-runtime and unzip
+2. Run start.sh (which fires up jetty)
+3. You are given URL and security PIN code (so never left exposed)
+4. Go to URL and enter PIN
+5. Confirm data paths and database settings
+6. Set admin details
+7. Congrats page with link to home page and admin
+
+Requirements
+
+* Choose/generate salts?
+* Reset forgotten admin password?
+
+otherobjects-runtime
+
+README.html
+pom.xml
+conf/jetty.xml
+conf/oo.properties (data paths and db settings)?
+lib/oo.jar
+lib/all other deps
+webapp/
+webapp/static/theme/otherobjects (theme or skin?)
+webapp/static/theme/site1
+webapp/static/theme/site2
+webapp/static/theme/wireframe
+data/for private data eg repos

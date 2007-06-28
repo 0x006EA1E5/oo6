@@ -1,0 +1,2 @@
+Can we integrate with stock-photo library to pull in photography?
+Yes: http://istockphoto.com/webservices/xmlrpc_doc/

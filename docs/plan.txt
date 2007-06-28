@@ -1,3 +1,11 @@
+Todo
+
+* Improve test coverage of existing code
+* Acegi method and object-level security
+* Web and perforamance testing setup
+* Versioning and publishing support
+* Live deployment and clustering testing
+
 Development Plan
 
 * Data stores
