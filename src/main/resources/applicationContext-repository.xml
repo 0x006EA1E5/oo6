@@ -28,9 +28,8 @@
 	</bean>
 
 	<!-- Mapping -->
-
-	<bean id="jcrMappingDescriptor" class="org.apache.jackrabbit.ocm.mapper.impl.DigesterMapperImpl">
-		<constructor-arg index="0" value="src/main/resources/jcr-mapping.xml" />
+	<bean id="jcrMappingDescriptor" class="org.otherobjects.cms.jcr.ResourceDigesterMappingImpl">
+		<constructor-arg index="0" value="classpath:jcr-mapping.xml" />
 	</bean>
 
 	<bean id="jcrMappingTemplate" class="org.apache.jackrabbit.ocm.spring.JcrMappingTemplate">
@@ -58,13 +57,13 @@
 	
 	<!-- Types service -->
 	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl">
-		<property name="cmsNodeDao" ref="cmsNodeDao" />
+		<property name="dynaNodeDao" ref="dynaNodeDao" />
 	</bean>
 
 	<!-- Node service -->
-	<bean id="cmsNodeDao" parent="baseTransactionProxy">
+	<bean id="dynaNodeDao" parent="baseTransactionProxy">
 		<property name="target">
-			<bean class="org.otherobjects.cms.dao.CmsNodeDaoJackrabbit">
+			<bean class="org.otherobjects.cms.dao.DynaNodeDaoJackrabbit">
 				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
 			</bean>
 		</property>

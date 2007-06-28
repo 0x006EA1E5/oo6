@@ -12,7 +12,7 @@ import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.Date2LongTypeC
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.LongTypeConverterImpl;
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.StringTypeConverterImpl;
 import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.dao.CmsNodeDao;
+import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.jcr.BigDecimalTypeConverterImpl;
 
 public class JcrTypeServiceImpl extends AbstactTypeService
@@ -20,7 +20,7 @@ public class JcrTypeServiceImpl extends AbstactTypeService
     private Map<String, AtomicTypeConverter> jcrAtomicConverters;
     private Map<String, Class<?>> jcrClassMappings;
 
-    private CmsNodeDao cmsNodeDao;
+    private DynaNodeDao dynaNodeDao;
 
     public JcrTypeServiceImpl()
     {
@@ -150,14 +150,14 @@ public class JcrTypeServiceImpl extends AbstactTypeService
 
     }
 
-    public CmsNodeDao getCmsNodeDao()
+    public DynaNodeDao getDynaNodeDao()
     {
-        return cmsNodeDao;
+        return dynaNodeDao;
     }
 
-    public void setCmsNodeDao(CmsNodeDao cmsNodeDao)
+    public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
     {
-        this.cmsNodeDao = cmsNodeDao;
+        this.dynaNodeDao = dynaNodeDao;
     }
 
 }

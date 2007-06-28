@@ -50,7 +50,7 @@ import org.apache.jackrabbit.ocm.mapper.Mapper;
 import org.apache.jackrabbit.ocm.mapper.model.BeanDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.CollectionDescriptor;
 import org.otherobjects.cms.SingletonBeanLocator;
-import org.otherobjects.cms.model.CmsNode;
+import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
@@ -144,12 +144,12 @@ public class MapCollectionConverterImpl extends AbstractCollectionConverterImpl
         if (propertyType.equals("component"))
         {
             collectionConverter = new DefaultCollectionConverterImpl(atomicTypeConverterProvider.getAtomicTypeConverters(), objectConverter, mapper);
-            elementClassName = CmsNode.class.getName();
+            elementClassName = DynaNode.class.getName();
         }
         else if (propertyType.equals("reference"))
         {
             collectionConverter = new BeanReferenceCollectionConverterImpl(atomicTypeConverterProvider.getAtomicTypeConverters(), objectConverter, mapper);
-            elementClassName = CmsNode.class.getName();
+            elementClassName = DynaNode.class.getName();
         }
         else
         {
@@ -167,7 +167,7 @@ public class MapCollectionConverterImpl extends AbstractCollectionConverterImpl
         BeanDescriptor beanDescriptor = new BeanDescriptor();
         beanDescriptor.setFieldName(key);
         beanDescriptor.setJcrName(key);
-        beanConverter.insert(session, dataNode, beanDescriptor, mapper.getClassDescriptorByClass(CmsNode.class), fieldValue, mapper.getClassDescriptorByClass(CmsNode.class), null);
+        beanConverter.insert(session, dataNode, beanDescriptor, mapper.getClassDescriptorByClass(DynaNode.class), fieldValue, mapper.getClassDescriptorByClass(DynaNode.class), null);
     }
 
     private void insertComponentProperty(Session session, Node dataNode, String key, Object fieldValue)
@@ -176,7 +176,7 @@ public class MapCollectionConverterImpl extends AbstractCollectionConverterImpl
         BeanDescriptor beanDescriptor = new BeanDescriptor();
         beanDescriptor.setFieldName(key);
         beanDescriptor.setJcrName(key);
-        beanConverter.insert(session, dataNode, beanDescriptor, mapper.getClassDescriptorByClass(CmsNode.class), fieldValue, mapper.getClassDescriptorByClass(CmsNode.class), null);
+        beanConverter.insert(session, dataNode, beanDescriptor, mapper.getClassDescriptorByClass(DynaNode.class), fieldValue, mapper.getClassDescriptorByClass(DynaNode.class), null);
     }
 
     private void insertSimpleProperty(Node dataNode, ValueFactory valueFactory, PropertyDef property, Object value) throws RepositoryException
@@ -271,12 +271,12 @@ public class MapCollectionConverterImpl extends AbstractCollectionConverterImpl
         if (propertyType.equals("component"))
         {
             collectionConverter = new DefaultCollectionConverterImpl(atomicTypeConverterProvider.getAtomicTypeConverters(), objectConverter, mapper);
-            elementClassName = CmsNode.class.getName();
+            elementClassName = DynaNode.class.getName();
         }
         else if (propertyType.equals("reference"))
         {
             collectionConverter = new BeanReferenceCollectionConverterImpl(atomicTypeConverterProvider.getAtomicTypeConverters(), objectConverter, mapper);
-            elementClassName = CmsNode.class.getName();
+            elementClassName = DynaNode.class.getName();
         }
         else
         {
@@ -301,7 +301,7 @@ public class MapCollectionConverterImpl extends AbstractCollectionConverterImpl
         BeanDescriptor beanDescriptor = new BeanDescriptor();
         beanDescriptor.setFieldName(property.getName());
         beanDescriptor.setJcrName(property.getName());
-        value = beanConverter.getObject(session, dataNode, beanDescriptor, mapper.getClassDescriptorByClass(CmsNode.class), CmsNode.class, null);
+        value = beanConverter.getObject(session, dataNode, beanDescriptor, mapper.getClassDescriptorByClass(DynaNode.class), DynaNode.class, null);
         return value;
     }
 
@@ -312,7 +312,7 @@ public class MapCollectionConverterImpl extends AbstractCollectionConverterImpl
         BeanDescriptor beanDescriptor = new BeanDescriptor();
         beanDescriptor.setFieldName(property.getName());
         beanDescriptor.setJcrName(property.getName());
-        value = beanConverter.getObject(session, dataNode, beanDescriptor, mapper.getClassDescriptorByClass(CmsNode.class), CmsNode.class, null);
+        value = beanConverter.getObject(session, dataNode, beanDescriptor, mapper.getClassDescriptorByClass(DynaNode.class), DynaNode.class, null);
         return value;
     }
 

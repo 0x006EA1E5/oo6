@@ -14,7 +14,7 @@
 		</class-descriptor>
 	-->
 
-	<class-descriptor className="org.otherobjects.cms.model.CmsNode" jcrNodeType="oo:node">
+	<class-descriptor className="org.otherobjects.cms.model.DynaNode" jcrNodeType="oo:node">
 		<field-descriptor fieldName="id" uuid="true" />
 		<field-descriptor fieldName="jcrPath" path="true" />
 		<field-descriptor fieldName="ooType" jcrName="ooType"/>

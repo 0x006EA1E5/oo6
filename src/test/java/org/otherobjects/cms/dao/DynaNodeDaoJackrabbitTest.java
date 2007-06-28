@@ -8,28 +8,28 @@ import java.util.List;
 
 import javax.jcr.RepositoryException;
 
-import org.otherobjects.cms.model.CmsNode;
+import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.test.BaseJcrTestCase;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 
-public class CmsNodeDaoJackrabbitTest extends BaseJcrTestCase
+public class DynaNodeDaoJackrabbitTest extends BaseJcrTestCase
 {
-    private CmsNodeDao cmsNodeDao;
-    
+    private DynaNodeDao dynaNodeDao;
+
     @Override
     protected void onSetUp() throws Exception
     {
         super.onSetUp();
-        cmsNodeDao = (CmsNodeDao) getApplicationContext().getBean("cmsNodeDao");
+        dynaNodeDao = (DynaNodeDao) getApplicationContext().getBean("dynaNodeDao");
         TypeService typeService = (TypeService) getApplicationContext().getBean("typeService");
         setupTypesService(typeService);
     }
 
     private void setupTypesService(TypeService typeService)
     {
-        TypeDef td = new TypeDef("org.otherobjects.cms.jcr.TestObject");
+        TypeDef td = new TypeDef("org.otherobjects.Dyna.jcr.TestObject");
         td.addProperty(new PropertyDef("testString", "string", null, null));
         td.addProperty(new PropertyDef("testText", "text", null, null));
         td.addProperty(new PropertyDef("testDate", "date", null, null));
@@ -38,82 +38,82 @@ public class CmsNodeDaoJackrabbitTest extends BaseJcrTestCase
         td.addProperty(new PropertyDef("testNumber", "number", null, null));
         td.addProperty(new PropertyDef("testDecimal", "decimal", null, null));
         td.addProperty(new PropertyDef("testBoolean", "boolean", null, null));
-        td.addProperty(new PropertyDef("testReference", "reference", "org.otherobjects.cms.jcr.TestReferenceObject", null));
-        td.addProperty(new PropertyDef("testComponent", "component", "org.otherobjects.cms.jcr.TestComponentObject", null));
+        td.addProperty(new PropertyDef("testReference", "reference", "org.otherobjects.Dyna.jcr.TestReferenceObject", null));
+        td.addProperty(new PropertyDef("testComponent", "component", "org.otherobjects.Dyna.jcr.TestComponentObject", null));
         td.addProperty(new PropertyDef("testStringsList", "string", null, "list"));
         td.addProperty(new PropertyDef("testComponentsList", "component", null, "list"));
         td.addProperty(new PropertyDef("testReferencesList", "reference", null, "list"));
         typeService.registerType(td);
 
-        TypeDef td2 = new TypeDef("org.otherobjects.cms.jcr.TestReferenceObject");
+        TypeDef td2 = new TypeDef("org.otherobjects.Dyna.jcr.TestReferenceObject");
         td2.addProperty(new PropertyDef("name", "string", null, null));
         typeService.registerType(td2);
 
-        TypeDef td3 = new TypeDef("org.otherobjects.cms.jcr.TestComponentObject");
+        TypeDef td3 = new TypeDef("org.otherobjects.Dyna.jcr.TestComponentObject");
         td3.addProperty(new PropertyDef("name", "string", null, null));
-        td3.addProperty(new PropertyDef("component", "component", "org.otherobjects.cms.jcr.TestComponentObject", null));
+        td3.addProperty(new PropertyDef("component", "component", "org.otherobjects.Dyna.jcr.TestComponentObject", null));
         typeService.registerType(td3);
 
     }
-    
+
     public void testGet()
     {
-        CmsNode node = cmsNodeDao.getByPath("/site/about/about-us.html");
+        DynaNode node = dynaNodeDao.getByPath("/site/about/about-us.html");
         assertNotNull(node);
         assertEquals("About us", node.get("title"));
     }
-    
+
     public void testRemove()
     {
-        CmsNode node = cmsNodeDao.getByPath("/site/about/about-us.html");
+        DynaNode node = dynaNodeDao.getByPath("/site/about/about-us.html");
         assertNotNull(node);
-        
-        cmsNodeDao.remove(node.getId());
-        assertNull(cmsNodeDao.get(node.getId()));
+
+        dynaNodeDao.remove(node.getId());
+        assertNull(dynaNodeDao.get(node.getId()));
     }
 
     public void testExistsAtPath()
     {
-        assertTrue(cmsNodeDao.existsAtPath("/site/about/about-us.html"));
-        assertFalse(cmsNodeDao.existsAtPath("/site/about/not-about-us.html"));
+        assertTrue(dynaNodeDao.existsAtPath("/site/about/about-us.html"));
+        assertFalse(dynaNodeDao.existsAtPath("/site/about/not-about-us.html"));
         try
         {
-            cmsNodeDao.existsAtPath(null);
+            dynaNodeDao.existsAtPath(null);
             fail();
         }
         catch (RuntimeException e)
         {
-            
+
         }
     }
-    
+
     public void testExists()
     {
-        CmsNode node = cmsNodeDao.getByPath("/site/about/about-us.html");
-        assertTrue(cmsNodeDao.exists(node.getId()));
-        assertFalse(cmsNodeDao.exists(node.getId().replaceAll("a", "b")));
-        assertFalse(cmsNodeDao.exists(null));
+        DynaNode node = dynaNodeDao.getByPath("/site/about/about-us.html");
+        assertTrue(dynaNodeDao.exists(node.getId()));
+        assertFalse(dynaNodeDao.exists(node.getId().replaceAll("a", "b")));
+        assertFalse(dynaNodeDao.exists(null));
     }
 
     @SuppressWarnings("unchecked")
     public void testSave() throws RepositoryException
     {
-        CmsNode r1 = createReference("R1");
-        List<CmsNode> referencesList = new ArrayList<CmsNode>();
+        DynaNode r1 = createReference("R1");
+        List<DynaNode> referencesList = new ArrayList<DynaNode>();
         referencesList.add(createReference("R3"));
         referencesList.add(createReference("R4"));
         referencesList.add(createReference("R5"));
 
-        CmsNode c1 = createComponent("C1");
-        CmsNode c2 = createComponent("C2");
+        DynaNode c1 = createComponent("C1");
+        DynaNode c2 = createComponent("C2");
         // Test nested 
         c1.set("component", c2);
-        List<CmsNode> componentsList = new ArrayList<CmsNode>();
+        List<DynaNode> componentsList = new ArrayList<DynaNode>();
         componentsList.add(createComponent("C3"));
         componentsList.add(createComponent("C4"));
         componentsList.add(createComponent("C5"));
 
-        CmsNode n1 = new CmsNode("org.otherobjects.cms.jcr.TestObject");
+        DynaNode n1 = new DynaNode("org.otherobjects.Dyna.jcr.TestObject");
         n1.setJcrPath("/site/news.html");
         n1.set("testString", "News Story 1");
         n1.set("testText", "Content of story");
@@ -141,9 +141,9 @@ public class CmsNodeDaoJackrabbitTest extends BaseJcrTestCase
         n1.set("testComponentsList", componentsList);
         n1.set("testReferencesList", referencesList);
 
-        cmsNodeDao.save(n1);
+        dynaNodeDao.save(n1);
 
-        CmsNode ns2 = (CmsNode) cmsNodeDao.getByPath("/site/news.html");
+        DynaNode ns2 = (DynaNode) dynaNodeDao.getByPath("/site/news.html");
         assertEquals(n1.get("testString"), ns2.get("testString"));
         assertEquals(n1.get("testText"), ns2.get("testText"));
         assertEquals(n1.get("testDate"), ns2.get("testDate"));
@@ -155,10 +155,10 @@ public class CmsNodeDaoJackrabbitTest extends BaseJcrTestCase
         assertNotNull(ns2.getId());
 
         n1.set("testString", "News Story 1.1");
-        cmsNodeDao.save(n1);
+        dynaNodeDao.save(n1);
         jcrMappingTemplate.save();
 
-        ns2 = (CmsNode) cmsNodeDao.getByPath("/site/news.html");
+        ns2 = (DynaNode) dynaNodeDao.getByPath("/site/news.html");
         assertEquals(n1.get("testString"), ns2.get("testString"));
         assertEquals(c1.get("name"), ns2.get("testComponent.name"));
         assertEquals(c2.get("name"), ns2.get("testComponent.component.name"));
@@ -171,19 +171,19 @@ public class CmsNodeDaoJackrabbitTest extends BaseJcrTestCase
         //assertEquals(referencesList.get(1), ((List) ns2.get("testReferencesList")).get(1));
     }
 
-    private CmsNode createReference(String name)
+    private DynaNode createReference(String name)
     {
-        CmsNode r = new CmsNode("org.otherobjects.cms.jcr.TestReferenceObject");
+        DynaNode r = new DynaNode("org.otherobjects.Dyna.jcr.TestReferenceObject");
         r.setJcrPath("/" + name + ".html");
         r.set("name", name + " Name");
-        cmsNodeDao.save(r);
-        r = (CmsNode) cmsNodeDao.getByPath("/" + name + ".html");
+        dynaNodeDao.save(r);
+        r = (DynaNode) dynaNodeDao.getByPath("/" + name + ".html");
         return r;
     }
 
-    private CmsNode createComponent(String name)
+    private DynaNode createComponent(String name)
     {
-        CmsNode c = new CmsNode("org.otherobjects.cms.jcr.TestComponentObject");
+        DynaNode c = new DynaNode("org.otherobjects.Dyna.jcr.TestComponentObject");
         c.set("name", name + " Name");
         return c;
     }

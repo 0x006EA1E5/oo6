@@ -1,0 +1,14 @@
+<h1>Counter</h1>
+
+<p style="color:green; font-size:300%;">$counter</p>
+
+
+<h1>JCR Data</h1>
+
+<p>$diggnodeDao.getByPath("/site/about/about-us.html").title</p>
+
+<h1>JDBC Data</h1>
+
+#foreach($user in $userDao.all)
+<p>$user.username</p>
+#end
