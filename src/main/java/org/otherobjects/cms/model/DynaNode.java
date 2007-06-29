@@ -8,18 +8,18 @@ import org.otherobjects.cms.OtherObjectsException;
 import org.springframework.util.Assert;
 
 /**
- * A CmsNode object represents a data node in the content repository.
+ * A dynamic object represents a data node in the content repository.
  * 
- * <p>A node can be uniquely identified in 2 ways: by a GUID or by the jcrPath
- * (which is the concatenation of path and code).
+ * <p>Dynamic nodes can change their properties and validators at runtime
+ * providing a very flexible data model.
  * 
  * <p>TODO Add support for description, icon and image generators
- * <p>TODO Equals, hashCode, serialableId builders
+ * <br>TODO Equals, hashCode, serialableId builders
  */
 @SuppressWarnings("unchecked")
 public class DynaNode implements CmsNode
 {
-    /** Property to be used an the label for this node. */
+    /** Property to be used an the label (human friendly identifier) for this node. */
     private static final String LABEL_KEY = "title";
 
     /** GUID */
@@ -31,7 +31,6 @@ public class DynaNode implements CmsNode
     /** System readable identifier eg filename */
     private String code;
 
-    /* Human readable identifier */
     /* Additional textual information about this item */
     /* Icon representing this node */
     /* Image representing this node */

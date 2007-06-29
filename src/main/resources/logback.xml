@@ -11,6 +11,10 @@
 		<level value="INFO" />
 		<appender-ref ref="STDOUT" />
 	</root>
+	<!--  Turn off annoying and obvious warning. -->
+	<logger name="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+		<level value="ERROR" />
+	</logger>
 	<logger name="org.apache.velocity">
 		<level value="WARN" />
 	</logger>

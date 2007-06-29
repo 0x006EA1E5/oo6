@@ -1,12 +1,10 @@
 package org.otherobjects.cms.model;
 
 /**
- * A CmsNode object represents a data node in the content repository.
+ * Base interface that all objcts stored via OCM must implement.
  * 
  * <p>A node can be uniquely identified in 2 ways: by a GUID or by the jcrPath
  * (which is the concatenation of path and code).
- * 
- * <p>TODO Add support for description, icon and image generators
  */
 public interface CmsNode
 {
