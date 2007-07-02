@@ -5,3 +5,4 @@ TODO External sytem check page:
 * JCR
 * SVN
 TODO Configuration summary page
+TODO Hot backup and restore
