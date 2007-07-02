@@ -1,5 +1,7 @@
 package org.otherobjects.cms.servlet;
 
+import javax.servlet.ServletContext;
+
 import org.mortbay.jetty.servlet.DefaultServlet;
 import org.mortbay.resource.Resource;
 
@@ -11,10 +13,9 @@ import org.mortbay.resource.Resource;
  * <p>TODO Check caching and gzip
  * <br>TODO Local file serving
  * <br>TODO Check content types
+ * <br>TODO Adapt to mapped path correctly
  * <br>TODO Check this works in non-Jetty containers
- * <br>FIXME Path security so that configuration data can't be served
  * 
-
  * @author rich
  */
 public class StaticResourceServlet extends DefaultServlet
@@ -24,6 +25,15 @@ public class StaticResourceServlet extends DefaultServlet
     @Override
     public Resource getResource(String pathInContext)
     {
-        return Resource.newClassPathResource(pathInContext.substring(4));
+        if (pathInContext == null)
+            return null;
+
+        // FIXME Security check: so that configuration data can't be served
+        String path = pathInContext.substring("resources".length() + 2);
+
+        if (!path.startsWith("static/") && !path.startsWith("templates/"))
+            return null;
+
+        return Resource.newClassPathResource(path);
     }
 }
