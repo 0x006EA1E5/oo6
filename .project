@@ -2,27 +2,36 @@
 <projectDescription>
 	<name>otherobjects</name>
 	<comment></comment>
-	<projects>
-	</projects>
+	<projects></projects>
 	<buildSpec>
 		<buildCommand>
 			<name>org.eclipse.jdt.core.javabuilder</name>
-			<arguments>
-			</arguments>
+			<arguments></arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.springframework.ide.eclipse.core.springbuilder</name>
-			<arguments>
-			</arguments>
+			<name>
+				org.springframework.ide.eclipse.core.springbuilder
+			</name>
+			<arguments></arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.jst.j2ee.LibCopyBuilder</name>
+			<arguments></arguments>
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>org.springframework.ide.eclipse.core.springnature</nature>
+		<nature>
+			org.springframework.ide.eclipse.core.springnature
+		</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.jst.j2ee.web.WebNature</nature>
 		<nature>org.maven.ide.eclipse.maven2Nature</nature>
-		<nature>org.eclipse.wst.common.modulecore.ModuleCoreNature</nature>
-		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
+		<nature>
+			org.eclipse.wst.common.modulecore.ModuleCoreNature
+		</nature>
+		<nature>
+			org.eclipse.wst.common.project.facet.core.nature
+		</nature>
 		<nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
 	</natures>
 </projectDescription>

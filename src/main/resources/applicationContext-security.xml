@@ -29,7 +29,7 @@
 
 	<bean id="authenticationProcessingFilter" class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilter">
 		<property name="authenticationManager" ref="authenticationManager" />
-		<property name="authenticationFailureUrl" value="/login.html" />
+		<property name="authenticationFailureUrl" value="/go/workbench/login.html" />
 		<property name="defaultTargetUrl" value="/" />
 		<property name="filterProcessesUrl" value="/j_security_check" />
 		<property name="rememberMeServices" ref="rememberMeServices" />
@@ -50,7 +50,7 @@
 	<bean id="exceptionTranslationFilter" class="org.acegisecurity.ui.ExceptionTranslationFilter">
 		<property name="authenticationEntryPoint">
 			<bean class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilterEntryPoint">
-				<property name="loginFormUrl" value="/login.html" />
+				<property name="loginFormUrl" value="/go/workbench/login.html" />
 				<property name="forceHttps" value="false" />
 			</bean>
 		</property>
@@ -79,6 +79,7 @@
 				<![CDATA[
 				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON 
 				PATTERN_TYPE_APACHE_ANT
+				/go/workbench/login.html=IS_AUTHENTICATED_ANONYMOUSLY
 				/go/**/**=IS_AUTHENTICATED_REMEMBERED
 				/go**=IS_AUTHENTICATED_REMEMBERED
 				/**=IS_AUTHENTICATED_ANONYMOUSLY
