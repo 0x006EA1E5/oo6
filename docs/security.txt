@@ -33,3 +33,110 @@ HibernateUserService
 
 Interesting drupal module: http://drupal.org/node/87679
 
+
+
+Notes on acegi
+--------------
+
+Things we need for oo6
+
+- a way to authenticate users by username/password forms and remember me
+cookies
+- a way to protect certain url patterns (authorization 1)
+- a way to manage access to our business objects (articles, news, orders
+etc.) coming from both
+the repository or persistent database storage (authorization 2)
+
+
+Acegi seems to provide for all of the above but the best patterns
+practices need to be
+established. The authentication is actually straight forward and shall
+not be discusses any further.
+What is currently in place is probably almost enough.
+
+
+Now my understanding of acegi is that similar to our split authorization
+needs, acegi is split into
+two different ways how authorization is managed. When a user
+authenticates, a UserDetails object is created that
+holds information about the users rights. These are global application
+rights that are not at all dependent on
+the resources that need to be protected. Acegi calls those rights
+GrantedAuthorities (GA) and I think they are roughly equivalent
+to oo5's parameterless Permissions (i.e. no resource and actionSet
+specified).
+In a way I think that it doesn't really matter whether one refers to
+these as Permissions, Groups or Roles, what matters is that
+within the application you just care whether a user has one or not to
+allow for access to a certain area or feature.
+They could be further organised within the database to make management
+of those GAs simpler, i.e. by grouping various permissions
+into one Role. But I think that is a meta aspect. As far as acegi is
+concerned these meta levels need to be flattened into a list
+of GAs on authentication. This also means that there probably shouldn't
+be hundreds of distinct GAs but rather dozens as each
+UserDetails object needs to carry around this list.
+
+
+Usage of above GAs is then fairly straightforward in the application. It
+happens through configuration and can protect URL patterns that way
+or happens through the use of e.g.
+org.acegisecurity.taglibs.velocity.Authz where application or template
+code can just ask questions concerning
+the existence of certain GAs in the current UserDetails like boolean
+anyGranted(String roles).
+
+Now the access control to tegh business objects is more interesting and
+complicated. The complication lies mainly in the fact that now not only
+the user and its GAs need to be taken into account but that the object
+the user wants to perform some action on now becomes a part of the
+equation.
+Now it is conceivable that in various use cases above model is still
+sufficient and permission to perform an action is simply given based on
+the
+existence of a specific GA and the type of the object.
+But it gets more interesting when not only the type of object needs to
+be taken into account but also the particular instance properties,
+especially
+the concept of owner- or creatorship. Here is where Access control lists
+ACLs come into play. Acegis contact example app solves this by storing
+the AccessControlEntries for each business object /user pair in the
+database - which might get a bit messy over time.
+The creatorship concept is implemented by adding administration
+permission for the current user when creating a new contact (meaning a
+new row in the database)
+
+Now I think if we want the full power of ACLs there is not much we can
+do other than storing Access Control Entries (ACEs) (which make up the
+ACL for a given object)
+in the database. I'm not sure how bad a plan that is and whether it is a
+case of premature optimization to rule that out at this stage.
+
+Anyway I think there is one potential short cut if we don't want the
+full power of ACLs: we can manage most access to objects by using a
+RoleVoter on the global GAs and
+then have a special Ownership AclEntryVoter, that takes the owner from
+the object to perform on and votes to grant access if the owner matches
+the current user.
+This would require us to store a reference to the owner/creator of an
+object with each object which is probably not that heavy a burden. That
+should work alright with objects
+stored in JCR I think. (I think the full ACL stuff would also work
+alright with JCR persisted objects)
+
+Configuration of the ACL stuff is fairly verbose and needs to be done
+for each class needing to be secured as far as I understand. So I guess
+we should keep the
+number of secured classes to minimum.
+
+Overall I think the configuration is quite an issue. acegi is very
+flexibel and pluggable at the price of being very configuration heavy.
+This can be eased a bit by using
+Java5 annotations but it still stays verbose.
+
+Unfortunately I didn't manage to start writing code yet but I have a lot
+better understanding of acegi now. It would be good to have a chat as
+soon as
+possible about these things while they memory of my research is still
+warm in my head :-)
+
