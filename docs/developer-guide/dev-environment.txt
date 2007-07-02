@@ -1,5 +1,7 @@
 Eclipse 3.3
 
+Dowload Eclipse for JEE developers
+
 http://www.vasanth.in/2004/01/13/EclipseTipKeepingPluginsAndWorkspaceSeparate.aspx
 
 * Subclipse (SVN integration)
@@ -15,3 +17,9 @@ Possible
 * Logback plugin
 * Find bugs?
 * Eclipse-cs? (Checksyle integration)
+
+WTP
+
+* Looks usable at last
+* Preview server (Jetty)
+* Glassfish integration: https://glassfishplugins.dev.java.net/eclipse33/index.html
