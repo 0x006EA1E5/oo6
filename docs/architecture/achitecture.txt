@@ -1,0 +1,6 @@
+Logging
+-------
+
+Using slf4j not commons-logging (JCL) to avoid the classloader nightmares people have reported.
+Other libs coded against JCL are supported via bridgse.
+Advice is for loggers not to be static.
