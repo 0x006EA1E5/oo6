@@ -1,7 +1,5 @@
 package org.otherobjects.cms.servlet;
 
-import javax.servlet.ServletContext;
-
 import org.mortbay.jetty.servlet.DefaultServlet;
 import org.mortbay.resource.Resource;
 
@@ -11,7 +9,7 @@ import org.mortbay.resource.Resource;
  * by otherobjects and other plugins).
  * 
  * <p>TODO Check caching and gzip
- * <br>TODO Local file serving
+ * <br>TODO Local file serving  - check not cached
  * <br>TODO Check content types
  * <br>TODO Adapt to mapped path correctly
  * <br>TODO Check this works in non-Jetty containers
