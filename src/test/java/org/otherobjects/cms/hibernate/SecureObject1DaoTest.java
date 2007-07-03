@@ -1,6 +1,7 @@
 package org.otherobjects.cms.hibernate;
 
 import org.acegisecurity.AccessDeniedException;
+import org.acegisecurity.AuthenticationManager;
 import org.acegisecurity.GrantedAuthority;
 import org.acegisecurity.GrantedAuthorityImpl;
 import org.acegisecurity.context.SecurityContextHolder;
@@ -8,10 +9,31 @@ import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.otherobjects.cms.dao.SecureObject1Dao;
 import org.otherobjects.cms.test.BaseDaoTestCase;
 
+/**
+ * Database needs to have the following:
+ * 
+ * 3 users 
+ * 	- id:1 normal user
+ * 	- id:2 admin user
+ * 	- id:3 another normal user
+ * 
+ * 2 secure objects
+ * 	- id:1, owned by user with id 1
+ * 	- id:2, owned by user with id 3
+ * @author joerg
+ *
+ */
 public class SecureObject1DaoTest extends BaseDaoTestCase {
 	
 	private SecureObject1Dao secureObject1Dao;
+	private AuthenticationManager authenticationManager;
 	
+	
+	
+	public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+		this.authenticationManager = authenticationManager;
+	}
+
 	/**
 	 * this gets injected from spring because of AUTOWIRE_BY_NAME config
 	 * @param secureObject1Dao
@@ -31,27 +53,20 @@ public class SecureObject1DaoTest extends BaseDaoTestCase {
             };
     }
 	
-	protected void setAdminUser()
-	{
-		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("admin", "pass", new GrantedAuthority[] {new GrantedAuthorityImpl("ROLE_ADMIN")}));
-	}
 	
-	protected void setCommonUser()
-	{
-		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "pass", new GrantedAuthority[] {new GrantedAuthorityImpl("ROLE_USER")}));
-	}
+
 	
 	
 	public void testAdminCanGet()
 	{
-		setAdminUser();
+		SecurityContextHolder.getContext().setAuthentication(authenticationManager.authenticate(new UsernamePasswordAuthenticationToken("admin", "admin")));
 		secureObject1Dao.get(1L);
 	}
 	
 	public void testCommonUserCantGet()
 	{
 		try{
-			setCommonUser();
+			SecurityContextHolder.getContext().setAuthentication(authenticationManager.authenticate(new UsernamePasswordAuthenticationToken("user", "user")));
 			secureObject1Dao.get(1L);
 			fail();
 		}

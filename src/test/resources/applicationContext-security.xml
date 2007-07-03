@@ -79,34 +79,26 @@
 	
 	<!-- ============== "AFTER INTERCEPTION" AUTHORIZATION DEFINITIONS =========== -->
 
-<!--   <bean id="afterInvocationManager" class="org.acegisecurity.afterinvocation.AfterInvocationProviderManager">-->
-<!--      <property name="providers">-->
-<!--         <list>-->
-<!--            <ref local="afterAclRead"/>-->
-<!--         </list>-->
-<!--      </property>-->
-<!--   </bean>-->
-<!--   -->
-<!--    Processes AFTER_ACL_READ configuration settings -->
-<!--   <bean id="afterAclRead" class="org.acegisecurity.afterinvocation.AclEntryAfterInvocationProvider">-->
-<!--      <constructor-arg>-->
-<!--      	<ref bean="aclService"/>-->
-<!--      </constructor-arg>-->
-<!--      <constructor-arg>-->
-<!--      	<list>-->
-<!--          <ref local="org.acegisecurity.acls.domain.BasePermission.ADMINISTRATION"/>-->
-<!--          <ref local="org.acegisecurity.acls.domain.BasePermission.READ"/>-->
-<!--      	</list>-->
-<!--      </constructor-arg>-->
-<!--   </bean>-->
+	<bean id="afterInvocationManager" class="org.acegisecurity.afterinvocation.AfterInvocationProviderManager">
+	   <property name="providers">
+	      <list>
+	         <ref local="afterOwnership"/>
+	      </list>
+	   </property>
+	</bean>
+	   
+	<!--    Processes AFTER_ACL_READ configuration settings -->
+	<bean id="afterOwnership" class="org.otherobjects.cms.security.OwnershipAfterInvocationProvider">
+
+	</bean>
 	
 	<bean id="secureObjectDao1Security" class="org.acegisecurity.intercept.method.aopalliance.MethodSecurityInterceptor">
 	      <property name="authenticationManager"><ref bean="authenticationManager"/></property>
 	      <property name="accessDecisionManager"><ref local="businessAccessDecisionManager"/></property>
-	      <!--  <property name="afterInvocationManager"><ref local="afterInvocationManager"/></property>-->
+	      <property name="afterInvocationManager"><ref local="afterInvocationManager"/></property>
 	      <property name="objectDefinitionSource">
 	         <value>
-	            org.otherobjects.cms.dao.SecureObject1Dao.get=ROLE_ADMIN
+	            org.otherobjects.cms.dao.SecureObject1Dao.get=ROLE_ADMIN,AFTER_OWNERSHIP
 	         </value>
 	      </property>
 	   </bean>
