@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+<!--	Instance security	-->
+	
+	<!-- ~~~~~~~~~~~~~~~~~~ "BEFORE INVOCATION" AUTHORIZATION DEFINITIONS ~~~~~~~~~~~~~~~~ -->
+
+   <!-- ACL permission masks used by this application -->
+<!--   <bean id="org.acegisecurity.acls.domain.BasePermission.ADMINISTRATION" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">-->
+<!--      <property name="staticField"><value>org.acegisecurity.acls.domain.BasePermission.ADMINISTRATION</value></property>-->
+<!--   </bean>-->
+<!--   <bean id="org.acegisecurity.acls.domain.BasePermission.READ" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">-->
+<!--      <property name="staticField"><value>org.acegisecurity.acls.domain.BasePermission.READ</value></property>-->
+<!--   </bean>-->
+<!--   <bean id="org.acegisecurity.acls.domain.BasePermission.DELETE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">-->
+<!--      <property name="staticField"><value>org.acegisecurity.acls.domain.BasePermission.DELETE</value></property>-->
+<!--   </bean>-->
+	
+	<!-- An access decision voter that reads ROLE_* configuration settings -->
+	<bean id="roleVoter" class="org.acegisecurity.vote.RoleVoter"/>
+	
+	<!-- An access decision manager used by the business objects -->
+	<bean id="businessAccessDecisionManager" class="org.acegisecurity.vote.AffirmativeBased">
+	   <property name="allowIfAllAbstainDecisions"><value>false</value></property>
+	   <property name="decisionVoters">
+	      <list>
+	         <ref local="roleVoter"/>
+	      </list>
+	   </property>
+	</bean>
+	
+	<!-- ========= ACCESS CONTROL LIST LOOKUP MANAGER DEFINITIONS ========= -->
+
+<!--	<bean id="aclCache" class="org.acegisecurity.acls.jdbc.EhCacheBasedAclCache">-->
+<!--		<constructor-arg>-->
+<!--		   <bean class="org.springframework.cache.ehcache.EhCacheFactoryBean">-->
+<!--		      <property name="cacheManager">-->
+<!--				<bean class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>-->
+<!--		      </property>-->
+<!--		      <property name="cacheName">-->
+<!--		         <value>aclCache</value>-->
+<!--		      </property>-->
+<!--		   </bean>-->
+<!--		</constructor-arg>-->
+<!--	</bean>-->
+<!--    -->
+<!--	<bean id="lookupStrategy" class="org.acegisecurity.acls.jdbc.BasicLookupStrategy">-->
+<!--		<constructor-arg ref="dataSource"/>-->
+<!--		<constructor-arg ref="aclCache"/>-->
+<!--		<constructor-arg ref="aclAuthorizationStrategy"/>-->
+<!--		<constructor-arg>-->
+<!--			<bean class="org.acegisecurity.acls.domain.ConsoleAuditLogger"/>-->
+<!--		</constructor-arg>-->
+<!--	</bean>-->
+<!--	-->
+<!--	<bean id="aclAuthorizationStrategy" class="org.acegisecurity.acls.domain.AclAuthorizationStrategyImpl">-->
+<!--		<constructor-arg>-->
+<!--			<list>-->
+<!--				<bean class="org.acegisecurity.GrantedAuthorityImpl">-->
+<!--					<constructor-arg value="ROLE_ADMIN"/>-->
+<!--				</bean>-->
+<!--				<bean class="org.acegisecurity.GrantedAuthorityImpl">-->
+<!--					<constructor-arg value="ROLE_ADMIN"/>-->
+<!--				</bean>-->
+<!--				<bean class="org.acegisecurity.GrantedAuthorityImpl">-->
+<!--					<constructor-arg value="ROLE_ADMIN"/>-->
+<!--				</bean>-->
+<!--			</list>-->
+<!--		</constructor-arg>-->
+<!--	</bean>-->
+<!--	-->
+<!--	<bean id="aclService" class="org.acegisecurity.acls.jdbc.JdbcMutableAclService">-->
+<!--		<constructor-arg ref="dataSource"/>-->
+<!--		<constructor-arg ref="lookupStrategy"/>-->
+<!--		<constructor-arg ref="aclCache"/>-->
+<!--	</bean>-->
+	
+	<!-- ============== "AFTER INTERCEPTION" AUTHORIZATION DEFINITIONS =========== -->
+
+<!--   <bean id="afterInvocationManager" class="org.acegisecurity.afterinvocation.AfterInvocationProviderManager">-->
+<!--      <property name="providers">-->
+<!--         <list>-->
+<!--            <ref local="afterAclRead"/>-->
+<!--         </list>-->
+<!--      </property>-->
+<!--   </bean>-->
+<!--   -->
+<!--    Processes AFTER_ACL_READ configuration settings -->
+<!--   <bean id="afterAclRead" class="org.acegisecurity.afterinvocation.AclEntryAfterInvocationProvider">-->
+<!--      <constructor-arg>-->
+<!--      	<ref bean="aclService"/>-->
+<!--      </constructor-arg>-->
+<!--      <constructor-arg>-->
+<!--      	<list>-->
+<!--          <ref local="org.acegisecurity.acls.domain.BasePermission.ADMINISTRATION"/>-->
+<!--          <ref local="org.acegisecurity.acls.domain.BasePermission.READ"/>-->
+<!--      	</list>-->
+<!--      </constructor-arg>-->
+<!--   </bean>-->
+	
+	<bean id="secureObjectDao1Security" class="org.acegisecurity.intercept.method.aopalliance.MethodSecurityInterceptor">
+	      <property name="authenticationManager"><ref bean="authenticationManager"/></property>
+	      <property name="accessDecisionManager"><ref local="businessAccessDecisionManager"/></property>
+	      <!--  <property name="afterInvocationManager"><ref local="afterInvocationManager"/></property>-->
+	      <property name="objectDefinitionSource">
+	         <value>
+	            org.otherobjects.cms.dao.SecureObject1Dao.get=ROLE_ADMIN
+	         </value>
+	      </property>
+	   </bean>
+
+
+</beans>

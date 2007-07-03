@@ -24,8 +24,10 @@ public class SecureObject1DaoTest extends BaseDaoTestCase {
         setAutowireMode(AUTOWIRE_BY_NAME);
         return new String[] {
                 "file:src/test/resources/applicationContext-resources.xml",
+                "file:src/test/resources/applicationContext-dao.xml",
+                "file:src/test/resources/applicationContext-security.xml",
                 "file:src/main/resources/applicationContext-dao.xml",
-                "file:src/main/resources/applicationContext-security.xml"
+                "file:src/main/resources/applicationContext-security.xml",
             };
     }
 	
