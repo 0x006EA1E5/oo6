@@ -1,0 +1,3 @@
+Example implementations:
+
+http://confluence.atlassian.com/display/JIRA/JIRA+Plugin+Guide

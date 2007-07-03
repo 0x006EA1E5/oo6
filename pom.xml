@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.otherobjects.cms</groupId>
@@ -12,19 +11,13 @@
 	<inceptionYear>2007</inceptionYear>
 	<properties>
 		<copyright.year>2007</copyright.year>
-		<dbunit.dataTypeFactoryName>
-			org.dbunit.dataset.datatype.DefaultDataTypeFactory
-		</dbunit.dataTypeFactoryName>
+		<dbunit.dataTypeFactoryName>org.dbunit.dataset.datatype.DefaultDataTypeFactory</dbunit.dataTypeFactoryName>
 		<dbunit.operation.type>CLEAN_INSERT</dbunit.operation.type>
-		<hibernate.dialect>
-			org.hibernate.dialect.PostgreSQLDialect
-		</hibernate.dialect>
+		<hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
 		<jdbc.groupId>postgresql</jdbc.groupId>
 		<jdbc.artifactId>postgresql</jdbc.artifactId>
 		<jdbc.version>8.1-408.jdbc3</jdbc.version>
-		<jdbc.driverClassName>
-			org.postgresql.Driver
-		</jdbc.driverClassName>
+		<jdbc.driverClassName>org.postgresql.Driver</jdbc.driverClassName>
 		<jdbc.url><![CDATA[jdbc:postgresql://localhost/oong]]></jdbc.url>
 		<jdbc.username>postgres</jdbc.username>
 		<jdbc.password>postgres</jdbc.password>
@@ -88,9 +81,7 @@
 		</distributionManagement>
 	-->
 	<scm>
-		<connection>
-			scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/trunk
-		</connection>
+		<connection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/trunk</connection>
 		<developerConnection>
 			scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/trunk
 		</developerConnection>
@@ -127,14 +118,10 @@
 				<version>2.3</version>
 				<configuration>
 					<additionalProjectnatures>
-						<projectnature>
-							org.springframework.ide.eclipse.core.springnature
-						</projectnature>
+						<projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
 					</additionalProjectnatures>
 					<additionalBuildcommands>
-						<buildcommand>
-							org.springframework.ide.eclipse.core.springbuilder
-						</buildcommand>
+						<buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand>
 					</additionalBuildcommands>
 					<downloadSources>true</downloadSources>
 					<downloadJavadocs>true</downloadJavadocs>
@@ -149,17 +136,13 @@
 					<components>
 						<component>
 							<name>hbm2ddl</name>
-							<implementation>
-								annotationconfiguration
-							</implementation>
+							<implementation>annotationconfiguration</implementation>
 						</component>
 					</components>
 					<componentProperties>
 						<drop>true</drop>
 						<jdk5>true</jdk5>
-						<propertyfile>
-							target/classes/jdbc.properties
-						</propertyfile>
+						<propertyfile>target/classes/jdbc.properties</propertyfile>
 						<skip>${maven.test.skip}</skip>
 					</componentProperties>
 				</configuration>
@@ -192,9 +175,7 @@
 				<artifactId>dbunit-maven-plugin</artifactId>
 				<version>1.0-beta-1</version>
 				<configuration>
-					<dataTypeFactoryName>
-						${dbunit.dataTypeFactoryName}
-					</dataTypeFactoryName>
+					<dataTypeFactoryName>${dbunit.dataTypeFactoryName}</dataTypeFactoryName>
 					<driver>${jdbc.driverClassName}</driver>
 					<username>${jdbc.username}</username>
 					<password>${jdbc.password}</password>
@@ -237,9 +218,7 @@
 						<param>bootstrap-data/jcr-data-types.xml</param>
 						<param>bootstrap-data/jcr-data-site.xml</param>
 					</dataFiles>
-					<repositoryLocation>
-						src/main/webapp/WEB-INF/repository/
-					</repositoryLocation>
+					<repositoryLocation>src/main/webapp/WEB-INF/repository/</repositoryLocation>
 				</configuration>
 				<executions>
 					<execution>
@@ -449,9 +428,7 @@
 				</exclusion>
 				<exclusion>
 					<groupId>geronimo-spec</groupId>
-					<artifactId>
-						geronimo-spec-j2ee-connector
-					</artifactId>
+					<artifactId>geronimo-spec-j2ee-connector</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>org.apache.jackrabbit</groupId>
