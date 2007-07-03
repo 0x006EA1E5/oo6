@@ -14,9 +14,7 @@
 	         <idref bean="secureObjectDao1Security"/>
 	      </list>
 	   </property>
-	   <property name="target">
-	   		<idref local="secureObject1DaoTarget"/>
-	   </property>
+		<property name="target" ref="secureObject1DaoTarget" />
 	</bean>
 
    <bean id="secureObject1DaoTarget" class="org.otherobjects.cms.dao.SecureObject1DaoHibernate">

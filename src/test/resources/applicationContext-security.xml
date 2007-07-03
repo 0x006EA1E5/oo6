@@ -87,7 +87,7 @@
 	   </property>
 	</bean>
 	   
-	<!--    Processes AFTER_ACL_READ configuration settings -->
+	<!--    Processes AFTER_OWNERSHIP configuration settings -->
 	<bean id="afterOwnership" class="org.otherobjects.cms.security.OwnershipAfterInvocationProvider">
 
 	</bean>
@@ -98,7 +98,7 @@
 	      <property name="afterInvocationManager"><ref local="afterInvocationManager"/></property>
 	      <property name="objectDefinitionSource">
 	         <value>
-	            org.otherobjects.cms.dao.GenericDao.get=ROLE_ADMIN,AFTER_OWNERSHIP
+	         	org.otherobjects.cms.dao.GenericDao.get=AFTER_OWNERSHIP
 	         </value>
 	      </property>
 	   </bean>
