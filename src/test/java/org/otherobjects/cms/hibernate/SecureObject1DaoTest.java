@@ -67,11 +67,12 @@ public class SecureObject1DaoTest extends BaseDaoTestCase {
 	{
 		try{
 			SecurityContextHolder.getContext().setAuthentication(authenticationManager.authenticate(new UsernamePasswordAuthenticationToken("user", "user")));
-			secureObject1Dao.getById(1L);
+			secureObject1Dao.get(1L);
 			
 		}
 		catch(Exception e)
 		{
+			System.out.println(e.getMessage());
 			fail();
 		}
 		
