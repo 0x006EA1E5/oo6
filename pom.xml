@@ -52,6 +52,7 @@
 			<activation></activation>
 			<properties>
 				<dbunit.operation.type>CLEAN_INSERT</dbunit.operation.type>
+				<dbunit.dataTypeFactoryName>org.dbunit.ext.hsqldb.HsqldbDataTypeFactory</dbunit.dataTypeFactoryName>
 				<hibernate.dialect>org.hibernate.dialect.H2Dialect</hibernate.dialect>
 				<jdbc.groupId>com.h2database</jdbc.groupId>
 				<jdbc.artifactId>h2</jdbc.artifactId>
