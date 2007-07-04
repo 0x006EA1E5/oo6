@@ -26,6 +26,16 @@ mvn clean
 mvn project-info-reports:dependencies
 mvn surefire-report:report
 
+Running tests against H2 testdatabase
+-------------------------------------
+
+There is a maven profile called testdb that creates and populates the database as an H2 database
+rather than in postgres and then runs the tests against that. 
+To use that use something like this:
+
+mvn -P testdb test
+
+
 Using our jackrabbit plugin
 ---------------------------
 
