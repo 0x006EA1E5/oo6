@@ -10,12 +10,19 @@
 			</list>
 		</property>
 	</bean>
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="org.postgresql.Driver" />
-		<property name="url" value="jdbc:postgresql://localhost/oong" />
-		<property name="username" value="postgres" />
-		<property name="password" value="postgres" />
+		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.h2.Driver" />
+		<property name="url" value="jdbc:h2:${java.io.tmpdir}/oongtest" />
+		<property name="username" value="sa" />
+		<property name="password" value="" />
 	</bean>
+	
+<!--	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
+<!--		<property name="driverClassName" value="org.postgresql.Driver" />-->
+<!--		<property name="url" value="jdbc:postgresql://localhost/oong" />-->
+<!--		<property name="username" value="postgres" />-->
+<!--		<property name="password" value="postgres" />-->
+<!--	</bean>-->
 
 	<!--
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
