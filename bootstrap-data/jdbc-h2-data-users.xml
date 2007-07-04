@@ -41,6 +41,20 @@
             <value description="account_locked">0</value>
             <value description="credentials_expired">0</value>
         </row>
+        <row>
+            <value description="id">3</value>
+            <value description="username">user2</value>
+            <value description="password">12dea96fec20593566ab75692c9949596833adc9</value>
+            <value description="first_name">User</value>
+            <value description="last_name">User</value>
+            <value description="email">user2@user.com</value>
+            <value description="password_hint"><![CDATA[Password is: user.]]></value>
+            <value description="version">1</value>
+            <value description="account_enabled">1</value>
+            <value description="account_expired">0</value>
+            <value description="account_locked">0</value>
+            <value description="credentials_expired">0</value>
+        </row>
     </table>
     <table name="role">
         <column>id</column>
@@ -72,5 +86,25 @@
             <value description="user_id">2</value>
             <value description="role_id">2</value>
         </row>
+        <row>
+            <value description="user_id">3</value>
+            <value description="role_id">2</value>
+        </row>
+    </table>
+    <table name="secure_object_one">
+        <column>id</column>
+        <column>value</column>
+        <column>owner_id</column>
+        <row>
+            <value description="id">1</value>
+            <value description="value">user1 secure object</value>
+            <value description="owner_id">1</value>
+        </row>
+        <row>
+            <value description="id">2</value>
+            <value description="value">user2 secure object</value>
+            <value description="owner_id">3</value>
+        </row>
+        
     </table>
 </dataset>
