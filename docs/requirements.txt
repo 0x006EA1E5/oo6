@@ -1,0 +1,24 @@
+Site
+----
+
+* Dublin-core metadata
+* Multiple domains per server (with shared user base though -- what about template grouping though?)
+
+
+Security
+--------
+
+* Multiple authentication mechanisms (DB, LDAP)
+
+Design
+------
+
+Search
+------
+
+
+Intelligence
+------------
+
+* Search info
+* Page views per last day/last week/last month/last year. Updated houly?

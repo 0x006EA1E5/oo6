@@ -1,3 +1,9 @@
 Example implementations:
 
 http://confluence.atlassian.com/display/JIRA/JIRA+Plugin+Guide
+
+Extension points
+
+* Events
+* Blocks
+* Tools (utility objects provided to templates)

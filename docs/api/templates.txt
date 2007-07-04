@@ -1,0 +1,12 @@
+Methods available from templates
+
+L10N message
+Propreties
+DAOs - access to all
+Tools - security checks
+Tools - link generation
+
+Current Resource Object
+Current User
+Current Folder
+

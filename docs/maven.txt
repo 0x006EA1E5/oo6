@@ -45,7 +45,7 @@ mvn install
 
 mvn org.otherobjects.maven.plugins:maven-jackrabbit-plugin:export
 
-Guide: http://maven.apache.org/guides/plugin/guide-java-plugin-development.html
+Plugin dev guide: http://maven.apache.org/guides/plugin/guide-java-plugin-development.html
 
 How to install source for a project
 -----------------------------------
@@ -86,3 +86,8 @@ Creating plugins
 
 mvn plugin:xdoc
   Generate docs
+  
+Docs
+----
+
+http://www.sonatype.com/book/ 

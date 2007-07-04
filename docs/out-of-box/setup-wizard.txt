@@ -15,5 +15,7 @@ site setup on first run:
 Configration options
 
 * Data directory
-* JDBC settings (optional)
-* JCR settings (optional)
+* Admin email and telephone (recommended)
+* Mail server (recommended)
+* JDBC settings (optional -- use embedded H2)
+* JCR settings (optional -- not even sure if needed)

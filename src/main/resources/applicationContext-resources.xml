@@ -11,7 +11,7 @@
         <property name="locations">
             <list>
                 <value>classpath:jackrabbit.properties</value>
-                <value>classpath:jdbc.properties</value>
+                <value>file:target/classes/jdbc.properties</value>
             </list>
         </property>
     </bean>

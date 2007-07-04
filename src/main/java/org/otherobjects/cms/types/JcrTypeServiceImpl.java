@@ -28,6 +28,9 @@ public class JcrTypeServiceImpl extends AbstactTypeService
         loadTypes();
     }
 
+    /**
+     * FIXME Load data from JRC
+     */
     private void loadTypes()
     {
         TypeDef td = new TypeDef("Folder");
@@ -36,6 +39,7 @@ public class JcrTypeServiceImpl extends AbstactTypeService
 
         TypeDef td2 = new TypeDef("Article");
         td2.addProperty(new PropertyDef("title", "string", null, null));
+        td2.addProperty(new PropertyDef("content", "text", null, null));
         registerType(td2);
 
     }
