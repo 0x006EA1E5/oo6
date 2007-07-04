@@ -1,7 +1,5 @@
 package org.otherobjects.cms.servlet;
 
-import javax.servlet.UnavailableException;
-
 import org.mortbay.jetty.servlet.DefaultServlet;
 import org.mortbay.resource.Resource;
 
@@ -37,7 +35,4 @@ public class StaticResourceServlet extends DefaultServlet
         return Resource.newClassPathResource(path);
     }
 
-    public void init() throws UnavailableException
-    {
-    }
 }
