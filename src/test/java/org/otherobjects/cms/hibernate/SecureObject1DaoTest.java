@@ -6,6 +6,8 @@ import org.acegisecurity.GrantedAuthority;
 import org.acegisecurity.GrantedAuthorityImpl;
 import org.acegisecurity.context.SecurityContextHolder;
 import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
+import org.acegisecurity.providers.anonymous.AnonymousAuthenticationProvider;
+import org.acegisecurity.providers.anonymous.AnonymousAuthenticationToken;
 import org.otherobjects.cms.dao.SecureObject1Dao;
 import org.otherobjects.cms.test.BaseDaoTestCase;
 
@@ -68,7 +70,6 @@ public class SecureObject1DaoTest extends BaseDaoTestCase {
 		try{
 			SecurityContextHolder.getContext().setAuthentication(authenticationManager.authenticate(new UsernamePasswordAuthenticationToken("user", "user")));
 			secureObject1Dao.get(1L);
-			
 		}
 		catch(Exception e)
 		{
@@ -88,10 +89,28 @@ public class SecureObject1DaoTest extends BaseDaoTestCase {
 		}
 		catch(Exception e)
 		{
+			System.out.println(e.getMessage());
 			assertTrue(e instanceof AccessDeniedException);
 		}
 		
 		
+	}
+	
+	public void testNoUserCantGet()
+	{
+		try{
+			AnonymousAuthenticationProvider anonymousAuthenticationProvider = new AnonymousAuthenticationProvider();
+			anonymousAuthenticationProvider.setKey("testkey");
+			AnonymousAuthenticationToken anonymousAuthenticationToken = new AnonymousAuthenticationToken("testkey", "anonymous", new GrantedAuthority[] {new GrantedAuthorityImpl("ROLE_ANONYMOUS")});
+			SecurityContextHolder.getContext().setAuthentication(anonymousAuthenticationProvider.authenticate(anonymousAuthenticationToken));
+			secureObject1Dao.get(2L);
+			fail();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+			assertTrue(e instanceof AccessDeniedException);
+		}
 	}
 	
 }

@@ -92,14 +92,18 @@
 
 	</bean>
 	
+	<bean id="securityAttributes" class="org.acegisecurity.annotation.SecurityAnnotationAttributes"/>
+	<bean id="objectDefinitionSource" class="org.acegisecurity.intercept.method.MethodDefinitionAttributes">
+		<property name="attributes"><ref local="securityAttributes"/></property>
+	</bean>
+	
 	<bean id="secureObjectDao1Security" class="org.acegisecurity.intercept.method.aopalliance.MethodSecurityInterceptor">
+		<property name="validateConfigAttributes"><value>true</value></property>
 	      <property name="authenticationManager"><ref bean="authenticationManager"/></property>
 	      <property name="accessDecisionManager"><ref local="businessAccessDecisionManager"/></property>
 	      <property name="afterInvocationManager"><ref local="afterInvocationManager"/></property>
 	      <property name="objectDefinitionSource">
-	         <value>
-	         	org.otherobjects.cms.dao.GenericDao.get=ROLE_USER,AFTER_OWNERSHIP
-	         </value>
+	         <ref bean="objectDefinitionSource"/>
 	      </property>
 	   </bean>
 

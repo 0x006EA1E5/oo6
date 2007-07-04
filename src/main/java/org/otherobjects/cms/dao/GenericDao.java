@@ -3,6 +3,8 @@ package org.otherobjects.cms.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import org.acegisecurity.annotation.Secured;
+
 
 /**
  * Generic DAO (Data Access Object) with common methods to CRUD POJOs.
@@ -12,6 +14,7 @@ import java.util.List;
  *
  * @author AppFuse <a href="mailto:bwnoll@gmail.com">Bryan Noll</a>
  */
+@Secured({"ROLE_USER"})
 public interface GenericDao <T, PK extends Serializable> {
 
     /**
@@ -30,6 +33,7 @@ public interface GenericDao <T, PK extends Serializable> {
      * @return a populated object
      * @see org.springframework.orm.ObjectRetrievalFailureException
      */
+    @Secured({"AFTER_OWNERSHIP"})
     public T get(PK id);
     
     /**
