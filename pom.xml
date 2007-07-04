@@ -21,6 +21,8 @@
 		<jdbc.url><![CDATA[jdbc:postgresql://localhost/oong]]></jdbc.url>
 		<jdbc.username>postgres</jdbc.username>
 		<jdbc.password>postgres</jdbc.password>
+		<hibernate.jdbc.properties.file>target/classes/jdbc.properties</hibernate.jdbc.properties.file>
+		<dbunit-load-file>bootstrap-data/jdbc-data-users.xml</dbunit-load-file>
 		<jackrabbit.username>jackrabbit</jackrabbit.username>
 		<jackrabbit.password>jackrabbit</jackrabbit.password>
 	</properties>
@@ -44,6 +46,25 @@
 			<timezone>+1</timezone>
 		</developer>
 	</developers>
+	<profiles>
+		<profile>
+			<id>testdb</id>
+			<activation></activation>
+			<properties>
+				<dbunit.operation.type>CLEAN_INSERT</dbunit.operation.type>
+				<hibernate.dialect>org.hibernate.dialect.H2Dialect</hibernate.dialect>
+				<jdbc.groupId>com.h2database</jdbc.groupId>
+				<jdbc.artifactId>h2</jdbc.artifactId>
+				<jdbc.version>1.0.20070617</jdbc.version>
+				<jdbc.driverClassName>org.h2.Driver</jdbc.driverClassName>
+				<jdbc.url><![CDATA[jdbc:h2:${java.io.tmpdir}/oongtest]]></jdbc.url>
+				<jdbc.username>sa</jdbc.username>
+				<jdbc.password></jdbc.password>
+				<hibernate.jdbc.properties.file>target/classes/jdbc-h2.properties</hibernate.jdbc.properties.file>
+				<dbunit-load-file>bootstrap-data/jdbc-h2-data-users.xml</dbunit-load-file>
+			</properties>
+		</profile>
+	</profiles>
 	<!-- 
 		<repositories>
 		<repository>
@@ -89,6 +110,22 @@
 	</scm>
 	<build>
 		<plugins>
+			<plugin>
+			  <artifactId>maven-antrun-plugin</artifactId>
+			  <executions>
+			    <execution>
+			      <phase>validate</phase>
+			      <goals>
+			        <goal>run</goal>
+			      </goals>
+			      <configuration>
+			        <tasks>
+			          <echo>Temp dir=${java.io.tmpdir}</echo>
+			        </tasks>
+			      </configuration>
+			    </execution>
+			  </executions>
+			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<inherited>true</inherited>
@@ -142,7 +179,7 @@
 					<componentProperties>
 						<drop>true</drop>
 						<jdk5>true</jdk5>
-						<propertyfile>target/classes/jdbc.properties</propertyfile>
+						<propertyfile>${hibernate.jdbc.properties.file}</propertyfile>
 						<skip>${maven.test.skip}</skip>
 					</componentProperties>
 				</configuration>
@@ -180,7 +217,7 @@
 					<username>${jdbc.username}</username>
 					<password>${jdbc.password}</password>
 					<url>${jdbc.url}</url>
-					<src>bootstrap-data/jdbc-data-users.xml</src>
+					<src>${dbunit-load-file}</src>
 					<type>${dbunit.operation.type}</type>
 					<schema>${dbunit.schema}</schema>
 					<skip>${maven.test.skip}</skip>
@@ -659,7 +696,12 @@
 			<artifactId>commons-dbcp</artifactId>
 			<version>1.2.2</version>
 		</dependency>
-
+		
+		<dependency>
+		    <groupId>com.h2database</groupId>
+		    <artifactId>h2</artifactId>
+		    <version>1.0.20070617</version>
+		</dependency>
 	</dependencies>
 </project>
 
