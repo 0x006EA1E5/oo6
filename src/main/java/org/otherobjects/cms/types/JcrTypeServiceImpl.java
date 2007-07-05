@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter;
@@ -14,6 +15,7 @@ import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.StringTypeConv
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.jcr.BigDecimalTypeConverterImpl;
+import org.otherobjects.cms.model.DynaNode;
 
 public class JcrTypeServiceImpl extends AbstactTypeService
 {
@@ -22,26 +24,22 @@ public class JcrTypeServiceImpl extends AbstactTypeService
 
     private DynaNodeDao dynaNodeDao;
 
-    public JcrTypeServiceImpl()
+    public void init()
     {
         reset();
         loadTypes();
     }
 
     /**
-     * FIXME Load data from JRC
+     * Loads TypeDefs from JCR. Types are stored in the default workspace at /types.
      */
     private void loadTypes()
     {
-        TypeDef td = new TypeDef("Folder");
-        td.addProperty(new PropertyDef("name", "string", null, null));
-        registerType(td);
-
-        TypeDef td2 = new TypeDef("Article");
-        td2.addProperty(new PropertyDef("title", "string", null, null));
-        td2.addProperty(new PropertyDef("content", "text", null, null));
-        registerType(td2);
-
+//        List<DynaNode> typeDefs = dynaNodeDao.getAllByPath("/types");
+//        for(TypeDef t : typeDefs)
+//        {
+//            registerType(t);
+//        }
     }
 
     public Object getJcrConverter(String type)

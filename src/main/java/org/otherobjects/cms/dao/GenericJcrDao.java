@@ -1,5 +1,9 @@
 /* $$ This file has been instrumented by Clover 1.3.13#20070503123026657 $$ */package org.otherobjects.cms.dao;
 
+import java.util.List;
+
+import org.apache.jackrabbit.ocm.spring.JcrMappingTemplate;
+
 /**
  * Generic DAO (Data Access Object) with common methods to CRUD POJOs to JCR.
  *
@@ -17,7 +21,11 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
      * @see org.springframework.orm.ObjectRetrievalFailureException
      */
     public T getByPath(String path);
+    
+    public List<T> getAllByPath(String path);
 
     public boolean existsAtPath(String path);
 
+    // FIXME Is this a good idea?
+    public JcrMappingTemplate getJcrMappingTemplate();
 }

@@ -1,12 +1,17 @@
 package org.otherobjects.cms.jcr;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.jcr.RepositoryException;
 
+import org.apache.jackrabbit.ocm.query.Filter;
+import org.apache.jackrabbit.ocm.query.Query;
+import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.apache.jackrabbit.ocm.spring.JcrMappingTemplate;
 import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.model.CmsNode;
+import org.otherobjects.cms.model.DynaNode;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.util.Assert;
 
@@ -30,29 +35,15 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     public List<T> getAll()
     {
         return null;
-        // return (List<T>) getJcrMappingTemplate().execute(new JcrCallback()
-        // {
-        // public Object doInJcr(Session session) throws RepositoryException
-        // {
-        // Workspace ws = session.getWorkspace();
-        // QueryManager qm = ws.getQueryManager();
-        //
-        // String type =
-        //                
-        // Query q = qm.createQuery("/", Query.XPATH);
-        // QueryResult res = q.execute();
-        //
-        // NodeIterator it = res.getNodes();
-        //
-        // // List<Resource> resources = new ArrayList<Resource>();
-        // // while (it.hasNext())
-        // // {
-        // // resources.add(nodeToResource(it.nextNode()));
-        // // }
-        //
-        // return null;
-        // }
-        // });
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<T> getAllByPath(String path)
+    {
+        QueryManager queryManager = getJcrMappingTemplate().createQueryManager();
+        Filter filter = queryManager.createFilter(DynaNode.class);
+        Query query = queryManager.createQuery(filter);
+        return (List<T>) getJcrMappingTemplate().getObjects(query);
     }
 
     /**
