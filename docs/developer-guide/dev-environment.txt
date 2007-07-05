@@ -10,6 +10,7 @@ http://www.vasanth.in/2004/01/13/EclipseTipKeepingPluginsAndWorkspaceSeparate.as
 * MoreUnit http://moreunit.sourceforge.net/org.moreunit.updatesite/
 * SpringIDE http://springide.org/updatesite/
 * JCR Browser (http://sourceforge.net/projects/jcrbrowser)
+* Aptana (JS IDE) http://update.aptana.com/install/3.2/
 
 Possible
 
