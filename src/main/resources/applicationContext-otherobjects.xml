@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-	<bean name="siteController"
-		class="org.otherobjects.cms.controllers.SiteController">
+	<bean name="siteController" class="org.otherobjects.cms.controllers.SiteController">
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
 		<property name="userDao" ref="userDao" />
 	</bean>
 
-	<bean name="workbenchController"
-		class="org.otherobjects.cms.controllers.WorkbenchController">
-	</bean>
+	<bean name="workbenchController" class="org.otherobjects.cms.controllers.WorkbenchController"></bean>
 
+	<bean name="workbenchDataController" class="org.otherobjects.cms.controllers.WorkbenchDataController"></bean>
 
-	<bean name="singletonBeanLocator"
-		class="org.otherobjects.cms.SingletonBeanLocator" />
+	<bean name="singletonBeanLocator" class="org.otherobjects.cms.SingletonBeanLocator" />
 
-	<bean id="urlMapping"
-		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
 			<props>
+				<prop key="/go/workbench/data/*">workbenchDataController</prop>
 				<prop key="/go/workbench/*">workbenchController</prop>
 				<prop key="/go/*">siteController</prop>
 			</props>
@@ -31,15 +26,11 @@
 		<property name="alwaysUseFullPath" value="true" />
 	</bean>
 
-	<bean id="velocityConfig"
-		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+	<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
 		<property name="resourceLoaderPath" value="/" />
 		<property name="velocityProperties">
 			<props>
-				<prop
-					key="velocimacro.permissions.allow.inline.local.scope">
-					true
-				</prop>
+				<prop key="velocimacro.permissions.allow.inline.local.scope">true</prop>
 				<prop key="velocimacro.library.autoreload">true</prop>
 				<!-- 
 					<prop key="velocimacro.library">templates/workbench/oo.vm,templates/macros/global.vm</prop>
@@ -49,24 +40,23 @@
 		</property>
 	</bean>
 
-	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
 		<property name="cache" value="false" />
 		<property name="prefix" value="" />
 		<property name="suffix" value="" />
 	</bean>
 
-	<!-- <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<!-- 
+		<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="10000000" />
 		</bean>
 	-->
-	<bean id="beanNameViewResolver"
-		class="org.springframework.web.servlet.view.BeanNameViewResolver">
+	<bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
 		<property name="order">
 			<value>1</value>
 		</property>
 	</bean>
 
-
+	<bean id="jsonView" class="org.otherobjects.cms.views.JsonView" />
 
 </beans>

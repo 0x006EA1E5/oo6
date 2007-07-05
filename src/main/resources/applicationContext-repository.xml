@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" 
-    "http://www.springframework.org/dtd/spring-beans.dtd">
 
-<beans default-lazy-init="true">
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd">
 
 	<!-- Repository -->
 
@@ -56,8 +57,9 @@
 	
 	
 	<!-- Types service -->
-	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl">
+	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl" init-method="init">
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
+		<dwr:remote javascript="TypeService" />
 	</bean>
 
 	<!-- Node service -->
