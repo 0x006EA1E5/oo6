@@ -1,6 +1,5 @@
 package org.otherobjects.cms.jcr;
 
-import java.util.Collection;
 import java.util.List;
 
 import javax.jcr.RepositoryException;
@@ -34,7 +33,10 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     @SuppressWarnings("unchecked")
     public List<T> getAll()
     {
-        return null;
+        QueryManager queryManager = getJcrMappingTemplate().createQueryManager();
+        Filter filter = queryManager.createFilter(persistentClass);
+        Query query = queryManager.createQuery(filter);
+        return (List<T>) getJcrMappingTemplate().getObjects(query);
     }
 
     @SuppressWarnings("unchecked")

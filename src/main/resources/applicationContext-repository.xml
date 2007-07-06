@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd">
 
@@ -44,25 +43,24 @@
 		<property name="sessionFactory" ref="jcrSessionFactory" />
 	</bean>
 
-	<bean id="baseTransactionProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" abstract="true">
-		<property name="transactionManager">
-			<ref bean="jcrTransactionManager" />
-		</property>
+	<bean id="baseTransactionProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+		abstract="true">
+		<property name="transactionManager" ref="jcrTransactionManager" />
 		<property name="transactionAttributes">
 			<props>
 				<prop key="*">PROPAGATION_REQUIRED</prop>
 			</props>
 		</property>
 	</bean>
-	
-	
+
+
 	<!-- Types service -->
 	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl" init-method="init">
-		<property name="dynaNodeDao" ref="dynaNodeDao" />
+		<property name="typeDefDao" ref="typeDefDao" />
 		<dwr:remote javascript="TypeService" />
 	</bean>
 
-	<!-- Node service -->
+	<!-- DAOs -->
 	<bean id="dynaNodeDao" parent="baseTransactionProxy">
 		<property name="target">
 			<bean class="org.otherobjects.cms.dao.DynaNodeDaoJackrabbit">
@@ -70,5 +68,14 @@
 			</bean>
 		</property>
 	</bean>
+
+	<bean id="typeDefDao" parent="baseTransactionProxy">
+		<property name="target">
+			<bean class="org.otherobjects.cms.types.TypeDefDaoJackrabbit">
+				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
+			</bean>
+		</property>
+	</bean>
+
 
 </beans>

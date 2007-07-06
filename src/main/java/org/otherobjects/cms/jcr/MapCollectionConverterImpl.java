@@ -289,9 +289,14 @@ public class MapCollectionConverterImpl extends AbstractCollectionConverterImpl
 
     private Object retrieveSimpleProperty(Node dataNode, PropertyDef property) throws RepositoryException
     {
-        Property jcrProperty = dataNode.getProperty(property.getName());
-        AtomicTypeConverter atomicTypeConverter = (AtomicTypeConverter) typeService.getJcrConverter(property.getType());
-        return atomicTypeConverter.getObject(jcrProperty.getValue());
+        if (dataNode.hasProperty(property.getName()))
+        {
+            Property jcrProperty = dataNode.getProperty(property.getName());
+            AtomicTypeConverter atomicTypeConverter = (AtomicTypeConverter) typeService.getJcrConverter(property.getType());
+            return atomicTypeConverter.getObject(jcrProperty.getValue());
+        }
+        else
+            return null;
     }
 
     private Object retrieveReferenceProperty(Session session, Node dataNode, PropertyDef property)

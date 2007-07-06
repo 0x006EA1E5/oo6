@@ -13,16 +13,14 @@ import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.Date2LongTypeC
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.LongTypeConverterImpl;
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.StringTypeConverterImpl;
 import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.jcr.BigDecimalTypeConverterImpl;
-import org.otherobjects.cms.model.DynaNode;
 
 public class JcrTypeServiceImpl extends AbstactTypeService
 {
     private Map<String, AtomicTypeConverter> jcrAtomicConverters;
     private Map<String, Class<?>> jcrClassMappings;
 
-    private DynaNodeDao dynaNodeDao;
+    private TypeDefDao typeDefDao;
 
     public void init()
     {
@@ -35,11 +33,11 @@ public class JcrTypeServiceImpl extends AbstactTypeService
      */
     private void loadTypes()
     {
-//        List<DynaNode> typeDefs = dynaNodeDao.getAllByPath("/types");
-//        for(TypeDef t : typeDefs)
-//        {
-//            registerType(t);
-//        }
+        List<TypeDef> typeDefs = typeDefDao.getAll();
+        for (TypeDef t : typeDefs)
+        {
+            registerType(t);
+        }
     }
 
     public Object getJcrConverter(String type)
@@ -103,6 +101,7 @@ public class JcrTypeServiceImpl extends AbstactTypeService
         jcrClassMappings = new HashMap<String, Class<?>>();
         jcrClassMappings.put("string", String.class);
         jcrClassMappings.put("text", String.class);
+        jcrClassMappings.put("html", String.class);
         jcrClassMappings.put("date", Date.class);
         jcrClassMappings.put("time", Date.class);
         jcrClassMappings.put("timestamp", Date.class);
@@ -115,51 +114,50 @@ public class JcrTypeServiceImpl extends AbstactTypeService
     {
         setTypes(new LinkedHashMap<String, TypeDef>());
 
-        TypeDef t = new TypeDef("oo_TypeDef");
-        t.addProperty(new PropertyDef("name", "string", null, null));
-        registerType(t);
-
-        TypeDef pd = new TypeDef("oo_PropertyDef");
-        pd.addProperty(new PropertyDef("name", "string", null, null));
-        pd.addProperty(new PropertyDef("type", "string", null, null));
-        pd.addProperty(new PropertyDef("relatedType", "string", null, null));
-        registerType(pd);
-
-        TypeDef td = new TypeDef("org.otherobjects.cms.jcr.TestObject");
-        td.addProperty(new PropertyDef("testString", "string", null, null));
-        td.addProperty(new PropertyDef("testText", "text", null, null));
-        td.addProperty(new PropertyDef("testDate", "date", null, null));
-        td.addProperty(new PropertyDef("testTime", "time", null, null));
-        td.addProperty(new PropertyDef("testTimestamp", "timestamp", null, null));
-        td.addProperty(new PropertyDef("testNumber", "number", null, null));
-        td.addProperty(new PropertyDef("testDecimal", "decimal", null, null));
-        td.addProperty(new PropertyDef("testBoolean", "boolean", null, null));
-        td.addProperty(new PropertyDef("testReference", "reference", "org.otherobjects.cms.jcr.TestReferenceObject", null));
-        td.addProperty(new PropertyDef("testComponent", "component", "org.otherobjects.cms.jcr.TestComponentObject", null));
-        td.addProperty(new PropertyDef("testStringsList", "string", null, "list"));
-        td.addProperty(new PropertyDef("testComponentsList", "component", null, "list"));
-        td.addProperty(new PropertyDef("testReferencesList", "reference", null, "list"));
-        registerType(td);
-
-        TypeDef td2 = new TypeDef("org.otherobjects.cms.jcr.TestReferenceObject");
-        td2.addProperty(new PropertyDef("name", "string", null, null));
-        registerType(td2);
-
-        TypeDef td3 = new TypeDef("org.otherobjects.cms.jcr.TestComponentObject");
-        td3.addProperty(new PropertyDef("name", "string", null, null));
-        td3.addProperty(new PropertyDef("component", "component", "org.otherobjects.cms.jcr.TestComponentObject", null));
-        registerType(td3);
+//        TypeDef t = new TypeDef("oo_TypeDef");
+//        t.addProperty(new PropertyDef("name", "string", null, null));
+//        registerType(t);
+//
+//        TypeDef pd = new TypeDef("oo_PropertyDef");
+//        pd.addProperty(new PropertyDef("name", "string", null, null));
+//        pd.addProperty(new PropertyDef("type", "string", null, null));
+//        pd.addProperty(new PropertyDef("relatedType", "string", null, null));
+//        registerType(pd);
+//
+//        TypeDef td = new TypeDef("org.otherobjects.cms.jcr.TestObject");
+//        td.addProperty(new PropertyDef("testString", "string", null, null));
+//        td.addProperty(new PropertyDef("testText", "text", null, null));
+//        td.addProperty(new PropertyDef("testDate", "date", null, null));
+//        td.addProperty(new PropertyDef("testTime", "time", null, null));
+//        td.addProperty(new PropertyDef("testTimestamp", "timestamp", null, null));
+//        td.addProperty(new PropertyDef("testNumber", "number", null, null));
+//        td.addProperty(new PropertyDef("testDecimal", "decimal", null, null));
+//        td.addProperty(new PropertyDef("testBoolean", "boolean", null, null));
+//        td.addProperty(new PropertyDef("testReference", "reference", "org.otherobjects.cms.jcr.TestReferenceObject", null));
+//        td.addProperty(new PropertyDef("testComponent", "component", "org.otherobjects.cms.jcr.TestComponentObject", null));
+//        td.addProperty(new PropertyDef("testStringsList", "string", null, "list"));
+//        td.addProperty(new PropertyDef("testComponentsList", "component", null, "list"));
+//        td.addProperty(new PropertyDef("testReferencesList", "reference", null, "list"));
+//        registerType(td);
+//
+//        TypeDef td2 = new TypeDef("org.otherobjects.cms.jcr.TestReferenceObject");
+//        td2.addProperty(new PropertyDef("name", "string", null, null));
+//        registerType(td2);
+//
+//        TypeDef td3 = new TypeDef("org.otherobjects.cms.jcr.TestComponentObject");
+//        td3.addProperty(new PropertyDef("name", "string", null, null));
+//        td3.addProperty(new PropertyDef("component", "component", "org.otherobjects.cms.jcr.TestComponentObject", null));
+//        registerType(td3);
 
     }
 
-    public DynaNodeDao getDynaNodeDao()
+    public TypeDefDao getTypeDefDao()
     {
-        return dynaNodeDao;
+        return typeDefDao;
     }
 
-    public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
+    public void setTypeDefDao(TypeDefDao typeDefDao)
     {
-        this.dynaNodeDao = dynaNodeDao;
+        this.typeDefDao = typeDefDao;
     }
-
 }

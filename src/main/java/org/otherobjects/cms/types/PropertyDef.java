@@ -63,6 +63,10 @@ public class PropertyDef
     /** Help text to assist choosing value for this property. */
     private String help;
 
+    public PropertyDef()
+    {
+    }
+    
     public PropertyDef(String name, String propertyType, String relatedType, String collectionType)
     {
         setName(name);

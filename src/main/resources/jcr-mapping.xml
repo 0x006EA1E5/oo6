@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
- 
- <!-- 
-<!DOCTYPE jackrabbit-ocm PUBLIC "-//The Apache Software Foundation//DTD Repository//EN" "jackrabbit-ocm.dtd">
+
+<!-- 
+	<!DOCTYPE jackrabbit-ocm PUBLIC "-//The Apache Software Foundation//DTD Repository//EN" "jackrabbit-ocm.dtd">
 -->
 
 <jackrabbit-ocm>
@@ -17,8 +17,24 @@
 	<class-descriptor className="org.otherobjects.cms.model.DynaNode" jcrNodeType="oo:node">
 		<field-descriptor fieldName="id" uuid="true" />
 		<field-descriptor fieldName="jcrPath" path="true" />
-		<field-descriptor fieldName="ooType" jcrName="ooType"/>
-		<field-descriptor fieldName="label" jcrName="label"/>
-		<collection-descriptor fieldName="data" jcrName="data"  collectionClassName="org.apache.jackrabbit.ocm.persistence.collectionconverter.impl.ManagedHashMap" collectionConverter="org.otherobjects.cms.jcr.MapCollectionConverterImpl"/>
+		<field-descriptor fieldName="ooType" jcrName="ooType" />
+		<field-descriptor fieldName="label" jcrName="label" />
+		<collection-descriptor fieldName="data" jcrName="data"
+			collectionClassName="org.apache.jackrabbit.ocm.persistence.collectionconverter.impl.ManagedHashMap"
+			collectionConverter="org.otherobjects.cms.jcr.MapCollectionConverterImpl" />
 	</class-descriptor>
+
+	<class-descriptor className="org.otherobjects.cms.types.TypeDef" jcrNodeType="oo:node">
+		<field-descriptor fieldName="id" uuid="true" />
+		<field-descriptor fieldName="jcrPath" path="true" />
+		<field-descriptor fieldName="label" jcrName="label" />
+		<collection-descriptor fieldName="properties" jcrName="properties"
+			elementClassName="org.otherobjects.cms.types.PropertyDef" />
+	</class-descriptor>
+
+	<class-descriptor className="org.otherobjects.cms.types.PropertyDef">
+		<field-descriptor fieldName="name" jcrName="name" />
+		<field-descriptor fieldName="type" jcrName="type" />
+	</class-descriptor>
+	
 </jackrabbit-ocm>
