@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd">
+
+	<!-- Repository -->
+
+	<bean id="repository" class="org.springmodules.jcr.jackrabbit.RepositoryFactoryBean">
+		<property name="configuration" value="${jackrabbit.config.path}" />
+		<property name="homeDir" value="${jackrabbit.repository.path}" />
+	</bean>
+
+	<bean id="jcrSessionFactory" class="org.apache.jackrabbit.ocm.spring.JackrabbitSessionFactory">
+		<property name="repository" ref="repository" />
+		<property name="credentials">
+			<bean class="javax.jcr.SimpleCredentials">
+				<constructor-arg index="0" value="jackrabbit" />
+				<constructor-arg index="1">
+					<bean factory-bean="password" factory-method="toCharArray" />
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="password" class="java.lang.String">
+		<constructor-arg index="0" value="jackrabbit" />
+	</bean>
+
+	<!-- Mapping -->
+	<bean id="jcrMappingDescriptor" class="org.otherobjects.cms.jcr.ResourceDigesterMappingImpl">
+		<constructor-arg index="0" value="classpath:jcr-mapping.xml" />
+	</bean>
+
+	<bean id="jcrMappingTemplate" class="org.apache.jackrabbit.ocm.spring.JcrMappingTemplate">
+		<constructor-arg index="0" ref="jcrSessionFactory" />
+		<constructor-arg index="1" ref="jcrMappingDescriptor" />
+	</bean>
+
+	<!-- Transaction support -->
+
+	<bean id="jcrTransactionManager" class="org.springmodules.jcr.jackrabbit.LocalTransactionManager">
+		<property name="sessionFactory" ref="jcrSessionFactory" />
+	</bean>
+
+	<bean id="baseTransactionProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+		abstract="true">
+		<property name="transactionManager" ref="jcrTransactionManager" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+
+
+	<!-- Types service -->
+	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl" init-method="init">
+		<property name="typeDefDao" ref="typeDefDao" />
+		<dwr:remote javascript="TypeService" />
+	</bean>
+
+	<!-- DAOs -->
+	<bean id="dynaNodeDao" parent="baseTransactionProxy">
+		<property name="target">
+			<bean class="org.otherobjects.cms.dao.DynaNodeDaoJackrabbit">
+				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="typeDefDao" parent="baseTransactionProxy">
+		<property name="target">
+			<bean class="org.otherobjects.cms.types.TypeDefDaoJackrabbit">
+				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
+			</bean>
+		</property>
+	</bean>
+
+
+</beans>

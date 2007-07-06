@@ -1,0 +1,12 @@
+<oo = 'http://www.otherobjects.org/system/oo'>
+<nt = 'http://www.jcp.org/jcr/nt/1.0'>
+<mix = 'http://www.jcp.org/jcr/mix/1.0'>
+<ocm = 'http://jackrabbit.apache.org/ocm'>
+
+[ocm:discriminator] mixin
+- ocm:classname (String) mandatory copy
+
+[oo:node] > nt:base, mix:referenceable
+orderable
+- * (UNDEFINED)
++ * = oo:node
