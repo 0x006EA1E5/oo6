@@ -20,6 +20,7 @@
 			<props>
 				<prop key="/go/workbench/data/*">workbenchDataController</prop>
 				<prop key="/go/workbench/*">workbenchController</prop>
+				<prop key="/go/**">siteController</prop>
 				<prop key="/go/*">siteController</prop>
 			</props>
 		</property>
