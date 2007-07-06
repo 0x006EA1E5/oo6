@@ -28,7 +28,7 @@ public class WorkbenchDataController implements Controller
         Map n1 = new HashMap();
         n1.put("id", "1");
         n1.put("text", "Node");
-        n1.put("leaf", "false");
+        n1.put("leaf", "true");
 
         nodes.add(n1);
         nodes.add(n1);
