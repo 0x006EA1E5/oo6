@@ -29,8 +29,8 @@ public class StaticResourceServlet extends DefaultServlet
         // FIXME Security check: so that configuration data can't be served
         String path = pathInContext.substring("resources".length() + 2);
 
-        if (!path.startsWith("static/") && !path.startsWith("templates/"))
-            return null;
+//        if (!path.startsWith("static/") && !path.startsWith("templates/"))
+//            return null;
 
         return Resource.newClassPathResource(path);
     }
