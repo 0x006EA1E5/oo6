@@ -29,7 +29,7 @@
 
 	<!-- Mapping -->
 	<bean id="jcrMappingDescriptor" class="org.otherobjects.cms.jcr.ResourceDigesterMappingImpl">
-		<constructor-arg index="0" value="classpath:jcr-mapping.xml" />
+		<constructor-arg index="0" value="classpath:otherobjects.resources/config/jcr-mapping.xml" />
 	</bean>
 
 	<bean id="jcrMappingTemplate" class="org.apache.jackrabbit.ocm.spring.JcrMappingTemplate">
