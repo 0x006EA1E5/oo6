@@ -4,10 +4,6 @@
 		<configExtension>xml</configExtension>
 	</configExtensions>
 	<configs>
-		<config>src/main/resources/applicationContext-dao.xml</config>
-		<config>src/main/resources/applicationContext-repository.xml</config>
-		<config>src/main/resources/applicationContext-resources.xml</config>
-		<config>src/main/resources/applicationContext-security.xml</config>
 	</configs>
 	<configSets>
 		<configSet>
@@ -15,10 +11,6 @@
 			<allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
 			<incomplete>false</incomplete>
 			<configs>
-				<config>src/main/resources/applicationContext-dao.xml</config>
-				<config>src/main/resources/applicationContext-repository.xml</config>
-				<config>src/main/resources/applicationContext-resources.xml</config>
-				<config>src/main/resources/applicationContext-security.xml</config>
 			</configs>
 		</configSet>
 	</configSets>
