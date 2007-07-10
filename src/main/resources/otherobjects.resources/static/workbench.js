@@ -7,9 +7,13 @@ Ext.BLANK_IMAGE_URL = '/resources/otherobjects.resources/static/extjs/images/def
 
 OO.Workbench = function()
 {
-    var layout, navigator;
+    var layout, navigator, tabs;
+	var listing;
     
     return {
+		
+		layout : layout, 
+		
         init : function()
 		{
             // Set up workbench layout
@@ -17,7 +21,7 @@ OO.Workbench = function()
 	            north: {split:false, initialSize: 25, minSize: 60, maxSize: 60, titlebar: false, collapsible: false, animate: false},	                    
 				//east: {split:true, collapsed: false, hidden: true, initialSize: 350, minSize: 350, maxSize: 500, titlebar: true, collapsible: true, animate: false},
 				west: {split:true, collapsed: false, initialSize: 200, minSize: 200, maxSize: 500, collapsible: true, animate: false, autoScroll:true},
-	            center: {titlebar: false, autoScroll:true, closeOnTab: true}
+	            center: {titlebar:false, autoScroll:true, closeOnTab:true, tabPosition:'top', alwaysShowTabs:true}
 	        });
 
 			// Add tree
@@ -38,6 +42,18 @@ OO.Workbench = function()
                 dropConfig: {appendOnly:true}
             });
 			
+			var folderContextMenu = new Ext.menu.Menu();
+			
+			var i1 = folderContextMenu.add({ text: 'Add sub folder...' });
+			i1.on('click', function(item){
+            	Ext.Msg.alert('Date Selected', 'You chose {0}.', item);
+        	});
+			folderContextMenu.add({ text: 'Rename folder...' });
+
+			
+			navigator.on("click", function(node){OO.Workbench.selectContainer(node);});
+			navigator.on("contextmenu", function(node){folderContextMenu.show(node.ui.elNode);});
+			
 //			var navigatorRoot = new Ext.tree.TreeNode({text: 'Root', allowDrag:false, allowDrop:false, folderPath:"/", id:'root'});
 //            navigator.setRootNode(navigatorRoot); 
             
@@ -48,29 +64,37 @@ OO.Workbench = function()
                 id:'source'
             });
             navigator.setRootNode(root);
- navigator.render();
+			navigator.render();
 //			navigatorRoot.expand();
 
-			// Add tabs	
-			tabs = new Ext.TabPanel('content');
-			tabs.addTab('listing-tab', "Listing");
-			tabs.addTab('edit-tab', "Edit");
-			tabs.getTab('edit-tab').disable();
-			
-			var previewTab = tabs.addTab('preview-tab', "Preview");
-			//previewTab.on('activate', activatePreviewTab, previewTab);
-			previewTab.disable();
-			
-	
-			tabs.activate('listing-tab');
+
+
+			var welcomePanel = new Ext.ContentPanel('welcome-panel', {autoCreate:true, title:'Welcome', background:true});
+			welcomePanel.setUrl('/go/workbench/welcome.html');
+	        layout.add('center', welcomePanel);
 	
 	        layout.beginUpdate();
 			layout.add('north', new Ext.ContentPanel('header'));
 	        //layout.add('east', editPanel);
 	        layout.add('west', new Ext.ContentPanel('select', {title: 'Select'}));
-	        layout.add('center', new Ext.ContentPanel('content', {title: 'Center Panel', closable: false}));
 	        layout.endUpdate();
-        }
+			
+			listing = OO.ListingGrid;
+			listing.init();
+			
+        },
+		
+		selectContainer : function(node)
+		{
+			layout.getRegion("center").showPanel("listing-grid");
+	        console.log(node);
+	        listing.load(node.id);
+		},
+		
+		addPanel : function(panel)
+		{
+	        layout.add('center', panel);
+		}
     };
 }();
 Ext.onReady(OO.Workbench.init, OO.Workbench);

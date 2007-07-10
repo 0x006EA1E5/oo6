@@ -22,3 +22,10 @@ Intelligence
 
 * Search info
 * Page views per last day/last week/last month/last year. Updated houly?
+
+Tuning
+------
+JCR/page
+JDBC/page
+Times/page
+TPTP integration howto

@@ -4,4 +4,6 @@ import org.otherobjects.cms.model.DynaNode;
 
 public interface DynaNodeDao extends GenericJcrDao<DynaNode>
 {
+
+    void saveSession();
 }

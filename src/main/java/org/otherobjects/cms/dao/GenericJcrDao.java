@@ -23,6 +23,8 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
     public T getByPath(String path);
     
     public List<T> getAllByPath(String path);
+    
+    public List<T> getAllByJcrExperssion(String xpath);
 
     public boolean existsAtPath(String path);
 

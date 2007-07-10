@@ -11,7 +11,9 @@
 
 	<bean name="workbenchController" class="org.otherobjects.cms.controllers.WorkbenchController"></bean>
 
-	<bean name="workbenchDataController" class="org.otherobjects.cms.controllers.WorkbenchDataController"></bean>
+	<bean name="workbenchDataController" class="org.otherobjects.cms.controllers.WorkbenchDataController">
+		<property name="dynaNodeDao" ref="dynaNodeDao" />
+	</bean>
 
 	<bean name="singletonBeanLocator" class="org.otherobjects.cms.SingletonBeanLocator" />
 

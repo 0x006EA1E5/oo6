@@ -45,7 +45,14 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
         QueryManager queryManager = getJcrMappingTemplate().createQueryManager();
         Filter filter = queryManager.createFilter(DynaNode.class);
         Query query = queryManager.createQuery(filter);
+        filter.setScope(path+"/");
         return (List<T>) getJcrMappingTemplate().getObjects(query);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<T> getAllByJcrExperssion(String jcrExpression)
+    {
+        return null;
     }
 
     /**
@@ -66,6 +73,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
         CmsNode newObj = getByPath(object.getJcrPath());
         Assert.notNull(newObj, "Object not saved correctly. Could not read ID.");
         object.setId(newObj.getId());
+        getJcrMappingTemplate().save();
         return object;
     }
 
@@ -152,5 +160,13 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     {
         this.jcrMappingTemplate = jcrMappingTemplate;
     }
-
+    
+    /**
+     * FIXME Shouldn't this be in the transaction handling?
+     */
+    @Deprecated 
+    public void saveSession()
+    {
+        getJcrMappingTemplate().save();
+    }
 }

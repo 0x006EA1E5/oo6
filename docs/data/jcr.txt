@@ -6,6 +6,7 @@ Todo
 * Finsh mapping all data types
 * Determine mixins: lang, auditInfo, dublinccore?
 * Namespaces better than site_whatever
+* Session save semantics -- bulk import
 
 Properties
 

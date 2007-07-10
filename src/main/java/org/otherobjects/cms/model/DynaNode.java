@@ -157,7 +157,8 @@ public class DynaNode implements CmsNode
 
     public String getLabel()
     {
-        return (String) get(LABEL_KEY);
+        // FIXME This needs string in TypeDef
+        return (String) (get(LABEL_KEY) != null ? get(LABEL_KEY) : get("label")) ;
     }
 
     public void setLabel(String label)

@@ -1,0 +1,25 @@
+M1 Todo List
+------------
+
+Workbench
+
+* Rename folder
+* Add sub folder
+* Error handling
+* Refresh tree
+* NTH Update all trees after edit?
+* Show folder contents
+* Article form with validation
+* Preview tab
+
+Infrastructure
+
+* Tests running 
+* 80% test coverage
+* Maven setup
+
+Documentation
+
+* Architecture overview
+* User manual
+* Demo videos
