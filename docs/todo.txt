@@ -35,7 +35,7 @@ Documentation
 
 JS
 
-! Fix preview bug
+* IE testing!
 * Contextual menus
 ? Non-singleton JS classes
 ? Tab order
@@ -43,7 +43,7 @@ JS
 
 Rich
 
-* Edit tab
+! Fix preview bug
 * Add/delete article
 * Rename folder
 * Add sub folder
