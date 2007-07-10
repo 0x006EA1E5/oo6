@@ -27,6 +27,7 @@ OO.ListingGrid = function() {
 			        }, [
 			            {name: 'id', mapping: 'id'},
 			            {name: 'label', mapping: 'label'},
+			            {name: 'ooType', mapping: 'ooType'},
 			            {name: 'path', mapping: 'linkPath'}
 			        ]),
 			
@@ -39,7 +40,7 @@ OO.ListingGrid = function() {
 				{ header: 'Label', width: 200, sortable: true, dataIndex: 'label' },
 				{ header: 'Type', width: 200, sortable: true, dataIndex: 'ooType' },
 				{ header: 'Path', width: 200, sortable: true, dataIndex: 'path' },
-				{ header: 'UUID', width: 200, sortable: true, dataIndex: 'id' }
+				{ header: 'UUID', width: 300, sortable: true, dataIndex: 'id' }
 			]);
 			
 			// create the grid
@@ -67,17 +68,30 @@ OO.ListingGrid = function() {
 			
 			// Add toolbar
 			var gridHeader = grid.getView().getHeaderPanel(true);
-			var gridToolbar = new Ext.Toolbar(gridHeader,
-				[ 
-			  		{cls:'x-btn-text-icon', text:'Add item' }
-				]
-			);
+			var gridToolbar = new Ext.Toolbar(gridHeader, [
+		  		{cls:'x-btn-text-icon add-btn', text:'Add Article', handler:function(e){OO.ListingGrid.addItem('Article', e);}},
+				'-',
+		  		{cls:'x-btn-text-icon refresh-btn', text:'Refresh', handler:function(e){OO.ListingGrid.refresh();}}
+			]);
 			
 			return new Ext.GridPanel(grid, {title:'Listing',background:true});
 	    },
 	    
+	    refresh : function() {
+	      ds.load({params:{node:OO.Workbench.currentContainer}});
+	    },
+		
 	    load : function(uuid) {
-	      ds.load({params:{start:0, limit:10, node:uuid}});
-	    }
+	      ds.load({params:{node:uuid}});
+		  // FIXME Shouldn't need this in 2 places
+		  OO.Workbench.currentContainer = uuid;
+	    },
+		
+		addItem : function(type, e)
+		{
+			var c = OO.Workbench.currentContainer;
+			console.log('Creating new item: ' + type + ' at ' + c);
+			ContentService.createItem(c,type);
+		}
   	}
 }();

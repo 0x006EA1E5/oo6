@@ -11,5 +11,4 @@ public class ResourceDigesterMappingImpl extends DigesterMapperImpl
     {
         super(resource.getInputStream());
     }
-
 }

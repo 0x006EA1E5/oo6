@@ -3,26 +3,29 @@ M1 Todo List
 
 Workbench
 
-* Edit tab
-* Rename folder
-* Add sub folder
-* Delete folder
-* Error handling
-* Refresh tree
-* Show folder contents
-* Article form with validation
+* Data binding
+* Data validation
+* Logout
+* Localisation
+* Add all simple properties to Article inc BigDecimal
+? Folder and Page objects
 ? Sortable columns
-? Update all trees after edit
 ? System status indicators
 ? Audit log
-? Localisation
+? Refresh tree
+? Update all trees after edit
+
+Site 
+
+* Navigation tree
 
 Infrastructure
 
 * Error logging and report back
 * Tests running 
 * 80% test coverage
-* Maven setup
+* Website and CI
+? Maven setup
 
 Documentation
 
@@ -32,14 +35,32 @@ Documentation
 
 JS
 
-* Global status/error handling
-* Non-singleton JS classes
-* Tab order
+! Fix preview bug
+* Contextual menus
+? Non-singleton JS classes
+? Tab order
+? Global status/error handling
+
+Rich
+
+* Edit tab
+* Add/delete article
+* Rename folder
+* Add sub folder
+* Delete folder
 
 Joerg
 
+* DynaBean
 * DAO Test cases
 * Paging
-* Non-data node?
-* Transactions and sessions?
-* Protect key folders
+? Transactions and sessions
+? Protect key folders
+
+Ext HTML Editor Bugs
+
+* Can't set width of text area
+* Safari 3.0 support?
+* Classes on blosws
+* Change icons
+* No spans for bold

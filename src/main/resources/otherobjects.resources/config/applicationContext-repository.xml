@@ -57,7 +57,6 @@
 	<!-- Types service -->
 	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl" init-method="init">
 		<property name="typeDefDao" ref="typeDefDao" />
-		<dwr:remote javascript="TypeService" />
 	</bean>
 
 	<!-- DAOs -->

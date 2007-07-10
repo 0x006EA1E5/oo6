@@ -31,7 +31,7 @@ import org.springframework.web.servlet.mvc.Controller;
 public class WorkbenchDataController implements Controller
 {
     private Logger logger = LoggerFactory.getLogger(WorkbenchDataController.class);
-    
+
     private DynaNodeDao dynaNodeDao;
     private TypeService typeService;
 
@@ -55,26 +55,33 @@ public class WorkbenchDataController implements Controller
     private ModelAndView generateItemData(HttpServletRequest request)
     {
         String path = request.getPathInfo();
-        String id = path.substring(path.lastIndexOf("/")+1);
-        
+        String id = path.substring(path.lastIndexOf("/") + 1);
+
         logger.info("Sending item data: {} ", id);
-        
+
         DynaNode dynaNode = dynaNodeDao.get(id);
-        
-        Assert.notNull(dynaNode, "No item found: " + dynaNode);
-        
+        Assert.notNull(dynaNode, "No item found: " + id);
+
+        TypeDef type = typeService.getType(dynaNode.getOoType());
+        Assert.notNull(dynaNode, "No type found: " + dynaNode.getOoType());
+
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("type", type);
+        m.put("data", dynaNode);
+
         ModelAndView view = new ModelAndView("jsonView");
-        view.addObject("json", dynaNode);
-        view.addObject("jsonIncludes", "properties");
+        view.addObject("json", m);
+        view.addObject("jsonIncludes", new String[]{"data.data", "type.properties"});
         return view;
     }
+
     private ModelAndView generateTypeData(HttpServletRequest request)
     {
         String path = request.getPathInfo();
-        String typeName = path.substring(path.lastIndexOf("/")+1);
-        
+        String typeName = path.substring(path.lastIndexOf("/") + 1);
+
         logger.info("Sending type definition: {} ", typeName);
-        
+
         TypeDef type = typeService.getType(typeName);
         Assert.notNull(type, "No type found: " + typeName);
 
@@ -108,6 +115,7 @@ public class WorkbenchDataController implements Controller
                 Map<String, Object> n1 = new HashMap<String, Object>();
                 n1.put("id", dynaNode.getId());
                 n1.put("text", dynaNode.getLabel());
+                n1.put("cls", "folder");
                 n1.put("leaf", false);
                 nodes.add(n1);
             }
@@ -121,7 +129,6 @@ public class WorkbenchDataController implements Controller
         String jcrPath = "/site";
 
         ModelAndView view = new ModelAndView("jsonView");
-        List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
 
         String nodeId = request.getParameter("node");
         if (nodeId != null && nodeId.length() > 10)
@@ -129,22 +136,18 @@ public class WorkbenchDataController implements Controller
             DynaNode node = dynaNodeDao.get(nodeId);
             jcrPath = node.getJcrPath();
         }
+
+        // FIXME Can we exclude folders in the query?
         List<DynaNode> contents = dynaNodeDao.getAllByPath(jcrPath);
 
+        List<DynaNode> nonFolders = new ArrayList<DynaNode>();
         for (DynaNode dynaNode : contents)
         {
-
             if (dynaNode.getOoType().equals("Article"))
-            {
-                Map<String, Object> n1 = new HashMap<String, Object>();
-                n1.put("id", dynaNode.getId());
-                n1.put("label", dynaNode.getLabel());
-                n1.put("linkPath", dynaNode.getLinkPath());
-                nodes.add(n1);
-            }
-
+                nonFolders.add(dynaNode);
         }
-        view.addObject("data", nodes);
+        view.addObject("json", nonFolders);
+        view.addObject("jsonIncludes", new String[]{"data"});
         return view;
     }
 

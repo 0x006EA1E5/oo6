@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
+	xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd">
 
 	<bean name="siteController" class="org.otherobjects.cms.controllers.SiteController">
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
@@ -15,12 +15,24 @@
 		<property name="typeService" ref="typeService" />
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
 	</bean>
+	
+	<bean name="formController" class="org.otherobjects.cms.controllers.FormController">
+		<property name="typeService" ref="typeService" />
+		<property name="dynaNodeDao" ref="dynaNodeDao" />
+	</bean>
+	
+	<bean name="contentService" class="org.otherobjects.cms.workbench.ContentServiceImpl">
+		<property name="typeService" ref="typeService" />
+		<property name="dynaNodeDao" ref="dynaNodeDao" />
+		<dwr:remote javascript="ContentService" />
+	</bean>
 
 	<bean name="singletonBeanLocator" class="org.otherobjects.cms.SingletonBeanLocator" />
 
 	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
 			<props>
+				<prop key="/go/workbench/form/**">formController</prop>
 				<prop key="/go/workbench/data/**">workbenchDataController</prop>
 				<prop key="/go/workbench/*">workbenchController</prop>
 				<prop key="/go/**">siteController</prop>

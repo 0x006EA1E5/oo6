@@ -13,10 +13,10 @@ OO.EditForm = function(){
       	Ext.Msg.alert('Warning', 'An error ocured whilst saving. Please try again.');
 	}
 
-	function buildForm(typeDef)
+	function buildForm(obj)
 	{
-		console.log("Test", typeDef);
-		console.log(typeDef);
+		var typeDef = obj.type;
+		
 		// TODO Find out about QuickTips
 		// Ext.QuickTips.init();
 
@@ -51,8 +51,9 @@ OO.EditForm = function(){
 			}
 			else if(propDef.type=="html")
 			{
-				config.height='300px';
-				var f = new Ext.form.TextArea(config);
+				config.width=null; // FIXME Ext bug: can't set width of HtmlEditor
+				// config.growMax=500;// FIXME Ext bug: can't grow HtmlEditor
+				var f = new Ext.form.HtmlEditor(config);
 			}
 			else if(propDef.type=="text")
 			{
@@ -79,7 +80,7 @@ OO.EditForm = function(){
 //		});
 		
 	    form.addButton('Save', function() {
-			form.submit({url:'/go/form', bindForm:true, waitMsg:'Saving Data...', params: hiddenFields });   
+			form.submit({url:'/go/workbench/form', bindForm:true, waitMsg:'Saving Data...', params: hiddenFields });   
 		});
 		
 		form.on('actioncomplete', function() {Workbench.activateTab("listing-tab");}, this);
@@ -89,11 +90,14 @@ OO.EditForm = function(){
 		Ext.get('edit-panel').dom.innerHTML='';
 		console.log(Ext.get('edit-panel'));
 	    form.render('edit-panel');
+		
+		// FIXME Better way to set form values without conflict danger?
+		form.setValues(obj.data);
+		form.setValues(obj.data.data);
 	    
 	}
 
-	function loadJsonObject(url, callback)
-	{
+	function loadJsonObject(url, callback) {
 		Ext.Ajax.request({url:url, success:function(r){
 			var o = Ext.util.JSON.decode(r.responseText);
 			callback(o);
@@ -102,23 +106,9 @@ OO.EditForm = function(){
 
  	return {
 		
-    	createForm : function(typeDef) {
-		loadJsonObject("/go/workbench/data/types/Article", buildForm);
-		//buildForm(td);
-//      		console.log(resource);
-//      		form.setValues({ooType:resource.type});
-//      		form.setValues(resource);
-//      		form.setValues(resource.data);
-//      		//form.on('actionfailed', showFailureMessage, this);
-//      		//showFailureMessage();
-//      		Workbench.enableTab("edit-tab");
-    	},
-		
-		setFormValues : function(data){
-			console.log(data);
-      		form.setValues(data);
+    	createForm : function(typeDef, id) {
+			loadJsonObject("/go/workbench/data/item/" + id, buildForm);
     	}
-   
 	}
 
 }();

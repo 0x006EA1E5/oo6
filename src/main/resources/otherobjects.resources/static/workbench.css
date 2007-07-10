@@ -1,5 +1,10 @@
 .clear {clear:both; display:block; visibility:hidden; height:1px; width:1px; overflow:hidden;}
 
+/* Header */
+.x-layout-panel-north { background-image: url(/resources/otherobjects.resources/static/graphics/header.gif); background-repeat: repeat-x; color:#FFF; font:bold 12px verdana, helvetica; overflow:hidden; padding:4px; border:0px solid #c3daf9!important; }
+.x-layout-panel-north P { background: url(/resources/otherobjects.resources/static/graphics/logo.png) no-repeat 5px -5px; width:200px; height:100px; }
+.x-layout-panel-north EM { display:none; }
+
 /* Welcome */
 .welcome {font:80% Arial; margin:20px;}
 .welcome-col {width:45%; float:left; margin-right:20px;}
@@ -8,26 +13,28 @@
 .welcome P {padding-bottom:10px;}
 .welcome UL {list-style:square; padding-left:20px; margin-top:5px;}
 
+/* Panels */
 #edit-panel {padding:10px;}
 
 /* Status bar */
 #status {font:70% Arial; background:#c3daf9 url('/resources/otherobjects.resources/static/extjs/images/default/grid/nowait.gif') no-repeat 2px 2px;	padding:5px 0px 0px 25px;	height:18px;}
 #status.loading {background-image: url('/resources/otherobjects.resources/static/extjs/images/default/grid/loading.gif');}
 
-/* Workbench interface */
-.x-layout-panel-north { background-image: url(/resources/otherobjects.resources/static/graphics/header.gif); background-repeat: repeat-x; color:#FFF; font:bold 12px verdana, helvetica; overflow:hidden; padding:4px; border:0px solid #c3daf9!important; }
-.x-layout-panel-north P { background: url(/resources/otherobjects.resources/static/graphics/logo.png) no-repeat 5px -5px; width:200px; height:100px; }
-.x-layout-panel-north EM { display:none; }
-.refresh-btn .x-btn-text { background-image:url(/static/images/default/grid/refresh.gif); }
-.plugin-btn .x-btn-text { background-image:url(/static/icons/plugin-add.png); }
-.new-folder-btn .x-btn-text { background-image:url(/static/images/default/tree/drop-add.gif); }
-.x-layout-panel-north {border:0px none;}
-#edit-form {padding:10px;}
-.folder .x-tree-node-icon { background:transparent url(/static/images/default/tree/folder.gif); }
-
+/* Navigator */
+.folder .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/extjs/images/default/tree/folder.gif)!important; }
 .site-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/sitemap-color.png) 0px 1px no-repeat!important; }
 
+/* Toolbar icons */
+.add-btn .x-btn-text { background-image:url(/resources/otherobjects.resources/static/extjs/images/default/tree/drop-add.gif); }
+.refresh-btn .x-btn-text { background-image:url(/resources/otherobjects.resources/static/extjs/images/default/grid/refresh.gif); }
 
+
+
+/* Pending */
+
+.plugin-btn .x-btn-text { background-image:url(/static/icons/plugin-add.png); }
+.x-layout-panel-north {border:0px none;}
+#edit-form {padding:10px;}
 
 .favorites-folder .x-tree-node-icon { background:transparent url(/static/icons/heart.png) 0px 1px no-repeat!important; }
 .resources-folder .x-tree-node-icon { background:transparent url(/static/icons/brick.png) 0px 1px no-repeat!important; }
@@ -46,101 +53,3 @@
 .x-tabs-body {border:0px;}
 
 .x-form-textarea {font-family:monospace;}
-
-.content {font:80% Arial; padding:10px;}
-.content H1 {font:bold 130% Arial; padding-bottom:20px;}
-.content P {padding-bottom:10px;}
-
-/* Designer */
-.layout {float:left; overflow:hidden; margin:10px 0px 0px 10px; padding:0px 0px 10px 0px;}
-.locked-region {border:1px dotted #666666;}
-.region {border:1px dotted #666666;}
-.locked-block {border: 1px solid #083772; padding: 5px 8px 8px 8px; margin:10px 10px 0px 10px; background: #c3daf9 url(/static/icons/lock.png) no-repeat 5px 5px;}
-.locked-block P {margin: 2px 22px;}
-.block { background:#c3daf9; border: 1px solid #083772; padding: 8px 8px 8px 8px; margin:10px 10px 0px 10px;}
-.wireframe {float:left; overflow:hidden;}
-.block-selector {float:left; overflow:hidden; margin:10px 0px 0px 10px; padding:0px 0px 100px 0px; width:200px;background:#ffcccc;}
-.block-selector .block {background:#fff;}
-
-/* Uploader */
-.swfuploadbtn {display: block; width: 100px; padding: 0 0 0 20px;}
-/* .browsebtn {background: url(/static/images/default/tree/drop-add.gif) no-repeat 0 4px;}*/
-.uploadbtn {display:none; background:url(/static/images/default/tree/drop-yes.gif) no-repeat 0 4px;}
-.cancelbtn {display: block; width: 16px; height: 16px; float: right; background: url(/static/icons/cancel.png) no-repeat; }
-#cancelqueuebtn {display: block; display: none; background: url(/static/icons/cancel.png) no-repeat 0 4px; margin: 10px 0;}
-#SWFUploadFileListingFiles ul {margin: 0; padding: 0; list-style: none;}
-.SWFUploadFileItem {display: block; width: 230px; height: 70px; float: left; background: #eaefea; margin: 0 10px 10px 0; padding: 5px;}
-.fileUploading {background: #fee727;}
-.uploadCompleted {background: #d2fa7c;}
-.uploadCancelled {background: #f77c7c;}
-.uploadFailed {background: #ff0000;}
-.uploadCompleted .cancelbtn, .uploadCancelled .cancelbtn {display: none;}
-SPAN.progressBar {width: 200px; display: block; font-size: 10px; height: 4px; margin-top: 2px; margin-bottom: 10px; background-color: #CCC;}
-.queueinfo {clear:both; font-weight:bold; padding:10px 0px 10px 0px;}
-.uploader .x-btn-text-icon {float:left; padding:0px 10px 0px 0px;}
-
-/* Chooser */
-.details{
-	padding: 10px;
-	text-align: center;
-}
-.details-info{
-	border-top: 1px solid #cccccc;
-	font: 11px Arial, Helvetica, sans-serif;
-	margin-top: 5px;
-	padding-top: 5px;
-	text-align: left;
-}
-.details-info b{
-	color: #555555;
-	display: block;
-	margin-bottom: 4px;
-}
-.details-info span{
-	display: block;
-	margin-bottom: 5px;
-	margin-left: 5px;
-}
-.ychooser-dlg select{
-	font-size: 12px;
-}
-.ychooser-view{
-	background: white;
-	font: 11px Arial, Helvetica, sans-serif;
-	overflow: auto;
-}
-.ychooser-view .thumb{
-	background: #dddddd;
-	padding: 3px;
-}
-.ychooser-view .thumb img{
-	height: 100px;
-	width: 100px;
-}
-.ychooser-view .thumb-wrap{
-	float: left;
-	margin: 4px;
-	margin-right: 0;
-	padding: 5px;
-}
-.ychooser-view .thumb-wrap span{
-	display: block;
-	overflow: hidden;
-	text-align: center;
-}
-.ychooser-view .x-view-selected{
-	background: #c3daf9;
-	border: 2px solid #6593cf;
-	padding: 3px;
-}
-.ychooser-view .x-view-selected .thumb{
-	background:transparent;
-}
-.ychooser-view .loading-indicator {
-	font-size:11px;
-	background-image:url('../../resources/images/grid/loading.gif');
-	background-repeat: no-repeat;
-	background-position: left;
-	padding-left:20px;
-	margin:10px;
-}

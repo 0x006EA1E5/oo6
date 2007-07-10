@@ -24,14 +24,15 @@ OO.Workbench = function()
     
     return {
 		
-		layout : layout, 
+		// FIXME Use getters/setters intead?
+		currentContainer : currentContainer, 
+		currentItem : currentItem, 
 		
         init : function()
 		{
             // Set up workbench layout
 			layout = new Ext.BorderLayout(document.body, {
 	            north: {split:false, initialSize: 25, minSize: 60, maxSize: 60, titlebar: false, collapsible: false, animate: false},	                    
-				//east: {split:true, collapsed: false, hidden: true, initialSize: 350, minSize: 350, maxSize: 500, titlebar: true, collapsible: true, animate: false},
 				west: {split:true, collapsed: false, initialSize: 200, minSize: 200, maxSize: 500, collapsible: true, animate: false, autoScroll:true},
 	            center: {titlebar:false, autoScroll:true, closeOnTab:true, tabPosition:'top', alwaysShowTabs:true}
 	            //south: {split:false, initialSize: 25, minSize: 60, maxSize: 60, titlebar: false, collapsible: false, animate: false}	                   
@@ -48,7 +49,8 @@ OO.Workbench = function()
 			var root = new Ext.tree.AsyncTreeNode({
                 text: 'Site', 
                 draggable:false, // disable root node dragging
-                id:'source'
+                id:'source',
+				cls:'site-nav-item'
             });
             navigator.setRootNode(root);
 			navigator.render();
@@ -122,7 +124,7 @@ OO.Workbench = function()
 			
 			var editPanel = layout.getRegion("center").getPanel("edit-panel");
 			editPanel.setUrl(null);
-			editForm.createForm(null);
+			editForm.createForm(null, row.id);
 			
 			//layout.getRegion("center").showPanel("preview-panel");
 		},
@@ -133,4 +135,5 @@ OO.Workbench = function()
 		}
     };
 }();
+
 Ext.onReady(OO.Workbench.init, OO.Workbench);

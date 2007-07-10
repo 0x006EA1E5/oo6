@@ -1,11 +1,12 @@
 package org.otherobjects.cms.types;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstactTypeService implements TypeService
 {
-    private Map<String, TypeDef> types;
+    private Map<String, TypeDef> types = new HashMap<String, TypeDef>();
 
     public void registerType(TypeDef t)
     {
