@@ -48,7 +48,7 @@ OO.ListingGrid = function() {
 			grid.render();
 			
 			
-			var gp = new Ext.GridPanel(grid, {title:'Listing',background:false});
+			var gp = new Ext.GridPanel(grid, {title:'Listing',background:true});
 			panel = OO.Workbench.addPanel(gp);
 			
 			var gridFoot = grid.getView().getFooterPanel(true);

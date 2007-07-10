@@ -69,7 +69,7 @@ OO.Workbench = function()
 
 
 
-			var welcomePanel = new Ext.ContentPanel('welcome-panel', {autoCreate:true, title:'Welcome', background:true});
+			var welcomePanel = new Ext.ContentPanel('welcome-panel', {autoCreate:true, title:'Welcome', background:false});
 			welcomePanel.setUrl('/go/workbench/welcome.html');
 	        layout.add('center', welcomePanel);
 	
