@@ -3,16 +3,15 @@ M1 Todo List
 
 Workbench
 
-* Preview tab
 * Edit tab
 * Rename folder
 * Add sub folder
 * Delete folder
-* Protect key folders
 * Error handling
 * Refresh tree
 * Show folder contents
 * Article form with validation
+? Sortable columns
 ? Update all trees after edit
 ? System status indicators
 ? Audit log
@@ -20,6 +19,7 @@ Workbench
 
 Infrastructure
 
+* Error logging and report back
 * Tests running 
 * 80% test coverage
 * Maven setup
@@ -29,3 +29,17 @@ Documentation
 * Architecture overview
 * User manual
 * Demo videos
+
+JS
+
+* Global status/error handling
+* Non-singleton JS classes
+* Tab order
+
+Joerg
+
+* DAO Test cases
+* Paging
+* Non-data node?
+* Transactions and sessions?
+* Protect key folders

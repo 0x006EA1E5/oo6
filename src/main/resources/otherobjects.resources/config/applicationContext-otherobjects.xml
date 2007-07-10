@@ -12,6 +12,7 @@
 	<bean name="workbenchController" class="org.otherobjects.cms.controllers.WorkbenchController"></bean>
 
 	<bean name="workbenchDataController" class="org.otherobjects.cms.controllers.WorkbenchDataController">
+		<property name="typeService" ref="typeService" />
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
 	</bean>
 
@@ -20,7 +21,7 @@
 	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
 			<props>
-				<prop key="/go/workbench/data/*">workbenchDataController</prop>
+				<prop key="/go/workbench/data/**">workbenchDataController</prop>
 				<prop key="/go/workbench/*">workbenchController</prop>
 				<prop key="/go/**">siteController</prop>
 				<prop key="/go/*">siteController</prop>

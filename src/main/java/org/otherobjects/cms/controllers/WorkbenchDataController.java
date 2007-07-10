@@ -10,29 +10,78 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.types.TypeDef;
+import org.otherobjects.cms.types.TypeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
 /**
- * Controller providing JSON data to the workbench. Currently supports navigator structure and
- * container contents.
+ * Controller providing a REST style interface to site data. Currently supports navigator structure and
+ * container contents. Data is served in JSON format.
+ * 
+ * <p>/navigator?node= (sends sub-contaniners of specified container)
+ * <br>/listing?node= (sends items in specified container)
+ * <br/>/type/typeName (sends typeDef info)
  * 
  * @author rich
  */
 public class WorkbenchDataController implements Controller
 {
+    private Logger logger = LoggerFactory.getLogger(WorkbenchDataController.class);
+    
     private DynaNodeDao dynaNodeDao;
+    private TypeService typeService;
 
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         String path = request.getPathInfo();
         path = path.substring(6);
 
-        if (path.endsWith("listing"))
+        if (path.contains("/types/"))
+            return generateTypeData(request);
+        else if (path.contains("/item/"))
+            return generateItemData(request);
+        else if (path.endsWith("/listing"))
             return generateListingData(request);
-        else
+        else if (path.endsWith("/navigator"))
             return generateNavigatorData(request);
+        else
+            return null;
+    }
 
+    private ModelAndView generateItemData(HttpServletRequest request)
+    {
+        String path = request.getPathInfo();
+        String id = path.substring(path.lastIndexOf("/")+1);
+        
+        logger.info("Sending item data: {} ", id);
+        
+        DynaNode dynaNode = dynaNodeDao.get(id);
+        
+        Assert.notNull(dynaNode, "No item found: " + dynaNode);
+        
+        ModelAndView view = new ModelAndView("jsonView");
+        view.addObject("json", dynaNode);
+        view.addObject("jsonIncludes", "properties");
+        return view;
+    }
+    private ModelAndView generateTypeData(HttpServletRequest request)
+    {
+        String path = request.getPathInfo();
+        String typeName = path.substring(path.lastIndexOf("/")+1);
+        
+        logger.info("Sending type definition: {} ", typeName);
+        
+        TypeDef type = typeService.getType(typeName);
+        Assert.notNull(type, "No type found: " + typeName);
+
+        ModelAndView view = new ModelAndView("jsonView");
+        view.addObject("json", type);
+        view.addObject("jsonIncludes", "properties");
+        return view;
     }
 
     private ModelAndView generateNavigatorData(HttpServletRequest request)
@@ -107,5 +156,15 @@ public class WorkbenchDataController implements Controller
     public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
     {
         this.dynaNodeDao = dynaNodeDao;
+    }
+
+    public TypeService getTypeService()
+    {
+        return typeService;
+    }
+
+    public void setTypeService(TypeService typeService)
+    {
+        this.typeService = typeService;
     }
 }

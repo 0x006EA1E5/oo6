@@ -698,9 +698,9 @@
 			<version>1.2.2</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.json</groupId>
-		    <artifactId>json</artifactId>
-		    <version>1.0</version>
+		    <groupId>net.sourceforge</groupId>
+		    <artifactId>flexjson</artifactId>
+		    <version>1.2</version>
 		</dependency>
 				<dependency>
 		    <groupId>org.directwebremoting</groupId>

@@ -1,5 +1,7 @@
 package org.otherobjects.cms.types;
 
+import org.otherobjects.cms.util.StringUtils;
+
 /**
  * Defines a property of a type.
  * 
@@ -122,10 +124,13 @@ public class PropertyDef
     }
 
     public String getLabel()
-    {
-        return label;
+    {   
+        if(label == null)
+            return StringUtils.generateLabel(getName());
+        else
+            return label;
     }
-
+    
     public void setLabel(String label)
     {
         this.label = label;

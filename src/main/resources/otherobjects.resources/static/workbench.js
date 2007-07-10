@@ -4,7 +4,6 @@
 // Defines OO.Workbench the main workbench interface class.
 //
 
-
 // Define OO namespace
 var OO = OO || {};
 
@@ -18,6 +17,7 @@ OO.Workbench = function()
     var layout; // Ext.BorderLayout
 	var navigator; // Ext.tree.Treepanel
 	var listing; // OO.Listing
+	var editForm; // OO.EditForm
 	
 	var currentContainer;
 	var currentItem;
@@ -77,12 +77,19 @@ OO.Workbench = function()
 			var listingPanel = listing.init();
 			console.log(listingPanel);
 			
+			// Create edit panel
+			editForm = OO.EditForm;
+			var editPanel = new Ext.ContentPanel('edit-panel', {autoCreate:true, title:'Edit', background:true, closable:false});
+//			editPanel.setUrl('/go/workbench/edit-help.html');
+			editForm.createForm();
+			
 			// Render layout
 	        layout.beginUpdate();
 			layout.add('north', new Ext.ContentPanel('header'));
 	        layout.add('west', new Ext.ContentPanel('select', {title: 'Select'}));
 	        layout.add('center', welcomePanel);
 	        layout.add('center', listingPanel);
+	        layout.add('center', editPanel);
 	        layout.add('center', previewPanel);
 	        // layout.add('south', new Ext.ContentPanel('status'));
 	        layout.endUpdate();
@@ -113,7 +120,11 @@ OO.Workbench = function()
 					height: '100%'
 				});
 			
-			layout.getRegion("center").showPanel("preview-panel");
+			var editPanel = layout.getRegion("center").getPanel("edit-panel");
+			editPanel.setUrl(null);
+			editForm.createForm(null);
+			
+			//layout.getRegion("center").showPanel("preview-panel");
 		},
 		
 		addPanel : function(panel)
