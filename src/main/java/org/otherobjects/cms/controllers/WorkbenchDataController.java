@@ -90,6 +90,7 @@ public class WorkbenchDataController implements Controller
                 Map<String, Object> n1 = new HashMap<String, Object>();
                 n1.put("id", dynaNode.getId());
                 n1.put("label", dynaNode.getLabel());
+                n1.put("linkPath", dynaNode.getLinkPath());
                 nodes.add(n1);
             }
 

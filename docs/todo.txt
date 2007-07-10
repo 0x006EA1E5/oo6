@@ -3,14 +3,20 @@ M1 Todo List
 
 Workbench
 
+* Preview tab
+* Edit tab
 * Rename folder
 * Add sub folder
+* Delete folder
+* Protect key folders
 * Error handling
 * Refresh tree
-* NTH Update all trees after edit?
 * Show folder contents
 * Article form with validation
-* Preview tab
+? Update all trees after edit
+? System status indicators
+? Audit log
+? Localisation
 
 Infrastructure
 

@@ -190,5 +190,14 @@ public class DynaNode implements CmsNode
     {
         this.ooType = ooType;
     }
+    
+    /**
+     * FIXME Better name needed?
+     * @return
+     */
+    public String getLinkPath()
+    {
+        return getJcrPath().replaceAll("/site/", "/go/");
+    }
 
 }
