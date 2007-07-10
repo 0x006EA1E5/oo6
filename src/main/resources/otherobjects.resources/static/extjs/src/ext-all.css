@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.1 Beta 2
+ * Ext JS Library 1.1 RC 1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -1481,6 +1481,9 @@ html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,bloc
     background: transparent url(../images/default/grid/dirty.gif) no-repeat 0 0;
 }
 
+.x-grid-row-alt .x-grid-dirty-cell{
+	background-color:#f1f1f1;
+}
 
 .x-grid-topbar, .x-grid-bottombar{
 	font:normal 11px arial, tahoma, helvetica, sans-serif;
