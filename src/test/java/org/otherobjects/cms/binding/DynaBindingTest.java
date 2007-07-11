@@ -87,4 +87,32 @@ public class DynaBindingTest extends TestCase {
 		assertEquals(new Long(17), PropertyUtils.getSimpleProperty(myBean, "id"));
 	}
 	
+	public void testInspectionCache() throws Exception
+	{
+		Object myBean  = commandObjectGenerator.create();
+		
+		request.addParameter("id", "17");
+		ServletRequestDataBinder binder = new ServletRequestDataBinder(myBean);
+		binder.bind(request);
+		
+		System.out.println("Errors:");
+		for(Iterator it = binder.getBindingResult().getAllErrors().iterator(); it.hasNext();)
+		{
+			System.out.print(it.next());
+		}
+		
+		assertEquals(new Long(17), PropertyUtils.getSimpleProperty(myBean, "id"));
+		
+		// now modify the bean
+		commandObjectGenerator.addProperty("id2", Integer.class);
+		Object myBean2 = commandObjectGenerator.create();
+		
+		request.addParameter("id2", "19");
+		ServletRequestDataBinder binder2 = new ServletRequestDataBinder(myBean2);
+		binder2.bind(request);
+		
+		assertEquals(new Integer(19), PropertyUtils.getSimpleProperty(myBean2, "id2"));
+		
+	}
+	
 }
