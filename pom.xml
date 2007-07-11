@@ -11,18 +11,18 @@
 	<inceptionYear>2007</inceptionYear>
 	<properties>
 		<copyright.year>2007</copyright.year>
-		<dbunit.dataTypeFactoryName>org.dbunit.dataset.datatype.DefaultDataTypeFactory</dbunit.dataTypeFactoryName>
 		<dbunit.operation.type>CLEAN_INSERT</dbunit.operation.type>
-		<hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
-		<jdbc.groupId>postgresql</jdbc.groupId>
-		<jdbc.artifactId>postgresql</jdbc.artifactId>
-		<jdbc.version>8.1-408.jdbc3</jdbc.version>
-		<jdbc.driverClassName>org.postgresql.Driver</jdbc.driverClassName>
-		<jdbc.url><![CDATA[jdbc:postgresql://localhost/oong]]></jdbc.url>
-		<jdbc.username>postgres</jdbc.username>
-		<jdbc.password>postgres</jdbc.password>
-		<hibernate.jdbc.properties.file>target/classes/jdbc.properties</hibernate.jdbc.properties.file>
-		<dbunit-load-file>bootstrap-data/jdbc-data-users.xml</dbunit-load-file>
+		<dbunit.dataTypeFactoryName>org.dbunit.ext.hsqldb.HsqldbDataTypeFactory</dbunit.dataTypeFactoryName>
+		<hibernate.dialect>org.hibernate.dialect.H2Dialect</hibernate.dialect>
+		<jdbc.groupId>com.h2database</jdbc.groupId>
+		<jdbc.artifactId>h2</jdbc.artifactId>
+		<jdbc.version>1.0.20070617</jdbc.version>
+		<jdbc.driverClassName>org.h2.Driver</jdbc.driverClassName>
+		<jdbc.url><![CDATA[jdbc:h2:${java.io.tmpdir}/oongtest]]></jdbc.url>
+		<jdbc.username>sa</jdbc.username>
+		<jdbc.password></jdbc.password>
+		<hibernate.jdbc.properties.file>target/classes/otherobjects.resources/config/jdbc-h2.properties</hibernate.jdbc.properties.file>
+		<dbunit-load-file>bootstrap-data/jdbc-h2-data-users.xml</dbunit-load-file>
 		<jackrabbit.username>jackrabbit</jackrabbit.username>
 		<jackrabbit.password>jackrabbit</jackrabbit.password>
 	</properties>
@@ -48,21 +48,29 @@
 	</developers>
 	<profiles>
 		<profile>
-			<id>testdb</id>
+			<id>postgres</id>
 			<activation></activation>
 			<properties>
+
+				<dbunit.dataTypeFactoryName>
+					org.dbunit.dataset.datatype.DefaultDataTypeFactory
+				</dbunit.dataTypeFactoryName>
 				<dbunit.operation.type>CLEAN_INSERT</dbunit.operation.type>
-				<dbunit.dataTypeFactoryName>org.dbunit.ext.hsqldb.HsqldbDataTypeFactory</dbunit.dataTypeFactoryName>
-				<hibernate.dialect>org.hibernate.dialect.H2Dialect</hibernate.dialect>
-				<jdbc.groupId>com.h2database</jdbc.groupId>
-				<jdbc.artifactId>h2</jdbc.artifactId>
-				<jdbc.version>1.0.20070617</jdbc.version>
-				<jdbc.driverClassName>org.h2.Driver</jdbc.driverClassName>
-				<jdbc.url><![CDATA[jdbc:h2:${java.io.tmpdir}/oongtest]]></jdbc.url>
-				<jdbc.username>sa</jdbc.username>
-				<jdbc.password></jdbc.password>
-				<hibernate.jdbc.properties.file>target/classes/jdbc-h2.properties</hibernate.jdbc.properties.file>
-				<dbunit-load-file>bootstrap-data/jdbc-h2-data-users.xml</dbunit-load-file>
+				<hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
+				<jdbc.groupId>postgresql</jdbc.groupId>
+				<jdbc.artifactId>postgresql</jdbc.artifactId>
+				<jdbc.version>8.1-408.jdbc3</jdbc.version>
+				<jdbc.driverClassName>org.postgresql.Driver</jdbc.driverClassName>
+				<jdbc.url><![CDATA[jdbc:postgresql://localhost/oong]]></jdbc.url>
+				<jdbc.username>postgres</jdbc.username>
+				<jdbc.password>postgres</jdbc.password>
+				<hibernate.jdbc.properties.file>
+					target/classes/otherobjects.resources/config/jdbc.properties
+				</hibernate.jdbc.properties.file>
+				<dbunit-load-file>bootstrap-data/jdbc-data-users.xml</dbunit-load-file>
+
+
+
 			</properties>
 		</profile>
 	</profiles>
@@ -112,20 +120,20 @@
 	<build>
 		<plugins>
 			<plugin>
-			  <artifactId>maven-antrun-plugin</artifactId>
-			  <executions>
-			    <execution>
-			      <phase>validate</phase>
-			      <goals>
-			        <goal>run</goal>
-			      </goals>
-			      <configuration>
-			        <tasks>
-			          <echo>Temp dir=${java.io.tmpdir}</echo>
-			        </tasks>
-			      </configuration>
-			    </execution>
-			  </executions>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<echo>Temp dir=${java.io.tmpdir}</echo>
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -182,6 +190,7 @@
 						<jdk5>true</jdk5>
 						<propertyfile>${hibernate.jdbc.properties.file}</propertyfile>
 						<skip>${maven.test.skip}</skip>
+						<configurationfile>src/test/resources/hibernate.cfg.xml</configurationfile>
 					</componentProperties>
 				</configuration>
 				<executions>
@@ -256,7 +265,11 @@
 						<param>bootstrap-data/jcr-data-types.xml</param>
 						<param>bootstrap-data/jcr-data-site.xml</param>
 					</dataFiles>
-					<repositoryLocation>src/main/webapp/WEB-INF/repository/</repositoryLocation>
+					<repositoryLocation>/tmp/otherobjects/test/repository/</repositoryLocation>
+					<configurationFile>
+						src/main/resources/otherobjects.resources/config/jackrabbit-repo.xml
+					</configurationFile>
+					<nodeTypesFile>src/main/resources/otherobjects.resources/config/node-types.cnd</nodeTypesFile>
 				</configuration>
 				<executions>
 					<execution>
@@ -698,19 +711,19 @@
 			<version>1.2.2</version>
 		</dependency>
 		<dependency>
-		    <groupId>net.sourceforge</groupId>
-		    <artifactId>flexjson</artifactId>
-		    <version>1.2</version>
-		</dependency>
-				<dependency>
-		    <groupId>org.directwebremoting</groupId>
-		    <artifactId>dwr</artifactId>
-		    <version>2.0.1</version>
+			<groupId>net.sourceforge</groupId>
+			<artifactId>flexjson</artifactId>
+			<version>1.2</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.h2database</groupId>
-		    <artifactId>h2</artifactId>
-		    <version>1.0.20070617</version>
+			<groupId>org.directwebremoting</groupId>
+			<artifactId>dwr</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.0.20070617</version>
 		</dependency>
 	</dependencies>
 </project>

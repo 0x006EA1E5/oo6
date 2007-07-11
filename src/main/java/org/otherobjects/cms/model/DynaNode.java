@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.ManagedHashMap;
 import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.cms.workbench.WorkbenchItem;
 import org.springframework.util.Assert;
 
 /**
@@ -17,7 +18,7 @@ import org.springframework.util.Assert;
  * <br>TODO Equals, hashCode, serialableId builders
  */
 @SuppressWarnings("unchecked")
-public class DynaNode implements CmsNode
+public class DynaNode implements CmsNode, WorkbenchItem
 {
     /** Property to be used an the label (human friendly identifier) for this node. */
     private static final String LABEL_KEY = "title";
@@ -199,5 +200,4 @@ public class DynaNode implements CmsNode
     {
         return getJcrPath().replaceAll("/site/", "/go/");
     }
-
 }

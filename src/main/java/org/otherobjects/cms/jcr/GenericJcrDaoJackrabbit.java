@@ -68,7 +68,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
             getJcrMappingTemplate().update(object);
         else
             getJcrMappingTemplate().insert(object);
-
+        
         // PERF Extra lookup required to get UUID. Should be done in PM.
         CmsNode newObj = getByPath(object.getJcrPath());
         Assert.notNull(newObj, "Object not saved correctly. Could not read ID.");
@@ -77,6 +77,21 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
         return object;
     }
 
+    /**
+     * Moves the object to a new location in the repository. This is also used for 
+     * renaming nodes.
+     * 
+     * <p>FIXME Can we detect path changes automatically?
+     */
+    @SuppressWarnings("unchecked")
+    public T move(T object, String newPath)
+    {
+        getJcrMappingTemplate().move(object.getJcrPath(),newPath);
+        getJcrMappingTemplate().save();
+        return null; //FIXME
+    }
+    
+    
     public boolean existsAtPath(String path)
     {
         // If there in no path then the object hasn't been set up correctly

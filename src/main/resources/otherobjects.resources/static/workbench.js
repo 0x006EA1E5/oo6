@@ -15,7 +15,7 @@ OO.Workbench = function()
 	var dh = Ext.DomHelper;
 	
     var layout; // Ext.BorderLayout
-	var navigator; // Ext.tree.Treepanel
+	var navigator; // OO.Navigator
 	var listing; // OO.Listing
 	var editForm; // OO.EditForm
 	
@@ -37,42 +37,15 @@ OO.Workbench = function()
 	            center: {titlebar:false, autoScroll:true, closeOnTab:true, tabPosition:'top', alwaysShowTabs:true}
 	            //south: {split:false, initialSize: 25, minSize: 60, maxSize: 60, titlebar: false, collapsible: false, animate: false}	                   
 	        });
-
-			// Create lazy-loading navigator
-			navigator = new Ext.tree.TreePanel('navigator-tree', {
-                animate:true, 
-                loader: new Ext.tree.TreeLoader({dataUrl:'/go/workbench/data/navigator'}),
-                //enableDD:true,
-                containerScroll: true,
-                dropConfig: {appendOnly:true}
-            });
-			var root = new Ext.tree.AsyncTreeNode({
-                text: 'Site', 
-                draggable:false, // disable root node dragging
-                id:'source',
-				cls:'site-nav-item'
-            });
-            navigator.setRootNode(root);
-			navigator.render();
-			root.expand();
-			navigator.on("click", function(node){OO.Workbench.selectContainer(node);});
-			
-//			// Add contextual menu to tree
-//			var folderContextMenu = new Ext.menu.Menu();	
-//			var i1 = folderContextMenu.add({ text: 'Add sub folder...' });
-//			i1.on('click', function(item){
-//            	Ext.Msg.alert('Date Selected', 'You chose {0}.', item);
-//        	});
-//			folderContextMenu.add({ text: 'Rename folder...' });
-//			navigator.on("contextmenu", function(node){folderContextMenu.show(node.ui.elNode);});
 			
 			// Create welcome panel
 			var welcomePanel = new Ext.ContentPanel('welcome-panel', {autoCreate:true, title:'Welcome', background:false, closable:true});
-			welcomePanel.setUrl('/go/workbench/welcome.html');
+			welcomePanel.setUrl('/go/workbench/welcome.html',null,true); //loadOnce
 
 			// Create preview panel
-			var previewPanel = new Ext.ContentPanel('preview-panel', {autoCreate:true, title:'Preview', background:true, closable:false});
-			previewPanel.setUrl('/go/workbench/preview-help.html');
+			var previewPanel = new OO.PreviewPanel('preview-panel', {autoCreate:true, src:'/go/workbench/preview-help.html', title:'Preview', background:true, closable:false});
+			//previewPanel.setUrl('/go/workbench/preview-help.html',null,true); //loadOnce
+			//previewPanel.on("activate", OO.Workbench.showPreview);
 	
 			// Create listing grid
 			listing = OO.ListingGrid;
@@ -82,8 +55,12 @@ OO.Workbench = function()
 			// Create edit panel
 			editForm = OO.EditForm;
 			var editPanel = new Ext.ContentPanel('edit-panel', {autoCreate:true, title:'Edit', background:true, closable:false});
-//			editPanel.setUrl('/go/workbench/edit-help.html');
+			editPanel.setUrl('/go/workbench/edit-help.html',null,true); //loadOnce
 			editForm.createForm();
+			
+			// Create navigator
+			navigator = OO.Navigator;
+			navigator.init();
 			
 			// Render layout
 	        layout.beginUpdate();
@@ -112,21 +89,30 @@ OO.Workbench = function()
 			currentItem = row.id;
 	        console.log("Selected item: "+ row.id + " => " + row.data.path);
 			var previewPanel = layout.getRegion("center").getPanel("preview-panel");
-			var linkPath = row.data.path;
-			previewPanel.setUrl(null);
-			dh.overwrite(previewPanel.getEl(), {
-					tag: 'iframe',
-					src: linkPath,
-					style: 'border:0px;',
-					width: '100%',
-					height: '100%'
-				});
-			
+			previewPanel.setSrc(row.data.path);
 			var editPanel = layout.getRegion("center").getPanel("edit-panel");
-			editPanel.setUrl(null);
-			editForm.createForm(null, row.id);
+			
+			//editForm.createForm(row.id);
 			
 			//layout.getRegion("center").showPanel("preview-panel");
+		},
+		
+		showPreview : function()
+		{
+			console.log("Showing preview panel");
+			var previewPanel = layout.getRegion("center").getPanel("preview-panel");
+			
+			console.log("Current preview:" + previewPanel.curentPath);
+			if(previewPanel.curentPath != previewPanel.linkPath) {
+				console.log("Loading new preview:" + previewPanel.linkPath);
+				previewPanel.currentPath = previewPanel.linkPath;
+				var html = dh.markup({
+					tag: 'iframe',
+					src: 'http://google.com/',//previewPanel.linkPath,
+					style: 'border:0px;'
+				});
+				previewPanel.setContent(html);
+			}			
 		},
 		
 		addPanel : function(panel)

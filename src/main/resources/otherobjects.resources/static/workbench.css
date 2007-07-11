@@ -14,7 +14,7 @@
 .welcome UL {list-style:square; padding-left:20px; margin-top:5px;}
 
 /* Panels */
-#edit-panel {padding:10px;}
+#edit-panel .x-form {padding:10px;}
 
 /* Status bar */
 #status {font:70% Arial; background:#c3daf9 url('/resources/otherobjects.resources/static/extjs/images/default/grid/nowait.gif') no-repeat 2px 2px;	padding:5px 0px 0px 25px;	height:18px;}

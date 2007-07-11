@@ -19,6 +19,9 @@ mvn hibernate3:hbm2ddl
   
 mvn dbunit:operation
   Seed database with default data
+
+mvn jackrabbit:import
+  Seed JCR with default data  
   
 mvn clean
   Remove all generated artifacts

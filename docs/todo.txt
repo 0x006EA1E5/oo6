@@ -3,17 +3,25 @@ M1 Todo List
 
 Workbench
 
-* Data binding
-* Data validation
+* Delete article 
+* Rename folder [R]
+* Add sub folder [R]
+* Move sub folder
+* Delete folder
+* Data binding [J]
+* Data validation [J]
 * Logout
 * Localisation
 * Add all simple properties to Article inc BigDecimal
+* Paging
 ? Folder and Page objects
 ? Sortable columns
 ? System status indicators
 ? Audit log
 ? Refresh tree
 ? Update all trees after edit
+? Transactions and sessions
+? Protect key folders
 
 Site 
 
@@ -23,6 +31,7 @@ Infrastructure
 
 * Error logging and report back
 * Tests running 
+* DAO Test cases
 * 80% test coverage
 * Website and CI
 ? Maven setup
@@ -40,22 +49,6 @@ JS
 ? Non-singleton JS classes
 ? Tab order
 ? Global status/error handling
-
-Rich
-
-! Fix preview bug
-* Add/delete article
-* Rename folder
-* Add sub folder
-* Delete folder
-
-Joerg
-
-* DynaBean
-* DAO Test cases
-* Paging
-? Transactions and sessions
-? Protect key folders
 
 Ext HTML Editor Bugs
 

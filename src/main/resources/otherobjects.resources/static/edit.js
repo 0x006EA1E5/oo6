@@ -106,7 +106,7 @@ OO.EditForm = function(){
 
  	return {
 		
-    	createForm : function(typeDef, id) {
+    	createForm : function(id) {
 			loadJsonObject("/go/workbench/data/item/" + id, buildForm);
     	}
 	}

@@ -1,0 +1,3 @@
+http://dynclass.sourceforge.net/
+http://sixlegs.com/blog/java/death-to-dynabeans.html
+http://www.ociweb.com/jnb/jnbNov2005.html

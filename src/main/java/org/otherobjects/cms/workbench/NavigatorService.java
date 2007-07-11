@@ -9,11 +9,14 @@ import java.util.List;
  * <p>All items that may be selected or acted upon are
  * ultimately dervied from this.
  * 
+ * <p>FIXME The terminology is terrible
+ * <p>FIXME Pages and PageSets in the Navigtaor?
  * <p>TODO Think about publishing/workflow for this
+ * <p>TODO Does this work with IDs or Paths?
  * 
  * @author rich
  */
-public interface Navigator
+public interface NavigatorService
 {
    public WorkbenchItem getRootItem();
    
@@ -21,7 +24,7 @@ public interface Navigator
    
    public WorkbenchItem getItem(String path);
    
-   public void addItem(String path, WorkbenchItem newItem);
+   public void addItem(String path, String name);
    
    public void removeItem(String path);
    
