@@ -5,6 +5,6 @@
     <session-factory>
         <mapping class="org.otherobjects.cms.model.User"/>
         <mapping class="org.otherobjects.cms.model.Role"/>
-        <mapping class="org.otherobjects.cms.model.SecureObject1"/>
+        <mapping class="org.otherobjects.cms.hibernate.SecureObject1"/>
     </session-factory>
 </hibernate-configuration>

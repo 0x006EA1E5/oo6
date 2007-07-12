@@ -3,29 +3,24 @@ M1 Todo List
 
 Workbench
 
-* Delete article 
-* Rename folder [R]
-* Add sub folder [R]
-* Move sub folder
-* Delete folder
+* Delete article [R]
+* Move/reorder sub folder [R]
+* Delete folder [R]
 * Data binding [J]
+* Add all simple properties to Article inc BigDecimal [J]
 * Data validation [J]
-* Logout
-* Localisation
-* Add all simple properties to Article inc BigDecimal
+* Logout [J]
+* Localisation [J]
 * Paging
+* Sort out path problems esp in siteview
+* Queries/page stats and timings
+* Security
 ? Folder and Page objects
 ? Sortable columns
 ? System status indicators
 ? Audit log
 ? Refresh tree
 ? Update all trees after edit
-? Transactions and sessions
-? Protect key folders
-
-Site 
-
-* Navigation tree
 
 Infrastructure
 
@@ -45,10 +40,10 @@ Documentation
 JS
 
 * IE testing!
-* Contextual menus
-? Non-singleton JS classes
 ? Tab order
 ? Global status/error handling
+
+==================================================================
 
 Ext HTML Editor Bugs
 
@@ -57,3 +52,9 @@ Ext HTML Editor Bugs
 * Classes on blosws
 * Change icons
 * No spans for bold
+
+M2
+--
+? Transactions and sessions
+? Protect key folders
+* Versions for Types

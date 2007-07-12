@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.util.StringUtils;
+import org.springframework.util.Assert;
 
 public class NavigatorServiceImpl implements NavigatorService
 {
@@ -30,15 +32,25 @@ public class NavigatorServiceImpl implements NavigatorService
         return children;
     }
 
-    public void addItem(String uuid, String name)
+    public WorkbenchItem addItem(String uuid, String name)
     {
         DynaNode parent = dynaNodeDao.get(uuid);
+        Assert.notNull(parent, "Parent node not found: " + uuid);
 
-        DynaNode newFolder = new DynaNode("Folder");
-        newFolder.setPath(parent.getJcrPath() + "/");
-        newFolder.setCode("untitled");
-        newFolder.set("label", "Untitled");
-        dynaNodeDao.save(newFolder);
+        int c = 0;
+        do
+        {
+            String newPath = parent.getJcrPath() + "/untitled-" + ++c;
+            boolean alreadyExists = (dynaNodeDao.existsAtPath(newPath));
+            if(!alreadyExists) break;
+            
+        } while(true);
+
+        DynaNode newFolder = dynaNodeDao.create("Folder");
+        newFolder.setPath(parent.getJcrPath());
+        newFolder.setCode("untitled-" + c);
+        newFolder.setLabel("Untitled " + c);
+        return dynaNodeDao.save(newFolder);
     }
 
     public WorkbenchItem getItem(String path)
@@ -51,13 +63,12 @@ public class NavigatorServiceImpl implements NavigatorService
         return null;
     }
 
-    public WorkbenchItem moveItem(String uuid, String newPath)
+    public WorkbenchItem moveItem(String uuid, String newName)
     {
         DynaNode node = dynaNodeDao.get(uuid);
-//        node.setCode("untitled2");
-        node.set("label", "Untitled2");
+        node.setCode(StringUtils.generateUrlCode(newName));
+        node.set("label", newName);
         dynaNodeDao.save(node);
-        dynaNodeDao.move(node,node.getPath() + "untitled2");
         return null;
     }
 

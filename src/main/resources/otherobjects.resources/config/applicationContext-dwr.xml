@@ -6,8 +6,10 @@
 
 	<dwr:controller id="dwrController" debug="true" />
 
-	<dwr:configuration></dwr:configuration>
-
+	<dwr:configuration>
+		<dwr:convert type="bean" class="org.otherobjects.cms.model.DynaNode" />
+	</dwr:configuration>
+	
 	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="alwaysUseFullPath" value="true" />
 		<property name="mappings">

@@ -24,7 +24,7 @@ public interface NavigatorService
    
    public WorkbenchItem getItem(String path);
    
-   public void addItem(String path, String name);
+   public WorkbenchItem addItem(String path, String name);
    
    public void removeItem(String path);
    

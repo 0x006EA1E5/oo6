@@ -12,6 +12,11 @@ public abstract class AbstactTypeService implements TypeService
     {
         types.put(t.getName(), t);
     }
+    
+    public void unregisterType(String typeName)
+    {
+        types.remove(typeName);
+    }
 
     public TypeDef getType(String name)
     {

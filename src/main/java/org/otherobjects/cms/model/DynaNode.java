@@ -5,6 +5,9 @@ import java.util.Map;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.ManagedHashMap;
 import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.cms.SingletonBeanLocator;
+import org.otherobjects.cms.types.TypeDef;
+import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.workbench.WorkbenchItem;
 import org.springframework.util.Assert;
 
@@ -20,16 +23,16 @@ import org.springframework.util.Assert;
 @SuppressWarnings("unchecked")
 public class DynaNode implements CmsNode, WorkbenchItem
 {
-    /** Property to be used an the label (human friendly identifier) for this node. */
-    private static final String LABEL_KEY = "title";
-
     /** GUID */
     private String id;
+
+    /** Property to be used an the label (human friendly identifier) for this node. */
+    private String labelProperty;
 
     /** The path of this node's parent. Must end with a forward slash. */
     private String path;
 
-    /** System readable identifier eg filename */
+    /** System readable identifier eg filename. Used an the name of the node. Must not contain a slash. */
     private String code;
 
     /* Additional textual information about this item */
@@ -41,9 +44,16 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     private Map<String, Object> data = new ManagedHashMap();
 
+    //FIXME This is temporary until we figure out what to do with CGLIB and JCR OCM.
+    private static TypeService typeService;
+
+    public DynaNode(TypeDef typeDef)
+    {
+        setOoType(typeDef.getName());
+    }
+
     public DynaNode()
     {
-        setOoType(getClass().getName());
     }
 
     /**
@@ -55,6 +65,16 @@ public class DynaNode implements CmsNode, WorkbenchItem
     public DynaNode(String type)
     {
         setOoType(type);
+    }
+    
+    public void setOoType(String ooType)
+    {
+        if (typeService == null)
+            typeService = (TypeService) SingletonBeanLocator.getBean("typeService");
+        TypeDef typeDef = typeService.getType(ooType);
+        
+        setLabelProperty(typeDef.getLabelProperty());
+        this.ooType = ooType;
     }
 
     /**
@@ -68,7 +88,7 @@ public class DynaNode implements CmsNode, WorkbenchItem
         if (path == null || code == null)
             return null;
 
-        Assert.isTrue(path.endsWith("/"), "Path must end with a forward slash" );
+        Assert.isTrue(path.endsWith("/"), "Path must end with a forward slash");
         return getPath() + getCode();
     }
 
@@ -107,7 +127,7 @@ public class DynaNode implements CmsNode, WorkbenchItem
         try
         {
             // Property values are stored in the data map...
-            return PropertyUtils.getNestedProperty(getData(), name.replaceAll("\\.","\\.data\\."));
+            return PropertyUtils.getNestedProperty(getData(), name.replaceAll("\\.", "\\.data\\."));
         }
         catch (Exception e)
         {
@@ -143,6 +163,10 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     public void setPath(String path)
     {
+        Assert.notNull(path, "path may not be null.");
+// FIXME       Assert.doesNotContain(path, ".", "path may not contain a period.");
+        if (!path.endsWith("/"))
+            path += "/";
         this.path = path;
     }
 
@@ -158,13 +182,13 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     public String getLabel()
     {
-        // FIXME This needs string in TypeDef
-        return (String) (get(LABEL_KEY) != null ? get(LABEL_KEY) : get("label")) ;
+        return (String) (get(labelProperty) != null ? get(labelProperty) : getCode());
     }
 
     public void setLabel(String label)
     {
-        set(LABEL_KEY, label);
+        //TODO What is labelProperty is missing
+        set(labelProperty, label);
     }
 
     public void set(String key, Object value)
@@ -179,6 +203,8 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     public void setCode(String code)
     {
+        Assert.notNull(code, "code may not be null.");
+        Assert.doesNotContain(code, "/", "code may not contain a slash.");
         this.code = code;
     }
 
@@ -187,11 +213,6 @@ public class DynaNode implements CmsNode, WorkbenchItem
         return ooType;
     }
 
-    public void setOoType(String ooType)
-    {
-        this.ooType = ooType;
-    }
-    
     /**
      * FIXME Better name needed?
      * @return
@@ -199,5 +220,15 @@ public class DynaNode implements CmsNode, WorkbenchItem
     public String getLinkPath()
     {
         return getJcrPath().replaceAll("/site/", "/go/");
+    }
+
+    public String getLabelProperty()
+    {
+        return labelProperty;
+    }
+
+    public void setLabelProperty(String labelProperty)
+    {
+        this.labelProperty = labelProperty;
     }
 }

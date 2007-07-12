@@ -5,7 +5,7 @@
 	<bean id="secureObject1Dao" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="proxyInterfaces">
 			<list>
-				<value>org.otherobjects.cms.dao.SecureObject1Dao</value>
+				<value>org.otherobjects.cms.hibernate.SecureObject1Dao</value>
 				<value>org.otherobjects.cms.dao.GenericDao</value>
 		   	</list>
 	   	</property>
@@ -17,7 +17,7 @@
 		<property name="target" ref="secureObject1DaoTarget" />
 	</bean>
 
-   <bean id="secureObject1DaoTarget" class="org.otherobjects.cms.dao.SecureObject1DaoHibernate">
+   <bean id="secureObject1DaoTarget" class="org.otherobjects.cms.hibernate.SecureObject1DaoHibernate">
 		<property name="sessionFactory" ref="sessionFactory"/>
    </bean>
 </beans>

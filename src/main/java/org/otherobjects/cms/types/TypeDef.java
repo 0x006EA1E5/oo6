@@ -29,6 +29,7 @@ public class TypeDef implements CmsNode
     private Map<String, PropertyDef> properties = new LinkedHashMap<String, PropertyDef>();
     //    private List<PropertyDef> properties = new ArrayList<PropertyDef>();
 
+    
     /** Human friendly name for type. Can be inferred from name */
     private String label;
 
@@ -37,6 +38,9 @@ public class TypeDef implements CmsNode
 
     /** Help text to assist choosing value for this type. */
     private String help;
+
+    /** The property to use as the label for items of this type. */
+    private String labelProperty;
 
     public TypeDef()
     {
@@ -152,6 +156,16 @@ public class TypeDef implements CmsNode
     public void setId(String id)
     {
         this.id = id;
+    }
+
+    public String getLabelProperty()
+    {
+        return labelProperty;
+    }
+
+    public void setLabelProperty(String labelProperty)
+    {
+        this.labelProperty = labelProperty;
     }
 
 }

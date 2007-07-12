@@ -64,6 +64,7 @@
 		<property name="target">
 			<bean class="org.otherobjects.cms.dao.DynaNodeDaoJackrabbit">
 				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
+				<property name="typeService" ref="typeService" />
 			</bean>
 		</property>
 	</bean>

@@ -5,7 +5,7 @@
 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>file:target/classes/jdbc.properties</value>
+				<value>file:src/test/resources/jdbc.properties</value>
 				<value>file:src/test/resources/jackrabbit.properties</value>
 			</list>
 		</property>
@@ -17,19 +17,4 @@
 		<property name="password" value="" />
 	</bean>
 	
-<!--	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
-<!--		<property name="driverClassName" value="org.postgresql.Driver" />-->
-<!--		<property name="url" value="jdbc:postgresql://localhost/oong" />-->
-<!--		<property name="username" value="postgres" />-->
-<!--		<property name="password" value="postgres" />-->
-<!--	</bean>-->
-
-	<!--
-		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="${jdbc.driverClassName}"/>
-		<property name="url" value="${jdbc.url}"/>
-		<property name="username" value="${jdbc.username}"/>
-		<property name="password" value="${jdbc.password}"/>
-		</bean>
-	-->
 </beans>

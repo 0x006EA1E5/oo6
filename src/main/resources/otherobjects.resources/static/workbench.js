@@ -92,7 +92,7 @@ OO.Workbench = function()
 			previewPanel.setSrc(row.data.path);
 			var editPanel = layout.getRegion("center").getPanel("edit-panel");
 			
-			//editForm.createForm(row.id);
+			editForm.createForm(row.id);
 			
 			//layout.getRegion("center").showPanel("preview-panel");
 		},

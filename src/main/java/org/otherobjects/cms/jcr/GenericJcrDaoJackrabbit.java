@@ -15,7 +15,7 @@ import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.util.Assert;
 
 /**
- * Base class for all JCR OCM mapped classes.
+ * Base class for all JCR DAOs.
  * 
  * @author rich
  */
@@ -45,7 +45,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
         QueryManager queryManager = getJcrMappingTemplate().createQueryManager();
         Filter filter = queryManager.createFilter(DynaNode.class);
         Query query = queryManager.createQuery(filter);
-        filter.setScope(path+"/");
+        filter.setScope(path + "/");
         return (List<T>) getJcrMappingTemplate().getObjects(query);
     }
 
@@ -62,19 +62,30 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     @SuppressWarnings("unchecked")
     public T save(T object)
     {
-        // PERF Extra lookup required to determine insert/update? Should be have
-        // separate methods instead?
-        if (exists(object.getId()))
-            getJcrMappingTemplate().update(object);
-        else
+        if (object.getId() == null)
+        {
+            // New
             getJcrMappingTemplate().insert(object);
-        
-        // PERF Extra lookup required to get UUID. Should be done in PM.
-        CmsNode newObj = getByPath(object.getJcrPath());
-        Assert.notNull(newObj, "Object not saved correctly. Could not read ID.");
-        object.setId(newObj.getId());
-        getJcrMappingTemplate().save();
-        return object;
+
+            // PERF Extra lookup required to get UUID. Should be done in PM.
+            CmsNode newObj = getByPath(object.getJcrPath());
+            Assert.notNull(newObj, "Object not saved correctly. Could not read ID.");
+            object.setId(newObj.getId());
+            getJcrMappingTemplate().save();
+            return object;
+        }
+        else
+        {
+            // PERF Extra lookup required to check path change
+            CmsNode existingObj = get(object.getId());
+            if (!existingObj.getJcrPath().equals(object.getJcrPath()))
+                getJcrMappingTemplate().move(existingObj.getJcrPath(), object.getJcrPath());
+            
+            // Update
+            getJcrMappingTemplate().update(object);
+            getJcrMappingTemplate().save();
+            return object;
+        }
     }
 
     /**
@@ -86,12 +97,11 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     @SuppressWarnings("unchecked")
     public T move(T object, String newPath)
     {
-        getJcrMappingTemplate().move(object.getJcrPath(),newPath);
+        getJcrMappingTemplate().move(object.getJcrPath(), newPath);
         getJcrMappingTemplate().save();
         return null; //FIXME
     }
-    
-    
+
     public boolean existsAtPath(String path)
     {
         // If there in no path then the object hasn't been set up correctly
@@ -174,14 +184,5 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     public void setJcrMappingTemplate(JcrMappingTemplate jcrMappingTemplate)
     {
         this.jcrMappingTemplate = jcrMappingTemplate;
-    }
-    
-    /**
-     * FIXME Shouldn't this be in the transaction handling?
-     */
-    @Deprecated 
-    public void saveSession()
-    {
-        getJcrMappingTemplate().save();
     }
 }

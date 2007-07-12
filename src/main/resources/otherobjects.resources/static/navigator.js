@@ -30,7 +30,6 @@ OO.Navigator = function(){
             treeEditor = new Ext.tree.TreeEditor(tree, {
                 allowBlank:false,
                 blankText:'A name is required'
-                //selectOnFocus:true,
             });
 			treeEditor.ignoreNoChange=true;
 			// ... but disable default behaviour. Only allow via context menu.
@@ -43,27 +42,26 @@ OO.Navigator = function(){
 			
 			// Add contextual menu to tree
 			var navigatorContextMenu = new Ext.menu.Menu();	
-			var i1 = navigatorContextMenu.add({ text: 'Add sub folder' });
-			i1.on('click', function(item){
-					var parent = item.parentMenu.selectedNode.id;
-					console.log("Creating sub folder in:"+parent);
-					NavigatorService.addItem(parent,null);
-        	});
-			
-			var i2 = navigatorContextMenu.add({ text: 'Rename folder' });
-			i2.on('click', function(item){
+			navigatorContextMenu.add({ text: 'Add sub folder', handler:function(item){
+					var parent = item.parentMenu.selectedNode;
+					// FIXME Need to make sure that the parent has expanded before we add new node.
+					parent.expand();
+					console.log("Creating sub folder in:"+parent.id);
+					NavigatorService.addItem(parent.id,null, function(r){
+						console.log(r);
+						var node = parent.appendChild(new Ext.tree.TreeNode({id:r.id, text:r.label, cls:'folder', leaf:true, allowDrag:true}));
+						node.select();	
+					});
+        	}});
+			navigatorContextMenu.add({ text: 'Rename folder', handler:function(item){
 				var node = item.parentMenu.selectedNode;
 				console.log(node);
 				treeEditor.triggerEdit(node);
-        	});
-			
+        	}});
 			tree.on("contextmenu", function(node){
 					navigatorContextMenu.selectedNode = node;
 					navigatorContextMenu.show(node.ui.node.ui.getAnchor());
 			});
-			
-		
-          
 		}	
 	}	
 }();

@@ -16,6 +16,8 @@ import org.otherobjects.cms.types.TypeService;
 
 public class DynaNodeDaoJackrabbitTest extends BaseJcrTestCase
 {
+    //FIXME Inject this?
+    private TypeService typeService;
     private DynaNodeDao dynaNodeDao;
 
     @Override
@@ -23,7 +25,7 @@ public class DynaNodeDaoJackrabbitTest extends BaseJcrTestCase
     {
         super.onSetUp();
         dynaNodeDao = (DynaNodeDao) getApplicationContext().getBean("dynaNodeDao");
-        TypeService typeService = (TypeService) getApplicationContext().getBean("typeService");
+        typeService = (TypeService) getApplicationContext().getBean("typeService");
         setupTypesService(typeService);
     }
 
@@ -55,17 +57,26 @@ public class DynaNodeDaoJackrabbitTest extends BaseJcrTestCase
         typeService.registerType(td3);
 
     }
+    
+    @Override
+    protected void onTearDown() throws Exception
+    {
+        super.onTearDown();
+        typeService.unregisterType("org.otherobjects.Dyna.jcr.TestObject");
+        typeService.unregisterType("org.otherobjects.Dyna.jcr.TestReferenceObject");
+        typeService.unregisterType("org.otherobjects.Dyna.jcr.TestComponentObject");
+    }
 
     public void testGet()
     {
-        DynaNode node = dynaNodeDao.getByPath("/site/about/about-us.html");
+        DynaNode node = dynaNodeDao.getByPath("/site/about/index.html");
         assertNotNull(node);
         assertEquals("About us", node.get("title"));
     }
 
     public void testRemove()
     {
-        DynaNode node = dynaNodeDao.getByPath("/site/about/about-us.html");
+        DynaNode node = dynaNodeDao.getByPath("/site/about/index.html");
         assertNotNull(node);
 
         dynaNodeDao.remove(node.getId());
@@ -74,7 +85,7 @@ public class DynaNodeDaoJackrabbitTest extends BaseJcrTestCase
 
     public void testExistsAtPath()
     {
-        assertTrue(dynaNodeDao.existsAtPath("/site/about/about-us.html"));
+        assertTrue(dynaNodeDao.existsAtPath("/site/about/index.html"));
         assertFalse(dynaNodeDao.existsAtPath("/site/about/not-about-us.html"));
         try
         {
@@ -89,7 +100,7 @@ public class DynaNodeDaoJackrabbitTest extends BaseJcrTestCase
 
     public void testExists()
     {
-        DynaNode node = dynaNodeDao.getByPath("/site/about/about-us.html");
+        DynaNode node = dynaNodeDao.getByPath("/site/about/index.html");
         assertTrue(dynaNodeDao.exists(node.getId()));
         assertFalse(dynaNodeDao.exists(node.getId().replaceAll("a", "b")));
         assertFalse(dynaNodeDao.exists(null));
