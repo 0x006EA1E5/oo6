@@ -23,10 +23,10 @@ public class HibernateConfigurationTest extends BaseDaoTestCase {
             for (Object o : metadata.values()) {
                 EntityPersister persister = (EntityPersister) o;
                 String className = persister.getEntityName();
-                log.debug("Trying select * from: " + className);
+                logger.debug("Trying select * from: " + className);
                 Query q = session.createQuery("from " + className + " c");
                 q.iterate();
-                log.debug("ok: " + className);
+                logger.debug("ok: " + className);
             }
         } finally {
             session.close();

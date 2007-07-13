@@ -68,7 +68,7 @@ public class UserDaoTest extends BaseDaoTestCase
         catch (DataIntegrityViolationException e)
         {
             assertNotNull(e);
-            log.debug("expected exception: " + e.getMessage());
+            logger.debug("expected exception: " + e.getMessage());
         }
     }
 
