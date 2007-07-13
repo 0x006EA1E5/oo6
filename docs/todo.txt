@@ -10,10 +10,10 @@ Workbench
 * Data validation [J]
 * Logout [J]
 * Localisation [J]
-* Sort out path problems esp in siteview
+* Rename/drag name clashes [R]
+* Auto code setting. Remove dots.
 * Queries/page stats and timings
 * Security
-
 ? Paging
 ? Folder and Page objects
 ? Sortable columns
@@ -36,6 +36,11 @@ Documentation
 * Architecture overview
 * User manual
 * Demo videos
+
+QA
+
+* Naming consistency
+* Site controller, WDC to use NavService
 
 JS
 

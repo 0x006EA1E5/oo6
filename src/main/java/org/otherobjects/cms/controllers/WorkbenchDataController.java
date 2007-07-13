@@ -123,6 +123,9 @@ public class WorkbenchDataController implements Controller
                 else
                     n1.put("cls", "folder");
                 n1.put("leaf", false);
+                if(dynaNode.getCode().equals("site"))
+                    n1.put("expanded", true);
+                    
                 nodes.add(n1);
             }
         }

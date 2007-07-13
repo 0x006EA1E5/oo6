@@ -59,12 +59,16 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
             {
                 try
                 {
+                    String p = path;
+                    if(path.length() > 1 && path.endsWith("/"))
+                        p = path.substring(0, path.length()-1);
+                    
                     List<T> list = new ArrayList<T>();
                     Node node;
-                    if(path.equals("/"))
+                    if(p.equals("/"))
                         node = manager.getSession().getRootNode();
                     else
-                        node = manager.getSession().getRootNode().getNode(path.substring(1));
+                        node = manager.getSession().getRootNode().getNode(p.substring(1));
                     
                     NodeIterator nodes = node.getNodes();
                     while (nodes.hasNext())

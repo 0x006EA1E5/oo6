@@ -219,7 +219,10 @@ public class DynaNode implements CmsNode, WorkbenchItem
      */
     public String getLinkPath()
     {
-        return getJcrPath().replaceAll("/site/", "/go/");
+        String linkPath = getJcrPath().replaceAll("/site/", "/go/");
+        if(!linkPath.contains(".") && !linkPath.endsWith("/"))
+            linkPath += "/";
+        return linkPath;
     }
 
     public String getLabelProperty()
