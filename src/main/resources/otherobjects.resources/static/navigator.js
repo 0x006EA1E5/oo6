@@ -12,6 +12,8 @@ OO.Navigator = function(){
                 animate:true, 
                 loader: new Ext.tree.TreeLoader({dataUrl:'/go/workbench/data/navigator'}),
                 enableDD:true,
+				enableDrop:true,
+				ddGroup : 'NavigatorDD',
                 containerScroll: true,
 				rootVisible:false
             });
@@ -26,10 +28,16 @@ OO.Navigator = function(){
 			root.expand();
 			tree.on("click", function(node){OO.Workbench.selectContainer(node);});
 			tree.on('beforenodedrop', function(e) {
-				console.log("Moving folder from: " + e.dropNode.id + " to " + e.target.id);
-				NavigatorService.moveItem(e.dropNode.id, e.target.id, e.point);
+				var itemId ;
+				if(e.dropNode)
+					itemId = e.dropNode.id;
+				else
+					itemId = e.data.selections[0].id;
+				console.log("Moving folder from: " + itemId + " to " + e.target.id);
+				NavigatorService.moveItem(itemId, e.target.id, e.point);
 				return true;
 			});
+			
             
 			
 			// Add an inline editor for the nodes...

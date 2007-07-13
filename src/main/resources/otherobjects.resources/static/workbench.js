@@ -108,6 +108,11 @@ OO.Workbench = function()
 			//layout.getRegion("center").showPanel("edit-panel");
 		},
 		
+		activatePanel : function(name)
+		{
+			layout.getRegion("center").showPanel(name);
+		},
+		
 		activateEditor : function()
 		{
 			layout.getRegion("center").showPanel("edit-panel");

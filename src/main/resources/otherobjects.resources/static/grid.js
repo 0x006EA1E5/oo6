@@ -45,11 +45,13 @@ OO.ListingGrid = function() {
 			
 			// create the grid
 			grid = new Ext.grid.Grid('listing-panel', {
-			    ds: ds,
-			    cm: cm,
-			    selModel: new Ext.grid.RowSelectionModel({singleSelect:true}),
+			    ds:ds,
+			    cm:cm,
+				enableDrag:true,
+				ddGroup : 'NavigatorDD',
+			    selModel:new Ext.grid.RowSelectionModel({singleSelect:true}),
 			    enableColLock:false,
-			    loadMask: true
+			    loadMask:true
 			});
 			grid.on('rowclick', OO.Workbench.selectItem, this);
 		    grid.on('rowdblclick', OO.Workbench.activateEditor, this);
