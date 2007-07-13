@@ -1,18 +1,27 @@
 package org.otherobjects.cms.jcr;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 
+import org.apache.jackrabbit.ocm.exception.JcrMappingException;
+import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
 import org.apache.jackrabbit.ocm.query.Filter;
 import org.apache.jackrabbit.ocm.query.Query;
 import org.apache.jackrabbit.ocm.query.QueryManager;
+import org.apache.jackrabbit.ocm.spring.JcrMappingCallback;
 import org.apache.jackrabbit.ocm.spring.JcrMappingTemplate;
 import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.model.CmsNode;
-import org.otherobjects.cms.model.DynaNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.util.Assert;
+import org.springmodules.jcr.JcrCallback;
 
 /**
  * Base class for all JCR DAOs.
@@ -21,6 +30,8 @@ import org.springframework.util.Assert;
  */
 public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao<T>
 {
+    private Logger logger = LoggerFactory.getLogger(GenericJcrDaoJackrabbit.class);
+
     private Class<T> persistentClass;
 
     private JcrMappingTemplate jcrMappingTemplate;
@@ -40,13 +51,39 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     }
 
     @SuppressWarnings("unchecked")
-    public List<T> getAllByPath(String path)
+    public List<T> getAllByPath(final String path)
     {
-        QueryManager queryManager = getJcrMappingTemplate().createQueryManager();
-        Filter filter = queryManager.createFilter(DynaNode.class);
-        Query query = queryManager.createQuery(filter);
-        filter.setScope(path + "/");
-        return (List<T>) getJcrMappingTemplate().getObjects(query);
+        return (List<T>) getJcrMappingTemplate().execute(new JcrMappingCallback()
+        {
+            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+            {
+                try
+                {
+                    List<T> list = new ArrayList<T>();
+                    Node node = manager.getSession().getRootNode().getNode(path.substring(1));
+                    NodeIterator nodes = node.getNodes();
+                    while (nodes.hasNext())
+                    {
+                        Node n = nodes.nextNode();
+                        //FIXME Extra lookup is bad. Can we avorid UUID requirement too
+                        //FIXME Avoid data nodes better...
+                        if (!n.getName().equals("data"))
+                            list.add((T) manager.getObjectByUuid(n.getUUID()));
+                    }
+                    return list;
+                }
+                catch (Exception e)
+                {
+                    throw new JcrMappingException(e);
+                }
+            }
+        }, true);
+
+        //        QueryManager queryManager = getJcrMappingTemplate().createQueryManager();
+        //        Filter filter = queryManager.createFilter(DynaNode.class);
+        //        Query query = queryManager.createQuery(filter);
+        //        filter.setScope(path + "/");
+        //        return (List<T>) getJcrMappingTemplate().getObjects(query);
     }
 
     @SuppressWarnings("unchecked")
@@ -65,6 +102,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
         if (object.getId() == null)
         {
             // New
+            Assert.notNull(object.getJcrPath(), "jcrPath must not be null when saving.");
             getJcrMappingTemplate().insert(object);
 
             // PERF Extra lookup required to get UUID. Should be done in PM.
@@ -80,7 +118,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
             CmsNode existingObj = get(object.getId());
             if (!existingObj.getJcrPath().equals(object.getJcrPath()))
                 getJcrMappingTemplate().move(existingObj.getJcrPath(), object.getJcrPath());
-            
+
             // Update
             getJcrMappingTemplate().update(object);
             getJcrMappingTemplate().save();
@@ -152,6 +190,75 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     {
         String path = convertIdToPath(id);
         getJcrMappingTemplate().remove(path);
+    }
+
+    public void moveItem(final String itemId, final String targetId, final String point)
+    {
+        getJcrMappingTemplate().execute(new JcrCallback()
+        {
+            public Object doInJcr(Session session) throws RepositoryException
+            {
+                Node item = session.getNodeByUUID(itemId);
+                Node target = session.getNodeByUUID(targetId);
+
+                Assert.doesNotContain(target.getPath(), ".", "Target must be a folder: " + target.getPath());
+
+                /*
+                 * Five situations:
+                 * 
+                 * 1. Simple append
+                 * 2. Move above same folder
+                 * 3. Move below same folder
+                 * 4. Move above different folder
+                 * 5. Move below different folder
+                 */
+                boolean sameFolder = false;
+                if (item.getParent().getPath().equals(target.getParent().getPath()))
+                    sameFolder = true;
+
+                if (point.equals("append") || !sameFolder)
+                {
+                    // Case 1
+                    String origPath = item.getPath();
+
+                    String newPath;
+                    if (point.equals("append"))
+                        newPath = target.getPath() + "/" + item.getName();
+                    else
+                        newPath = target.getParent().getPath() + "/" + item.getName();
+
+                    logger.info("Moving: " + origPath + " to " + newPath);
+                    session.move(origPath, newPath);
+                }
+                if (point.equals("above"))
+                {
+                    // Case 2, 4
+                    item.getParent().orderBefore(item.getName(), target.getName());
+                }
+                else if (point.equals("below"))
+                {
+                    NodeIterator nodes = target.getParent().getNodes();
+                    boolean found = false;
+                    while (nodes.hasNext())
+                    {
+                        Node n = nodes.nextNode();
+                        if (n.getUUID().equals(target.getUUID()))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    Assert.isTrue(found, "Target node not found.");
+                    if(nodes.hasNext())
+                        item.getParent().orderBefore(item.getName(), nodes.nextNode().getName());
+                    else
+                        item.getParent().orderBefore(item.getName(), null);
+                }
+
+                session.save();
+                return null;
+            }
+        });
     }
 
     /**

@@ -11,9 +11,8 @@ OO.Navigator = function(){
 			tree = new Ext.tree.TreePanel('navigator-tree', {
                 animate:true, 
                 loader: new Ext.tree.TreeLoader({dataUrl:'/go/workbench/data/navigator'}),
-                //enableDD:true,
-                containerScroll: true,
-                dropConfig: {appendOnly:true}
+                enableDD:true,
+                containerScroll: true
             });
 			var root = new Ext.tree.AsyncTreeNode({
                 text: 'Site', 
@@ -25,6 +24,12 @@ OO.Navigator = function(){
 			tree.render();
 			root.expand();
 			tree.on("click", function(node){OO.Workbench.selectContainer(node);});
+			tree.on('beforenodedrop', function(e) {
+				console.log("Moving folder from: " + e.dropNode.id + " to " + e.target.id);
+				NavigatorService.moveItem(e.dropNode.id, e.target.id, e.point);
+				return true;
+			});
+            
 			
 			// Add an inline editor for the nodes...
             treeEditor = new Ext.tree.TreeEditor(tree, {
@@ -36,7 +41,7 @@ OO.Navigator = function(){
 			tree.un('beforeclick', treeEditor.beforeNodeClick, treeEditor);
             treeEditor.on("complete", function(element, newName){
 				console.log("Renaming folder from: " + element.editNode.attributes.folderPath + " to " + newName);
-				NavigatorService.moveItem(element.editNode.id, newName);
+				NavigatorService.renameItem(element.editNode.id, newName);
 			});
 			
 			

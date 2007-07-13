@@ -28,5 +28,8 @@ public interface NavigatorService
    
    public void removeItem(String path);
    
-   public WorkbenchItem moveItem(String oldPath, String newPath);
+   public WorkbenchItem renameItem(String oldPath, String newPath);
+   
+   public void moveItem(String itemId, String targetId, String point);
+   
 }

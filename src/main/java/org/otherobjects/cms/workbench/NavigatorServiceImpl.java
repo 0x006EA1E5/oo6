@@ -63,7 +63,7 @@ public class NavigatorServiceImpl implements NavigatorService
         return null;
     }
 
-    public WorkbenchItem moveItem(String uuid, String newName)
+    public WorkbenchItem renameItem(String uuid, String newName)
     {
         DynaNode node = dynaNodeDao.get(uuid);
         node.setCode(StringUtils.generateUrlCode(newName));
@@ -72,6 +72,11 @@ public class NavigatorServiceImpl implements NavigatorService
         return null;
     }
 
+    public void moveItem(String itemId, String targetId, String point)
+    {
+        dynaNodeDao.moveItem(itemId, targetId, point);
+    }
+    
     public void removeItem(String path)
     {
     }

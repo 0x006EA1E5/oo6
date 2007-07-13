@@ -78,7 +78,7 @@ OO.Workbench = function()
 		{
 			currentContainer = node;
 			layout.getRegion("center").showPanel("listing-panel");
-	        console.log("Selected container: "+ node);
+	        console.log("Selected container: "+ node.id);
 	        listing.load(node.id);
 		},
 		

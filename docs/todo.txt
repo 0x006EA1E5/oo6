@@ -39,6 +39,8 @@ Documentation
 
 JS
 
+* First view of edit/preview
+* Error handling if server is down
 * IE testing!
 ? Tab order
 ? Global status/error handling

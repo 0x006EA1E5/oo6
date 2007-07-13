@@ -20,3 +20,7 @@ MApping
 
 Apache Graffito
 http://www.openwfe.org/openwfe-jcr-beancoder.html
+
+Gotchas
+
+http://mail-archives.apache.org/mod_mbox/jackrabbit-dev/200608.mbox/%3c44D9A26C.9030209@gmx.net%3e

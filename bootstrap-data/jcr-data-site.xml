@@ -3,22 +3,34 @@
 	xmlns:oo="http://www.otherobjects.org/system/oo" xmlns:ocm="http://jackrabbit.apache.org/ocm"
 	xmlns:sv="http://www.jcp.org/jcr/sv/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" jcr:primaryType="oo:node"
 	ocm:classname="org.otherobjects.cms.model.DynaNode" ooType="Folder">
-	<data  label="Site" />
+	<data label="Site" />
 
 	<index.html jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode" ooType="Article">
 		<data title="Congratulations!"
 			content="&lt;p&gt;If you can see this, it means that the installation of &lt;a href=&quot;http://www.otherobjects.org/&quot;&gt;OTHERobjects&lt;/a&gt; on this system was successful.&lt;/p&gt;&lt;p&gt;You can now use the OTHERobjects Workbench to start building your website.&lt;/p&gt;&lt;p&gt;You should login in with the username &quot;admin&quot; and the automatically generated password you were given when you started the server.&lt;/p&gt;&lt;p&gt;If this in your first OTHERobjects you might want to follow the &lt;a href=&quot;http://www.otherobjects.org/tutorials/first-site/&quot;&gt;first website tutorial&lt;/a&gt;.&lt;/p&gt;" />
 	</index.html>
 	<about jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode" ooType="Folder">
-		<data  label="About us" />
+		<data label="About us" />
 		<index.html jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode" ooType="Article">
 			<data title="About us" content="&lt;p&gt;All about content here&lt;/p&gt;" />
 		</index.html>
 	</about>
 	<contact jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode" ooType="Folder">
-		<data  label="Contact us" />
+		<data label="Contact us" />
 		<index.html jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode" ooType="Article">
 			<data title="Contact us" content="&lt;p&gt;All contact info here&lt;/p&gt;" />
 		</index.html>
 	</contact>
+	<test jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode" ooType="Folder">
+		<data label="Test" />
+		<test1 jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode" ooType="Folder">
+			<data label="Test 1" />
+		</test1>
+		<test2 jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode" ooType="Folder">
+			<data label="Test 2" />
+		</test2>
+		<test3 jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode" ooType="Folder">
+			<data label="Test 3" />
+		</test3>
+	</test>
 </site>
