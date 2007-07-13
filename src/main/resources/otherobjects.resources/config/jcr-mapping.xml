@@ -28,6 +28,8 @@
 	<class-descriptor className="org.otherobjects.cms.types.PropertyDef">
 		<field-descriptor fieldName="name" jcrName="name" />
 		<field-descriptor fieldName="type" jcrName="type" />
+		<field-descriptor fieldName="required" jcrName="required" />
+		<field-descriptor fieldName="maxLength" jcrName="maxLength" />
 	</class-descriptor>
 
 </jackrabbit-ocm>

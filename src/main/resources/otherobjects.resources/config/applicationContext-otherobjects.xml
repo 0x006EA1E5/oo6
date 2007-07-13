@@ -20,6 +20,7 @@
 	<bean name="formController" class="org.otherobjects.cms.controllers.FormController">
 		<property name="typeService" ref="typeService" />
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
+		<property name="validator" ref="dynaNodeValidator" />
 	</bean>
 	
 	<bean name="navigatorService" class="org.otherobjects.cms.workbench.NavigatorServiceImpl">
@@ -31,6 +32,10 @@
 		<property name="typeService" ref="typeService" />
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
 		<dwr:remote javascript="ContentService" />
+	</bean>
+	
+	<bean name="dynaNodeValidator" class="org.otherobjects.cms.validation.DynaNodeValidator">
+		<property name="typeService" ref="typeService" />
 	</bean>
 
 	<bean name="singletonBeanLocator" class="org.otherobjects.cms.SingletonBeanLocator" />

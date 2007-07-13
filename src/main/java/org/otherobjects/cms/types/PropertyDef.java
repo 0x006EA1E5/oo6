@@ -61,8 +61,14 @@ public class PropertyDef
 
     /** Description for this property. */
     private String description;
+    
+    /** To flag whether this property can be left empty or not */
+    private boolean required = false;
+    
+    /** To indicate how long this property can be (only makes for string type properties). Defaults to -1 which means no limit */
+    private int maxLength = -1;
+    
 
-    /** Help text to assist choosing value for this property. */
     private String help;
 
     public PropertyDef()
@@ -165,5 +171,21 @@ public class PropertyDef
     {
         this.collectionType = collectionType;
     }
+
+	public boolean isRequired() {
+		return required;
+	}
+
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+
+	public int getMaxLength() {
+		return maxLength;
+	}
+
+	public void setMaxLength(int maxLength) {
+		this.maxLength = maxLength;
+	}
 
 }

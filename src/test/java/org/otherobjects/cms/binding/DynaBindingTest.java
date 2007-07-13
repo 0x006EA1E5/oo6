@@ -46,7 +46,7 @@ public class DynaBindingTest extends TestCase
         System.out.println("Errors:");
         for (Iterator it = binder.getBindingResult().getAllErrors().iterator(); it.hasNext();)
         {
-            System.out.print(it.next());
+            System.out.println(it.next());
         }
 
         assertEquals("test", PropertyUtils.getSimpleProperty(myBean, "name"));
@@ -66,7 +66,7 @@ public class DynaBindingTest extends TestCase
         System.out.println("Errors:");
         for (Iterator it = binder.getBindingResult().getAllErrors().iterator(); it.hasNext();)
         {
-            System.out.print(it.next());
+            System.out.println(it.next());
         }
 
         assertEquals(cal.getTime(), PropertyUtils.getSimpleProperty(myBean, "dob"));
@@ -88,6 +88,24 @@ public class DynaBindingTest extends TestCase
 
         assertEquals(new Long(17), PropertyUtils.getSimpleProperty(myBean, "id"));
     }
+    
+    public void testBindErrrorsGetSet() throws Exception
+    {
+        Object myBean = commandObjectGenerator.create();
+
+        request.addParameter("id", "abc");
+        ServletRequestDataBinder binder = new ServletRequestDataBinder(myBean);
+        binder.bind(request);
+
+        System.out.println("Errors:");
+        for (Iterator it = binder.getBindingResult().getAllErrors().iterator(); it.hasNext();)
+        {
+            System.out.println(it.next());
+        }
+        
+        assertTrue("A binding error should've occurred", binder.getBindingResult().getAllErrors().size() > 0);
+        
+    }
 
     public void testInspectionCache() throws Exception
     {
@@ -100,7 +118,7 @@ public class DynaBindingTest extends TestCase
         System.out.println("Errors:");
         for (Iterator it = binder.getBindingResult().getAllErrors().iterator(); it.hasNext();)
         {
-            System.out.print(it.next());
+            System.out.println(it.next());
         }
 
         assertEquals(new Long(17), PropertyUtils.getSimpleProperty(myBean, "id"));
