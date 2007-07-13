@@ -5,8 +5,10 @@ Workbench
 
 * Delete article [R]
 * Delete folder [R]
-* Drag articles to folders [R]
-* Contents list refrest [R]
+* Grid multilpe DD
+* Better naming for created articles
+* Grid context menu (+ icons)
+* Contents list refresh [R]
 * Data validation [J]
 * Logout [J]
 * Localisation [J]
