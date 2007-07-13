@@ -7,6 +7,7 @@
 OO.EditForm = function(){
 
 	var form;
+	var dataId;
 
 	function showFailureMessage(form, scope)
 	{
@@ -44,10 +45,12 @@ OO.EditForm = function(){
 			var propDef = typeDef.properties[i];
 			var fName = '' + propDef.name;
 			console.log("Creating field: " + fName + " type: " + propDef.type);
-			var config = {fieldLabel:propDef.label, name: propDef.name, width:'500px', allowBlank:true, format: 'd/m/y'};
+			var config = {fieldLabel:propDef.label, name: propDef.name, allowBlank:true};
 			if(propDef.type=="date")
 			{
-				var f = new Ext.form.DateField(config);
+				config.format='d/m/y';
+				var f = new Ext.form.OODateField(config);
+				f.on("change", function(f,n,o){console.log("Change",n);});
 			}
 			else if(propDef.type=="html")
 			{
@@ -57,6 +60,7 @@ OO.EditForm = function(){
 			}
 			else if(propDef.type=="text")
 			{
+				config.width='500px';
 				config.grow=true;
 				config.growMax=500;
 				var f = new Ext.form.TextArea(config);
@@ -68,6 +72,7 @@ OO.EditForm = function(){
 			}
 			else
 			{
+				config.width='300px';
 				var f = new Ext.form.TextField(config);
 			}
 			form.add(f);
@@ -107,8 +112,27 @@ OO.EditForm = function(){
  	return {
 		
     	createForm : function(id) {
-			loadJsonObject("/go/workbench/data/item/" + id, buildForm);
-    	}
+			this.dataId = id;
+    	},
+		
+		renderForm : function()
+		{
+			loadJsonObject("/go/workbench/data/item/" + this.dataId, buildForm);
+		}
 	}
 
 }();
+
+
+
+
+// Custom DateField that supports Java style dates in milliseconds
+Ext.form.OODateField = function(config){
+    Ext.form.OODateField.superclass.constructor.call(this, config);
+};
+
+Ext.extend(Ext.form.OODateField, Ext.form.DateField,  {
+  	setValue : function(date){
+		Ext.form.DateField.superclass.setValue.call(this, this.formatDate(new Date(date)));
+    }
+});

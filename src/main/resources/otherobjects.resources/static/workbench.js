@@ -55,9 +55,18 @@ OO.Workbench = function()
 			// Create edit panel
 			editForm = OO.EditForm;
 			var editPanel = new Ext.ContentPanel('edit-panel', {autoCreate:true, title:'Edit', background:true, closable:false});
-			editPanel.setUrl('/go/workbench/edit-help.html',null,true); //loadOnce
-			editForm.createForm();
-			
+			editPanel.on("activate", function() {
+				
+				console.log(editForm.dataId);
+				if(editForm.dataId)
+					editForm.renderForm();
+				else if(!editForm.loaded)
+				{
+					editPanel.load('/go/workbench/edit-help.html'); //loadOnce
+					editForm.loaded = true;
+				}
+			});
+//			
 			// Create navigator
 			navigator = OO.Navigator;
 			navigator.init();
@@ -92,9 +101,16 @@ OO.Workbench = function()
 			previewPanel.setSrc(row.data.path);
 			var editPanel = layout.getRegion("center").getPanel("edit-panel");
 			
+			//editForm.setUrl(null);
 			editForm.createForm(row.id);
 			
 			//layout.getRegion("center").showPanel("preview-panel");
+			//layout.getRegion("center").showPanel("edit-panel");
+		},
+		
+		activateEditor : function()
+		{
+			layout.getRegion("center").showPanel("edit-panel");
 		},
 		
 		showPreview : function()

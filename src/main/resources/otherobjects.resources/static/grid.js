@@ -52,7 +52,7 @@ OO.ListingGrid = function() {
 			    loadMask: true
 			});
 			grid.on('rowclick', OO.Workbench.selectItem, this);
-//		    grid.on('rowdblclick', this.editRecord, this);
+		    grid.on('rowdblclick', OO.Workbench.activateEditor, this);
 			
 			// render it
 			grid.render();
