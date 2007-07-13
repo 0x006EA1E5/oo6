@@ -97,7 +97,7 @@ public class WorkbenchDataController implements Controller
         ModelAndView view = new ModelAndView("jsonView");
 
         String nodeId = request.getParameter("node");
-        String jcrPath = "/site";
+        String jcrPath = "/";
         if (nodeId != null && nodeId.length() > 10)
         {
             DynaNode node = dynaNodeDao.get(nodeId);
@@ -115,7 +115,13 @@ public class WorkbenchDataController implements Controller
                 Map<String, Object> n1 = new HashMap<String, Object>();
                 n1.put("id", dynaNode.getId());
                 n1.put("text", dynaNode.getLabel());
-                n1.put("cls", "folder");
+                if(dynaNode.get("cssClass")!=null)
+                {
+                    n1.put("cls", dynaNode.get("cssClass")+"-nav-item");
+                    n1.put("allowDrag", false);
+                }
+                else
+                    n1.put("cls", "folder");
                 n1.put("leaf", false);
                 nodes.add(n1);
             }

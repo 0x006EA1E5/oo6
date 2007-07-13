@@ -12,10 +12,11 @@ OO.Navigator = function(){
                 animate:true, 
                 loader: new Ext.tree.TreeLoader({dataUrl:'/go/workbench/data/navigator'}),
                 enableDD:true,
-                containerScroll: true
+                containerScroll: true,
+				rootVisible:false
             });
 			var root = new Ext.tree.AsyncTreeNode({
-                text: 'Site', 
+                text: 'Root', 
                 draggable:false, // disable root node dragging
                 id:'source',
 				cls:'site-nav-item'

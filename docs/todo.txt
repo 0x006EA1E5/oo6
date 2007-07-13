@@ -4,17 +4,17 @@ M1 Todo List
 Workbench
 
 * Delete article [R]
-* Move/reorder sub folder [R]
 * Delete folder [R]
-* Data binding [J]
-* Add all simple properties to Article inc BigDecimal [J]
+* Drag articles to folders [R]
+* Contents list refrest [R]
 * Data validation [J]
 * Logout [J]
 * Localisation [J]
-* Paging
 * Sort out path problems esp in siteview
 * Queries/page stats and timings
 * Security
+
+? Paging
 ? Folder and Page objects
 ? Sortable columns
 ? System status indicators

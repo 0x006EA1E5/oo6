@@ -23,6 +23,7 @@
 /* Navigator */
 .folder .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/extjs/images/default/tree/folder.gif)!important; }
 .site-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/sitemap-color.png) 0px 1px no-repeat!important; }
+.trash-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/bin-closed.png) -2px 1px no-repeat!important; }
 
 /* Toolbar icons */
 .add-btn .x-btn-text { background-image:url(/resources/otherobjects.resources/static/extjs/images/default/tree/drop-add.gif); }

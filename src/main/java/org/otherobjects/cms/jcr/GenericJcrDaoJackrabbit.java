@@ -60,14 +60,19 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
                 try
                 {
                     List<T> list = new ArrayList<T>();
-                    Node node = manager.getSession().getRootNode().getNode(path.substring(1));
+                    Node node;
+                    if(path.equals("/"))
+                        node = manager.getSession().getRootNode();
+                    else
+                        node = manager.getSession().getRootNode().getNode(path.substring(1));
+                    
                     NodeIterator nodes = node.getNodes();
                     while (nodes.hasNext())
                     {
                         Node n = nodes.nextNode();
                         //FIXME Extra lookup is bad. Can we avorid UUID requirement too
                         //FIXME Avoid data nodes better...
-                        if (!n.getName().equals("data"))
+                        if (!n.getName().equals("data") && !n.getName().startsWith("jcr:") && !n.getName().startsWith("types"))
                             list.add((T) manager.getObjectByUuid(n.getUUID()));
                     }
                     return list;
