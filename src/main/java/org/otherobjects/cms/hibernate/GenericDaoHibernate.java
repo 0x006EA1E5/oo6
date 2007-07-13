@@ -3,9 +3,9 @@ package org.otherobjects.cms.hibernate;
 import java.io.Serializable;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.otherobjects.cms.dao.GenericDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -25,7 +25,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  * @author AppFuse <a href="mailto:bwnoll@gmail.com">Bryan Noll</a>
  */
 public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDaoSupport implements GenericDao<T, PK> {
-    protected final Log log = LogFactory.getLog(getClass());
+    protected final Logger log = LoggerFactory.getLogger(getClass());
     private Class<T> persistentClass;
 
     public GenericDaoHibernate(Class<T> persistentClass) {

@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.test.AbstractTransactionalDataSourceSpringContextTests;
@@ -18,7 +18,7 @@ import org.springframework.test.AbstractTransactionalDataSourceSpringContextTest
  * @author mraible
  */
 public abstract class BaseDaoTestCase extends AbstractTransactionalDataSourceSpringContextTests {
-    protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
     protected ResourceBundle rb;
 
     protected String[] getConfigLocations() {

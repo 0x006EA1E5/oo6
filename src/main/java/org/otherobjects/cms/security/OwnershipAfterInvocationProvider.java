@@ -9,9 +9,9 @@ import org.acegisecurity.ConfigAttribute;
 import org.acegisecurity.ConfigAttributeDefinition;
 import org.acegisecurity.GrantedAuthority;
 import org.acegisecurity.afterinvocation.AfterInvocationProvider;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.otherobjects.cms.model.AccessControlled;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -41,7 +41,7 @@ public class OwnershipAfterInvocationProvider implements AfterInvocationProvider
         this.messages = new MessageSourceAccessor(messageSource);;
     }
 
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     public Object decide(Authentication authentication, Object object, ConfigAttributeDefinition config, Object returnedObject) throws AccessDeniedException
     {

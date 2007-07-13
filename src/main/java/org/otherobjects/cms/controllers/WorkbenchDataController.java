@@ -30,7 +30,7 @@ import org.springframework.web.servlet.mvc.Controller;
  */
 public class WorkbenchDataController implements Controller
 {
-    private Logger logger = LoggerFactory.getLogger(WorkbenchDataController.class);
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     private DynaNodeDao dynaNodeDao;
     private TypeService typeService;
