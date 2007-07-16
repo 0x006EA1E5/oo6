@@ -9,7 +9,6 @@ Workbench
 * Better naming for created articles
 * Grid context menu (+ icons)
 * Contents list refresh [R]
-* Data validation [J]
 * Logout [J]
 * Localisation [J]
 * Rename/drag name clashes [R]
