@@ -7,3 +7,18 @@ Complete list of all implemented features
 
 Integrated with JCR (using jackrabbit and jackrabbit-ocm) to provide a flexible
 and mutable data store.
+
+* Forms
+
+Powerful validation language
+In-place validation via AJAX
+Localised error messages
+
+* Workbench
+
+REST based design
+
+* Serving
+
+All served content automatically GZipped
+Static resources cached automatically for one hour

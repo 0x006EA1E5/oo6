@@ -215,7 +215,6 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     /**
      * FIXME Better name needed?
-     * @return
      */
     public String getLinkPath()
     {

@@ -18,38 +18,43 @@ import org.otherobjects.cms.model.User;
  *   Modified by <a href="mailto:bwnoll@gmail.com">Bryan Noll</a> to work with 
  *   the new BaseDaoHibernate implementation that uses generics.
 */
-public class UserDaoHibernate extends GenericDaoHibernate<User, Long> implements UserDao, UserDetailsService {
+public class UserDaoHibernate extends GenericDaoHibernate<User, Long> implements UserDao, UserDetailsService
+{
 
-    public UserDaoHibernate() {
+    public UserDaoHibernate()
+    {
         super(User.class);
     }
 
     /**
-     * @see org.appfuse.dao.UserDao#getUsers()
+     * @see org.otherobjects.cms.UserDao#getUsers()
      */
     @SuppressWarnings("unchecked")
-	public List<User> getUsers() {
+    public List<User> getUsers()
+    {
         return getHibernateTemplate().find("from User u order by upper(u.username)");
     }
 
     /**
-     * @see org.appfuse.dao.UserDao#saveUser(org.appfuse.model.User)
+     * @see org.otherobjects.cms.UserDao#saveUser(org.appfuse.model.User)
      */
-    public User saveUser(User user) {
+    public User saveUser(User user)
+    {
         log.debug("user's id: " + user.getId());
         getHibernateTemplate().saveOrUpdate(user);
         // necessary to throw a DataIntegrityViolation and catch it in UserManager
         getHibernateTemplate().flush();
         return user;
     }
-    
+
     /**
      * Overridden simply to call the saveUser method. This is happenening 
      * because saveUser flushes the session and saveObject of BaseDaoHibernate 
      * does not.
      */
     @Override
-    public User save(User user) {
+    public User save(User user)
+    {
         return this.saveUser(user);
     }
 
@@ -57,11 +62,15 @@ public class UserDaoHibernate extends GenericDaoHibernate<User, Long> implements
     * @see org.acegisecurity.userdetails.UserDetailsService#loadUserByUsername(java.lang.String)
     */
     @SuppressWarnings("unchecked")
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
+    {
         List<UserDetails> users = getHibernateTemplate().find("from User where username=?", username);
-        if (users == null || users.isEmpty()) {
+        if (users == null || users.isEmpty())
+        {
             throw new UsernameNotFoundException("user '" + username + "' not found...");
-        } else {
+        }
+        else
+        {
             return users.get(0);
         }
     }

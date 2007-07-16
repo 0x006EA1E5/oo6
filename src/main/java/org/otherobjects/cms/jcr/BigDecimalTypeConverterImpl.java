@@ -33,7 +33,7 @@ public class BigDecimalTypeConverterImpl implements AtomicTypeConverter
 {
 	/**
 	 * 
-	 * @see org.apache.jackrabbit.ocm.persistence.atomictypeconverter.AtomicTypeConverter#getValue(java.lang.Object)
+	 * @see org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter#getValue(java.lang.Object)
 	 */
 	public Value getValue(ValueFactory valueFactory, Object propValue)
 	{
@@ -48,7 +48,7 @@ public class BigDecimalTypeConverterImpl implements AtomicTypeConverter
 
     /**
      * 
-     * @see org.apache.jackrabbit.ocm.persistence.atomictypeconverter.AtomicTypeConverter#getObject(javax.jcr.Value)
+     * @see org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter#getObject(javax.jcr.Value)
      */
 	public Object getObject(Value value)
     {
@@ -65,7 +65,7 @@ public class BigDecimalTypeConverterImpl implements AtomicTypeConverter
 	
 	/**
 	 * 
-	 * @see org.apache.jackrabbit.ocm.persistence.atomictypeconverter.AtomicTypeConverter#getStringValue(java.lang.Object)
+	 * @see org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter#getStringValue(java.lang.Object)
 	 */
 	public String getXPathQueryValue(ValueFactory valueFactory, Object object)
 	{
