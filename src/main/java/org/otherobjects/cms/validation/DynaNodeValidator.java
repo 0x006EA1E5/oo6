@@ -55,7 +55,7 @@ public class DynaNodeValidator implements Validator
             // if we have a valang property, insert the fieldName into it and append it to the valang rules buffer
             if (StringUtils.hasText(propertyDef.getValang()))
             {
-                valangRules.append(propertyDef.getValang().replaceAll("\\$THIS", fieldName));
+                valangRules.append(propertyDef.getValang().replaceAll("\\?", fieldName));
             }
         }
 

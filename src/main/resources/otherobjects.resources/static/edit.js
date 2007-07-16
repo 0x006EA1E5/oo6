@@ -19,7 +19,7 @@ OO.EditForm = function(){
 		var typeDef = obj.type;
 		
 		// TODO Find out about QuickTips
-		//Ext.QuickTips.init();
+		Ext.QuickTips.init();
 		
 		// Show form validation warnings next to each field
 		Ext.form.Field.prototype.msgTarget = 'side';
