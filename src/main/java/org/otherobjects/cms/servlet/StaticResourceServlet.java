@@ -1,7 +1,16 @@
 package org.otherobjects.cms.servlet;
 
-import org.mortbay.jetty.servlet.DefaultServlet;
-import org.mortbay.resource.Resource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Fast servlet to serve static resources for the webapp. Static resources
@@ -16,23 +25,50 @@ import org.mortbay.resource.Resource;
  * 
  * @author rich
  */
-public class StaticResourceServlet extends DefaultServlet
+public class StaticResourceServlet extends HttpServlet
 {
+    private final Logger logger = LoggerFactory.getLogger(StaticResourceServlet.class);
+
     private static final long serialVersionUID = 3970455238515527584L;
 
     @Override
-    public Resource getResource(String pathInContext)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
-        if (pathInContext == null)
-            return null;
+        String path = req.getPathInfo();
+        //path = path.substring("resources".length() + 2);
+
+        if (path == null)
+            return;
 
         // FIXME Security check: so that configuration data can't be served
-        String path = pathInContext.substring("resources".length() + 2);
+        //        if (!path.startsWith("static/") && !path.startsWith("templates/"))
+        //            return null;
 
-//        if (!path.startsWith("static/") && !path.startsWith("templates/"))
-//            return null;
+        logger.info("Requested resource: {}", path);
 
-        return Resource.newClassPathResource(path);
+        // Add cache header
+        resp.addHeader("Cache-Control", "max-age=3600");
+        
+        // FIXME Is there a faster way of servig these?
+        // FIXME Cache?
+        InputStream in = getClass().getResourceAsStream(path);
+        OutputStream out = resp.getOutputStream();
+        try
+        {
+            byte[] buf = new byte[4 * 1024]; // 4K buffer
+            int bytesRead;
+            while ((bytesRead = in.read(buf)) != -1)
+            {
+                out.write(buf, 0, bytesRead);
+            }
+        }
+        finally
+        {
+            if (in != null)
+                in.close();
+        }
+        
+        
     }
 
 }
