@@ -21,6 +21,7 @@
 		<property name="typeService" ref="typeService" />
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
 		<property name="validator" ref="dynaNodeValidator" />
+		<property name="messageSource" ref="messageSource" />
 	</bean>
 	
 	<bean name="navigatorService" class="org.otherobjects.cms.workbench.NavigatorServiceImpl">
