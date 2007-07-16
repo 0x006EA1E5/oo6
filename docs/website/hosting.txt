@@ -1,0 +1,11 @@
+How to host your OO site
+
+1. OTHERmedia
+
+2. Amazon EC2 (Prebulid AMI/data store help)
+
+3. Hosting partners:
+
+http://www.jsp-servlet.net/
+http://rimuhosting.com/index.jsp
+http://hostsyst.com/
