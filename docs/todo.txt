@@ -5,7 +5,7 @@ Workbench
 
 * Delete article [R]
 * Delete folder [R]
-* Grid multilpe DD
+* Multiple drag/dop in the grid
 * Better naming for created articles
 * Grid context menu (+ icons)
 * Contents list refresh [R]
@@ -27,8 +27,6 @@ Workbench
 Infrastructure
 
 * Error logging and report back
-* Tests running 
-* DAO Test cases
 * 80% test coverage
 * Website and CI
 ? Maven setup
@@ -54,16 +52,9 @@ JS
 
 ==================================================================
 
-Ext HTML Editor Bugs
-
-* Can't set width of text area
-* Safari 3.0 support?
-* Classes on blosws
-* Change icons
-* No spans for bold
-
 M2
 --
 ? Transactions and sessions
 ? Protect key folders
 * Versions for Types
+* Don't fliter binary resources

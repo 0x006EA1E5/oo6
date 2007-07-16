@@ -11,6 +11,12 @@ Requirements
 * Secured pages always accessed over https (redirect if required)
 * Session id changed after authentication
 
+Passwords
+
+* Expirable
+* Max attempts
+* Reset via new password
+
 Examples
 
 ALICE is a EDITOR of INTERNATIONAL_NEWS

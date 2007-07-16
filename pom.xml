@@ -18,10 +18,10 @@
 		<jdbc.artifactId>h2</jdbc.artifactId>
 		<jdbc.version>1.0.20070617</jdbc.version>
 		<jdbc.driverClassName>org.h2.Driver</jdbc.driverClassName>
-		<jdbc.url><![CDATA[jdbc:h2:${java.io.tmpdir}/oongtest]]></jdbc.url>
-		<jdbc.username>sa</jdbc.username>
-		<jdbc.password></jdbc.password>
-		<hibernate.jdbc.properties.file>target/classes/otherobjects.resources/config/jdbc-h2.properties</hibernate.jdbc.properties.file>
+		<jdbc.url>jdbc:h2:/tmp/otherobjects/test/database</jdbc.url>
+		<jdbc.username>admin</jdbc.username>
+		<jdbc.password>admin</jdbc.password>
+		<hibernate.jdbc.properties.file>target/test-classes/jdbc.properties</hibernate.jdbc.properties.file>
 		<dbunit-load-file>bootstrap-data/jdbc-h2-data-users.xml</dbunit-load-file>
 		<jackrabbit.username>jackrabbit</jackrabbit.username>
 		<jackrabbit.password>jackrabbit</jackrabbit.password>
@@ -51,7 +51,6 @@
 			<id>postgres</id>
 			<activation></activation>
 			<properties>
-
 				<dbunit.dataTypeFactoryName>
 					org.dbunit.dataset.datatype.DefaultDataTypeFactory
 				</dbunit.dataTypeFactoryName>
@@ -68,48 +67,15 @@
 					target/classes/otherobjects.resources/config/jdbc.properties
 				</hibernate.jdbc.properties.file>
 				<dbunit-load-file>bootstrap-data/jdbc-data-users.xml</dbunit-load-file>
-
-
-
 			</properties>
 		</profile>
 	</profiles>
-	<!-- 
-		<repositories>
+	<distributionManagement>
 		<repository>
-		<releases>
-		<enabled>true</enabled>
-		<updatePolicy>always</updatePolicy>
-		<checksumPolicy>fail</checksumPolicy>
-		</releases>
-		<snapshots>
-		<enabled>true</enabled>
-		<updatePolicy>always</updatePolicy>
-		<checksumPolicy>fail</checksumPolicy>
-		</snapshots>
-		<id>otherobjectsRepository</id>
-		<name>OTHERobjects Repository</name>
-		<url>scp://ivy.otherworks.com/data/webroot/ivy-repository/</url>
-		<layout>default</layout>
+			<id>ssh-repository</id>
+			<url>scpexe://static.media70.com/var/maven</url>
 		</repository>
-		</repositories>
-		<distributionManagement>
-		<repository>
-		<uniqueVersion>false</uniqueVersion>
-		<id>otherobjectsRepository</id>
-		<name>OTHERobjects Repository</name>
-		<url>file:///Java/maven-repo</url>
-		<layout>default</layout>
-		</repository>
-		<snapshotRepository>
-		<uniqueVersion>true</uniqueVersion>
-		<id>otherobjectsRepository</id>
-		<name>OTHERobjects Snapshots</name>
-		<url>file:///Java/maven-repo</url>
-		<layout>default</layout>
-		</snapshotRepository>
-		</distributionManagement>
-	-->
+	</distributionManagement>
 	<scm>
 		<connection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/trunk</connection>
 		<developerConnection>
@@ -434,114 +400,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springmodules</groupId>
-			<artifactId>spring-modules-jcr</artifactId>
-			<version>0.8</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-log4j12</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>log4j</groupId>
-					<artifactId>log4j</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-mock</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>jsr170</groupId>
-					<artifactId>jsr170</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.servlet</groupId>
-					<artifactId>servlet-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>commons-lang</groupId>
-					<artifactId>commons-lang</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>commons-collections</groupId>
-					<artifactId>commons-collections</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>geronimo-spec</groupId>
-					<artifactId>geronimo-spec-jta</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>geronimo-spec</groupId>
-					<artifactId>geronimo-spec-j2ee-connector</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.jackrabbit</groupId>
-					<artifactId>jackrabbit-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.jackrabbit</groupId>
-					<artifactId>jackrabbit-jcr-commons</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.jackrabbit</groupId>
-					<artifactId>jackrabbit-jca</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.jackrabbit</groupId>
-					<artifactId>jackrabbit-jcr-rmi</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>concurrent</groupId>
-					<artifactId>concurrent</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.lucene</groupId>
-					<artifactId>lucene-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>xerces</groupId>
-					<artifactId>xercesImpl</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>xerces</groupId>
-					<artifactId>xmlParserAPIs</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>jeceira</groupId>
-					<artifactId>jeceira</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>aparzev</groupId>
-					<artifactId>doka</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>aparzev</groupId>
-					<artifactId>commons</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>jug</groupId>
-					<artifactId>jug-asl</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>cglib</groupId>
-					<artifactId>cglib-nodep</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		
-				<dependency>
-			<groupId>org.springmodules</groupId>
 			<artifactId>spring-modules-validation</artifactId>
 			<version>0.8a</version>
 			<exclusions>
@@ -647,7 +505,113 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+		<dependency>
+			<groupId>org.springmodules</groupId>
+			<artifactId>spring-modules-jcr</artifactId>
+			<version>0.8</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-mock</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>jsr170</groupId>
+					<artifactId>jsr170</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-lang</groupId>
+					<artifactId>commons-lang</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-collections</groupId>
+					<artifactId>commons-collections</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>geronimo-spec</groupId>
+					<artifactId>geronimo-spec-jta</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>geronimo-spec</groupId>
+					<artifactId>geronimo-spec-j2ee-connector</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.jackrabbit</groupId>
+					<artifactId>jackrabbit-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.jackrabbit</groupId>
+					<artifactId>jackrabbit-jcr-commons</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.jackrabbit</groupId>
+					<artifactId>jackrabbit-jca</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.jackrabbit</groupId>
+					<artifactId>jackrabbit-jcr-rmi</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>concurrent</groupId>
+					<artifactId>concurrent</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.lucene</groupId>
+					<artifactId>lucene-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>xerces</groupId>
+					<artifactId>xercesImpl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>xerces</groupId>
+					<artifactId>xmlParserAPIs</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>jeceira</groupId>
+					<artifactId>jeceira</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>aparzev</groupId>
+					<artifactId>doka</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>aparzev</groupId>
+					<artifactId>commons</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>jug</groupId>
+					<artifactId>jug-asl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>cglib</groupId>
+					<artifactId>cglib-nodep</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>

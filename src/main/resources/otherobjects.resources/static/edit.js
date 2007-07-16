@@ -89,7 +89,7 @@ OO.EditForm = function(){
 		});
 		
 		form.on('actioncomplete', function() {OO.Workbench.activatePanel("listing-panel");}, this);
-		form.on('actionfailed', showFailureMessage, this);
+		//form.on('actionfailed', showFailureMessage, this);
 		
 		// Remove previous form and render new one
 		Ext.get('edit-panel').dom.innerHTML='';

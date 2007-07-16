@@ -9,6 +9,7 @@ Security
 --------
 
 * Multiple authentication mechanisms (DB, LDAP)
+* Easy hot backups (hourly, nightly) with Amazon S3 integration
 
 Design
 ------

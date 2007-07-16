@@ -5,16 +5,23 @@
 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>file:src/test/resources/jdbc.properties</value>
+				<value>file:target/test-classes/jdbc.properties</value>
 				<value>file:src/test/resources/jackrabbit.properties</value>
 			</list>
 		</property>
 	</bean>
-		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="org.h2.Driver" />
-		<property name="url" value="jdbc:h2:${java.io.tmpdir}/oongtest" />
-		<property name="username" value="sa" />
-		<property name="password" value="" />
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${spring.jdbc.driverClassName}" />
+		<property name="url" value="${spring.jdbc.url}" />
+		<property name="username" value="${spring.jdbc.username}" />
+		<property name="password" value="${spring.jdbc.password}" />
+		<property name="maxActive" value="100" />
+		<property name="maxIdle" value="30" />
+		<property name="maxWait" value="1000" />
+		<property name="defaultAutoCommit" value="true" />
+		<property name="removeAbandoned" value="true" />
+		<property name="removeAbandonedTimeout" value="60" />
 	</bean>
-	
+
 </beans>

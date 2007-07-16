@@ -7,7 +7,7 @@
         <property name="configLocation" value="${hibernate.config}"/>
         <property name="hibernateProperties">
             <value>
-                hibernate.dialect=${hibernate.dialect}
+                hibernate.dialect=${spring.hibernate.dialect}
                 hibernate.query.substitutions=true 'Y', false 'N'
                 hibernate.cache.use_second_level_cache=true
                 hibernate.cache.provider_class=org.hibernate.cache.EhCacheProvider

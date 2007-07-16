@@ -94,3 +94,13 @@ Docs
 ----
 
 http://www.sonatype.com/book/ 
+
+Repository setup
+----------------
+otherobjects
+maven-jackrabbit-plugin
+jackrabbit-ocm-spring
+mvn deploy:deploy-file -DgroupId=javax.jcr -DartifactId=jcr  -Dversion=1.0 -Dpackaging=jar -Dfile=jcr-1.0.jar -Durl=scpexe://slate/var/maven
+mvn deploy:deploy-file -DgroupId=javax.transaction -DartifactId=jta  -Dversion=1.0.1B -Dpackaging=jar -Dfile=jta-1.0.1B.jar -Durl=scpexe://slate/var/maven
+mvn deploy:deploy-file -DgroupId=net.sourceforge -DartifactId=flexjson -Dversion=1.2 -Dpackaging=jar -Dfile=flexjson-1.2.jar -Durl=scpexe://slate/var/maven
+mvn deploy:deploy-file -DgroupId=org.apache.jackrabbit -DartifactId=jackrabbit-ocm -Dversion=1.0-SNAPSHOT -Dpackaging=jar -Dfile=flexjson-1.2.jar -Durl=scpexe://slate/var/maven
