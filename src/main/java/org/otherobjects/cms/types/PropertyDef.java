@@ -25,7 +25,7 @@ import org.otherobjects.cms.util.StringUtils;
  * <li>reference
  * </ul>
  * 
- * <p>Components persist independently and can't be saved or deleted indepently of the CmsNode they belong to. 
+ * <p>Components persist independently and can't be saved or deleted independently of the CmsNode they belong to. 
  * Can be multiple levels deep.
  * 
  * <p>Currently supported collection property types (which can be used with any of the above) are:
@@ -44,10 +44,10 @@ public class PropertyDef
     /** Property name. */
     private String name;
 
-    /** Defines type ofthis property. */
+    /** Defines type of this property. */
     private String type;
 
-    /** Type of collecion if this property can have multipe values. */
+    /** Type of collection if this property can have multiple values. */
     private String collectionType;
 
     /** Type of reference or component.  */
@@ -66,7 +66,18 @@ public class PropertyDef
     private boolean required = false;
     
     /** To indicate how long this property can be (only makes for string type properties). Defaults to -1 which means no limit */
-    private int maxLength = -1;
+    private int size = -1;
+    
+    /** Holds valang rules to build a validator for the type that is made of this PropertyDef. Beware: the name of the property is not included in the rule unlike with standard valang rules 
+     * so the syntax is this:
+     * { $THIS : <predicate_expression> : <message> [: <error_code> [: <args> ]] }
+     * (above can be repeated multiple times)
+     * 
+     * Notice the $THIS placeholder which gets substituted for the property name. This has to appear exactly as shown in the valang string.
+     * 
+     * */
+    private String valang;
+    
     
 
     private String help;
@@ -180,12 +191,20 @@ public class PropertyDef
 		this.required = required;
 	}
 
-	public int getMaxLength() {
-		return maxLength;
+	public int getSize() {
+		return size;
 	}
 
-	public void setMaxLength(int maxLength) {
-		this.maxLength = maxLength;
+	public void setSize(int size) {
+		this.size = size;
 	}
 
+	public String getValang() {
+		return valang;
+	}
+
+	public void setValang(String valang) {
+		this.valang = valang;
+	}
+	
 }

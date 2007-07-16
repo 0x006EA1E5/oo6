@@ -29,7 +29,8 @@
 		<field-descriptor fieldName="name" jcrName="name" />
 		<field-descriptor fieldName="type" jcrName="type" />
 		<field-descriptor fieldName="required" jcrName="required" />
-		<field-descriptor fieldName="maxLength" jcrName="maxLength" />
+		<field-descriptor fieldName="size" jcrName="size" />
+		<field-descriptor fieldName="valang" jcrName="valang" />
 	</class-descriptor>
 
 </jackrabbit-ocm>
