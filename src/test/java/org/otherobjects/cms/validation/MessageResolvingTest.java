@@ -24,7 +24,7 @@ public class MessageResolvingTest extends AbstractSingleSpringContextTests {
 		
 		errors.rejectValue("name", "field.valueTooLong");
 		
-		assertEquals("The value you've given is too long for this field", getApplicationContext().getMessage(errors.getFieldError("name").getCode(), null, Locale.GERMANY));
+		assertEquals("The value you've given is too long for this field", getApplicationContext().getMessage(errors.getFieldError("name").getCode(), null, Locale.getDefault()));
 		
 	}
 	
