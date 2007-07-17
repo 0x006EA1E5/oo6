@@ -9,7 +9,7 @@
  */
 OO.PreviewPanel = function(id, config){
 	this.src = config.src;
-	this.currentSrc = null;
+	this.currentSrc = config.src;
     this.wrapper = Ext.DomHelper.append(document.body, {tag: "iframe", id:id, src:config.src, frameborder:'no'}, true);
     OO.PreviewPanel.superclass.constructor.call(this, this.wrapper, config);
 	this.on("activate", activate);

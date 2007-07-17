@@ -32,10 +32,20 @@ OO.Navigator = function(){
 				if(e.dropNode)
 					itemId = e.dropNode.id;
 				else
-					itemId = e.data.selections[0].id;
+				{
+					itemId = e.data.selections[0].data.id;
+					// Remove from grid
+					console.log("Drop", e.data);
+					e.data.grid.getDataSource().remove(e.data.selections[0]);
+				}
 				console.log("Moving folder from: " + itemId + " to " + e.target.id);
 				NavigatorService.moveItem(itemId, e.target.id, e.point);
 				return true;
+			});
+			tree.on('nodedragover', function(e) {
+				// Only allow position of tree nodes to be set
+				if(!e.dropNode && e.point!="append")
+					return false;
 			});
 			
             
@@ -76,6 +86,14 @@ OO.Navigator = function(){
 					navigatorContextMenu.selectedNode = node;
 					navigatorContextMenu.show(node.ui.node.ui.getAnchor());
 			});
-		}	
+		},
+		
+		selectNode : function(path)
+		{
+			var node = tree.getRootNode().firstChild
+			node.select();
+			OO.Workbench.selectContainer(node);
+		}
+		
 	}	
 }();

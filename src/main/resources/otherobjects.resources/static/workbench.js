@@ -19,7 +19,7 @@ OO.Workbench = function()
 	var listing; // OO.Listing
 	var editForm; // OO.EditForm
 	
-	var currentContainer;
+	var currentContainer = "ed587d28-eee9-4c6d-8887-a1b5332ca262";
 	var currentItem;
     
     return {
@@ -27,6 +27,7 @@ OO.Workbench = function()
 		// FIXME Use getters/setters intead?
 		currentContainer : currentContainer, 
 		currentItem : currentItem, 
+		navigator : navigator, 
 		
         init : function()
 		{
@@ -50,6 +51,12 @@ OO.Workbench = function()
 			// Create listing grid
 			listing = OO.ListingGrid;
 			var listingPanel = listing.init();
+			listingPanel.on("activate", function(){
+				if(listing.currentContainerId != currentContainer) {
+	       			listing.load(currentContainer);
+					listing.currentContainerId = currentContainer;
+				}
+			});
 			console.log(listingPanel);
 			
 			// Create edit panel
@@ -66,7 +73,7 @@ OO.Workbench = function()
 					editForm.loaded = true;
 				}
 			});
-//			
+			
 			// Create navigator
 			navigator = OO.Navigator;
 			navigator.init();
@@ -85,10 +92,12 @@ OO.Workbench = function()
 		
 		selectContainer : function(node)
 		{
-			currentContainer = node;
+			currentContainer = node.id;
+	        console.log("Selected container: "+ currentContainer);
+			if(listing.currentContainerId != currentContainer)
+	       		listing.load(currentContainer);
+			listing.currentContainerId = currentContainer;
 			layout.getRegion("center").showPanel("listing-panel");
-	        console.log("Selected container: "+ node.id);
-	        listing.load(node.id);
 		},
 		
 		selectItem : function(grid,index)

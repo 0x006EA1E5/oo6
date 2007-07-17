@@ -41,8 +41,8 @@ OO.ListingGrid = function() {
 			// create the column model
 			cm = new Ext.grid.ColumnModel([
 				{ header: 'Label', width: 200, sortable: true, dataIndex: 'label' },
-				{ header: 'Type', width: 200, sortable: true, dataIndex: 'ooType' },
-				{ header: 'Path', width: 200, sortable: true, dataIndex: 'path' },
+				{ header: 'Type', width: 100, sortable: true, dataIndex: 'ooType' },
+				{ header: 'Path', width: 300, sortable: true, dataIndex: 'path' },
 				{ header: 'UUID', width: 300, sortable: false, dataIndex: 'id' }
 			]);
 			
@@ -99,6 +99,7 @@ OO.ListingGrid = function() {
 			ContentService.createItem(c,type, function(item) {
 				var ArticleRecord = Ext.data.Record.create(mappings);
 				var myNewRecord = new ArticleRecord(item);
+				console.log("Adding new item to grid",item);
 				ds.add(myNewRecord); 
 				grid.getSelectionModel().selectLastRow();
 			});

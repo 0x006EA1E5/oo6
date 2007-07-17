@@ -2,16 +2,20 @@
 
 /* Header */
 .x-layout-panel-north { background-image: url(/resources/otherobjects.resources/static/graphics/header.gif); background-repeat: repeat-x; color:#FFF; font:bold 12px verdana, helvetica; overflow:hidden; padding:4px; border:0px solid #c3daf9!important; }
-.x-layout-panel-north P { background: url(/resources/otherobjects.resources/static/graphics/logo.png) no-repeat 5px -5px; width:200px; height:100px; }
+.x-layout-panel-north H1 { float:left; background: url(/resources/otherobjects.resources/static/graphics/logo.png) no-repeat 5px -5px; width:200px; height:100px; }
 .x-layout-panel-north EM { display:none; }
+.x-layout-panel-north P { font:normal 90% Arial!important; color:#ffffff; padding:1px 10px 0px 10px;}
+.x-layout-panel-north A { color:#ffffff; padding:0px 3px 0px 3px;}
 
 /* Welcome */
 .welcome {font:80% Arial; margin:20px;}
 .welcome-col {width:45%; float:left; margin-right:20px;}
 .welcome-block { border:3px solid #B2D0F7; background:white url(/resources/otherobjects.resources/static/graphics/block-bg.gif) repeat-x; padding:10px; margin-bottom:20px;}
 .welcome-block H1 {color:#083772; font-weight:bold; padding-bottom:10px;}
+.welcome-block H2 {color:#000000; font-weight:bold; padding-bottom:5px;}
 .welcome P {padding-bottom:10px;}
-.welcome UL {list-style:square; padding-left:20px; margin-top:5px;}
+.welcome UL {list-style:square; padding-left:20px; margin-top:5px; padding-bottom:10px}
+.welcome LI {padding-bottom:3px}
 
 /* Panels */
 #edit-panel .x-form {padding:10px;}

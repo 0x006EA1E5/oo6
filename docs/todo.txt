@@ -5,23 +5,25 @@ Initial release with major infrasturcture in place. Basic Article/Folder
 manipulation in new Workbench.
 ==================================================================
 
+Known issues
+
+* Timing conflict can show duplicate folders when dropped. Workaound: wait for expand before dropping.
+* Safari 3 Beta may not cache resources properly resulting in much decreased page load times.
+* WYSYWYG editor is a preview only and has not ben tested.
+* Turn off Firebug if using firefox or page times will be very slow whilst it loads the debugger.
+
 Workbench
 
-* Grid context menu (+ icons)
-* Nav tree refresh [R]
-* Set default listing contents
-* Logout [J]
-* Localisation [J]
-* Validate on save [J]
-* Remove missing property warnings
-* Get rid of "data" node
 * Rename/drag name clashes [R]
-* Queries/page stats and timings
-* Security
-* Maven project archetype
 * Fix checkboxes in forms
-* Multiple drag/dop in the grid
-? Sortable columns
+* Iframe nonsense
+* Get rid of "data" node and clean up boostrap files
+* Update grid/preview after edit
+* Show all data items in form on page. Add Also in this section.
+* Localisation switch & move to login? [J]
+* Method level security [J]
+* Validate on all saves [J]
+* Better type conversion errors [J]
 
 Infrastructure
 
@@ -42,6 +44,8 @@ and publishing with the exception of internal links. Introduction
 of new templating/block model with efficient caching.
 ==================================================================
 
+* Queries/page stats and timings
+* Maven project archetype
 * Paging/soting in data grid, different columns for different objects?
 * Favourites
 * Global search

@@ -2,7 +2,7 @@
 <site xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:rep="internal"
 	xmlns:oo="http://www.otherobjects.org/system/oo" xmlns:ocm="http://jackrabbit.apache.org/ocm"
 	xmlns:sv="http://www.jcp.org/jcr/sv/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" jcr:primaryType="oo:node"
-	ocm:classname="org.otherobjects.cms.model.DynaNode" ooType="Folder">
+	ocm:classname="org.otherobjects.cms.model.DynaNode" ooType="Folder" jcr:uuid="ed587d28-eee9-4c6d-8887-a1b5332ca262">
 	<data label="Site" />
 
 	<index.html jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode" ooType="Article">

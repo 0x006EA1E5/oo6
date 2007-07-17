@@ -114,6 +114,7 @@ public class WorkbenchDataController implements Controller
             {
                 Map<String, Object> n1 = new HashMap<String, Object>();
                 n1.put("id", dynaNode.getId());
+                n1.put("code", dynaNode.getCode());
                 n1.put("text", dynaNode.getLabel());
                 if(dynaNode.get("cssClass")!=null)
                 {
