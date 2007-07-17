@@ -53,7 +53,7 @@ public class PropertyDef
     /** Type of reference or component.  */
     private String relatedType;
 
-    /** To specify format for decimals. TODO Maybe others? */
+    /** To specify format for decimals. TODO M2 Implement this for BigDecimal and maybe others? */
     private String format;
 
     /** Human friendly name for property. Can be inferred from name */

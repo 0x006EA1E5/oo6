@@ -1,11 +1,8 @@
 package org.otherobjects.cms.workbench;
 
-import java.util.Date;
-
 import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.DynaNode;
-import org.otherobjects.cms.types.TypeService;
-import org.otherobjects.cms.util.StringUtils;
+import org.springframework.util.Assert;
 
 /**
  * Default implementaion of content service.
@@ -14,34 +11,32 @@ import org.otherobjects.cms.util.StringUtils;
  */
 public class ContentServiceImpl implements ContentService
 {
-    private TypeService typeService;
     private DynaNodeDao dynaNodeDao;
 
-    public void createItem(String container, String typeName)
+    public DynaNode createItem(String container, String typeName)
     {
-        //TODO Check location and type are valid
+        Assert.notNull("container must be specified.",container);
+        Assert.notNull("typeName must be specified.",typeName);
+        
+        //TODO Make sure this throws exception is not exists
         DynaNode parent = dynaNodeDao.get(container);
-        String label = "Untitled " + new Date().getTime();
-        DynaNode item = new DynaNode(typeName);
-        item.setPath(parent.getJcrPath() + "/");
-        item.setCode(StringUtils.generateUrlCode(label) + ".html");
-        item.setLabel(label);
-        dynaNodeDao.save(item);
-    }
+        dynaNodeDao.create(typeName);
+        
+        //TODO M2 Merge this code with NavService version
+        int c = 0;
+        do
+        {
+            String newPath = parent.getJcrPath() + "/untitled-article-" + ++c +".html";
+            boolean alreadyExists = (dynaNodeDao.existsAtPath(newPath));
+            if(!alreadyExists) break;
+            
+        } while(true);
 
-    public TypeService getTypeService()
-    {
-        return typeService;
-    }
-
-    public void setTypeService(TypeService typeService)
-    {
-        this.typeService = typeService;
-    }
-
-    public DynaNodeDao getDynaNodeDao()
-    {
-        return dynaNodeDao;
+        DynaNode newNode = dynaNodeDao.create(typeName);
+        newNode.setPath(parent.getJcrPath());
+        newNode.setCode("untitled-article-" + c +".html"); //TODO M2 Auto generate
+        newNode.setLabel("Untitled Article " + c);
+        return dynaNodeDao.save(newNode);
     }
 
     public void setDynaNodeDao(DynaNodeDao dynaNodeDao)

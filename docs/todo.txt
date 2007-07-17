@@ -1,59 +1,88 @@
-M1 Todo List
-------------
+==================================================================
+M1 (mid July)
+
+Initial release with major infrasturcture in place. Basic Article/Folder 
+manipulation in new Workbench.
+==================================================================
 
 Workbench
 
-* Delete article [R]
-* Delete folder [R]
-* Multiple drag/dop in the grid
-* Better naming for created articles
 * Grid context menu (+ icons)
-* Contents list refresh [R]
+* Nav tree refresh [R]
+* Set default listing contents
 * Logout [J]
 * Localisation [J]
+* Validate on save [J]
+* Remove missing property warnings
+* Get rid of "data" node
 * Rename/drag name clashes [R]
-* Auto code setting. Remove dots.
 * Queries/page stats and timings
 * Security
-? Paging
-? Folder and Page objects
+* Maven project archetype
+* Fix checkboxes in forms
+* Multiple drag/dop in the grid
 ? Sortable columns
-? System status indicators
-? Audit log
-? Refresh tree
-? Update all trees after edit
 
 Infrastructure
 
+* Canoo Webtest support
+* Site doc to show ALL FIXME tags
 * Error logging and report back
 * 80% test coverage
-* Website and CI
-? Maven setup
-
-Documentation
-
-* Architecture overview
-* User manual
-* Demo videos
-
-QA
-
-* Naming consistency
-* Site controller, WDC to use NavService
-
-JS
-
-* First view of edit/preview
-* Error handling if server is down
-* IE testing!
-? Tab order
-? Global status/error handling
+* Website, CI, Trac setup
+* Documentation: Architecture overview
+* Documentation: User manual
+* Documentation: Demo videos
 
 ==================================================================
+M2 (end August)
 
-M2
---
-? Transactions and sessions
-? Protect key folders
-* Versions for Types
-* Don't fliter binary resources
+The CMS release. Feature parity with OO5 for object editing
+and publishing with the exception of internal links. Introduction
+of new templating/block model with efficient caching.
+==================================================================
+
+* Paging/soting in data grid, different columns for different objects?
+* Favourites
+* Global search
+* System status indicators
+* Licensing finalised
+* Folder/Page base objects (auto code generation)
+* Support for JDBC objects in Workbench
+* Instance level security (for Folders at least)
+* Naming consistency
+* Forms support for components and references and real time client side support
+* Live TypeDef manipulation (inc version numbers)
+* Publishing and versioning
+* Image, file and rich media libaries (external image libary support)
+* Live template manipulation
+* OO Toolbar
+* Clustering support
+* Transactional intergity with JCR and JDBC
+* Protect key folders in navigator
+* Backup and restore
+* Audit log
++ Don't filter binary resources
+? Optional textile support
+? JS Global status/error handling and reporting
+
+==================================================================
+M3 (mid September)
+
+The site structure and plugin release.
+==================================================================
+
+* Link libraries
+* Path tooling inc robust SSL support
+* Plugin architecture
+* Import/export
+* Web services
+* SVN integration
+* New interface
+* RSS/Atom support 
+
+==================================================================
+M4 (end November)
+
+The interface release.
+==================================================================

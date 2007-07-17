@@ -30,7 +30,6 @@
 	</bean>
 	
 	<bean name="contentService" class="org.otherobjects.cms.workbench.ContentServiceImpl">
-		<property name="typeService" ref="typeService" />
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
 		<dwr:remote javascript="ContentService" />
 	</bean>

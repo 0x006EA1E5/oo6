@@ -1,0 +1,11 @@
+Extjs
+
+* Iframe panel weirdness
+* No error messages for HtmlEditor
+* Can't set width of HtmlEditor
+* Can't grow HtmlEditor
+* Have to click before drag in grid
+
+Jackrabbit OCM
+
+* Set uuid after insert

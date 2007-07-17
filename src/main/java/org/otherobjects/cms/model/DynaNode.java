@@ -99,12 +99,13 @@ public class DynaNode implements CmsNode, WorkbenchItem
      */
     public void setJcrPath(String jcrPath)
     {
-        if (jcrPath == null)
-        {
-            setCode(null);
-            setPath(null);
-            return;
-        }
+//        if (jcrPath == null)
+//        {
+//            setCode(null);
+//            setPath(null);
+//            return;
+//        }
+        Assert.notNull(jcrPath, "jcrPath must not be null");
 
         Assert.isTrue(jcrPath.lastIndexOf("/") >= 0, "jcrPath must contain at least one forward slash");
         Assert.isTrue(!jcrPath.endsWith("/"), "jcrPath must not end with a forward slash");

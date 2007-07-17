@@ -97,6 +97,7 @@ http://www.sonatype.com/book/
 
 Repository setup
 ----------------
+http://www.softonaut.com/2007/05/12/maven-cobertura-plugin-version-21-and-the-100-line-and-branch-coverage-problem/
 otherobjects
 maven-jackrabbit-plugin
 jackrabbit-ocm-spring

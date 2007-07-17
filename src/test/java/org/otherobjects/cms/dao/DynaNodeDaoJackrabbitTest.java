@@ -16,7 +16,6 @@ import org.otherobjects.cms.types.TypeService;
 
 public class DynaNodeDaoJackrabbitTest extends BaseJcrTestCase
 {
-    //FIXME Inject this?
     private TypeService typeService;
     private DynaNodeDao dynaNodeDao;
 
@@ -24,8 +23,6 @@ public class DynaNodeDaoJackrabbitTest extends BaseJcrTestCase
     protected void onSetUp() throws Exception
     {
         super.onSetUp();
-        dynaNodeDao = (DynaNodeDao) getApplicationContext().getBean("dynaNodeDao");
-        typeService = (TypeService) getApplicationContext().getBean("typeService");
         setupTypesService(typeService);
     }
 
@@ -69,9 +66,22 @@ public class DynaNodeDaoJackrabbitTest extends BaseJcrTestCase
 
     public void testGet()
     {
+        DynaNode node = dynaNodeDao.get("756ec0e7-300c-4d41-b9b6-6a2ccf823675");
+        assertNotNull(node);
+        assertEquals("/site/about", node.getJcrPath());
+    }
+    
+    public void testGetByPath()
+    {
+        // Resources
         DynaNode node = dynaNodeDao.getByPath("/site/about/index.html");
         assertNotNull(node);
         assertEquals("About us", node.get("title"));
+        
+        // Folders
+        node = dynaNodeDao.getByPath("/site/about/");
+        assertNotNull(node);
+        assertEquals("about", node.getCode());
     }
 
     public void testGetAllByPath()
@@ -138,37 +148,38 @@ public class DynaNodeDaoJackrabbitTest extends BaseJcrTestCase
     {
         DynaNode t2 = dynaNodeDao.getByPath("/site/test/test2");
         DynaNode t3 = dynaNodeDao.getByPath("/site/test/test3");
-        
+
         // 2. Move above in same folder
         dynaNodeDao.moveItem(t3.getId(), t2.getId(), "above");
         List<DynaNode> aContents = dynaNodeDao.getAllByPath("/site/test");
         assertEquals(3, aContents.size());
         assertEquals(t3.getCode(), aContents.get(1).getCode());
     }
-    
+
     public void testMove3()
     {
         DynaNode t1 = dynaNodeDao.getByPath("/site/test/test1");
         DynaNode t3 = dynaNodeDao.getByPath("/site/test/test3");
-        
+
         // 3. Move below in same folder
         dynaNodeDao.moveItem(t1.getId(), t3.getId(), "below");
         List<DynaNode> aContents = dynaNodeDao.getAllByPath("/site/test");
         assertEquals(3, aContents.size());
         assertEquals(t1.getCode(), aContents.get(2).getCode());
     }
-    
+
     public void testMove4()
     {
         DynaNode c = dynaNodeDao.getByPath("/site/contact");
         DynaNode t2 = dynaNodeDao.getByPath("/site/test/test2");
-        
+
         // 4. Move above different folder
         dynaNodeDao.moveItem(c.getId(), t2.getId(), "above");
         List<DynaNode> contents = dynaNodeDao.getAllByPath("/site/test");
         assertEquals(4, contents.size());
         assertEquals(c.getCode(), contents.get(1).getCode());
     }
+
     public void testMove5()
     {
         DynaNode c = dynaNodeDao.getByPath("/site/contact");
@@ -280,6 +291,26 @@ public class DynaNodeDaoJackrabbitTest extends BaseJcrTestCase
         DynaNode c = new DynaNode("org.otherobjects.Dyna.jcr.TestComponentObject");
         c.set("name", name + " Name");
         return c;
+    }
+
+    public TypeService getTypeService()
+    {
+        return typeService;
+    }
+
+    public void setTypeService(TypeService typeService)
+    {
+        this.typeService = typeService;
+    }
+
+    public DynaNodeDao getDynaNodeDao()
+    {
+        return dynaNodeDao;
+    }
+
+    public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
+    {
+        this.dynaNodeDao = dynaNodeDao;
     }
 
 }

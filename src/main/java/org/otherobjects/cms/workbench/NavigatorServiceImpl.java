@@ -48,7 +48,7 @@ public class NavigatorServiceImpl implements NavigatorService
 
         DynaNode newFolder = dynaNodeDao.create("Folder");
         newFolder.setPath(parent.getJcrPath());
-        newFolder.setCode("untitled-" + c);
+        newFolder.setCode("untitled-" + c); //TODO M2 Auto generate
         newFolder.setLabel("Untitled " + c);
         return dynaNodeDao.save(newFolder);
     }

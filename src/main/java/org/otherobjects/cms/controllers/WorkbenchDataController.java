@@ -104,7 +104,7 @@ public class WorkbenchDataController implements Controller
             jcrPath = node.getJcrPath();
         }
 
-        // FIXME Use NavigatorService
+        // FIXME M2 Use NavigatorService
         List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
         List<DynaNode> contents = dynaNodeDao.getAllByPath(jcrPath);
 
@@ -146,7 +146,7 @@ public class WorkbenchDataController implements Controller
             jcrPath = node.getJcrPath();
         }
 
-        // FIXME Can we exclude folders in the query?
+        // FIXME M2 Can we exclude folders in the query?
         List<DynaNode> contents = dynaNodeDao.getAllByPath(jcrPath);
 
         List<DynaNode> nonFolders = new ArrayList<DynaNode>();

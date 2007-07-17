@@ -9,7 +9,8 @@
 		<data title="Congratulations!"
 			content="&lt;p&gt;If you can see this, it means that the installation of &lt;a href=&quot;http://www.otherobjects.org/&quot;&gt;OTHERobjects&lt;/a&gt; on this system was successful.&lt;/p&gt;&lt;p&gt;You can now use the OTHERobjects Workbench to start building your website.&lt;/p&gt;&lt;p&gt;You should login in with the username &quot;admin&quot; and the automatically generated password you were given when you started the server.&lt;/p&gt;&lt;p&gt;If this in your first OTHERobjects you might want to follow the &lt;a href=&quot;http://www.otherobjects.org/tutorials/first-site/&quot;&gt;first website tutorial&lt;/a&gt;.&lt;/p&gt;" />
 	</index.html>
-	<about jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode" ooType="Folder">
+	<about jcr:uuid="756ec0e7-300c-4d41-b9b6-6a2ccf823675" jcr:primaryType="oo:node"
+		ocm:classname="org.otherobjects.cms.model.DynaNode" ooType="Folder">
 		<data label="About us" />
 		<index.html jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode" ooType="Article">
 			<data title="About us" content="&lt;p&gt;All about content here&lt;/p&gt;" />

@@ -1,5 +1,7 @@
 package org.otherobjects.cms.workbench;
 
+import org.otherobjects.cms.model.DynaNode;
+
 /**
  * Primary interface for manipulating site content.
  * 
@@ -7,5 +9,5 @@ package org.otherobjects.cms.workbench;
  */
 public interface ContentService
 {
-    public void createItem(String container, String typeName);
+    public DynaNode createItem(String container, String typeName);
 }

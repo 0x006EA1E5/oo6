@@ -24,11 +24,13 @@ OO.EditForm = function(){
 		// Show form validation warnings next to each field
 		Ext.form.Field.prototype.msgTarget = 'side';
 
-		// Create map to store hidden fields
-		var hiddenFields = {
-			put : function(foo,bar) {this[foo] = bar;},
-			get : function(foo) {return this[foo];}
-		}
+		// TODO M2 Create map to store hidden fields
+//		var hiddenFields = {
+//			put : function(foo,bar) {this[foo] = bar;},
+//			get : function(foo) {return this[foo];}
+//		}
+//		hiddenFields.put("id",obj.data,id);
+//		console.log(hiddenFields);
 		
 		// Create form
 	    form = new Ext.form.Form({
@@ -38,9 +40,9 @@ OO.EditForm = function(){
 			//labelWidth: 75
 	    });
 
-		// Add essential form processing support fields (TODO make hidden)		
-		form.add(new Ext.form.TextField({fieldLabel:'ID', name:'id', width:'200px', allowBlank:true}));
-		form.add(new Ext.form.TextField({fieldLabel:'Type', name:'ooType', width:'200px', allowBlank:false}));
+		// Add essential form processing support fields	
+		form.add(new Ext.form.TextField({fieldLabel:'ID', name:'id', width:'200px', allowBlank:true, disabled:true}));
+		//form.add(new Ext.form.TextField({fieldLabel:'Type', name:'ooType', width:'200px', allowBlank:false}));
 		
 		// Add fields according to typeDef
 		for(var i=0; i<typeDef.properties.length; i++)
@@ -71,7 +73,7 @@ OO.EditForm = function(){
 			else if(propDef.type=="boolean")
 			{
 				var f = new Ext.form.Checkbox(config);
-				hiddenFields.put(propDef.name+':BOOLEAN', '');
+				//hiddenFields.put(propDef.name+':BOOLEAN', '');
 			}
 			else
 			{
@@ -88,7 +90,7 @@ OO.EditForm = function(){
 //		});
 		
 	    form.addButton('Save', function() {
-			form.submit({url:'/go/workbench/form', bindForm:true, waitMsg:'Saving Data...', params: hiddenFields });   
+			form.submit({url:'/go/workbench/form', bindForm:true, waitMsg:'Saving Data...', params: {id:obj.data.id} });   
 		});
 		
 		form.on('actioncomplete', function() {OO.Workbench.activatePanel("listing-panel");}, this);

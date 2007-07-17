@@ -60,16 +60,16 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
                 try
                 {
                     String p = path;
-                    if(path.length() > 1 && path.endsWith("/"))
-                        p = path.substring(0, path.length()-1);
-                    
+                    if (path.length() > 1 && path.endsWith("/"))
+                        p = path.substring(0, path.length() - 1);
+
                     List<T> list = new ArrayList<T>();
                     Node node;
-                    if(p.equals("/"))
+                    if (p.equals("/"))
                         node = manager.getSession().getRootNode();
                     else
                         node = manager.getSession().getRootNode().getNode(p.substring(1));
-                    
+
                     NodeIterator nodes = node.getNodes();
                     while (nodes.hasNext())
                     {
@@ -165,6 +165,12 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     @SuppressWarnings("unchecked")
     public T getByPath(String path)
     {
+        Assert.notNull("path must be specified.", path);
+
+        // Removing trainling slash to make path JCR compatible
+        if (path.endsWith("/"))
+            path = path.substring(0, path.lastIndexOf("/"));
+        
         return (T) getJcrMappingTemplate().getObject(path);
     }
 
@@ -258,7 +264,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
                         }
                     }
                     Assert.isTrue(found, "Target node not found.");
-                    if(nodes.hasNext())
+                    if (nodes.hasNext())
                         item.getParent().orderBefore(item.getName(), nodes.nextNode().getName());
                     else
                         item.getParent().orderBefore(item.getName(), null);

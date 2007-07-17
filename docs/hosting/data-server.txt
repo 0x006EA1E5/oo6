@@ -2,4 +2,4 @@ WebDAV based data server
 Fast apache access
 DB but for files
 Security wrappers
-Image Reszing build it?
+Image Reszing built it?

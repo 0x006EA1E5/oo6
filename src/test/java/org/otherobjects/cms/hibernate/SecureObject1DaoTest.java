@@ -14,13 +14,13 @@ import org.otherobjects.cms.test.BaseDaoTestCase;
  * Database needs to have the following:
  * 
  * 3 users 
- * 	- id:1 normal user
- * 	- id:2 admin user
- * 	- id:3 another normal user
+ *  - id:1 normal user
+ *  - id:2 admin user
+ *  - id:3 another normal user
  * 
  * 2 secure objects
- * 	- id:1, owned by user with id 1
- * 	- id:2, owned by user with id 3
+ *  - id:1, owned by user with id 1
+ *  - id:2, owned by user with id 3
  * 
  * @author joerg
  */
@@ -48,7 +48,8 @@ public class SecureObject1DaoTest extends BaseDaoTestCase
     {
         setAutowireMode(AUTOWIRE_BY_NAME);
         return new String[]{"file:src/test/resources/applicationContext-resources.xml", "file:src/test/resources/applicationContext-secure-dao.xml",
-                "file:src/test/resources/applicationContext-security.xml", "file:src/main/resources/otherobjects.resources/config/applicationContext-dao.xml", "file:src/main/resources/otherobjects.resources/config/applicationContext-security.xml",};
+                "file:src/test/resources/applicationContext-security.xml", "file:src/main/resources/otherobjects.resources/config/applicationContext-dao.xml",
+                "file:src/main/resources/otherobjects.resources/config/applicationContext-security.xml",};
     }
 
     public void testAdminCanGet()

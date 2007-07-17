@@ -1,6 +1,15 @@
 How to run this project
 -----------------------
 
+You will need a Java 5 JRE (or later) installed.
+The recommended browser is Firefox 2. Others should work but have not been tested.
+
+
+
+
+
+
+ 
 This in a Maven 2 project.
 The dependencies are declared in pom.xml.
 

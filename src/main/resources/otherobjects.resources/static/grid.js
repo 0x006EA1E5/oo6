@@ -6,10 +6,17 @@
 
 OO.ListingGrid = function() {
 	
-	var cm, ds, grid;
+	var cm, ds, grid, mappings;
 	
 	return {
 	    init : function() {
+			
+			mappings = [
+	            {name: 'id', mapping: 'id'},
+	            {name: 'label', mapping: 'label'},
+	            {name: 'ooType', mapping: 'ooType'},
+	            {name: 'path', mapping: 'linkPath'}
+			];
 			
 			// create the Data Store
 			ds = new Ext.data.Store({
@@ -19,20 +26,16 @@ OO.ListingGrid = function() {
 			        url: '/go/workbench/data/listing'
 			    }),
 			
+			
 			    // create reader that reads the Topic records
 			    reader: new Ext.data.JsonReader({
 			        //root: 'topics',
 			        //totalProperty: 'totalCount',
 			        id: 'id'
-			        }, [
-			            {name: 'id', mapping: 'id'},
-			            {name: 'label', mapping: 'label'},
-			            {name: 'ooType', mapping: 'ooType'},
-			            {name: 'path', mapping: 'linkPath'}
-			        ]),
+			        }, mappings),
 			
 			    // turn on remote sorting
-			    remoteSort: true
+			    remoteSort: false
 			});
 			
 			// create the column model
@@ -40,7 +43,7 @@ OO.ListingGrid = function() {
 				{ header: 'Label', width: 200, sortable: true, dataIndex: 'label' },
 				{ header: 'Type', width: 200, sortable: true, dataIndex: 'ooType' },
 				{ header: 'Path', width: 200, sortable: true, dataIndex: 'path' },
-				{ header: 'UUID', width: 300, sortable: true, dataIndex: 'id' }
+				{ header: 'UUID', width: 300, sortable: false, dataIndex: 'id' }
 			]);
 			
 			// create the grid
@@ -59,14 +62,14 @@ OO.ListingGrid = function() {
 			// render it
 			grid.render();
 			
-			// Add paging toolbar
-			var gridFoot = grid.getView().getFooterPanel(true);
-			var paging = new Ext.PagingToolbar(gridFoot, ds, {
-			    pageSize: 25,
-			    displayInfo: true,
-			    displayMsg: 'Displaying topics {0} - {1} of {2}',
-			    emptyMsg: "No topics to display"
-			});
+			// TODO m2 Add paging toolbar
+//			var gridFoot = grid.getView().getFooterPanel(true);
+//			var paging = new Ext.PagingToolbar(gridFoot, ds, {
+//			    pageSize: 25,
+//			    displayInfo: true,
+//			    displayMsg: 'Displaying topics {0} - {1} of {2}',
+//			    emptyMsg: "No topics to display"
+//			});
 			
 			// Add toolbar
 			var gridHeader = grid.getView().getHeaderPanel(true);
@@ -93,7 +96,12 @@ OO.ListingGrid = function() {
 		{
 			var c = OO.Workbench.currentContainer;
 			console.log('Creating new item: ' + type + ' at ' + c);
-			ContentService.createItem(c,type);
+			ContentService.createItem(c,type, function(item) {
+				var ArticleRecord = Ext.data.Record.create(mappings);
+				var myNewRecord = new ArticleRecord(item);
+				ds.add(myNewRecord); 
+				grid.getSelectionModel().selectLastRow();
+			});
 		}
   	}
 }();
