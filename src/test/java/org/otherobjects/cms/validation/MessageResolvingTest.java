@@ -23,8 +23,9 @@ public class MessageResolvingTest extends AbstractSingleSpringContextTests {
 		Errors errors = new BeanPropertyBindingResult(new DummyBean(), "dummy");
 		
 		errors.rejectValue("name", "field.valueTooLong");
+		System.out.println(getApplicationContext().getMessage(errors.getFieldError("name").getCode(), null, Locale.getDefault()));
 		
-		assertEquals("The value you've given is too long for this field", getApplicationContext().getMessage(errors.getFieldError("name").getCode(), null, Locale.getDefault()));
+		assertEquals("The value you have given is too long for this field", getApplicationContext().getMessage(errors.getFieldError("name").getCode(), null, Locale.getDefault()));
 		
 	}
 	
