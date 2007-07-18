@@ -20,10 +20,10 @@
 	</bean>
 	
 	<bean name="formController" class="org.otherobjects.cms.controllers.FormController">
-		<property name="typeService" ref="typeService" />
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
 		<property name="validator" ref="dynaNodeValidator" />
-		<property name="messageSource" ref="messageSource" />
+		<property name="jcrBeanService" ref="jcrBeanService" />
+		<property name="bindService" ref="bindService" />
 	</bean>
 	
 	<bean name="navigatorService" class="org.otherobjects.cms.workbench.NavigatorServiceImpl">
@@ -34,6 +34,14 @@
 	<bean name="contentService" class="org.otherobjects.cms.workbench.ContentServiceImpl">
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
 		<dwr:remote javascript="ContentService" />
+	</bean>
+	
+	<bean name="jcrBeanService" class="org.otherobjects.cms.beans.JcrBeanService">
+		<property name="typeService" ref="typeService" />
+	</bean>
+	
+	<bean name="bindService" class="org.otherobjects.cms.bind.BindServiceImpl">
+		<property name="dateFormat"><value>dd/MM/yy</value></property>
 	</bean>
 	
 	<bean name="dynaNodeValidator" class="org.otherobjects.cms.validation.DynaNodeValidator">
