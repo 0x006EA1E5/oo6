@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<types xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:rep="internal"
+	xmlns:oo="http://www.otherobjects.org/system/oo" xmlns:ocm="http://jackrabbit.apache.org/ocm"
+	xmlns:sv="http://www.jcp.org/jcr/sv/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" jcr:primaryType="oo:node"
+	label="Data Type" cssClass="datatypes">
+
+	<!-- Site -->
+	<Folder jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.types.TypeDef" labelProperty="label">
+		<properties>
+			<property1 ocm:classname="org.otherobjects.cms.types.PropertyDef" name="name" type="string" required="true" />
+			<property2 ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" type="string" />
+		</properties>
+	</Folder>
+	<Article jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.types.TypeDef" labelProperty="title">
+		<properties>
+			<property1 ocm:classname="org.otherobjects.cms.types.PropertyDef" name="title" type="string" required="true" />
+			<property2 ocm:classname="org.otherobjects.cms.types.PropertyDef" name="teaser" type="text" />
+			<property3 ocm:classname="org.otherobjects.cms.types.PropertyDef" name="content" type="html" />
+			<property4 ocm:classname="org.otherobjects.cms.types.PropertyDef" name="tags" type="text" />
+		</properties>
+	</Article>
+
+</types>

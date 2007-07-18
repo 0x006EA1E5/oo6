@@ -22,7 +22,7 @@
 		<jdbc.username>admin</jdbc.username>
 		<jdbc.password>admin</jdbc.password>
 		<hibernate.jdbc.properties.file>target/test-classes/jdbc.properties</hibernate.jdbc.properties.file>
-		<dbunit-load-file>bootstrap-data/jdbc-h2-data-users.xml</dbunit-load-file>
+		<dbunit-load-file>src/test/data/jdbc-h2-data-users.xml</dbunit-load-file>
 		<jackrabbit.username>jackrabbit</jackrabbit.username>
 		<jackrabbit.password>jackrabbit</jackrabbit.password>
 	</properties>
@@ -228,8 +228,8 @@
 				<version>1.0-SNAPSHOT</version>
 				<configuration>
 					<dataFiles>
-						<param>bootstrap-data/jcr-data-types.xml</param>
-						<param>bootstrap-data/jcr-data-site.xml</param>
+						<param>src/test/data/jcr-data-types.xml</param>
+						<param>src/test/data/jcr-data-site.xml</param>
 					</dataFiles>
 					<repositoryLocation>/tmp/otherobjects/test/repository/</repositoryLocation>
 					<configurationFile>
