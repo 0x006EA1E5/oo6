@@ -9,6 +9,7 @@
 			<list>
 				<value>site</value>
 				<value>validation</value>
+				<value>workbench</value>
 			</list>
 		</property>
 	</bean>
