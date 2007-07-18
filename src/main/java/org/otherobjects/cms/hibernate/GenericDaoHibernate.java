@@ -61,10 +61,17 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
 
     @SuppressWarnings("unchecked")
 	public T save(T object) {
-        return (T) super.getHibernateTemplate().merge(object);
+        return save(object, true);
     }
+    
+	@SuppressWarnings("unchecked")
+    public T save(T object, boolean validate) {
+    	return (T) super.getHibernateTemplate().merge(object);
+	}
 
     public void remove(PK id) {
         super.getHibernateTemplate().delete(this.get(id));
     }
+
+	
 }

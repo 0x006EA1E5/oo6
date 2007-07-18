@@ -48,6 +48,13 @@ public interface GenericDao <T, PK extends Serializable> {
      * @param object the object to save
      */
     public T save(T object);
+    
+    /**
+     * Generic method to save an object - handles both update and insert.
+     * @param object the object to save
+     * @param validate - whether object should be validated before saving or not - if set to true object gets validated and not saved if validation fails
+     */
+    public T save(T object, boolean validate);
 
     /**
      * Generic method to delete an object based on class and id

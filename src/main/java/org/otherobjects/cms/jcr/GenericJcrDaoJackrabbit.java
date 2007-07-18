@@ -108,7 +108,11 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     @SuppressWarnings("unchecked")
     public T save(T object)
     {
-        if (object.getId() == null)
+        return save(object, true);
+    }
+    
+    public T save(T object, boolean validate) {
+		if (object.getId() == null)
         {
             // New
             Assert.notNull(object.getJcrPath(), "jcrPath must not be null when saving.");
@@ -133,7 +137,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
             getJcrMappingTemplate().save();
             return object;
         }
-    }
+	}
 
     /**
      * Moves the object to a new location in the repository. This is also used for 
@@ -309,4 +313,6 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     {
         this.jcrMappingTemplate = jcrMappingTemplate;
     }
+
+	
 }
