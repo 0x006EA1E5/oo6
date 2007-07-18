@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.mortbay.jetty.MimeTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +30,8 @@ public class StaticResourceServlet extends HttpServlet
 {
     private final Logger logger = LoggerFactory.getLogger(StaticResourceServlet.class);
 
+    private MimeTypes mimeTypes = new MimeTypes();
+    
     private static final long serialVersionUID = 3970455238515527584L;
 
     @Override
@@ -47,6 +50,7 @@ public class StaticResourceServlet extends HttpServlet
 
         // Add cache header
         resp.addHeader("Cache-Control", "max-age=3600");
+        resp.setContentType(mimeTypes.getMimeByExtension(path).toString());
 
         // FIXME Is there a faster way of servig these?
         // FIXME Cache?
