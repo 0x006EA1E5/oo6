@@ -51,6 +51,7 @@ public class StaticResourceServlet extends HttpServlet
         // Add cache header
         resp.addHeader("Cache-Control", "max-age=3600");
         resp.setContentType(mimeTypes.getMimeByExtension(path).toString());
+        resp.setCharacterEncoding("UTF-8");
 
         // FIXME Is there a faster way of servig these?
         // FIXME Cache?
@@ -67,6 +68,7 @@ public class StaticResourceServlet extends HttpServlet
                     break;
                 out.write(buffer, 0, len);
             }
+            out.flush();
         }
         catch (Exception e)
         {
@@ -77,7 +79,6 @@ public class StaticResourceServlet extends HttpServlet
             if (in != null)
                 in.close();
         }
-
     }
 
 }
