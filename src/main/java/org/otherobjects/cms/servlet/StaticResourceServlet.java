@@ -35,40 +35,45 @@ public class StaticResourceServlet extends HttpServlet
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
         String path = req.getPathInfo();
-        //path = path.substring("resources".length() + 2);
 
         if (path == null)
             return;
 
         // FIXME Security check: so that configuration data can't be served
-        //        if (!path.startsWith("static/") && !path.startsWith("templates/"))
-        //            return null;
+        if ((!path.contains("/static/") && !path.contains("/templates/")) || path.contains(".."))
+            return;
 
         logger.info("Requested resource: {}", path);
 
         // Add cache header
         resp.addHeader("Cache-Control", "max-age=3600");
-        
+
         // FIXME Is there a faster way of servig these?
         // FIXME Cache?
         InputStream in = getClass().getResourceAsStream(path);
         OutputStream out = resp.getOutputStream();
         try
         {
-            byte[] buf = new byte[4 * 1024]; // 4K buffer
-            int bytesRead;
-            while ((bytesRead = in.read(buf)) != -1)
+            byte buffer[] = new byte[2048];
+            int len = buffer.length;
+            while (true)
             {
-                out.write(buf, 0, bytesRead);
+                len = in.read(buffer);
+                if (len == -1)
+                    break;
+                out.write(buffer, 0, len);
             }
+        }
+        catch (Exception e)
+        {
+            logger.error("Error sending static resource: " + path, e);
         }
         finally
         {
             if (in != null)
                 in.close();
         }
-        
-        
+
     }
 
 }
