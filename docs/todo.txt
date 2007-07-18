@@ -17,13 +17,10 @@ Workbench
 * Rename/drag name clashes [R]
 * Iframe nonsense
 * Get rid of "data" node and clean up boostrap files
-* Update grid/preview after edit
-* Show all data items in form on page. Add Also in this section.
 * Localisation switch & move to login? [J]
 * Method level security [J]
 * Validate on all saves [J]
 * Better type conversion errors [J]
-* Can't edit new items
 
 Infrastructure
 
@@ -35,6 +32,7 @@ Infrastructure
 * Documentation: Architecture overview
 * Documentation: User manual
 * Documentation: Demo videos
+* Cleanup JS logging
 
 ==================================================================
 M2 (end August)
@@ -45,6 +43,8 @@ of new templating/block model with efficient caching.
 ==================================================================
 
 * Queries/page stats and timings
+* Action/event/scripting framework
+* Date/number formatting tools
 * Maven project archetype
 * Paging/soting in data grid, different columns for different objects?
 * Favourites

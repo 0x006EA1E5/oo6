@@ -92,6 +92,16 @@ OO.ListingGrid = function() {
 		  OO.Workbench.currentContainer = uuid;
 	    },
 		
+		updateItem : function(item)
+		{
+			var r = ds.getById(item.id);
+			var ArticleRecord = Ext.data.Record.create(mappings);
+			var newRecord = new ArticleRecord(item);
+			//FIXME Is there a better way to do this?
+			r.data = newRecord.data;
+			grid.getView().refresh();
+		},
+		
 		addItem : function(type, e)
 		{
 			var c = OO.Workbench.currentContainer;

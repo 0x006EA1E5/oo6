@@ -10,18 +10,20 @@
 OO.PreviewPanel = function(id, config){
 	this.src = config.src;
 	this.currentSrc = config.src;
+	this.dirty = false; // Flag to show that panel will need to refreshed
     this.wrapper = Ext.DomHelper.append(document.body, {tag: "iframe", id:id, src:config.src, frameborder:'no'}, true);
     OO.PreviewPanel.superclass.constructor.call(this, this.wrapper, config);
 	this.on("activate", activate);
 	
 	function activate()
 	{
-		console.log("Current preview:" + this.currentSrc);
-		if(this.currentSrc != this.src)
+		console.log("Current preview:" + this.currentSrc + " (Dirty: " +this.dirty + ")");
+		if(this.currentSrc != this.src  || this.dirty)
 		{
 			console.log("Loading new preview:" + this.src);
 			this.wrapper.dom.src=this.src;
 			this.currentSrc=this.src;			
+			this.dirty=false;
 		}
 	}
 };
@@ -36,6 +38,10 @@ Ext.extend(OO.PreviewPanel, Ext.ContentPanel, {
 			w.dom.height=height;
         }
     },
+	
+	setDirty : function(d) {
+		this.dirty=d;
+	},
 	
 	setSrc : function(src) {
 		this.src=src;

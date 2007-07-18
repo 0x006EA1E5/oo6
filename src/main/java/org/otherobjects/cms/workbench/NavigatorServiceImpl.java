@@ -58,9 +58,19 @@ public class NavigatorServiceImpl implements NavigatorService
         return null;
     }
 
-    public List<WorkbenchItem> getItemContents(String path)
+    public List<WorkbenchItem> getItemContents(String uuid)
     {
-        return null;
+        DynaNode node = dynaNodeDao.get(uuid);
+        
+        List<DynaNode> all = dynaNodeDao.getAllByPath(node.getPath());
+
+        List<WorkbenchItem> children = new ArrayList<WorkbenchItem>();
+        for (DynaNode n : all)
+        {
+            if (!n.getOoType().equals("Folder"))
+                children.add(n);
+        }
+        return children;
     }
 
     public WorkbenchItem renameItem(String uuid, String newName)

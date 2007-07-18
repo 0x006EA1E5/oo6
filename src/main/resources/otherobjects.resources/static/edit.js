@@ -89,7 +89,12 @@ OO.EditForm = function(){
 			form.submit({url:'/go/workbench/form', bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });   
 		});
 		
-		form.on('actioncomplete', function() {OO.Workbench.activatePanel("listing-panel");}, this);
+		form.on('actioncomplete', function(event,action) {
+			// Update listing panel
+			OO.ListingGrid.updateItem(action.result.formObject);
+			OO.Workbench.getPanel("preview-panel").setDirty(true);
+			OO.Workbench.activatePanel("listing-panel");
+		}, this);
 		//form.on('actionfailed', showFailureMessage, this);
 		
 		// Remove previous form and render new one

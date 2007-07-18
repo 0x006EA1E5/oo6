@@ -104,14 +104,14 @@ OO.Workbench = function()
 		{
 			var row = grid.dataSource.getAt(index);
 			// TODO Move grid specific login to grid.js
-			currentItem = row.id;
-	        console.log("Selected item: "+ row.data.id + " => " + row.data.path);
+			currentItem = row.data.id;
+	        console.log("Selected item: "+ currentItem + " => " + row.data.path);
 			var previewPanel = layout.getRegion("center").getPanel("preview-panel");
 			previewPanel.setSrc(row.data.path);
 			var editPanel = layout.getRegion("center").getPanel("edit-panel");
 			
 			//editForm.setUrl(null);
-			editForm.createForm(row.id);
+			editForm.createForm(currentItem);
 			
 			//layout.getRegion("center").showPanel("preview-panel");
 			//layout.getRegion("center").showPanel("edit-panel");
@@ -120,6 +120,11 @@ OO.Workbench = function()
 		activatePanel : function(name)
 		{
 			layout.getRegion("center").showPanel(name);
+		},
+		
+		getPanel : function(name)
+		{
+			return layout.getRegion("center").getPanel(name);
 		},
 		
 		activateEditor : function()
