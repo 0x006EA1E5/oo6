@@ -15,7 +15,6 @@ Known issues
 Workbench
 
 * Rename/drag name clashes [R]
-* Fix checkboxes in forms
 * Iframe nonsense
 * Get rid of "data" node and clean up boostrap files
 * Update grid/preview after edit
@@ -24,6 +23,7 @@ Workbench
 * Method level security [J]
 * Validate on all saves [J]
 * Better type conversion errors [J]
+* Can't edit new items
 
 Infrastructure
 

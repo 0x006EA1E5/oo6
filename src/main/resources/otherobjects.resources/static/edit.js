@@ -24,13 +24,9 @@ OO.EditForm = function(){
 		// Show form validation warnings next to each field
 		Ext.form.Field.prototype.msgTarget = 'side';
 
-		// TODO M2 Create map to store hidden fields
-//		var hiddenFields = {
-//			put : function(foo,bar) {this[foo] = bar;},
-//			get : function(foo) {return this[foo];}
-//		}
-//		hiddenFields.put("id",obj.data,id);
-//		console.log(hiddenFields);
+		// Create map to store hidden fields
+		var hiddenFields = {};
+		hiddenFields["id"] = obj.data.id;
 		
 		// Create form
 	    form = new Ext.form.Form({
@@ -73,7 +69,7 @@ OO.EditForm = function(){
 			else if(propDef.type=="boolean")
 			{
 				var f = new Ext.form.Checkbox(config);
-				//hiddenFields.put(propDef.name+':BOOLEAN', '');
+				hiddenFields["_"+propDef.name] = "";
 			}
 			else
 			{
@@ -90,7 +86,7 @@ OO.EditForm = function(){
 //		});
 		
 	    form.addButton('Save', function() {
-			form.submit({url:'/go/workbench/form', bindForm:true, waitMsg:'Saving Data...', params: {id:obj.data.id} });   
+			form.submit({url:'/go/workbench/form', bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });   
 		});
 		
 		form.on('actioncomplete', function() {OO.Workbench.activatePanel("listing-panel");}, this);
@@ -98,7 +94,7 @@ OO.EditForm = function(){
 		
 		// Remove previous form and render new one
 		Ext.get('edit-panel').dom.innerHTML='';
-		console.log(Ext.get('edit-panel'));
+		console.log(hiddenFields);
 	    form.render('edit-panel');
 		
 		// FIXME Better way to set form values without conflict danger?
@@ -138,6 +134,7 @@ Ext.form.OODateField = function(config){
 
 Ext.extend(Ext.form.OODateField, Ext.form.DateField,  {
   	setValue : function(date){
-		Ext.form.DateField.superclass.setValue.call(this, this.formatDate(new Date(date)));
+		if(date)
+			Ext.form.DateField.superclass.setValue.call(this, this.formatDate(new Date(date)));
     }
 });
