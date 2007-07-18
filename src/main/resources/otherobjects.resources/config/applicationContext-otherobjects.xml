@@ -10,7 +10,9 @@
 		<property name="userDao" ref="userDao" />
 	</bean>
 
-	<bean name="workbenchController" class="org.otherobjects.cms.controllers.WorkbenchController"></bean>
+	<bean name="workbenchController" class="org.otherobjects.cms.controllers.WorkbenchController">
+		<property name="localeResolver" ref="localeResolver" />
+	</bean>
 
 	<bean name="workbenchDataController" class="org.otherobjects.cms.controllers.WorkbenchDataController">
 		<property name="typeService" ref="typeService" />
@@ -85,5 +87,11 @@
 	</bean>
 
 	<bean id="jsonView" class="org.otherobjects.cms.views.JsonView" />
-
+	
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+		<property name="defaultLocale"><value>en_GB</value></property>
+		<property name="cookieName" ><value>ooWorkbenchLocale</value></property>
+		<property name="cookieMaxAge"><value>-1</value></property>
+	</bean>
+	
 </beans>
