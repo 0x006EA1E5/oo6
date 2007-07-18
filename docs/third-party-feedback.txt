@@ -4,6 +4,7 @@ Extjs
 * No error messages for HtmlEditor
 * Can't set width of HtmlEditor
 * Can't grow HtmlEditor
+* Can't cancel treeeditor 
 * Have to click before drag in grid
 
 Jackrabbit OCM

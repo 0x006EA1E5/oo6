@@ -5,22 +5,14 @@ Initial release with major infrasturcture in place. Basic Article/Folder
 manipulation in new Workbench.
 ==================================================================
 
-Known issues
-
-* Timing conflict can show duplicate folders when dropped. Workaound: wait for expand before dropping.
-* Safari 3 Beta may not cache resources properly resulting in much decreased page load times.
-* WYSYWYG editor is a preview only and has not ben tested.
-* Turn off Firebug if using firefox or page times will be very slow whilst it loads the debugger.
-
 Workbench
 
-* Rename/drag name clashes [R]
 * Iframe nonsense
 * Get rid of "data" node and clean up boostrap files
-* Localisation switch & move to login? [J]
 * Method level security [J]
 * Validate on all saves [J]
 * Better type conversion errors [J]
+? Date formatter
 
 Infrastructure
 
@@ -66,6 +58,7 @@ of new templating/block model with efficient caching.
 * Protect key folders in navigator
 * Backup and restore
 * Audit log
+* EXT Drag/rename clashes: see http://extjs.com/forum/archive/index.php/t-5776.html
 + Don't filter binary resources
 ? Optional textile support
 ? JS Global status/error handling and reporting

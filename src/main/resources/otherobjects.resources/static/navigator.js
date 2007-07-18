@@ -58,9 +58,11 @@ OO.Navigator = function(){
 			treeEditor.ignoreNoChange=true;
 			// ... but disable default behaviour. Only allow via context menu.
 			tree.un('beforeclick', treeEditor.beforeNodeClick, treeEditor);
-            treeEditor.on("complete", function(element, newName){
-				console.log("Renaming folder from: " + element.editNode.attributes.folderPath + " to " + newName);
-				NavigatorService.renameItem(element.editNode.id, newName);
+            treeEditor.on("complete", function(editor, newName, oldName){
+				console.log("Renaming folder from: " + editor.editNode.attributes.label + " to " + newName);
+				NavigatorService.renameItem(editor.editNode.id, newName);
+				//editor.setValue(oldName);
+				//editor.cancelEdit(true);
 			});
 			
 			
@@ -80,7 +82,8 @@ OO.Navigator = function(){
 			navigatorContextMenu.add({ text: 'Rename folder', handler:function(item){
 				var node = item.parentMenu.selectedNode;
 				console.log(node);
-				treeEditor.triggerEdit(node);
+				if(node.draggable) // Don't allow locked nodes to be renamed
+					treeEditor.triggerEdit(node);
         	}});
 			tree.on("contextmenu", function(node){
 					navigatorContextMenu.selectedNode = node;

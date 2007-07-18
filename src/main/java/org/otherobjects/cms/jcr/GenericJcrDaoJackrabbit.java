@@ -233,13 +233,14 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
 
                 if (point.equals("append") || !sameFolder)
                 {
-                    // Case 1
                     String origPath = item.getPath();
 
                     String newPath;
                     if (point.equals("append"))
+                        // Case 1
                         newPath = target.getPath() + "/" + item.getName();
                     else
+                        // Case 4,5
                         newPath = target.getParent().getPath() + "/" + item.getName();
 
                     logger.info("Moving: " + origPath + " to " + newPath);
@@ -252,6 +253,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
                 }
                 else if (point.equals("below"))
                 {
+                    // Case 3, 5
                     NodeIterator nodes = target.getParent().getNodes();
                     boolean found = false;
                     while (nodes.hasNext())
