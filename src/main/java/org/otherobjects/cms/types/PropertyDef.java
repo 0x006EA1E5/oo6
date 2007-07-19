@@ -68,14 +68,16 @@ public class PropertyDef
     /** To indicate how long this property can be (only makes for string type properties). Defaults to -1 which means no limit */
     private int size = -1;
     
-    /** Holds valang rules to build a validator for the type that is made of this PropertyDef. Beware: the name of the property is not included in the rule unlike with standard valang rules 
+    /** 
+     * Holds valang rules to build a validator for the type that is made of this PropertyDef. Beware: the name of the property is not included in the rule unlike with standard valang rules 
      * so the syntax is this:
-     * { $THIS : <predicate_expression> : <message> [: <error_code> [: <args> ]] }
-     * (above can be repeated multiple times)
      * 
-     * Notice the $THIS placeholder which gets substituted for the property name. This has to appear exactly as shown in the valang string.
+     * { ? : <predicate_expression> : <message> [: <error_code> [: <args> ]] }
      * 
-     * */
+     * (above can be repeated multiple times separated by spaces)
+     * 
+     * Notice the ? placeholder which gets substituted for the property name. This has to appear exactly as shown in the valang string.
+     */
     private String valang;
     
     

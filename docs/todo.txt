@@ -7,24 +7,18 @@ manipulation in new Workbench.
 
 Workbench
 
-* Iframe nonsense
-* Get rid of "data" node and clean up boostrap files
-* Method level security [J]
-* Validate on all saves [J]
-* Better type conversion errors [J]
-? Date formatter
-
-Infrastructure
-
-* Canoo Webtest support
-* Site doc to show ALL FIXME tags
-* Error logging and report back
 * 80% test coverage
+* Javadoc for classes at least (and packages)
+* Don't allow drag to same folder
+* Site doc to show ALL FIXME tags
+? Cleanup JS logging
+? Iframe nonsense
+? Date formatter
+* Error logging and report back
 * Website, CI, Trac setup
 * Documentation: Architecture overview
-* Documentation: User manual
-* Documentation: Demo videos
-* Cleanup JS logging
+* Documentation: Getting started docs
+* Documentation: Demo video
 
 ==================================================================
 M2 (end August)
@@ -59,6 +53,9 @@ of new templating/block model with efficient caching.
 * Backup and restore
 * Audit log
 * EXT Drag/rename clashes: see http://extjs.com/forum/archive/index.php/t-5776.html
+* Get rid of "data" node and clean up boostrap files
+* Method level security [J]
+* Canoo Webtest support
 + Don't filter binary resources
 ? Optional textile support
 ? JS Global status/error handling and reporting

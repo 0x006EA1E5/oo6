@@ -27,6 +27,7 @@
 
 	<class-descriptor className="org.otherobjects.cms.types.PropertyDef">
 		<field-descriptor fieldName="name" jcrName="name" />
+		<field-descriptor fieldName="label" jcrName="label" />
 		<field-descriptor fieldName="type" jcrName="type" />
 		<field-descriptor fieldName="required" jcrName="required" />
 		<field-descriptor fieldName="size" jcrName="size" />

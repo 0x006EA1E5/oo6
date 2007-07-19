@@ -93,7 +93,6 @@ public class WorkbenchDataController implements Controller
 
     private ModelAndView generateNavigatorData(HttpServletRequest request)
     {
-
         ModelAndView view = new ModelAndView("jsonView");
 
         String nodeId = request.getParameter("node");
@@ -115,18 +114,29 @@ public class WorkbenchDataController implements Controller
                 Map<String, Object> n1 = new HashMap<String, Object>();
                 n1.put("id", dynaNode.getId());
                 n1.put("code", dynaNode.getCode());
-                n1.put("text", dynaNode.getLabel());
-                if(dynaNode.get("cssClass")!=null)
+
+                // Localise labels
+                String label = dynaNode.getLabel();
+                // TODO This has moved to JsonView -- may move back!
+//                if (label.startsWith("$"))
+//                {
+//                    label = label.substring(2, label.length() -1);
+//                    label = requestContext.getMessage(label);
+//                }
+                n1.put("text", label);
+                
+                if (dynaNode.get("cssClass") != null)
                 {
-                    n1.put("cls", dynaNode.get("cssClass")+"-nav-item");
+                    n1.put("cls", dynaNode.get("cssClass") + "-nav-item");
                     n1.put("allowDrag", false);
+
                 }
                 else
                     n1.put("cls", "folder");
                 n1.put("leaf", false);
-                if(dynaNode.getCode().equals("site"))
+                if (dynaNode.getCode().equals("site"))
                     n1.put("expanded", true);
-                    
+
                 nodes.add(n1);
             }
         }
@@ -161,19 +171,9 @@ public class WorkbenchDataController implements Controller
         return view;
     }
 
-    public DynaNodeDao getDynaNodeDao()
-    {
-        return dynaNodeDao;
-    }
-
     public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
     {
         this.dynaNodeDao = dynaNodeDao;
-    }
-
-    public TypeService getTypeService()
-    {
-        return typeService;
     }
 
     public void setTypeService(TypeService typeService)
