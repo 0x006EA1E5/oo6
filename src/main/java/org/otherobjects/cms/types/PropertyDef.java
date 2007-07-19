@@ -77,6 +77,7 @@ public class PropertyDef
      * (above can be repeated multiple times separated by spaces)
      * 
      * Notice the ? placeholder which gets substituted for the property name. This has to appear exactly as shown in the valang string.
+     * Beware: Don't use ? in your message or error_code unless you want it to be replaced by the property name.
      */
     private String valang;
     
