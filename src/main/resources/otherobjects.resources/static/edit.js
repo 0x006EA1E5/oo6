@@ -32,8 +32,8 @@ OO.EditForm = function(){
 	    form = new Ext.form.Form({
 			labelAlign: 'left',
 			buttonAlign: 'left',
-			monitorValid: true
-			//labelWidth: 75
+			monitorValid: true,
+			labelWidth: 120
 	    });
 
 		// Add essential form processing support fields	
