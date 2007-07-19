@@ -69,6 +69,7 @@
 					<prop key="velocimacro.library">templates/workbench/oo.vm,templates/macros/global.vm</prop>
 				-->
 				<prop key="file.resource.loader.cache">false</prop>
+				<prop key="encoding.default">UTF-8</prop>
 			</props>
 		</property>
 	</bean>
