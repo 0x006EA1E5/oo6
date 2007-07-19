@@ -40,7 +40,8 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
 		if(validate)
 		{
 			Errors errors = new BeanPropertyBindingResult(object, "target");
-			dynaNodeValidator.validate(object, errors);
+			// FIXME M2 Re-enable validation after dynaNodes are true beans
+			//dynaNodeValidator.validate(object, errors);
 			if(errors.getErrorCount() > 0)
 				throw new OtherObjectsException("DynaNode " + object.getLabel() + "couldn't be validated and therefore didn't get saved");
 		}

@@ -43,10 +43,6 @@
 	<bean name="bindService" class="org.otherobjects.cms.bind.BindServiceImpl">
 		<property name="dateFormat"><value>dd/MM/yy</value></property>
 	</bean>
-	
-	<bean name="dynaNodeValidator" class="org.otherobjects.cms.validation.DynaNodeValidator">
-		<property name="typeService" ref="typeService" />
-	</bean>
 
 	<bean name="singletonBeanLocator" class="org.otherobjects.cms.SingletonBeanLocator" />
 

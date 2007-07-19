@@ -53,6 +53,9 @@
 		</property>
 	</bean>
 
+	<bean name="dynaNodeValidator" class="org.otherobjects.cms.validation.DynaNodeValidator">
+		<property name="typeService" ref="typeService" />
+	</bean>
 
 	<!-- Types service -->
 	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl" init-method="init">

@@ -4,6 +4,13 @@
 		<configExtension>xml</configExtension>
 	</configExtensions>
 	<configs>
+		<config>src/main/resources/otherobjects.resources/config/applicationContext-dao.xml</config>
+		<config>src/main/resources/otherobjects.resources/config/applicationContext-dwr.xml</config>
+		<config>src/main/resources/otherobjects.resources/config/applicationContext-messages.xml</config>
+		<config>src/main/resources/otherobjects.resources/config/applicationContext-otherobjects.xml</config>
+		<config>src/main/resources/otherobjects.resources/config/applicationContext-repository.xml</config>
+		<config>src/main/resources/otherobjects.resources/config/applicationContext-resources.xml</config>
+		<config>src/main/resources/otherobjects.resources/config/applicationContext-security.xml</config>
 	</configs>
 	<configSets>
 		<configSet>
