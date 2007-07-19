@@ -77,8 +77,9 @@
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
 		<property name="cache" value="false" />
 		<property name="prefix" value="" />
-		<property name="suffix" value="" />
-		<property name="viewClass"><value>org.otherobjects.cms.views.VelocityView</value></property>
+		<property name="requestContextAttribute" value="ctxTool" />
+		<property name="dateToolAttribute" value="dateTool" />
+		<property name="numberToolAttribute" value="numberTool" />
 	</bean>
 
 	<!-- 
@@ -92,7 +93,9 @@
 		</property>
 	</bean>
 
-	<bean id="jsonView" class="org.otherobjects.cms.views.JsonView" />
+	<bean id="jsonView" class="org.otherobjects.cms.views.JsonView">
+		<property name="messageSource" ref="messageSource" />	
+	</bean>
 	
 	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
 		<property name="defaultLocale"><value>en_GB</value></property>

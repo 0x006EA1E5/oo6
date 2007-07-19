@@ -12,6 +12,7 @@ import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.cms.views.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -70,8 +71,8 @@ public class WorkbenchDataController implements Controller
         m.put("data", dynaNode);
 
         ModelAndView view = new ModelAndView("jsonView");
-        view.addObject("json", m);
-        view.addObject("jsonIncludes", new String[]{"data.data", "type.properties"});
+        view.addObject(JsonView.JSON_DATA_KEY, m);
+        view.addObject(JsonView.JSON_INCLUDES_KEY, new String[]{"data.data", "type.properties"});
         return view;
     }
 
@@ -86,8 +87,8 @@ public class WorkbenchDataController implements Controller
         Assert.notNull(type, "No type found: " + typeName);
 
         ModelAndView view = new ModelAndView("jsonView");
-        view.addObject("json", type);
-        view.addObject("jsonIncludes", "properties");
+        view.addObject(JsonView.JSON_DATA_KEY, type);
+        view.addObject(JsonView.JSON_INCLUDES_KEY, "properties");
         return view;
     }
 
@@ -140,7 +141,7 @@ public class WorkbenchDataController implements Controller
                 nodes.add(n1);
             }
         }
-        view.addObject("data", nodes);
+        view.addObject(JsonView.JSON_DATA_KEY, nodes);
         return view;
     }
 
@@ -166,8 +167,8 @@ public class WorkbenchDataController implements Controller
             if (dynaNode.getOoType().equals("Article"))
                 nonFolders.add(dynaNode);
         }
-        view.addObject("json", nonFolders);
-        view.addObject("jsonIncludes", new String[]{"data"});
+        view.addObject(JsonView.JSON_DATA_KEY, nonFolders);
+        view.addObject(JsonView.JSON_INCLUDES_KEY, new String[]{"data"});
         return view;
     }
 
