@@ -15,7 +15,7 @@ import org.otherobjects.cms.util.StringUtils;
  * <li>timestamp (Date.class)
  * <li>boolean (Boolean.class)
  * <li>number (Long.class Integer.class)
- * <li>decimal (BigDecimal.class, Float.class, Double.class) -- specify decimal places in format -- stored as double
+ * <li>decimal (BigDecimal.class, Float.class, Double.class) -- specify decimal places in format -- stored as a BigDecimal
  * </ul>
  * 
  * <p>Currently supported bean property types are:
