@@ -44,7 +44,7 @@ OO.Navigator = function(){
 			});
 			tree.on('nodedragover', function(e) {
 				// Only allow position of tree nodes to be set
-				if(!e.dropNode && e.point!="append")
+				if(e.dropNode == null && e.point!="append")
 					return false;
 			});
 			

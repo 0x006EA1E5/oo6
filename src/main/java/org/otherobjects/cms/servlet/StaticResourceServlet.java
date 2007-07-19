@@ -56,6 +56,12 @@ public class StaticResourceServlet extends HttpServlet
         // FIXME Is there a faster way of servig these?
         // FIXME Cache?
         InputStream in = getClass().getResourceAsStream(path);
+        if(in==null)
+        {
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+        
         OutputStream out = resp.getOutputStream();
         try
         {
@@ -73,6 +79,7 @@ public class StaticResourceServlet extends HttpServlet
         catch (Exception e)
         {
             logger.error("Error sending static resource: " + path, e);
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         finally
         {
