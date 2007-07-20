@@ -825,6 +825,17 @@
 			<artifactId>h2</artifactId>
 			<version>1.0.20070617</version>
 		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+		<!-- Needed for logback email support -->
+			<groupId>janino</groupId>
+			<artifactId>janino</artifactId>
+			<version>2.5.7</version>
+		</dependency>
 	</dependencies>
 </project>
 
