@@ -6,7 +6,7 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 
 import org.otherobjects.cms.beans.BaseBeanServiceTest;
-import org.otherobjects.cms.bind.BindServiceImpl;
+import org.otherobjects.cms.binding.BindServiceImpl;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;

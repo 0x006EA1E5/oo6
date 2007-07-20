@@ -40,7 +40,7 @@
 		<property name="typeService" ref="typeService" />
 	</bean>
 	
-	<bean name="bindService" class="org.otherobjects.cms.bind.BindServiceImpl">
+	<bean name="bindService" class="org.otherobjects.cms.binding.BindServiceImpl">
 		<property name="dateFormat"><value>dd/MM/yy</value></property>
 	</bean>
 

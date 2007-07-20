@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.beans.BaseBeanServiceTest;
-import org.otherobjects.cms.bind.BindServiceImpl;
+import org.otherobjects.cms.binding.BindServiceImpl;
 import org.otherobjects.cms.model.DynaNode;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.BindingResult;
