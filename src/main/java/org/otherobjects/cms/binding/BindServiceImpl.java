@@ -1,4 +1,4 @@
-package org.otherobjects.cms.bind;
+package org.otherobjects.cms.binding;
 
 import java.text.SimpleDateFormat;
 
