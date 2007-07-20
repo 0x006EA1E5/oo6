@@ -289,6 +289,16 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
+				<configuration>
+		          <instrumentation>
+			          <ignores>
+			          	<ignore>org.otherobjects.cms.controllers</ignore>
+			          </ignores>
+			          <excludes>
+			          	<exclude>org/otherobjects/cms/controllers/**/*.class</exclude>
+			          </excludes>
+		          </instrumentation>
+		        </configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
