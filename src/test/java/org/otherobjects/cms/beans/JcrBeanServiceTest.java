@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.model.DynaNode;
-import org.otherobjects.cms.test.BaseJcrTestCase;
 
 public class JcrBeanServiceTest extends BaseBeanServiceTest {
 	
@@ -12,14 +11,14 @@ public class JcrBeanServiceTest extends BaseBeanServiceTest {
 	{
 		DynaNode dynaNodeBean = beanService.createCustomDynaNodeBean(dynaNode);
 		try{
-			dynaNodeBean.getClass().getMethod("getTestString", null);
-			dynaNodeBean.getClass().getMethod("getTestText", null);
-			dynaNodeBean.getClass().getMethod("getTestDate", null);
-			dynaNodeBean.getClass().getMethod("getTestTime", null);
-			dynaNodeBean.getClass().getMethod("getTestTimestamp", null);
-			dynaNodeBean.getClass().getMethod("getTestNumber", null);
-			dynaNodeBean.getClass().getMethod("getTestDecimal", null);
-			dynaNodeBean.getClass().getMethod("getTestBoolean", null);
+			dynaNodeBean.getClass().getMethod("getTestString");
+			dynaNodeBean.getClass().getMethod("getTestText");
+			dynaNodeBean.getClass().getMethod("getTestDate");
+			dynaNodeBean.getClass().getMethod("getTestTime");
+			dynaNodeBean.getClass().getMethod("getTestTimestamp");
+			dynaNodeBean.getClass().getMethod("getTestNumber");
+			dynaNodeBean.getClass().getMethod("getTestDecimal");
+			dynaNodeBean.getClass().getMethod("getTestBoolean");
 		}
 		catch(NoSuchMethodException e)
 		{

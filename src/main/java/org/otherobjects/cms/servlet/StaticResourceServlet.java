@@ -46,12 +46,7 @@ public class StaticResourceServlet extends HttpServlet
         if ((!path.contains("/static/") && !path.contains("/templates/")) || path.contains(".."))
             return;
 
-        logger.info("Requested resource: {}", path);
-
-        // Add cache header
-        resp.addHeader("Cache-Control", "max-age=3600");
-        resp.setContentType(mimeTypes.getMimeByExtension(path).toString());
-        resp.setCharacterEncoding("UTF-8");
+        logger.info("Requested static resource: {}", path);
 
         // FIXME Is there a faster way of servig these?
         // FIXME Cache?
@@ -61,6 +56,12 @@ public class StaticResourceServlet extends HttpServlet
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
+        
+        // Add cache header
+        resp.addHeader("Cache-Control", "max-age=3600");
+        resp.setContentType(mimeTypes.getMimeByExtension(path).toString());
+        resp.setCharacterEncoding("UTF-8");
+
         
         OutputStream out = resp.getOutputStream();
         try

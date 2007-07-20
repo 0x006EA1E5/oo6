@@ -7,6 +7,7 @@ manipulation in new Workbench.
 
 Workbench
 
+* Fix Favicon
 * 80% test coverage
 * Javadoc for classes at least (and packages)
 * Don't allow drag to same folder
