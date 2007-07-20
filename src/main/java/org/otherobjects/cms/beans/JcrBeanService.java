@@ -16,7 +16,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 /**
- * Service class to 
+ * Service class to beanify DynaNodes. Dynamically adds bean style getters and setters for all (simple) properties
+ * defined in TypeDef for a given DynaNode {@link JcrBeanService#createCustomDynaNodeBean(DynaNode)}. Can then populate these bean properties 
+ * with the values contained in the JcrMapper managed data map {@link DynaNode#getData()} by calling {@link JcrBeanService#copyDynamicProperties(DynaNode, DynaNode)}.
+ * And those bean properties can then be copied back to the data map by calling {@link JcrBeanService#copyBeanProperties(DynaNode, DynaNode)}
+ *  
  * @author joerg
  *
  */
