@@ -20,6 +20,7 @@ OO.Navigator = function(){
 			var root = new Ext.tree.AsyncTreeNode({
                 text: 'Root', 
                 draggable:false, // disable root node dragging
+                allowDrop:false, // no items to be dragged here either
                 id:'source',
 				cls:'site-nav-item'
             });
@@ -43,6 +44,7 @@ OO.Navigator = function(){
 				return true;
 			});
 			tree.on('nodedragover', function(e) {
+				//console.log("Moving: " + e.dropNode + " / " + e.point);
 				// Only allow position of tree nodes to be set
 				if(e.dropNode == null && e.point!="append")
 					return false;
@@ -75,7 +77,7 @@ OO.Navigator = function(){
 					console.log("Creating sub folder in:"+parent.id);
 					NavigatorService.addItem(parent.id,null, function(r){
 						console.log(r);
-						var node = parent.appendChild(new Ext.tree.TreeNode({id:r.id, text:r.label, cls:'folder', leaf:true, allowDrag:true}));
+						var node = parent.appendChild(new Ext.tree.TreeNode({id:r.id, text:r.label, cls:'folder', leaf:false, allowDrag:true}));
 						node.select();	
 					});
         	}});

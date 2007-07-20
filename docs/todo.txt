@@ -7,19 +7,10 @@ manipulation in new Workbench.
 
 Workbench
 
-* Fix Favicon
-* 80% test coverage
-* Javadoc for classes at least (and packages)
 * Don't allow drag to same folder
-* Site doc to show ALL FIXME tags
-? Cleanup JS logging
+* Allow edits of new items
+* Getting started page for PMs and Devs
 ? Iframe nonsense
-? Date formatter
-* Error logging and report back
-* Website, CI, Trac setup
-* Documentation: Architecture overview
-* Documentation: Getting started docs
-* Documentation: Demo video
 
 ==================================================================
 M2 (end August)
@@ -60,6 +51,7 @@ of new templating/block model with efficient caching.
 + Don't filter binary resources
 ? Optional textile support
 ? JS Global status/error handling and reporting
+? Site doc to show ALL FIXME tags
 
 ==================================================================
 M3 (mid September)

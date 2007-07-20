@@ -91,6 +91,7 @@ OO.EditForm = function(){
 		
 		form.on('actioncomplete', function(event,action) {
 			// Update listing panel
+			console.log("Form saved correctly.");
 			OO.ListingGrid.updateItem(action.result.formObject);
 			OO.Workbench.getPanel("preview-panel").setDirty(true);
 			OO.Workbench.activatePanel("listing-panel");

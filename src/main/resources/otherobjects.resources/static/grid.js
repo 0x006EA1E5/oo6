@@ -94,6 +94,7 @@ OO.ListingGrid = function() {
 		
 		updateItem : function(item)
 		{
+			console.log("Updating record id: " + item.id);
 			var r = ds.getById(item.id);
 			var ArticleRecord = Ext.data.Record.create(mappings);
 			var newRecord = new ArticleRecord(item);
