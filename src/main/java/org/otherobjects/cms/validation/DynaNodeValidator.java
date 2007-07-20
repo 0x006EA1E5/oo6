@@ -17,7 +17,7 @@ import org.springmodules.validation.valang.ValangValidator;
 
 /**
  * Validator to validate DynaNodes (usually happens after binding by {@link BindService} and must happen only after the DynaNode has 
- * been beanified by {@link JcrBeanService#createCustomDynaNodeBean(DynaNode)}
+ * been beanified by {@link JcrBeanService#createCustomDynaNodeBean(DynaNode)}).
  * Uses the following three properties specified in {@link PropertyDef} for validation:
  * <ul>
  * 	<li>{@link PropertyDef#isRequired()}</li>
