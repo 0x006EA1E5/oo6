@@ -302,6 +302,7 @@
 						<link>http://static.springframework.org/spring/docs/2.0.x/api</link>
 						<link>http://java.sun.com/j2se/1.5.0/docs/api</link>
 						<link>http://java.sun.com/j2ee/1.4/docs/api</link>
+						<link>http://www.acegisecurity.org/multiproject/acegi-security/apidocs</link>
 					</links>
 				</configuration>
 			</plugin>
