@@ -2,6 +2,8 @@ package org.otherobjects.cms.validation;
 
 import java.util.Iterator;
 
+import org.otherobjects.cms.beans.JcrBeanService;
+import org.otherobjects.cms.binding.BindService;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
@@ -13,6 +15,20 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import org.springmodules.validation.valang.ValangValidator;
 
+/**
+ * Validator to validate DynaNodes (usually happens after binding by {@link BindService} and must happen only after the DynaNode has 
+ * been beanified by {@link JcrBeanService#createCustomDynaNodeBean(DynaNode)}
+ * Uses the following three properties specified in {@link PropertyDef} for validation:
+ * <ul>
+ * 	<li>{@link PropertyDef#isRequired()}</li>
+ *  <li>{@link PropertyDef#getSize()}</li>
+ *  <li>{@link PropertyDef#getValang()}</li>
+ * </ul>
+ * 
+ * 
+ * @author joerg
+ *
+ */
 public class DynaNodeValidator implements Validator
 {
 
