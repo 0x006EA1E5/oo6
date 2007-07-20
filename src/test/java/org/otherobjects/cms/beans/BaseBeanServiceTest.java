@@ -9,7 +9,7 @@ import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 
-public class BaseBeanServiceTest extends BaseJcrTestCase {
+public abstract class BaseBeanServiceTest extends BaseJcrTestCase {
 
 	protected TypeService typeService;
 	protected JcrBeanService beanService;
