@@ -13,7 +13,7 @@ public class MessageResolvingTest extends AbstractSingleSpringContextTests {
 	protected String[] getConfigLocations() {
         return new String[] {
                 "file:src/test/resources/applicationContext-resources.xml",
-                "file:src/main/resources/otherobjects.resources/config/applicationContext-messages.xml",
+                "file:src/test/resources/applicationContext-messages.xml",
             };
     }
 	
@@ -22,10 +22,10 @@ public class MessageResolvingTest extends AbstractSingleSpringContextTests {
 	{
 		Errors errors = new BeanPropertyBindingResult(new DummyBean(), "dummy");
 		
-		errors.rejectValue("name", "field.valueTooLong");
-		System.out.println(getApplicationContext().getMessage(errors.getFieldError("name").getCode(), null, Locale.getDefault()));
+		errors.rejectValue("name", "field.required");
+		System.out.println(getApplicationContext().getMessage(errors.getFieldError("name").getCode(), null, Locale.GERMANY));
 		
-		assertEquals("The value you have given is too long for this field", getApplicationContext().getMessage(errors.getFieldError("name").getCode(), null, Locale.getDefault()));
+		assertEquals("Dieses Feld ist obligatorisch", getApplicationContext().getMessage(errors.getFieldError("name").getCode(), null, Locale.GERMANY));
 		
 	}
 	
