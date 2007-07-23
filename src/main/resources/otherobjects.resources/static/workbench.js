@@ -31,6 +31,10 @@ OO.Workbench = function()
 		
         init : function()
 		{
+			// Setup DWR error handler
+			dwr.engine.setErrorHandler(errorHandler);
+
+			
             // Set up workbench layout
 			layout = new Ext.BorderLayout(document.body, {
 	            north: {split:false, initialSize: 25, minSize: 60, maxSize: 60, titlebar: false, collapsible: false, animate: false},	                    
@@ -157,4 +161,12 @@ OO.Workbench = function()
     };
 }();
 
+// Configure dwr error handling
+function errorHandler(msg) {
+	Ext.Msg.alert("Oops. Something bad has happened.", "Sorry, whatever you tried to do didn't work. The workbench may be in an inconsistent state.<br/>Please refresh the page now.");
+}
+
 Ext.onReady(OO.Workbench.init, OO.Workbench);
+
+
+

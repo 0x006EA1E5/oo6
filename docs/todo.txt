@@ -20,35 +20,38 @@ and publishing with the exception of internal links. Introduction
 of new templating/block model with efficient caching.
 ==================================================================
 
-* Queries/page stats and timings
+* CGLIB in OCM: Folder/Page base objects (auto code generation)
+ + Live TypeDef manipulation (inc version numbers)
+ + Get rid of "data" node and clean up boostrap files
+* Publishing and versioning
 * Action/event/scripting framework
-* Date/number formatting tools
+ + Audit log 
+* Forms support for components and references and real time client side support
+ + Image, file and rich media libaries (external image libary support)
+ + File system DAO
+* Licensing finalised
+* Support for JDBC objects in Workbench
+* Naming consistency
+* Global search
+
+* Transactional intergity with JCR and JDBC
+* Clustering support
+ + Canoo Webtest support 
+* Queries/page stats and timings
+* Date/number formatting tools (checked)
 * Maven project archetype
 * Paging/soting in data grid, different columns for different objects?
 * Favourites
-* Global search
 * System status indicators
-* Licensing finalised
-* Folder/Page base objects (auto code generation)
-* Support for JDBC objects in Workbench
+* Method level security -- waiting for Spring Security 2.0
 * Instance level security (for Folders at least)
-* Naming consistency
-* Forms support for components and references and real time client side support
-* Live TypeDef manipulation (inc version numbers)
-* Publishing and versioning
-* Image, file and rich media libaries (external image libary support)
 * Live template manipulation
 * OO Toolbar
-* Clustering support
-* Transactional intergity with JCR and JDBC
 * Protect key folders in navigator
 * Backup and restore
-* Audit log
+
 * EXT Drag/rename clashes: see http://extjs.com/forum/archive/index.php/t-5776.html
-* Get rid of "data" node and clean up boostrap files
-* Method level security [J]
-* Canoo Webtest support
-+ Don't filter binary resources
++ Maven: Don't filter binary resources
 ? Optional textile support
 ? JS Global status/error handling and reporting
 ? Site doc to show ALL FIXME tags

@@ -110,9 +110,10 @@ OO.ListingGrid = function() {
 			ContentService.createItem(c,type, function(item) {
 				var ArticleRecord = Ext.data.Record.create(mappings);
 				var myNewRecord = new ArticleRecord(item);
-				console.log("Adding new item to grid",item);
+				console.log("Adding new item to grid",myNewRecord);
 				ds.add(myNewRecord); 
-				grid.getSelectionModel().selectLastRow();
+				// FIXME Dont highlight unless truly selected 
+				//grid.getSelectionModel().selectLastRow();
 			});
 		}
   	}
