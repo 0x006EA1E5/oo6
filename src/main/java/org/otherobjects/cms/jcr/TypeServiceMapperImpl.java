@@ -16,6 +16,8 @@
  */
 package org.otherobjects.cms.jcr;
 
+import java.io.IOException;
+
 import org.apache.jackrabbit.ocm.exception.IncorrectPersistentClassException;
 import org.apache.jackrabbit.ocm.exception.InitMapperException;
 import org.apache.jackrabbit.ocm.manager.beanconverter.impl.DefaultBeanConverterImpl;
@@ -30,12 +32,14 @@ import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
+import org.springframework.core.io.Resource;
 
 public class TypeServiceMapperImpl implements Mapper
 {
     private JcrTypeServiceImpl typeService;
 
     private MappingDescriptor mappingDescriptor;
+    private Mapper staticMapper;
 
     /**
      * No-arg constructor.
@@ -44,9 +48,10 @@ public class TypeServiceMapperImpl implements Mapper
     {
     }
 
-    public TypeServiceMapperImpl(JcrTypeServiceImpl typeService)
+    public TypeServiceMapperImpl(Resource resource, JcrTypeServiceImpl typeService) throws IOException
     {
         this.typeService = typeService;
+        this.staticMapper = new ResourceDigesterMappingImpl(resource);
         buildMapper();
     }
 
@@ -143,7 +148,13 @@ public class TypeServiceMapperImpl implements Mapper
     @SuppressWarnings("unchecked")
     public ClassDescriptor getClassDescriptorByClass(Class clazz)
     {
-        ClassDescriptor descriptor = mappingDescriptor.getClassDescriptorByName(clazz.getName());
+    	// try static mappings first
+    	ClassDescriptor descriptor = staticMapper.getClassDescriptorByClass(clazz);
+    	if(descriptor != null)
+    		return descriptor;
+    	
+    	// then dynamic mapping
+        descriptor = mappingDescriptor.getClassDescriptorByName(clazz.getName());
         if (descriptor == null)
         {
             throw new IncorrectPersistentClassException("Class of type: " + clazz.getName() + " has no descriptor.");
@@ -156,7 +167,13 @@ public class TypeServiceMapperImpl implements Mapper
     */
     public ClassDescriptor getClassDescriptorByNodeType(String jcrNodeType)
     {
-        ClassDescriptor descriptor = mappingDescriptor.getClassDescriptorByNodeType(jcrNodeType);
+    	// try static mappings first
+    	ClassDescriptor descriptor = staticMapper.getClassDescriptorByNodeType(jcrNodeType);
+    	if(descriptor != null)
+    		return descriptor;
+    	
+    	// then dynamic mapping
+        descriptor = mappingDescriptor.getClassDescriptorByNodeType(jcrNodeType);
         if (descriptor == null)
         {
             throw new IncorrectPersistentClassException("Node type: " + jcrNodeType + " has no descriptor.");
