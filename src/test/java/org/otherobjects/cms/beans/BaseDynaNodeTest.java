@@ -4,24 +4,29 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.test.BaseJcrTestCase;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 
-public abstract class BaseBeanServiceTest extends BaseJcrTestCase {
+public abstract class BaseDynaNodeTest extends BaseJcrTestCase {
 
+	public static final String TEST_TYPE_NAME = "org.otherobjects.Dyna.jcr.TestObject"; 
+	
 	protected TypeService typeService;
-	protected JcrBeanService jcrBeanService;
+	protected DynaNodeDao dynaNodeDao;
 	protected DynaNode dynaNode;
 	protected Date now;
+	
+	
 
 	@Override
 	protected void onSetUp() throws Exception {
 		super.onSetUp();
 		setupTypesService(typeService);
-		dynaNode = jcrBeanService.createCustomDynaNodeBean("org.otherobjects.Dyna.jcr.TestObject");
+		dynaNode = dynaNodeDao.create(TEST_TYPE_NAME);
 		now = new Date();
 		populateDynNode(dynaNode);
 	}
@@ -42,7 +47,7 @@ public abstract class BaseBeanServiceTest extends BaseJcrTestCase {
 	@Override
 	protected void onTearDown() throws Exception {
 		super.onTearDown();
-		typeService.unregisterType("org.otherobjects.Dyna.jcr.TestObject");
+		typeService.unregisterType(TEST_TYPE_NAME);
 	    typeService.unregisterType("org.otherobjects.Dyna.jcr.TestReferenceObject");
 	    typeService.unregisterType("org.otherobjects.Dyna.jcr.TestComponentObject");
 	    dynaNode = null;
@@ -50,7 +55,7 @@ public abstract class BaseBeanServiceTest extends BaseJcrTestCase {
 	}
 
 	protected void setupTypesService(TypeService typeService) {
-	        TypeDef td = new TypeDef("org.otherobjects.Dyna.jcr.TestObject");
+	        TypeDef td = new TypeDef(TEST_TYPE_NAME);
 	        td.addProperty(new PropertyDef("testString", "string", null, null));
 	        td.addProperty(new PropertyDef("testText", "text", null, null));
 	        td.addProperty(new PropertyDef("testDate", "date", null, null));
@@ -83,9 +88,11 @@ public abstract class BaseBeanServiceTest extends BaseJcrTestCase {
 		this.typeService = typeService;
 	}
 
-	public void setJcrBeanService(JcrBeanService jcrBeanService) {
-		this.jcrBeanService = jcrBeanService;
+	public void setDynaNodeDao(DynaNodeDao dynaNodeDao) {
+		this.dynaNodeDao = dynaNodeDao;
 	}
+
+	
 	
 	
 

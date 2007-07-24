@@ -1,7 +1,7 @@
 package org.otherobjects.cms.beans;
 
 
-public class JcrBeanServiceTest extends BaseBeanServiceTest {
+public class JcrBeanServiceTest extends BaseDynaNodeTest {
 	
 	public void testCreateCustomDynaNodeBean() throws Exception
 	{

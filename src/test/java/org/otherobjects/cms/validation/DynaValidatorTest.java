@@ -6,7 +6,7 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.otherobjects.cms.beans.BaseBeanServiceTest;
+import org.otherobjects.cms.beans.BaseDynaNodeTest;
 import org.otherobjects.cms.binding.BindServiceImpl;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
@@ -14,7 +14,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-public class DynaValidatorTest extends BaseBeanServiceTest {
+public class DynaValidatorTest extends BaseDynaNodeTest {
 
 	private String dateFormat = "dd/MM/yy";
 	Date testDate;
@@ -31,7 +31,7 @@ public class DynaValidatorTest extends BaseBeanServiceTest {
 		
 		// modify the test type to include some stuff that needs to be validated
 		
-		TypeDef typeDef = typeService.getType("org.otherobjects.Dyna.jcr.TestObject");
+		TypeDef typeDef = typeService.getType(super.TEST_TYPE_NAME);
 		PropertyDef testString = typeDef.getProperty("testString");
 		testString.setRequired(true);
 		

@@ -9,14 +9,14 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.otherobjects.cms.beans.BaseBeanServiceTest;
+import org.otherobjects.cms.beans.BaseDynaNodeTest;
 import org.otherobjects.cms.binding.BindServiceImpl;
 import org.otherobjects.cms.model.DynaNode;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-public class BindServiceImplTest extends BaseBeanServiceTest {
+public class BindServiceImplTest extends BaseDynaNodeTest {
 	
 	private String dateFormat = "dd/MM/yy";
 	Date testDate;
