@@ -14,7 +14,6 @@ import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.StringTypeConv
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.beans.JcrBeanService;
 import org.otherobjects.cms.jcr.BigDecimalTypeConverterImpl;
-import org.otherobjects.cms.model.DynaNode;
 
 public class JcrTypeServiceImpl extends AbstactTypeService
 {
@@ -48,8 +47,7 @@ public class JcrTypeServiceImpl extends AbstactTypeService
         if (t.getClassName() == null)
         {
             // Create bean class
-            DynaNode n = jcrBeanService.createCustomDynaNodeBean(t);
-            t.setClassName(n.getClass().getName());
+            t.setClassName(jcrBeanService.createCustomDynaNodeClass(t));
         }
         super.registerType(t);
     }

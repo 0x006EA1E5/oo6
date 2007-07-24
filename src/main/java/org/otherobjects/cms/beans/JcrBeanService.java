@@ -17,9 +17,7 @@ import org.springframework.util.Assert;
 
 /**
  * Service class to beanify DynaNodes. Dynamically adds bean style getters and setters for all (simple) properties
- * defined in TypeDef for a given DynaNode {@link JcrBeanService#createCustomDynaNodeBean(DynaNode)}. Can then populate these bean properties 
- * with the values contained in the JcrMapper managed data map {@link DynaNode#getData()} by calling {@link JcrBeanService#copyDynamicProperties(DynaNode, DynaNode)}.
- * And those bean properties can then be copied back to the data map by calling {@link JcrBeanService#copyBeanProperties(DynaNode, DynaNode)}
+ * defined in TypeDef for a given DynaNode {@link JcrBeanService#createCustomDynaNodeClass(DynaNode)}. 
  *  
  * @author joerg
  *
@@ -35,8 +33,15 @@ public class JcrBeanService
     {
         this.typeService = typeService;
     }
-
-    public DynaNode createCustomDynaNodeBean(TypeDef typeDef)
+    
+    /**
+     * Uses CGLIB to generate a custom DynaNode with bean style properties as defined by the given typeDef.
+     * Used for its side effect of actually generating the bytecode for this dynamic class and injecting it into the current classloader.
+     * @param typeDef - typeDef to serve as a template for the dynamic DynaNode to be created
+     * 
+     * @return String - Class name of the generated dynamic class
+     */
+    public String createCustomDynaNodeClass(TypeDef typeDef)
     {
 
         BeanGenerator beanGenerator = new BeanGenerator();
@@ -63,25 +68,9 @@ public class JcrBeanService
 
         //TODO what do we do about nested properties?
         DynaNode dynaNode = (DynaNode) beanGenerator.create();
-//        dynaNode.setOoType(type.getName());
 
         logger.info("Created bean class for {}: {}", typeDef.getName(), dynaNode.getClass().getName());
-        dynaNode.setTypeDef(typeDef);
 
-        return dynaNode;
-
+        return dynaNode.getClass().getName();
     }
-
-    public DynaNode createCustomDynaNodeBean(DynaNode persistentDynaNode)
-    {
-        String ooType = persistentDynaNode.getOoType();
-        return createCustomDynaNodeBean(typeService.getType(ooType));
-    }
-    
-    public DynaNode createCustomDynaNodeBean(String ooType)
-    {
-        return createCustomDynaNodeBean(typeService.getType(ooType));
-    }
-
-    
 }
