@@ -11,6 +11,7 @@ import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.workbench.WorkbenchItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.util.Assert;
 
 /**
@@ -23,6 +24,7 @@ import org.springframework.util.Assert;
  * <br>TODO Equals, hashCode, serialableId builders
  */
 @SuppressWarnings("unchecked")
+@Configurable("dynaNode")
 public class DynaNode implements CmsNode, WorkbenchItem
 {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -47,11 +49,10 @@ public class DynaNode implements CmsNode, WorkbenchItem
     private String ooType;
     
     private TypeDef typeDef;
+    
+    private TypeService typeService;
 
     private Map<String, Object> data = new ManagedHashMap();
-
-    //FIXME This is temporary until we figure out what to do with CGLIB and JCR OCM.
-    private static TypeService typeService;
 
     public DynaNode(TypeDef typeDef)
     {
@@ -75,7 +76,11 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     public void setOoType(String ooType)
     {
-    	this.ooType = ooType;
+    	Assert.notNull(typeService, "DynaNodes need to be auto injected with a typeService reference in order to work properly");
+            
+        TypeDef typeDef = typeService.getType(ooType);
+        setLabelProperty(typeDef.getLabelProperty());
+        this.ooType = ooType;
     }
 
     /**
@@ -277,6 +282,11 @@ public class DynaNode implements CmsNode, WorkbenchItem
 		this.typeDef = typeDef;
 		setOoType(typeDef.getName());
 		setLabelProperty(typeDef.getLabelProperty());
+	}
+
+	public void setTypeService(TypeService typeService) {
+		this.typeService = typeService;
+		
 	}
     
     

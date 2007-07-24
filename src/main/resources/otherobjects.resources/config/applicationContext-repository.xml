@@ -65,7 +65,12 @@
 	<bean name="jcrBeanService" class="org.otherobjects.cms.beans.JcrBeanService">
 		<property name="typeService" ref="typeService" />
 	</bean>
-
+	
+	<!-- Domain objects -->
+	<bean name="dynaNode" scope="prototype">
+		<property name="typeService" ref="typeService" />
+	</bean>
+	
 	<!-- DAOs -->
 	<bean id="dynaNodeDao" parent="baseTransactionProxy">
 		<property name="target">
