@@ -27,7 +27,6 @@ import org.apache.jackrabbit.ocm.mapper.model.BeanDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.ClassDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.FieldDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.MappingDescriptor;
-import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;

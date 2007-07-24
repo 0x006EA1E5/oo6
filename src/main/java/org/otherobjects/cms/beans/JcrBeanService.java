@@ -5,7 +5,6 @@ import java.util.Map;
 
 import net.sf.cglib.beans.BeanGenerator;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.types.JcrTypeServiceImpl;
@@ -37,7 +36,7 @@ public class JcrBeanService
         this.typeService = typeService;
     }
 
-    public DynaNode createCustomDynaNodeBean(TypeDef type)
+    public DynaNode createCustomDynaNodeBean(TypeDef typeDef)
     {
 
         BeanGenerator beanGenerator = new BeanGenerator();
@@ -45,7 +44,7 @@ public class JcrBeanService
 
         JcrTypeServiceImpl jcrTypeService = (JcrTypeServiceImpl) typeService;
         Map<String, Class<?>> jcrClassMappings = jcrTypeService.getJcrClassMappings();
-        for (Iterator<PropertyDef> it = type.getProperties().iterator(); it.hasNext();)
+        for (Iterator<PropertyDef> it = typeDef.getProperties().iterator(); it.hasNext();)
         {
             PropertyDef propertyDef = it.next();
             Assert.doesNotContain(propertyDef.getName(), ".", "There is currently no mechanism to create nested properties");
@@ -53,7 +52,7 @@ public class JcrBeanService
             // FIXME Move this somewhere better
             if (propertyDef.getType().equals("reference") || propertyDef.getType().equals("component"))
             {
-                throw new OtherObjectsException("No support for reference or component proerties at the moment: " + type.getName());
+                throw new OtherObjectsException("No support for reference or component proerties at the moment: " + typeDef.getName());
 
                 //TypeDef type2 = typeService.getType(propertyDef.getRelatedType());
                 //beanGenerator.addProperty(propertyDef.getName(), Class.forName(type2.getClassName()));
@@ -66,7 +65,8 @@ public class JcrBeanService
         DynaNode dynaNode = (DynaNode) beanGenerator.create();
 //        dynaNode.setOoType(type.getName());
 
-        logger.info("Created bean class for {}: {}", type.getName(), dynaNode.getClass().getName());
+        logger.info("Created bean class for {}: {}", typeDef.getName(), dynaNode.getClass().getName());
+        dynaNode.setTypeDef(typeDef);
 
         return dynaNode;
 
@@ -77,41 +77,11 @@ public class JcrBeanService
         String ooType = persistentDynaNode.getOoType();
         return createCustomDynaNodeBean(typeService.getType(ooType));
     }
-
-    public void copyBeanProperties(DynaNode fromNode, DynaNode toNode)
+    
+    public DynaNode createCustomDynaNodeBean(String ooType)
     {
-        TypeDef type = typeService.getType(toNode.getOoType());
-        for (Iterator<PropertyDef> it = type.getProperties().iterator(); it.hasNext();)
-        {
-            PropertyDef propertyDef = it.next();
-
-            try
-            {
-                toNode.set(propertyDef.getName(), PropertyUtils.getNestedProperty(fromNode, propertyDef.getName()));
-            }
-            catch (Exception e)
-            {
-                logger.warn("Couldn't copy property " + propertyDef.getName(), e);
-            }
-        }
+        return createCustomDynaNodeBean(typeService.getType(ooType));
     }
 
-    public void copyDynamicProperties(DynaNode fromNode, DynaNode toBean)
-    {
-        for (Iterator<String> it = fromNode.getData().keySet().iterator(); it.hasNext();)
-        {
-            String property = it.next();
-            try
-            {
-                PropertyUtils.setNestedProperty(toBean, property, fromNode.get(property));
-            }
-            catch (Exception e)
-            {
-                logger.warn("Couldn't copy property " + property, e);
-            }
-        }
-        toBean.setId(fromNode.getId());
-        toBean.setPath(fromNode.getPath());
-        toBean.setCode(fromNode.getCode());
-    }
+    
 }

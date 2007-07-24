@@ -6,10 +6,11 @@ import java.util.Map;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.ManagedHashMap;
 import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.workbench.WorkbenchItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 /**
@@ -24,6 +25,8 @@ import org.springframework.util.Assert;
 @SuppressWarnings("unchecked")
 public class DynaNode implements CmsNode, WorkbenchItem
 {
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	
     /** GUID */
     private String id;
 
@@ -42,6 +45,8 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     /** The defining type for this node */
     private String ooType;
+    
+    private TypeDef typeDef;
 
     private Map<String, Object> data = new ManagedHashMap();
 
@@ -50,7 +55,7 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     public DynaNode(TypeDef typeDef)
     {
-        setOoType(typeDef.getName());
+    	setTypeDef(typeDef);
     }
 
     public DynaNode()
@@ -70,12 +75,7 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     public void setOoType(String ooType)
     {
-        if (typeService == null)
-            typeService = (TypeService) SingletonBeanLocator.getBean("typeService");
-        TypeDef typeDef = typeService.getType(ooType);
-
-        setLabelProperty(typeDef.getLabelProperty());
-        this.ooType = ooType;
+    	this.ooType = ooType;
     }
 
     /**
@@ -216,8 +216,14 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     public void setLabel(String label)
     {
-        //TODO What is labelProperty is missing
-        set(labelProperty, label);
+    	try{
+    		PropertyUtils.setNestedProperty(this, getLabelProperty(), label);
+    	}
+    	catch(Exception e)
+    	{
+    		if(logger.isDebugEnabled())
+    			logger.debug("Couldn't set label property", e);
+    	}
     }
 
     public void set(String key, Object value)
@@ -262,4 +268,16 @@ public class DynaNode implements CmsNode, WorkbenchItem
     {
         this.labelProperty = labelProperty;
     }
+
+	public TypeDef getTypeDef() {
+		return typeDef;
+	}
+
+	public void setTypeDef(TypeDef typeDef) {
+		this.typeDef = typeDef;
+		setOoType(typeDef.getName());
+		setLabelProperty(typeDef.getLabelProperty());
+	}
+    
+    
 }
