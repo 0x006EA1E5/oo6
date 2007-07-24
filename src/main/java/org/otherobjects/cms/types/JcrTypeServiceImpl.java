@@ -12,7 +12,9 @@ import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.Date2LongTypeC
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.LongTypeConverterImpl;
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.StringTypeConverterImpl;
 import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.cms.beans.JcrBeanService;
 import org.otherobjects.cms.jcr.BigDecimalTypeConverterImpl;
+import org.otherobjects.cms.model.DynaNode;
 
 public class JcrTypeServiceImpl extends AbstactTypeService
 {
@@ -20,6 +22,7 @@ public class JcrTypeServiceImpl extends AbstactTypeService
     private Map<String, Class<?>> jcrClassMappings;
 
     private TypeDefDao typeDefDao;
+    private JcrBeanService jcrBeanService;
 
     public void init()
     {
@@ -37,6 +40,18 @@ public class JcrTypeServiceImpl extends AbstactTypeService
         {
             registerType(t);
         }
+    }
+
+    @Override
+    public void registerType(TypeDef t)
+    {
+        if (t.getClassName() == null)
+        {
+            // Create bean class
+            DynaNode n = jcrBeanService.createCustomDynaNodeBean(t);
+            t.setClassName(n.getClass().getName());
+        }
+        super.registerType(t);
     }
 
     public Object getJcrConverter(String type)
@@ -117,5 +132,10 @@ public class JcrTypeServiceImpl extends AbstactTypeService
     public void setTypeDefDao(TypeDefDao typeDefDao)
     {
         this.typeDefDao = typeDefDao;
+    }
+
+    public void setJcrBeanService(JcrBeanService jcrBeanService)
+    {
+        this.jcrBeanService = jcrBeanService;
     }
 }

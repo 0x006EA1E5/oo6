@@ -3,6 +3,7 @@ package org.otherobjects.cms.dao;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.jcr.GenericJcrDaoJackrabbit;
 import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.validation.DynaNodeValidator;
 import org.springframework.util.Assert;
@@ -22,7 +23,16 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
     public DynaNode create(String typeName)
     {
         Assert.notNull(typeName, "typeName must not be null.");
-        return new DynaNode(typeService.getType(typeName));
+        TypeDef type = typeService.getType(typeName);
+        try
+        {
+            return (DynaNode) Class.forName(type.getClassName()).newInstance();
+        }
+        catch (Exception e)
+        {
+            //TODO Better exception?
+            throw new OtherObjectsException("Could not create new instance of type: " + typeName, e);
+        }
     }
 
     public TypeService getTypeService()
@@ -35,23 +45,24 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
         this.typeService = typeService;
     }
 
-	@Override
-	public DynaNode save(DynaNode object, boolean validate) {
-		if(validate)
-		{
-			Errors errors = new BeanPropertyBindingResult(object, "target");
-			// FIXME M2 Re-enable validation after dynaNodes are true beans
-			//dynaNodeValidator.validate(object, errors);
-			if(errors.getErrorCount() > 0)
-				throw new OtherObjectsException("DynaNode " + object.getLabel() + "couldn't be validated and therefore didn't get saved");
-		}
-		
-		return super.save(object, false);
-	}
+    @Override
+    public DynaNode save(DynaNode object, boolean validate)
+    {
+        if (validate)
+        {
+            Errors errors = new BeanPropertyBindingResult(object, "target");
+            // FIXME M2 Re-enable validation after dynaNodes are true beans
+            //dynaNodeValidator.validate(object, errors);
+            if (errors.getErrorCount() > 0)
+                throw new OtherObjectsException("DynaNode " + object.getLabel() + "couldn't be validated and therefore didn't get saved");
+        }
 
-	public void setDynaNodeValidator(DynaNodeValidator dynaNodeValidator) {
-		this.dynaNodeValidator = dynaNodeValidator;
-	}
-    
-    
+        return super.save(object, false);
+    }
+
+    public void setDynaNodeValidator(DynaNodeValidator dynaNodeValidator)
+    {
+        this.dynaNodeValidator = dynaNodeValidator;
+    }
+
 }

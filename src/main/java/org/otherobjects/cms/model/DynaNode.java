@@ -1,5 +1,6 @@
 package org.otherobjects.cms.model;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -66,14 +67,14 @@ public class DynaNode implements CmsNode, WorkbenchItem
     {
         setOoType(type);
     }
-    
+
     public void setOoType(String ooType)
     {
-        if (typeService == null)
-            typeService = (TypeService) SingletonBeanLocator.getBean("typeService");
-        TypeDef typeDef = typeService.getType(ooType);
-        
-        setLabelProperty(typeDef.getLabelProperty());
+        //        if (typeService == null)
+        //            typeService = (TypeService) SingletonBeanLocator.getBean("typeService");
+        //        TypeDef typeDef = typeService.getType(ooType);
+        //        
+        //        setLabelProperty(typeDef.getLabelProperty());
         this.ooType = ooType;
     }
 
@@ -99,12 +100,12 @@ public class DynaNode implements CmsNode, WorkbenchItem
      */
     public void setJcrPath(String jcrPath)
     {
-//        if (jcrPath == null)
-//        {
-//            setCode(null);
-//            setPath(null);
-//            return;
-//        }
+        //        if (jcrPath == null)
+        //        {
+        //            setCode(null);
+        //            setPath(null);
+        //            return;
+        //        }
         Assert.notNull(jcrPath, "jcrPath must not be null");
 
         Assert.isTrue(jcrPath.lastIndexOf("/") >= 0, "jcrPath must contain at least one forward slash");
@@ -117,10 +118,31 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     public Object get(String name)
     {
-        if (name != null && name.indexOf('.') > 0)
-            return getProperty(name);
-        else
-            return getData().get(name);
+        try
+        {
+            return PropertyUtils.getProperty(this, name);
+        }
+        catch (IllegalAccessException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (InvocationTargetException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (NoSuchMethodException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+
+        //        if (name != null && name.indexOf('.') > 0)
+        //            return getProperty(name);
+        //        else
+        //            return getData().get(name);
     }
 
     public Object getProperty(String name)
@@ -165,7 +187,7 @@ public class DynaNode implements CmsNode, WorkbenchItem
     public void setPath(String path)
     {
         Assert.notNull(path, "path may not be null.");
-// FIXME       Assert.doesNotContain(path, ".", "path may not contain a period.");
+        // FIXME       Assert.doesNotContain(path, ".", "path may not contain a period.");
         if (!path.endsWith("/"))
             path += "/";
         this.path = path;
@@ -220,7 +242,7 @@ public class DynaNode implements CmsNode, WorkbenchItem
     public String getLinkPath()
     {
         String linkPath = getJcrPath().replaceAll("/site/", "/go/");
-        if(!linkPath.contains(".") && !linkPath.endsWith("/"))
+        if (!linkPath.contains(".") && !linkPath.endsWith("/"))
             linkPath += "/";
         return linkPath;
     }

@@ -39,7 +39,6 @@ import org.springframework.util.Assert;
 public class TypeServiceMapperImpl implements Mapper, InitializingBean
 {
     private TypeService typeService;
-
     private MappingDescriptor mappingDescriptor;
     private Mapper staticMapper;
 
@@ -80,10 +79,7 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
     protected ClassDescriptor createClassDescriptor(TypeDef typeDef)
     {
         ClassDescriptor cd = new ClassDescriptor();
-        if (typeDef.getClassName() != null)
-            cd.setClassName(typeDef.getName());
-        else
-            cd.setClassName(CmsNode.class.getName());
+        cd.setClassName(typeDef.getClassName());
         cd.setJcrNodeType("oo:node");
 
         // Add standard properties
@@ -104,10 +100,10 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         fd3.setJcrName("label");
         cd.addFieldDescriptor(fd3);
 
-//        FieldDescriptor fd4 = new FieldDescriptor();
-//        fd4.setFieldName("description");
-//        fd4.setJcrName("description");
-//        cd.addFieldDescriptor(fd4);
+        FieldDescriptor fd4 = new FieldDescriptor();
+        fd4.setFieldName("ooType");
+        fd4.setJcrName("ooType");
+        cd.addFieldDescriptor(fd4);
 
         // Add custom properties
         for (PropertyDef propDef : typeDef.getProperties())
@@ -132,9 +128,9 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
             else
             {
                 FieldDescriptor f = new FieldDescriptor();
-                f.setFieldName("data." + propDef.getName());
+                f.setFieldName(propDef.getName());
                 f.setJcrName(propDef.getName());
-                f.setConverter(((JcrTypeServiceImpl)typeService).getJcrConverter(propertyType).getClass().getName());
+                f.setConverter(((JcrTypeServiceImpl) typeService).getJcrConverter(propertyType).getClass().getName());
                 cd.addFieldDescriptor(f);
             }
         }
@@ -148,13 +144,17 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
     @SuppressWarnings("unchecked")
     public ClassDescriptor getClassDescriptorByClass(Class clazz)
     {
-    	// try static mappings first
-    	ClassDescriptor descriptor = staticMapper.getClassDescriptorByClass(clazz);
-    	if(descriptor != null)
-    		return descriptor;
-    	
-    	// then dynamic mapping
-        descriptor = mappingDescriptor.getClassDescriptorByName(clazz.getName());
+        // try static mappings first
+        try
+        {
+            return staticMapper.getClassDescriptorByClass(clazz);
+        }
+        catch (RuntimeException e)
+        {
+        }
+
+        // then dynamic mapping
+        ClassDescriptor descriptor = mappingDescriptor.getClassDescriptorByName(clazz.getName());
         if (descriptor == null)
         {
             throw new IncorrectPersistentClassException("Class of type: " + clazz.getName() + " has no descriptor.");
@@ -167,12 +167,12 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
     */
     public ClassDescriptor getClassDescriptorByNodeType(String jcrNodeType)
     {
-    	// try static mappings first
-    	ClassDescriptor descriptor = staticMapper.getClassDescriptorByNodeType(jcrNodeType);
-    	if(descriptor != null)
-    		return descriptor;
-    	
-    	// then dynamic mapping
+        // try static mappings first
+        ClassDescriptor descriptor = staticMapper.getClassDescriptorByNodeType(jcrNodeType);
+        if (descriptor != null)
+            return descriptor;
+
+        // then dynamic mapping
         descriptor = mappingDescriptor.getClassDescriptorByNodeType(jcrNodeType);
         if (descriptor == null)
         {
@@ -191,9 +191,9 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         this.typeService = typeService;
     }
 
-	public void afterPropertiesSet() throws Exception {
-		Assert.isInstanceOf(JcrTypeServiceImpl.class, typeService);
-		buildMapper();
-	}
-
+    public void afterPropertiesSet() throws Exception
+    {
+        Assert.isInstanceOf(JcrTypeServiceImpl.class, typeService);
+        buildMapper();
+    }
 }

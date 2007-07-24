@@ -6,6 +6,7 @@
 
 <jackrabbit-ocm>
 
+<!-- 
 	<class-descriptor className="org.otherobjects.cms.model.DynaNode" jcrNodeType="oo:node">
 		<field-descriptor fieldName="id" uuid="true" />
 		<field-descriptor fieldName="jcrPath" path="true" />
@@ -15,7 +16,7 @@
 			collectionClassName="org.apache.jackrabbit.ocm.persistence.collectionconverter.impl.ManagedHashMap"
 			collectionConverter="org.otherobjects.cms.jcr.MapCollectionConverterImpl" />
 	</class-descriptor>
-
+ -->
 	<class-descriptor className="org.otherobjects.cms.types.TypeDef" jcrNodeType="oo:node">
 		<field-descriptor fieldName="id" uuid="true" />
 		<field-descriptor fieldName="jcrPath" path="true" />

@@ -6,6 +6,7 @@ import java.util.Map;
 import net.sf.cglib.beans.BeanGenerator;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.PropertyDef;
@@ -24,24 +25,23 @@ import org.springframework.util.Assert;
  * @author joerg
  *
  */
-public class JcrBeanService {
-	
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
-	
-	private TypeService typeService;
+public class JcrBeanService
+{
 
-	public void setTypeService(TypeService typeService) {
-		this.typeService = typeService;
-	}
-	
-	public DynaNode createCustomDynaNodeBean(String ooType)
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
+
+    private TypeService typeService;
+
+    public void setTypeService(TypeService typeService)
     {
-		TypeDef type = typeService.getType(ooType);
-		
+        this.typeService = typeService;
+    }
+
+    public DynaNode createCustomDynaNodeBean(TypeDef type)
+    {
+
         BeanGenerator beanGenerator = new BeanGenerator();
         beanGenerator.setSuperclass(DynaNode.class);
-
-        Assert.isInstanceOf(JcrTypeServiceImpl.class, typeService, "Only works if injected typeService is a JcrTypeServiceImpl");
 
         JcrTypeServiceImpl jcrTypeService = (JcrTypeServiceImpl) typeService;
         Map<String, Class<?>> jcrClassMappings = jcrTypeService.getJcrClassMappings();
@@ -49,23 +49,38 @@ public class JcrBeanService {
         {
             PropertyDef propertyDef = it.next();
             Assert.doesNotContain(propertyDef.getName(), ".", "There is currently no mechanism to create nested properties");
-            beanGenerator.addProperty(propertyDef.getName(), jcrClassMappings.get(propertyDef.getType()));
+
+            // FIXME Move this somewhere better
+            if (propertyDef.getType().equals("reference") || propertyDef.getType().equals("component"))
+            {
+                throw new OtherObjectsException("No support for reference or component proerties at the moment: " + type.getName());
+
+                //TypeDef type2 = typeService.getType(propertyDef.getRelatedType());
+                //beanGenerator.addProperty(propertyDef.getName(), Class.forName(type2.getClassName()));
+            }
+            else
+                beanGenerator.addProperty(propertyDef.getName(), jcrClassMappings.get(propertyDef.getType()));
         }
+
         //TODO what do we do about nested properties?
         DynaNode dynaNode = (DynaNode) beanGenerator.create();
         dynaNode.setOoType(type.getName());
 
+        logger.info("Created bean class for {}: {}", type.getName(), dynaNode.getClass().getName());
+
         return dynaNode;
-	}
-	
-	public DynaNode createCustomDynaNodeBean(DynaNode persistentDynaNode)
-    {
-		return createCustomDynaNodeBean(persistentDynaNode.getOoType());
+
     }
-	
-	public void copyBeanProperties(DynaNode fromNode, DynaNode toNode)
+
+    public DynaNode createCustomDynaNodeBean(DynaNode persistentDynaNode)
     {
-		TypeDef type = typeService.getType(toNode.getOoType());
+        String ooType = persistentDynaNode.getOoType();
+        return createCustomDynaNodeBean(typeService.getType(ooType));
+    }
+
+    public void copyBeanProperties(DynaNode fromNode, DynaNode toNode)
+    {
+        TypeDef type = typeService.getType(toNode.getOoType());
         for (Iterator<PropertyDef> it = type.getProperties().iterator(); it.hasNext();)
         {
             PropertyDef propertyDef = it.next();

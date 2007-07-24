@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd">
 
 	<!-- Repository -->
@@ -30,7 +29,7 @@
 	<!-- Mapping -->
 	<bean id="jcrMappingDescriptor" class="org.otherobjects.cms.jcr.TypeServiceMapperImpl">
 		<constructor-arg index="0" value="classpath:otherobjects.resources/config/jcr-mapping.xml" />
-		<property name="typeService" ref="typeService"></property>
+		<property name="typeService" ref="typeService" />
 	</bean>
 
 	<bean id="jcrMappingTemplate" class="org.apache.jackrabbit.ocm.spring.JcrMappingTemplate">
@@ -44,8 +43,7 @@
 		<property name="sessionFactory" ref="jcrSessionFactory" />
 	</bean>
 
-	<bean id="baseTransactionProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
-		abstract="true">
+	<bean id="baseTransactionProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" abstract="true">
 		<property name="transactionManager" ref="jcrTransactionManager" />
 		<property name="transactionAttributes">
 			<props>
@@ -61,6 +59,11 @@
 	<!-- Types service -->
 	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl" init-method="init">
 		<property name="typeDefDao" ref="typeDefDao" />
+		<property name="jcrBeanService" ref="jcrBeanService" />
+	</bean>
+
+	<bean name="jcrBeanService" class="org.otherobjects.cms.beans.JcrBeanService">
+		<property name="typeService" ref="typeService" />
 	</bean>
 
 	<!-- DAOs -->
