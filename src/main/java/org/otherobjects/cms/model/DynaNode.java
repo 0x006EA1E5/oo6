@@ -70,11 +70,11 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     public void setOoType(String ooType)
     {
-        //        if (typeService == null)
-        //            typeService = (TypeService) SingletonBeanLocator.getBean("typeService");
-        //        TypeDef typeDef = typeService.getType(ooType);
-        //        
-        //        setLabelProperty(typeDef.getLabelProperty());
+        if (typeService == null)
+            typeService = (TypeService) SingletonBeanLocator.getBean("typeService");
+        TypeDef typeDef = typeService.getType(ooType);
+
+        setLabelProperty(typeDef.getLabelProperty());
         this.ooType = ooType;
     }
 
@@ -149,8 +149,7 @@ public class DynaNode implements CmsNode, WorkbenchItem
     {
         try
         {
-            // Property values are stored in the data map...
-            return PropertyUtils.getNestedProperty(getData(), name.replaceAll("\\.", "\\.data\\."));
+            return PropertyUtils.getNestedProperty(getData(), name);
         }
         catch (Exception e)
         {
@@ -160,7 +159,14 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     public void set(String name, String value)
     {
-        getData().put(name, value);
+        try
+        {
+            PropertyUtils.setNestedProperty(getData(), name, value);
+        }
+        catch (Exception e)
+        {
+            throw new OtherObjectsException("Could not fetch property value.", e);
+        }
     }
 
     @Override

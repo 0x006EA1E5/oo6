@@ -64,7 +64,7 @@ public class JcrBeanService
 
         //TODO what do we do about nested properties?
         DynaNode dynaNode = (DynaNode) beanGenerator.create();
-        dynaNode.setOoType(type.getName());
+//        dynaNode.setOoType(type.getName());
 
         logger.info("Created bean class for {}: {}", type.getName(), dynaNode.getClass().getName());
 
