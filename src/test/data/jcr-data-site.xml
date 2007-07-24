@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:rep="internal" xmlns:oo="http://www.otherobjects.org/system/oo" xmlns:ocm="http://jackrabbit.apache.org/ocm"
-	xmlns:sv="http://www.jcp.org/jcr/sv/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode" ooType="Folder"
-	jcr:uuid="ed587d28-eee9-4c6d-8887-a1b5332ca262">
+	xmlns:sv="http://www.jcp.org/jcr/sv/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode$$BeanGeneratorByCGLIB$$ee901eb1"
+	ooType="Folder" jcr:uuid="ed587d28-eee9-4c6d-8887-a1b5332ca262" label="Site">
 
 	<index.html jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode$$BeanGeneratorByCGLIB$$ee901eb1" ooType="Article" title="Congratulations!" content="Content" />
 
-	<about jcr:uuid="756ec0e7-300c-4d41-b9b6-6a2ccf823675" jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode$$BeanGeneratorByCGLIB$$f96ef46e" ooType="Folder" label="About us">
-		<index.html jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode$$BeanGeneratorByCGLIB$$ee901eb1" ooType="Article" title="About us" content="&lt;p&gt;All about content here&lt;/p&gt;" />
+	<about jcr:uuid="756ec0e7-300c-4d41-b9b6-6a2ccf823675" jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode$$BeanGeneratorByCGLIB$$f96ef46e" ooType="Folder"
+		label="About us">
+		<index.html jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode$$BeanGeneratorByCGLIB$$ee901eb1" ooType="Article" title="About us"
+			content="&lt;p&gt;All about content here&lt;/p&gt;" />
 	</about>
 
 	<contact jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode$$BeanGeneratorByCGLIB$$f96ef46e" ooType="Folder" label="Contact us">
-		<index.html jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode$$BeanGeneratorByCGLIB$$ee901eb1" ooType="Article" title="Contact us" content="&lt;p&gt;All contact info here&lt;/p&gt;" />
+		<index.html jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode$$BeanGeneratorByCGLIB$$ee901eb1" ooType="Article" title="Contact us"
+			content="&lt;p&gt;All contact info here&lt;/p&gt;" />
 	</contact>
 
 	<test jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.DynaNode$$BeanGeneratorByCGLIB$$f96ef46e" ooType="Folder" label="Test">
