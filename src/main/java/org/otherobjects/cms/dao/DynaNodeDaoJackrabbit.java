@@ -26,7 +26,9 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
         TypeDef type = typeService.getType(typeName);
         try
         {
-            return (DynaNode) Class.forName(type.getClassName()).newInstance();
+            DynaNode n = (DynaNode) Class.forName(type.getClassName()).newInstance();
+            n.setTypeDef(type);
+            return n;
         }
         catch (Exception e)
         {
