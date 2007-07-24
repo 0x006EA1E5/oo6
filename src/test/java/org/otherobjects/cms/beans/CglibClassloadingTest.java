@@ -1,14 +1,16 @@
 package org.otherobjects.cms.beans;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
+import junit.framework.TestCase;
 import net.sf.cglib.beans.BeanGenerator;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.model.DynaNode;
-
-import junit.framework.TestCase;
 
 public class CglibClassloadingTest extends TestCase {
 	
@@ -39,6 +41,37 @@ public class CglibClassloadingTest extends TestCase {
 			fail();
 		}
 		
+		
+		InputStream in = getClass().getClassLoader().getResourceAsStream("/" + genClassName);
+		
+		System.out.println(in);
+		
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		
+        try
+        {
+            byte buffer[] = new byte[2048];
+            int len = buffer.length;
+            while (true)
+            {
+                len = in.read(buffer);
+                if (len == -1)
+                    break;
+                out.write(buffer, 0, len);
+            }
+            out.flush();
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        finally
+        {
+//            if (in != null)
+//                in.close();
+        }
+        
+        System.out.println(out.toByteArray());
 	
 	}
 	

@@ -5,9 +5,9 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.beans.BaseBeanServiceTest;
 import org.otherobjects.cms.binding.BindServiceImpl;
-import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -47,16 +47,12 @@ public class DynaValidatorTest extends BaseBeanServiceTest {
 	
 	public void testValidate() throws Exception
 	{
-		DynaNode dynaNodeBean = beanService.createCustomDynaNodeBean(dynaNode);
-		dynaNode.set("testString", null); //  nullify testString field to get the required validation
-		beanService.copyDynamicProperties(dynaNode, dynaNodeBean);
+		PropertyUtils.setSimpleProperty(dynaNode, "testString", null);
 		
-		
-		
-		BindingResult errors = bindService.bind(dynaNodeBean, getRequest());
+		BindingResult errors = bindService.bind(dynaNode, getRequest());
 		assertTrue(errors.getErrorCount() == 0);
 		
-		validator.validate(dynaNodeBean, errors);
+		validator.validate(dynaNode, errors);
 		
 		System.out.println(errors.getErrorCount());
 		

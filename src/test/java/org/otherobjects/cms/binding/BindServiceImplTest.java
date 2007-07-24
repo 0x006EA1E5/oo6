@@ -32,27 +32,23 @@ public class BindServiceImplTest extends BaseBeanServiceTest {
 
 	public void testBindValues() throws Exception
 	{
-		DynaNode dynaNodeBean = beanService.createCustomDynaNodeBean(dynaNode);
-		beanService.copyDynamicProperties(dynaNode, dynaNodeBean);
-		
-		BindingResult errors = bindService.bind(dynaNodeBean, getRequest());
+				
+		BindingResult errors = bindService.bind(dynaNode, getRequest());
 		assertTrue(errors.getErrorCount() == 0);
 		
-		assertEquals("testString1", PropertyUtils.getNestedProperty(dynaNodeBean, "testString"));
-		assertEquals("testText1", PropertyUtils.getNestedProperty(dynaNodeBean, "testText"));
-		assertEquals(testDate, PropertyUtils.getNestedProperty(dynaNodeBean, "testDate"));
-		assertEquals(testDate, PropertyUtils.getNestedProperty(dynaNodeBean, "testTime"));
-		assertEquals(testDate, PropertyUtils.getNestedProperty(dynaNodeBean, "testTimestamp"));
-		assertEquals(new Long(7), PropertyUtils.getNestedProperty(dynaNodeBean, "testNumber"));
-		assertEquals(new BigDecimal(2.7, new MathContext(2, RoundingMode.HALF_UP)), PropertyUtils.getNestedProperty(dynaNodeBean, "testDecimal"));
-		assertEquals(Boolean.FALSE, PropertyUtils.getNestedProperty(dynaNodeBean, "testBoolean"));
+		assertEquals("testString1", PropertyUtils.getNestedProperty(dynaNode, "testString"));
+		assertEquals("testText1", PropertyUtils.getNestedProperty(dynaNode, "testText"));
+		assertEquals(testDate, PropertyUtils.getNestedProperty(dynaNode, "testDate"));
+		assertEquals(testDate, PropertyUtils.getNestedProperty(dynaNode, "testTime"));
+		assertEquals(testDate, PropertyUtils.getNestedProperty(dynaNode, "testTimestamp"));
+		assertEquals(new Long(7), PropertyUtils.getNestedProperty(dynaNode, "testNumber"));
+		assertEquals(new BigDecimal(2.7, new MathContext(2, RoundingMode.HALF_UP)), PropertyUtils.getNestedProperty(dynaNode, "testDecimal"));
+		assertEquals(Boolean.FALSE, PropertyUtils.getNestedProperty(dynaNode, "testBoolean"));
 		
 	}
 	
 	public void testBindError()
 	{
-		DynaNode dynaNodeBean = beanService.createCustomDynaNodeBean(dynaNode);
-		beanService.copyDynamicProperties(dynaNode, dynaNodeBean);
 		
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.addParameter("testNumber", "abc"); // the wrong one
@@ -65,7 +61,7 @@ public class BindServiceImplTest extends BaseBeanServiceTest {
 		request.addParameter("testDecimal", "2.7");
 		request.addParameter("testBoolean", "false");
 		
-		BindingResult errors = bindService.bind(dynaNodeBean, request);
+		BindingResult errors = bindService.bind(dynaNode, request);
 		
 		assertTrue(errors.getErrorCount() == 1);
 		

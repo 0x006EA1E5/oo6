@@ -3,6 +3,7 @@ package org.otherobjects.cms.beans;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.test.BaseJcrTestCase;
 import org.otherobjects.cms.types.PropertyDef;
@@ -12,7 +13,7 @@ import org.otherobjects.cms.types.TypeService;
 public abstract class BaseBeanServiceTest extends BaseJcrTestCase {
 
 	protected TypeService typeService;
-	protected JcrBeanService beanService;
+	protected JcrBeanService jcrBeanService;
 	protected DynaNode dynaNode;
 	protected Date now;
 
@@ -20,22 +21,20 @@ public abstract class BaseBeanServiceTest extends BaseJcrTestCase {
 	protected void onSetUp() throws Exception {
 		super.onSetUp();
 		setupTypesService(typeService);
-		beanService = new JcrBeanService();
-		beanService.setTypeService(typeService);
-		dynaNode = new DynaNode(typeService.getType("org.otherobjects.Dyna.jcr.TestObject"));
+		dynaNode = jcrBeanService.createCustomDynaNodeBean("org.otherobjects.Dyna.jcr.TestObject");
 		now = new Date();
 		populateDynNode(dynaNode);
 	}
 
-	protected void populateDynNode(DynaNode dynaNode2) {
-		dynaNode.set("testString", "testString");
-		dynaNode.set("testText", "testText");
-		dynaNode.set("testDate", now);
-		dynaNode.set("testTime", now);
-		dynaNode.set("testTimestamp", now);
-		dynaNode.set("testNumber", new Long(1));
-		dynaNode.set("testDecimal", new BigDecimal(1.0));
-		dynaNode.set("testBoolean", Boolean.FALSE);
+	protected void populateDynNode(DynaNode dynaNode) throws Exception {
+		PropertyUtils.setNestedProperty(dynaNode,"testString", "testString");
+		PropertyUtils.setNestedProperty(dynaNode,"testText", "testText");
+		PropertyUtils.setNestedProperty(dynaNode,"testDate", now);
+		PropertyUtils.setNestedProperty(dynaNode,"testTime", now);
+		PropertyUtils.setNestedProperty(dynaNode,"testTimestamp", now);
+		PropertyUtils.setNestedProperty(dynaNode,"testNumber", new Long(1));
+		PropertyUtils.setNestedProperty(dynaNode,"testDecimal", new BigDecimal(1.0));
+		PropertyUtils.setNestedProperty(dynaNode,"testBoolean", Boolean.FALSE);
 		dynaNode.setPath("/test");
 		dynaNode.setCode("testNode");
 	}
@@ -83,5 +82,11 @@ public abstract class BaseBeanServiceTest extends BaseJcrTestCase {
 	public void setTypeService(TypeService typeService) {
 		this.typeService = typeService;
 	}
+
+	public void setJcrBeanService(JcrBeanService jcrBeanService) {
+		this.jcrBeanService = jcrBeanService;
+	}
+	
+	
 
 }
