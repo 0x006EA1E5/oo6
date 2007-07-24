@@ -32,11 +32,13 @@ import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
+import org.springframework.util.Assert;
 
-public class TypeServiceMapperImpl implements Mapper
+public class TypeServiceMapperImpl implements Mapper, InitializingBean
 {
-    private JcrTypeServiceImpl typeService;
+    private TypeService typeService;
 
     private MappingDescriptor mappingDescriptor;
     private Mapper staticMapper;
@@ -48,11 +50,9 @@ public class TypeServiceMapperImpl implements Mapper
     {
     }
 
-    public TypeServiceMapperImpl(Resource resource, JcrTypeServiceImpl typeService) throws IOException
+    public TypeServiceMapperImpl(Resource resource) throws IOException
     {
-        this.typeService = typeService;
         this.staticMapper = new ResourceDigesterMappingImpl(resource);
-        buildMapper();
     }
 
     protected Mapper buildMapper()
@@ -134,7 +134,7 @@ public class TypeServiceMapperImpl implements Mapper
                 FieldDescriptor f = new FieldDescriptor();
                 f.setFieldName("data." + propDef.getName());
                 f.setJcrName(propDef.getName());
-                f.setConverter(typeService.getJcrConverter(propertyType).getClass().getName());
+                f.setConverter(((JcrTypeServiceImpl)typeService).getJcrConverter(propertyType).getClass().getName());
                 cd.addFieldDescriptor(f);
             }
         }
@@ -186,9 +186,14 @@ public class TypeServiceMapperImpl implements Mapper
         return typeService;
     }
 
-    public void setTypeService(JcrTypeServiceImpl typeService)
+    public void setTypeService(TypeService typeService)
     {
         this.typeService = typeService;
     }
+
+	public void afterPropertiesSet() throws Exception {
+		Assert.isInstanceOf(JcrTypeServiceImpl.class, typeService);
+		buildMapper();
+	}
 
 }

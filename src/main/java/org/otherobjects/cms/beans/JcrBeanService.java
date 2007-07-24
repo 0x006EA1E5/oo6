@@ -34,9 +34,9 @@ public class JcrBeanService {
 		this.typeService = typeService;
 	}
 	
-	public DynaNode createCustomDynaNodeBean(DynaNode persistentDynaNode)
+	public DynaNode createCustomDynaNodeBean(String ooType)
     {
-		TypeDef type = typeService.getType(persistentDynaNode.getOoType());
+		TypeDef type = typeService.getType(ooType);
 		
         BeanGenerator beanGenerator = new BeanGenerator();
         beanGenerator.setSuperclass(DynaNode.class);
@@ -56,6 +56,11 @@ public class JcrBeanService {
         dynaNode.setOoType(type.getName());
 
         return dynaNode;
+	}
+	
+	public DynaNode createCustomDynaNodeBean(DynaNode persistentDynaNode)
+    {
+		return createCustomDynaNodeBean(persistentDynaNode.getOoType());
     }
 	
 	public void copyBeanProperties(DynaNode fromNode, DynaNode toNode)
