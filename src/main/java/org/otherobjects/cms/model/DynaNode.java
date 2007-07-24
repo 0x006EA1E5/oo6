@@ -6,12 +6,12 @@ import java.util.Map;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.ManagedHashMap;
 import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.workbench.WorkbenchItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.util.Assert;
 
 /**
@@ -24,11 +24,11 @@ import org.springframework.util.Assert;
  * <br>TODO Equals, hashCode, serialableId builders
  */
 @SuppressWarnings("unchecked")
-@Configurable("dynaNode")
+//TODO @Configurable("dynaNode")
 public class DynaNode implements CmsNode, WorkbenchItem
 {
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
-	
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
+
     /** GUID */
     private String id;
 
@@ -47,16 +47,14 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     /** The defining type for this node */
     private String ooType;
-    
+
     private TypeDef typeDef;
-    
-    private TypeService typeService;
 
     private Map<String, Object> data = new ManagedHashMap();
 
     public DynaNode(TypeDef typeDef)
     {
-    	setTypeDef(typeDef);
+        setTypeDef(typeDef);
     }
 
     public DynaNode()
@@ -76,10 +74,6 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     public void setOoType(String ooType)
     {
-    	Assert.notNull(typeService, "DynaNodes need to be auto injected with a typeService reference in order to work properly");
-            
-        TypeDef typeDef = typeService.getType(ooType);
-        setLabelProperty(typeDef.getLabelProperty());
         this.ooType = ooType;
     }
 
@@ -216,19 +210,20 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     public String getLabel()
     {
-        return (String) (get(labelProperty) != null ? get(labelProperty) : getCode());
+        return (String) (get(getLabelProperty()) != null ? get(getLabelProperty()) : getCode());
     }
 
     public void setLabel(String label)
     {
-    	try{
-    		PropertyUtils.setNestedProperty(this, getLabelProperty(), label);
-    	}
-    	catch(Exception e)
-    	{
-    		if(logger.isDebugEnabled())
-    			logger.debug("Couldn't set label property", e);
-    	}
+        try
+        {
+            PropertyUtils.setNestedProperty(this, getLabelProperty(), label);
+        }
+        catch (Exception e)
+        {
+            if (logger.isDebugEnabled())
+                logger.debug("Couldn't set label property", e);
+        }
     }
 
     public void set(String key, Object value)
@@ -266,28 +261,22 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     public String getLabelProperty()
     {
-        return labelProperty;
+        return getTypeDef().getLabelProperty();
     }
 
-    public void setLabelProperty(String labelProperty)
+    public TypeDef getTypeDef()
     {
-        this.labelProperty = labelProperty;
+        if (this.typeDef == null)
+        {
+            TypeService typeService = (TypeService) SingletonBeanLocator.getBean("typeService");
+            this.typeDef = typeService.getType(getOoType());
+        }
+        return this.typeDef;
     }
 
-	public TypeDef getTypeDef() {
-		return typeDef;
-	}
-
-	public void setTypeDef(TypeDef typeDef) {
-		this.typeDef = typeDef;
-		setOoType(typeDef.getName());
-		setLabelProperty(typeDef.getLabelProperty());
-	}
-
-	public void setTypeService(TypeService typeService) {
-		this.typeService = typeService;
-		
-	}
-    
-    
+    public void setTypeDef(TypeDef typeDef)
+    {
+        this.typeDef = typeDef;
+        setOoType(typeDef.getName());
+    }
 }

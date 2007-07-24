@@ -66,10 +66,11 @@
 		<property name="typeService" ref="typeService" />
 	</bean>
 	
-	<!-- Domain objects -->
+	<!-- Domain objects 
 	<bean name="dynaNode" scope="prototype">
 		<property name="typeService" ref="typeService" />
 	</bean>
+	-->
 	
 	<!-- DAOs -->
 	<bean id="dynaNodeDao" parent="baseTransactionProxy">

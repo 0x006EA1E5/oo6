@@ -5,8 +5,12 @@
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 	
+	<!-- 
+	Temporary disble AOP
+	-javaagent:/Users/rich/.m2/repository/aspectj/aspectjweaver/1.5.3/aspectjweaver-1.5.3.jar
 	<aop:spring-configured/>
-	
+	 -->
+	 
 	<bean name="siteController" class="org.otherobjects.cms.controllers.SiteController">
 		<property name="navigatorService" ref="navigatorService" />
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
