@@ -5,6 +5,8 @@ The CMS release. Feature parity with OO5 for object editing
 and publishing with the exception of internal links. Introduction
 of new templating/block model with efficient caching.
 ==================================================================
+* How to reload spring cofig esp properties
+* Configure runtime logging settings
 
 * CGLIB in OCM: Folder/Page base objects (auto code generation)
  + Live TypeDef manipulation (inc version numbers)
@@ -13,6 +15,7 @@ of new templating/block model with efficient caching.
 * Action/event/scripting framework
  + Audit log 
 * Forms support for components and references and real time client side support
+ + Pick Lists
  + Image, file and rich media libaries (external image libary support)
  + File system DAO
 * Licensing finalised

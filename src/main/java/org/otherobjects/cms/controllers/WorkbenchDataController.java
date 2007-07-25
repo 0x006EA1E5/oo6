@@ -88,7 +88,8 @@ public class WorkbenchDataController implements Controller
 
         ModelAndView view = new ModelAndView("jsonView");
         view.addObject(JsonView.JSON_DATA_KEY, type);
-        view.addObject(JsonView.JSON_INCLUDES_KEY, "properties");
+//        view.addObject(JsonView.JSON_INCLUDES_KEY, "properties");
+        view.addObject(JsonView.JSON_DEEP_SERIALIZE, true);
         return view;
     }
 

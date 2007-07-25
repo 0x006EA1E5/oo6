@@ -63,6 +63,7 @@ public class DynaNodeValidator implements Validator
             {
                 try
                 {
+                    Assert.isTrue(DynaNode.class.isAssignableFrom(value.getClass()), "Value of property " + fieldName + " is not a dynaNode. Perhaps there is a conflicting parameter?");
                     errors.pushNestedPath(fieldName);
                     ValidationUtils.invokeValidator(this, value, errors);
                 }

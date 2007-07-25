@@ -59,8 +59,8 @@ public class JcrBeanService
                 // FIXME Move this somewhere better
                 if (propertyDef.getType().equals("reference") || propertyDef.getType().equals("component"))
                 {
-                    //                throw new OtherObjectsException("No support for reference or component proerties at the moment: " + typeDef.getName());
                     TypeDef type2 = typeService.getType(propertyDef.getRelatedType());
+                    Assert.notNull(type2,"Could not find type: " + propertyDef.getRelatedType());
                     beanGenerator.addProperty(propertyDef.getName(), Class.forName(type2.getClassName()));
                 }
                 else

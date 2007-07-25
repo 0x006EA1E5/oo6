@@ -6,17 +6,6 @@
 
 <jackrabbit-ocm>
 
-<!-- 
-	<class-descriptor className="org.otherobjects.cms.model.DynaNode" jcrNodeType="oo:node">
-		<field-descriptor fieldName="id" uuid="true" />
-		<field-descriptor fieldName="jcrPath" path="true" />
-		<field-descriptor fieldName="ooType" jcrName="ooType" />
-		<field-descriptor fieldName="label" jcrName="label" />
-		<collection-descriptor fieldName="data" jcrName="data"
-			collectionClassName="org.apache.jackrabbit.ocm.persistence.collectionconverter.impl.ManagedHashMap"
-			collectionConverter="org.otherobjects.cms.jcr.MapCollectionConverterImpl" />
-	</class-descriptor>
- -->
 	<class-descriptor className="org.otherobjects.cms.types.TypeDef" jcrNodeType="oo:node">
 		<field-descriptor fieldName="id" uuid="true" />
 		<field-descriptor fieldName="jcrPath" path="true" />
@@ -32,6 +21,7 @@
 		<field-descriptor fieldName="type" jcrName="type" />
 		<field-descriptor fieldName="required" jcrName="required" />
 		<field-descriptor fieldName="size" jcrName="size" />
+		<field-descriptor fieldName="relatedType" jcrName="relatedType" />
 		<field-descriptor fieldName="valang" jcrName="valang" />
 	</class-descriptor>
 

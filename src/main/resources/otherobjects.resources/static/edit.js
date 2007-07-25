@@ -13,11 +13,62 @@ OO.EditForm = function(){
 	{
       	Ext.Msg.alert('Warning', 'An error ocured whilst saving. Please try again.');
 	}
+	
+	function buildFormPart(td, prefix, hiddenFields)
+	{
+		console.log(td);
+	
+		// Add fields according to typeDef
+		for(var i=0; i<td.properties.length; i++)
+		{
+			var propDef = td.properties[i];
+			var fName = '' + propDef.name;
+			
+			if(propDef.type=="component")
+			{
+				console.log(propDef.relatedTypeDef);
+				buildFormPart(propDef.relatedTypeDef, propDef.name+".", hiddenFields);
+			}
+			else
+			{
+				console.log("Creating field: " + fName + " type: " + propDef.type);
+				var config = {fieldLabel:propDef.label, name: prefix+propDef.name, allowBlank:true};
+				if(propDef.type=="date")
+				{
+					config.format='d/m/y';
+					var f = new Ext.form.OODateField(config);
+					f.on("change", function(f,n,o){console.log("Change",n);});
+				}
+				else if(propDef.type=="html")
+				{
+					config.width=null; // FIXME Ext bug: can't set width of HtmlEditor
+					// config.growMax=500;// FIXME Ext bug: can't grow HtmlEditor
+					var f = new Ext.form.HtmlEditor(config);
+				}
+				else if(propDef.type=="text")
+				{
+					config.width='500px';
+					config.grow=true;
+					config.growMax=500;
+					var f = new Ext.form.TextArea(config);
+				}
+				else if(propDef.type=="boolean")
+				{
+					var f = new Ext.form.Checkbox(config);
+					hiddenFields["_"+propDef.name] = "";
+				}
+				else
+				{
+					config.width='300px';
+					var f = new Ext.form.TextField(config);
+				}
+				form.add(f);
+			}
+		}
+	}
 
 	function buildForm(obj)
 	{
-		var typeDef = obj.type;
-		
 		// TODO Find out about QuickTips
 		Ext.QuickTips.init();
 		
@@ -40,50 +91,8 @@ OO.EditForm = function(){
 		form.add(new Ext.form.TextField({fieldLabel:'ID', name:'id', width:'200px', allowBlank:true, disabled:true}));
 		//form.add(new Ext.form.TextField({fieldLabel:'Type', name:'ooType', width:'200px', allowBlank:false}));
 		
-		// Add fields according to typeDef
-		for(var i=0; i<typeDef.properties.length; i++)
-		{
-			var propDef = typeDef.properties[i];
-			var fName = '' + propDef.name;
-			console.log("Creating field: " + fName + " type: " + propDef.type);
-			var config = {fieldLabel:propDef.label, name: propDef.name, allowBlank:true};
-			if(propDef.type=="date")
-			{
-				config.format='d/m/y';
-				var f = new Ext.form.OODateField(config);
-				f.on("change", function(f,n,o){console.log("Change",n);});
-			}
-			else if(propDef.type=="html")
-			{
-				config.width=null; // FIXME Ext bug: can't set width of HtmlEditor
-				// config.growMax=500;// FIXME Ext bug: can't grow HtmlEditor
-				var f = new Ext.form.HtmlEditor(config);
-			}
-			else if(propDef.type=="text")
-			{
-				config.width='500px';
-				config.grow=true;
-				config.growMax=500;
-				var f = new Ext.form.TextArea(config);
-			}
-			else if(propDef.type=="boolean")
-			{
-				var f = new Ext.form.Checkbox(config);
-				hiddenFields["_"+propDef.name] = "";
-			}
-			else
-			{
-				config.width='300px';
-				var f = new Ext.form.TextField(config);
-			}
-			form.add(f);
-		}
-
-
-		// FIXME Does this work?	    
-//	    form.addButton('Save and continue editing', function(){
-//			form.submit({url:'/go/form', bindForm:true, waitMsg:'Saving Data...', params: hiddenFields });   
-//		});
+		// Add form fields
+		buildFormPart(obj.type, "", hiddenFields);
 		
 	    form.addButton('Save', function() {
 			form.submit({url:'/go/workbench/form', bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });   
@@ -104,9 +113,20 @@ OO.EditForm = function(){
 	    form.render('edit-panel');
 		
 		// FIXME Better way to set form values without conflict danger?
-		form.setValues(obj.data);
-		form.setValues(obj.data.data);
-	    
+		form.setValues(flattenObject(obj.data, "", []));
+		
+	}
+	
+	function flattenObject(obj,prefix,flat) {
+		for(var id in obj) {
+	    	if(typeof obj[id] != 'function') {
+				if(obj[id] instanceof Object)
+					flattenObject(obj[id],id+".",flat);
+				else
+					flat[flat.length]={id:prefix+id, value:obj[id]};
+	        }
+	    }
+	    return flat;
 	}
 
 	function loadJsonObject(url, callback) {
