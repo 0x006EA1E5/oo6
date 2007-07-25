@@ -56,22 +56,38 @@ public class DynaNodeValidator implements Validator
         for (Iterator<PropertyDef> it = typeDef.getProperties().iterator(); it.hasNext();)
         {
             PropertyDef propertyDef = it.next();
-            Object value = errors.getFieldValue(propertyDef.getName());
             String fieldName = propertyDef.getName();
+            Object value = errors.getFieldValue(fieldName);
 
-            if (propertyDef.isRequired())
-                ValidationUtils.rejectIfEmptyOrWhitespace(errors, fieldName, "field.required");
-
-            if (propertyDef.getSize() > -1)
+            if (propertyDef.getType().equals(PropertyDef.COMPONENT))
             {
-                if (value != null && value.toString().length() > propertyDef.getSize())
-                    errors.rejectValue(fieldName, "field.valueTooLong");
+                try
+                {
+                    errors.pushNestedPath(fieldName);
+                    ValidationUtils.invokeValidator(this, value, errors);
+                }
+                finally
+                {
+                    errors.popNestedPath();
+                }
             }
-
-            // if we have a valang property, insert the fieldName into it and append it to the valang rules buffer
-            if (StringUtils.hasText(propertyDef.getValang()))
+            else
             {
-                valangRules.append(propertyDef.getValang().replaceAll("\\?", fieldName));
+
+                if (propertyDef.isRequired())
+                    ValidationUtils.rejectIfEmptyOrWhitespace(errors, fieldName, "field.required");
+
+                if (propertyDef.getSize() > -1)
+                {
+                    if (value != null && value.toString().length() > propertyDef.getSize())
+                        errors.rejectValue(fieldName, "field.valueTooLong");
+                }
+
+                // if we have a valang property, insert the fieldName into it and append it to the valang rules buffer
+                if (StringUtils.hasText(propertyDef.getValang()))
+                {
+                    valangRules.append(propertyDef.getValang().replaceAll("\\?", fieldName));
+                }
             }
         }
 

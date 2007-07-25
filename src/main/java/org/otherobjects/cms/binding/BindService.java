@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
  * @author joerg
  *
  */
-public interface BindService {
-	public BindingResult bind(DynaNode dynaNode, HttpServletRequest request);
+public interface BindService
+{
+    public BindingResult bind(DynaNode dynaNode, HttpServletRequest request);
 }

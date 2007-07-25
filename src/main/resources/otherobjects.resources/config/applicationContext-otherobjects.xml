@@ -29,7 +29,6 @@
 	<bean name="formController" class="org.otherobjects.cms.controllers.FormController">
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
 		<property name="validator" ref="dynaNodeValidator" />
-		<property name="jcrBeanService" ref="jcrBeanService" />
 		<property name="bindService" ref="bindService" />
 	</bean>
 	

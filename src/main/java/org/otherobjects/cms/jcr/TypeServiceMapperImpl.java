@@ -35,15 +35,19 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 
+/**
+ * JCR OCM mapper imelementation backed by a TypeService.
+ * 
+ * <p>TODO Bind to register/unregister events?
+ * 
+ * @author rich
+ */
 public class TypeServiceMapperImpl implements Mapper, InitializingBean
 {
     private TypeService typeService;
     private MappingDescriptor mappingDescriptor;
     private Mapper staticMapper;
 
-    /**
-     * No-arg constructor.
-     */
     public TypeServiceMapperImpl()
     {
     }
@@ -111,7 +115,7 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
             if (propertyType.equals("component"))
             {
                 BeanDescriptor bd = new BeanDescriptor();
-                bd.setFieldName("data." + propDef.getName());
+                bd.setFieldName(propDef.getName());
                 bd.setJcrName(propDef.getName());
                 bd.setConverter(DefaultBeanConverterImpl.class.getName());
                 cd.addBeanDescriptor(bd);
@@ -143,7 +147,7 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
     @SuppressWarnings("unchecked")
     public ClassDescriptor getClassDescriptorByClass(Class clazz)
     {
-        // try static mappings first
+        // Try config file mappings first
         try
         {
             return staticMapper.getClassDescriptorByClass(clazz);
@@ -152,13 +156,25 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         {
         }
 
-        // then dynamic mapping
+        // Try already build type mappings
         ClassDescriptor descriptor = mappingDescriptor.getClassDescriptorByName(clazz.getName());
-        if (descriptor == null)
+
+        if (descriptor != null)
+            return descriptor;
+
+        // Try building missing mapping
+        TypeDef td = typeService.getTypeByClassName(clazz.getName());
+        
+        // FIXME This must be sychronised to be tread safe
+        if (td != null)
         {
-            throw new IncorrectPersistentClassException("Class of type: " + clazz.getName() + " has no descriptor.");
+            descriptor = createClassDescriptor(td);
+            this.mappingDescriptor.addClassDescriptor(descriptor);
+            return descriptor;
         }
-        return descriptor;
+        
+        // No descriptor so throw error
+        throw new IncorrectPersistentClassException("Class of type: " + clazz.getName() + " has no descriptor.");
     }
 
     /**

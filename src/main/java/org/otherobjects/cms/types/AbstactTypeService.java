@@ -12,7 +12,7 @@ public abstract class AbstactTypeService implements TypeService
     {
         types.put(t.getName(), t);
     }
-    
+
     public void unregisterType(String typeName)
     {
         types.remove(typeName);
@@ -31,5 +31,15 @@ public abstract class AbstactTypeService implements TypeService
     public void setTypes(Map<String, TypeDef> types)
     {
         this.types = types;
+    }
+
+    public TypeDef getTypeByClassName(String name)
+    {
+        for (TypeDef t : types.values())
+        {
+            if (t.getClassName().equals(name))
+                return t;
+        }
+        return null;
     }
 }

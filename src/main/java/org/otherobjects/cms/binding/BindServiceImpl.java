@@ -1,11 +1,17 @@
 package org.otherobjects.cms.binding;
 
 import java.text.SimpleDateFormat;
+import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.beans.JcrBeanService;
 import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.types.PropertyDef;
+import org.otherobjects.cms.types.TypeDef;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -17,22 +23,74 @@ import org.springframework.web.bind.ServletRequestDataBinder;
  * @author joerg
  *
  */
-public class BindServiceImpl implements BindService {
-	
-	private String dateFormat;
-	
-	public void setDateFormat(String dateFormat) {
-		this.dateFormat = dateFormat;
-	}
+public class BindServiceImpl implements BindService
+{
+    private final Logger logger = LoggerFactory.getLogger(BindServiceImpl.class);
 
-	public BindingResult bind(DynaNode dynaNode, 
-			HttpServletRequest request) {
-		
-		ServletRequestDataBinder binder = new ServletRequestDataBinder(dynaNode);
+    private String dateFormat;
+
+    public void setDateFormat(String dateFormat)
+    {
+        this.dateFormat = dateFormat;
+    }
+
+    @SuppressWarnings("unchecked")
+    public BindingResult bind(DynaNode dynaNode, HttpServletRequest request)
+    {
+
+        // Create sub-objects where required
+        Enumeration<String> parameterNames = request.getParameterNames();
+        while (parameterNames.hasMoreElements())
+        {
+            String propertyName = parameterNames.nextElement();
+            if (propertyName.contains("."))
+            {
+                // Reference to sub object
+                createSubObjects(dynaNode, propertyName);
+            }
+
+        }
+
+        ServletRequestDataBinder binder = new ServletRequestDataBinder(dynaNode);
         binder.registerCustomEditor(java.util.Date.class, new CustomDateEditor(new SimpleDateFormat(dateFormat), true));
         binder.bind(request);
-        
-		return binder.getBindingResult();
-	}
+
+        return binder.getBindingResult();
+    }
+
+    protected void createSubObjects(DynaNode dynaNode, String propertyName)
+    {
+        //FIXME Can we do with reflection rather than TypeService?
+        int index = 0;
+        while (true)
+        {
+            index = propertyName.indexOf(".", index + 1);
+            if (index < 0)
+                break;
+            String p = propertyName.substring(0, index);
+            PropertyDef property = dynaNode.getTypeDef().getProperty(p);
+
+            //TODO More intelligent checking here to avoid repeat calls
+            createSubObject(dynaNode, p, property.getRelatedTypeDef());
+        }
+    }
+
+    protected void createSubObject(DynaNode dynaNode, String propertyName, TypeDef relatedTypeDef)
+    {
+        if (dynaNode.get(propertyName) == null)
+        {
+            logger.info("Creating sub object {} at {}.", relatedTypeDef.getName(), propertyName);
+            try
+            {
+                DynaNode subObject = (DynaNode) Class.forName(relatedTypeDef.getClassName()).newInstance();
+                subObject.setOoType(relatedTypeDef.getName());
+                dynaNode.set(propertyName, subObject);
+            }
+            catch (Exception e)
+            {
+                throw new OtherObjectsException("Error creating subObject: " + propertyName, e);
+            }
+        }
+    }
 
 }

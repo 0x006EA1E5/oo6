@@ -2,7 +2,6 @@ package org.otherobjects.cms.beans;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
@@ -26,7 +25,7 @@ public class CglibClassloadingTest extends TestCase {
 		
 		
 		try {
-			Class clazz = Class.forName(genClassName);
+			Class<?> clazz = Class.forName(genClassName);
 			Object bean3 = clazz.newInstance();
 			PropertyUtils.setSimpleProperty(bean3, "testString", "This is a test");
 		} catch (ClassNotFoundException e) {
@@ -86,17 +85,17 @@ public class CglibClassloadingTest extends TestCase {
         return beanGenerator.create();
 	}
 	
-	private Object getDynaNodeBean2()
-	{
-		BeanGenerator beanGenerator = new BeanGenerator();
-        beanGenerator.setSuperclass(DynaNode.class);
-        
-        beanGenerator.addProperty("testString", String.class);
-        beanGenerator.addProperty("testDate", Date.class);
-        beanGenerator.addProperty("testLong", Long.class);
-        beanGenerator.addProperty("testInt", Integer.class);
-        
-        return beanGenerator.create();
-	}
+//	private Object getDynaNodeBean2()
+//	{
+//		BeanGenerator beanGenerator = new BeanGenerator();
+//        beanGenerator.setSuperclass(DynaNode.class);
+//        
+//        beanGenerator.addProperty("testString", String.class);
+//        beanGenerator.addProperty("testDate", Date.class);
+//        beanGenerator.addProperty("testLong", Long.class);
+//        beanGenerator.addProperty("testInt", Integer.class);
+//        
+//        return beanGenerator.create();
+//	}
 			
 }

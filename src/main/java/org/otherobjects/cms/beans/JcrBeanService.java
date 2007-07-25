@@ -33,7 +33,7 @@ public class JcrBeanService
     {
         this.typeService = typeService;
     }
-    
+
     /**
      * Uses CGLIB to generate a custom DynaNode with bean style properties as defined by the given typeDef.
      * Used for its side effect of actually generating the bytecode for this dynamic class and injecting it into the current classloader.
@@ -47,29 +47,35 @@ public class JcrBeanService
         BeanGenerator beanGenerator = new BeanGenerator();
         beanGenerator.setSuperclass(DynaNode.class);
 
-        JcrTypeServiceImpl jcrTypeService = (JcrTypeServiceImpl) typeService;
-        Map<String, Class<?>> jcrClassMappings = jcrTypeService.getJcrClassMappings();
-        for (Iterator<PropertyDef> it = typeDef.getProperties().iterator(); it.hasNext();)
+        try
         {
-            PropertyDef propertyDef = it.next();
-            Assert.doesNotContain(propertyDef.getName(), ".", "There is currently no mechanism to create nested properties");
-
-            // FIXME Move this somewhere better
-            if (propertyDef.getType().equals("reference") || propertyDef.getType().equals("component"))
+            JcrTypeServiceImpl jcrTypeService = (JcrTypeServiceImpl) typeService;
+            Map<String, Class<?>> jcrClassMappings = jcrTypeService.getJcrClassMappings();
+            for (Iterator<PropertyDef> it = typeDef.getProperties().iterator(); it.hasNext();)
             {
-                throw new OtherObjectsException("No support for reference or component proerties at the moment: " + typeDef.getName());
+                PropertyDef propertyDef = it.next();
+                Assert.doesNotContain(propertyDef.getName(), ".", "There is currently no mechanism to create nested properties");
 
-                //TypeDef type2 = typeService.getType(propertyDef.getRelatedType());
-                //beanGenerator.addProperty(propertyDef.getName(), Class.forName(type2.getClassName()));
+                // FIXME Move this somewhere better
+                if (propertyDef.getType().equals("reference") || propertyDef.getType().equals("component"))
+                {
+                    //                throw new OtherObjectsException("No support for reference or component proerties at the moment: " + typeDef.getName());
+                    TypeDef type2 = typeService.getType(propertyDef.getRelatedType());
+                    beanGenerator.addProperty(propertyDef.getName(), Class.forName(type2.getClassName()));
+                }
+                else
+                    beanGenerator.addProperty(propertyDef.getName(), jcrClassMappings.get(propertyDef.getType()));
             }
-            else
-                beanGenerator.addProperty(propertyDef.getName(), jcrClassMappings.get(propertyDef.getType()));
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw new OtherObjectsException("Could not create bean class for: " + typeDef.getName());
         }
 
         //TODO what do we do about nested properties?
         DynaNode dynaNode = (DynaNode) beanGenerator.create();
 
-        logger.info("Created bean class for {}: {}", typeDef.getName(), dynaNode.getClass().getName());
+        logger.error("Created bean class for {}: {}", typeDef.getName(), dynaNode.getClass().getName());
 
         return dynaNode.getClass().getName();
     }

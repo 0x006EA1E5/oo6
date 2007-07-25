@@ -14,5 +14,6 @@ public interface TypeService
     public void unregisterType(String typeName);
     public void registerType(TypeDef t);
     public TypeDef getType(String name);
+    public TypeDef getTypeByClassName(String name);
     public Collection<TypeDef> getTypes();
 }

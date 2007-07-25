@@ -1,5 +1,6 @@
 package org.otherobjects.cms.types;
 
+import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.util.StringUtils;
 
 /**
@@ -41,6 +42,9 @@ import org.otherobjects.cms.util.StringUtils;
  */
 public class PropertyDef
 {
+    public static final Object REFERENCE = "reference";
+    public static final Object COMPONENT = "component";
+
     /** Property name. */
     private String name;
 
@@ -61,13 +65,13 @@ public class PropertyDef
 
     /** Description for this property. */
     private String description;
-    
+
     /** To flag whether this property can be left empty or not */
     private boolean required = false;
-    
+
     /** To indicate how long this property can be (only makes for string type properties). Defaults to -1 which means no limit */
     private int size = -1;
-    
+
     /** 
      * Holds valang rules to build a validator for the type that is made of this PropertyDef. Beware: the name of the property is not included in the rule unlike with standard valang rules 
      * so the syntax is this:
@@ -80,15 +84,22 @@ public class PropertyDef
      * Beware: Don't use ? in your message or error_code unless you want it to be replaced by the property name.
      */
     private String valang;
-    
-    
 
     private String help;
 
     public PropertyDef()
     {
     }
-    
+
+    public PropertyDef(String name, String propertyType, String relatedType, String collectionType, boolean required)
+    {
+        setName(name);
+        setType(propertyType);
+        setRelatedType(relatedType);
+        setCollectionType(collectionType);
+        setRequired(required);
+    }
+
     public PropertyDef(String name, String propertyType, String relatedType, String collectionType)
     {
         setName(name);
@@ -144,13 +155,13 @@ public class PropertyDef
     }
 
     public String getLabel()
-    {   
-        if(label == null)
+    {
+        if (label == null)
             return StringUtils.generateLabel(getName());
         else
             return label;
     }
-    
+
     public void setLabel(String label)
     {
         this.label = label;
@@ -186,28 +197,43 @@ public class PropertyDef
         this.collectionType = collectionType;
     }
 
-	public boolean isRequired() {
-		return required;
-	}
+    public boolean isRequired()
+    {
+        return required;
+    }
 
-	public void setRequired(boolean required) {
-		this.required = required;
-	}
+    public void setRequired(boolean required)
+    {
+        this.required = required;
+    }
 
-	public int getSize() {
-		return size;
-	}
+    public int getSize()
+    {
+        return size;
+    }
 
-	public void setSize(int size) {
-		this.size = size;
-	}
+    public void setSize(int size)
+    {
+        this.size = size;
+    }
 
-	public String getValang() {
-		return valang;
-	}
+    public String getValang()
+    {
+        return valang;
+    }
 
-	public void setValang(String valang) {
-		this.valang = valang;
-	}
-	
+    public void setValang(String valang)
+    {
+        this.valang = valang;
+    }
+
+    public TypeDef getRelatedTypeDef()
+    {
+        if (getRelatedType() == null)
+            return null;
+        // FIXME Remove singleton access
+        TypeService typeService = (TypeService) SingletonBeanLocator.getBean("typeService");
+        return typeService.getType(getRelatedType());
+    }
+
 }

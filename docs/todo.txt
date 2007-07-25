@@ -1,18 +1,4 @@
 ==================================================================
-M1 (mid July)
-
-Initial release with major infrasturcture in place. Basic Article/Folder 
-manipulation in new Workbench.
-==================================================================
-
-Workbench
-
-* Don't allow drag to same folder
-* Allow edits of new items
-* Getting started page for PMs and Devs
-? Iframe nonsense
-
-==================================================================
 M2 (end August)
 
 The CMS release. Feature parity with OO5 for object editing

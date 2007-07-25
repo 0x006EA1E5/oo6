@@ -1,10 +1,6 @@
 package org.otherobjects.cms.model;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
-
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.ManagedHashMap;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.types.TypeDef;
@@ -33,7 +29,7 @@ public class DynaNode implements CmsNode, WorkbenchItem
     private String id;
 
     /** Property to be used an the label (human friendly identifier) for this node. */
-    private String labelProperty;
+    // TODO This comes from TypeDef now: private String labelProperty;
 
     /** The path of this node's parent. Must end with a forward slash. */
     private String path;
@@ -49,8 +45,6 @@ public class DynaNode implements CmsNode, WorkbenchItem
     private String ooType;
 
     private TypeDef typeDef;
-
-    private Map<String, Object> data = new ManagedHashMap();
 
     public DynaNode(TypeDef typeDef)
     {
@@ -121,50 +115,21 @@ public class DynaNode implements CmsNode, WorkbenchItem
         {
             return PropertyUtils.getProperty(this, name);
         }
-        catch (IllegalAccessException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (InvocationTargetException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (NoSuchMethodException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
-
-        //        if (name != null && name.indexOf('.') > 0)
-        //            return getProperty(name);
-        //        else
-        //            return getData().get(name);
-    }
-
-    public Object getProperty(String name)
-    {
-        try
-        {
-            return PropertyUtils.getNestedProperty(getData(), name);
-        }
         catch (Exception e)
         {
-            throw new OtherObjectsException("Could not fetch property value.", e);
+            throw new OtherObjectsException("Could not get property value for: " + name, e);
         }
     }
 
-    public void set(String name, String value)
+    public void set(String name, Object value)
     {
         try
         {
-            PropertyUtils.setNestedProperty(getData(), name, value);
+            PropertyUtils.setNestedProperty(this, name, value);
         }
         catch (Exception e)
         {
-            throw new OtherObjectsException("Could not fetch property value.", e);
+            throw new OtherObjectsException("Could not set property value for: " + name, e);
         }
     }
 
@@ -198,16 +163,6 @@ public class DynaNode implements CmsNode, WorkbenchItem
         this.path = path;
     }
 
-    public Map<String, Object> getData()
-    {
-        return data;
-    }
-
-    public void setData(Map<String, Object> data)
-    {
-        this.data = data;
-    }
-
     public String getLabel()
     {
         return (String) (get(getLabelProperty()) != null ? get(getLabelProperty()) : getCode());
@@ -224,11 +179,6 @@ public class DynaNode implements CmsNode, WorkbenchItem
             if (logger.isDebugEnabled())
                 logger.debug("Couldn't set label property", e);
         }
-    }
-
-    public void set(String key, Object value)
-    {
-        getData().put(key, value);
     }
 
     public String getCode()

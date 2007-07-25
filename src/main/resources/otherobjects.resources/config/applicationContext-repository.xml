@@ -78,7 +78,6 @@
 			<bean class="org.otherobjects.cms.dao.DynaNodeDaoJackrabbit">
 				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
 				<property name="typeService" ref="typeService" />
-				<property name="dynaNodeValidator" ref="dynaNodeValidator" />
 			</bean>
 		</property>
 	</bean>

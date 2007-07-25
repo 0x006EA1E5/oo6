@@ -5,7 +5,6 @@ import org.otherobjects.cms.jcr.GenericJcrDaoJackrabbit;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
-import org.otherobjects.cms.validation.DynaNodeValidator;
 import org.springframework.util.Assert;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
@@ -13,7 +12,7 @@ import org.springframework.validation.Errors;
 public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> implements DynaNodeDao
 {
     private TypeService typeService;
-    private DynaNodeValidator dynaNodeValidator;
+//    private DynaNodeValidator dynaNodeValidator;
 
     public DynaNodeDaoJackrabbit()
     {
@@ -62,9 +61,9 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
         return super.save(object, false);
     }
 
-    public void setDynaNodeValidator(DynaNodeValidator dynaNodeValidator)
-    {
-        this.dynaNodeValidator = dynaNodeValidator;
-    }
+//    public void setDynaNodeValidator(DynaNodeValidator dynaNodeValidator)
+//    {
+//        this.dynaNodeValidator = dynaNodeValidator;
+//    }
 
 }

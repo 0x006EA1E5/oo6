@@ -28,7 +28,6 @@ public class TypeDef implements CmsNode
     /** Collection of properties for this type. */
     private Map<String, PropertyDef> properties = new LinkedHashMap<String, PropertyDef>();
     //    private List<PropertyDef> properties = new ArrayList<PropertyDef>();
-
     
     /** Human friendly name for type. Can be inferred from name */
     private String label;
@@ -49,6 +48,12 @@ public class TypeDef implements CmsNode
     public TypeDef(String name)
     {
         setName(name);
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "[Type: " + getName() + "])";
     }
 
     public PropertyDef getProperty(String name)
