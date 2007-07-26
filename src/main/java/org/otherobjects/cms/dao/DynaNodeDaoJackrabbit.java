@@ -1,5 +1,10 @@
 package org.otherobjects.cms.dao;
 
+import java.util.List;
+
+import org.apache.jackrabbit.ocm.query.Filter;
+import org.apache.jackrabbit.ocm.query.Query;
+import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.jcr.GenericJcrDaoJackrabbit;
 import org.otherobjects.cms.model.DynaNode;
@@ -59,6 +64,40 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
         }
 
         return super.save(object, false);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<DynaNode> getAllByType(String typeName)
+    {
+        try
+        {
+            TypeDef type = typeService.getType(typeName);
+            QueryManager queryManager = getJcrMappingTemplate().createQueryManager();
+            Filter filter = queryManager.createFilter(Class.forName(type.getClassName()));
+            Query query = queryManager.createQuery(filter);
+            //filter.setScope(path + "/");
+            filter.addEqualTo("ooType", typeName);
+            return (List<DynaNode>) getJcrMappingTemplate().getObjects(query);
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw new OtherObjectsException("No class found for type: " + typeName);
+        }
+        
+//        return (List<DynaNode>) getJcrMappingTemplate().execute(new JcrMappingCallback()
+//        {
+//            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+//            {
+//                try
+//                {
+//                    
+//                }
+//                catch (Exception e)
+//                {
+//                    throw new JcrMappingException(e);
+//                }
+//            }
+//        }, true);
     }
 
 //    public void setDynaNodeValidator(DynaNodeValidator dynaNodeValidator)

@@ -6,8 +6,6 @@ import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.beans.BaseDynaNodeTest;
 import org.otherobjects.cms.model.DynaNode;
@@ -28,6 +26,7 @@ public class BindServiceImplTest extends BaseDynaNodeTest
         super.onSetUp();
         bindService = new BindServiceImpl();
         bindService.setDateFormat(dateFormat);
+        bindService.setDynaNodeDao(dynaNodeDao);
         testDate = new SimpleDateFormat(dateFormat).parse("01/01/99");
     }
 
@@ -37,6 +36,7 @@ public class BindServiceImplTest extends BaseDynaNodeTest
         BindingResult errors = bindService.bind(dynaNode, getRequest());
         assertTrue(errors.getErrorCount() == 0);
 
+        // Simple properties
         assertEquals("testString1", PropertyUtils.getNestedProperty(dynaNode, "testString"));
         assertEquals("testText1", PropertyUtils.getNestedProperty(dynaNode, "testText"));
         assertEquals(testDate, PropertyUtils.getNestedProperty(dynaNode, "testDate"));
@@ -46,7 +46,11 @@ public class BindServiceImplTest extends BaseDynaNodeTest
         assertEquals(new BigDecimal(2.7, new MathContext(2, RoundingMode.HALF_UP)), PropertyUtils.getNestedProperty(dynaNode, "testDecimal"));
         assertEquals(Boolean.FALSE, PropertyUtils.getNestedProperty(dynaNode, "testBoolean"));
 
+        /// Component
         assertEquals("myName", PropertyUtils.getNestedProperty(dynaNode, "testComponent.name"));
+        
+        // Reference
+        assertEquals("TR1 Name", PropertyUtils.getNestedProperty(dynaNode, "testReference.name"));
     }
 
     public void testBindError()
@@ -71,7 +75,7 @@ public class BindServiceImplTest extends BaseDynaNodeTest
         assertTrue(numberFieldError.getCode().equals("typeMismatch"));
     }
 
-    public HttpServletRequest getRequest()
+    public MockHttpServletRequest getRequest()
     {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addParameter("testString", "testString1");
@@ -83,15 +87,25 @@ public class BindServiceImplTest extends BaseDynaNodeTest
         request.addParameter("testDecimal", "2.7");
         request.addParameter("testBoolean", "false");
         request.addParameter("testComponent.name", "myName");
+
+        DynaNode tr1 = createReference("TR1");
+        dynaNodeDao.save(tr1);
+        request.addParameter("testReference", tr1.getId());
+        
         return request;
     }
 
     public void testCreateSubObjects()
-    {
+    {     
+        // Check that only component (not reference) sub objects are created
         DynaNode node = dynaNodeDao.create(BaseDynaNodeTest.TEST_TYPE_NAME);
         assertNull(node.get("testComponent"));
         bindService.createSubObjects(node, "testComponent.name");
         assertNotNull(node.get("testComponent"));
+
+        assertNull(node.get("testReference"));
+        bindService.createSubObjects(node, "testReference");
+        assertNull(node.get("testReference"));
        
         // Make sure it has the type set
         assertNotNull(((DynaNode) node.get("testComponent")).getOoType());

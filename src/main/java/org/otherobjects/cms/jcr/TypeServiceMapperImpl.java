@@ -123,7 +123,7 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
             else if (propertyType.equals("reference"))
             {
                 BeanDescriptor bd = new BeanDescriptor();
-                bd.setFieldName("data." + propDef.getName());
+                bd.setFieldName(propDef.getName());
                 bd.setJcrName(propDef.getName());
                 bd.setConverter(ReferenceBeanConverterImpl.class.getName());
                 cd.addBeanDescriptor(bd);

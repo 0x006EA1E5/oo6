@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.beans.JcrBeanService;
+import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
@@ -28,6 +29,12 @@ public class BindServiceImpl implements BindService
     private final Logger logger = LoggerFactory.getLogger(BindServiceImpl.class);
 
     private String dateFormat;
+    private DynaNodeDao dynaNodeDao;
+
+    public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
+    {
+        this.dynaNodeDao = dynaNodeDao;
+    }
 
     public void setDateFormat(String dateFormat)
     {
@@ -37,6 +44,7 @@ public class BindServiceImpl implements BindService
     @SuppressWarnings("unchecked")
     public BindingResult bind(DynaNode dynaNode, HttpServletRequest request)
     {
+        ServletRequestDataBinder binder = new ServletRequestDataBinder(dynaNode);
 
         // Create sub-objects where required
         Enumeration<String> parameterNames = request.getParameterNames();
@@ -48,16 +56,40 @@ public class BindServiceImpl implements BindService
                 // Reference to sub object
                 createSubObjects(dynaNode, propertyName);
             }
-
         }
 
-        ServletRequestDataBinder binder = new ServletRequestDataBinder(dynaNode);
+        // Add reference custom editors
+        addReferenceEditors(dynaNode.getTypeDef(), binder, "");
+
         binder.registerCustomEditor(java.util.Date.class, new CustomDateEditor(new SimpleDateFormat(dateFormat), true));
         binder.bind(request);
 
         return binder.getBindingResult();
     }
 
+    private void addReferenceEditors(TypeDef typeDef, ServletRequestDataBinder binder, String prefix)
+    {
+        for (PropertyDef pd : typeDef.getProperties())
+        {
+            if (pd.getType().equals(PropertyDef.REFERENCE))
+            {
+                binder.registerCustomEditor(DynaNode.class, prefix + pd.getName(), new DynaNodeReferenceEditor(dynaNodeDao));
+            }
+            else if (pd.getType().equals(PropertyDef.COMPONENT))
+            {
+                // Cascade through component looking for references
+                addReferenceEditors(pd.getRelatedTypeDef(), binder, prefix + pd.getName() + ".");
+            }
+        }
+    }
+
+    /**
+     * Creates necessary sub objects. These are required for storing
+     * component and list properties but not for references. TODO Explain better.
+     * 
+     * @param dynaNode
+     * @param propertyName
+     */
     protected void createSubObjects(DynaNode dynaNode, String propertyName)
     {
         //FIXME Can we do with reflection rather than TypeService?

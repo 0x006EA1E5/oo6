@@ -18,6 +18,7 @@ of new templating/block model with efficient caching.
  + Pick Lists
  + Image, file and rich media libaries (external image libary support)
  + File system DAO
+ + Required Components
 * Licensing finalised
 * Support for JDBC objects in Workbench
 * Naming consistency

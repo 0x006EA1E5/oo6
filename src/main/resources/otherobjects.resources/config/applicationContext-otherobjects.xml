@@ -43,6 +43,7 @@
 	</bean>
 	
 	<bean name="bindService" class="org.otherobjects.cms.binding.BindServiceImpl">
+		<property name="dynaNodeDao" ref="dynaNodeDao" />
 		<property name="dateFormat"><value>dd/MM/yy</value></property>
 	</bean>
 

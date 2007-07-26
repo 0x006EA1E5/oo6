@@ -25,9 +25,7 @@ import org.springmodules.validation.valang.ValangValidator;
  *  <li>{@link PropertyDef#getValang()}</li>
  * </ul>
  * 
- * 
  * @author joerg
- *
  */
 public class DynaNodeValidator implements Validator
 {

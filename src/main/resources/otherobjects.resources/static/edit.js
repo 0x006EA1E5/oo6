@@ -57,6 +57,38 @@ OO.EditForm = function(){
 					var f = new Ext.form.Checkbox(config);
 					hiddenFields["_"+propDef.name] = "";
 				}
+				else if(propDef.type=="reference")
+				{
+				    var store = new Ext.data.Store({
+				        proxy: new Ext.data.HttpProxy({
+				            url: '/go/workbench/data/select/'+propDef.relatedType
+				        }),
+				
+				        // create reader that reads the records
+				        reader: new Ext.data.JsonReader({
+				            id: 'id'
+				        }, [
+				            {name: 'id', mapping: 'id'},
+				            {name: 'label', mapping: 'label'}
+				        ]),
+				    });
+					var f = new Ext.form.OOComboBox({
+						
+						fieldLabel: propDef.label,
+			            name: propDef.name+":label",
+			            hiddenName: propDef.name, 
+			            allowBlank:true,
+					    store: store,
+					    displayField:'label',
+					    valueField:'id',
+					    typeAhead: true,
+					    //mode: 'local',
+					    triggerAction: 'all',
+					    emptyText:'Select...',
+					    valueNotFoundText: '???',
+					    selectOnFocus:true
+					});
+				}
 				else
 				{
 					config.width='300px';
@@ -121,7 +153,10 @@ OO.EditForm = function(){
 		for(var id in obj) {
 	    	if(typeof obj[id] != 'function') {
 				if(obj[id] instanceof Object)
+				{
+					flat[flat.length]={id:prefix+id, value:obj[id]};
 					flattenObject(obj[id],id+".",flat);
+				}
 				else
 					flat[flat.length]={id:prefix+id, value:obj[id]};
 	        }
@@ -150,10 +185,10 @@ OO.EditForm = function(){
 
 }();
 
-
-
-
+// ------------------------------------------------------------------------------------------------------------------------------
 // Custom DateField that supports Java style dates in milliseconds
+// ------------------------------------------------------------------------------------------------------------------------------
+
 Ext.form.OODateField = function(config){
     Ext.form.OODateField.superclass.constructor.call(this, config);
 };
@@ -162,5 +197,49 @@ Ext.extend(Ext.form.OODateField, Ext.form.DateField,  {
   	setValue : function(date){
 		if(date)
 			Ext.form.DateField.superclass.setValue.call(this, this.formatDate(new Date(date)));
+    }
+});
+
+// ------------------------------------------------------------------------------------------------------------------------------
+// Json backed combo field
+// ------------------------------------------------------------------------------------------------------------------------------
+
+Ext.form.OOComboBox = function(config){
+    Ext.form.OOComboBox.superclass.constructor.call(this, config);
+};
+
+Ext.extend(Ext.form.OOComboBox, Ext.form.ComboBox,  {
+
+    setValue : function(v){
+		console.log("Combo value", v);
+    	var text = v;
+    	if(v.id)
+    	{
+    		text = v.label;
+    		v = v.id;
+    	}
+        else if(this.valueField){
+            var r = this.findRecord(this.valueField, v);
+            if(r){
+                text = r.data[this.displayField];
+            }else if(this.valueNotFoundText){
+                text = this.valueNotFoundText;
+            }
+        }
+        this.lastSelectionText = text;
+        if(this.hiddenField){
+            this.hiddenField.value = v;
+        }
+        Ext.form.ComboBox.superclass.setValue.call(this, text);
+        this.value = v;
+    },
+    
+     getValue : function(){
+        console.log("Combo getValue");
+		if(this.valueField){
+            return typeof this.value != 'undefined' ? this.value : '';
+        }else{
+            return Ext.form.ComboBox.superclass.getValue.call(this);
+        }
     }
 });

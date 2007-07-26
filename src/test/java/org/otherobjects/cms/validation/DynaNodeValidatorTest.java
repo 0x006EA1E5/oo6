@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.beans.BaseDynaNodeTest;
 import org.otherobjects.cms.binding.BindServiceImpl;
+import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -29,6 +30,7 @@ public class DynaNodeValidatorTest extends BaseDynaNodeTest
 
         bindService = new BindServiceImpl();
         bindService.setDateFormat(dateFormat);
+        bindService.setDynaNodeDao(dynaNodeDao);
         testDate = new SimpleDateFormat(dateFormat).parse("01/01/99");
 
         // modify the test type to include some stuff that needs to be validated
@@ -58,7 +60,7 @@ public class DynaNodeValidatorTest extends BaseDynaNodeTest
 
         System.out.println(errors.getErrorCount());
 
-        assertEquals(4,errors.getErrorCount());
+        assertEquals(5,errors.getErrorCount());
 
         FieldError testStringField = errors.getFieldError("testString");
         assertTrue(testStringField.getCode().equals("field.required"));
@@ -72,6 +74,10 @@ public class DynaNodeValidatorTest extends BaseDynaNodeTest
         // Component validation
         FieldError testComponentField = errors.getFieldError("testComponent.requiredString");
         assertTrue(testComponentField.getCode().equals("field.required"));
+        
+        // Reference validation
+        FieldError testReferenceField = errors.getFieldError("testReference2");
+        assertTrue(testReferenceField.getCode().equals("field.required"));
     }
 
     public HttpServletRequest generateMockRequest()
@@ -86,7 +92,13 @@ public class DynaNodeValidatorTest extends BaseDynaNodeTest
         request.addParameter("testDecimal", "2.7");
         request.addParameter("testBoolean", "false");
         request.addParameter("testComponent.name", "");
+        
+        DynaNode tr1 = createReference("TR1");
+        dynaNodeDao.save(tr1);
+        request.addParameter("testReference", tr1.getId());
+
         return request;
     }
 
 }
+

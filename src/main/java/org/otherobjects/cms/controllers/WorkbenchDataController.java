@@ -47,6 +47,8 @@ public class WorkbenchDataController implements Controller
             return generateItemData(request);
         else if (path.endsWith("/listing"))
             return generateListingData(request);
+        else if (path.contains("/select"))
+            return generateSelectData(request);
         else if (path.endsWith("/navigator"))
             return generateNavigatorData(request);
         else
@@ -76,6 +78,21 @@ public class WorkbenchDataController implements Controller
         return view;
     }
 
+    private ModelAndView generateSelectData(HttpServletRequest request)
+    {
+        String path = request.getPathInfo();
+        String typeName = path.substring(path.lastIndexOf("/") + 1);
+        
+        logger.info("Sending select data of type: {} ", typeName);
+        
+        List<DynaNode> allByType = dynaNodeDao.getAllByType(typeName);
+        
+        ModelAndView view = new ModelAndView("jsonView");
+        view.addObject(JsonView.JSON_DATA_KEY, allByType);
+        view.addObject(JsonView.JSON_DEEP_SERIALIZE, false);
+        return view;
+    }
+    
     private ModelAndView generateTypeData(HttpServletRequest request)
     {
         String path = request.getPathInfo();
@@ -165,7 +182,7 @@ public class WorkbenchDataController implements Controller
         List<DynaNode> nonFolders = new ArrayList<DynaNode>();
         for (DynaNode dynaNode : contents)
         {
-            if (dynaNode.getOoType().equals("Article"))
+            if (!dynaNode.getOoType().equals("Folder"))
                 nonFolders.add(dynaNode);
         }
         view.addObject(JsonView.JSON_DATA_KEY, nonFolders);

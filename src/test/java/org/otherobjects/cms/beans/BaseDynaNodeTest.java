@@ -15,6 +15,7 @@ public abstract class BaseDynaNodeTest extends BaseJcrTestCase
 {
 
     public static final String TEST_TYPE_NAME = "org.otherobjects.Dyna.jcr.TestObject";
+    public static final String TEST_REFERENCE_TYPE_NAME = "org.otherobjects.Dyna.jcr.TestReferenceObject";
 
     protected TypeService typeService;
     protected DynaNodeDao dynaNodeDao;
@@ -58,9 +59,10 @@ public abstract class BaseDynaNodeTest extends BaseJcrTestCase
 
     protected void setupTypesService(TypeService typeService)
     {
-        //            TypeDef td2 = new TypeDef("org.otherobjects.Dyna.jcr.TestReferenceObject");
-        //            td2.addProperty(new PropertyDef("name", "string", null, null));
-        //            typeService.registerType(td2);
+        TypeDef td2 = new TypeDef("org.otherobjects.Dyna.jcr.TestReferenceObject");
+        td2.addProperty(new PropertyDef("name", "string", null, null));
+        td2.setLabelProperty("name");
+        typeService.registerType(td2);
 
         TypeDef td3 = new TypeDef("org.otherobjects.Dyna.jcr.TestComponentObject");
         td3.addProperty(new PropertyDef("name", "string", null, null));
@@ -79,24 +81,25 @@ public abstract class BaseDynaNodeTest extends BaseJcrTestCase
         td.addProperty(new PropertyDef("testDecimal", "decimal", null, null));
         td.addProperty(new PropertyDef("testBoolean", "boolean", null, null));
         td.addProperty(new PropertyDef("testComponent", "component", "org.otherobjects.Dyna.jcr.TestComponentObject", null));
-        td.setLabelProperty("testString");
-        //            td.addProperty(new PropertyDef("testReference", "reference", "org.otherobjects.Dyna.jcr.TestReferenceObject", null));
+        td.addProperty(new PropertyDef("testReference", "reference", "org.otherobjects.Dyna.jcr.TestReferenceObject", null));
+        td.addProperty(new PropertyDef("testReference2", "reference", "org.otherobjects.Dyna.jcr.TestReferenceObject", null, true));
         //            td.addProperty(new PropertyDef("testStringsList", "string", null, "list"));
         //            td.addProperty(new PropertyDef("testComponentsList", "component", null, "list"));
         //            td.addProperty(new PropertyDef("testReferencesList", "reference", null, "list"));
+        td.setLabelProperty("testString");
         typeService.registerType(td);
 
     }
 
-    //  protected DynaNode createReference(String name)
-    //  {
-    //      DynaNode r = dynaNodeDao.create("org.otherobjects.Dyna.jcr.TestReferenceObject");
-    //      r.setJcrPath("/" + name + ".html");
-    //      r.set("name", name + " Name");
-    //      dynaNodeDao.save(r);
-    //      r = (DynaNode) dynaNodeDao.getByPath("/" + name + ".html");
-    //      return r;
-    //  }
+    protected DynaNode createReference(String name)
+    {
+        DynaNode r = dynaNodeDao.create("org.otherobjects.Dyna.jcr.TestReferenceObject");
+        r.setJcrPath("/" + name + ".html");
+        r.set("name", name + " Name");
+        dynaNodeDao.save(r);
+        r = (DynaNode) dynaNodeDao.getByPath("/" + name + ".html");
+        return r;
+    }
 
     protected DynaNode createComponent(String name)
     {
