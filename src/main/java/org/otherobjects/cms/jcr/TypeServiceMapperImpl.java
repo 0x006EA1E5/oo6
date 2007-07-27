@@ -22,9 +22,12 @@ import org.apache.jackrabbit.ocm.exception.IncorrectPersistentClassException;
 import org.apache.jackrabbit.ocm.exception.InitMapperException;
 import org.apache.jackrabbit.ocm.manager.beanconverter.impl.DefaultBeanConverterImpl;
 import org.apache.jackrabbit.ocm.manager.beanconverter.impl.ReferenceBeanConverterImpl;
+import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.DefaultCollectionConverterImpl;
+import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.ManageableArrayList;
 import org.apache.jackrabbit.ocm.mapper.Mapper;
 import org.apache.jackrabbit.ocm.mapper.model.BeanDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.ClassDescriptor;
+import org.apache.jackrabbit.ocm.mapper.model.CollectionDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.FieldDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.MappingDescriptor;
 import org.otherobjects.cms.types.JcrTypeServiceImpl;
@@ -112,7 +115,32 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         for (PropertyDef propDef : typeDef.getProperties())
         {
             String propertyType = propDef.getType();
-            if (propertyType.equals("component"))
+            String collectionType = propDef.getCollectionType();
+            String relatedType = propDef.getRelatedType();
+            
+            if(collectionType != null && collectionType.equals("list"))
+            {
+            	CollectionDescriptor cld = new CollectionDescriptor();
+            	cld.setFieldName(propDef.getName());
+            	cld.setJcrName(propDef.getName());
+            	
+            	// if this list contains references or components the items contained in the list are of type related type
+            	// for simple  properties they are of type propertyType
+            	if(propertyType.equals("component") || propertyType.equals("reference"))
+            	{
+            		cld.setElementClassName(typeService.getType(relatedType).getClassName());
+            	}
+            	else
+            	{
+            		//FIXME should the getClassMapping method not be in the typeService interface?
+            		cld.setElementClassName(((JcrTypeServiceImpl)typeService).getJcrClassMapping(propertyType).getName());
+            	}
+            	
+            	cld.setCollectionConverter(DefaultCollectionConverterImpl.class.getName());
+            	//cld.setCollectionClassName(ManageableArrayList.class.getName());
+            	cd.addCollectionDescriptor(cld);
+            }
+            else if (propertyType.equals("component"))
             {
                 BeanDescriptor bd = new BeanDescriptor();
                 bd.setFieldName(propDef.getName());

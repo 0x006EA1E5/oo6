@@ -83,9 +83,9 @@ public abstract class BaseDynaNodeTest extends BaseJcrTestCase
         td.addProperty(new PropertyDef("testComponent", "component", "org.otherobjects.Dyna.jcr.TestComponentObject", null));
         td.addProperty(new PropertyDef("testReference", "reference", "org.otherobjects.Dyna.jcr.TestReferenceObject", null));
         td.addProperty(new PropertyDef("testReference2", "reference", "org.otherobjects.Dyna.jcr.TestReferenceObject", null, true));
-        //            td.addProperty(new PropertyDef("testStringsList", "string", null, "list"));
-        //            td.addProperty(new PropertyDef("testComponentsList", "component", null, "list"));
-        //            td.addProperty(new PropertyDef("testReferencesList", "reference", null, "list"));
+        td.addProperty(new PropertyDef("testStringsList", "string", null, "list"));
+        //td.addProperty(new PropertyDef("testComponentsList", "component", "org.otherobjects.Dyna.jcr.TestComponentObject", "list"));
+        td.addProperty(new PropertyDef("testReferencesList", "reference", "org.otherobjects.Dyna.jcr.TestReferenceObject", "list"));
         td.setLabelProperty("testString");
         typeService.registerType(td);
 

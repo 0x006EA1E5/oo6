@@ -1,7 +1,10 @@
 package org.otherobjects.cms.beans;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+
+import javax.jcr.PropertyType;
 
 import net.sf.cglib.beans.BeanGenerator;
 
@@ -57,7 +60,17 @@ public class JcrBeanService
                 Assert.doesNotContain(propertyDef.getName(), ".", "There is currently no mechanism to create nested properties");
 
                 // FIXME Move this somewhere better
-                if (propertyDef.getType().equals("reference") || propertyDef.getType().equals("component"))
+                if(propertyDef.getCollectionType() != null && propertyDef.getCollectionType().equals("list"))
+                {
+                	if(propertyDef.getType().equals("reference")|| propertyDef.getType().equals("component"))
+                	{
+                		TypeDef type2 = typeService.getType(propertyDef.getRelatedType());
+                		Assert.notNull(type2, "Could not find type: " + propertyDef.getRelatedType());
+                	}
+                	
+                	beanGenerator.addProperty(propertyDef.getName(), List.class);
+                }
+                else if (propertyDef.getType().equals("reference") || propertyDef.getType().equals("component"))
                 {
                     TypeDef type2 = typeService.getType(propertyDef.getRelatedType());
                     Assert.notNull(type2,"Could not find type: " + propertyDef.getRelatedType());

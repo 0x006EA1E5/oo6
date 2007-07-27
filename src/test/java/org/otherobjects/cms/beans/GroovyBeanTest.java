@@ -29,7 +29,7 @@ public class GroovyBeanTest extends TestCase {
 		
 		Object articleInstance2 = gcl.loadClass(articleInstance.getClass().getName());
 		
-		Object articleInstance3 = Class.forName(articleInstance.getClass().getName());
+//		Object articleInstance3 = Class.forName(articleInstance.getClass().getName());
 //		
 //		PropertyUtils.setSimpleProperty(articleInstance, "testString", "testStringValue");
 		
