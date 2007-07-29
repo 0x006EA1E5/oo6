@@ -13,6 +13,13 @@ import org.otherobjects.cms.model.DynaNode;
 
 public class CglibClassloadingTest extends TestCase {
 	
+    public void testBeanModification()
+    {
+        BeanGenerator beanGenerator = new BeanGenerator();
+        beanGenerator.setSuperclass(DynaNode.class);
+        beanGenerator.addProperty("testString", String.class);
+    }
+    
 	public void testTwoBeansSameClassname() 
 	{
 		Object bean1 = getDynaNodeBean();

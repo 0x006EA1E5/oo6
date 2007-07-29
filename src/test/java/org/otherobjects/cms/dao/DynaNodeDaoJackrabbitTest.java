@@ -1,6 +1,8 @@
 package org.otherobjects.cms.dao;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -152,19 +154,20 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
     {
         //FIXME Re-enable this test
         DynaNode r1 = createReference("R1");
-        //        List<DynaNode> referencesList = new ArrayList<DynaNode>();
-        //        referencesList.add(createReference("R3"));
-        //        referencesList.add(createReference("R4"));
-        //        referencesList.add(createReference("R5"));
+        List<DynaNode> referencesList = new ArrayList<DynaNode>();
+        referencesList.add(createReference("R3"));
+        referencesList.add(createReference("R4"));
+        referencesList.add(createReference("R5"));
 
         DynaNode c1 = createComponent("C1");
-        //        DynaNode c2 = createComponent("C2");
+        // DynaNode c2 = createComponent("C2");
         // Test nested 
-        //        c1.set("component", c2);
-        //        List<DynaNode> componentsList = new ArrayList<DynaNode>();
-        //        componentsList.add(createComponent("C3"));
-        //        componentsList.add(createComponent("C4"));
-        //        componentsList.add(createComponent("C5"));
+        // c1.set("component", c2);
+
+        List<DynaNode> componentsList = new ArrayList<DynaNode>();
+        componentsList.add(createComponent("C3"));
+        componentsList.add(createComponent("C4"));
+        componentsList.add(createComponent("C5"));
 
         DynaNode n1 = dynaNodeDao.create("org.otherobjects.Dyna.jcr.TestObject");
         n1.setJcrPath("/site/news.html");
@@ -188,11 +191,11 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
         n1.set("testComponent", c1);
         n1.set("testReference", r1);
 
-        //        String[] s = {"S1", "S2", "S3"};
-        //        List<String> stringsList = new ArrayList<String>(Arrays.asList(s));
-        //        n1.set("testStringsList", stringsList);
-        //        n1.set("testComponentsList", componentsList);
-        //        n1.set("testReferencesList", referencesList);
+        String[] s = {"S1", "S2", "S3"};
+        List<String> stringsList = new ArrayList<String>(Arrays.asList(s));
+        n1.set("testStringsList", stringsList);
+        //n1.set("testComponentsList", componentsList);
+        n1.set("testReferencesList", referencesList);
 
         dynaNodeDao.save(n1);
 
@@ -217,18 +220,18 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
         //        assertEquals(c2.get("name"), ns2.get("testComponent.component.name"));
         assertEquals(r1.get("name"), ns2.get("testReference.name")); // Required reference
 
-        //        assertEquals(stringsList.size(), ((List) ns2.get("testStringsList")).size());
-        //        assertEquals(stringsList.get(1), ((List) ns2.get("testStringsList")).get(1));
-        //        assertEquals(componentsList.size(), ((List) ns2.get("testComponentsList")).size());
-        //        //assertEquals(componentsList.get(1), ((List) ns2.get("testComponentsList")).get(1));
-        //        assertEquals(referencesList.size(), ((List) ns2.get("testReferencesList")).size());
-        //        //assertEquals(referencesList.get(1), ((List) ns2.get("testReferencesList")).get(1));
+        assertEquals(stringsList.size(), ((List) ns2.get("testStringsList")).size());
+        assertEquals(stringsList.get(1), ((List) ns2.get("testStringsList")).get(1));
+        //assertEquals(componentsList.size(), ((List) ns2.get("testComponentsList")).size());
+        //assertEquals(componentsList.get(1), ((List) ns2.get("testComponentsList")).get(1));
+        assertEquals(referencesList.size(), ((List) ns2.get("testReferencesList")).size());
+        //assertEquals(referencesList.get(1), ((List) ns2.get("testReferencesList")).get(1));
     }
 
     public void testGetAllByType()
     {
         List<DynaNode> nodes = dynaNodeDao.getAllByType("Article");
         assertNotNull(nodes);
-        assertEquals(3,nodes.size());
+        assertEquals(3, nodes.size());
     }
 }

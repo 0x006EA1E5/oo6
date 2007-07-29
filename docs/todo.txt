@@ -5,15 +5,30 @@ The CMS release. Feature parity with OO5 for object editing
 and publishing with the exception of internal links. Introduction
 of new templating/block model with efficient caching.
 ==================================================================
-* How to reload spring cofig esp properties
-* Configure runtime logging settings
 
+* Hosting work (with Martin)
+ + JMX support for status update and tuning
+ + Mem/connection stats
+ + Queries per page via AOP
+ + Clustering with Terracotta
+ + Canoo Webtest support 
+ + Maven-less startup
+ + Checking for and handling gracefully missing external resources
+   - JCR
+   - JDBC inc pool status and connections
+   - Read/write Filesystem
+   - HTTP access to: google/self
+   - Mail support
+   - Imagemagick
+   - JVM Version vendor and memory
+ + Backup and restore (hot?)
+
+* How to reload spring cofig esp properties
 * CGLIB in OCM: Folder/Page base objects (auto code generation)
  + Live TypeDef manipulation (inc version numbers)
- + Get rid of "data" node and clean up boostrap files
 * Publishing and versioning
 * Action/event/scripting framework
- + Audit log 
+ + Audit log / AOP
 * Forms support for components and references and real time client side support
  + Pick Lists
  + Image, file and rich media libaries (external image libary support)
@@ -26,19 +41,18 @@ of new templating/block model with efficient caching.
 
 * Transactional intergity with JCR and JDBC
 * Clustering support
- + Canoo Webtest support 
+ 
 * Queries/page stats and timings
 * Date/number formatting tools (checked)
 * Maven project archetype
 * Paging/soting in data grid, different columns for different objects?
-* Favourites
 * System status indicators
 * Method level security -- waiting for Spring Security 2.0
 * Instance level security (for Folders at least)
 * Live template manipulation
 * OO Toolbar
 * Protect key folders in navigator
-* Backup and restore
+* Favourites
 
 * EXT Drag/rename clashes: see http://extjs.com/forum/archive/index.php/t-5776.html
 + Maven: Don't filter binary resources
@@ -49,7 +63,7 @@ of new templating/block model with efficient caching.
 ==================================================================
 M3 (mid September)
 
-The site structure and plugin release.
+The web services release. Site structure and plugin release.
 ==================================================================
 
 * Link libraries

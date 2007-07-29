@@ -9,4 +9,5 @@
 [oo:node] > nt:base, mix:referenceable
 orderable
 - * (UNDEFINED)
+- * (UNDEFINED) multiple
 + * = oo:node
