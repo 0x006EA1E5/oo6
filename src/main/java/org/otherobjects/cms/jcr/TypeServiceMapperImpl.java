@@ -106,20 +106,26 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         fd3.setFieldName("label");
         fd3.setJcrName("label");
         cd.addFieldDescriptor(fd3);
-
+        
         FieldDescriptor fd4 = new FieldDescriptor();
         fd4.setFieldName("ooType");
         fd4.setJcrName("ooType");
         cd.addFieldDescriptor(fd4);
+
+        // FIXME This is used for collections. Is there a better way?
+        FieldDescriptor fd5 = new FieldDescriptor();
+        fd5.setFieldName("code");
+        fd5.setJcrName("code");
+        fd5.setId(true);
+        cd.addFieldDescriptor(fd5);
 
         // Add custom properties
         for (PropertyDef propDef : typeDef.getProperties())
         {
             String propertyType = propDef.getType();
             String collectionType = propDef.getCollectionType();
-            String relatedType = propDef.getRelatedType();
 
-            if (collectionType != null && collectionType.equals("list"))
+            if (collectionType != null && collectionType.equals(PropertyDef.LIST))
             {
                 CollectionDescriptor cld = new CollectionDescriptor();
                 cld.setFieldName(propDef.getName());
@@ -140,21 +146,6 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
                     cld.setElementClassName(((JcrTypeServiceImpl) typeService).getJcrClassMapping(propertyType).getName());
                     cld.setCollectionConverter(MultiValueCollectionConverterImpl.class.getName());
                 }
-
-                // if this list contains references or components the items contained in the list are of type related type
-                // for simple  properties they are of type propertyType
-                //            	if(propertyType.equals(PropertyDef.COMPONENT) || propertyType.equals(PropertyDef.REFERENCE))
-                //            	{
-                //            		cld.setElementClassName(typeService.getType(relatedType).getClassName());
-                //            	}
-                //            	else
-                //            	{
-                //            		//FIXME should the getClassMapping method not be in the typeService interface?
-                //            		cld.setElementClassName(((JcrTypeServiceImpl)typeService).getJcrClassMapping(propertyType).getName());
-                //            	}
-
-                //            	 collectionConverter = new MultiValueCollectionConverterImpl(atomicTypeConverterProvider.getAtomicTypeConverters(), objectConverter, mapper);
-                //                cld.setElementClassName(((JcrTypeServiceImpl) typeService).getJcrClassMapping(propertyType).getName());
 
                 cd.addCollectionDescriptor(cld);
             }

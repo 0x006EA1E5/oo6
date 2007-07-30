@@ -194,7 +194,7 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
         String[] s = {"S1", "S2", "S3"};
         List<String> stringsList = new ArrayList<String>(Arrays.asList(s));
         n1.set("testStringsList", stringsList);
-        //n1.set("testComponentsList", componentsList);
+        n1.set("testComponentsList", componentsList);
         n1.set("testReferencesList", referencesList);
 
         dynaNodeDao.save(n1);

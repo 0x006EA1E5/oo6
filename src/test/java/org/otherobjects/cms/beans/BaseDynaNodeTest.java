@@ -105,6 +105,7 @@ public abstract class BaseDynaNodeTest extends BaseJcrTestCase
     protected DynaNode createComponent(String name)
     {
         DynaNode c = dynaNodeDao.create("org.otherobjects.Dyna.jcr.TestComponentObject");
+        c.setCode(name);
         c.set("name", name + " Name");
         return c;
     }
