@@ -170,10 +170,8 @@ public class BindServiceImpl implements BindService
             if(listMatcher.matches())
             {
             	createList(dynaNode, propertyName, listMatcher);
-            	break;
+            	continue;
             }
-            
-            propertyName = propertyName.substring(index + 1, propertyName.length());
             
             PropertyDef property = dynaNode.getTypeDef().getProperty(p);
 	
