@@ -27,6 +27,7 @@ public class JcrTypeServiceImpl extends AbstactTypeService
     {
         reset();
         loadTypes();
+        generateClasses();
     }
 
     /**
@@ -41,15 +42,19 @@ public class JcrTypeServiceImpl extends AbstactTypeService
         }
     }
 
-    @Override
-    public void registerType(TypeDef t)
+    /**
+     * Generates classes for types not backed by an existing class.
+     */
+    public void generateClasses()
     {
-        if (t.getClassName() == null)
+        for (TypeDef t : getTypes())
         {
-            // Create bean class
-            t.setClassName(jcrBeanService.createCustomDynaNodeClass(t));
+            if (!t.hasClass())
+            {
+                // Create bean class
+                t.setClassName(jcrBeanService.createCustomDynaNodeClass(t));
+            }
         }
-        super.registerType(t);
     }
 
     public Object getJcrConverter(String type)
@@ -92,6 +97,11 @@ public class JcrTypeServiceImpl extends AbstactTypeService
     {
         registerConverters();
         registerClassMappings();
+    }
+
+    public String getClassNameForType(String type)
+    {
+        return jcrClassMappings.get(type).getName();
     }
 
     private void registerConverters()

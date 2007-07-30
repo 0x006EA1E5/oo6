@@ -30,7 +30,6 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     /** Property to be used an the label (human friendly identifier) for this node. */
     // TODO This comes from TypeDef now: private String labelProperty;
-    
     /** The path of this node's parent. Must end with a forward slash. Ignored when this node is a component. */
     private String path;
 
@@ -205,7 +204,7 @@ public class DynaNode implements CmsNode, WorkbenchItem
     {
         if (getJcrPath() == null)
             return null;
-        
+
         String linkPath = getJcrPath().replaceAll("/site/", "/go/");
         if (!linkPath.contains(".") && !linkPath.endsWith("/"))
             linkPath += "/";

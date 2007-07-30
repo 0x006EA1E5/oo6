@@ -7,6 +7,8 @@ import java.util.Map;
 import org.otherobjects.cms.model.CmsNode;
 import org.springframework.util.Assert;
 
+import flexjson.JSON;
+
 /**
  * FIXME Split into interface and Jcr impl
  * 
@@ -28,7 +30,7 @@ public class TypeDef implements CmsNode
     /** Collection of properties for this type. */
     private Map<String, PropertyDef> properties = new LinkedHashMap<String, PropertyDef>();
     //    private List<PropertyDef> properties = new ArrayList<PropertyDef>();
-    
+
     /** Human friendly name for type. Can be inferred from name */
     private String label;
 
@@ -41,6 +43,9 @@ public class TypeDef implements CmsNode
     /** The property to use as the label for items of this type. */
     private String labelProperty;
 
+    /** Reference to TypeService where this TypeDEf is registered. */
+    private TypeService typeService;
+
     public TypeDef()
     {
     }
@@ -49,7 +54,7 @@ public class TypeDef implements CmsNode
     {
         setName(name);
     }
-    
+
     @Override
     public String toString()
     {
@@ -89,6 +94,7 @@ public class TypeDef implements CmsNode
     {
         // Check for duplicates 
         Assert.isNull(getProperty(pd.getName()));
+        pd.setParentTypeDef(this);
         this.properties.put(pd.getName(), pd);
     }
 
@@ -124,7 +130,10 @@ public class TypeDef implements CmsNode
 
     public String getClassName()
     {
-        return className;
+        if (this.className != null)
+            return this.className;
+        else
+            return getName();
     }
 
     public void setClassName(String className)
@@ -171,6 +180,27 @@ public class TypeDef implements CmsNode
     public void setLabelProperty(String labelProperty)
     {
         this.labelProperty = labelProperty;
+    }
+
+    @JSON(include = false)
+    public TypeService getTypeService()
+    {
+        return typeService;
+    }
+
+    public void setTypeService(TypeService typeService)
+    {
+        this.typeService = typeService;
+    }
+
+    /**
+     * Determines if this TypeDef has a class associated with it. This 
+     * only return true if the backing class exists or has been generated.
+     * @return
+     */
+    public boolean hasClass()
+    {
+        return (this.className != null);
     }
 
 }

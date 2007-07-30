@@ -7,6 +7,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.test.BaseJcrTestCase;
+import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
@@ -17,7 +18,7 @@ public abstract class BaseDynaNodeTest extends BaseJcrTestCase
     public static final String TEST_TYPE_NAME = "org.otherobjects.Dyna.jcr.TestObject";
     public static final String TEST_REFERENCE_TYPE_NAME = "org.otherobjects.Dyna.jcr.TestReferenceObject";
 
-    protected TypeService typeService;
+    protected JcrTypeServiceImpl typeService;
     protected DynaNodeDao dynaNodeDao;
     protected DynaNode dynaNode;
     protected Date now;
@@ -57,7 +58,7 @@ public abstract class BaseDynaNodeTest extends BaseJcrTestCase
         now = null;
     }
 
-    protected void setupTypesService(TypeService typeService)
+    protected void setupTypesService(JcrTypeServiceImpl typeService)
     {
         TypeDef td2 = new TypeDef("org.otherobjects.Dyna.jcr.TestReferenceObject");
         td2.addProperty(new PropertyDef("name", "string", null, null));
@@ -89,6 +90,8 @@ public abstract class BaseDynaNodeTest extends BaseJcrTestCase
         td.addProperty(new PropertyDef("testReferencesList", "reference", "org.otherobjects.Dyna.jcr.TestReferenceObject", "list"));
         td.setLabelProperty("testString");
         typeService.registerType(td);
+        
+        typeService.generateClasses();
 
     }
 
@@ -110,7 +113,7 @@ public abstract class BaseDynaNodeTest extends BaseJcrTestCase
         return c;
     }
 
-    public void setTypeService(TypeService typeService)
+    public void setTypeService(JcrTypeServiceImpl typeService)
     {
         this.typeService = typeService;
     }

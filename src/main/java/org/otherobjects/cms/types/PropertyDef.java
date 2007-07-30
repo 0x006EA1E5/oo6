@@ -1,7 +1,11 @@
 package org.otherobjects.cms.types;
 
-import org.otherobjects.cms.SingletonBeanLocator;
+import java.util.ArrayList;
+
 import org.otherobjects.cms.util.StringUtils;
+import org.springframework.util.Assert;
+
+import flexjson.JSON;
 
 /**
  * Defines a property of a type.
@@ -88,6 +92,9 @@ public class PropertyDef
 
     private String help;
 
+    /** Reference to parent TypeDef. */
+    private TypeDef parentTypeDef;
+
     public PropertyDef()
     {
     }
@@ -107,6 +114,22 @@ public class PropertyDef
         setType(propertyType);
         setRelatedType(relatedType);
         setCollectionType(collectionType);
+    }
+
+    /**
+     * Returns the name of the Class required to store this property. This is looked up from the TypeService.
+     */
+    public String getClassName()
+    {
+        String className;
+        if (getCollectionType() != null && getCollectionType().equals(LIST))
+            className = ArrayList.class.getName();
+        else if (getType().equals(REFERENCE) || getType().equals(COMPONENT))
+            className = getRelatedTypeDef().getClassName();
+        else
+            className = ((JcrTypeServiceImpl) getTypeService()).getClassNameForType(this.type);
+        Assert.notNull(className, "No class found for property: " + getName() + " of type: " + getType() + ".");
+        return className;
     }
 
     @Override
@@ -232,9 +255,27 @@ public class PropertyDef
     {
         if (getRelatedType() == null)
             return null;
+        return getTypeService().getType(getRelatedType());
+    }
+
+    @JSON(include = false)
+    public TypeService getTypeService()
+    {
         // FIXME Remove singleton access
-        TypeService typeService = (TypeService) SingletonBeanLocator.getBean("typeService");
-        return typeService.getType(getRelatedType());
+        TypeService typeService = getParentTypeDef().getTypeService();
+        Assert.notNull(typeService, "No TypeService registered with parent TypeDef.");
+        return typeService;
+    }
+
+    @JSON(include = false)
+    public TypeDef getParentTypeDef()
+    {
+        return parentTypeDef;
+    }
+
+    public void setParentTypeDef(TypeDef typeDef)
+    {
+        this.parentTypeDef = typeDef;
     }
 
 }

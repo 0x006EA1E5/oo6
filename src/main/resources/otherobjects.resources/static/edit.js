@@ -154,12 +154,16 @@ OO.EditForm = function(){
 	    	if(typeof obj[id] != 'function') {
 				if(obj[id] instanceof Object)
 				{
+					console.log(prefix+id +"="+ obj[id]);
 					flat[flat.length]={id:prefix+id, value:obj[id]};
 					flattenObject(obj[id],id+".",flat);
 				}
 				else
+				{
+					console.log(prefix+id +"="+ obj[id]);
 					flat[flat.length]={id:prefix+id, value:obj[id]};
-	        }
+	        	}
+			}
 	    }
 	    return flat;
 	}
