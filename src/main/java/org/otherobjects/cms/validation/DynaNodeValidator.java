@@ -1,6 +1,7 @@
 package org.otherobjects.cms.validation;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.otherobjects.cms.beans.JcrBeanService;
 import org.otherobjects.cms.binding.BindService;
@@ -56,8 +57,32 @@ public class DynaNodeValidator implements Validator
             PropertyDef propertyDef = it.next();
             String fieldName = propertyDef.getName();
             Object value = errors.getFieldValue(fieldName);
-
-            if (propertyDef.getType().equals(PropertyDef.COMPONENT))
+            
+            if(propertyDef.getCollectionType() != null && propertyDef.getCollectionType().equals(PropertyDef.LIST))
+            {
+            	if(propertyDef.getType().equals(PropertyDef.COMPONENT))
+            	{
+            		if(value != null && List.class.isAssignableFrom(value.getClass()))
+            		{
+            			int i = 0;
+            			List<DynaNode> dynaNodeList = (List<DynaNode>) value;
+            			for(DynaNode dynaNode: dynaNodeList)
+            			{
+            				try
+                            {
+                                errors.pushNestedPath(fieldName + "[" + i + "]");
+                                ValidationUtils.invokeValidator(this, dynaNode, errors);
+                            }
+                            finally
+                            {
+                                errors.popNestedPath();
+                            }
+                            i++;
+            			}
+            		}
+            	}
+            }
+            else if (propertyDef.getType().equals(PropertyDef.COMPONENT))
             {
                 try
                 {
