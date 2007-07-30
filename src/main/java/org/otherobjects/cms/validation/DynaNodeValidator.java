@@ -68,15 +68,7 @@ public class DynaNodeValidator implements Validator
             			List<DynaNode> dynaNodeList = (List<DynaNode>) value;
             			for(DynaNode dynaNode: dynaNodeList)
             			{
-            				try
-                            {
-                                errors.pushNestedPath(fieldName + "[" + i + "]");
-                                ValidationUtils.invokeValidator(this, dynaNode, errors);
-                            }
-                            finally
-                            {
-                                errors.popNestedPath();
-                            }
+            				validateComponent(fieldName + "[" + i + "]", dynaNode, errors);
                             i++;
             			}
             		}
@@ -84,16 +76,7 @@ public class DynaNodeValidator implements Validator
             }
             else if (propertyDef.getType().equals(PropertyDef.COMPONENT))
             {
-                try
-                {
-                    Assert.isTrue(DynaNode.class.isAssignableFrom(value.getClass()), "Value of property " + fieldName + " is not a dynaNode. Perhaps there is a conflicting parameter in the request?");
-                    errors.pushNestedPath(fieldName);
-                    ValidationUtils.invokeValidator(this, value, errors);
-                }
-                finally
-                {
-                    errors.popNestedPath();
-                }
+                validateComponent(fieldName, value, errors);
             }
             else
             {
@@ -133,5 +116,19 @@ public class DynaNodeValidator implements Validator
         }
 
     }
-
+    
+    private void validateComponent(String fieldName, Object dynaNode, Errors errors)
+    {
+    	Assert.isTrue(DynaNode.class.isAssignableFrom(dynaNode.getClass()), "Value of property " + fieldName + " is not a dynaNode. Perhaps there is a conflicting parameter in the request?");
+    	try
+        {
+            errors.pushNestedPath(fieldName);
+            ValidationUtils.invokeValidator(this, dynaNode, errors);
+        }
+        finally
+        {
+            errors.popNestedPath();
+        }
+    }
+    
 }

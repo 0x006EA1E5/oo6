@@ -1,10 +1,15 @@
 package org.otherobjects.cms.binding;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.beans.JcrBeanService;
 import org.otherobjects.cms.dao.DynaNodeDao;
@@ -14,6 +19,7 @@ import org.otherobjects.cms.types.TypeDef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
 
@@ -30,6 +36,8 @@ public class BindServiceImpl implements BindService
 
     private String dateFormat;
     private DynaNodeDao dynaNodeDao;
+    
+    static Pattern listPattern = Pattern.compile("^(\\S*)\\[(\\d+)\\]$");
 
     public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
     {
@@ -56,6 +64,11 @@ public class BindServiceImpl implements BindService
                 // Reference to sub object
                 createSubObjects(dynaNode, propertyName);
             }
+            
+            Matcher matcher = listPattern.matcher(propertyName);
+            if(matcher.matches())
+            	createList(dynaNode, propertyName, matcher);
+            
         }
 
         // Add reference custom editors
@@ -82,7 +95,60 @@ public class BindServiceImpl implements BindService
             }
         }
     }
-
+    
+    
+    protected void createList(DynaNode dynaNode, String propertyName, Matcher listMatcher)
+    {
+        if(listMatcher.matches()) // this seems to be a list - create it if it doesn't exist
+        {
+        	String listName = listMatcher.group(1);
+        	int listIndex = -1;
+        	try{
+        		listIndex = Integer.parseInt(listMatcher.group(2));
+        	}
+        	catch(NumberFormatException e)
+        	{
+        		throw new OtherObjectsException("Error parsing list index: " + propertyName, e);
+        	}
+        	
+        	List listProperty = null;
+        	
+        	
+        	try {
+        		listProperty = (List) PropertyUtils.getSimpleProperty(dynaNode, listName);
+				if(listProperty == null)
+				{
+					listProperty = new ArrayList();
+					PropertyUtils.setSimpleProperty(dynaNode, listName, listProperty);
+				}
+				
+			} catch (Exception e) {
+				throw new OtherObjectsException("Error instantiating list property: " + listName, e);
+			}
+			
+			// set indexed property if not yet set
+			Assert.isTrue(listIndex > -1, "This should have been parsed to something greater than -1, otherwise some parsing ex would have happenend and we wouldn't be here");
+			fillList(listProperty, listIndex + 1);
+			if(listProperty.get(listIndex) == null)
+			{
+				// type of property in list
+				String listElementType = dynaNode.getTypeDef().getProperty(listName).getType();
+				if(listElementType.equals(PropertyDef.COMPONENT)) // only do something for components, not for simple properties
+				{
+					TypeDef relatedTypeDef = dynaNode.getTypeDef().getProperty(listName).getRelatedTypeDef();
+					try {
+						DynaNode subObject = (DynaNode) Class.forName(relatedTypeDef.getClassName()).newInstance();
+						subObject.setOoType(relatedTypeDef.getName());
+		                listProperty.set(listIndex, subObject);
+					} catch (Exception e) {
+						throw new OtherObjectsException("Couldn't create/set indexed component", e);
+					}	
+	            }
+			}
+        		
+        }
+    }
+    
     /**
      * Creates necessary sub objects. These are required for storing
      * component and list properties but not for references. TODO Explain better.
@@ -100,14 +166,31 @@ public class BindServiceImpl implements BindService
             if (index < 0)
                 break;
             String p = propertyName.substring(0, index);
+            Matcher listMatcher = listPattern.matcher(p);
+            if(listMatcher.matches())
+            {
+            	createList(dynaNode, propertyName, listMatcher);
+            	break;
+            }
+            
+            propertyName = propertyName.substring(index + 1, propertyName.length());
+            
             PropertyDef property = dynaNode.getTypeDef().getProperty(p);
-
+	
             //TODO More intelligent checking here to avoid repeat calls
             createSubObject(dynaNode, p, property.getRelatedTypeDef());
         }
     }
 
-    protected void createSubObject(DynaNode dynaNode, String propertyName, TypeDef relatedTypeDef)
+    private void fillList(List listProperty, int size) {
+		while(listProperty.size() < size)
+		{
+			listProperty.add(null);
+		}
+		
+	}
+
+	protected void createSubObject(DynaNode dynaNode, String propertyName, TypeDef relatedTypeDef)
     {
         if (dynaNode.get(propertyName) == null)
         {
