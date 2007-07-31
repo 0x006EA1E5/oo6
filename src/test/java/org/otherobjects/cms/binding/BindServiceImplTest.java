@@ -88,13 +88,13 @@ public class BindServiceImplTest extends BaseDynaNodeTest
     }
     
     
-    public void testDeepNest()  throws Exception
+    public void testDeepNestList()  throws Exception
     {
     	MockHttpServletRequest request = new MockHttpServletRequest();
     	
-    	request.addParameter("testDeepComponentsList[0].testComponentsList2[1].testSimpleList[0].name", "testDeepName2");
-    	request.addParameter("testDeepComponentsList[0].testComponentsList2[0].testSimpleList[0].name", "testDeepName");
-    	request.addParameter("testDeepComponentsList[0].testComponentsList2[2].testSimpleList[0].name", "testDeepName3");
+    	request.addParameter("testDeepComponentsList[0].testComponentsList2[1].testSimpleList[0]", "testDeepName2");
+    	request.addParameter("testDeepComponentsList[0].testComponentsList2[0].testSimpleList[0]", "testDeepName");
+    	request.addParameter("testDeepComponentsList[0].testComponentsList2[2].testSimpleList[0]", "testDeepName3");
     	
     	BindingResult errors = bindService.bind(dynaNode, request);
     	
@@ -102,8 +102,19 @@ public class BindServiceImplTest extends BaseDynaNodeTest
     	Object firstLevelWithComponentsList = PropertyUtils.getIndexedProperty(deepComponentListEntry,"testComponentsList2", 2);
     	Object simpleListEntry = PropertyUtils.getIndexedProperty(firstLevelWithComponentsList,"testSimpleList", 0);
     	
-    	assertEquals("testDeepName3", PropertyUtils.getSimpleProperty(simpleListEntry, "name"));
+    	assertEquals("testDeepName3", simpleListEntry);
     	
+    }
+    
+    public void testDeepNestComponent() throws Exception
+    {
+    	MockHttpServletRequest request = new MockHttpServletRequest();
+    	request.addParameter("testDeepComponent.subComponent.name", "testSubName");
+    	request.addParameter("testDeepComponent.name", "testSuperName");
+    	BindingResult errors = bindService.bind(dynaNode, request);
+    	
+    	assertEquals("testSuperName", PropertyUtils.getNestedProperty(dynaNode, "testDeepComponent.name"));
+    	assertEquals("testSubName", PropertyUtils.getNestedProperty(dynaNode, "testDeepComponent.subComponent.name"));
     }
 
     public void testBindError()
