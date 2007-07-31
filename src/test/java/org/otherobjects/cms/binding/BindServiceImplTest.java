@@ -86,6 +86,25 @@ public class BindServiceImplTest extends BaseDynaNodeTest
     	
     	
     }
+    
+    
+    public void testDeepNest()  throws Exception
+    {
+    	MockHttpServletRequest request = new MockHttpServletRequest();
+    	
+    	request.addParameter("testDeepComponentsList[0].testComponentsList2[1].testSimpleList[0].name", "testDeepName2");
+    	request.addParameter("testDeepComponentsList[0].testComponentsList2[0].testSimpleList[0].name", "testDeepName");
+    	request.addParameter("testDeepComponentsList[0].testComponentsList2[2].testSimpleList[0].name", "testDeepName3");
+    	
+    	BindingResult errors = bindService.bind(dynaNode, request);
+    	
+    	Object deepComponentListEntry = PropertyUtils.getIndexedProperty(dynaNode,"testDeepComponentsList", 0);
+    	Object firstLevelWithComponentsList = PropertyUtils.getIndexedProperty(deepComponentListEntry,"testComponentsList2", 2);
+    	Object simpleListEntry = PropertyUtils.getIndexedProperty(firstLevelWithComponentsList,"testSimpleList", 0);
+    	
+    	assertEquals("testDeepName3", PropertyUtils.getSimpleProperty(simpleListEntry, "name"));
+    	
+    }
 
     public void testBindError()
     {
@@ -129,22 +148,22 @@ public class BindServiceImplTest extends BaseDynaNodeTest
         return request;
     }
 
-    public void testCreateSubObjects()
-    {     
-        // Check that only component (not reference) sub objects are created
-        DynaNode node = dynaNodeDao.create(BaseDynaNodeTest.TEST_TYPE_NAME);
-        assertNull(node.get("testComponent"));
-        bindService.createSubObjects(node, "testComponent.name");
-        assertNotNull(node.get("testComponent"));
-
-        assertNull(node.get("testReference"));
-        bindService.createSubObjects(node, "testReference");
-        assertNull(node.get("testReference"));
-       
-        // Make sure it has the type set
-        assertNotNull(((DynaNode) node.get("testComponent")).getOoType());
-        
-        // Check it is correct class
-        assertEquals(node.getTypeDef().getProperty("testComponent").getRelatedTypeDef().getClassName(), node.get("testComponent").getClass().getName());
-    }
+//    public void testCreateSubObjects()
+//    {     
+//        // Check that only component (not reference) sub objects are created
+//        DynaNode node = dynaNodeDao.create(BaseDynaNodeTest.TEST_TYPE_NAME);
+//        assertNull(node.get("testComponent"));
+//        bindService.createSubObjects(node, "testComponent.name");
+//        assertNotNull(node.get("testComponent"));
+//
+//        assertNull(node.get("testReference"));
+//        bindService.createSubObjects(node, "testReference");
+//        assertNull(node.get("testReference"));
+//       
+//        // Make sure it has the type set
+//        assertNotNull(((DynaNode) node.get("testComponent")).getOoType());
+//        
+//        // Check it is correct class
+//        assertEquals(node.getTypeDef().getProperty("testComponent").getRelatedTypeDef().getClassName(), node.get("testComponent").getClass().getName());
+//    }
 }
