@@ -72,6 +72,18 @@ public abstract class BaseDynaNodeTest extends BaseJcrTestCase
         // td3.addProperty(new PropertyDef("component", "component", "org.otherobjects.Dyna.jcr.TestComponentObject", null));
         td3.setLabelProperty("name");
         typeService.registerType(td3);
+        
+        TypeDef td4 = new TypeDef("org.otherobjects.Dyna.jcr.TestComponentObjectWithSimpleList");
+        td4.addProperty(new PropertyDef("name", "string", null, null));
+        td4.addProperty(new PropertyDef("testSimpleList", "string", null, "list"));
+        td4.setLabelProperty("name");
+        typeService.registerType(td4);
+        
+        TypeDef td5 = new TypeDef("org.otherobjects.Dyna.jcr.TestComponentObjectWithComponentList");
+        td5.addProperty(new PropertyDef("name", "string", null, null));
+        td5.addProperty(new PropertyDef("testComponentsList2", "component", "org.otherobjects.Dyna.jcr.TestComponentObjectWithSimpleList", "list"));
+        td5.setLabelProperty("name");
+        typeService.registerType(td5);
 
         TypeDef td = new TypeDef("org.otherobjects.Dyna.jcr.TestObject");
         td.addProperty(new PropertyDef("testString", "string", null, null));
@@ -88,6 +100,7 @@ public abstract class BaseDynaNodeTest extends BaseJcrTestCase
         td.addProperty(new PropertyDef("testStringsList", "string", null, "list"));
         td.addProperty(new PropertyDef("testComponentsList", "component", "org.otherobjects.Dyna.jcr.TestComponentObject", "list"));
         td.addProperty(new PropertyDef("testReferencesList", "reference", "org.otherobjects.Dyna.jcr.TestReferenceObject", "list"));
+        td.addProperty(new PropertyDef("testDeepComponentsList", "component", "org.otherobjects.Dyna.jcr.TestComponentObjectWithComponentList", "list"));
         td.setLabelProperty("testString");
         typeService.registerType(td);
         
