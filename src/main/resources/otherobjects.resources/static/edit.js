@@ -27,7 +27,13 @@ OO.EditForm = function(){
 			if(propDef.type=="component")
 			{
 				console.log(propDef.relatedTypeDef);
+				form.fieldset({legend:propDef.label});
 				buildFormPart(propDef.relatedTypeDef, propDef.name+".", hiddenFields);
+				form.end();
+			}
+			else if(propDef.collectionType=="list")
+			{
+				form.fieldset({legend:propDef.label}, new Ext.form.OOListField(form, {fieldLabel:'Actions', id:propDef.name, name:propDef.name, width:'200px', allowBlank:true, disabled:false}));
 			}
 			else
 			{
@@ -89,7 +95,7 @@ OO.EditForm = function(){
 					    selectOnFocus:true
 					});
 				}
-				else
+				else if(propDef.collectionType!="list")
 				{
 					config.width='300px';
 					var f = new Ext.form.TextField(config);
@@ -144,23 +150,21 @@ OO.EditForm = function(){
 		console.log(hiddenFields);
 	    form.render('edit-panel');
 		
-		// FIXME Better way to set form values without conflict danger?
-		form.setValues(flattenObject(obj.data, "", []));
-		
+		// Set form values
+		var v = flattenObject(obj.data, "", []);
+		form.setValues(v);
 	}
 	
 	function flattenObject(obj,prefix,flat) {
 		for(var id in obj) {
 	    	if(typeof obj[id] != 'function') {
-				if(obj[id] instanceof Object)
-				{
-					console.log(prefix+id +"="+ obj[id]);
+				if(obj[id] instanceof Object) {
+					//console.log(prefix+id,obj[id]);
 					flat[flat.length]={id:prefix+id, value:obj[id]};
 					flattenObject(obj[id],id+".",flat);
 				}
-				else
-				{
-					console.log(prefix+id +"="+ obj[id]);
+				else {
+					//console.log(prefix+id +"="+ obj[id]);
 					flat[flat.length]={id:prefix+id, value:obj[id]};
 	        	}
 			}
@@ -169,7 +173,7 @@ OO.EditForm = function(){
 	}
 
 	function loadJsonObject(url, callback) {
-		Ext.Ajax.request({url:url, success:function(r){
+		Ext.Ajax.request({url:url, success:function(r) {
 			var o = Ext.util.JSON.decode(r.responseText);
 			callback(o);
 		}});
@@ -181,8 +185,7 @@ OO.EditForm = function(){
 			this.dataId = id;
     	},
 		
-		renderForm : function()
-		{
+		renderForm : function()	{
 			loadJsonObject("/go/workbench/data/item/" + this.dataId, buildForm);
 		}
 	}
@@ -193,12 +196,12 @@ OO.EditForm = function(){
 // Custom DateField that supports Java style dates in milliseconds
 // ------------------------------------------------------------------------------------------------------------------------------
 
-Ext.form.OODateField = function(config){
+Ext.form.OODateField = function(config) {
     Ext.form.OODateField.superclass.constructor.call(this, config);
 };
 
-Ext.extend(Ext.form.OODateField, Ext.form.DateField,  {
-  	setValue : function(date){
+Ext.extend(Ext.form.OODateField, Ext.form.DateField, {
+  	setValue : function(date) {
 		if(date)
 			Ext.form.DateField.superclass.setValue.call(this, this.formatDate(new Date(date)));
     }
@@ -217,7 +220,7 @@ Ext.extend(Ext.form.OOComboBox, Ext.form.ComboBox,  {
     setValue : function(v){
 		console.log("Combo value", v);
     	var text = v;
-    	if(v.id)
+    	if(v && v.id)
     	{
     		text = v.label;
     		v = v.id;
@@ -245,5 +248,23 @@ Ext.extend(Ext.form.OOComboBox, Ext.form.ComboBox,  {
         }else{
             return Ext.form.ComboBox.superclass.getValue.call(this);
         }
+    },
+	
+	newSetValue : function(v){
+		var id, label;
+    	if(v && v.id)
+    	{
+    		label = v.label;
+    		id = v.id;
+    	}
+        else
+		{
+			label = "Nothing selected";
+			id = null; 
+		}
+        this.lastSelectionText = label;
+            this.hiddenField.value = id;
+        this.value = label;
     }
+	
 });

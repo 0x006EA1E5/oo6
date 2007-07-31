@@ -21,6 +21,7 @@
 		<field-descriptor fieldName="type" jcrName="type" />
 		<field-descriptor fieldName="required" jcrName="required" />
 		<field-descriptor fieldName="size" jcrName="size" />
+		<field-descriptor fieldName="collectionType" jcrName="collectionType" />
 		<field-descriptor fieldName="relatedType" jcrName="relatedType" />
 		<field-descriptor fieldName="valang" jcrName="valang" />
 	</class-descriptor>

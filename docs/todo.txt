@@ -40,9 +40,7 @@ of new templating/block model with efficient caching.
 * Global search
 
 * Transactional intergity with JCR and JDBC
-* Clustering support
- 
-* Queries/page stats and timings
+
 * Date/number formatting tools (checked)
 * Maven project archetype
 * Paging/soting in data grid, different columns for different objects?
