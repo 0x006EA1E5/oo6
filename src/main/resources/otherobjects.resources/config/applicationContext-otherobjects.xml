@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
-	
+
 	<!-- 
-	Temporary disble AOP
-	-javaagent:/Users/rich/.m2/repository/aspectj/aspectjweaver/1.5.3/aspectjweaver-1.5.3.jar
-	<aop:spring-configured/>
-	 -->
-	 
+		Temporary disble AOP
+		-javaagent:/Users/rich/.m2/repository/aspectj/aspectjweaver/1.5.3/aspectjweaver-1.5.3.jar
+		<aop:spring-configured/>
+	-->
+
+	<bean id="performanceInterceptor"  class = "org.otherobjects.cms.PerformanceInterceptor"/>
+
+	<aop:config>
+		<aop:aspect ref="performanceInterceptor">
+			<!-- <aop:pointcut id="myCutLogging" expression="execution(* org.otherobjects.cms.controllers.SiteController*.*(..))" />
+			<aop:pointcut id="myCutLogging" expression="execution(* org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImpl*.*(..))" />  -->
+			<aop:pointcut id="myCutLogging" expression="execution(* org.otherobjects.cms.dao.DynaNodeDao.*(..))" />
+			<aop:around pointcut-ref="myCutLogging" method="log" />
+		</aop:aspect>
+	</aop:config>
+
 	<bean name="siteController" class="org.otherobjects.cms.controllers.SiteController">
 		<property name="navigatorService" ref="navigatorService" />
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
@@ -25,26 +35,28 @@
 		<property name="typeService" ref="typeService" />
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
 	</bean>
-	
+
 	<bean name="formController" class="org.otherobjects.cms.controllers.FormController">
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
 		<property name="validator" ref="dynaNodeValidator" />
 		<property name="bindService" ref="bindService" />
 	</bean>
-	
+
 	<bean name="navigatorService" class="org.otherobjects.cms.workbench.NavigatorServiceImpl">
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
 		<dwr:remote javascript="NavigatorService" />
 	</bean>
-	
+
 	<bean name="contentService" class="org.otherobjects.cms.workbench.ContentServiceImpl">
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
 		<dwr:remote javascript="ContentService" />
 	</bean>
-	
+
 	<bean name="bindService" class="org.otherobjects.cms.binding.BindServiceImpl">
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
-		<property name="dateFormat"><value>dd/MM/yy</value></property>
+		<property name="dateFormat">
+			<value>dd/MM/yy</value>
+		</property>
 	</bean>
 
 	<bean name="singletonBeanLocator" class="org.otherobjects.cms.SingletonBeanLocator" />
@@ -97,13 +109,19 @@
 	</bean>
 
 	<bean id="jsonView" class="org.otherobjects.cms.views.JsonView">
-		<property name="messageSource" ref="messageSource" />	
+		<property name="messageSource" ref="messageSource" />
 	</bean>
-	
+
 	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
-		<property name="defaultLocale"><value>en_GB</value></property>
-		<property name="cookieName" ><value>ooWorkbenchLocale</value></property>
-		<property name="cookieMaxAge"><value>1000</value></property>
+		<property name="defaultLocale">
+			<value>en_GB</value>
+		</property>
+		<property name="cookieName">
+			<value>ooWorkbenchLocale</value>
+		</property>
+		<property name="cookieMaxAge">
+			<value>1000</value>
+		</property>
 	</bean>
-	
+
 </beans>
