@@ -104,17 +104,17 @@ public class MapCollectionConverterImpl extends AbstractCollectionConverterImpl
                 Object fieldValue = map.get(propertyName);
                 PropertyDef property = type.getProperty(propertyName);
                 String propertyType = property.getType();
-                String collectionType = property.getCollectionType();
+                //String collectionElementType = property.getCollectionElementType();
 
-                if (collectionType != null && collectionType.equals("list"))
+                if (propertyType != null && propertyType.equals(PropertyDef.LIST))
                 {
                     insertList(session, dataNode, propertyName, fieldValue, property);
                 }
-                else if (propertyType.equals("component"))
+                else if (propertyType.equals(PropertyDef.COMPONENT))
                 {
                     insertComponentProperty(session, dataNode, propertyName, fieldValue);
                 }
-                else if (propertyType.equals("reference"))
+                else if (propertyType.equals(PropertyDef.REFERENCE))
                 {
                     insertReferenceProperty(session, dataNode, propertyName, fieldValue);
                 }
@@ -227,18 +227,17 @@ public class MapCollectionConverterImpl extends AbstractCollectionConverterImpl
             for (PropertyDef property : type.getProperties())
             {
                 String propertyType = property.getType();
-                String collectionType = property.getCollectionType();
                 Object value = null;
 
-                if (collectionType != null && collectionType.equals("list"))
+                if (propertyType.equals(PropertyDef.LIST))
                 {
                     value = retrieveList(session, dataNode, property);
                 }
-                else if (propertyType.equals("component"))
+                else if (propertyType.equals(PropertyDef.COMPONENT))
                 {
                     value = retrieveComponentProperty(session, dataNode, property);
                 }
-                else if (propertyType.equals("reference"))
+                else if (propertyType.equals(PropertyDef.REFERENCE))
                 {
                     value = retrieveReferenceProperty(session, dataNode, property);
                 }

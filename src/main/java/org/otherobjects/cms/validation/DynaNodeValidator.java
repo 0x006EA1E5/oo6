@@ -58,9 +58,11 @@ public class DynaNodeValidator implements Validator
             String fieldName = propertyDef.getName();
             Object value = errors.getFieldValue(fieldName);
             
-            if(propertyDef.getCollectionType() != null && propertyDef.getCollectionType().equals(PropertyDef.LIST))
+            if(propertyDef.getType().equals(PropertyDef.LIST))
             {
-            	if(propertyDef.getType().equals(PropertyDef.COMPONENT))
+            	String collectionElementType = propertyDef.getCollectionElementType();
+            	Assert.isTrue(collectionElementType != null, "If this property is a collection the collectionElementType needs to have been set");
+            	if(collectionElementType.equals(PropertyDef.COMPONENT))
             	{
             		if(value != null && List.class.isAssignableFrom(value.getClass()))
             		{

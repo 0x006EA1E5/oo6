@@ -56,8 +56,8 @@ public class PropertyDef
     /** Defines type of this property. */
     private String type;
 
-    /** Type of collection if this property can have multiple values. */
-    private String collectionType;
+    /** Type of items in collection if this property is a collection. */
+    private String collectionElementType;
 
     /** Type of reference or component.  */
     private String relatedType;
@@ -98,22 +98,37 @@ public class PropertyDef
     public PropertyDef()
     {
     }
-
-    public PropertyDef(String name, String propertyType, String relatedType, String collectionType, boolean required)
+    
+    /**
+     * 
+     * @param name
+     * @param propertyType - oo type: simple props, component, reference or list
+     * @param relatedType - for components and references or lists thereof, type of component/reference
+     * @param collectionElementType - for lists only: type of elements of the list: simple, component, reference
+     * @param required
+     */
+    public PropertyDef(String name, String propertyType, String relatedType, String collectionElementType, boolean required)
     {
         setName(name);
         setType(propertyType);
         setRelatedType(relatedType);
-        setCollectionType(collectionType);
+        setCollectionElementType(collectionElementType);
         setRequired(required);
     }
-
-    public PropertyDef(String name, String propertyType, String relatedType, String collectionType)
+    
+    /**
+     * 
+     * @param name
+     * @param propertyType - oo type: simple props, component, reference or list
+     * @param relatedType - for components and references or lists thereof, type of component/reference
+     * @param collectionElementType - for lists only: type of elements of the list: simple, component, reference
+     */
+    public PropertyDef(String name, String propertyType, String relatedType, String collectionElementType)
     {
         setName(name);
         setType(propertyType);
         setRelatedType(relatedType);
-        setCollectionType(collectionType);
+        setCollectionElementType(collectionElementType);
     }
 
     /**
@@ -122,7 +137,7 @@ public class PropertyDef
     public String getClassName()
     {
         String className;
-        if (getCollectionType() != null && getCollectionType().equals(LIST))
+        if (getType().equals(LIST))
             className = ArrayList.class.getName();
         else if (getType().equals(REFERENCE) || getType().equals(COMPONENT))
             className = getRelatedTypeDef().getClassName();
@@ -211,16 +226,6 @@ public class PropertyDef
         this.help = help;
     }
 
-    public String getCollectionType()
-    {
-        return collectionType;
-    }
-
-    public void setCollectionType(String collectionType)
-    {
-        this.collectionType = collectionType;
-    }
-
     public boolean isRequired()
     {
         return required;
@@ -277,5 +282,15 @@ public class PropertyDef
     {
         this.parentTypeDef = typeDef;
     }
+
+	public String getCollectionElementType() {
+		return collectionElementType;
+	}
+
+	public void setCollectionElementType(String collectionElementType) {
+		this.collectionElementType = collectionElementType;
+	}
+    
+    
 
 }

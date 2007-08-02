@@ -136,6 +136,10 @@ public class BindServiceImpl implements BindService
     	if(isList)
     	{
     		List listProperty;
+    		// this is a list so it needs to have a collectionElementType in propertyDef
+    		String collectionElementType = propertyDef.getCollectionElementType();
+        	Assert.isTrue(collectionElementType != null, "If this property is a collection the collectionElementType needs to have been set");
+        	
     		// create list
     		try {
     			listProperty = (List) PropertyUtils.getSimpleProperty(parent, propertyName);
@@ -147,7 +151,7 @@ public class BindServiceImpl implements BindService
 
 				fillList(listProperty, listIndex + 1);
 				
-				if(propertyDef.getType().equals(PropertyDef.COMPONENT)) // we only create list elements that are supposed to be components
+				if(collectionElementType.equals(PropertyDef.COMPONENT)) // we only create list elements that are supposed to be components
 				{
 					if(listProperty.get(listIndex) == null) 
 					{

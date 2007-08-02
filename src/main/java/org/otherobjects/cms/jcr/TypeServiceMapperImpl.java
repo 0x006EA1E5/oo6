@@ -123,27 +123,29 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         for (PropertyDef propDef : typeDef.getProperties())
         {
             String propertyType = propDef.getType();
-            String collectionType = propDef.getCollectionType();
+            
 
-            if (collectionType != null && collectionType.equals(PropertyDef.LIST))
+            if (propertyType.equals(PropertyDef.LIST))
             {
+            	String collectionElementType = propDef.getCollectionElementType();
+            	Assert.isTrue(collectionElementType != null, "If this property is a collection the collectionElementType needs to have been set");
                 CollectionDescriptor cld = new CollectionDescriptor();
                 cld.setFieldName(propDef.getName());
                 cld.setJcrName(propDef.getName());
 
-                if (propertyType.equals(PropertyDef.COMPONENT))
+                if (collectionElementType.equals(PropertyDef.COMPONENT))
                 {
                     cld.setElementClassName(propDef.getRelatedTypeDef().getClassName());
                     cld.setCollectionConverter(DefaultCollectionConverterImpl.class.getName());
                 }
-                else if (propertyType.equals(PropertyDef.REFERENCE))
+                else if (collectionElementType.equals(PropertyDef.REFERENCE))
                 {
                     cld.setElementClassName(propDef.getRelatedTypeDef().getClassName());
                     cld.setCollectionConverter(BeanReferenceCollectionConverterImpl.class.getName());
                 }
                 else
                 {
-                    cld.setElementClassName(((JcrTypeServiceImpl) typeService).getJcrClassMapping(propertyType).getName());
+                    cld.setElementClassName(((JcrTypeServiceImpl) typeService).getJcrClassMapping(collectionElementType).getName());
                     cld.setCollectionConverter(MultiValueCollectionConverterImpl.class.getName());
                 }
 
