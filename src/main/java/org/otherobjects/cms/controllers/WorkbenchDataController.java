@@ -65,16 +65,9 @@ public class WorkbenchDataController implements Controller
         DynaNode dynaNode = dynaNodeDao.get(id);
         Assert.notNull(dynaNode, "No item found: " + id);
 
-        TypeDef type = typeService.getType(dynaNode.getOoType());
-        Assert.notNull(dynaNode, "No type found: " + dynaNode.getOoType());
-
-        Map<String, Object> m = new HashMap<String, Object>();
-        m.put("type", type);
-        m.put("data", dynaNode);
-
         ModelAndView view = new ModelAndView("jsonView");
-        view.addObject(JsonView.JSON_DATA_KEY, m);
-        view.addObject(JsonView.JSON_INCLUDES_KEY, new String[]{"data.data", "type.properties"});
+        view.addObject(JsonView.JSON_DATA_KEY, dynaNode);
+        view.addObject(JsonView.JSON_DEEP_SERIALIZE, true);
         return view;
     }
 
