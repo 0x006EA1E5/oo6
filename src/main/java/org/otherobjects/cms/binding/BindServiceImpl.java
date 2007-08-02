@@ -1,6 +1,5 @@
 package org.otherobjects.cms.binding;
 
-import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -17,8 +16,6 @@ import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
@@ -33,8 +30,6 @@ import org.springframework.web.bind.ServletRequestDataBinder;
  */
 public class BindServiceImpl implements BindService
 {
-    private final Logger logger = LoggerFactory.getLogger(BindServiceImpl.class);
-
     private String dateFormat;
     private DynaNodeDao dynaNodeDao;
     
@@ -93,6 +88,7 @@ public class BindServiceImpl implements BindService
      * @param typeDef
      * @param propertyPath
      */
+    @SuppressWarnings("unchecked")
     protected void createNextObject(Object parent, TypeDef typeDef,
 			String propertyPath) {
     	Matcher matcher = listPattern.matcher(propertyPath);
@@ -132,13 +128,15 @@ public class BindServiceImpl implements BindService
     	// find out type of object
     	Object newParent = null;
     	PropertyDef propertyDef = typeDef.getProperty(propertyName);
+    	// TODO Show complete paramater name at this point
+    	Assert.notNull(propertyDef, "No property found for parameter path: " + propertyName);
     	TypeDef newTypeDef = null;
     	if(isList)
     	{
     		List listProperty;
     		// this is a list so it needs to have a collectionElementType in propertyDef
     		String collectionElementType = propertyDef.getCollectionElementType();
-        	Assert.isTrue(collectionElementType != null, "If this property is a collection the collectionElementType needs to have been set");
+        	Assert.notNull("If this property is a collection the collectionElementType needs to have been set: " + propertyDef.getName());
         	
     		// create list
     		try {
@@ -217,7 +215,7 @@ public class BindServiceImpl implements BindService
         }
     }
     
-    private void fillList(List list, int size) {
+    private void fillList(List<?> list, int size) {
     	int initialSize = list.size();
     	if(initialSize >= size)
     		return;

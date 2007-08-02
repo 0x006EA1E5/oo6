@@ -31,9 +31,9 @@ OO.EditForm = function(){
 				buildFormPart(propDef.relatedTypeDef, propDef.name+".", hiddenFields);
 				form.end();
 			}
-			else if(propDef.collectionType=="list")
+			else if(propDef.type=="list")
 			{
-				form.fieldset({legend:propDef.label}, new Ext.form.OOListField(form, {fieldLabel:'Actions', id:propDef.name, name:propDef.name, width:'200px', allowBlank:true, disabled:false}));
+				form.fieldset({legend:propDef.label}, new Ext.form.OOListField(form, propDef, {fieldLabel:'Actions', id:prefix+propDef.name, name:prefix+propDef.name, width:'200px', allowBlank:true, disabled:false}));
 			}
 			else
 			{
@@ -115,7 +115,7 @@ OO.EditForm = function(){
 
 		// Create map to store hidden fields
 		var hiddenFields = {};
-		hiddenFields["id"] = obj.data.id;
+		hiddenFields["id"] = obj.id;
 		
 		// Create form
 	    form = new Ext.form.Form({
@@ -130,7 +130,7 @@ OO.EditForm = function(){
 		//form.add(new Ext.form.TextField({fieldLabel:'Type', name:'ooType', width:'200px', allowBlank:false}));
 		
 		// Add form fields
-		buildFormPart(obj.type, "", hiddenFields);
+		buildFormPart(obj.typeDef, "", hiddenFields);
 		
 	    form.addButton('Save', function() {
 			form.submit({url:'/go/workbench/form', bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });   
@@ -151,7 +151,7 @@ OO.EditForm = function(){
 	    form.render('edit-panel');
 		
 		// Set form values
-		var v = flattenObject(obj.data, "", []);
+		var v = flattenObject(obj, "", []);
 		form.setValues(v);
 	}
 	

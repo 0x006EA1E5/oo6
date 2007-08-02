@@ -2,14 +2,14 @@
 // List field
 // ------------------------------------------------------------------------------------------------------------------------------
 
-Ext.form.OOListField = function(form, config){
+Ext.form.OOListField = function(form, propDef, config){
 	var i = 0;
 	this.form = form;
+	this.propertyDef =  propDef;
     Ext.form.OOListField.superclass.constructor.call(this, config);
 };
 
 Ext.extend(Ext.form.OOListField, Ext.form.Field, {
-	form : undefined,
 	fields : undefined,
 	layouts : undefined,
 	
@@ -36,10 +36,12 @@ Ext.extend(Ext.form.OOListField, Ext.form.Field, {
     },
 
 	addField : function() {
-		console.log(this.form);
 		var index = 0;
 		if(this.fields) index = this.fields.length;
-		var f = new Ext.form.TextField({fieldLabel:(index+1), name:this.name+'['+index+']', width:'200px', allowBlank:true, disabled:false});
+		if(this.propertyDef.type == "reference")
+			var f = new Ext.form.TextArea({fieldLabel:(index+1), name:this.name+'['+index+']', width:'200px', allowBlank:true, disabled:false});
+		else
+			var f = new Ext.form.TextField({fieldLabel:(index+1), name:this.name+'['+index+']', width:'200px', allowBlank:true, disabled:false});
 		this.append(f);
 	},
 	
@@ -54,7 +56,6 @@ Ext.extend(Ext.form.OOListField, Ext.form.Field, {
 	},
 
 	append : function(field) {
-		
 		if(!this.fields) this.fields = [];
 		if(!this.layouts) this.layouts = [];
 			
@@ -63,16 +64,13 @@ Ext.extend(Ext.form.OOListField, Ext.form.Field, {
 		layout.stack.push(field);
 
 		// Render the layout
-		console.log(this.fields);
 		var neighbour;
 		if(this.fields.length==0)
 			neighbour = this.el;
 		else
 			neighbour = this.fields[this.fields.length-1].el;
-		console.log(neighbour);
 		neighbour = neighbour.findParent(".x-form-item");
 		var c = Ext.DomHelper.insertAfter(neighbour, {tag:"div"});
-		console.log(c);
 		layout.render(c);
 		
 		this.form.items.add(field);

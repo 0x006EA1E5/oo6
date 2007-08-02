@@ -226,7 +226,7 @@
 						<param>src/test/data/jcr-data-site.xml</param>
 					</dataFiles>
 					<repositoryLocation>/tmp/otherobjects/test/repository/</repositoryLocation>
-					<configurationFile>src/main/resources/otherobjects.resources/config/jackrabbit-repo.xml</configurationFile>
+					<configurationFile>src/test/resources/jackrabbit-repo.xml</configurationFile>
 					<nodeTypesFile>src/main/resources/otherobjects.resources/config/node-types.cnd</nodeTypesFile>
 				</configuration>
 				<executions>
