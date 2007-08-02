@@ -7,12 +7,10 @@ of new templating/block model with efficient caching.
 ==================================================================
 
 * Hosting work (with Martin)
- + JMX support for status update and tuning
- + Mem/connection stats
- + Queries per page via AOP
  + Clustering with Terracotta
+ + Queries per page via AOP
+ + JMX support for status update and tuning -- Mem/connection stats
  + Canoo Webtest support 
- + Maven-less startup
  + Checking for and handling gracefully missing external resources
    - JCR
    - JDBC inc pool status and connections

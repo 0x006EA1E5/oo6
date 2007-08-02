@@ -1,0 +1,139 @@
+==================================================================
+M1 (mid July): The Foundations release
+
+Create initial structure for the project. Get major new components
+working. Create solid build and test infrastucture.
+==================================================================
+
+* Workbench
+ + Ajax based interfaced based on the Ext Javascript library.
+ + Drag and drop interface.
+ + Localisation support.
+ + Strong form validation.
+* Data storage
+ + Flexible object storage via Jackrabbit Content Repository.
+ + Support for database access via Hibernate 3.2.
+* Security
+ + Support for administrators and guests.
+ + Passwords are stored securely and your login details can be remembered.
+ + Usernames do not have to be email addresses although it is strongly 
+   recommended that they are and this will probably be enforced for most sites.
+* Architecture
+ + Based on the industry standard Spring framework.
+* Infrastructure
+ + Built with Maven to automate testing, packaging and deployment.
+ + Comprehensive test coverage — over 60%
+
+
+
+==================================================================
+M1.1 (start August): Initial High Availability release
+
+Customised release of M1 with support for running in a clustered
+environment for high availability.
+==================================================================
+
+* Add in support for PostgreSQL as a database
+* Add in clustering support for Jackrabbit
+* Test running under Tomcat (best supported servlet container)
+* Provide sample Terracotta configuration files
+. Design test hosting environment (Martin/Simon)
+. Provide reliable test-data setup procedures
+. Allow simple customisation of server specific properties
+. JMX hooks for important runtime information
+. Canoo Webtest scripts for functional testing 
+. Apache Jmeter scripts for performance testing (Martin/Simon)
+
+
+
+==================================================================
+M2 (end August): The CMS release
+
+Feature parity with OO5 for object editing and publishing 
+(with the exception of internal links). Introduction
+of new templating/block model with efficient caching.
+==================================================================
+
+* Licensing finalised
+* Publishing and versioning
+* Audit log / AOP
+* Action/event/scripting framework
+* Runtime data-type manipulation
+* Enhanced forms support for components, references and lists
+* Libraries: image, file and rich media (external image libary support)
+* Support for JDBC (database) objects in Workbench
+* Global search (for JCR and JDBC)
+* Date/number formatting tools
+* Paging/sorting/columns in data grid
+* Page template support
+* Template designer
+* Site Toolbar
+* Maven project archetype
+* Page performance reporting (queries per page via AOP)
+* System and server status indicators (check for common server problems)
+* Build test hosting environment (Simon to lead)
+
+[Rich and Joerg? to visit London to present M2 at start of September. Date to be
+confirmed]
+
+
+
+==================================================================
+M3 (mid October) The API release.
+
+Finalise site structure and internal links. Then expose API to 
+webservices and plugins
+==================================================================
+
+* Project naming finalised
+* Site structure finalised
+* Internal link libraries
+* Path tooling inc robust SSL support
+* Web services API
+* Plugin architecture
+* SVN integration for site design data
+* Syndication support (publish and subscribe RSS/Atom feeds)
+* Robust Import/export tools
+* Embed Quartz as job scheduler
+* Preliminary reporting integration
+* Integrate OTHERclicks
+* Method level security -- waiting for Spring Security 2.0
+* Instance level security -- waiting for Spring Security 2.0
+
+
+
+==================================================================
+M4 (end November) The interface release.
+
+Design and build of new interface. 
+
+Rich back in office from start of November. Will need to work closely
+with Chris and the design team during M4.
+==================================================================
+
+* Site toolbar improvements
+* Workbench improvements
+ + Favourites
+ + HTML editor
+
+
+
+==================================================================
+Beta 1 (end January) First Beta release
+
+(Rich back in office from start of November)
+==================================================================
+
+* Bug fixing
+* Interface polish
+* Add in forgotten features
+* Performance testing
+* Clustered database testing
+* Backup and restore (hot?)
+* Write user/developer manuals
+* Build www.otherobjects.org
+* Record demo screencasts
+
++ Other stuff we've forgotten
++ Migrate www.othermedia.com to Beta 1 via migration tooling.
++ Start OTHERcommerce planning/development
