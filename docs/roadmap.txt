@@ -37,8 +37,8 @@ environment for high availability.
 * Add in clustering support for Jackrabbit
 * Test running under Tomcat (best supported servlet container)
 * Provide sample Terracotta configuration files
-. Design test hosting environment (Martin/Simon)
-. Provide reliable test-data setup procedures
+* Provide reliable test-data setup procedures
+* Design test hosting environment (Martin/Simon)
 . Allow simple customisation of server specific properties
 . JMX hooks for important runtime information
 . Canoo Webtest scripts for functional testing 
