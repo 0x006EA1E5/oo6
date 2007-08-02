@@ -68,7 +68,7 @@ public class DynaNodeValidator implements Validator
             			List<DynaNode> dynaNodeList = (List<DynaNode>) value;
             			for(DynaNode dynaNode: dynaNodeList)
             			{
-            				validateComponent(fieldName + "[" + i + "]", dynaNode, errors);
+            				validateComponent(fieldName + "[" + i + "]",propertyDef, dynaNode, errors);
                             i++;
             			}
             		}
@@ -76,7 +76,7 @@ public class DynaNodeValidator implements Validator
             }
             else if (propertyDef.getType().equals(PropertyDef.COMPONENT))
             {
-                validateComponent(fieldName, value, errors);
+                validateComponent(fieldName, propertyDef, value, errors);
             }
             else
             {
@@ -117,8 +117,15 @@ public class DynaNodeValidator implements Validator
 
     }
     
-    private void validateComponent(String fieldName, Object dynaNode, Errors errors)
+    private void validateComponent(String fieldName, PropertyDef propertyDef, Object dynaNode, Errors errors)
     {
+    	if(dynaNode == null)
+    	{
+    		if(propertyDef.isRequired())
+    			errors.rejectValue(fieldName, "field.required");
+    		else
+    			return;
+    	}
     	Assert.isTrue(DynaNode.class.isAssignableFrom(dynaNode.getClass()), "Value of property " + fieldName + " is not a dynaNode. Perhaps there is a conflicting parameter in the request?");
     	try
         {
