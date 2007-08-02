@@ -1,2 +1,0 @@
-http://docs.codehaus.org/display/JETTY/Session+Clustering+with+Terracotta
-+ http://www.nabble.com/Load-Balancing%5CClustering-in-6.14-tf3945950.html#a11312269
