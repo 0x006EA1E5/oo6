@@ -10,7 +10,7 @@
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
-                <value>classpath:otherobjects.resources/config/jackrabbit.properties</value>
+                <value>classpath:site.resources/config/jackrabbit.properties</value>
                 <value>classpath:site.resources/config/jdbc.properties</value>
             </list>
         </property>
