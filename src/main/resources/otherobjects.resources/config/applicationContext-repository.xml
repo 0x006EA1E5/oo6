@@ -10,7 +10,7 @@
 		<property name="homeDir" value="${jackrabbit.repository.path}" />
 	</bean>
 
-	<bean id="jcrSessionFactory" class="org.apache.jackrabbit.ocm.spring.JackrabbitSessionFactory">
+	<bean id="jcrSessionFactory" class="org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory">
 		<property name="repository" ref="repository" />
 		<property name="credentials">
 			<bean class="javax.jcr.SimpleCredentials">

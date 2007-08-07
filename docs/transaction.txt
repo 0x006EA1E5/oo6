@@ -13,3 +13,6 @@ http://jencks.codehaus.org/
 
 JOTM (BSD-style license):
 http://jotm.objectweb.org/
+
+SimpleJTA (Apache license v2):
+http://sourceforge.net/projects/simplejta
