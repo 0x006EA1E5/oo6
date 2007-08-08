@@ -10,4 +10,5 @@ import org.otherobjects.cms.model.DynaNode;
 public interface ContentService
 {
     public DynaNode createItem(String container, String typeName);
+    public void publishItem(String uuid);  
 }

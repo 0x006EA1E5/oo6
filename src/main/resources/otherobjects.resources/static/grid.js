@@ -15,7 +15,8 @@ OO.ListingGrid = function() {
 	            {name: 'id', mapping: 'id'},
 	            {name: 'label', mapping: 'label'},
 	            {name: 'ooType', mapping: 'ooType'},
-	            {name: 'path', mapping: 'linkPath'}
+	            {name: 'path', mapping: 'linkPath'},
+	            {name: 'published', mapping: 'published'}
 			];
 			
 			// create the Data Store
@@ -43,7 +44,8 @@ OO.ListingGrid = function() {
 				{ header: 'Label', width: 200, sortable: true, dataIndex: 'label' },
 				{ header: 'Type', width: 100, sortable: true, dataIndex: 'ooType' },
 				{ header: 'Path', width: 300, sortable: true, dataIndex: 'path' },
-				{ header: 'UUID', width: 300, sortable: false, dataIndex: 'id' }
+				{ header: 'UUID', width: 300, sortable: false, dataIndex: 'id' },
+				{ header: 'Published', width: 300, sortable: false, dataIndex: 'published' }
 			]);
 			
 			// create the grid
@@ -76,6 +78,8 @@ OO.ListingGrid = function() {
 			var gridToolbar = new Ext.Toolbar(gridHeader, [
 		  		{cls:'x-btn-text-icon add-btn', text:'Add Article', handler:function(e){OO.ListingGrid.addItem('Article', e);}},
 				'-',
+		  		{cls:'x-btn-text-icon publish-btn', text:'Publish', handler:function(e){OO.ListingGrid.publishSelected();}},
+				'-',
 		  		{cls:'x-btn-text-icon refresh-btn', text:'Refresh', handler:function(e){OO.ListingGrid.refresh();}}
 			]);
 			
@@ -91,6 +95,13 @@ OO.ListingGrid = function() {
 		  // FIXME Shouldn't need this in 2 places
 		  OO.Workbench.currentContainer = uuid;
 	    },
+		
+		publishSelected : function()
+		{
+			var r = grid.getSelectionModel().getSelected();
+			console.log("Publishing record: " + r.id);
+			ContentService.publishItem(r.id);
+		},
 		
 		updateItem : function(item)
 		{

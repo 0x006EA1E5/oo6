@@ -31,12 +31,20 @@ public class ContentServiceImpl implements ContentService
             if(!alreadyExists) break;
             
         } while(true);
-
+        
         DynaNode newNode = dynaNodeDao.create(typeName);
         newNode.setPath(parent.getJcrPath());
         newNode.setCode("untitled-article-" + c +".html"); //TODO M2 Auto generate
         newNode.setLabel("Untitled Article " + c);
         return dynaNodeDao.save(newNode);
+    }
+    
+    public void publishItem(String uuid)
+    {
+        Assert.notNull("item must be specified.",uuid);
+        
+        DynaNode item = dynaNodeDao.get(uuid);
+        dynaNodeDao.publish(item);
     }
 
     public void setDynaNodeDao(DynaNodeDao dynaNodeDao)

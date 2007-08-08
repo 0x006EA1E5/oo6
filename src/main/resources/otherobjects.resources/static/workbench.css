@@ -33,6 +33,7 @@
 /* Toolbar icons */
 .add-btn .x-btn-text { background-image:url(/resources/otherobjects.resources/static/extjs/images/default/tree/drop-add.gif); }
 .refresh-btn .x-btn-text { background-image:url(/resources/otherobjects.resources/static/extjs/images/default/grid/refresh.gif); }
+.publish-btn .x-btn-text { background-image:url(/resources/otherobjects.resources/static/icons/tick.png); }
 
 
 
