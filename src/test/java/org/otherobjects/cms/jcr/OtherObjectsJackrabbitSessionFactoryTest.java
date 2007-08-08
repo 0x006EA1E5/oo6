@@ -53,8 +53,9 @@ public class OtherObjectsJackrabbitSessionFactoryTest extends BaseDynaNodeTest {
 		new MockAuthenticationManager().authenticate(
 				new UsernamePasswordAuthenticationToken("admin", "admin", new GrantedAuthority[]{new GrantedAuthorityImpl(OtherObjectsJackrabbitSessionFactory.EDITOR_ROLE_NAME)})
 				);
-		
+		System.out.println("workspace: " + jcrSessionFactory.getSession().getWorkspace().getName());
 		assertTrue(jcrSessionFactory.getSession().getWorkspace().getName().equals(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME));
+		SecurityContextHolder.clearContext();
 	}
 	
 	public void testAnonymousUserGetsLiveSession() throws Exception
@@ -64,7 +65,9 @@ public class OtherObjectsJackrabbitSessionFactoryTest extends BaseDynaNodeTest {
         AnonymousAuthenticationToken anonymousAuthenticationToken = new AnonymousAuthenticationToken("testkey", "anonymous", new GrantedAuthority[]{new GrantedAuthorityImpl("ROLE_ANONYMOUS")});
         SecurityContextHolder.getContext().setAuthentication(anonymousAuthenticationProvider.authenticate(anonymousAuthenticationToken));
         
+        System.out.println("workspace: " + jcrSessionFactory.getSession().getWorkspace().getName());
         assertTrue(jcrSessionFactory.getSession().getWorkspace().getName().equals(OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME));
+        SecurityContextHolder.clearContext();
 	}
 	
 	

@@ -2,6 +2,8 @@ package org.otherobjects.cms.dao;
 
 import java.util.List;
 
+import javax.jcr.Item;
+import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Workspace;
@@ -125,7 +127,17 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
     		// get a live workspace session
 			session = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
 			Workspace liveWorkspace = session.getWorkspace();
-			liveWorkspace.clone(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME, dynaNode.getJcrPath(), dynaNode.getJcrPath(), true);
+			if(!session.itemExists(dynaNode.getJcrPath()))
+				liveWorkspace.clone(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME, dynaNode.getJcrPath(), dynaNode.getJcrPath(), true);
+			else
+			{
+				Item item = session.getItem(dynaNode.getJcrPath());
+				if(item.isNode())
+				{
+					Node toBePublished = (Node) item;
+					toBePublished.update(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
+				}
+			}
 			
 		} catch (RepositoryException e) {
 			throw new OtherObjectsException("Couldn't publish DynaNode with path " + dynaNode.getJcrPath(), e);

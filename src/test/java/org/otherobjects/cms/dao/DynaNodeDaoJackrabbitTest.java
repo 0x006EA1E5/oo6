@@ -262,11 +262,11 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
     	
     	liveSession.getWorkspace().clone(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME, "/site", "/site", true);
     	
-    	Item about = liveSession.getItem("/site/about");
-    	about.remove();
-    	
-    	Item site = liveSession.getItem("/site");
-    	site.save();
+//    	Item about = liveSession.getItem("/site/about");
+//    	about.remove();
+//    	
+//    	Item site = liveSession.getItem("/site");
+//    	site.save();
     	
     	liveSession.logout();
     	
@@ -296,7 +296,7 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
         anonymousAuthenticationProvider.setKey("testkey");
         AnonymousAuthenticationToken anonymousAuthenticationToken = new AnonymousAuthenticationToken("testkey", "anonymous", new GrantedAuthority[]{new GrantedAuthorityImpl("ROLE_ANONYMOUS")});
         SecurityContextHolder.getContext().setAuthentication(anonymousAuthenticationProvider.authenticate(anonymousAuthenticationToken));
-        
+
         
         DynaNode node1 = dynaNodeDao.get("756ec0e7-300c-4d41-b9b6-6a2ccf823675");
         assertEquals(changeLabel, node1.getLabel());
