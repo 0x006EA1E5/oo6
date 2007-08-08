@@ -2,11 +2,16 @@ package org.otherobjects.cms.dao;
 
 import java.util.List;
 
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import javax.jcr.Workspace;
+
 import org.apache.jackrabbit.ocm.query.Filter;
 import org.apache.jackrabbit.ocm.query.Query;
 import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.jcr.GenericJcrDaoJackrabbit;
+import org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
@@ -17,9 +22,17 @@ import org.springframework.validation.Errors;
 public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> implements DynaNodeDao
 {
     private TypeService typeService;
+    private OtherObjectsJackrabbitSessionFactory sessionFactory;
+    
+    
 //    private DynaNodeValidator dynaNodeValidator;
 
-    public DynaNodeDaoJackrabbit()
+    public void setSessionFactory(
+			OtherObjectsJackrabbitSessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	public DynaNodeDaoJackrabbit()
     {
         super(DynaNode.class);
     }
@@ -104,5 +117,24 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
 //    {
 //        this.dynaNodeValidator = dynaNodeValidator;
 //    }
+    
+    public void publish(DynaNode dynaNode)
+    {
+    	Session session = null;
+    	try {
+    		// get a live workspace session
+			session = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
+			Workspace liveWorkspace = session.getWorkspace();
+			liveWorkspace.clone(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME, dynaNode.getJcrPath(), dynaNode.getJcrPath(), true);
+			
+		} catch (RepositoryException e) {
+			throw new OtherObjectsException("Couldn't publish DynaNode with path " + dynaNode.getJcrPath(), e);
+		}
+		finally
+		{
+			if(session != null)
+				session.logout();
+		}
+    }
 
 }

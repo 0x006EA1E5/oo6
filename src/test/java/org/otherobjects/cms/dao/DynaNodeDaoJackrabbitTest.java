@@ -4,16 +4,35 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import javax.jcr.Item;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 
+import org.acegisecurity.GrantedAuthority;
+import org.acegisecurity.GrantedAuthorityImpl;
+import org.acegisecurity.MockAuthenticationManager;
+import org.acegisecurity.context.SecurityContextHolder;
+import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
+import org.acegisecurity.providers.anonymous.AnonymousAuthenticationProvider;
+import org.acegisecurity.providers.anonymous.AnonymousAuthenticationToken;
 import org.otherobjects.cms.beans.BaseDynaNodeTest;
+import org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory;
 import org.otherobjects.cms.model.DynaNode;
 
 public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
 {
-    public void testGet()
+	
+	protected OtherObjectsJackrabbitSessionFactory sessionFactory;
+	
+	public void setSessionFactory(
+			OtherObjectsJackrabbitSessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	public void testGet()
     {
         DynaNode node = dynaNodeDao.get("756ec0e7-300c-4d41-b9b6-6a2ccf823675");
         assertNotNull(node);
@@ -233,5 +252,56 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
         List<DynaNode> nodes = dynaNodeDao.getAllByType("Article");
         assertNotNull(nodes);
         assertEquals(3, nodes.size());
+    }
+    
+    public void testPublish() throws Exception
+    {
+    	// first copy complete workspace
+    	Session liveSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
+    	//Session editSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
+    	
+    	liveSession.getWorkspace().clone(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME, "/site", "/site", true);
+    	
+    	Item about = liveSession.getItem("/site/about");
+    	about.remove();
+    	
+    	Item site = liveSession.getItem("/site");
+    	site.save();
+    	
+    	liveSession.logout();
+    	
+    	// pretend an editor session
+    	new MockAuthenticationManager().authenticate(
+				new UsernamePasswordAuthenticationToken("admin", "admin", new GrantedAuthority[]{new GrantedAuthorityImpl(OtherObjectsJackrabbitSessionFactory.EDITOR_ROLE_NAME)})
+				);
+    	
+    	DynaNode node = dynaNodeDao.get("756ec0e7-300c-4d41-b9b6-6a2ccf823675");
+        assertNotNull(node);
+        
+        String changeLabel = "changedLabel" + new Date().toString();
+        node.setLabel(changeLabel);
+        
+        dynaNodeDao.save(node);
+        
+        
+        
+        System.out.println(node.getJcrPath());
+        
+        dynaNodeDao.publish(node);
+        
+        SecurityContextHolder.clearContext(); //logout
+        
+        // pretend anonymous user
+        AnonymousAuthenticationProvider anonymousAuthenticationProvider = new AnonymousAuthenticationProvider();
+        anonymousAuthenticationProvider.setKey("testkey");
+        AnonymousAuthenticationToken anonymousAuthenticationToken = new AnonymousAuthenticationToken("testkey", "anonymous", new GrantedAuthority[]{new GrantedAuthorityImpl("ROLE_ANONYMOUS")});
+        SecurityContextHolder.getContext().setAuthentication(anonymousAuthenticationProvider.authenticate(anonymousAuthenticationToken));
+        
+        
+        DynaNode node1 = dynaNodeDao.get("756ec0e7-300c-4d41-b9b6-6a2ccf823675");
+        assertEquals(changeLabel, node1.getLabel());
+        
+        SecurityContextHolder.clearContext();
+        
     }
 }
