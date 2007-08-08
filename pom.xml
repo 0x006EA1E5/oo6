@@ -224,6 +224,8 @@
 					<dataFiles>
 						<param>src/test/data/jcr-data-types.xml</param>
 						<param>src/test/data/jcr-data-site.xml</param>
+						<param>live:src/test/data/jcr-data-types.xml</param>
+						<param>live:src/test/data/jcr-data-site.xml</param>
 					</dataFiles>
 					<repositoryLocation>/tmp/otherobjects/test/repository/</repositoryLocation>
 					<configurationFile>src/test/resources/jackrabbit-repo.xml</configurationFile>
