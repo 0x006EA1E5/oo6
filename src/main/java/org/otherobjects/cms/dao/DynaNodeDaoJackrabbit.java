@@ -3,6 +3,7 @@ package org.otherobjects.cms.dao;
 import java.util.List;
 
 import javax.jcr.Item;
+import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -128,14 +129,25 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
     public void publish(DynaNode dynaNode)
     {
     	if(dynaNode.isPublished())
-    		throw new OtherObjectsException("DynaNode " + dynaNode.getJcrPath() + "[" + dynaNode.getId() + "]couldn't be published as its published flag is already set ");
+    		throw new OtherObjectsException("DynaNode " + dynaNode.getJcrPath() + "[" + dynaNode.getId() + "] couldn't be published as its published flag is already set ");
     	
-    	Session session = null;
+    	Session liveSession = null;
     	try {
     		// get a live workspace session
-			session = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
-			Workspace liveWorkspace = session.getWorkspace();
-			if(!session.itemExists(dynaNode.getJcrPath()))
+			liveSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
+			Workspace liveWorkspace = liveSession.getWorkspace();
+			
+			Node liveNode = null;
+			try{
+			//get the corresponding node in the live workspace by UUID in case path has changed
+				liveNode = liveSession.getNodeByUUID(dynaNode.getId());
+			}
+			catch(ItemNotFoundException e)
+			{
+				// noop
+			}
+			
+			if( liveNode == null) // no such node so we can clone
 			{
 				liveWorkspace.clone(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME, dynaNode.getJcrPath(), dynaNode.getJcrPath(), true);
 				dynaNode.setPublished(true);
@@ -143,14 +155,9 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
 			}
 			else
 			{
-				Item item = session.getItem(dynaNode.getJcrPath());
-				if(item.isNode())
-				{
-					Node toBePublished = (Node) item;
-					toBePublished.update(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
-					dynaNode.setPublished(true);
-					saveWithoutChangingPublishState(dynaNode);
-				}
+				liveNode.update(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
+				dynaNode.setPublished(true);
+				saveWithoutChangingPublishState(dynaNode);
 			}
 			
 		} catch (RepositoryException e) {
@@ -158,8 +165,8 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
 		}
 		finally
 		{
-			if(session != null)
-				session.logout();
+			if(liveSession != null)
+				liveSession.logout();
 		}
     }
 
