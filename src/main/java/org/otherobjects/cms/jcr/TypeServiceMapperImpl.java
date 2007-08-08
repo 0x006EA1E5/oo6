@@ -118,6 +118,11 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         fd5.setJcrName("code");
         fd5.setId(true);
         cd.addFieldDescriptor(fd5);
+        
+        FieldDescriptor fd6 = new FieldDescriptor();
+        fd6.setFieldName("published");
+        fd6.setJcrName("published");
+        cd.addFieldDescriptor(fd6);
 
         // Add custom properties
         for (PropertyDef propDef : typeDef.getProperties())

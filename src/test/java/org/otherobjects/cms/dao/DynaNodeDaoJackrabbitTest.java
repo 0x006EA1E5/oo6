@@ -276,18 +276,20 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
 				);
     	
     	DynaNode node = dynaNodeDao.get("756ec0e7-300c-4d41-b9b6-6a2ccf823675");
+    	System.out.println(node.isPublished());
         assertNotNull(node);
         
         String changeLabel = "changedLabel" + new Date().toString();
         node.setLabel(changeLabel);
         
         dynaNodeDao.save(node);
-        
+        System.out.println(node.isPublished());
         
         
         System.out.println(node.getJcrPath());
         
         dynaNodeDao.publish(node);
+        System.out.println(node.isPublished());
         
         SecurityContextHolder.clearContext(); //logout
         

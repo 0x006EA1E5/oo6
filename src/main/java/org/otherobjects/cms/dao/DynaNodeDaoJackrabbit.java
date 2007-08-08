@@ -77,8 +77,13 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
             if (errors.getErrorCount() > 0)
                 throw new OtherObjectsException("DynaNode " + object.getLabel() + "couldn't be validated and therefore didn't get saved");
         }
-
+        object.setPublished(false); // on saving the publish state gets set to false
         return super.save(object, false);
+    }
+    
+    private DynaNode saveWithoutChangingPublishState(DynaNode dynaNode)
+    {
+    	return super.save(dynaNode, false); 
     }
 
     @SuppressWarnings("unchecked")
@@ -122,13 +127,20 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
     
     public void publish(DynaNode dynaNode)
     {
+    	if(dynaNode.isPublished())
+    		throw new OtherObjectsException("DynaNode " + dynaNode.getJcrPath() + "[" + dynaNode.getId() + "]couldn't be published as its published flag is already set ");
+    	
     	Session session = null;
     	try {
     		// get a live workspace session
 			session = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
 			Workspace liveWorkspace = session.getWorkspace();
 			if(!session.itemExists(dynaNode.getJcrPath()))
+			{
 				liveWorkspace.clone(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME, dynaNode.getJcrPath(), dynaNode.getJcrPath(), true);
+				dynaNode.setPublished(true);
+				saveWithoutChangingPublishState(dynaNode);
+			}
 			else
 			{
 				Item item = session.getItem(dynaNode.getJcrPath());
@@ -136,6 +148,8 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
 				{
 					Node toBePublished = (Node) item;
 					toBePublished.update(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
+					dynaNode.setPublished(true);
+					saveWithoutChangingPublishState(dynaNode);
 				}
 			}
 			

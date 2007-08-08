@@ -42,6 +42,9 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
     /** The defining type for this node */
     private String ooType;
+    
+    /** Indication of whether this node is published or not */
+    private boolean published = false;
 
     private TypeDef typeDef;
 
@@ -231,4 +234,14 @@ public class DynaNode implements CmsNode, WorkbenchItem
         this.typeDef = typeDef;
         setOoType(typeDef.getName());
     }
+
+	public boolean isPublished() {
+		return published;
+	}
+
+	public void setPublished(boolean published) {
+		this.published = published;
+	}
+    
+    
 }
