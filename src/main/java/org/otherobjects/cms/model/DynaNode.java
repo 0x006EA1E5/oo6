@@ -1,5 +1,7 @@
 package org.otherobjects.cms.model;
 
+import java.util.Date;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.SingletonBeanLocator;
@@ -21,7 +23,7 @@ import org.springframework.util.Assert;
  */
 @SuppressWarnings("unchecked")
 //TODO @Configurable("dynaNode")
-public class DynaNode implements CmsNode, WorkbenchItem
+public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo
 {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -45,6 +47,12 @@ public class DynaNode implements CmsNode, WorkbenchItem
     
     /** Indication of whether this node is published or not */
     private boolean published = false;
+    
+    // Audit properties
+    private String userName;
+    private String userId;
+    private Date modificationTimestamp;
+    private String comment;
 
     private TypeDef typeDef;
 
@@ -241,6 +249,38 @@ public class DynaNode implements CmsNode, WorkbenchItem
 
 	public void setPublished(boolean published) {
 		this.published = published;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public Date getModificationTimestamp() {
+		return modificationTimestamp;
+	}
+
+	public void setModificationTimestamp(Date modificationTimestamp) {
+		this.modificationTimestamp = modificationTimestamp;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
     
     

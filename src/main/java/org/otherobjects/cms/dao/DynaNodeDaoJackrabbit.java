@@ -1,14 +1,16 @@
 package org.otherobjects.cms.dao;
 
+import java.util.Date;
 import java.util.List;
 
-import javax.jcr.Item;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Workspace;
 
+import org.acegisecurity.Authentication;
+import org.acegisecurity.context.SecurityContextHolder;
 import org.apache.jackrabbit.ocm.query.Filter;
 import org.apache.jackrabbit.ocm.query.Query;
 import org.apache.jackrabbit.ocm.query.QueryManager;
@@ -16,6 +18,7 @@ import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.jcr.GenericJcrDaoJackrabbit;
 import org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory;
 import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.User;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.springframework.util.Assert;
@@ -139,26 +142,26 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
 			
 			Node liveNode = null;
 			try{
-			//get the corresponding node in the live workspace by UUID in case path has changed
+				//get the corresponding node in the live workspace by UUID in case path has changed
 				liveNode = liveSession.getNodeByUUID(dynaNode.getId());
-			}
-			catch(ItemNotFoundException e)
-			{
-				// noop
-			}
+			}catch(ItemNotFoundException e)	{} // noop
 			
 			if( liveNode == null) // no such node so we can clone
 			{
 				liveWorkspace.clone(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME, dynaNode.getJcrPath(), dynaNode.getJcrPath(), true);
-				dynaNode.setPublished(true);
-				saveWithoutChangingPublishState(dynaNode);
 			}
 			else
 			{
 				liveNode.update(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
-				dynaNode.setPublished(true);
-				saveWithoutChangingPublishState(dynaNode);
 			}
+			
+			// we got here so we successfully published
+			updateStatus(dynaNode, "Published");
+			Session editSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
+			Node editNode = editSession.getNodeByUUID(dynaNode.getId());
+			// create version
+			editNode.checkin();
+			editNode.checkout();
 			
 		} catch (RepositoryException e) {
 			throw new OtherObjectsException("Couldn't publish DynaNode with path " + dynaNode.getJcrPath(), e);
@@ -168,6 +171,22 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
 			if(liveSession != null)
 				liveSession.logout();
 		}
+    }
+    
+    private void updateStatus(DynaNode dynaNode, String comment)
+    {
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	Assert.isTrue(principal instanceof User, "Can't do auditing if principal isn't your user class");
+    	User user = (User) principal;
+    	dynaNode.setUserName(user.getFullName());
+    	dynaNode.setUserId(user.getId().toString());
+    	dynaNode.setModificationTimestamp(new Date());
+    	dynaNode.setComment(comment);
+    		
+    	dynaNode.setPublished(true);
+		saveWithoutChangingPublishState(dynaNode);
+		
     }
 
 }

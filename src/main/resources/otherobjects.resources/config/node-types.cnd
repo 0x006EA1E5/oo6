@@ -6,7 +6,7 @@
 [ocm:discriminator] mixin
 - ocm:classname (String) mandatory copy
 
-[oo:node] > nt:base, mix:referenceable
+[oo:node] > nt:base, mix:versionable
 orderable
 - * (UNDEFINED)
 - * (UNDEFINED) multiple
