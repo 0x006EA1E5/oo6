@@ -7,7 +7,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 
 import org.acegisecurity.GrantedAuthority;
 import org.acegisecurity.GrantedAuthorityImpl;
@@ -279,9 +281,9 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
         
         assertNotNull( "Must not be null", dynaNodeDao.getByPath(node.getJcrPath()));
 
-        
+        System.out.println("There are " + getVersionCount(node) + " in the repository before publishing");
         dynaNodeDao.publish(node);
-
+        System.out.println("There are " + getVersionCount(node) + " in the repository after publishing");
         
         SecurityContextHolder.clearContext(); //logout
         
@@ -299,4 +301,23 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
         SecurityContextHolder.clearContext();
         
     }
+
+	private long getVersionCount(DynaNode dynaNode) {
+		Session editSession = null;
+		try{
+			editSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
+			Node node = editSession.getNodeByUUID(dynaNode.getId());
+			
+			return node.getVersionHistory().getAllVersions().getSize();
+		}
+		catch(RepositoryException e)
+		{
+			//noop
+		}
+		finally{
+			if(editSession != null)
+				editSession.logout();
+		}
+		return 0;
+	}
 }
