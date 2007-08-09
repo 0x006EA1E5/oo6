@@ -131,6 +131,17 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
 //        this.dynaNodeValidator = dynaNodeValidator;
 //    }
     
+    public boolean canSave(DynaNode dynaNode)
+    {
+    	// if dynaNode is in published state save is possible
+    	
+    	// if it is not we can save only if the current AuditInfo.getUserId()  is equal to the current users id
+    	
+    	
+    	// and even then we need to make sure that the changeNumber we carry around is still the same as the one in persistent storage
+    	return true;
+    }
+    
     public void publish(DynaNode dynaNode)
     {
     	//FIXME this should display proper transactional behaviour which it doesn't at the moment as there are multiple jcr sessions involved

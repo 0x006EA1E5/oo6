@@ -314,5 +314,8 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
         this.jcrMappingTemplate = jcrMappingTemplate;
     }
 
-	
+//	public List<T> getVersions(T object)
+//	{
+//		
+//	}
 }

@@ -41,12 +41,14 @@ public class NavigatorServiceImplTest extends BaseJcrTestCase
     
     public void testAddItem()
     {
+    	adminLogin();
     	DynaNode root = dynaNodeDao.getByPath("/site");
     	WorkbenchItem item = navigatorService.addItem(root.getId(), "");
     	System.out.println(item.getId() + " " + item.getLinkPath());
     	assertTrue(item instanceof DynaNode);
     	DynaNode dynaNode = (DynaNode) item;
     	assertTrue(dynaNode.getPath().startsWith("/site"));
+    	logout();
     }
     
     public void testGetItemContents()
@@ -75,6 +77,7 @@ public class NavigatorServiceImplTest extends BaseJcrTestCase
     
     public void testRenameItem()
     {
+    	adminLogin();
     	DynaNode root = dynaNodeDao.getByPath("/site");
     	WorkbenchItem item = navigatorService.addItem(root.getId(), "");
     	
@@ -84,12 +87,13 @@ public class NavigatorServiceImplTest extends BaseJcrTestCase
     	System.out.println(newNode.getLabel());
     	
     	//assertTrue(newNode.getLabel().equals("asdasdasdasdasd"));
-    	
+    	logout();
     	
     }
     
     public void testMoveItem()
     {
+    	adminLogin();
     	DynaNode root = dynaNodeDao.getByPath("/site");
     	
     	WorkbenchItem item = navigatorService.addItem(root.getId(), "");
@@ -107,7 +111,7 @@ public class NavigatorServiceImplTest extends BaseJcrTestCase
 //    	List<WorkbenchItem> wisReordered = navigatorService.getSubContainers(root.getId());
 //    	
 //    	assertEquals(item.getLabel(), wisReordered.get(0).getLabel());
-    	
+    	logout();
     }
 
 	public void setDynaNodeDao(DynaNodeDao dynaNodeDao) {

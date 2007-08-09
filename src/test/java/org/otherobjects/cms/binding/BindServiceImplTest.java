@@ -34,8 +34,8 @@ public class BindServiceImplTest extends BaseDynaNodeTest
 
     public void testBindValues() throws Exception
     {
-
-        BindingResult errors = bindService.bind(dynaNode, getRequest());
+    	BindingResult errors = bindService.bind(dynaNode, getRequest());
+        
         assertTrue(errors.getErrorCount() == 0);
 
         // Simple properties
@@ -151,11 +151,12 @@ public class BindServiceImplTest extends BaseDynaNodeTest
         request.addParameter("testDecimal", "2.7");
         request.addParameter("testBoolean", "false");
         request.addParameter("testComponent.name", "myName");
-
+        
+        adminLogin();
         DynaNode tr1 = createReference("TR1");
         dynaNodeDao.save(tr1);
         request.addParameter("testReference", tr1.getId());
-        
+        logout();
         return request;
     }
 

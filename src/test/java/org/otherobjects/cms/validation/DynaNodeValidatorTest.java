@@ -93,8 +93,10 @@ public class DynaNodeValidatorTest extends BaseDynaNodeTest
         request.addParameter("testBoolean", "false");
         request.addParameter("testComponent.name", "");
         
+        adminLogin();
         DynaNode tr1 = createReference("TR1");
         dynaNodeDao.save(tr1);
+        logout();
         request.addParameter("testReference", tr1.getId());
 
         return request;
