@@ -8,6 +8,13 @@ OO.ListingGrid = function() {
 	
 	var cm, ds, grid, mappings;
 	
+	function renderState(value, p, record) {
+		if(value)
+			return '<span style="padding-left:15px; background:url(/resources/otherobjects.resources/static/icons/bullet-green.png) no-repeat -2px -2px">Live</span>';
+		else
+			return '<span style="padding-left:15px; background:url(/resources/otherobjects.resources/static/icons/bullet-red.png) no-repeat -2px -2px">Edited</span>';	
+	}
+	
 	return {
 	    init : function() {
 			
@@ -15,7 +22,7 @@ OO.ListingGrid = function() {
 	            {name: 'id', mapping: 'id'},
 	            {name: 'label', mapping: 'label'},
 	            {name: 'ooType', mapping: 'ooType'},
-	            {name: 'path', mapping: 'linkPath'},
+	            {name: 'linkPath', mapping: 'linkPath'},
 	            {name: 'published', mapping: 'published'}
 			];
 			
@@ -41,11 +48,11 @@ OO.ListingGrid = function() {
 			
 			// create the column model
 			cm = new Ext.grid.ColumnModel([
+				{ header: 'State', width: 100, sortable: false, dataIndex: 'published', renderer:renderState },
 				{ header: 'Label', width: 200, sortable: true, dataIndex: 'label' },
 				{ header: 'Type', width: 100, sortable: true, dataIndex: 'ooType' },
-				{ header: 'Path', width: 300, sortable: true, dataIndex: 'path' },
-				{ header: 'UUID', width: 300, sortable: false, dataIndex: 'id' },
-				{ header: 'Published', width: 300, sortable: false, dataIndex: 'published' }
+				{ header: 'Path', width: 300, sortable: true, dataIndex: 'linkPath' },
+				{ header: 'UUID', width: 300, sortable: false, dataIndex: 'id' }
 			]);
 			
 			// create the grid
@@ -99,17 +106,17 @@ OO.ListingGrid = function() {
 		publishSelected : function()
 		{
 			var r = grid.getSelectionModel().getSelected();
-			console.log("Publishing record: " + r.id);
-			ContentService.publishItem(r.id);
+			var id = r.data.id;
+			console.log("Publishing record: " + id);
+			ContentService.publishItem(id, function(item) { OO.ListingGrid.updateItem(item);});
 		},
 		
 		updateItem : function(item)
 		{
-			console.log("Updating record id: " + item.id);
+			console.log("Updating record id: " + item.id, item);
 			var r = ds.getById(item.id);
 			var ArticleRecord = Ext.data.Record.create(mappings);
-			var newRecord = new ArticleRecord(item);
-			//FIXME Is there a better way to do this?
+			var newRecord = new ArticleRecord(item, item.id);
 			r.data = newRecord.data;
 			grid.getView().refresh();
 		},
@@ -120,7 +127,7 @@ OO.ListingGrid = function() {
 			console.log('Creating new item: ' + type + ' at ' + c);
 			ContentService.createItem(c,type, function(item) {
 				var ArticleRecord = Ext.data.Record.create(mappings);
-				var myNewRecord = new ArticleRecord(item);
+				var myNewRecord = new ArticleRecord(item,item.id);
 				console.log("Adding new item to grid",myNewRecord);
 				ds.add(myNewRecord); 
 				// FIXME Dont highlight unless truly selected 

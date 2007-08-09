@@ -92,6 +92,9 @@ OO.Workbench = function()
 	        layout.add('center', previewPanel);
 	        // layout.add('south', new Ext.ContentPanel('status'));
 	        layout.endUpdate();
+			
+			layout.getRegion("center").showPanel("listing-panel");
+
         },
 		
 		selectContainer : function(node)
@@ -109,9 +112,9 @@ OO.Workbench = function()
 			var row = grid.dataSource.getAt(index);
 			// TODO Move grid specific login to grid.js
 			currentItem = row.data.id;
-	        console.log("Selected item: "+ currentItem + " => " + row.data.path);
+	        console.log("Selected item: "+ currentItem + " => " + row.data.linkPath);
 			var previewPanel = layout.getRegion("center").getPanel("preview-panel");
-			previewPanel.setSrc(row.data.path);
+			previewPanel.setSrc(row.data.linkPath);
 			var editPanel = layout.getRegion("center").getPanel("edit-panel");
 			
 			//editForm.setUrl(null);

@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.1 RC 1
+ * Ext JS Library 1.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -10,7 +10,8 @@
 Ext.DomHelper = function(){
     var tempTableEl = null;
     var emptyTags = /^(?:br|frame|hr|img|input|link|meta|range|spacer|wbr|area|param|col)$/i;
-
+    var tableRe = /^table|tbody|tr|td$/i;
+    
     
     
     var createHtml = function(o){
@@ -219,25 +220,24 @@ Ext.DomHelper = function(){
     insertHtml : function(where, el, html){
         where = where.toLowerCase();
         if(el.insertAdjacentHTML){
-            var tag = el.tagName.toLowerCase();
-            if(tag == "table" || tag == "tbody" || tag == "tr" || tag == 'td'){
+            if(tableRe.test(el.tagName)){
                 var rs;
-                if(rs = insertIntoTable(tag, where, el, html)){
+                if(rs = insertIntoTable(el.tagName.toLowerCase(), where, el, html)){
                     return rs;
                 }
             }
             switch(where){
                 case "beforebegin":
-                    el.insertAdjacentHTML(where, html);
+                    el.insertAdjacentHTML('BeforeBegin', html);
                     return el.previousSibling;
                 case "afterbegin":
-                    el.insertAdjacentHTML(where, html);
+                    el.insertAdjacentHTML('AfterBegin', html);
                     return el.firstChild;
                 case "beforeend":
-                    el.insertAdjacentHTML(where, html);
+                    el.insertAdjacentHTML('BeforeEnd', html);
                     return el.lastChild;
                 case "afterend":
-                    el.insertAdjacentHTML(where, html);
+                    el.insertAdjacentHTML('AfterEnd', html);
                     return el.nextSibling;
             }
             throw 'Illegal insertion point -> "' + where + '"';
@@ -532,15 +532,14 @@ Ext.DomQuery = function(){
  	    return this;
  	};
 
-    function byClassName(c, a, v, re, cn){
+    function byClassName(c, a, v){
         if(!v){
             return c;
         }
-        var r = [];
+        var r = [], ri = -1, cn;
         for(var i = 0, ci; ci = c[i]; i++){
-            cn = ci.className;
-            if(cn && (' '+cn+' ').indexOf(v) != -1){
-                r[r.length] = ci;
+            if((' '+ci.className+' ').indexOf(v) != -1){
+                r[++ri] = ci;
             }
         }
         return r;
@@ -564,7 +563,7 @@ Ext.DomQuery = function(){
     };
 
     function getNodes(ns, mode, tagName){
-        var result = [], cs;
+        var result = [], ri = -1, cs;
         if(!ns){
             return result;
         }
@@ -576,30 +575,32 @@ Ext.DomQuery = function(){
             for(var i = 0, ni; ni = ns[i]; i++){
                 cs = ni.getElementsByTagName(tagName);
                 for(var j = 0, ci; ci = cs[j]; j++){
-                    result[result.length] = ci;
+                    result[++ri] = ci;
                 }
             }
         }else if(mode == "/" || mode == ">"){
-            for(var i = 0, ni; ni = ns[i]; i++){
-                var cn = ni.getElementsByTagName(tagName);
+            var utag = tagName.toUpperCase();
+            for(var i = 0, ni, cn; ni = ns[i]; i++){
+                cn = ni.children || ni.childNodes;
                 for(var j = 0, cj; cj = cn[j]; j++){
-                    if(cj.parentNode == ni){
-                        result[result.length] = cj;
+                    if(cj.nodeName == utag || cj.nodeName == tagName  || tagName == '*'){
+                        result[++ri] = cj;
                     }
                 }
             }
         }else if(mode == "+"){
+            var utag = tagName.toUpperCase();
             for(var i = 0, n; n = ns[i]; i++){
                 while((n = n.nextSibling) && n.nodeType != 1);
-                if(n && (tagName == '*' || n.tagName.toLowerCase()==tagName)){
-                    result[result.length] = n;
+                if(n && (n.nodeName == utag || n.nodeName == tagName || tagName == '*')){
+                    result[++ri] = n;
                 }
             }
         }else if(mode == "~"){
             for(var i = 0, n; n = ns[i]; i++){
                 while((n = n.nextSibling) && (n.nodeType != 1 || (tagName == '*' || n.tagName.toLowerCase()!=tagName)));
                 if(n){
-                    result[result.length] = n;
+                    result[++ri] = n;
                 }
             }
         }
@@ -623,11 +624,11 @@ Ext.DomQuery = function(){
         if(!tagName){
             return cs;
         }
-        var r = [];
+        var r = [], ri = -1;
         tagName = tagName.toLowerCase();
         for(var i = 0, ci; ci = cs[i]; i++){
             if(ci.nodeType == 1 && ci.tagName.toLowerCase()==tagName){
-                r[r.length] = ci;
+                r[++ri] = ci;
             }
         }
         return r;
@@ -640,10 +641,10 @@ Ext.DomQuery = function(){
         if(!id){
             return cs;
         }
-        var r = [];
+        var r = [], ri = -1;
         for(var i = 0,ci; ci = cs[i]; i++){
             if(ci && ci.id == id){
-                r[r.length] = ci;
+                r[++ri] = ci;
                 return r;
             }
         }
@@ -651,7 +652,7 @@ Ext.DomQuery = function(){
     };
 
     function byAttribute(cs, attr, value, op, custom){
-        var r = [], st = custom=="{";
+        var r = [], ri = -1, st = custom=="{";
         var f = Ext.DomQuery.operators[op];
         for(var i = 0, ci; ci = cs[i]; i++){
             var a;
@@ -668,7 +669,7 @@ Ext.DomQuery = function(){
                 a = ci.getAttribute(attr);
             }
             if((f && f(a, value)) || (!f && a)){
-                r[r.length] = ci;
+                r[++ri] = ci;
             }
         }
         return r;
@@ -710,7 +711,7 @@ Ext.DomQuery = function(){
         if(!cs){
             return [];
         }
-        var len = cs.length, c, i, r = cs, cj;
+        var len = cs.length, c, i, r = cs, cj, ri = -1;
         if(!len || typeof cs.nodeType != "undefined" || len == 1){
             return cs;
         }
@@ -725,12 +726,12 @@ Ext.DomQuery = function(){
             }else{
                 r = [];
                 for(var j = 0; j < i; j++){
-                    r[r.length] = cs[j];
+                    r[++ri] = cs[j];
                 }
                 for(j = i+1; cj = cs[j]; j++){
                     if(cj._nodup != d){
                         cj._nodup = d;
-                        r[r.length] = cj;
+                        r[++ri] = cj;
                     }
                 }
                 return r;
@@ -974,35 +975,41 @@ Ext.DomQuery = function(){
             },
             "%=" : function(a, v){
                 return (a % v) == 0;
+            },
+            "|=" : function(a, v){
+                return a && (a == v || a.substr(0, v.length+1) == v+'-');
+            },
+            "~=" : function(a, v){
+                return a && (' '+a+' ').indexOf(' '+v+' ') != -1;
             }
         },
 
         
         pseudos : {
             "first-child" : function(c){
-                var r = [], n;
+                var r = [], ri = -1, n;
                 for(var i = 0, ci; ci = n = c[i]; i++){
                     while((n = n.previousSibling) && n.nodeType != 1);
                     if(!n){
-                        r[r.length] = ci;
+                        r[++ri] = ci;
                     }
                 }
                 return r;
             },
 
             "last-child" : function(c){
-                var r = [], n;
+                var r = [], ri = -1, n;
                 for(var i = 0, ci; ci = n = c[i]; i++){
                     while((n = n.nextSibling) && n.nodeType != 1);
                     if(!n){
-                        r[r.length] = ci;
+                        r[++ri] = ci;
                     }
                 }
                 return r;
             },
 
             "nth-child" : function(c, a) {
-                var r = [];
+                var r = [], ri = -1;
                 var m = nthRe.exec(a == "even" && "2n" || a == "odd" && "2n+1" || !nthRe2.test(a) && "n+" + a || a);
                 var f = (m[1] || 1) - 0, l = m[2] - 0;
                 for(var i = 0, n; n = c[i]; i++){
@@ -1018,10 +1025,10 @@ Ext.DomQuery = function(){
                     }
                     if (f == 1) {
                         if (l == 0 || n.nodeIndex == l){
-                            r[r.length] = n;
+                            r[++ri] = n;
                         }
                     } else if ((n.nodeIndex + l) % f == 0){
-                        r[r.length] = n;
+                        r[++ri] = n;
                     }
                 }
 
@@ -1029,17 +1036,17 @@ Ext.DomQuery = function(){
             },
 
             "only-child" : function(c){
-                var r = [];
+                var r = [], ri = -1;;
                 for(var i = 0, ci; ci = c[i]; i++){
                     if(!prev(ci) && !next(ci)){
-                        r[r.length] = ci;
+                        r[++ri] = ci;
                     }
                 }
                 return r;
             },
 
             "empty" : function(c){
-                var r = [];
+                var r = [], ri = -1;
                 for(var i = 0, ci; ci = c[i]; i++){
                     var cns = ci.childNodes, j = 0, cn, empty = true;
                     while(cn = cns[j]){
@@ -1050,37 +1057,37 @@ Ext.DomQuery = function(){
                         }
                     }
                     if(empty){
-                        r[r.length] = ci;
+                        r[++ri] = ci;
                     }
                 }
                 return r;
             },
 
             "contains" : function(c, v){
-                var r = [];
+                var r = [], ri = -1;
                 for(var i = 0, ci; ci = c[i]; i++){
-                    if(ci.innerHTML.indexOf(v) !== -1){
-                        r[r.length] = ci;
+                    if((ci.textContent||ci.innerText||'').indexOf(v) != -1){
+                        r[++ri] = ci;
                     }
                 }
                 return r;
             },
 
             "nodeValue" : function(c, v){
-                var r = [];
+                var r = [], ri = -1;
                 for(var i = 0, ci; ci = c[i]; i++){
                     if(ci.firstChild && ci.firstChild.nodeValue == v){
-                        r[r.length] = ci;
+                        r[++ri] = ci;
                     }
                 }
                 return r;
             },
 
             "checked" : function(c){
-                var r = [];
+                var r = [], ri = -1;
                 for(var i = 0, ci; ci = c[i]; i++){
                     if(ci.checked == true){
-                        r[r.length] = ci;
+                        r[++ri] = ci;
                     }
                 }
                 return r;
@@ -1112,10 +1119,10 @@ Ext.DomQuery = function(){
 
             "has" : function(c, ss){
                 var s = Ext.DomQuery.select;
-                var r = [];
+                var r = [], ri = -1;
                 for(var i = 0, ci; ci = c[i]; i++){
                     if(s(ss, ci).length > 0){
-                        r[r.length] = ci;
+                        r[++ri] = ci;
                     }
                 }
                 return r;
@@ -1123,11 +1130,11 @@ Ext.DomQuery = function(){
 
             "next" : function(c, ss){
                 var is = Ext.DomQuery.is;
-                var r = [];
+                var r = [], ri = -1;
                 for(var i = 0, ci; ci = c[i]; i++){
                     var n = next(ci);
                     if(n && is(n, ss)){
-                        r[r.length] = ci;
+                        r[++ri] = ci;
                     }
                 }
                 return r;
@@ -1135,11 +1142,11 @@ Ext.DomQuery = function(){
 
             "prev" : function(c, ss){
                 var is = Ext.DomQuery.is;
-                var r = [];
+                var r = [], ri = -1;
                 for(var i = 0, ci; ci = c[i]; i++){
                     var n = prev(ci);
                     if(n && is(n, ss)){
-                        r[r.length] = ci;
+                        r[++ri] = ci;
                     }
                 }
                 return r;
@@ -2995,7 +3002,7 @@ El.prototype = {
     getConstrainToXY : function(){
         var os = {top:0, left:0, bottom:0, right: 0};
 
-        return function(el, local, offsets){
+        return function(el, local, offsets, proposedXY){
             el = Ext.get(el);
             offsets = offsets ? Ext.applyIf(offsets, os) : os;
 
@@ -3024,7 +3031,7 @@ El.prototype = {
             var vr = vx+vw;
             var vb = vy+vh;
 
-            var xy = !local ? this.getXY() : [this.getLeft(true), this.getTop(true)];
+            var xy = proposedXY || (!local ? this.getXY() : [this.getLeft(true), this.getTop(true)]);
             var x = xy[0], y = xy[1];
             var w = this.dom.offsetWidth, h = this.dom.offsetHeight;
 
@@ -3052,6 +3059,11 @@ El.prototype = {
             return moved ? [x, y] : false;
         };
     }(),
+
+    
+    adjustForConstraints : function(xy, parent, offsets){
+        return this.getConstrainToXY(parent || document, false, offsets, xy) ||  xy;
+    },
 
     
     alignTo : function(element, position, offsets, animate){
@@ -3455,13 +3467,22 @@ El.prototype = {
     },
 
     
-    fitToParent : function(monitorResize, targetParent){
-        var p = Ext.get(targetParent || this.dom.parentNode);
-        this.setSize(p.getComputedWidth()-p.getFrameWidth('lr'), p.getComputedHeight()-p.getFrameWidth('tb'));
-        if(monitorResize === true){
-            Ext.EventManager.onWindowResize(this.fitToParent.createDelegate(this, []));
-        }
-        return this;
+  fitToParentDelegate : Ext.emptyFn, 
+
+    
+    fitToParent : function(monitorResize, targetParent) {
+      Ext.EventManager.removeResizeListener(this.fitToParentDelegate); 
+      this.fitToParentDelegate = Ext.emptyFn; 
+      if (monitorResize === true && !this.dom.parentNode) { 
+        return;
+      }
+      var p = Ext.get(targetParent || this.dom.parentNode);
+      this.setSize(p.getComputedWidth() - p.getFrameWidth('lr'), p.getComputedHeight() - p.getFrameWidth('tb'));
+      if (monitorResize === true) {
+        this.fitToParentDelegate = this.fitToParent.createDelegate(this, [true, targetParent]);
+        Ext.EventManager.onWindowResize(this.fitToParentDelegate);
+      }
+      return this;
     },
 
     
@@ -4911,6 +4932,9 @@ Ext.extend(Ext.data.Connection, Ext.util.Observable, {
     autoAbort:false,
 
     
+    disableCaching: true,
+
+    
     request : function(o){
         if(this.fireEvent("beforerequest", this, o) !== false){
             var p = o.params;
@@ -4960,6 +4984,10 @@ Ext.extend(Ext.data.Connection, Ext.util.Observable, {
             };
 
             var method = o.method||this.method||(p ? "POST" : "GET");
+
+            if(method == 'GET' && (this.disableCaching && o.disableCaching !== false) || o.disableCaching === true){
+                url += (url.indexOf('?') != -1 ? '&' : '?') + '_dc=' + (new Date().getTime());
+            }
 
             if(typeof o.autoAbort == 'boolean'){ 
                 if(o.autoAbort){
@@ -5063,6 +5091,8 @@ Ext.extend(Ext.data.Connection, Ext.util.Observable, {
                 responseXML : null
             };
 
+            r.argument = o ? o.argument : null;
+
             try { 
                 var doc;
                 if(Ext.isIE){
@@ -5106,13 +5136,16 @@ Ext.extend(Ext.data.Connection, Ext.util.Observable, {
 
 Ext.Ajax = new Ext.data.Connection({
     
-    
+   
     
     
     
     
     
 
+    
+
+    
     
     
     
@@ -5491,11 +5524,11 @@ Date.getFormatCode = function(character) {
     case "A":
         return "(this.getHours() < 12 ? 'AM' : 'PM') + ";
     case "g":
-        return "((this.getHours() %12) ? this.getHours() % 12 : 12) + ";
+        return "((this.getHours() % 12) ? this.getHours() % 12 : 12) + ";
     case "G":
         return "this.getHours() + ";
     case "h":
-        return "String.leftPad((this.getHours() %12) ? this.getHours() % 12 : 12, 2, '0') + ";
+        return "String.leftPad((this.getHours() % 12) ? this.getHours() % 12 : 12, 2, '0') + ";
     case "H":
         return "String.leftPad(this.getHours(), 2, '0') + ";
     case "i":
@@ -5530,12 +5563,12 @@ Date.createParser = function(format) {
     Date.parseFunctions[format] = funcName;
 
     var code = "Date." + funcName + " = function(input){\n"
-        + "var y = -1, m = -1, d = -1, h = -1, i = -1, s = -1, o, z;\n"
+        + "var y = -1, m = -1, d = -1, h = -1, i = -1, s = -1, o, z, v;\n"
         + "var d = new Date();\n"
         + "y = d.getFullYear();\n"
         + "m = d.getMonth();\n"
         + "d = d.getDate();\n"
-        + "var v = null, results = input.match(Date.parseRegexes[" + regexNum + "]);\n"
+        + "var results = input.match(Date.parseRegexes[" + regexNum + "]);\n"
         + "if (results && results.length > 0) {";
     var regex = "";
 
@@ -5560,17 +5593,17 @@ Date.createParser = function(format) {
         }
     }
 
-    code += "if (y > 0 && m >= 0 && d > 0 && h >= 0 && i >= 0 && s >= 0)\n"
+    code += "if (y >= 0 && m >= 0 && d > 0 && h >= 0 && i >= 0 && s >= 0)\n"
         + "{v = new Date(y, m, d, h, i, s);}\n"
-        + "else if (y > 0 && m >= 0 && d > 0 && h >= 0 && i >= 0)\n"
+        + "else if (y >= 0 && m >= 0 && d > 0 && h >= 0 && i >= 0)\n"
         + "{v = new Date(y, m, d, h, i);}\n"
-        + "else if (y > 0 && m >= 0 && d > 0 && h >= 0)\n"
+        + "else if (y >= 0 && m >= 0 && d > 0 && h >= 0)\n"
         + "{v = new Date(y, m, d, h);}\n"
-        + "else if (y > 0 && m >= 0 && d > 0)\n"
+        + "else if (y >= 0 && m >= 0 && d > 0)\n"
         + "{v = new Date(y, m, d);}\n"
-        + "else if (y > 0 && m >= 0)\n"
+        + "else if (y >= 0 && m >= 0)\n"
         + "{v = new Date(y, m);}\n"
-        + "else if (y > 0)\n"
+        + "else if (y >= 0)\n"
         + "{v = new Date(y);}\n"
         + "}return (v && (z || o))?\n" 
         + "    ((z)? v.add(Date.SECOND, (v.getTimezoneOffset() * 60) + (z*1)) :\n" 
@@ -5589,10 +5622,13 @@ Date.formatCodeToRegex = function(character, currentGroup) {
         c:null,
         s:"(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)"};
     case "j":
+        return {g:1,
+            c:"d = parseInt(results[" + currentGroup + "], 10);\n",
+            s:"(\\d{1,2})"}; 
     case "d":
         return {g:1,
             c:"d = parseInt(results[" + currentGroup + "], 10);\n",
-            s:"(\\d{1,2})"};
+            s:"(\\d{2})"}; 
     case "l":
         return {g:0,
             c:null,
@@ -5622,10 +5658,13 @@ Date.formatCodeToRegex = function(character, currentGroup) {
             c:"m = parseInt(Date.monthNumbers[results[" + currentGroup + "]], 10);\n",
             s:"(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)"};
     case "n":
+        return {g:1,
+            c:"m = parseInt(results[" + currentGroup + "], 10) - 1;\n",
+            s:"(\\d{1,2})"}; 
     case "m":
         return {g:1,
             c:"m = parseInt(results[" + currentGroup + "], 10) - 1;\n",
-            s:"(\\d{1,2})"};
+            s:"(\\d{2})"}; 
     case "t":
         return {g:0,
             c:null,
@@ -5657,11 +5696,14 @@ Date.formatCodeToRegex = function(character, currentGroup) {
             s:"(AM|PM)"};
     case "g":
     case "G":
+        return {g:1,
+            c:"h = parseInt(results[" + currentGroup + "], 10);\n",
+            s:"(\\d{1,2})"}; 
     case "h":
     case "H":
         return {g:1,
             c:"h = parseInt(results[" + currentGroup + "], 10);\n",
-            s:"(\\d{1,2})"};
+            s:"(\\d{2})"}; 
     case "i":
         return {g:1,
             c:"i = parseInt(results[" + currentGroup + "], 10);\n",
@@ -6668,7 +6710,6 @@ Ext.MasterTemplate.from = function(el, config){
     el = Ext.getDom(el);
     return new Ext.MasterTemplate(el.value || el.innerHTML, config || '');
 };
-
 Ext.XTemplate = function(){
     Ext.XTemplate.superclass.constructor.apply(this, arguments);
     var s = this.html;
@@ -6771,7 +6812,7 @@ Ext.extend(Ext.XTemplate, Ext.Template, {
                     args = ", values";
                 }
             }else{
-                args= ''; format = "("+v+" == undefined ? '' : ";
+                args= ''; format = "("+v+" === undefined ? '' : ";
             }
             return "'"+ sep + format + v + args + ")"+sep+"'";
         };
@@ -7055,6 +7096,8 @@ Ext.KeyNav.prototype = {
     disabled : false,
     defaultEventAction: "stopEvent",
 
+    forceKeyDown : false,
+
     prepareEvent : function(e){
         var k = e.getKey();
         var h = this.keyToHandler[k];
@@ -7108,7 +7151,7 @@ Ext.KeyNav.prototype = {
 	
 	enable: function(){
 		if(this.disabled){
-                                    if(Ext.isIE){
+                                    if(this.forceKeyDown || Ext.isIE || Ext.isAir){
                 this.el.on("keydown", this.relay,  this);
             }else{
                 this.el.on("keydown", this.prepareEvent,  this);
@@ -7121,7 +7164,7 @@ Ext.KeyNav.prototype = {
 	
 	disable: function(){
 		if(!this.disabled){
-		    if(Ext.isIE){
+		    if(this.forceKeyDown || Ext.isIE || Ext.isAir){
                 this.el.un("keydown", this.relay);
             }else{
                 this.el.un("keydown", this.prepareEvent);
@@ -10210,6 +10253,11 @@ Ext.data.Record.prototype = {
     
     clearError : function(){
         this.error = null;
+    },
+
+    
+    copy : function(newId) {
+        return new this.constructor(Ext.apply({}, this.data), newId || this.id);
     }
 };
 
@@ -10291,6 +10339,9 @@ Ext.extend(Ext.data.Store, Ext.util.Observable, {
     remoteSort : false,
 
     
+    pruneModifiedRecords : false,
+
+    
     lastOptions : null,
 
     
@@ -10308,12 +10359,18 @@ Ext.extend(Ext.data.Store, Ext.util.Observable, {
     remove : function(record){
         var index = this.data.indexOf(record);
         this.data.removeAt(index);
+        if(this.pruneModifiedRecords){
+            this.modified.remove(record);
+        }
         this.fireEvent("remove", this, record, index);
     },
 
     
     removeAll : function(){
         this.data.clear();
+        if(this.pruneModifiedRecords){
+            this.modified = [];
+        }
         this.fireEvent("clear", this);
     },
 
@@ -10394,6 +10451,9 @@ Ext.extend(Ext.data.Store, Ext.util.Observable, {
         }
         var r = o.records, t = o.totalRecords || r.length;
         if(!options || options.add !== true){
+            if(this.pruneModifiedRecords){
+                this.modified = [];
+            }
             for(var i = 0, len = r.length; i < len; i++){
                 r[i].join(this);
             }
@@ -11729,11 +11789,14 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
     
     disabled : false,
     
-    disabledClass : "x-item-disabled",
-    
     rendered : false,
-
-    allowDomMove: true,
+    
+    
+    disabledClass : "x-item-disabled",
+	
+    allowDomMove : true,
+    
+    hideMode: 'display',
 
         ctype : "Ext.Component",
 
@@ -11742,9 +11805,6 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
         getActionEl : function(){
         return this[this.actionMode];
     },
-
-    
-    hideMode: 'display',
 
     initComponent : Ext.emptyFn,
     
@@ -11805,7 +11865,8 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
 
         afterRender : Ext.emptyFn,
 
-        destroy : function(){
+    
+    destroy : function(){
         if(this.fireEvent("beforedestroy", this) !== false){
             this.purgeListeners();
             this.beforeDestroy();
@@ -11958,7 +12019,7 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
         overrides = overrides || {};
         var id = overrides.id || Ext.id();
         var cfg = Ext.applyIf(overrides, this.initialConfig);
-        cfg.id = id;         return new this.__extcls(cfg);
+        cfg.id = id;         return new this.constructor(cfg);
     }
 });
 
@@ -12534,18 +12595,22 @@ Ext.Shadow.Pool = function(){
         }
     };
 }();
+
 Ext.BoxComponent = function(config){
     Ext.BoxComponent.superclass.constructor.call(this, config);
     this.addEvents({
+        
         resize : true,
+        
         move : true
     });
 };
 
 Ext.extend(Ext.BoxComponent, Ext.Component, {
-    boxReady : false,
+        boxReady : false,
         deferHeight: false,
 
+    
     setSize : function(w, h){
                 if(typeof w == 'object'){
             h = w.height;
@@ -12578,10 +12643,12 @@ Ext.extend(Ext.BoxComponent, Ext.Component, {
         return this;
     },
 
+    
     getSize : function(){
         return this.el.getSize();
     },
 
+    
     getPosition : function(local){
         if(local === true){
             return [this.el.getLeft(true), this.el.getTop(true)];
@@ -12589,6 +12656,7 @@ Ext.extend(Ext.BoxComponent, Ext.Component, {
         return this.xy || this.el.getXY();
     },
 
+    
     getBox : function(local){
         var s = this.el.getSize();
         if(local){
@@ -12602,19 +12670,22 @@ Ext.extend(Ext.BoxComponent, Ext.Component, {
         return s;
     },
 
+    
     updateBox : function(box){
         this.setSize(box.width, box.height);
         this.setPagePosition(box.x, box.y);
+        return this;
     },
 
-    getResizeEl : function(){
+        getResizeEl : function(){
         return this.resizeEl || this.el;
     },
 
-    getPositionEl : function(){
+        getPositionEl : function(){
         return this.positionEl || this.el;
     },
 
+    
     setPosition : function(x, y){
         this.x = x;
         this.y = y;
@@ -12639,6 +12710,7 @@ Ext.extend(Ext.BoxComponent, Ext.Component, {
         return this;
     },
 
+    
     setPagePosition : function(x, y){
         this.pageX = x;
         this.pageY = y;
@@ -12652,7 +12724,7 @@ Ext.extend(Ext.BoxComponent, Ext.Component, {
         return this;
     },
 
-    onRender : function(ct, position){
+        onRender : function(ct, position){
         Ext.BoxComponent.superclass.onRender.call(this, ct, position);
         if(this.resizeEl){
             this.resizeEl = Ext.get(this.resizeEl);
@@ -12662,7 +12734,7 @@ Ext.extend(Ext.BoxComponent, Ext.Component, {
         }
     },
 
-    afterRender : function(){
+        afterRender : function(){
         Ext.BoxComponent.superclass.afterRender.call(this);
         this.boxReady = true;
         this.setSize(this.width, this.height);
@@ -12674,19 +12746,23 @@ Ext.extend(Ext.BoxComponent, Ext.Component, {
         }
     },
 
+    
     syncSize : function(){
         this.setSize(this.el.getWidth(), this.el.getHeight());
+        return this;
     },
 
+    
     onResize : function(adjWidth, adjHeight, rawWidth, rawHeight){
 
     },
 
+    
     onPosition : function(x, y){
 
     },
 
-    adjustSize : function(w, h){
+        adjustSize : function(w, h){
         if(this.autoWidth){
             w = 'auto';
         }
@@ -12696,7 +12772,7 @@ Ext.extend(Ext.BoxComponent, Ext.Component, {
         return {width : w, height: h};
     },
 
-    adjustPosition : function(x, y){
+        adjustPosition : function(x, y){
         return {x : x, y: y};
     }
 });
@@ -14135,19 +14211,19 @@ Ext.TabPanel = function(container, config){
       this.el.addClass("x-tabs-top");
     }
     this.items = [];
-    
+
     this.bodyEl.setStyle("position", "relative");
-    
+
     this.active = null;
     this.activateDelegate = this.activate.createDelegate(this);
-    
+
     this.addEvents({
         
         "tabchange": true,
         
         "beforetabchange" : true
     });
-    
+
     Ext.EventManager.onWindowResize(this.onResize, this);
     this.cpad = this.el.getPadding("lr");
     this.hiddenCount = 0;
@@ -14156,18 +14232,19 @@ Ext.TabPanel = function(container, config){
 };
 
 Ext.extend(Ext.TabPanel, Ext.util.Observable, {
-    
+	
     tabPosition : "top",
+	
     currentTabWidth : 0,
-    
+	
     minTabWidth : 40,
-    
+	
     maxTabWidth : 250,
-    
+	
     preferredTabWidth : 175,
-    
+	
     resizeTabs : false,
-    
+	
     monitorResize : true,
 
     
@@ -14179,12 +14256,12 @@ Ext.extend(Ext.TabPanel, Ext.util.Observable, {
         }
         return item;
     },
-    
+
     
     getTab : function(id){
         return this.items[id];
     },
-    
+
     
     hideTab : function(id){
         var t = this.items[id];
@@ -14194,7 +14271,7 @@ Ext.extend(Ext.TabPanel, Ext.util.Observable, {
            this.autoSizeTabs();
         }
     },
-    
+
     
     unhideTab : function(id){
         var t = this.items[id];
@@ -14204,7 +14281,7 @@ Ext.extend(Ext.TabPanel, Ext.util.Observable, {
            this.autoSizeTabs();
         }
     },
-    
+
     
     addTabItem : function(item){
         this.items[item.id] = item;
@@ -14216,7 +14293,7 @@ Ext.extend(Ext.TabPanel, Ext.util.Observable, {
             item.autoSize();
         }
     },
-        
+
     
     removeTab : function(id){
         var items = this.items;
@@ -14237,7 +14314,7 @@ Ext.extend(Ext.TabPanel, Ext.util.Observable, {
         tab.purgeListeners();
         this.autoSizeTabs();
     },
-    
+
     getNextAvailable : function(start){
         var items = this.items;
         var index = start;
@@ -14259,7 +14336,7 @@ Ext.extend(Ext.TabPanel, Ext.util.Observable, {
         }
         return null;
     },
-    
+
     
     disableTab : function(id){
         var tab = this.items[id];
@@ -14267,13 +14344,13 @@ Ext.extend(Ext.TabPanel, Ext.util.Observable, {
             tab.disable();
         }
     },
-    
+
     
     enableTab : function(id){
         var tab = this.items[id];
         tab.enable();
     },
-    
+
     
     activate : function(id){
         var tab = this.items[id];
@@ -14282,7 +14359,7 @@ Ext.extend(Ext.TabPanel, Ext.util.Observable, {
         }
         if(tab == this.active || tab.disabled){
             return tab;
-        } 
+        }
         var e = {};
         this.fireEvent("beforetabchange", this, e, tab);
         if(e.cancel !== true && !tab.disabled){
@@ -14295,21 +14372,21 @@ Ext.extend(Ext.TabPanel, Ext.util.Observable, {
         }
         return tab;
     },
-    
+
     
     getActiveTab : function(){
         return this.active;
     },
-    
+
     
     syncHeight : function(targetHeight){
         var height = (targetHeight || this.el.getHeight())-this.el.getBorderWidth("tb")-this.el.getPadding("tb");
         var bm = this.bodyEl.getMargins();
         var newHeight = height-(this.stripWrap.getHeight()||0)-(bm.top+bm.bottom);
         this.bodyEl.setHeight(newHeight);
-        return newHeight; 
+        return newHeight;
     },
-    
+
     onResize : function(){
         if(this.monitorResize){
             this.autoSizeTabs();
@@ -14318,15 +14395,15 @@ Ext.extend(Ext.TabPanel, Ext.util.Observable, {
 
     
     beginUpdate : function(){
-        this.updating = true;    
+        this.updating = true;
     },
-    
+
     
     endUpdate : function(){
         this.updating = false;
-        this.autoSizeTabs();  
+        this.autoSizeTabs();
     },
-    
+
     
     autoSizeTabs : function(){
         var count = this.items.length;
@@ -14347,12 +14424,12 @@ Ext.extend(Ext.TabPanel, Ext.util.Observable, {
             }
         }
     },
-    
+
     
      getCount : function(){
-         return this.items.length;  
+         return this.items.length;
      },
-    
+
     
     setTabWidth : function(width){
         this.currentTabWidth = width;
@@ -14360,7 +14437,7 @@ Ext.extend(Ext.TabPanel, Ext.util.Observable, {
         	if(!this.items[i].isHidden())this.items[i].setWidth(width);
         }
     },
-    
+
     
     destroy : function(removeEl){
         Ext.EventManager.removeResizeListener(this.onResize, this);
@@ -14374,7 +14451,7 @@ Ext.extend(Ext.TabPanel, Ext.util.Observable, {
     }
 });
 
- 
+
 Ext.TabPanelItem = function(tabPanel, id, text, closable){
     
     this.tabPanel = tabPanel;
@@ -14387,14 +14464,14 @@ Ext.TabPanelItem = function(tabPanel, id, text, closable){
     
     this.loaded = false;
     this.closable = closable;
-    
+
     
     this.bodyEl = Ext.get(tabPanel.createItemBody(tabPanel.bodyEl.dom, id));
     this.bodyEl.setVisibilityMode(Ext.Element.VISIBILITY);
     this.bodyEl.setStyle("display", "block");
     this.bodyEl.setStyle("zoom", "1");
     this.hideAction();
-    
+
     var els = tabPanel.createStripElements(tabPanel.stripEl.dom, text, closable);
     
     this.el = Ext.get(els.el, true);
@@ -14410,7 +14487,7 @@ Ext.TabPanelItem = function(tabPanel, id, text, closable){
         c.addClassOnOver("close-over");
         c.on("click", this.closeClick, this);
      }
-    
+
     this.addEvents({
          
         "activate": true,
@@ -14429,7 +14506,7 @@ Ext.TabPanelItem = function(tabPanel, id, text, closable){
 Ext.extend(Ext.TabPanelItem, Ext.util.Observable, {
     purgeListeners : function(){
        Ext.util.Observable.prototype.purgeListeners.call(this);
-       this.el.removeAllListeners(); 
+       this.el.removeAllListeners();
     },
     
     show : function(){
@@ -14440,33 +14517,33 @@ Ext.extend(Ext.TabPanelItem, Ext.util.Observable, {
         }
         this.fireEvent("activate", this.tabPanel, this);
     },
-    
+
     
     isActive : function(){
-        return this.tabPanel.getActiveTab() == this;  
+        return this.tabPanel.getActiveTab() == this;
     },
-    
+
     
     hide : function(){
         this.pnode.removeClass("on");
         this.hideAction();
         this.fireEvent("deactivate", this.tabPanel, this);
     },
-    
+
     hideAction : function(){
         this.bodyEl.hide();
         this.bodyEl.setStyle("position", "absolute");
         this.bodyEl.setLeft("-20000px");
         this.bodyEl.setTop("-20000px");
     },
-    
+
     showAction : function(){
         this.bodyEl.setStyle("position", "relative");
         this.bodyEl.setTop("");
         this.bodyEl.setLeft("");
         this.bodyEl.show();
     },
-    
+
     
     setTooltip : function(text){
         if(Ext.QuickTips && Ext.QuickTips.isEnabled()){
@@ -14476,7 +14553,7 @@ Ext.extend(Ext.TabPanelItem, Ext.util.Observable, {
             this.textEl.dom.title = text;
         }
     },
-    
+
     onTabClick : function(e){
         e.preventDefault();
         this.tabPanel.activate(this.id);
@@ -14488,38 +14565,39 @@ Ext.extend(Ext.TabPanelItem, Ext.util.Observable, {
     },
 
     getWidth : function(){
-        return this.inner.getWidth();  
+        return this.inner.getWidth();
     },
-    
+
     setWidth : function(width){
         var iwidth = width - this.pnode.getPadding("lr");
         this.inner.setWidth(iwidth);
         this.textEl.setWidth(iwidth-this.inner.getPadding("lr"));
         this.pnode.setWidth(width);
     },
+
     
     setHidden : function(hidden){
         this.hidden = hidden;
         this.pnode.setStyle("display", hidden ? "none" : "");
     },
-    
+
     
     isHidden : function(){
-        return this.hidden;  
+        return this.hidden;
     },
-    
+
     
     getText : function(){
         return this.text;
     },
-    
+
     autoSize : function(){
         
         this.textEl.setWidth(1);
         this.setWidth(this.textEl.dom.scrollWidth+this.pnode.getPadding("lr")+this.inner.getPadding("lr"));
         
     },
-    
+
     
     setText : function(text){
         this.text = text;
@@ -14533,7 +14611,7 @@ Ext.extend(Ext.TabPanelItem, Ext.util.Observable, {
     activate : function(){
         this.tabPanel.activate(this.id);
     },
-    
+
     
     disable : function(){
         if(this.tabPanel.active != this){
@@ -14541,23 +14619,23 @@ Ext.extend(Ext.TabPanelItem, Ext.util.Observable, {
             this.pnode.addClass("disabled");
         }
     },
-    
+
     
     enable : function(){
         this.disabled = false;
         this.pnode.removeClass("disabled");
     },
-    
+
     
     setContent : function(content, loadScripts){
         this.bodyEl.update(content, loadScripts);
     },
-    
+
     
     getUpdateManager : function(){
         return this.bodyEl.getUpdateManager();
     },
-    
+
     
     setUrl : function(url, params, loadOnce){
         if(this.refreshDelegate){
@@ -14567,7 +14645,7 @@ Ext.extend(Ext.TabPanelItem, Ext.util.Observable, {
         this.on("activate", this.refreshDelegate);
         return this.bodyEl.getUpdateManager();
     },
-    
+
     
     _handleRefresh : function(url, params, loadOnce){
         if(!loadOnce || !this.loaded){
@@ -14575,20 +14653,20 @@ Ext.extend(Ext.TabPanelItem, Ext.util.Observable, {
             updater.update(url, params, this._setLoaded.createDelegate(this));
         }
     },
-    
+
     
     refresh : function(){
         if(this.refreshDelegate){
            this.loaded = false;
            this.refreshDelegate();
         }
-    }, 
-    
+    },
+
     
     _setLoaded : function(){
         this.loaded = true;
     },
-    
+
     
     closeClick : function(e){
         var o = {};
@@ -15639,7 +15717,6 @@ Ext.extend(Ext.PagingToolbar, Ext.Toolbar, {
         this.loading = this.addButton({
             tooltip: this.refreshText,
             cls: "x-btn-icon x-grid-loading",
-            disabled: true,
             handler: this.onClick.createDelegate(this, ["refresh"])
         });
 
@@ -18253,7 +18330,7 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
     
     ensureVisible : function(callback){
         var tree = this.getOwnerTree();
-        tree.expandPath(this.getPath(), false, function(){
+        tree.expandPath(this.parentNode.getPath(), false, function(){
             tree.getTreeEl().scrollChildIntoView(this.ui.anchor);
             Ext.callback(callback);
         }.createDelegate(this));
@@ -18548,10 +18625,14 @@ Ext.tree.TreeNodeUI.prototype = {
         if(dd && (!this.node.isRoot || ot.rootVisible)){
             Ext.dd.Registry.register(this.elNode, {
                 node: this.node,
-                handles: [this.iconNode, this.textNode],
+                handles: this.getDDHandles(),
                 isHandle: false
             });
         }
+    },
+
+    getDDHandles : function(){
+        return [this.iconNode, this.textNode];
     },
 
     hide : function(){
@@ -18786,9 +18867,9 @@ Ext.tree.TreeNodeUI.prototype = {
 
         var buf = ['<li class="x-tree-node"><div class="x-tree-node-el ', a.cls,'">',
             '<span class="x-tree-node-indent">',this.indentMarkup,"</span>",
-            '<img src="', this.emptyIcon, '" class="x-tree-ec-icon">',
-            '<img src="', a.icon || this.emptyIcon, '" class="x-tree-node-icon',(a.icon ? " x-tree-node-inline-icon" : ""),(a.iconCls ? " "+a.iconCls : ""),'" unselectable="on">',
-            cb ? ('<input class="x-tree-node-cb" type="checkbox" ' + (a.checked ? 'checked="checked">' : '>')) : '',
+            '<img src="', this.emptyIcon, '" class="x-tree-ec-icon" />',
+            '<img src="', a.icon || this.emptyIcon, '" class="x-tree-node-icon',(a.icon ? " x-tree-node-inline-icon" : ""),(a.iconCls ? " "+a.iconCls : ""),'" unselectable="on" />',
+            cb ? ('<input class="x-tree-node-cb" type="checkbox" ' + (a.checked ? 'checked="checked" />' : ' />')) : '',
             '<a hidefocus="on" href="',a.href ? a.href : "#",'" tabIndex="1" ',
              a.hrefTarget ? ' target="'+a.hrefTarget+'"' : "", '><span unselectable="on">',n.text,"</span></a></div>",
             '<ul class="x-tree-node-ct" style="display:none;"></ul>',
@@ -19067,15 +19148,15 @@ Ext.extend(Ext.tree.TreeLoader, Ext.util.Observable, {
 Ext.tree.TreeFilter = function(tree, config){
     this.tree = tree;
     this.filtered = {};
-    Ext.apply(this, config, {
-        clearBlank:false,
-        reverse:false,
-        autoClear:false,
-        remove:false
-    });
+    Ext.apply(this, config);
 };
 
 Ext.tree.TreeFilter.prototype = {
+    clearBlank:false,
+    reverse:false,
+    autoClear:false,
+    remove:false,
+
      
     filter : function(value, attr, startNode){
         attr = attr || "text";
@@ -19084,7 +19165,7 @@ Ext.tree.TreeFilter.prototype = {
             var vlen = value.length;
             
             if(vlen == 0 && this.clearBlank){
-                this.clearFilter();
+                this.clear();
                 return;
             }
             value = value.toLowerCase();
@@ -19100,12 +19181,12 @@ Ext.tree.TreeFilter.prototype = {
         }
         this.filterBy(f, null, startNode);
 	},
-    
+
     
     filterBy : function(fn, scope, startNode){
         startNode = startNode || this.tree.root;
         if(this.autoClear){
-            this.clearFilter();
+            this.clear();
         }
         var af = this.filtered, rv = this.reverse;
         var f = function(n){
@@ -19132,10 +19213,10 @@ Ext.tree.TreeFilter.prototype = {
                        n.parentNode.removeChild(n);
                    }
                }
-           } 
+           }
         }
     },
-    
+
     
     clear : function(){
         var t = this.tree;
@@ -19148,7 +19229,7 @@ Ext.tree.TreeFilter.prototype = {
                 }
             }
         }
-        this.filtered = {}; 
+        this.filtered = {};
     }
 };
 
@@ -19175,8 +19256,8 @@ Ext.tree.TreeSorter = function(tree, config){
                 return -1;
             }
         }
-    	var v1 = sortType ? sortType(n1) : (cs ? n1[p] : n1[p].toUpperCase());
-    	var v2 = sortType ? sortType(n2) : (cs ? n2[p] : n2[p].toUpperCase());
+    	var v1 = sortType ? sortType(n1) : (cs ? n1.attributes[p] : n1.attributes[p].toUpperCase());
+    	var v2 = sortType ? sortType(n2) : (cs ? n2.attributes[p] : n2.attributes[p].toUpperCase());
     	if(v1 < v2){
 			return dsc ? +1 : -1;
 		}else if(v1 > v2){
@@ -19193,7 +19274,6 @@ Ext.tree.TreeSorter.prototype = {
     },
     
     compareNodes : function(n1, n2){
-        
         return (n1.text.toUpperCase() > n2.text.toUpperCase() ? 1 : -1);
     },
     
@@ -19745,13 +19825,14 @@ Ext.extend(Ext.menu.Menu, Ext.util.Observable, {
     },
 
     
-    showAt : function(xy, parentMenu, _fireBefore){
+    showAt : function(xy, parentMenu, _e){
         this.parentMenu = parentMenu;
         if(!this.el){
             this.render();
         }
-        if(_fireBefore !== false){
+        if(_e !== false){
             this.fireEvent("beforeshow", this);
+            xy = this.el.adjustForConstraints(xy);
         }
         this.el.setXY(xy);
         this.el.show();
@@ -20501,9 +20582,9 @@ Ext.extend(Ext.form.Field, Ext.BoxComponent,  {
     
     defaultAutoCreate : {tag: "input", type: "text", size: "20", autocomplete: "off"},
     
-    fieldClass: "x-form-field",
+    fieldClass : "x-form-field",
     
-    msgTarget: 'qtip',
+    msgTarget : 'qtip',
     
     msgFx : 'normal',
 
@@ -20511,11 +20592,14 @@ Ext.extend(Ext.form.Field, Ext.BoxComponent,  {
     readOnly : false,
 
     
-    disabled: false,
+    disabled : false,
 
     
     inputType : undefined,
-
+    
+    
+	tabIndex : undefined,
+	
         isFormField : true,
 
         hasFocus : false,
@@ -20559,9 +20643,6 @@ Ext.extend(Ext.form.Field, Ext.BoxComponent,  {
             if(this.inputType){
                 cfg.type = this.inputType;
             }
-            if(this.tabIndex !== undefined){
-                cfg.tabIndex = this.tabIndex;
-            }
             this.el = ct.createChild(cfg, position);
         }
         var type = this.el.dom.type;
@@ -20573,6 +20654,9 @@ Ext.extend(Ext.form.Field, Ext.BoxComponent,  {
         }
         if(this.readOnly){
             this.el.dom.readOnly = true;
+        }
+        if(this.tabIndex !== undefined){
+            this.el.dom.setAttribute('tabIndex', this.tabIndex);
         }
 
         this.el.addClass([this.fieldClass, this.cls]);
@@ -20774,7 +20858,7 @@ Ext.extend(Ext.form.Field, Ext.BoxComponent,  {
     
     getValue : function(){
         var v = this.el.getValue();
-        if(v == this.emptyText || v === undefined){
+        if(v === this.emptyText || v === undefined){
             v = '';
         }
         return v;
@@ -21312,7 +21396,7 @@ Ext.extend(Ext.form.TextArea, Ext.form.TextField,  {
 
     onDestroy : function(){
         if(this.textSizeEl){
-            this.textSizeEl.remove();
+            this.textSizeEl.parentNode.removeChild(this.textSizeEl);
         }
         Ext.form.TextArea.superclass.onDestroy.call(this);
     },
@@ -21861,7 +21945,9 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
                    return Ext.KeyNav.prototype.doRelay.apply(this, arguments);
                 }
                 return true;
-            }
+            },
+
+            forceKeyDown: true
         });
         this.queryDelay = Math.max(this.queryDelay || 10,
                 this.mode == 'local' ? 10 : 250);
@@ -22304,6 +22390,8 @@ Ext.extend(Ext.form.Checkbox, Ext.form.Field,  {
         }
         if(this.checked){
             this.setValue(true);
+        }else{
+            this.checked = this.el.dom.checked;
         }
     },
 
@@ -22907,10 +22995,7 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             btns.insertorderedlist.toggle(doc.queryCommandState('insertorderedlist'));
             btns.insertunorderedlist.toggle(doc.queryCommandState('insertunorderedlist'));
         }
-        if(this.enableColors){
-            btns.forecolor.menu.hide();
-            btns.backcolor.menu.hide();
-        }
+        Ext.menu.MenuMgr.hideAll();
 
         this.syncValue();
     },
@@ -22998,13 +23083,16 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
                         r.pasteHTML('&nbsp;&nbsp;&nbsp;&nbsp;');
                         this.deferFocus();
                     }
-                }else if(k == e.ENTER && !e.getTarget('li')){
-                    e.stopEvent();
+                }else if(k == e.ENTER){
                     r = this.doc.selection.createRange();
                     if(r){
-                        r.pasteHTML('<br />');
-                        r.collapse(false);
-                        r.select();
+                        var target = r.parentElement();
+                        if(!target || target.tagName.toLowerCase() != 'li'){
+                            e.stopEvent();
+                            r.pasteHTML('<br />');
+                            r.collapse(false);
+                            r.select();
+                        }
                     }
                 }
             };
@@ -23690,11 +23778,13 @@ Ext.extend(Ext.form.Action.Submit, Ext.form.Action, {
 
     run : function(){
         var o = this.options;
-        var isPost = this.getMethod() == 'POST';
+        var method = this.getMethod();
+        var isPost = method == 'POST';
         if(o.clientValidation === false || this.form.isValid()){
             Ext.Ajax.request(Ext.apply(this.createCallback(), {
                 form:this.form.el.dom,
                 url:this.getUrl(!isPost),
+                method: method,
                 params:isPost ? this.getParams() : null,
                 isUpload: this.form.fileUpload
             }));
@@ -26168,6 +26258,7 @@ Ext.extend(Ext.grid.Grid, Ext.util.Observable, {
         return this;
     },
 
+	
     reconfigure : function(dataSource, colModel){
         if(this.loadMask){
             this.loadMask.destroy();
@@ -26418,6 +26509,7 @@ Ext.extend(Ext.grid.AbstractGridView, Ext.util.Observable, {
         return Ext.util.CSS.createStyleSheet(ruleBuf.join(""), rulesId);
     }
 });
+
 Ext.grid.GridView = function(config){
     Ext.grid.GridView.superclass.constructor.call(this);
     this.el = null;
@@ -26463,11 +26555,11 @@ Ext.extend(Ext.grid.GridView, Ext.grid.AbstractGridView, {
     bind : function(ds, cm){
         if(this.ds){
             this.ds.un("load", this.onLoad, this);
-            this.ds.un("datachanged", this.onDataChange);
-            this.ds.un("add", this.onAdd);
-            this.ds.un("remove", this.onRemove);
-            this.ds.un("update", this.onUpdate);
-            this.ds.un("clear", this.onClear);
+            this.ds.un("datachanged", this.onDataChange, this);
+            this.ds.un("add", this.onAdd, this);
+            this.ds.un("remove", this.onRemove, this);
+            this.ds.un("update", this.onUpdate, this);
+            this.ds.un("clear", this.onClear, this);
         }
         if(ds){
             ds.on("load", this.onLoad, this);

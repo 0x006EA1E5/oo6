@@ -147,7 +147,6 @@ OO.EditForm = function(){
 		
 		// Remove previous form and render new one
 		Ext.get('edit-panel').dom.innerHTML='';
-		console.log(hiddenFields);
 	    form.render('edit-panel');
 		
 		// Set form values

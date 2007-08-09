@@ -39,12 +39,13 @@ public class ContentServiceImpl implements ContentService
         return dynaNodeDao.save(newNode);
     }
     
-    public void publishItem(String uuid)
+    public DynaNode publishItem(String uuid)
     {
         Assert.notNull("item must be specified.",uuid);
         
         DynaNode item = dynaNodeDao.get(uuid);
         dynaNodeDao.publish(item);
+        return item;
     }
 
     public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
