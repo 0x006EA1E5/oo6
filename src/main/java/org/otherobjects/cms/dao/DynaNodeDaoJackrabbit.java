@@ -135,6 +135,7 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
     		throw new OtherObjectsException("DynaNode " + dynaNode.getJcrPath() + "[" + dynaNode.getId() + "] couldn't be published as its published flag is already set ");
     	
     	Session liveSession = null;
+    	Session editSession = null;
     	try {
     		// get a live workspace session
 			liveSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
@@ -157,7 +158,7 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
 			
 			// we got here so we successfully published
 			updateStatus(dynaNode, "Published");
-			Session editSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
+			editSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
 			Node editNode = editSession.getNodeByUUID(dynaNode.getId());
 			// create version
 			editNode.checkin();
@@ -170,6 +171,8 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
 		{
 			if(liveSession != null)
 				liveSession.logout();
+			if(editSession != null)
+				editSession.logout();
 		}
     }
     
