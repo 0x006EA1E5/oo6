@@ -281,9 +281,13 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
         
         assertNotNull( "Must not be null", dynaNodeDao.getByPath(node.getJcrPath()));
 
-        System.out.println("There are " + getVersionCount(node) + " in the repository before publishing");
+        long countBefore = getVersionCount(node);
+        System.out.println("There are " + countBefore + " in the repository before publishing");
         dynaNodeDao.publish(node);
-        System.out.println("There are " + getVersionCount(node) + " in the repository after publishing");
+        long countAfter = getVersionCount(node);
+        System.out.println("There are " + countAfter + " in the repository after publishing");
+        
+        assertTrue(countBefore < countAfter);
         
         SecurityContextHolder.clearContext(); //logout
         
