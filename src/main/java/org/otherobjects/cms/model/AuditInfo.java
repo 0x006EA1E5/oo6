@@ -11,4 +11,6 @@ public interface AuditInfo {
 	public void setModificationTimestamp(Date modificationTimestamp);
 	public String getComment();
 	public void setComment(String comment);
+	public int getChangeNumber();
+	public void setChangeNumber(int changeNumber);
 }

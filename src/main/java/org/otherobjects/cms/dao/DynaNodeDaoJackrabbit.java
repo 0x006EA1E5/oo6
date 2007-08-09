@@ -81,12 +81,14 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
             if (errors.getErrorCount() > 0)
                 throw new OtherObjectsException("DynaNode " + object.getLabel() + "couldn't be validated and therefore didn't get saved");
         }
+        updateAuditInfo(object, "Saved");
         object.setPublished(false); // on saving the publish state gets set to false
         return super.save(object, false);
     }
     
-    private DynaNode saveWithoutChangingPublishState(DynaNode dynaNode)
+    private DynaNode saveInternal(DynaNode dynaNode, boolean publishStatus)
     {
+    	dynaNode.setPublished(publishStatus);
     	return super.save(dynaNode, false); 
     }
 
@@ -131,6 +133,7 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
     
     public void publish(DynaNode dynaNode)
     {
+    	//FIXME this should display proper transactional behaviour which it doesn't at the moment as there are multiple jcr sessions involved
     	if(dynaNode.isPublished())
     		throw new OtherObjectsException("DynaNode " + dynaNode.getJcrPath() + "[" + dynaNode.getId() + "] couldn't be published as its published flag is already set ");
     	
@@ -157,7 +160,8 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
 			}
 			
 			// we got here so we successfully published
-			updateStatus(dynaNode, "Published");
+			updateAuditInfo(dynaNode, "Published");
+			saveInternal(dynaNode, true); // set the status to published
 			editSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
 			Node editNode = editSession.getNodeByUUID(dynaNode.getId());
 			// create version
@@ -176,7 +180,7 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
 		}
     }
     
-    private void updateStatus(DynaNode dynaNode, String comment)
+    private void updateAuditInfo(DynaNode dynaNode, String comment)
     {
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -186,10 +190,9 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
     	dynaNode.setUserId(user.getId().toString());
     	dynaNode.setModificationTimestamp(new Date());
     	dynaNode.setComment(comment);
-    		
-    	dynaNode.setPublished(true);
-		saveWithoutChangingPublishState(dynaNode);
-		
+    	dynaNode.setChangeNumber(dynaNode.getChangeNumber() + 1);
     }
+    
+    
 
 }

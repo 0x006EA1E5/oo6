@@ -57,6 +57,7 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
 
     public void testGetAllByPath()
     {
+    	adminLogin();
         // Testing that it is transaction safe
         List<DynaNode> contents = dynaNodeDao.getAllByPath("/site/test");
         assertEquals(3, contents.size());
@@ -68,6 +69,7 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
         dynaNodeDao.save(folder);
         contents = dynaNodeDao.getAllByPath("/site/test");
         assertEquals(4, contents.size());
+        logout();
     }
 
     public void testCreate()
@@ -174,6 +176,7 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
     @SuppressWarnings("unchecked")
     public void testSave() throws RepositoryException
     {
+    	adminLogin();
         //FIXME Re-enable this test
         DynaNode r1 = createReference("R1");
         List<DynaNode> referencesList = new ArrayList<DynaNode>();
@@ -248,6 +251,7 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
         //assertEquals(componentsList.get(1), ((List) ns2.get("testComponentsList")).get(1));
         assertEquals(referencesList.size(), ((List) ns2.get("testReferencesList")).size());
         //assertEquals(referencesList.get(1), ((List) ns2.get("testReferencesList")).get(1));
+        logout();
     }
 
     public void testGetAllByType()
@@ -259,14 +263,7 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
     
     public void testPublish() throws Exception
     {
-    	// pretend an editor session
-    	// fake admin
-    	User admin = new User("admin");
-    	admin.setId(new Long(1));
-    	
-    	SecurityContextHolder.getContext().setAuthentication(new MockAuthenticationManager().authenticate(
-				new UsernamePasswordAuthenticationToken(admin, "admin", new GrantedAuthority[]{new GrantedAuthorityImpl(OtherObjectsJackrabbitSessionFactory.EDITOR_ROLE_NAME)})
-		));
+    	adminLogin();
     	
     	DynaNode node = dynaNodeDao.getByPath("/site/about/index.html");
 
@@ -289,20 +286,15 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
         
         assertTrue(countBefore < countAfter);
         
-        SecurityContextHolder.clearContext(); //logout
+        logout();
         
-        // pretend anonymous user
-        AnonymousAuthenticationProvider anonymousAuthenticationProvider = new AnonymousAuthenticationProvider();
-        anonymousAuthenticationProvider.setKey("testkey");
-        AnonymousAuthenticationToken anonymousAuthenticationToken = new AnonymousAuthenticationToken("testkey", "anonymous", new GrantedAuthority[]{new GrantedAuthorityImpl("ROLE_ANONYMOUS")});
-        SecurityContextHolder.getContext().setAuthentication(anonymousAuthenticationProvider.authenticate(anonymousAuthenticationToken));
-
+        anoymousLogin();
         
         DynaNode node1 = dynaNodeDao.getByPath(node.getJcrPath());
         System.out.println(node1.getJcrPath());
         assertEquals(changedTitle, PropertyUtils.getSimpleProperty(node1, "title"));
         
-        SecurityContextHolder.clearContext();
+        logout();
         
     }
 
@@ -323,5 +315,31 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
 				editSession.logout();
 		}
 		return 0;
+	}
+	
+	private void adminLogin()
+	{
+		// pretend an editor session
+    	// fake admin
+    	User admin = new User("admin");
+    	admin.setId(new Long(1));
+    	
+    	SecurityContextHolder.getContext().setAuthentication(new MockAuthenticationManager().authenticate(
+				new UsernamePasswordAuthenticationToken(admin, "admin", new GrantedAuthority[]{new GrantedAuthorityImpl(OtherObjectsJackrabbitSessionFactory.EDITOR_ROLE_NAME)})
+		));
+	}
+	
+	private void anoymousLogin()
+	{
+		// pretend anonymous user
+        AnonymousAuthenticationProvider anonymousAuthenticationProvider = new AnonymousAuthenticationProvider();
+        anonymousAuthenticationProvider.setKey("testkey");
+        AnonymousAuthenticationToken anonymousAuthenticationToken = new AnonymousAuthenticationToken("testkey", "anonymous", new GrantedAuthority[]{new GrantedAuthorityImpl("ROLE_ANONYMOUS")});
+        SecurityContextHolder.getContext().setAuthentication(anonymousAuthenticationProvider.authenticate(anonymousAuthenticationToken));
+	}
+	
+	private void logout()
+	{
+		SecurityContextHolder.clearContext();
 	}
 }

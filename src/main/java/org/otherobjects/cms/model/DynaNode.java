@@ -53,6 +53,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo
     private String userId;
     private Date modificationTimestamp;
     private String comment;
+    private int changeNumber = 0;
 
     private TypeDef typeDef;
 
@@ -281,6 +282,14 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public int getChangeNumber() {
+		return changeNumber;
+	}
+
+	public void setChangeNumber(int changeNumber) {
+		this.changeNumber = changeNumber;
 	}
     
     

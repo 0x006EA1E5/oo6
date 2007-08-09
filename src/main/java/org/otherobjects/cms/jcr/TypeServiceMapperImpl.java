@@ -144,6 +144,11 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         fd10.setFieldName("comment");
         fd10.setJcrName("comment");
         cd.addFieldDescriptor(fd10);
+        
+        FieldDescriptor fd11 = new FieldDescriptor();
+        fd11.setFieldName("changeNumber");
+        fd11.setJcrName("changeNumber");
+        cd.addFieldDescriptor(fd11);
 
         // Add custom properties
         for (PropertyDef propDef : typeDef.getProperties())
