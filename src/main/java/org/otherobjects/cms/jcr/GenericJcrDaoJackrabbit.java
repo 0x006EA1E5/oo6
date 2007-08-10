@@ -37,7 +37,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
 
     private Class<T> persistentClass;
 
-    private JcrMappingTemplate jcrMappingTemplate;
+    protected JcrMappingTemplate jcrMappingTemplate;
 
     public GenericJcrDaoJackrabbit(Class<T> persistentClass)
     {
@@ -350,4 +350,23 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
 	        }
 	    }, true);
 	}
+    
+    @SuppressWarnings("unchecked")
+    public T getVersionByChangeNumber(final T object, final int changeNumber)
+    {
+    	return (T) getJcrMappingTemplate().execute(new JcrMappingCallback()
+	    {
+	        public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+	        {
+	            try
+	            {
+	            	return (T)manager.getVersion(object.getJcrPath(), changeNumber + "");
+	            }
+	            catch (Exception e)
+	            {
+	                throw new JcrMappingException(e);
+	            }
+	        }
+	    }, true);
+    }
 }

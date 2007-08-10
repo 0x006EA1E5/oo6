@@ -1,5 +1,6 @@
 package org.otherobjects.cms.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,12 +9,15 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Workspace;
+import javax.jcr.version.Version;
+import javax.jcr.version.VersionIterator;
 
-import org.acegisecurity.Authentication;
-import org.acegisecurity.context.SecurityContextHolder;
+import org.apache.jackrabbit.ocm.exception.JcrMappingException;
+import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
 import org.apache.jackrabbit.ocm.query.Filter;
 import org.apache.jackrabbit.ocm.query.Query;
 import org.apache.jackrabbit.ocm.query.QueryManager;
+import org.apache.jackrabbit.ocm.spring.JcrMappingCallback;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.jcr.GenericJcrDaoJackrabbit;
 import org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory;
@@ -170,53 +174,66 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
     	return false;
     }
     
-    public void publish(DynaNode dynaNode)
+    public void publish(final DynaNode dynaNode)
     {
     	//FIXME this should display proper transactional behaviour which it doesn't at the moment as there are multiple jcr sessions involved
     	if(dynaNode.isPublished())
     		throw new OtherObjectsException("DynaNode " + dynaNode.getJcrPath() + "[" + dynaNode.getId() + "] couldn't be published as its published flag is already set ");
     	
-    	Session liveSession = null;
-    	Session editSession = null;
-    	try {
-    		// get a live workspace session
-			liveSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
-			Workspace liveWorkspace = liveSession.getWorkspace();
-			
-			Node liveNode = null;
-			try{
-				//get the corresponding node in the live workspace by UUID in case path has changed
-				liveNode = liveSession.getNodeByUUID(dynaNode.getId());
-			}catch(ItemNotFoundException e)	{} // noop
-			
-			if( liveNode == null) // no such node so we can clone
-			{
-				liveWorkspace.clone(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME, dynaNode.getJcrPath(), dynaNode.getJcrPath(), true);
-			}
-			else
-			{
-				liveNode.update(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
-			}
-			
-			// we got here so we successfully published
-			updateAuditInfo(dynaNode, "Published");
-			saveInternal(dynaNode, true); // set the status to published
-			editSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
-			Node editNode = editSession.getNodeByUUID(dynaNode.getId());
-			// create version
-			editNode.checkin();
-			editNode.checkout();
-			
-		} catch (RepositoryException e) {
-			throw new OtherObjectsException("Couldn't publish DynaNode with path " + dynaNode.getJcrPath(), e);
-		}
-		finally
-		{
-			if(liveSession != null)
-				liveSession.logout();
-			if(editSession != null)
-				editSession.logout();
-		}
+    	getJcrMappingTemplate().execute(new JcrMappingCallback()
+	    {
+	        public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+	        {
+	            try
+	            {
+	            	Session liveSession = null;
+	            	String jcrPath = dynaNode.getJcrPath();
+	            	try {
+	            		// get a live workspace session
+	        			liveSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
+	        			Workspace liveWorkspace = liveSession.getWorkspace();
+	        			
+	        			Node liveNode = null;
+	        			try{
+	        				//get the corresponding node in the live workspace by UUID in case path has changed
+	        				liveNode = liveSession.getNodeByUUID(dynaNode.getId());
+	        			}catch(ItemNotFoundException e)	{} // noop
+	        			
+	        			if( liveNode == null) // no such node so we can clone
+	        			{
+	        				liveWorkspace.clone(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME, jcrPath, jcrPath, true);
+	        			}
+	        			else
+	        			{
+	        				liveNode.update(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
+	        			}
+	        			
+	        			// we got here so we successfully published
+	        			updateAuditInfo(dynaNode, "Published");
+	        			saveInternal(dynaNode, true); // set the status to published
+	        			
+	        			
+	        			// create version and assign the current changeNumber as the label
+	        			manager.checkin(jcrPath, new String[]{dynaNode.getChangeNumber() + ""});
+	        			manager.checkout(jcrPath);
+	            	}
+	            	finally
+	        		{
+	        			if(liveSession != null)
+	        				liveSession.logout();
+	        		}
+	            	return null;
+	            }
+	            catch (Exception e)
+	            {
+	                throw new JcrMappingException(e);
+	            }
+	        }
+	    }, true);
+    	
+    	
+    	
+    	
     }
     
     private void updateAuditInfo(DynaNode dynaNode, String comment)

@@ -270,10 +270,10 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
         
         assertNotNull( "Must not be null", dynaNodeDao.getByPath(node.getJcrPath()));
 
-        long countBefore = getVersionCount(node);
+        long countBefore = dynaNodeDao.getVersions(node).size();
         System.out.println("There are " + countBefore + " in the repository before publishing");
         dynaNodeDao.publish(node);
-        long countAfter = getVersionCount(node);
+        long countAfter = dynaNodeDao.getVersions(node).size();
         System.out.println("There are " + countAfter + " in the repository after publishing");
         
         assertTrue(countBefore < countAfter);
@@ -309,6 +309,39 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
     	{
     		System.out.println(PropertyUtils.getSimpleProperty(dn, "title"));
     	}
+    }
+    
+    public void getVersionByChangeNumber() throws Exception
+    {
+    	adminLogin();
+    	DynaNode node = dynaNodeDao.getByPath("/site/about/index.html");
+    	
+    	String firstVersionTitle = "title1";
+    	
+    	PropertyUtils.setSimpleProperty(node, "title", firstVersionTitle);
+        node.setCode(StringUtils.generateUrlCode(node.getLabel()) + ".html");
+        
+        dynaNodeDao.save(node);
+        dynaNodeDao.publish(node);
+        
+        int firstChangeNumber = node.getChangeNumber();
+        
+        String secondVersionTitle = "title2";
+    	
+    	PropertyUtils.setSimpleProperty(node, "title", secondVersionTitle);
+        node.setCode(StringUtils.generateUrlCode(node.getLabel()) + ".html");
+        
+        dynaNodeDao.save(node);
+        dynaNodeDao.publish(node);
+        
+        int secondChangeNumber = node.getChangeNumber();
+        
+        assertEquals(firstVersionTitle, dynaNodeDao.getVersionByChangeNumber(node, firstChangeNumber));
+        assertEquals(secondVersionTitle, dynaNodeDao.getVersionByChangeNumber(node, secondChangeNumber));
+        
+        
+    	
+    	logout();
     }
     
 
