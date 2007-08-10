@@ -3,26 +3,28 @@ M1 (mid July): The Foundations release
 
 Create initial structure for the project. Get major new components
 working. Create solid build and test infrastucture.
+
+[RELEASED 23/July/2007]
 ==================================================================
 
-* Workbench
- + Ajax based interfaced based on the Ext Javascript library.
- + Drag and drop interface.
- + Localisation support.
- + Strong form validation.
-* Data storage
- + Flexible object storage via Jackrabbit Content Repository.
- + Support for database access via Hibernate 3.2.
-* Security
- + Support for administrators and guests.
- + Passwords are stored securely and your login details can be remembered.
- + Usernames do not have to be email addresses although it is strongly 
-   recommended that they are and this will probably be enforced for most sites.
-* Architecture
- + Based on the industry standard Spring framework.
-* Infrastructure
- + Built with Maven to automate testing, packaging and deployment.
- + Comprehensive test coverage — over 60%
+[DONE] * Workbench
+[DONE]  + Ajax based interfaced based on the Ext Javascript library.
+[DONE]  + Drag and drop interface.
+[DONE]  + Localisation support.
+[DONE]  + Strong form validation.
+[DONE] * Data storage
+[DONE]  + Flexible object storage via Jackrabbit Content Repository.
+[DONE]  + Support for database access via Hibernate 3.2.
+[DONE] * Security
+[DONE]  + Support for administrators and guests.
+[DONE]  + Passwords are stored securely and your login details can be remembered.
+[DONE]  + Usernames do not have to be email addresses although it is strongly 
+[DONE]    recommended that they are and this will probably be enforced for most sites.
+[DONE] * Architecture
+[DONE]  + Based on the industry standard Spring framework.
+[DONE] * Infrastructure
+[DONE]  + Built with Maven to automate testing, packaging and deployment.
+[DONE]  + Comprehensive test coverage — over 60%
 
 
 
@@ -33,17 +35,15 @@ Customised release of M1 with support for running in a clustered
 environment for high availability.
 ==================================================================
 
-* Add in support for PostgreSQL as a database
-* Add in clustering support for Jackrabbit
-* Test running under Tomcat (best supported servlet container)
-* Provide sample Terracotta configuration files
-* Provide reliable test-data setup procedures
-* Design test hosting environment (Martin/Simon)
-. Allow simple customisation of server specific properties
-. JMX hooks for important runtime information
-. Canoo Webtest scripts for functional testing 
-. Apache Jmeter scripts for performance testing (Martin/Simon)
-
+[DONE] * Add in support for PostgreSQL as a database
+[DONE] * Add in clustering support for Jackrabbit
+[DONE] * Test running under Tomcat (best supported servlet container)
+[DONE] * Provide sample Terracotta configuration files
+[DONE] * Provide reliable test-data setup procedures
+[DONE] * Design test hosting environment (Martin/Simon)
+[DONE] * Allow simple customisation of server specific properties
+[DONE] * JMX hooks for important runtime information
+[DONE] * Canoo Webtest scripts for functional testing 
 
 
 ==================================================================
@@ -54,16 +54,16 @@ Feature parity with OO5 for object editing and publishing
 of new templating/block model with efficient caching.
 ==================================================================
 
-* Licensing finalised
-* Publishing and versioning
+[IN PROGRESS] * Licensing finalised 
+[IN PROGRESS] * Publishing and versioning 
 * Audit log / AOP
-* Action/event/scripting framework
+[IN PROGRESS] * Action/event/scripting framework
 * Runtime data-type manipulation
-* Enhanced forms support for components, references and lists
+[IN PROGRESS] * Enhanced forms support for components, references and lists
 * Libraries: image, file and rich media (external image libary support)
 * Support for JDBC (database) objects in Workbench
 * Global search (for JCR and JDBC)
-* Date/number formatting tools
+[IN TEST] * Date/number formatting tools 
 * Paging/sorting/columns in data grid
 * Page template support
 * Template designer
@@ -71,11 +71,14 @@ of new templating/block model with efficient caching.
 * Maven project archetype
 * Page performance reporting (queries per page via AOP)
 * System and server status indicators (check for common server problems)
-* Build test hosting environment (Simon to lead)
+[IN PROGRESS] Build test hosting environment (Simon to lead)
+|* Apache Jmeter scripts for performance testing (Martin/Simon)
+[IN PROGRESS] * Use Selenium scripts for functional testing ajax
+* Widget publish/consume
 
-[Rich and Joerg? to visit London to present M2 at start of September. Date to be
-confirmed]
++ See todo.txt
 
+[September 12-14: Rich to visit London to present M2]
 
 
 ==================================================================
@@ -115,7 +118,8 @@ with Chris and the design team during M4.
 * Workbench improvements
  + Favourites
  + HTML editor
-
+ + History and bookmark support: http://www.sproutcore.com/blog
+* Usability testing
 
 
 ==================================================================
@@ -124,6 +128,7 @@ Beta 1 (end January) First Beta release
 (Rich back in office from start of November)
 ==================================================================
 
+* Validate all user input eg type names, property names
 * Bug fixing
 * Interface polish
 * Add in forgotten features
@@ -133,6 +138,7 @@ Beta 1 (end January) First Beta release
 * Write user/developer manuals
 * Build www.otherobjects.org
 * Record demo screencasts
+* Profiling work to remove bottlenecks
 
 + Other stuff we've forgotten
 + Migrate www.othermedia.com to Beta 1 via migration tooling.

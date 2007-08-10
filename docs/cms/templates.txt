@@ -1,0 +1,9 @@
+Templates
+---------
+
+Pages are assembled from templates. 
+
+Layouts define the struture of the page (2-col, 3-col etc.)
+Blocks  define an are of the page (header, advert, main content etc.)
+
+A Template consists of a Layout template and an arrangement of Block Templates.

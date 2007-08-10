@@ -1,0 +1,9 @@
+Too much choice is bad. 
+
+Recommend: jetty / tomcat / glassfish?
+
+Link in with ohloh for metrics
+
+Offer sign up for interest in free courses
+
+Easy bug and feature request reporting
