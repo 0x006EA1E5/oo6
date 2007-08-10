@@ -290,11 +290,6 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
         
     }
     
-    public void testCanSave()
-    {
-    	
-    }
-    
     public void testGetAllVersions() throws Exception
     {
     	DynaNode node = dynaNodeDao.getByPath("/site/about/index.html");

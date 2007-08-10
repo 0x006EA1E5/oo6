@@ -75,9 +75,12 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
         this.typeService = typeService;
     }
 
-    @Override
+	@Override
     public DynaNode save(DynaNode object, boolean validate)
     {
+		if(!canSaveWithRepositoryCheck(object))
+			throw new OtherObjectsException("Can't save DynaNode " + object.getLabel() + " because it has either in use by a different user or has been changed in the repository since being loaded");
+		
         if (validate)
         {
             Errors errors = new BeanPropertyBindingResult(object, "target");
@@ -159,10 +162,14 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
     
     private boolean canSaveWithRepositoryCheck(DynaNode dynaNode)
     {
+    	// check if this is a new node, if so we can safely assume that a save is fine
+    	if(dynaNode.getId() == null)
+    		return true;
+    	
     	DynaNode compareNode = get(dynaNode.getId());
     	// if the changeNumber has changed something else has save the dynaNode while we were working on it. So it shouldn't be saved.
-    	if(compareNode.getChangeNumber() != dynaNode.getChangeNumber()) 
-    		return false;
+    	if(compareNode.getChangeNumber() == dynaNode.getChangeNumber()) 
+    		return true;
     	
     	// change number is fine so check for the rest 
     	if(dynaNode.isPublished())
@@ -230,10 +237,6 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
 	            }
 	        }
 	    }, true);
-    	
-    	
-    	
-    	
     }
     
     private void updateAuditInfo(DynaNode dynaNode, String comment)
