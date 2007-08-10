@@ -3,8 +3,17 @@ package org.otherobjects.cms.test;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.acegisecurity.GrantedAuthority;
+import org.acegisecurity.GrantedAuthorityImpl;
+import org.acegisecurity.MockAuthenticationManager;
+import org.acegisecurity.context.SecurityContextHolder;
+import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
+import org.acegisecurity.providers.anonymous.AnonymousAuthenticationProvider;
+import org.acegisecurity.providers.anonymous.AnonymousAuthenticationToken;
 import org.apache.jackrabbit.ocm.spring.JcrMappingTemplate;
 import org.otherobjects.cms.SingletonBeanLocator;
+import org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory;
+import org.otherobjects.cms.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.AbstractTransactionalSpringContextTests;
@@ -26,7 +35,7 @@ public abstract class BaseJcrTestCase extends AbstractTransactionalSpringContext
     protected String[] getConfigLocations()
     {
         setAutowireMode(AUTOWIRE_BY_TYPE);
-        return new String[]{"file:src/test/resources/applicationContext-resources.xml", "file:src/main/resources/otherobjects.resources/config/applicationContext-repository.xml", "file:src/test/resources/applicationContext-resources.xml"};
+        return new String[]{"file:src/test/resources/applicationContext-resources.xml", "file:src/main/resources/otherobjects.resources/config/applicationContext-repository.xml"};
     }
 
     public BaseJcrTestCase()
@@ -58,6 +67,29 @@ public abstract class BaseJcrTestCase extends AbstractTransactionalSpringContext
     {
         this.jcrMappingTemplate = jcrMappingTemplate;
     }
+
+	protected void adminLogin() {
+		// pretend an editor session
+		// fake admin
+		User admin = new User("admin");
+		admin.setId(new Long(1));
+		
+		SecurityContextHolder.getContext().setAuthentication(new MockAuthenticationManager().authenticate(
+				new UsernamePasswordAuthenticationToken(admin, "admin", new GrantedAuthority[]{new GrantedAuthorityImpl(OtherObjectsJackrabbitSessionFactory.EDITOR_ROLE_NAME)})
+		));
+	}
+
+	protected void anoymousLogin() {
+		// pretend anonymous user
+	    AnonymousAuthenticationProvider anonymousAuthenticationProvider = new AnonymousAuthenticationProvider();
+	    anonymousAuthenticationProvider.setKey("testkey");
+	    AnonymousAuthenticationToken anonymousAuthenticationToken = new AnonymousAuthenticationToken("testkey", "anonymous", new GrantedAuthority[]{new GrantedAuthorityImpl("ROLE_ANONYMOUS")});
+	    SecurityContextHolder.getContext().setAuthentication(anonymousAuthenticationProvider.authenticate(anonymousAuthenticationToken));
+	}
+
+	protected void logout() {
+		SecurityContextHolder.clearContext();
+	}
 
     //    public void exportDocument(String filePath, String nodePath, boolean skipBinary, boolean noRecurse)
     //    {
