@@ -289,6 +289,28 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
         logout();
         
     }
+    
+    public void testCanSave()
+    {
+    	
+    }
+    
+    public void testGetAllVersions() throws Exception
+    {
+    	DynaNode node = dynaNodeDao.getByPath("/site/about/index.html");
+    	long versionCount = getVersionCount(node);
+    	
+    	List<DynaNode> versions = dynaNodeDao.getVersions(node);
+    	
+    	int objectVersionCount = versions.size();
+    	assertTrue((int)versionCount == ++objectVersionCount); // object version count should be one less as we ignore the root version
+    	
+    	for(DynaNode dn: versions)
+    	{
+    		System.out.println(PropertyUtils.getSimpleProperty(dn, "title"));
+    	}
+    }
+    
 
 	private long getVersionCount(DynaNode dynaNode) {
 		Session editSession = null;

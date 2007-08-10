@@ -7,6 +7,8 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.version.Version;
+import javax.jcr.version.VersionIterator;
 
 import org.apache.jackrabbit.ocm.exception.JcrMappingException;
 import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
@@ -17,6 +19,7 @@ import org.apache.jackrabbit.ocm.spring.JcrMappingCallback;
 import org.apache.jackrabbit.ocm.spring.JcrMappingTemplate;
 import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.model.CmsNode;
+import org.otherobjects.cms.model.DynaNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.orm.ObjectRetrievalFailureException;
@@ -313,9 +316,38 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     {
         this.jcrMappingTemplate = jcrMappingTemplate;
     }
-
-//	public List<T> getVersions(T object)
-//	{
-//		
-//	}
+    
+    @SuppressWarnings("unchecked")
+	public List<T> getVersions(final T object)
+	{
+		return (List<T>) getJcrMappingTemplate().execute(new JcrMappingCallback()
+	    {
+	        public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+	        {
+	            try
+	            {
+	            	List<T> list = new ArrayList<T>();
+	            	
+	            	// get underlying node
+	                Node node = manager.getSession().getNodeByUUID(object.getId());
+	
+	                VersionIterator versions = node.getVersionHistory().getAllVersions();
+	                while (versions.hasNext())
+	                {
+	                    Version version = versions.nextVersion();
+	                    if(!version.getName().equals("jcr:rootVersion")) //  don't include the root version as it can't be object mapped
+	                    {
+		                    Object versionObject = manager.getObject(object.getJcrPath(), version.getName());
+		                    list.add((T) versionObject);
+	                    }
+	                }
+	                return list;
+	            }
+	            catch (Exception e)
+	            {
+	                throw new JcrMappingException(e);
+	            }
+	        }
+	    }, true);
+	}
 }

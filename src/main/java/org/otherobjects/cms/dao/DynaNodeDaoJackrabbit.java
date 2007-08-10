@@ -19,6 +19,7 @@ import org.otherobjects.cms.jcr.GenericJcrDaoJackrabbit;
 import org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.model.User;
+import org.otherobjects.cms.security.SecurityTool;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.springframework.util.Assert;
@@ -131,15 +132,42 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
 //        this.dynaNodeValidator = dynaNodeValidator;
 //    }
     
-    public boolean canSave(DynaNode dynaNode)
+    public boolean canSave(DynaNode dynaNode, boolean checkRepository)
     {
-    	// if dynaNode is in published state save is possible
+    	if(checkRepository)
+    		return canSaveWithRepositoryCheck(dynaNode);
+    	else
+    		return canSaveNoRepositoryCheck(dynaNode);
+    }
+    
+    private boolean canSaveNoRepositoryCheck(DynaNode dynaNode)
+    {
+    	// dynaNode is published and we haven't been asked to sync with repository
+    	if(dynaNode.isPublished())
+    		return true;
     	
     	// if it is not we can save only if the current AuditInfo.getUserId()  is equal to the current users id
+    	if(SecurityTool.isCurrentUser(dynaNode.getUserId()))
+    		return true;
     	
+    	return false;
+    }
+    
+    private boolean canSaveWithRepositoryCheck(DynaNode dynaNode)
+    {
+    	DynaNode compareNode = get(dynaNode.getId());
+    	// if the changeNumber has changed something else has save the dynaNode while we were working on it. So it shouldn't be saved.
+    	if(compareNode.getChangeNumber() != dynaNode.getChangeNumber()) 
+    		return false;
     	
-    	// and even then we need to make sure that the changeNumber we carry around is still the same as the one in persistent storage
-    	return true;
+    	// change number is fine so check for the rest 
+    	if(dynaNode.isPublished())
+    		return true;
+    	
+    	if(SecurityTool.isCurrentUser(dynaNode.getUserId()))
+    		return true;
+    	
+    	return false;
     }
     
     public void publish(DynaNode dynaNode)
@@ -193,10 +221,8 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
     
     private void updateAuditInfo(DynaNode dynaNode, String comment)
     {
-    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    	Assert.isTrue(principal instanceof User, "Can't do auditing if principal isn't your user class");
-    	User user = (User) principal;
+    	User user = SecurityTool.getCurrentUser();
+    	Assert.notNull(user, "auditInfo can't be updated if there is no current user");
     	dynaNode.setUserName(user.getFullName());
     	dynaNode.setUserId(user.getId().toString());
     	dynaNode.setModificationTimestamp(new Date());
