@@ -339,40 +339,40 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
     	logout();
     }
     
-    public void testRestoreVersionByChangeNumber() throws Exception
-    {
-    	adminLogin();
-    	DynaNode node = dynaNodeDao.getByPath("/site/about/index.html");
-    	
-    	String firstVersionTitle = "title1";
-    	
-    	PropertyUtils.setSimpleProperty(node, "title", firstVersionTitle);
-        node.setCode(StringUtils.generateUrlCode(node.getLabel()) + ".html");
-        
-        dynaNodeDao.save(node);
-        dynaNodeDao.publish(node);
-        
-        int firstChangeNumber = node.getChangeNumber();
-        System.out.println("cn: " + firstChangeNumber);
-        
-        String secondVersionTitle = "title2";
-    	
-    	PropertyUtils.setSimpleProperty(node, "title", secondVersionTitle);
-        node.setCode(StringUtils.generateUrlCode(node.getLabel()) + ".html");
-        
-        dynaNodeDao.save(node);
-        dynaNodeDao.publish(node);
-        System.out.println("cn: " + node.getChangeNumber());
-        
-        assertNotNull(dynaNodeDao.getVersionByChangeNumber(node, firstChangeNumber));
-
-        DynaNode nodeRestored = dynaNodeDao.restoreVersionByChangeNumber(node, firstChangeNumber, false);
-        
-        assertEquals(firstVersionTitle, PropertyUtils.getSimpleProperty(nodeRestored, "title"));
-        
-    	
-    	logout();
-    }
+//    public void testRestoreVersionByChangeNumber() throws Exception
+//    {
+//    	adminLogin();
+//    	DynaNode node = dynaNodeDao.getByPath("/site/about/index.html");
+//    	
+//    	String firstVersionTitle = "title1";
+//    	
+//    	PropertyUtils.setSimpleProperty(node, "title", firstVersionTitle);
+//        node.setCode(StringUtils.generateUrlCode(node.getLabel()) + ".html");
+//        
+//        dynaNodeDao.save(node);
+//        dynaNodeDao.publish(node);
+//        
+//        int firstChangeNumber = node.getChangeNumber();
+//        System.out.println("cn: " + firstChangeNumber);
+//        
+//        String secondVersionTitle = "title2";
+//    	
+//    	PropertyUtils.setSimpleProperty(node, "title", secondVersionTitle);
+//        node.setCode(StringUtils.generateUrlCode(node.getLabel()) + ".html");
+//        
+//        dynaNodeDao.save(node);
+//        dynaNodeDao.publish(node);
+//        System.out.println("cn: " + node.getChangeNumber());
+//        
+//        assertNotNull(dynaNodeDao.getVersionByChangeNumber(node, firstChangeNumber));
+//
+//        DynaNode nodeRestored = dynaNodeDao.restoreVersionByChangeNumber(node, firstChangeNumber, false);
+//        
+//        assertEquals(firstVersionTitle, PropertyUtils.getSimpleProperty(nodeRestored, "title"));
+//        
+//    	
+//    	logout();
+//    }
     
 
 	private long getVersionCount(DynaNode dynaNode) {
