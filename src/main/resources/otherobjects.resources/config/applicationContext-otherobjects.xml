@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
-	xmlns:aop="http://www.springframework.org/schema/aop"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
 	<!-- 
@@ -10,12 +10,12 @@
 		<aop:spring-configured/>
 	-->
 
-	<bean id="performanceInterceptor"  class = "org.otherobjects.cms.PerformanceInterceptor"/>
+	<bean id="performanceInterceptor" class="org.otherobjects.cms.PerformanceInterceptor" />
 
 	<aop:config>
 		<aop:aspect ref="performanceInterceptor">
 			<!-- <aop:pointcut id="myCutLogging" expression="execution(* org.otherobjects.cms.controllers.SiteController*.*(..))" />
-			<aop:pointcut id="myCutLogging" expression="execution(* org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImpl*.*(..))" />  -->
+				<aop:pointcut id="myCutLogging" expression="execution(* org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImpl*.*(..))" />  -->
 			<aop:pointcut id="myCutLogging" expression="execution(* org.otherobjects.cms.dao.DynaNodeDao.*(..))" />
 			<aop:around pointcut-ref="myCutLogging" method="log" />
 		</aop:aspect>
@@ -23,7 +23,7 @@
 
 	<bean name="siteController" class="org.otherobjects.cms.controllers.SiteController">
 		<property name="navigatorService" ref="navigatorService" />
-		<property name="dynaNodeDao" ref="dynaNodeDao" />
+		<property name="daoService" ref="daoService" />
 		<property name="userDao" ref="userDao" />
 	</bean>
 
@@ -53,9 +53,28 @@
 	</bean>
 
 	<bean name="bindService" class="org.otherobjects.cms.binding.BindServiceImpl">
-		<property name="dynaNodeDao" ref="dynaNodeDao" />
+		<property name="daoService" ref="daoService" />
 		<property name="dateFormat">
 			<value>dd/MM/yy</value>
+		</property>
+	</bean>
+
+	<bean name="daoService" class="org.otherobjects.cms.dao.DaoServiceImpl">
+		<property name="daoMap">
+			<map>
+				<entry>
+					<key>
+						<value>org.otherobjects.cms.types.TypeDef</value>
+					</key>
+					<ref bean="typeDefDao" />
+				</entry>
+				<entry>
+					<key>
+						<value>org.otherobjects.cms.model.DynaNode</value>
+					</key>
+					<ref bean="dynaNodeDao" />
+				</entry>
+			</map>
 		</property>
 	</bean>
 
