@@ -1,16 +1,18 @@
 package org.otherobjects.cms.binding;
 
-import org.otherobjects.cms.dao.DynaNodeDao;
+import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.model.DynaNode;
 import org.springframework.util.StringUtils;
 
 public class DynaNodeReferenceEditor extends java.beans.PropertyEditorSupport
 {
-    private DynaNodeDao dynaNodeDao;
+    private String type;
+    private DaoService daoService;
     
-    public DynaNodeReferenceEditor(DynaNodeDao dynaNodeDao)
+    public DynaNodeReferenceEditor(DaoService daoService, String type)
     {
-        this.dynaNodeDao = dynaNodeDao;
+        this.daoService = daoService;
+        this.type = type;
     }
 
     /**
@@ -30,7 +32,7 @@ public class DynaNodeReferenceEditor extends java.beans.PropertyEditorSupport
         }
         else
         {
-            setValue(dynaNodeDao.get(text));
+            setValue(daoService.getDao(type).get(text));
         }
     }
 

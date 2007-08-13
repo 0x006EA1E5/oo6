@@ -4,13 +4,13 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.test.BaseJcrTestCase;
 import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
-import org.otherobjects.cms.types.TypeService;
 
 public abstract class BaseDynaNodeTest extends BaseJcrTestCase
 {
@@ -19,6 +19,7 @@ public abstract class BaseDynaNodeTest extends BaseJcrTestCase
     public static final String TEST_REFERENCE_TYPE_NAME = "org.otherobjects.Dyna.jcr.TestReferenceObject";
 
     protected JcrTypeServiceImpl typeService;
+    protected DaoService daoService;
     protected DynaNodeDao dynaNodeDao;
     protected DynaNode dynaNode;
     protected Date now;
@@ -87,6 +88,7 @@ public abstract class BaseDynaNodeTest extends BaseJcrTestCase
         
         TypeDef td6 = new TypeDef("org.otherobjects.Dyna.jcr.TestSimpleSubComponent");
         td6.addProperty(new PropertyDef("name", "string", null, null));
+        td6.addProperty(new PropertyDef("reference", "reference", "org.otherobjects.Dyna.jcr.TestReferenceObject", null));
         td6.setLabelProperty("name");
         typeService.registerType(td6);
         
@@ -146,6 +148,16 @@ public abstract class BaseDynaNodeTest extends BaseJcrTestCase
     public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
     {
         this.dynaNodeDao = dynaNodeDao;
+    }
+
+    public DaoService getDaoService()
+    {
+        return daoService;
+    }
+
+    public void setDaoService(DaoService daoService)
+    {
+        this.daoService = daoService;
     }
 
 }

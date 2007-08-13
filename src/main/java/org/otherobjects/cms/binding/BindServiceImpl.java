@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.beans.JcrBeanService;
-import org.otherobjects.cms.dao.DynaNodeDao;
+import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
@@ -31,18 +31,14 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 public class BindServiceImpl implements BindService
 {
     private String dateFormat;
-    private DynaNodeDao dynaNodeDao;
-    
+    private DaoService daoService;
+
     static Pattern listPattern = Pattern.compile("^([\\S&&[^\\.]]*)\\[(\\d+)\\]"); // howevermany non-whitespace characters (apart from the dot) followed by at least one digit in square braces
 
-    public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
-    {
-        this.dynaNodeDao = dynaNodeDao;
-    }
 
-    public void setDateFormat(String dateFormat)
+    public void setDaoService(DaoService daoService)
     {
-        this.dateFormat = dateFormat;
+        this.daoService = daoService;
     }
 
     @SuppressWarnings("unchecked")
@@ -55,30 +51,19 @@ public class BindServiceImpl implements BindService
         while (parameterNames.hasMoreElements())
         {
             String propertyName = parameterNames.nextElement();
-//            if (propertyName.contains("."))
-//            {
-//                // Reference to sub object
-//                createSubObjects(dynaNode, dynaNode.getTypeDef(), propertyName);
-//            }
-//            
-//            Matcher matcher = listPattern.matcher(propertyName);
-//            if(matcher.matches())
-//            	createList(dynaNode, dynaNode.getTypeDef(), propertyName, matcher);
-            
-            if(propertyName.contains(".") || listPattern.matcher(propertyName).matches()) // this is a nested property or a list
-            	createNextObject(dynaNode, dynaNode.getTypeDef(), propertyName);
-            
+            // FIXME Add caching here so easy level is processed only once 
+            prepareObject(dynaNode, dynaNode.getTypeDef(), propertyName, propertyName, binder);
+
         }
 
-        // Add reference custom editors
-        addReferenceEditors(dynaNode.getTypeDef(), binder, "");
-
+        // Add date editor
         binder.registerCustomEditor(java.util.Date.class, new CustomDateEditor(new SimpleDateFormat(dateFormat), true));
-        binder.bind(request);
 
+        // Bind
+        binder.bind(request);
         return binder.getBindingResult();
     }
-    
+
     /**
      * walks the propertyPath and creates components and lists of components along the way.
      * Stops once all of the propertyPath is consumed or if it comes across a simple property or 
@@ -87,143 +72,154 @@ public class BindServiceImpl implements BindService
      * @param parent
      * @param typeDef
      * @param propertyPath
+     * @param binder 
      */
     @SuppressWarnings("unchecked")
-    protected void createNextObject(Object parent, TypeDef typeDef,
-			String propertyPath) {
-    	Matcher matcher = listPattern.matcher(propertyPath);
-    	String propertyName;
-    	String leftOverPath;
-    	String listWithIndex = null;
-    	int listIndex = -1;
-    	boolean isList = false;
-    	if(matcher.lookingAt()) // we have a list
-    	{
-    		isList = true;
-    		propertyName = matcher.group(1);
-    		listWithIndex = matcher.group();
-    		listIndex = Integer.parseInt(matcher.group(2));
-    		int thisPartPathLength = listWithIndex.length();
-    		if(thisPartPathLength < propertyPath.length())
-    			leftOverPath = propertyPath.substring(thisPartPathLength + 1);
-    		else
-    			leftOverPath = null;
-    	}
-    	else // subObject other than list
-    	{
-    		int dotIndex = propertyPath.indexOf(".");
-    		if(dotIndex > -1)
-    		{
-    			propertyName = propertyPath.substring(0, dotIndex);
-    			//Assert.isTrue(dotIndex + 1 < propertyName.length(), "a valid propertyPath can't end in a dot");
-    			leftOverPath = propertyPath.substring(dotIndex + 1);
-    		}
-    		else
-    		{
-    			propertyName = propertyPath; // apparently we reached the end leaf
-    			leftOverPath = null;
-    		}
-    	}
-    	
-    	// find out type of object
-    	Object newParent = null;
-    	PropertyDef propertyDef = typeDef.getProperty(propertyName);
-    	// TODO Show complete paramater name at this point
-    	Assert.notNull(propertyDef, "No property found for parameter path: " + propertyName);
-    	TypeDef newTypeDef = null;
-    	if(isList)
-    	{
-    		List listProperty;
-    		// this is a list so it needs to have a collectionElementType in propertyDef
-    		String collectionElementType = propertyDef.getCollectionElementType();
-        	Assert.notNull("If this property is a collection the collectionElementType needs to have been set: " + propertyDef.getName());
-        	
-    		// create list
-    		try {
-    			listProperty = (List) PropertyUtils.getSimpleProperty(parent, propertyName);
-				if(listProperty == null)
-				{
-					listProperty = new ArrayList();
-					PropertyUtils.setSimpleProperty(parent, propertyName, listProperty);
-				}
-
-				fillList(listProperty, listIndex + 1);
-				
-				if(collectionElementType.equals(PropertyDef.COMPONENT)) // we only create list elements that are supposed to be components
-				{
-					if(listProperty.get(listIndex) == null) 
-					{
-						newTypeDef = propertyDef.getRelatedTypeDef();
-						newParent = getRelatedTypeInstance(newTypeDef);
-						listProperty.set(listIndex, newParent);
-					}
-					else
-					{
-						newTypeDef = propertyDef.getRelatedTypeDef();
-						newParent = listProperty.get(listIndex);
-					}
-				}
-			} catch (Exception e) {
-				throw new OtherObjectsException("Error getting or instantiating list property: " + propertyName, e);
-			}
-		}
-    	else if(propertyDef.getType().equals(PropertyDef.COMPONENT))
-    	{
-    		try {
-    			newTypeDef = propertyDef.getRelatedTypeDef();
-    			newParent = PropertyUtils.getSimpleProperty(parent, propertyName);
-    			if(newParent == null)
-    			{
-    				newParent = getRelatedTypeInstance(newTypeDef);
-					PropertyUtils.setSimpleProperty(parent, propertyName, newParent);
-    			}
-			} catch (Exception e) {
-				throw new OtherObjectsException("Error getting or instantiating component property: " + propertyName, e);
-			} 
-    	}
-    	else
-    	{
-    		// neither a list nor a component - stop here
-    		return;
-    	}
-    	
-    	
-    	if(leftOverPath != null && newParent != null && newTypeDef != null)
-    		createNextObject(newParent, newTypeDef, leftOverPath);
-    }
-
-	private Object getRelatedTypeInstance(TypeDef typeDef) throws Exception {
-		
-		Object relatedTypeInstance = Class.forName(typeDef.getClassName()).newInstance();
-		PropertyUtils.setSimpleProperty(relatedTypeInstance, "ooType", typeDef.getName());
-		return relatedTypeInstance;
-	}
-
-	private void addReferenceEditors(TypeDef typeDef, ServletRequestDataBinder binder, String prefix)
+    protected void prepareObject(Object parent, TypeDef typeDef, String propertyPath, String fullPath, ServletRequestDataBinder binder)
     {
-        for (PropertyDef pd : typeDef.getProperties())
+        if(propertyPath.equals("id"))
+            return;
+            
+        Matcher matcher = listPattern.matcher(propertyPath);
+        String propertyName;
+        String leftOverPath;
+        String listWithIndex = null;
+        int listIndex = -1;
+        boolean isList = false;
+        if (matcher.lookingAt()) // we have a list
         {
-            if (pd.getType().equals(PropertyDef.REFERENCE))
+            isList = true;
+            propertyName = matcher.group(1);
+            listWithIndex = matcher.group();
+            listIndex = Integer.parseInt(matcher.group(2));
+            int thisPartPathLength = listWithIndex.length();
+            if (thisPartPathLength < propertyPath.length())
+                leftOverPath = propertyPath.substring(thisPartPathLength + 1);
+            else
+                leftOverPath = null;
+        }
+        else
+        // subObject other than list
+        {
+            int dotIndex = propertyPath.indexOf(".");
+            if (dotIndex > -1)
             {
-                binder.registerCustomEditor(DynaNode.class, prefix + pd.getName(), new DynaNodeReferenceEditor(dynaNodeDao));
+                propertyName = propertyPath.substring(0, dotIndex);
+                //Assert.isTrue(dotIndex + 1 < propertyName.length(), "a valid propertyPath can't end in a dot");
+                leftOverPath = propertyPath.substring(dotIndex + 1);
             }
-            else if (pd.getType().equals(PropertyDef.COMPONENT))
+            else
             {
-                // Cascade through component looking for references
-                addReferenceEditors(pd.getRelatedTypeDef(), binder, prefix + pd.getName() + ".");
+                propertyName = propertyPath; // apparently we reached the end leaf
+                leftOverPath = null;
             }
         }
+
+        // find out type of object
+        Object newParent = null;
+        PropertyDef propertyDef = typeDef.getProperty(propertyName);
+        // TODO Show complete parameter name at this point
+        Assert.notNull(propertyDef, "No property found for parameter path: " + propertyName);
+        TypeDef newTypeDef = null;
+        if (isList)
+        {
+            List listProperty;
+            // this is a list so it needs to have a collectionElementType in propertyDef
+            String collectionElementType = propertyDef.getCollectionElementType();
+            Assert.notNull("If this property is a collection the collectionElementType needs to have been set: " + propertyDef.getName());
+
+            // create list
+            try
+            {
+                listProperty = (List) PropertyUtils.getSimpleProperty(parent, propertyName);
+                if (listProperty == null)
+                {
+                    listProperty = new ArrayList();
+                    PropertyUtils.setSimpleProperty(parent, propertyName, listProperty);
+                }
+
+                fillList(listProperty, listIndex + 1);
+
+                if (collectionElementType.equals(PropertyDef.COMPONENT)) // FIXME Explain: we only create list elements that are supposed to be components
+                {
+                    if (listProperty.get(listIndex) == null)
+                    {
+                        newTypeDef = propertyDef.getRelatedTypeDef();
+                        newParent = getRelatedTypeInstance(newTypeDef);
+                        listProperty.set(listIndex, newParent);
+                    }
+                    else
+                    {
+                        newTypeDef = propertyDef.getRelatedTypeDef();
+                        newParent = listProperty.get(listIndex);
+                    }
+                }
+                else if (collectionElementType.equals(PropertyDef.REFERENCE)) 
+                {
+                    // Add reference editors to all the reference propreties                    
+                    binder.registerCustomEditor(DynaNode.class, fullPath, new DynaNodeReferenceEditor(daoService, propertyDef.getRelatedType()));
+                }
+            }
+            catch (Exception e)
+            {
+                throw new OtherObjectsException("Error getting or instantiating list property: " + propertyName, e);
+            }
+        }
+        else if (propertyDef.getType().equals(PropertyDef.COMPONENT))
+        {
+            try
+            {
+                newTypeDef = propertyDef.getRelatedTypeDef();
+                newParent = PropertyUtils.getSimpleProperty(parent, propertyName);
+                if (newParent == null)
+                {
+                    newParent = getRelatedTypeInstance(newTypeDef);
+                    PropertyUtils.setSimpleProperty(parent, propertyName, newParent);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new OtherObjectsException("Error getting or instantiating component property: " + propertyName, e);
+            }
+        }
+        else if (propertyDef.getType().equals(PropertyDef.REFERENCE)) 
+        {
+            // Add reference editors to all the reference propreties                    
+            binder.registerCustomEditor(DynaNode.class, fullPath, new DynaNodeReferenceEditor(daoService, propertyDef.getRelatedType()));
+        }
+        else
+        {
+            // neither a list nor a component - stop here
+            return;
+        }
+
+        if (leftOverPath != null && newParent != null && newTypeDef != null)
+            prepareObject(newParent, newTypeDef, leftOverPath, fullPath, binder);
     }
-    
-    private void fillList(List<?> list, int size) {
-    	int initialSize = list.size();
-    	if(initialSize >= size)
-    		return;
-    	
-    	for(int i = 0; i < (size - initialSize); i++)
-    	{
-    		list.add(null);
-    	}
-	}
+
+    private Object getRelatedTypeInstance(TypeDef typeDef) throws Exception
+    {
+
+        Object relatedTypeInstance = Class.forName(typeDef.getClassName()).newInstance();
+        PropertyUtils.setSimpleProperty(relatedTypeInstance, "ooType", typeDef.getName());
+        return relatedTypeInstance;
+    }
+
+    private void fillList(List<?> list, int size)
+    {
+        int initialSize = list.size();
+        if (initialSize >= size)
+            return;
+
+        for (int i = 0; i < (size - initialSize); i++)
+        {
+            list.add(null);
+        }
+    }
+
+    public void setDateFormat(String dateFormat)
+    {
+        this.dateFormat = dateFormat;
+    }
 
 }
