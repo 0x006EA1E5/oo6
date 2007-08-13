@@ -106,7 +106,7 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         fd3.setFieldName("label");
         fd3.setJcrName("label");
         cd.addFieldDescriptor(fd3);
-        
+
         FieldDescriptor fd4 = new FieldDescriptor();
         fd4.setFieldName("ooType");
         fd4.setJcrName("ooType");
@@ -118,28 +118,28 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         fd5.setJcrName("code");
         fd5.setId(true);
         cd.addFieldDescriptor(fd5);
-        
+
         FieldDescriptor fd6 = new FieldDescriptor();
         fd6.setFieldName("published");
         fd6.setJcrName("published");
         cd.addFieldDescriptor(fd6);
-        
+
         // Audit info
         FieldDescriptor fd7 = new FieldDescriptor();
         fd7.setFieldName("userName");
         fd7.setJcrName("userName");
         cd.addFieldDescriptor(fd7);
-        
+
         FieldDescriptor fd8 = new FieldDescriptor();
         fd8.setFieldName("userId");
         fd8.setJcrName("userId");
         cd.addFieldDescriptor(fd8);
-        
+
         FieldDescriptor fd9 = new FieldDescriptor();
         fd9.setFieldName("modificationTimestamp");
         fd9.setJcrName("modificationTimestamp");
         cd.addFieldDescriptor(fd9);
-        
+
         FieldDescriptor fd10 = new FieldDescriptor();
         fd10.setFieldName("comment");
         fd10.setJcrName("comment");
@@ -154,57 +154,62 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         for (PropertyDef propDef : typeDef.getProperties())
         {
             String propertyType = propDef.getType();
-            
+            String propertyName = propDef.getName();
 
-            if (propertyType.equals(PropertyDef.LIST))
+			// FIXME Need better way to exclude already mapped properties
+            if (!propertyName.equals("code"))
             {
-            	String collectionElementType = propDef.getCollectionElementType();
-            	Assert.isTrue(collectionElementType != null, "If this property is a collection the collectionElementType needs to have been set");
-                CollectionDescriptor cld = new CollectionDescriptor();
-                cld.setFieldName(propDef.getName());
-                cld.setJcrName(propDef.getName());
 
-                if (collectionElementType.equals(PropertyDef.COMPONENT))
+                if (propertyType.equals(PropertyDef.LIST))
                 {
-                    cld.setElementClassName(propDef.getRelatedTypeDef().getClassName());
-                    cld.setCollectionConverter(DefaultCollectionConverterImpl.class.getName());
+                    String collectionElementType = propDef.getCollectionElementType();
+                    Assert.isTrue(collectionElementType != null, "If this property is a collection the collectionElementType needs to have been set");
+                    CollectionDescriptor cld = new CollectionDescriptor();
+                    cld.setFieldName(propDef.getName());
+                    cld.setJcrName(propDef.getName());
+
+                    if (collectionElementType.equals(PropertyDef.COMPONENT))
+                    {
+                        cld.setElementClassName(propDef.getRelatedTypeDef().getClassName());
+                        cld.setCollectionConverter(DefaultCollectionConverterImpl.class.getName());
+                    }
+                    else if (collectionElementType.equals(PropertyDef.REFERENCE))
+                    {
+                        cld.setElementClassName(propDef.getRelatedTypeDef().getClassName());
+                        cld.setCollectionConverter(BeanReferenceCollectionConverterImpl.class.getName());
+                    }
+                    else
+                    {
+                        cld.setElementClassName(((JcrTypeServiceImpl) typeService).getJcrClassMapping(collectionElementType).getName());
+                        cld.setCollectionConverter(MultiValueCollectionConverterImpl.class.getName());
+                    }
+
+                    cd.addCollectionDescriptor(cld);
                 }
-                else if (collectionElementType.equals(PropertyDef.REFERENCE))
+                else if (propertyType.equals(PropertyDef.COMPONENT))
                 {
-                    cld.setElementClassName(propDef.getRelatedTypeDef().getClassName());
-                    cld.setCollectionConverter(BeanReferenceCollectionConverterImpl.class.getName());
+                    BeanDescriptor bd = new BeanDescriptor();
+                    bd.setFieldName(propDef.getName());
+                    bd.setJcrName(propDef.getName());
+                    bd.setConverter(DefaultBeanConverterImpl.class.getName());
+                    cd.addBeanDescriptor(bd);
+                }
+                else if (propertyType.equals(PropertyDef.REFERENCE))
+                {
+                    BeanDescriptor bd = new BeanDescriptor();
+                    bd.setFieldName(propDef.getName());
+                    bd.setJcrName(propDef.getName());
+                    bd.setConverter(ReferenceBeanConverterImpl.class.getName());
+                    cd.addBeanDescriptor(bd);
                 }
                 else
                 {
-                    cld.setElementClassName(((JcrTypeServiceImpl) typeService).getJcrClassMapping(collectionElementType).getName());
-                    cld.setCollectionConverter(MultiValueCollectionConverterImpl.class.getName());
+                    FieldDescriptor f = new FieldDescriptor();
+                    f.setFieldName(propDef.getName());
+                    f.setJcrName(propDef.getName());
+                    f.setConverter(((JcrTypeServiceImpl) typeService).getJcrConverter(propertyType).getClass().getName());
+                    cd.addFieldDescriptor(f);
                 }
-
-                cd.addCollectionDescriptor(cld);
-            }
-            else if (propertyType.equals(PropertyDef.COMPONENT))
-            {
-                BeanDescriptor bd = new BeanDescriptor();
-                bd.setFieldName(propDef.getName());
-                bd.setJcrName(propDef.getName());
-                bd.setConverter(DefaultBeanConverterImpl.class.getName());
-                cd.addBeanDescriptor(bd);
-            }
-            else if (propertyType.equals(PropertyDef.REFERENCE))
-            {
-                BeanDescriptor bd = new BeanDescriptor();
-                bd.setFieldName(propDef.getName());
-                bd.setJcrName(propDef.getName());
-                bd.setConverter(ReferenceBeanConverterImpl.class.getName());
-                cd.addBeanDescriptor(bd);
-            }
-            else
-            {
-                FieldDescriptor f = new FieldDescriptor();
-                f.setFieldName(propDef.getName());
-                f.setJcrName(propDef.getName());
-                f.setConverter(((JcrTypeServiceImpl) typeService).getJcrConverter(propertyType).getClass().getName());
-                cd.addFieldDescriptor(f);
             }
         }
         return cd;

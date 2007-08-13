@@ -26,7 +26,7 @@ public class ContentServiceImpl implements ContentService
         int c = 0;
         do
         {
-            String newPath = parent.getJcrPath() + "/untitled-article-" + ++c +".html";
+            String newPath = parent.getJcrPath() + "/untitled-" + ++c +".html";
             boolean alreadyExists = (dynaNodeDao.existsAtPath(newPath));
             if(!alreadyExists) break;
             
@@ -34,8 +34,8 @@ public class ContentServiceImpl implements ContentService
         
         DynaNode newNode = dynaNodeDao.create(typeName);
         newNode.setPath(parent.getJcrPath());
-        newNode.setCode("untitled-article-" + c +".html"); //TODO M2 Auto generate
-        newNode.setLabel("Untitled Article " + c);
+        newNode.setCode("untitled-" + c +".html"); //TODO M2 Auto generate
+        newNode.setLabel("Untitled " + c);
         return dynaNodeDao.save(newNode);
     }
     

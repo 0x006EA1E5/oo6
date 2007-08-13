@@ -92,4 +92,23 @@
 	</bean>
 
 
+	<bean name="daoService" class="org.otherobjects.cms.dao.DaoServiceImpl">
+		<property name="daoMap">
+			<map>
+				<entry>
+					<key>
+						<value>org.otherobjects.cms.types.TypeDef</value>
+					</key>
+					<ref bean="typeDefDao" />
+				</entry>
+				<entry>
+					<key>
+						<value>org.otherobjects.cms.model.DynaNode</value>
+					</key>
+					<ref bean="dynaNodeDao" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
 </beans>

@@ -134,6 +134,7 @@ public class PropertyDef
     /**
      * Returns the name of the Class required to store this property. This is looked up from the TypeService.
      */
+    @JSON(include=false)
     public String getClassName()
     {
         String className;
@@ -268,7 +269,7 @@ public class PropertyDef
     {
         // FIXME Remove singleton access
         TypeService typeService = getParentTypeDef().getTypeService();
-        Assert.notNull(typeService, "No TypeService registered with parent TypeDef.");
+        Assert.notNull(typeService, "No TypeService registered with this proprerty's typeDef.");
         return typeService;
     }
 

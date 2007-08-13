@@ -21,7 +21,6 @@ import org.apache.jackrabbit.ocm.spring.JcrMappingCallback;
 import org.apache.jackrabbit.ocm.spring.JcrMappingTemplate;
 import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.model.CmsNode;
-import org.otherobjects.cms.model.DynaNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.orm.ObjectRetrievalFailureException;

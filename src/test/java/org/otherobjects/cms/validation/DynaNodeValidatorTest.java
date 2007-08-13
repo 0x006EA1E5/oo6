@@ -30,7 +30,7 @@ public class DynaNodeValidatorTest extends BaseDynaNodeTest
 
         bindService = new BindServiceImpl();
         bindService.setDateFormat(dateFormat);
-        bindService.setDynaNodeDao(dynaNodeDao);
+        bindService.setDaoService(daoService);
         testDate = new SimpleDateFormat(dateFormat).parse("01/01/99");
 
         // modify the test type to include some stuff that needs to be validated

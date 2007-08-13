@@ -58,7 +58,7 @@ public class TypeDef implements CmsNode
     @Override
     public String toString()
     {
-        return "[Type: " + getName() + "])";
+        return "[Type: " + getName() + "]";
     }
 
     public PropertyDef getProperty(String name)
@@ -100,7 +100,7 @@ public class TypeDef implements CmsNode
 
     public String getLabel()
     {
-        return label;
+        return label != null ? label :getName();
     }
 
     public void setLabel(String label)

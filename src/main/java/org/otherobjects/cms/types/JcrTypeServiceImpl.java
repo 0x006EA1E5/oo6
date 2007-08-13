@@ -40,6 +40,11 @@ public class JcrTypeServiceImpl extends AbstactTypeService
         {
             registerType(t);
         }
+        
+        // FIXME Nasty
+        TypeDef td = new TypeDef(TypeDef.class.getName());
+        td.setClassName(TypeDef.class.getName());
+        registerType(td);
     }
 
     /**
