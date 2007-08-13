@@ -1,3 +1,8 @@
+Lists: component testing, remove, reordering
+Regexp validator: eg *.html
+Default values on types
+Order of nodes after update
+
 System indicators:
    - JCR (schema version)
    - JDBC inc pool status and connections
