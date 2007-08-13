@@ -7,7 +7,9 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.version.Version;
+import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 
 import org.apache.jackrabbit.ocm.exception.JcrMappingException;
@@ -360,7 +362,8 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
 	        {
 	            try
 	            {
-	            	return (T)manager.getVersion(object.getJcrPath(), changeNumber + "");
+	            	String versionName = getVersionNameFromLabel(object.getId(), changeNumber + "", manager.getSession());
+	            	return (T)manager.getObject(object.getJcrPath(), versionName);
 	            }
 	            catch (Exception e)
 	            {
@@ -368,5 +371,49 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
 	            }
 	        }
 	    }, true);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public T restoreVersionByChangeNumber(final T object, final int changeNumber, final boolean removeExisting)
+    {
+    	return (T) getJcrMappingTemplate().execute(new JcrMappingCallback()
+	    {
+	        public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+	        {
+	            try
+	            {
+	            	//we need to fall back into native jcr as ObjectContentManager hasn't got a restore equivalent yet
+	            	Session session = manager.getSession();
+	            	Node node = session.getNodeByUUID(object.getId());
+	            	printVersionHistory(node.getVersionHistory());
+	            	String requestedVersionName = node.getVersionHistory().getVersionByLabel(changeNumber + "").getName();
+	            	Version requestedVersion = node.getVersionHistory().getVersion(requestedVersionName);
+	            	node.restore(requestedVersion, false);
+	            	// reget object
+	            	return (T)manager.getObjectByUuid(object.getId());
+	            }
+	            catch (Exception e)
+	            {
+	                throw new JcrMappingException(e);
+	            }
+	        }
+	    }, true);
+    }
+    
+    public String getVersionNameFromLabel(String uuid, String label, Session session) throws RepositoryException
+    {
+    	Node node = session.getNodeByUUID(uuid); // get Node
+    	Version requestedVersion = node.getVersionHistory().getVersionByLabel(label);
+    	return requestedVersion.getName();
+    }
+    
+    private void printVersionHistory(VersionHistory versionHistory) throws RepositoryException
+    {
+    	for(VersionIterator vi = versionHistory.getAllVersions(); vi.hasNext();)
+    	{
+    		Version version = vi.nextVersion();
+    		if(!version.getName().equals("jcr:rootVersion"))
+    			System.out.println("label(s):" + versionHistory.getVersionLabels(version)[0] + " name: " + version.getName());
+    	}
     }
 }

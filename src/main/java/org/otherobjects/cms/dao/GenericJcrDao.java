@@ -29,6 +29,8 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
     public List<T> getVersions(T object);
     
     public T getVersionByChangeNumber(T object, int changeNumber);
+    
+    public T restoreVersionByChangeNumber(T object, int changeNumber, boolean removeExisting);
 
     public boolean existsAtPath(String path);
 
