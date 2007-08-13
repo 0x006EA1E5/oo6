@@ -8,8 +8,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.views.JsonView;
@@ -41,7 +43,7 @@ public class WorkbenchDataController implements Controller
         String path = request.getPathInfo();
         path = path.substring(6);
 
-        if (path.contains("/types/"))
+        if (path.contains("/types"))
             return generateTypeData(request);
         else if (path.contains("/item/"))
             return generateItemData(request);
@@ -71,6 +73,7 @@ public class WorkbenchDataController implements Controller
         return view;
     }
 
+    @SuppressWarnings("unchecked")
     private ModelAndView generateSelectData(HttpServletRequest request)
     {
         String path = request.getPathInfo();
@@ -78,7 +81,17 @@ public class WorkbenchDataController implements Controller
         
         logger.info("Sending select data of type: {} ", typeName);
         
-        List<DynaNode> allByType = dynaNodeDao.getAllByType(typeName);
+        List allByType =null;
+        // FIXME Temp hack
+        if(typeName.equals("org.otherobjects.cms.types.TypeDef"))
+        {
+            allByType = ((JcrTypeServiceImpl)typeService).getTypeDefDao().getAll();
+        }
+        else
+        {
+            allByType = dynaNodeDao.getAllByType(typeName);
+        }
+        
         
         ModelAndView view = new ModelAndView("jsonView");
         view.addObject(JsonView.JSON_DATA_KEY, allByType);
@@ -126,6 +139,8 @@ public class WorkbenchDataController implements Controller
                 Map<String, Object> n1 = new HashMap<String, Object>();
                 n1.put("id", dynaNode.getId());
                 n1.put("code", dynaNode.getCode());
+                
+                n1.put("allowedTypes", dynaNode.get("allowedTypes"));
 
                 // Localise labels
                 String label = dynaNode.getLabel();
@@ -137,11 +152,10 @@ public class WorkbenchDataController implements Controller
 //                }
                 n1.put("text", label);
                 
-                if (dynaNode.get("cssClass") != null)
+                if (!StringUtils.isEmpty((String) dynaNode.get("cssClass")))
                 {
                     n1.put("cls", dynaNode.get("cssClass") + "-nav-item");
                     n1.put("allowDrag", false);
-
                 }
                 else
                     n1.put("cls", "folder");
