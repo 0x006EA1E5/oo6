@@ -7,7 +7,11 @@
 <script type="text/javascript" src="/resources/otherobjects.resources/static/firebug/firebug.js"></script>
 <script type="text/javascript" src="/resources/otherobjects.resources/static/extjs/src/ext-base.js"></script>
 <script type="text/javascript" src="/resources/otherobjects.resources/static/extjs/src/ext-all-debug.js"></script>
+<script type="text/javascript" src="/resources/otherobjects.resources/static/edit.js"></script>
 <script type="text/javascript" src="/resources/otherobjects.resources/static/list-field.js"></script>
+<script type="text/javascript" src="/dwr/engine.js"></script>
+<script type="text/javascript" src="/dwr/interface/ContentService.js"></script>
+<script type="text/javascript" src="/dwr/interface/NavigatorService.js"></script>
 <link rel="stylesheet" type="text/css" href="/resources/otherobjects.resources/static/workbench.css" />
 <link rel="stylesheet" type="text/css" href="/resources/otherobjects.resources/static/extjs/src/ext-all.css" />
 <style>
@@ -46,13 +50,8 @@ function buildForm()
 		labelWidth: 120
     });
 
-	frm.add(new Ext.form.TextField({fieldLabel:'ID', id:"id", name:'id', width:'200px', allowBlank:true, disabled:false}));
-	frm.fieldset({legend:'Tags'}, new Ext.form.OOListField(frm, {fieldLabel:'Actions', id:"tags", name:'tags', width:'200px', allowBlank:true, disabled:false}));
-//	form.add();
-	//form.end();
-	frm.add(new Ext.form.TextField({fieldLabel:'Name', id:"name", name:'name', width:'200px', allowBlank:true, disabled:false}));
-	frm.fieldset({legend:'Keywords'}, new Ext.form.OOListField(frm, {fieldLabel:'Actions', id:"keywords", name:'keywords', width:'200px', allowBlank:true, disabled:false}));
-	
+
+	frm.add(OO.EditForm.buildField({name:'one', type:'reference', relatedType:'Article', label:'Test'}));
 	
 	//form.add(new Ext.form.OOListField({fieldLabel:'ID', id:"idx", name:'idx', width:'200px', allowBlank:true, disabled:false}));
 

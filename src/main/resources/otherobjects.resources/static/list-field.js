@@ -38,10 +38,8 @@ Ext.extend(Ext.form.OOListField, Ext.form.Field, {
 	addField : function() {
 		var index = 0;
 		if(this.fields) index = this.fields.length;
-		if(this.propertyDef.type == "reference")
-			var f = new Ext.form.TextArea({fieldLabel:(index+1), name:this.name+'['+index+']', width:'200px', allowBlank:true, disabled:false});
-		else
-			var f = new Ext.form.TextField({fieldLabel:(index+1), name:this.name+'['+index+']', width:'200px', allowBlank:true, disabled:false});
+		var pd = {name:this.name+'['+index+']', type:this.propertyDef.collectionElementType, relatedType:this.propertyDef.relatedType, label:(index+1)};
+		var f = OO.EditForm.buildField(pd, "", []);
 		this.append(f);
 	},
 	

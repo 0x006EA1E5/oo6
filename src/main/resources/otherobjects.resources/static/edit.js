@@ -4,39 +4,33 @@
 // Defines OO.EditForm providing a dynamic data editor.
 //
 
+var OO = OO || {};
+
 OO.EditForm = function(){
 
 	var form;
 	var dataId;
 
-	function showFailureMessage(form, scope)
-	{
-      	Ext.Msg.alert('Warning', 'An error ocured whilst saving. Please try again.');
-	}
-	
-	function buildFormPart(td, prefix, hiddenFields)
-	{
-		console.log(td);
-	
-		// Add fields according to typeDef
-		for(var i=0; i<td.properties.length; i++)
+ 	return {
+		
+		showFailureMessage: function(form, scope)
 		{
-			var propDef = td.properties[i];
+	      	Ext.Msg.alert('Warning', 'An error ocured whilst saving. Please try again.');
+		},
+		
+		buildField : function(propDef, prefix, hiddenFields) {
+		
 			var fName = '' + propDef.name;
-			
-			if(propDef.type=="component")
-			{
+			if(propDef.type=="component") {
 				console.log(propDef.relatedTypeDef);
 				form.fieldset({legend:propDef.label});
-				buildFormPart(propDef.relatedTypeDef, propDef.name+".", hiddenFields);
+				OO.EditForm.buildFormPart(propDef.relatedTypeDef, propDef.name+".", hiddenFields);
 				form.end();
 			}
-			else if(propDef.type=="list")
-			{
+			else if(propDef.type=="list") {
 				form.fieldset({legend:propDef.label}, new Ext.form.OOListField(form, propDef, {fieldLabel:'Actions', id:prefix+propDef.name, name:prefix+propDef.name, width:'200px', allowBlank:true, disabled:false}));
 			}
-			else
-			{
+			else {
 				console.log("Creating field: " + fName + " type: " + propDef.type);
 				var config = {fieldLabel:propDef.label, name: prefix+propDef.name, allowBlank:true};
 				if(propDef.type=="date")
@@ -100,92 +94,104 @@ OO.EditForm = function(){
 					config.width='300px';
 					var f = new Ext.form.TextField(config);
 				}
-				form.add(f);
 			}
-		}
-	}
 
-	function buildForm(obj)
-	{
-		// TODO Find out about QuickTips
-		Ext.QuickTips.init();
-		
-		// Show form validation warnings next to each field
-		Ext.form.Field.prototype.msgTarget = 'side';
-
-		// Create map to store hidden fields
-		var hiddenFields = {};
-		hiddenFields["id"] = obj.id;
-		
-		// Create form
-	    form = new Ext.form.Form({
-			labelAlign: 'left',
-			buttonAlign: 'left',
-			monitorValid: true,
-			labelWidth: 120
-	    });
-
-		// Add essential form processing support fields	
-		form.add(new Ext.form.TextField({fieldLabel:'ID', name:'id', width:'200px', allowBlank:true, disabled:true}));
-		//form.add(new Ext.form.TextField({fieldLabel:'Type', name:'ooType', width:'200px', allowBlank:false}));
-		
-		// Add form fields
-		buildFormPart(obj.typeDef, "", hiddenFields);
-		
-	    form.addButton('Save', function() {
-			form.submit({url:'/go/workbench/form', bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });   
-		});
-		
-		form.on('actioncomplete', function(event,action) {
-			// Update listing panel
-			console.log("Form saved correctly.");
-			OO.ListingGrid.updateItem(action.result.formObject);
-			OO.Workbench.getPanel("preview-panel").setDirty(true);
-			OO.Workbench.activatePanel("listing-panel");
-		}, this);
-		//form.on('actionfailed', showFailureMessage, this);
-		
-		// Remove previous form and render new one
-		Ext.get('edit-panel').dom.innerHTML='';
-	    form.render('edit-panel');
-		
-		// Set form values
-		var v = flattenObject(obj, "", []);
-		form.setValues(v);
-	}
+			return f;
+		},
 	
-	function flattenObject(obj,prefix,flat) {
-		for(var id in obj) {
-	    	if(typeof obj[id] != 'function') {
-				if(obj[id] instanceof Object) {
-					//console.log(prefix+id,obj[id]);
-					flat[flat.length]={id:prefix+id, value:obj[id]};
-					flattenObject(obj[id],id+".",flat);
-				}
-				else {
-					//console.log(prefix+id +"="+ obj[id]);
-					flat[flat.length]={id:prefix+id, value:obj[id]};
-	        	}
-			}
-	    }
-	    return flat;
-	}
-
-	function loadJsonObject(url, callback) {
-		Ext.Ajax.request({url:url, success:function(r) {
-			var o = Ext.util.JSON.decode(r.responseText);
-			callback(o);
-		}});
-	}
-
- 	return {
+		buildFormPart : function(td, prefix, hiddenFields)
+		{
+			console.log(td);
 		
+			// Add fields according to typeDef
+			for(var i=0; i<td.properties.length; i++)
+			{
+				var propDef = td.properties[i];
+				var f = OO.EditForm.buildField(propDef, prefix, hiddenFields);
+				if(f)
+					form.add(f);
+			}
+		},
+
+		buildForm : function(obj)
+		{
+			// TODO Find out about QuickTips
+			Ext.QuickTips.init();
+			
+			// Show form validation warnings next to each field
+			Ext.form.Field.prototype.msgTarget = 'side';
+	
+			// Create map to store hidden fields
+			var hiddenFields = {};
+			hiddenFields["id"] = obj.id;
+			
+			// Create form
+		    form = new Ext.form.Form({
+				labelAlign: 'left',
+				buttonAlign: 'left',
+				monitorValid: true,
+				labelWidth: 120
+		    });
+	
+			// Add essential form processing support fields	
+			form.add(new Ext.form.TextField({fieldLabel:'ID', name:'id', width:'200px', allowBlank:true, disabled:true}));
+			
+			// Add form fields
+			OO.EditForm.buildFormPart(obj.typeDef, "", hiddenFields);
+			
+		    form.addButton('Save', function() {
+				form.submit({url:'/go/workbench/form', bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });   
+			});
+			
+			form.on('actioncomplete', function(event,action) {
+				// Update listing panel
+				console.log("Form saved correctly.");
+				OO.ListingGrid.updateItem(action.result.formObject);
+				OO.Workbench.getPanel("preview-panel").setDirty(true);
+				OO.Workbench.activatePanel("listing-panel");
+			}, this);
+			//form.on('actionfailed', showFailureMessage, this);
+			
+			// Remove previous form and render new one
+			Ext.get('edit-panel').dom.innerHTML='';
+		    form.render('edit-panel');
+			
+			// Set form values
+			var v = OO.EditForm.flattenObject(obj, "", []);
+			form.setValues(v);
+		},
+	
+		flattenObject : function(obj,prefix,flat) {
+			for(var id in obj) {
+		    	if(typeof obj[id] != 'function') {
+					if(obj[id] instanceof Object) {
+						//console.log(prefix+id,obj[id]);
+						flat[flat.length]={id:prefix+id, value:obj[id]};
+						OO.EditForm.flattenObject(obj[id],id+".",flat);
+					}
+					else {
+						//console.log(prefix+id +"="+ obj[id]);
+						flat[flat.length]={id:prefix+id, value:obj[id]};
+		        	}
+				}
+		    }
+		    return flat;
+		},
+
+		loadJsonObject : function(url, callback) {
+			Ext.Ajax.request({url:url, success:function(r) {
+				var o = Ext.util.JSON.decode(r.responseText);
+				callback(o);
+			}});
+		},
+
+
     	createForm : function(id) {
 			this.dataId = id;
     	},
 		
 		renderForm : function()	{
-			loadJsonObject("/go/workbench/data/item/" + this.dataId, buildForm);
+			OO.EditForm.loadJsonObject("/go/workbench/data/item/" + this.dataId, OO.EditForm.buildForm);
 		}
 	}
 
@@ -218,13 +224,14 @@ Ext.extend(Ext.form.OOComboBox, Ext.form.ComboBox,  {
 
     setValue : function(v){
 		console.log("Combo value", v);
+	
     	var text = v;
     	if(v && v.id)
     	{
     		text = v.label;
     		v = v.id;
     	}
-        else if(this.valueField){
+        else if(v && this.valueField){
             var r = this.findRecord(this.valueField, v);
             if(r){
                 text = r.data[this.displayField];

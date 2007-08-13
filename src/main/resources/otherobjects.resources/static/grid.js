@@ -81,9 +81,30 @@ OO.ListingGrid = function() {
 //			});
 			
 			// Add toolbar
+			var addMenu = new Ext.menu.Menu({
+		        id: 'mainMenu'
+			});
+			
 			var gridHeader = grid.getView().getHeaderPanel(true);
 			var gridToolbar = new Ext.Toolbar(gridHeader, [
-		  		{cls:'x-btn-text-icon add-btn', text:'Add Article', handler:function(e){OO.ListingGrid.addItem('Article', e);}},
+		  		{cls:'x-btn-text-icon add-btn', text:'Add object', menu:addMenu, handler:function(e){
+					e.menu.removeAll();	
+					var types = OO.Workbench.getCurrentNode().attributes.allowedTypes;
+					if(types && types.length>0) {
+						for(var i=0; i<types.length; i++) {
+							var fn = function(ev) {
+								OO.ListingGrid.addItem(ev.code, ev);
+								};
+							var item = new Ext.menu.Item({text: types[i].label, code:types[i].label});
+							item.on("click", fn, this);
+							e.menu.addItem(item);
+						}
+					}
+					else {
+						Ext.Msg.alert("Error", "This folder has not been configured with allowed types yet.");
+						return false;
+					}
+				}},
 				'-',
 		  		{cls:'x-btn-text-icon publish-btn', text:'Publish', handler:function(e){OO.ListingGrid.publishSelected();}},
 				'-',

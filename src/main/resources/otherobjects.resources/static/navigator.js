@@ -70,7 +70,7 @@ OO.Navigator = function(){
 			
 			// Add contextual menu to tree
 			var navigatorContextMenu = new Ext.menu.Menu();	
-			navigatorContextMenu.add({ text: 'Add sub folder', handler:function(item){
+			navigatorContextMenu.add({ text: 'Add sub folder', icon:'/resources/otherobjects.resources/static/extjs/images/default/tree/drop-add.gif', handler:function(item){
 					var parent = item.parentMenu.selectedNode;
 					// FIXME Need to make sure that the parent has expanded before we add new node.
 					parent.expand();
@@ -81,12 +81,22 @@ OO.Navigator = function(){
 						node.select();	
 					});
         	}});
-			navigatorContextMenu.add({ text: 'Rename folder', handler:function(item){
-				var node = item.parentMenu.selectedNode;
-				console.log(node);
-				if(node.draggable) // Don't allow locked nodes to be renamed
-					treeEditor.triggerEdit(node);
+			navigatorContextMenu.add({ text: 'Publish folder', icon:'/resources/otherobjects.resources/static/icons/tick.png',handler:function(item) {
+				var id = item.parentMenu.selectedNode.id;
+				console.log("Publishing folder: " + id);
+				ContentService.publishItem(id);
         	}});
+			navigatorContextMenu.add({ text: 'Edit folder', icon:'/resources/otherobjects.resources/static/icons/pencil.png', handler:function(item){
+				var node = item.parentMenu.selectedNode;
+				OO.Workbench.selectContainer(node);
+				OO.Workbench.activateEditor();
+        	}});
+//			navigatorContextMenu.add({ text: 'Rename folder', icon:'/resources/otherobjects.resources/static/icons/pencil.png', handler:function(item){
+//				var node = item.parentMenu.selectedNode;
+//				console.log(node);
+//				if(node.draggable) // Don't allow locked nodes to be renamed
+//					treeEditor.triggerEdit(node);
+//        	}});
 			tree.on("contextmenu", function(node){
 					navigatorContextMenu.selectedNode = node;
 					navigatorContextMenu.show(node.ui.node.ui.getAnchor());

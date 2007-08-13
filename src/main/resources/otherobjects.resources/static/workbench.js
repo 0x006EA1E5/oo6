@@ -27,7 +27,16 @@ OO.Workbench = function()
 		// FIXME Use getters/setters intead?
 		currentContainer : currentContainer, 
 		currentItem : currentItem, 
+		currentNode : null, 
 		navigator : navigator, 
+		
+		
+		getCurrentNode : function() {
+			// FIXME Temp hack to lazy set root node
+			if(!this.currentNode)
+				OO.Navigator.selectNode("/site/");
+			return this.currentNode;
+		},
 		
         init : function()
 		{
@@ -68,7 +77,7 @@ OO.Workbench = function()
 			var editPanel = new Ext.ContentPanel('edit-panel', {autoCreate:true, title:'Edit', background:true, closable:false});
 			editPanel.on("activate", function() {
 				
-				console.log(editForm.dataId);
+				console.log("Activating editor", editForm.dataId);
 				if(editForm.dataId)
 					editForm.renderForm();
 				else if(!editForm.loaded)
@@ -99,12 +108,14 @@ OO.Workbench = function()
 		
 		selectContainer : function(node)
 		{
+			this.currentNode = node;
 			currentContainer = node.id;
-	        console.log("Selected container: "+ currentContainer);
+	        console.log("Selected container: "+ currentContainer, node);
 			if(listing.currentContainerId != currentContainer)
 	       		listing.load(currentContainer);
 			listing.currentContainerId = currentContainer;
 			layout.getRegion("center").showPanel("listing-panel");
+			editForm.createForm(currentContainer);
 		},
 		
 		selectItem : function(grid,index)
