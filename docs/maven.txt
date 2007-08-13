@@ -78,6 +78,12 @@ http://repo1.maven.org/maven2/
 
 To host your own: http://www.jfrog.org/sites/artifactory/latest/
 
+Local .m2
+----------------
+Hibernate search
+get hibernate search 3.0.0 beta4 from www.hibernate.org
+mvn install:install-file -DgroupId=org.hibernate -DartifactId=hibernate-search -Dversion=3.0.0.beta4 -Dpackaging=jar -Dfile=/path/to/hibernate-search.jar
+
 Todo
 ----
 Find out about profiles
