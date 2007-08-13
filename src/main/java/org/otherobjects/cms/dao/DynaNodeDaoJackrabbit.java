@@ -1,16 +1,12 @@
 package org.otherobjects.cms.dao;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Workspace;
-import javax.jcr.version.Version;
-import javax.jcr.version.VersionIterator;
 
 import org.apache.jackrabbit.ocm.exception.JcrMappingException;
 import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
