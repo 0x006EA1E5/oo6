@@ -1,6 +1,7 @@
 package org.otherobjects.cms.dao;
 
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Simple results wrapper top allow for paged views of large lists of items. Implementations need to make sure
@@ -32,5 +33,8 @@ public interface PagedResult<T> extends Iterable<T>, Iterator<T> {
 	
 	/** Number of total items in the underlying result list */
 	public int getItemTotal();
+	
+	/** List backing this PagedResult */
+	public List<T> getItems();
 	
 }

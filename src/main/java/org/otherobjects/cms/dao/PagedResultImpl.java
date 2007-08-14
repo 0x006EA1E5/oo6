@@ -144,6 +144,11 @@ public class PagedResultImpl<T> implements PagedResult<T> {
 	public boolean isLastPage() {
 		return currentPage == pageCount;
 	}
+	
+	public List<T> getItems()
+	{
+		return items;
+	}
 
 	public Iterator<T> iterator() {
 
