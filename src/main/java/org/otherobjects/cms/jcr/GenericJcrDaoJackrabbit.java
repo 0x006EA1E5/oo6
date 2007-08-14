@@ -7,7 +7,6 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
@@ -387,7 +386,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
 	            	printVersionHistory(node.getVersionHistory());
 	            	String requestedVersionName = node.getVersionHistory().getVersionByLabel(changeNumber + "").getName();
 	            	Version requestedVersion = node.getVersionHistory().getVersion(requestedVersionName);
-	            	node.restore(requestedVersion, false);
+	            	node.restore(requestedVersion, removeExisting);
 	            	// reget object
 	            	return (T)manager.getObjectByUuid(object.getId());
 	            }
