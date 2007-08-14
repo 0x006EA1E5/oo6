@@ -40,7 +40,7 @@ public class IndexedPersistentObject implements Serializable {
         return id;
     }
 	
-	@Field(index=Index.UN_TOKENISED, store=Store.YES)
+	@Field(index=Index.UN_TOKENIZED, store=Store.YES)
 	@Column(name="title", length=100)
 	public String getTitle() {
 		return title;
@@ -62,7 +62,7 @@ public class IndexedPersistentObject implements Serializable {
 		this.summary = summary;
 	}
 
-	@Field(index=Index.UN_TOKENISED, store=Store.YES)
+	@Field(index=Index.UN_TOKENIZED, store=Store.YES)
 	@Column()
 	public Date getDate() {
 		return date;
