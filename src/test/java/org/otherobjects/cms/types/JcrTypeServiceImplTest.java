@@ -13,9 +13,9 @@ public class JcrTypeServiceImplTest extends BaseJcrTestCase
         // FIXME Should = 2 when other tests unregister types correctly
         assertTrue(typeService.getTypes().size()>=2);
         
-        TypeDef folder = typeService.getType("Folder");
+        TypeDef folder = typeService.getType("org.otherobjects.cms.model.SiteFolder");
         assertNotNull(folder);
-        assertNotNull(folder.getProperty("name"));
+        assertNotNull(folder.getProperty("label"));
     }
 
     public void testGetType()

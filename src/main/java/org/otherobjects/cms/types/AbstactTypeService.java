@@ -1,7 +1,9 @@
 package org.otherobjects.cms.types;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -57,5 +59,16 @@ public abstract class AbstactTypeService implements TypeService
                 return t;
         }
         return null;
+    }
+    
+    public Collection<TypeDef> getTypesBySuperClass(Class<?> superClass)
+    {
+        List<TypeDef> matches = new ArrayList<TypeDef>();
+        for (TypeDef t : types.values())
+        {
+            if (t.getSuperClassName().equals(superClass.getName()))
+                matches.add(t);
+        }
+        return matches;
     }
 }

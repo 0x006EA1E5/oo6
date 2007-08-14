@@ -89,7 +89,7 @@ OO.ListingGrid = function() {
 			var gridToolbar = new Ext.Toolbar(gridHeader, [
 		  		{cls:'x-btn-text-icon add-btn', text:'Add object', menu:addMenu, handler:function(e){
 					e.menu.removeAll();	
-					var types = OO.Workbench.getCurrentNode().attributes.allowedTypes;
+					var types = OO.Workbench.getCurrentNode().attributes.allAllowedTypes;
 					if(types && types.length>0) {
 						for(var i=0; i<types.length; i++) {
 							var fn = function(ev) {

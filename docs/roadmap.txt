@@ -96,6 +96,7 @@ webservices and plugins
 * Plugin architecture
 * SVN integration for site design data
 * Syndication support (publish and subscribe RSS/Atom feeds)
+* Non-HTML output support (PDF, XLS, JPG, XML)
 * Robust Import/export tools
 * Embed Quartz as job scheduler
 * Preliminary reporting integration

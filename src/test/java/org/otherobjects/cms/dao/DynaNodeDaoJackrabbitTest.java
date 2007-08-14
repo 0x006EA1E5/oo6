@@ -54,7 +54,7 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
         List<DynaNode> contents = dynaNodeDao.getAllByPath("/site/test");
         assertEquals(3, contents.size());
 
-        DynaNode folder = dynaNodeDao.create("Folder");
+        DynaNode folder = dynaNodeDao.create("org.otherobjects.cms.model.SiteFolder");
         folder.setPath("/site/test/");
         folder.setLabel("Test 4");
         folder.setCode("test4");

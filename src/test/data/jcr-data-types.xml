@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<types xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:rep="internal"
-	xmlns:oo="http://www.otherobjects.org/system/oo" xmlns:ocm="http://jackrabbit.apache.org/ocm"
-	xmlns:sv="http://www.jcp.org/jcr/sv/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" jcr:primaryType="oo:node"
-	label="Data Type" cssClass="datatypes">
+<types xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:rep="internal" xmlns:oo="http://www.otherobjects.org/system/oo"
+	xmlns:ocm="http://jackrabbit.apache.org/ocm" xmlns:sv="http://www.jcp.org/jcr/sv/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" jcr:primaryType="oo:node" label="Data Type" cssClass="datatypes">
 
 	<!-- Site -->
-	<Folder jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.types.TypeDef" labelProperty="label">
-		<properties>
-			<property1 ocm:classname="org.otherobjects.cms.types.PropertyDef" name="name" type="string" required="true" />
-			<property2 ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" type="string" />
+	<org.otherobjects.cms.model.SiteFolder jcr:primaryType="oo:node" jcr:uuid="4b299ada-1f0e-4999-a623-e1ddb3eaab7e" labelProperty="label" ocm:classname="org.otherobjects.cms.types.TypeDef"
+		className="org.otherobjects.cms.model.SiteFolder">
+		<properties jcr:primaryType="nt:unstructured">
+			<property jcr:primaryType="nt:unstructured" required="true" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
+			<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" />
+			<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="cssClass" />
+			<property jcr:primaryType="nt:unstructured" type="list" label="${allowedTypes.label}" collectionElementType="reference" relatedType="org.otherobjects.cms.types.TypeDef"
+				ocm:classname="org.otherobjects.cms.types.PropertyDef" name="allowedTypes" />
 		</properties>
-	</Folder>
+	</org.otherobjects.cms.model.SiteFolder>
 	<Article jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.types.TypeDef" labelProperty="title">
 		<properties>
 			<property1 ocm:classname="org.otherobjects.cms.types.PropertyDef" name="title" type="string" required="true" />

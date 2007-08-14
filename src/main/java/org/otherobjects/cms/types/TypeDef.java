@@ -4,7 +4,9 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.CmsNode;
+import org.otherobjects.cms.model.DynaNode;
 import org.springframework.util.Assert;
 
 import flexjson.JSON;
@@ -17,7 +19,8 @@ import flexjson.JSON;
 public class TypeDef implements CmsNode
 {
     private static final String JCR_ROOT_PATH = "/types";
-
+    private static final String DEFAULT_SUPER_CLASS_NAME = DynaNode.class.getName();
+    
     /** JCR GUID. */
     private String id;
 
@@ -26,6 +29,13 @@ public class TypeDef implements CmsNode
 
     /** The class name of the backing class (if not using CmsNode). */
     private String className;
+   
+    /** 
+     * The name of the class that this type extends. Defaults to DynaNode.
+     * 
+     *  <p>TODO Add support for extending Types themselves
+     */
+    private String superClassName;
 
     /** Collection of properties for this type. */
     private Map<String, PropertyDef> properties = new LinkedHashMap<String, PropertyDef>();
@@ -201,6 +211,16 @@ public class TypeDef implements CmsNode
     public boolean hasClass()
     {
         return (this.className != null);
+    }
+
+    public String getSuperClassName()
+    {
+        return superClassName != null ? superClassName : DEFAULT_SUPER_CLASS_NAME ;
+    }
+
+    public void setSuperClassName(String superClassName)
+    {
+        this.superClassName = superClassName;
     }
 
 }

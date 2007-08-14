@@ -2,19 +2,21 @@
     "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
-    <session-factory>
-        <mapping class="org.otherobjects.cms.model.User"/>
-        <mapping class="org.otherobjects.cms.model.Role"/>
-        <mapping class="org.otherobjects.cms.hibernate.SecureObject1"/>
-        <mapping class="org.otherobjects.cms.hibernate.IndexedPersistentObject"/>
-        <event type="post-update">
-            <listener class="org.hibernate.search.event.FullTextIndexEventListener"/>
-        </event>
-        <event type="post-insert">
-            <listener class="org.hibernate.search.event.FullTextIndexEventListener"/>
-        </event>
-        <event type="post-delete">
-            <listener class="org.hibernate.search.event.FullTextIndexEventListener"/>
-        </event>
-    </session-factory>
+	<session-factory>
+		<mapping class="org.otherobjects.cms.model.User" />
+		<mapping class="org.otherobjects.cms.model.Role" />
+		<mapping class="org.otherobjects.cms.hibernate.SecureObject1" />
+		<!-- 
+			<mapping class="org.otherobjects.cms.hibernate.IndexedPersistentObject"/>
+			<event type="post-update">
+			<listener class="org.hibernate.search.event.FullTextIndexEventListener"/>
+			</event>
+			<event type="post-insert">
+			<listener class="org.hibernate.search.event.FullTextIndexEventListener"/>
+			</event>
+			<event type="post-delete">
+			<listener class="org.hibernate.search.event.FullTextIndexEventListener"/>
+			</event>
+		-->
+	</session-factory>
 </hibernate-configuration>

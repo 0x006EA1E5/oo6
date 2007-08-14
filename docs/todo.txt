@@ -2,6 +2,9 @@ Lists: component testing, remove, reordering
 Regexp validator: eg *.html
 Default values on types
 Order of nodes after update
+Type standard fields: esp id, code, label
+Don't filter binary resources in maven
+Reference Fields to have custom queries/selectors
 
 System indicators:
    - JCR (schema version)
@@ -12,3 +15,6 @@ System indicators:
    - Imagemagick
    - JVM Version vendor and memory
    - Encoding
+
+Rich media FLV: http://www.jeroenwijering.com/?item=Flash_video_Player
+Rich media MP3: http://www.1pixelout.net/code/audio-player-wordpress-plugin

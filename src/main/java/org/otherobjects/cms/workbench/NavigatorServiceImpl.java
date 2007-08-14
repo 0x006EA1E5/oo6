@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.cms.util.StringUtils;
 import org.springframework.util.Assert;
 
@@ -26,7 +27,7 @@ public class NavigatorServiceImpl implements NavigatorService
         List<WorkbenchItem> children = new ArrayList<WorkbenchItem>();
         for (DynaNode n : all)
         {
-            if (n.getOoType().equals("Folder"))
+            if (n instanceof SiteFolder)
                 children.add(n);
         }
         return children;
@@ -46,9 +47,8 @@ public class NavigatorServiceImpl implements NavigatorService
             
         } while(true);
 
-        DynaNode newFolder = dynaNodeDao.create("Folder");
+        DynaNode newFolder = dynaNodeDao.create("org.otherobjects.cms.model.SiteFolder");
         newFolder.setPath(parent.getJcrPath());
-        newFolder.setCode("untitled-" + c); //TODO M2 Auto generate
         newFolder.setLabel("Untitled " + c);
         return dynaNodeDao.save(newFolder);
     }
@@ -67,7 +67,7 @@ public class NavigatorServiceImpl implements NavigatorService
         List<WorkbenchItem> children = new ArrayList<WorkbenchItem>();
         for (DynaNode n : all)
         {
-            if (!n.getOoType().equals("Folder"))
+            if (!(n instanceof SiteFolder))
                 children.add(n);
         }
         return children;

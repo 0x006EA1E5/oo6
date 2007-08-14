@@ -48,7 +48,7 @@ public class StaticResourceServlet extends HttpServlet
 
         logger.info("Requested static resource: {}", path);
 
-        // FIXME Is there a faster way of servig these?
+        // FIXME Is there a faster way of serving these?
         // FIXME Cache?
         InputStream in = getClass().getResourceAsStream(path);
         if(in==null)

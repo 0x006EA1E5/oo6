@@ -7,6 +7,7 @@ import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.cms.util.StringUtils;
 import org.otherobjects.cms.workbench.WorkbenchItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +91,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo
      */
     public String getJcrPath()
     {
-        if (path == null || code == null)
+        if (getPath() == null || getPath() == null)
             return null;
 
         Assert.isTrue(path.endsWith("/"), "Path must end with a forward slash");
@@ -194,7 +195,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo
 
     public String getCode()
     {
-        return code;
+        return code != null ? code : StringUtils.generateUrlCode(getLabel());
     }
 
     public void setCode(String code)

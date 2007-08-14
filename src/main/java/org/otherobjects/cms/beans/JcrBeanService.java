@@ -46,4 +46,18 @@ public class JcrBeanService
             throw new OtherObjectsException("Could not create bean class for: " + typeDef.getName(), e);
         }
     }
+
+    public boolean hasExistingClass(String className)
+    {
+        try
+        {
+            Class.forName(className);
+            //ClassReader classReader = new ClassReader(className);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
 }

@@ -40,9 +40,9 @@ public class ContentServiceImplTest extends BaseJcrTestCase
     	adminLogin();
         DynaNode siteRoot = dynaNodeDao.getByPath("/site/");
         DynaNode new1 = contentService.createItem(siteRoot.getId(), "Article");
-        assertEquals("Untitled Article 1", new1.getLabel()); 
+        assertEquals("Untitled 1", new1.getLabel()); 
         DynaNode new2 = contentService.createItem(siteRoot.getId(), "Article");
-        assertEquals("Untitled Article 2", new2.getLabel());
+        assertEquals("Untitled 2", new2.getLabel());
         logout();
     }
 }

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
@@ -134,13 +135,13 @@ public class WorkbenchDataController implements Controller
 
         for (DynaNode dynaNode : contents)
         {
-            if (dynaNode.getOoType().equals("Folder"))
+            if (dynaNode instanceof SiteFolder)
             {
                 Map<String, Object> n1 = new HashMap<String, Object>();
                 n1.put("id", dynaNode.getId());
                 n1.put("code", dynaNode.getCode());
                 
-                n1.put("allowedTypes", dynaNode.get("allowedTypes"));
+                n1.put("allAllowedTypes", dynaNode.get("allAllowedTypes"));
 
                 // Localise labels
                 String label = dynaNode.getLabel();
@@ -189,7 +190,7 @@ public class WorkbenchDataController implements Controller
         List<DynaNode> nonFolders = new ArrayList<DynaNode>();
         for (DynaNode dynaNode : contents)
         {
-            if (!dynaNode.getOoType().equals("Folder"))
+            if (! (dynaNode instanceof SiteFolder))
                 nonFolders.add(dynaNode);
         }
         view.addObject(JsonView.JSON_DATA_KEY, nonFolders);
