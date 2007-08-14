@@ -81,4 +81,21 @@ public class PagedResultImplTest extends TestCase {
 		assertEquals(true, pr4.isLastPage());
 	}
 	
+	public void testNoIndexOutOfBounds()
+	{
+		PagedResultImpl<String> pr = new PagedResultImpl<String>(4,1,testList);
+		System.out.println("Page1:");
+		for(String s: pr)
+		{
+			System.out.println(s);
+		}
+		
+		System.out.println("Page2:");
+		PagedResultImpl<String> pr2 = new PagedResultImpl<String>(4,2,testList);
+		for(String s: pr2)
+		{
+			System.out.println(s);
+		}
+	}
+	
 }

@@ -52,7 +52,7 @@ public class PagedResultImpl<T> implements PagedResult<T> {
 			int endIndex = startIndex + pageSize;
 			endIndex = (endIndex >= items.size()) ? items.size() : endIndex; // if there are not enough items left, set it to last index + 1
 			
-			this.items = Collections.unmodifiableList(items.subList(startIndex, endIndex));
+			this.items = Collections.unmodifiableList(items.subList(startIndex, endIndex)); // subList is exclusive of endIndex hence no IndexOutOfBounds
 			this.iterator = this.items.iterator();
 		}
 	}
