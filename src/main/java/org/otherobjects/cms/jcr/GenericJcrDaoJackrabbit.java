@@ -19,6 +19,8 @@ import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.apache.jackrabbit.ocm.spring.JcrMappingCallback;
 import org.apache.jackrabbit.ocm.spring.JcrMappingTemplate;
 import org.otherobjects.cms.dao.GenericJcrDao;
+import org.otherobjects.cms.dao.PagedResult;
+import org.otherobjects.cms.dao.PagedResultImpl;
 import org.otherobjects.cms.model.CmsNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -414,4 +416,51 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     			System.out.println("label(s):" + versionHistory.getVersionLabels(version)[0] + " name: " + version.getName());
     	}
     }
+    
+    @SuppressWarnings("unchecked")
+	public PagedResult<T> getPagedByPath(final String path, final int pageSize, final int pageNo) {
+		return (PagedResult<T>) getJcrMappingTemplate().execute(new JcrMappingCallback()
+        {
+            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+            {
+                try
+                {
+                    String p = path;
+                    if (path.length() > 1 && path.endsWith("/"))
+                        p = path.substring(0, path.length() - 1); // cut of trailing slash
+                    
+                    javax.jcr.query.QueryManager queryManager = manager.getSession().getWorkspace().getQueryManager();
+                    javax.jcr.query.Query query = queryManager.createQuery("/jcr:root" + p + "//element(*, oo:node)", javax.jcr.query.Query.XPATH);
+                    
+                    
+                    javax.jcr.query.QueryResult queryResult = query.execute();
+                    // first count results
+                    NodeIterator nodeIterator = queryResult.getNodes();
+                    long count = nodeIterator.getSize();
+                    
+                    int startIndex = PagedResultImpl.calcStartIndex(pageSize, pageNo);
+                    int endIndex = PagedResultImpl.calcEndIndex(pageSize, (int)count, startIndex); //FIXME we are downcasting to int here which could theoretically cause problems ...
+                    
+                    // now do a loop and store the range of interest in a list
+                    List<T> nodes = new ArrayList<T>();
+                    int i = 0;
+                    while(nodeIterator.hasNext())
+                    {
+                    	if(i >= startIndex && i < endIndex)
+                    		nodes.add((T) manager.getObjectByUuid(nodeIterator.nextNode().getUUID()));
+                    	
+                    	if(i >= endIndex)
+                    		break;
+                    	i++;
+                    }
+                    
+                    return new PagedResultImpl<T>(pageSize, (int)count, pageNo, nodes, false);
+                }
+                catch (Exception e)
+                {
+                    throw new JcrMappingException(e);
+                }
+            }
+        }, true);
+	}
 }

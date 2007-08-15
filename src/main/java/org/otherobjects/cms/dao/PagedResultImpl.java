@@ -60,9 +60,8 @@ public class PagedResultImpl<T> implements PagedResult<T> {
 		}
 		else
 		{
-			int startIndex = pageSize * (currentPage - 1); // 0 for currentPage = 1, 10 for currentPage=1 and pageSize=10
-			int endIndex = startIndex + pageSize;
-			endIndex = (endIndex >= items.size()) ? items.size() : endIndex; // if there are not enough items left, set it to last index + 1
+			int startIndex = calcStartIndex(pageSize, currentPage); 
+			int endIndex = calcEndIndex(pageSize, itemTotal, startIndex); 
 			
 			if(comparator != null)
 			{
@@ -108,6 +107,17 @@ public class PagedResultImpl<T> implements PagedResult<T> {
 	public PagedResultImpl(int pageSize, int currentPage, List<T> items, Comparator comparator)
 	{
 		this(pageSize, (items == null) ? 0 : items.size(), currentPage, items, true, comparator);
+	}
+	
+	public static int calcStartIndex(int pageSize, int currentPage)
+	{
+		return pageSize * (currentPage - 1); // 0 for currentPage = 1, 10 for currentPage=1 and pageSize=10
+	}
+	
+	public static int calcEndIndex(int pageSize, int itemTotal, int startIndex)
+	{
+		int endIndex = startIndex + pageSize;
+		return (endIndex >= itemTotal) ? itemTotal : endIndex; // if there are not enough items left, set it to last index + 1
 	}
 	
 	private int calcPageCount() {

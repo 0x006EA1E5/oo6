@@ -173,7 +173,22 @@ public class WorkbenchDataController implements Controller
         view.addObject(JsonView.JSON_DATA_KEY, nodes);
         return view;
     }
-
+    
+    /**
+     * Called to populate an ext grid
+     * ext will always send the parameters 
+     * <ul>
+     * 	<li>start - offset </li>
+     *  <li>limit - max items per page</li>
+     * </ul>
+     * It might also send 
+     * <ul>
+     * 	<li>dir - which is either ASC or DESC to indicate sort order</li>
+     *  <li>sort - name of the colum to sort on</li>
+     * </ul>
+     * @param request
+     * @return
+     */
     private ModelAndView generateListingData(HttpServletRequest request)
     {
         String jcrPath = "/site";
@@ -188,16 +203,18 @@ public class WorkbenchDataController implements Controller
         }
 
         // FIXME M2 Can we exclude folders in the query?
-        List<DynaNode> contents = dynaNodeDao.getAllByPath(jcrPath);
-
-        List<DynaNode> nonFolders = new ArrayList<DynaNode>();
-        for (DynaNode dynaNode : contents)
-        {
-            if (! (dynaNode instanceof SiteFolder))
-                nonFolders.add(dynaNode);
-        }
+//        List<DynaNode> contents = dynaNodeDao.getAllByPath(jcrPath);
+//
+//        List<DynaNode> nonFolders = new ArrayList<DynaNode>();
+//        for (DynaNode dynaNode : contents)
+//        {
+//            if (! (dynaNode instanceof SiteFolder))
+//                nonFolders.add(dynaNode);
+//        }
+//        
+//        PagedResult<DynaNode> pageResult = new PagedResultImpl<DynaNode>(25, getRequestedPage(request), nonFolders);
         
-        PagedResult<DynaNode> pageResult = new PagedResultImpl<DynaNode>(25, getRequestedPage(request), nonFolders);
+        PagedResult<DynaNode> pageResult = dynaNodeDao.getPagedByPath(jcrPath, ITEMS_PER_PAGE, getRequestedPage(request));
         
         Map resultMap = new HashMap();
         resultMap.put("items", pageResult);
