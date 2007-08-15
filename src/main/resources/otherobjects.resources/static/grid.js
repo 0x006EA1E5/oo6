@@ -37,8 +37,8 @@ OO.ListingGrid = function() {
 			
 			    // create reader that reads the Topic records
 			    reader: new Ext.data.JsonReader({
-			        //root: 'topics',
-			        //totalProperty: 'totalCount',
+			        root: 'items',
+			        totalProperty: 'totalItems',
 			        id: 'id'
 			        }, mappings),
 			
@@ -72,13 +72,13 @@ OO.ListingGrid = function() {
 			grid.render();
 			
 			// TODO m2 Add paging toolbar
-//			var gridFoot = grid.getView().getFooterPanel(true);
-//			var paging = new Ext.PagingToolbar(gridFoot, ds, {
-//			    pageSize: 25,
-//			    displayInfo: true,
-//			    displayMsg: 'Displaying topics {0} - {1} of {2}',
-//			    emptyMsg: "No topics to display"
-//			});
+			var gridFoot = grid.getView().getFooterPanel(true);
+			var paging = new Ext.PagingToolbar(gridFoot, ds, {
+			    pageSize: 25,
+			    displayInfo: true,
+			    displayMsg: 'Displaying items {0} - {1} of {2}',
+			    emptyMsg: "No items to display"
+			});
 			
 			// Add toolbar
 			var addMenu = new Ext.menu.Menu({
@@ -115,11 +115,11 @@ OO.ListingGrid = function() {
 	    },
 	    
 	    refresh : function() {
-	      ds.load({params:{node:OO.Workbench.currentContainer}});
+	      ds.load({params:{node:OO.Workbench.currentContainer,start:0, limit:25}});
 	    },
 		
 	    load : function(uuid) {
-	      ds.load({params:{node:uuid}});
+	      ds.load({params:{node:uuid,start:0, limit:25}});
 		  // FIXME Shouldn't need this in 2 places
 		  OO.Workbench.currentContainer = uuid;
 	    },

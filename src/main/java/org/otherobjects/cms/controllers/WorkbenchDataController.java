@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.dao.DynaNodeDao;
+import org.otherobjects.cms.dao.PagedResult;
+import org.otherobjects.cms.dao.PagedResultImpl;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.cms.types.JcrTypeServiceImpl;
@@ -34,6 +36,7 @@ import org.springframework.web.servlet.mvc.Controller;
  */
 public class WorkbenchDataController implements Controller
 {
+	public static final int ITEMS_PER_PAGE = 25;
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     private DynaNodeDao dynaNodeDao;
@@ -193,12 +196,31 @@ public class WorkbenchDataController implements Controller
             if (! (dynaNode instanceof SiteFolder))
                 nonFolders.add(dynaNode);
         }
-        view.addObject(JsonView.JSON_DATA_KEY, nonFolders);
+        
+        PagedResult<DynaNode> pageResult = new PagedResultImpl<DynaNode>(25, getRequestedPage(request), nonFolders);
+        
+        Map resultMap = new HashMap();
+        resultMap.put("items", pageResult);
+        resultMap.put("totalItems", pageResult.getItemTotal());
+        
+        view.addObject(JsonView.JSON_DATA_KEY, resultMap);
         view.addObject(JsonView.JSON_INCLUDES_KEY, new String[]{"data"});
         return view;
     }
 
-    public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
+    /**
+     * ext sends to parameters to control paging: a limit and a start. Our page number
+     * needs to be calculated from these. On the first request there are  
+     * @param request
+     * @return
+     */
+    private int getRequestedPage(HttpServletRequest request) {
+		int start = Integer.parseInt(request.getParameter("start"));
+		int limit = Integer.parseInt(request.getParameter("limit"));
+		return (start/limit) + 1; 
+	}
+
+	public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
     {
         this.dynaNodeDao = dynaNodeDao;
     }
