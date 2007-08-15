@@ -43,7 +43,7 @@ OO.ListingGrid = function() {
 			        }, mappings),
 			
 			    // turn on remote sorting
-			    remoteSort: false
+			    remoteSort: true
 			});
 			
 			// create the column model
@@ -71,13 +71,13 @@ OO.ListingGrid = function() {
 			// render it
 			grid.render();
 			
-			// TODO m2 Add paging toolbar
+			// Add paging toolbar
 			var gridFoot = grid.getView().getFooterPanel(true);
 			var paging = new Ext.PagingToolbar(gridFoot, ds, {
 			    pageSize: 25,
 			    displayInfo: true,
-			    displayMsg: 'Displaying items {0} - {1} of {2}',
-			    emptyMsg: "No items to display"
+			    displayMsg: 'Displaying objects {0} - {1} of {2}',
+			    emptyMsg: "No objects to display"
 			});
 			
 			// Add toolbar
@@ -115,11 +115,13 @@ OO.ListingGrid = function() {
 	    },
 	    
 	    refresh : function() {
-	      ds.load({params:{node:OO.Workbench.currentContainer,start:0, limit:25}});
+	      ds.load({params:{start:0, limit:25}});
 	    },
 		
 	    load : function(uuid) {
-	      ds.load({params:{node:uuid,start:0, limit:25}});
+		  // Set parameters to send in all data requests 
+	      ds.baseParams={node:uuid};
+	      ds.load({params:{start:0, limit:25}});
 		  // FIXME Shouldn't need this in 2 places
 		  OO.Workbench.currentContainer = uuid;
 	    },

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.otherobjects.cms.OtherObjectsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,12 +64,21 @@ public abstract class AbstactTypeService implements TypeService
     
     public Collection<TypeDef> getTypesBySuperClass(Class<?> superClass)
     {
-        List<TypeDef> matches = new ArrayList<TypeDef>();
-        for (TypeDef t : types.values())
+        try
         {
-            if (t.getSuperClassName().equals(superClass.getName()))
-                matches.add(t);
+            // FIXME Is there an alternative to instatiating classes here?
+            List<TypeDef> matches = new ArrayList<TypeDef>();
+            for (TypeDef t : types.values())
+            {
+                Class cls = Class.forName(t.getSuperClassName());
+                if (superClass.isAssignableFrom(cls))
+                    matches.add(t);
+            }
+            return matches;
         }
-        return matches;
+        catch (ClassNotFoundException e)
+        {
+            throw new OtherObjectsException("Super class not found");
+        }
     }
 }
