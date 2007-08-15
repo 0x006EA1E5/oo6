@@ -3,7 +3,6 @@ package org.otherobjects.cms.beans;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.types.TypeDef;
-import org.otherobjects.cms.types.TypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,15 +15,7 @@ import org.slf4j.LoggerFactory;
  */
 public class JcrBeanService
 {
-
     protected final Logger logger = LoggerFactory.getLogger(getClass());
-
-    private TypeService typeService;
-
-    public void setTypeService(TypeService typeService)
-    {
-        this.typeService = typeService;
-    }
 
     /**
      * Uses CGLIB to generate a custom DynaNode with bean style properties as defined by the given typeDef.

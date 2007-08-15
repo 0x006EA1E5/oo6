@@ -24,15 +24,15 @@
 
 <div id="header" class="x-layout-inactive-content">
 <h1><em>OTHERobjects Workbench</em></h1>
-<p style="float:right; color:#FFFFFF;">$ctxTool.getMessage("interface.language.label"):
+<p style="float:right; color:#FFFFFF;">$requestContext.getMessage("interface.language.label"):
 
-#set($workbenchLocale = $ctxTool.locale)
+#set($workbenchLocale = $requestContext.locale)
 #if($workbenchLocale == "en_GB") English #else <a href="/go/workbench/?locale=en_GB">English</a> #end |
 #if($workbenchLocale == "de_DE") Deutsch #else <a href="/go/workbench/?locale=de_DE">Deutsch</a> #end 
 
 &nbsp;&nbsp;&nbsp;
 
-$ctxTool.getMessage("login.status.label"): <strong>$user.username</strong> <a href="/j_acegi_logout">$ctxTool.getMessage("logout.label")</a>
+$requestContext.getMessage("login.status.label"): <strong>$user.username</strong> <a href="/j_acegi_logout">$requestContext.getMessage("logout.label")</a>
 
 </p>
 </div>

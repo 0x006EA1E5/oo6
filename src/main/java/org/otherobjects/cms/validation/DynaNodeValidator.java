@@ -44,6 +44,7 @@ public class DynaNodeValidator implements Validator
         return DynaNode.class.isAssignableFrom(clazz);
     }
 
+    @SuppressWarnings("unchecked")
     public void validate(Object target, Errors errors)
     {
         Assert.isInstanceOf(DynaNode.class, target, "Can only validate DynaNodes");

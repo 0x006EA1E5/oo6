@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.model.DynaNode;
 import org.springframework.util.Assert;

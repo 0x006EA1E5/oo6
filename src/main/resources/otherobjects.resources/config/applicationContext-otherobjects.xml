@@ -80,9 +80,7 @@
 			<props>
 				<prop key="velocimacro.permissions.allow.inline.local.scope">true</prop>
 				<prop key="velocimacro.library.autoreload">true</prop>
-				<!-- 
-					<prop key="velocimacro.library">templates/workbench/oo.vm,templates/macros/global.vm</prop>
-				-->
+				<prop key="velocimacro.library">otherobjects.resources/templates/macros/workbench.vm</prop>
 				<prop key="file.resource.loader.cache">false</prop>
 				<prop key="encoding.default">UTF-8</prop>
 			</props>
@@ -92,7 +90,7 @@
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
 		<property name="cache" value="false" />
 		<property name="prefix" value="" />
-		<property name="requestContextAttribute" value="ctxTool" />
+		<property name="requestContextAttribute" value="requestContext" />
 		<property name="dateToolAttribute" value="dateTool" />
 		<property name="numberToolAttribute" value="numberTool" />
 	</bean>

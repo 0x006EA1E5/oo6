@@ -63,7 +63,6 @@
 	</bean>
 
 	<bean name="jcrBeanService" class="org.otherobjects.cms.beans.JcrBeanService">
-		<property name="typeService" ref="typeService" />
 	</bean>
 	
 	<!-- Domain objects 

@@ -55,21 +55,21 @@ of new templating/block model with efficient caching.
 ==================================================================
 
 [IN PROGRESS] * Licensing finalised 
-[IN PROGRESS] * Publishing and versioning 
+[IN TEST] * Publishing and versioning 
 [IN PROGRESS] * Action/event/scripting framework
 * Runtime data-type manipulation: UI 
 [IN PROGRESS] * Enhanced forms support for components, references and lists
 * Support for JDBC (database) objects in Workbench
-* Global search (for JCR and JDBC)
+[IN PROGRESS] * Global search (for JCR and JDBC)
 [IN TEST] * Date/number formatting tools 
-* Paging/sorting/columns/filtering in data grid
+[IN PROGRESS] * Paging/sorting/columns/filtering in data grid
 * Libraries: image, file and rich media (external image libary support)
 [IN PROGRESS] * Page template support
 [IN PROGRESS] * Template designer
 * Site Toolbar / Page performance reporting (queries per page via AOP) and disableable
 [IN PROGRESS] Build test hosting environment (Simon to lead)
 * Apache Jmeter scripts for performance testing (Martin/Simon)
-[IN PROGRESS] * Use Selenium scripts for functional testing ajax
+* Use Selenium scripts for functional testing ajax
 * Widget publish/consume
 * Debug page: System and server status indicators (check for common server problems)
 * Status page -- what I'm editing, what happened today
@@ -89,7 +89,7 @@ webservices and plugins
 ==================================================================
 
 * Project naming finalised
-* Site structure finalised
+* Site structure finalised + navigation macros
 * Internal link libraries
 * Path tooling inc robust SSL support
 * Web services API

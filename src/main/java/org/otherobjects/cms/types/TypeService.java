@@ -1,9 +1,6 @@
 package org.otherobjects.cms.types;
 
 import java.util.Collection;
-import java.util.List;
-
-import org.otherobjects.cms.model.SitePage;
 
 /**
  * Maintains a register of all data types definitions (TypeDef) in the system.

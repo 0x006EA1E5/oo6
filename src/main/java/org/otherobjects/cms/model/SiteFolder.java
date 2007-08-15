@@ -7,10 +7,12 @@ import org.otherobjects.cms.types.TypeService;
 
 import flexjson.JSON;
 
+@SuppressWarnings("unchecked")
 public class SiteFolder extends DynaNode
 {
     private String label;
     private String cssClass;
+    //FIXME This List should be TypeDefs but they are really DynaNodes...
     private List allowedTypes;
 
     public String getCssClass()
@@ -28,7 +30,7 @@ public class SiteFolder extends DynaNode
         if (getAllowedTypes() != null && getAllowedTypes().size() > 0)
             return getAllowedTypes();
         else
-            return (List) ((TypeService)SingletonBeanLocator.getBean("typeService")).getTypesBySuperClass(SitePage.class);
+            return (List) ((TypeService)SingletonBeanLocator.getBean("typeService")).getTypesBySuperClass(DynaNode.class);
     }
 
     @JSON(include = false)

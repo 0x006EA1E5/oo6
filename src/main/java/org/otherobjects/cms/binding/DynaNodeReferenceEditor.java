@@ -18,6 +18,7 @@ public class DynaNodeReferenceEditor extends java.beans.PropertyEditorSupport
     /**
      * Lookup a DynaNode from the UUID String.
      */
+    @SuppressWarnings("unchecked")
     public void setAsText(String text) throws IllegalArgumentException
     {
         if (!StringUtils.hasText(text))
