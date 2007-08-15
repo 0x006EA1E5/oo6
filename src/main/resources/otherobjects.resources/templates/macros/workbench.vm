@@ -1,0 +1,29 @@
+#macro(region $name)
+
+    #set($blocks = $jcr.findResources("/jcr:root/designer/templates/$templateName/$name/element(*, oo:resource)"))
+    
+    #foreach($b in $blocks)
+		#if($b.block.code)
+			$jcr.render($b.block.code)
+		#elseif($b.block.templatePath)
+			#parse($b.block.templatePath)
+		#else
+			#parse("templates/blocks/$b.data.block.name")
+		#end
+    #end
+	
+#end
+
+#macro(defineRegion $name $class)
+	
+    <div class="region layout $class" id="$name">
+  
+    #set($blocks = $jcr.findResources("/jcr:root/designer/templates/$templateName/$name/element(*, oo:resource)"))
+    
+    #foreach($b in $blocks)
+    	<div id="$b.data.block.id" class="block">$b.data.block.data.title</div>
+    #end
+    
+    </div>
+
+#end
