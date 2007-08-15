@@ -448,6 +448,8 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
                     {
                     	if(i >= startIndex && i < endIndex)
                     		nodes.add((T) manager.getObjectByUuid(nodeIterator.nextNode().getUUID()));
+                    	else
+                    		nodeIterator.nextNode();
                     	
                     	if(i >= endIndex)
                     		break;
