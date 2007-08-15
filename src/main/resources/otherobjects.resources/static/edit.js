@@ -18,20 +18,26 @@ OO.EditForm = function(){
 	      	Ext.Msg.alert('Warning', 'An error ocured whilst saving. Please try again.');
 		},
 		
-		buildField : function(propDef, prefix, hiddenFields) {
+		buildField : function(propDef, prefix, hiddenFields, doNotAdd) {
 		
 			var fName = '' + propDef.name;
+			console.log("Creating field: " + fName + " type: " + propDef.type);
+			
 			if(propDef.type=="component") {
-				console.log(propDef.relatedTypeDef);
-				form.fieldset({legend:propDef.label});
-				OO.EditForm.buildFormPart(propDef.relatedTypeDef, propDef.name+".", hiddenFields);
-				form.end();
+				if(!doNotAdd)
+					form.fieldset({legend:propDef.label});
+				var fields =  OO.EditForm.buildFormPart(propDef.relatedTypeDef, propDef.name+".", hiddenFields, doNotAdd);
+				if(!doNotAdd) {
+					form.end();
+				}
+				else
+					return fields;
 			}
 			else if(propDef.type=="list") {
-				form.fieldset({legend:propDef.label}, new Ext.form.OOListField(form, propDef, {fieldLabel:'Actions', id:prefix+propDef.name, name:prefix+propDef.name, width:'200px', allowBlank:true, disabled:false}));
+				var f = new Ext.form.OOListField(form, propDef, {fieldLabel:'Actions', label:propDef.label, id:prefix+propDef.name, name:prefix+propDef.name, width:'200px', allowBlank:true, disabled:false});
+				return f;
 			}
 			else {
-				console.log("Creating field: " + fName + " type: " + propDef.type);
 				var config = {fieldLabel:propDef.label, name: prefix+propDef.name, allowBlank:true};
 				if(propDef.type=="date")
 				{
@@ -99,18 +105,26 @@ OO.EditForm = function(){
 			return f;
 		},
 	
-		buildFormPart : function(td, prefix, hiddenFields)
+		buildFormPart : function(td, prefix, hiddenFields, doNotAdd)
 		{
 			console.log(td);
-		
+			var fields = [];
 			// Add fields according to typeDef
 			for(var i=0; i<td.properties.length; i++)
 			{
 				var propDef = td.properties[i];
-				var f = OO.EditForm.buildField(propDef, prefix, hiddenFields);
-				if(f)
+				var f = OO.EditForm.buildField(propDef, prefix, hiddenFields, doNotAdd);
+				if(doNotAdd)
+					fields.push(f);
+				else if(f && f.isListField)
+					form.fieldset({legend:f.label},f);
+				else if(f)
 					form.add(f);
 			}
+			if(doNotAdd)
+				return fields;
+			
+			
 		},
 
 		buildForm : function(obj)
@@ -138,7 +152,7 @@ OO.EditForm = function(){
 			
 			// Add form fields
 			OO.EditForm.buildFormPart(obj.typeDef, "", hiddenFields);
-			
+				
 		    form.addButton('Save', function() {
 				form.submit({url:'/go/workbench/form', bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });   
 			});
@@ -162,6 +176,7 @@ OO.EditForm = function(){
 		},
 	
 		flattenObject : function(obj,prefix,flat) {
+			// FIXME Produces too many results.
 			for(var id in obj) {
 		    	if(typeof obj[id] != 'function') {
 					if(obj[id] instanceof Object) {
