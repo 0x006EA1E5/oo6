@@ -489,15 +489,25 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
             		queryString.append("element(*, oo:node)");
             		queryString.append(" ");
             		
+            		StringBuffer searchString = new StringBuffer();
+            		
             		// full text search
             		boolean isSearch = false;
             		if(StringUtils.isNotBlank(search))
             		{
             			isSearch = true;
-            			queryString.append("[jcr:contains(.,'");
-            			queryString.append(search);
-            			queryString.append("')]");
+            			searchString.append("jcr:contains(.,'");
+            			searchString.append(search);
+            			searchString.append("')");
             		}	
+            		
+            		// make sure folders are not included in search results
+            		//FIXME this is a temporary hack and needs to be superseded by something better
+            		queryString.append("[@ooType!='org.otherobjects.cms.model.SiteFolder'");
+            		if(isSearch)
+            			queryString.append(" and ").append(searchString.toString());
+            		queryString.append("]");
+            		
             		
             		// ordering
             		if(StringUtils.isNotBlank(sortField))
