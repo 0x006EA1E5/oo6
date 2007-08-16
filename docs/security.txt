@@ -11,6 +11,9 @@ Requirements
 * Secured pages always accessed over https (redirect if required)
 * Session id changed after authentication
 
+* SuperUser can login as any other user:
+  http://vikashazrati.wordpress.com/2007/07/16/acegi-using-switchuserprocessingfilter-playing-another-user/
+
 Passwords
 
 * Expirable

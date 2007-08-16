@@ -56,7 +56,6 @@ of new templating/block model with efficient caching.
 
 [DONE] * Paging/sorting/filtering in data grid
 [IN TEST] * Enhanced forms support for components, references and lists
-[IN PROGRESS] * Licensing finalised 
 [IN TEST] * Publishing and versioning
  + Change folder icon based publish state
  + UI for rolling back versions
@@ -64,16 +63,16 @@ of new templating/block model with efficient caching.
  + Publish without descending
 [IN TEST] * Page template support
  + Block properties
-[IN TEST] * Date/number formatting tools 
+[IN TEST] * Date/number formatting tools -- Joerg
  + Localisation
  + ContextManager / ToolService / In template ToolDoc 
 
-* Runtime data-type manipulation: UI 
-* Support for JDBC (database) objects in Workbench
-* Libraries: image, file and rich media (external image libary support), thumnail grid for images
-* Site Toolbar / Page performance reporting (queries per page via AOP) and disableable
+[JOERG] * Support for JDBC (database) objects in Workbench  -- Joerg
+* Libraries: image, file and rich media (external image libary support), thumnail grid for images -- Rich
+* Site Toolbar / Page performance reporting (queries per page via AOP) and disableable -- Rich/Joerg
 
-[IN PROGRESS] Build test hosting environment (Simon to lead)
+[IN PROGRESS] * Licensing finalised 
+[IN PROGRESS] * Build test hosting environment (Simon to lead)
 [IN PROGRESS] * Global search (for JCR and JDBC)
 * Action/event/scripting framework
 * Apache Jmeter scripts for performance testing (Martin/Simon)
@@ -97,6 +96,7 @@ webservices and plugins
 ==================================================================
 
 * Project naming finalised
+* Runtime data-type manipulation: UI 
 * Localized sites
 * Site structure finalised + navigation macros
 * Internal link libraries + link integrity

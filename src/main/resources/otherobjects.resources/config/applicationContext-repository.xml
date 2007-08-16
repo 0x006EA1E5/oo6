@@ -106,6 +106,12 @@
 					</key>
 					<ref bean="dynaNodeDao" />
 				</entry>
+				<entry>
+					<key>
+						<value>org.otherobjects.cms.model.User</value>
+					</key>
+					<ref bean="userDao" />
+				</entry>
 			</map>
 		</property>
 	</bean>
