@@ -71,14 +71,33 @@ OO.ListingGrid = function() {
 			// render it
 			grid.render();
 			
+			
+			
 			// Add paging toolbar
 			var gridFoot = grid.getView().getFooterPanel(true);
-			var paging = new Ext.PagingToolbar(gridFoot, ds, {
-			    pageSize: 25,
-			    displayInfo: true,
-			    displayMsg: 'Displaying objects {0} - {1} of {2}',
+			var paging = new Ext.PagingToolbar(gridFoot, ds, { 
+				pageSize:25,
+				displayInfo: true,
+			    displayMsg: 'Displaying {0} - {1} of {2}',
 			    emptyMsg: "No objects to display"
 			});
+			paging.add('-', 'Filter: '); // add a separator followed by a text string to label the filter input
+			// add a DomHelper config to the toolbar and return a reference to it
+			var filter = Ext.get(paging.addDom({tag: 'input', type:'text', size:'30', value: '', cls: 'x-grid-filter'}).el);
+			filter.on('keypress', function(e) { // setup an onkeypress event handler
+				if(e.getKey() == e.ENTER) // listen for the ENTER key
+					ds.load({params: {start:0, limit:20}});
+			});
+			filter.on('keydown', function(e) { // setup an onkeyup event handler
+				var key = e.getKey(); // assign the current key to a local variable
+				if((key == e.BACKSPACE || key == e.DELETE) && this.getValue().length == 0) // listen for the BACKSPACE or DELETE keys and the field being empty
+					ds.load({params: {start:0, limit:20}});
+			});
+			filter.on('focus', function(){filter.dom.select()}); // setup an onfocus event handler to cause the text in the field to be selected
+			ds.on('beforeload', function() {
+				ds.baseParams = {node:OO.Workbench.currentContainer, q:filter.getValue()};
+			});
+			
 			
 			// Add toolbar
 			var addMenu = new Ext.menu.Menu({
@@ -120,10 +139,10 @@ OO.ListingGrid = function() {
 		
 	    load : function(uuid) {
 		  // Set parameters to send in all data requests 
-	      ds.baseParams={node:uuid};
-	      ds.load({params:{start:0, limit:25}});
+//	      ds.baseParams={node:uuid};
 		  // FIXME Shouldn't need this in 2 places
 		  OO.Workbench.currentContainer = uuid;
+	      ds.load({params:{start:0, limit:25}});
 	    },
 		
 		publishSelected : function()

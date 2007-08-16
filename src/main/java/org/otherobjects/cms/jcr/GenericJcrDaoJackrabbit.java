@@ -80,8 +80,8 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
                     {
                         Node n = nodes.nextNode();
                         //FIXME Extra lookup is bad. Can we avoid UUID requirement too
-                        //FIXME Avoid data nodes better...
-                        if (!n.getName().equals("data") && !n.getName().startsWith("jcr:") && !n.getName().startsWith("types"))
+                        //FIXME Avoid jcr: nodes better...
+                        if (!n.getName().startsWith("jcr:"))
                             list.add((T) manager.getObjectByUuid(n.getUUID()));
                     }
                     return list;

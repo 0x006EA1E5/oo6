@@ -195,7 +195,10 @@ public class WorkbenchDataController implements Controller
 
         ModelAndView view = new ModelAndView("jsonView");
 
+        String q = request.getParameter("q");
+        String sort = request.getParameter("sort");
         String nodeId = request.getParameter("node");
+        
         if (nodeId != null && nodeId.length() > 10)
         {
             DynaNode node = dynaNodeDao.get(nodeId);
