@@ -217,8 +217,13 @@ public class WorkbenchDataController implements Controller
 //        
 //        PagedResult<DynaNode> pageResult = new PagedResultImpl<DynaNode>(25, getRequestedPage(request), nonFolders);
         
-        PagedResult<DynaNode> pageResult = dynaNodeDao.getPagedByPath(jcrPath, ITEMS_PER_PAGE, getRequestedPage(request));
+        boolean asc = false;
+        String dir = request.getParameter("dir");
+        if(dir == null || dir.equals("ASC"))
+        	asc = true;
         
+        //PagedResult<DynaNode> pageResult = dynaNodeDao.getPagedByPath(node, ITEMS_PER_PAGE, getRequestedPage(request), request.getParameter("sort"), asc);
+        PagedResult<DynaNode> pageResult = dynaNodeDao.getPagedByPath(jcrPath, ITEMS_PER_PAGE, getRequestedPage(request), "Olga", request.getParameter("sort"), asc);
         Map resultMap = new HashMap();
         resultMap.put("items", pageResult);
         resultMap.put("totalItems", pageResult.getItemTotal());

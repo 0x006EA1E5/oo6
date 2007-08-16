@@ -11,6 +11,7 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.ocm.exception.JcrMappingException;
 import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
 import org.apache.jackrabbit.ocm.query.Filter;
@@ -465,4 +466,161 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
             }
         }, true);
 	}
+    
+    @SuppressWarnings("unchecked")
+	public PagedResult<T> getPagedByPath(final String path, final int pageSize, final int pageNo, final String search, final String sortField, final boolean asc) {
+		return (PagedResult<T>) getJcrMappingTemplate().execute(new JcrMappingCallback()
+        {
+            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+            {
+            	try{
+            		/* a jcr xpath query looks like this :
+            		 * 
+            		 * /jcr:root/path//element(*, oo:node) [@attr1 = 'abc' and @attr2 = 'def' and jcr:contains(., 'some text')] order by @attr3 ascending
+            		 * |        |     |                   |                                  |    |                           | |                        |
+            		 *	rep root        what kind of nodes            where clause                      text search                    order by clause
+            		 */
+            		
+            		// basic xpath
+            		StringBuffer queryString = new StringBuffer();
+            		queryString.append("/jcr:root");
+            		queryString.append(path);
+            		queryString.append("//");
+            		queryString.append("element(*, oo:node)");
+            		queryString.append(" ");
+            		
+            		// full text search
+            		boolean isSearch = false;
+            		if(StringUtils.isNotBlank(search))
+            		{
+            			isSearch = true;
+            			queryString.append("[jcr:contains(.,'");
+            			queryString.append(search);
+            			queryString.append("')]");
+            		}	
+            		
+            		// ordering
+            		if(StringUtils.isNotBlank(sortField))
+            		{
+            			queryString.append(" order by ");
+            			queryString.append("@");
+            			queryString.append(sortField);
+            			queryString.append(" ");
+            			if(asc)
+            				queryString.append("ascending");
+            			else
+            				queryString.append("descending");
+            				
+            		}
+            		else if(isSearch) // no specific order colum spec. but we are im search so we might as well order by relevance
+            		{
+            			queryString.append(" order by jcr:score() descending");
+            		}
+            		
+            		
+	            	javax.jcr.query.QueryManager queryManager = manager.getSession().getWorkspace().getQueryManager();
+	                javax.jcr.query.Query query = queryManager.createQuery(queryString.toString(), javax.jcr.query.Query.XPATH);
+	                
+	                
+	                javax.jcr.query.QueryResult queryResult = query.execute();
+	                // first count results
+	                NodeIterator nodeIterator = queryResult.getNodes();
+	                long count = nodeIterator.getSize();
+	                
+	                int startIndex = PagedResultImpl.calcStartIndex(pageSize, pageNo);
+	                int endIndex = PagedResultImpl.calcEndIndex(pageSize, (int)count, startIndex); //FIXME we are downcasting to int here which could theoretically cause problems ...
+	                
+	                // now do a loop and store the range of interest in a list
+	                List<T> nodes = new ArrayList<T>();
+	                int i = 0;
+	                while(nodeIterator.hasNext())
+	                {
+	                	if(i >= startIndex && i < endIndex)
+	                		nodes.add((T) manager.getObjectByUuid(nodeIterator.nextNode().getUUID()));
+	                	else
+	                		nodeIterator.nextNode();
+	                	
+	                	if(i >= endIndex)
+	                		break;
+	                	i++;
+	                }
+	                
+	                return new PagedResultImpl<T>(pageSize, (int)count, pageNo, nodes, false);
+	            }
+                catch (Exception e)
+                {
+                    throw new JcrMappingException(e);
+                }
+            }
+        }, true);
+    }
+    
+    
+    
+//    @SuppressWarnings("unchecked")
+//	public PagedResult<T> getPagedByPath(final DynaNode dynaNode, final int pageSize, final int pageNo, final String sortField, final boolean asc) {
+//		return (PagedResult<T>) getJcrMappingTemplate().execute(new JcrMappingCallback()
+//        {
+//            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+//            {
+//                try
+//                {
+//                    String p = dynaNode.getJcrPath();
+//                    Assert.isTrue(!p.endsWith("/"), "jcr paths obtained from  dynaNodes must not end in a slash");
+//                    p = p + "/";
+//                    
+//                    //Use the jackrabbit-ocm infrastructure to build the jcr query
+//                    QueryManager queryManager = getJcrMappingTemplate().createQueryManager();
+//                    Filter filter = queryManager.createFilter(Class.forName(dynaNode.getOoType()));
+//                    
+//                    filter.setScope(p);
+//                    
+//                    Query query = queryManager.createQuery(filter);
+//                    if(sortField != null)
+//                    {
+//                    	if(asc)
+//                    		query.addOrderByAscending(sortField);
+//                    	else
+//                    		query.addOrderByDescending(sortField);
+//                    }
+//                    
+//                    String xPathQuery = queryManager.buildJCRExpression(query);
+//                    logger.debug("getPagedByPath query: " + xPathQuery);
+//                    
+//                    javax.jcr.query.QueryManager jcrQueryManager = manager.getSession().getWorkspace().getQueryManager();
+//                    javax.jcr.query.Query jcrQuery = jcrQueryManager.createQuery(xPathQuery, javax.jcr.query.Query.XPATH);
+//                    
+//                    
+//                    javax.jcr.query.QueryResult queryResult = jcrQuery.execute();
+//                    // first count results
+//                    NodeIterator nodeIterator = queryResult.getNodes();
+//                    long count = nodeIterator.getSize();
+//                    
+//                    int startIndex = PagedResultImpl.calcStartIndex(pageSize, pageNo);
+//                    int endIndex = PagedResultImpl.calcEndIndex(pageSize, (int)count, startIndex); //FIXME we are downcasting to int here which could theoretically cause problems ...
+//                    
+//                    // now do a loop and store the range of interest in a list
+//                    List<T> nodes = new ArrayList<T>();
+//                    int i = 0;
+//                    while(nodeIterator.hasNext())
+//                    {
+//                    	if(i >= startIndex && i < endIndex)
+//                    		nodes.add((T) manager.getObjectByUuid(nodeIterator.nextNode().getUUID()));
+//                    	else
+//                    		nodeIterator.nextNode();
+//                    	
+//                    	if(i >= endIndex)
+//                    		break;
+//                    	i++;
+//                    }
+//                    
+//                    return new PagedResultImpl<T>(pageSize, (int)count, pageNo, nodes, false);
+//                }
+//                catch (Exception e)
+//                {
+//                    throw new JcrMappingException(e);
+//                }
+//            }
+//        }, true);
+//	}
 }
