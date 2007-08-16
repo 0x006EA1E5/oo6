@@ -185,6 +185,7 @@ public class WorkbenchDataController implements Controller
      * <ul>
      * 	<li>dir - which is either ASC or DESC to indicate sort order</li>
      *  <li>sort - name of the colum to sort on</li>
+     *  <li>q - a query string to do a full text search with</li>
      * </ul>
      * @param request
      * @return
@@ -197,6 +198,7 @@ public class WorkbenchDataController implements Controller
 
         String q = request.getParameter("q");
         String sort = request.getParameter("sort");
+
         String nodeId = request.getParameter("node");
         
         if (nodeId != null && nodeId.length() > 10)
@@ -221,9 +223,9 @@ public class WorkbenchDataController implements Controller
         String dir = request.getParameter("dir");
         if(dir == null || dir.equals("ASC"))
         	asc = true;
+
+        PagedResult<DynaNode> pageResult = dynaNodeDao.getPagedByPath(jcrPath, ITEMS_PER_PAGE, getRequestedPage(request), q, sort, asc);
         
-        //PagedResult<DynaNode> pageResult = dynaNodeDao.getPagedByPath(node, ITEMS_PER_PAGE, getRequestedPage(request), request.getParameter("sort"), asc);
-        PagedResult<DynaNode> pageResult = dynaNodeDao.getPagedByPath(jcrPath, ITEMS_PER_PAGE, getRequestedPage(request), "Olga", request.getParameter("sort"), asc);
         Map resultMap = new HashMap();
         resultMap.put("items", pageResult);
         resultMap.put("totalItems", pageResult.getItemTotal());
