@@ -54,20 +54,28 @@ Feature parity with OO5 for object editing and publishing
 of new templating/block model with efficient caching.
 ==================================================================
 
+[DONE] * Paging/sorting/filtering in data grid
+[IN TEST] * Enhanced forms support for components, references and lists
 [IN PROGRESS] * Licensing finalised 
-[IN TEST] * Publishing and versioning 
-[IN PROGRESS] * Action/event/scripting framework
-* Runtime data-type manipulation: UI 
-[IN PROGRESS] * Enhanced forms support for components, references and lists
-* Support for JDBC (database) objects in Workbench
-[IN PROGRESS] * Global search (for JCR and JDBC)
+[IN TEST] * Publishing and versioning
+ + Change folder icon based publish state
+ + UI for rolling back versions
+ + Change state of chid items on publish
+ + Publish without descending
+[IN TEST] * Page template support
+ + Block properties
 [IN TEST] * Date/number formatting tools 
-[IN PROGRESS] * Paging/sorting/columns/filtering in data grid
-* Libraries: image, file and rich media (external image libary support)
-[IN PROGRESS] * Page template support
-[IN PROGRESS] * Template designer
+ + Localisation
+ + ContextManager / ToolService / In template ToolDoc 
+
+* Runtime data-type manipulation: UI 
+* Support for JDBC (database) objects in Workbench
+* Libraries: image, file and rich media (external image libary support), thumnail grid for images
 * Site Toolbar / Page performance reporting (queries per page via AOP) and disableable
+
 [IN PROGRESS] Build test hosting environment (Simon to lead)
+[IN PROGRESS] * Global search (for JCR and JDBC)
+* Action/event/scripting framework
 * Apache Jmeter scripts for performance testing (Martin/Simon)
 * Use Selenium scripts for functional testing ajax
 * Widget publish/consume
@@ -89,8 +97,9 @@ webservices and plugins
 ==================================================================
 
 * Project naming finalised
+* Localized sites
 * Site structure finalised + navigation macros
-* Internal link libraries
+* Internal link libraries + link integrity
 * Path tooling inc robust SSL support
 * Web services API
 * Plugin architecture
@@ -120,7 +129,9 @@ with Chris and the design team during M4.
  + Favourites
  + HTML editor
  + History and bookmark support: http://www.sproutcore.com/blog
+* Filtering
 * Usability testing
+* Template designer
 
 
 ==================================================================
