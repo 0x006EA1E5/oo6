@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.Folder;
 import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.cms.util.StringUtils;
 import org.springframework.util.Assert;
@@ -27,7 +28,7 @@ public class NavigatorServiceImpl implements NavigatorService
         List<WorkbenchItem> children = new ArrayList<WorkbenchItem>();
         for (DynaNode n : all)
         {
-            if (n instanceof SiteFolder)
+            if (n instanceof Folder)
                 children.add(n);
         }
         return children;

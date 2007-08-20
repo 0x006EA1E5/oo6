@@ -23,6 +23,11 @@ public interface GenericDao <T, PK extends Serializable> {
      * @return List of populated objects
      */
     public List<T> getAll();
+    
+    
+    public PagedResult<T> getAllPaged(int pageSize, int pageNo, String filterQuery, String sortField, boolean asc);
+    
+    public PagedResult<T> getPagedByQuery(String query, int pageSize, int pageNo, String filterQuery, String sortField, boolean asc);
 
     /**
      * Generic method to get an object based on class and identifier. An

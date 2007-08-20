@@ -564,6 +564,18 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
             }
         }, true);
     }
+
+	public PagedResult<T> getAllPaged(int pageSize, int pageNo,
+			String filterQuery, String sortField, boolean asc) {
+		//FIXME needs to be implemented
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
+	public PagedResult<T> getPagedByQuery(String query, int pageSize,
+			int pageNo, String filterQuery, String sortField, boolean asc) {
+		//FIXME needs to be implemented
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
     
     
     

@@ -7,23 +7,15 @@ import org.otherobjects.cms.types.TypeService;
 
 import flexjson.JSON;
 
-@SuppressWarnings("unchecked")
-public class SiteFolder extends DynaNode implements Folder
-{
-    private String label;
-    private String cssClass;
+public class DbFolder extends DynaNode implements Folder {
+
+	private String label;
+	private String mainType;
+	private String mainTypeQuery;
+	private String cssClass;
+	
     //FIXME This List should be TypeDefs but they are really DynaNodes...
     private List allowedTypes;
-
-    public String getCssClass()
-    {
-        return cssClass;
-    }
-
-    public void setCssClass(String cssClass)
-    {
-        this.cssClass = cssClass;
-    }
 
     public List getAllAllowedTypes()
     {
@@ -53,4 +45,29 @@ public class SiteFolder extends DynaNode implements Folder
     {
         this.label = label;
     }
+
+	public String getMainType() {
+		return mainType;
+	}
+
+	public void setMainType(String mainType) {
+		this.mainType = mainType;
+	}
+
+	public String getMainTypeQuery() {
+		return mainTypeQuery;
+	}
+
+	public void setMainTypeQuery(String mainTypeQuery) {
+		this.mainTypeQuery = mainTypeQuery;
+	}
+
+	public String getCssClass() {
+		return cssClass;
+	}
+
+	public void setCssClass(String cssClass) {
+		this.cssClass = cssClass;
+	}
+
 }

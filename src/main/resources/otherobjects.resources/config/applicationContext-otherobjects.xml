@@ -34,6 +34,7 @@
 	<bean name="workbenchDataController" class="org.otherobjects.cms.controllers.WorkbenchDataController">
 		<property name="typeService" ref="typeService" />
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
+		<property name="daoService" ref="daoService" />
 	</bean>
 
 	<bean name="formController" class="org.otherobjects.cms.controllers.FormController">

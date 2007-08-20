@@ -9,10 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.DynaNodeDao;
+import org.otherobjects.cms.dao.GenericDao;
 import org.otherobjects.cms.dao.PagedResult;
-import org.otherobjects.cms.dao.PagedResultImpl;
+import org.otherobjects.cms.model.DbFolder;
 import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.Folder;
 import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.TypeDef;
@@ -41,6 +45,7 @@ public class WorkbenchDataController implements Controller
 
     private DynaNodeDao dynaNodeDao;
     private TypeService typeService;
+    private DaoService daoService;
 
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
@@ -138,7 +143,7 @@ public class WorkbenchDataController implements Controller
 
         for (DynaNode dynaNode : contents)
         {
-            if (dynaNode instanceof SiteFolder)
+            if (dynaNode instanceof Folder)
             {
                 Map<String, Object> n1 = new HashMap<String, Object>();
                 n1.put("id", dynaNode.getId());
@@ -193,6 +198,7 @@ public class WorkbenchDataController implements Controller
     private ModelAndView generateListingData(HttpServletRequest request)
     {
         String jcrPath = "/site";
+        DynaNode node = null;
 
         ModelAndView view = new ModelAndView("jsonView");
 
@@ -203,8 +209,12 @@ public class WorkbenchDataController implements Controller
         
         if (nodeId != null && nodeId.length() > 10)
         {
-            DynaNode node = dynaNodeDao.get(nodeId);
+            node = dynaNodeDao.get(nodeId);
             jcrPath = node.getJcrPath();
+        }
+        else
+        {
+        	node = dynaNodeDao.getByPath(jcrPath);
         }
 
         // FIXME M2 Can we exclude folders in the query?
@@ -223,12 +233,30 @@ public class WorkbenchDataController implements Controller
         String dir = request.getParameter("dir");
         if(dir == null || dir.equals("ASC"))
         	asc = true;
-
-        PagedResult<DynaNode> pageResult = dynaNodeDao.getPagedByPath(jcrPath, ITEMS_PER_PAGE, getRequestedPage(request), q, sort, asc);
         
+        PagedResult pagedResult = null;
+        if(node instanceof SiteFolder)
+        {
+        	pagedResult = dynaNodeDao.getPagedByPath(jcrPath, ITEMS_PER_PAGE, getRequestedPage(request), q, sort, asc);
+        }
+        else if (node instanceof DbFolder)
+        {
+        	DbFolder dbFolder = (DbFolder) node;
+        	String dbType = dbFolder.getMainType();
+        	String dbQuery = dbFolder.getMainTypeQuery();
+        	
+        	GenericDao genericDao = daoService.getDao(dbType);
+        	if(StringUtils.isNotBlank(dbQuery))
+        		pagedResult = genericDao.getPagedByQuery(dbQuery, ITEMS_PER_PAGE, getRequestedPage(request), q, sort, asc);
+        	else
+        		pagedResult = genericDao.getAllPaged(ITEMS_PER_PAGE, getRequestedPage(request), q, sort, asc);
+        }
+        else
+        	throw new OtherObjectsException("Currently only listings for SiteFolder or DbFolder are supporter");
+        	
         Map resultMap = new HashMap();
-        resultMap.put("items", pageResult);
-        resultMap.put("totalItems", pageResult.getItemTotal());
+        resultMap.put("items", pagedResult);
+        resultMap.put("totalItems", pagedResult.getItemTotal());
         
         view.addObject(JsonView.JSON_DATA_KEY, resultMap);
         view.addObject(JsonView.JSON_INCLUDES_KEY, new String[]{"data"});
@@ -256,4 +284,10 @@ public class WorkbenchDataController implements Controller
     {
         this.typeService = typeService;
     }
+
+	public void setDaoService(DaoService daoService) {
+		this.daoService = daoService;
+	}
+    
+    
 }

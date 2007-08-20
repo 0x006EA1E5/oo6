@@ -3,11 +3,17 @@ package org.otherobjects.cms.hibernate;
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.otherobjects.cms.dao.GenericDao;
+import org.otherobjects.cms.dao.PagedResult;
+import org.otherobjects.cms.dao.PagedResultImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.orm.ObjectRetrievalFailureException;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.util.Assert;
 
 /**
  * This class serves as the Base class for all other DAOs - namely to hold
@@ -72,6 +78,43 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
     public void remove(PK id) {
         super.getHibernateTemplate().delete(this.get(id));
     }
+
+	public PagedResult<T> getAllPaged(int pageSize, int pageNo,
+			String filterQuery, String sortField, boolean asc) {
+			return getPagedByQuery("from " + persistentClass.getName(), pageSize, pageNo, filterQuery, sortField, asc);
+	}
+
+    @SuppressWarnings("unchecked")
+	public PagedResult<T> getPagedByQuery(final String queryString, final int pageSize,
+			final int pageNo, final String filterQuery, final String sortField, final boolean asc) {
+			Assert.isTrue(queryString.trim().toLowerCase().startsWith("from"), "Currently only object hql queries are supported - those that start directly with 'from'");
+			
+			return (PagedResult<T>)getHibernateTemplate().execute(new HibernateCallback(){
+				public Object doInHibernate(Session session)
+				{
+					//FIXME we need to take into account filter and order
+					Query query = session.createQuery("Select count(*) " + queryString);
+					Long count = (Long) query.iterate().next();
+					
+					if(count > 0)
+					{
+						int startIndex = PagedResultImpl.calcStartIndex(pageSize, pageNo);
+						
+						query = session.createQuery(queryString);
+						query.setFirstResult(startIndex);
+						query.setMaxResults(pageSize);
+						
+						List results = query.list();
+						return new PagedResultImpl<T>(pageSize, (int)count.longValue(), pageNo, results, false);
+					}
+					else
+					{
+						return new PagedResultImpl<T>(pageSize, 0, pageNo, null, false);
+					}
+				}
+			}
+			);
+	}
 
 	
 }
