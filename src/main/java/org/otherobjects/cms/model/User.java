@@ -21,6 +21,9 @@ import org.acegisecurity.GrantedAuthority;
 import org.acegisecurity.userdetails.UserDetails;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.otherobjects.cms.types.PropertyDef;
+import org.otherobjects.cms.types.TypeDef;
+
 
 /**
  * This class represents the basic "user" object in AppFuse that allows for authentication
@@ -33,7 +36,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  */
 @Entity
 @Table(name = "app_user")
-public class User implements Serializable, UserDetails
+public class User implements Serializable, UserDetails, Editable
 {
 
     private static final long serialVersionUID = -4036033332338732151L;
@@ -315,5 +318,31 @@ public class User implements Serializable, UserDetails
             sb.append("No Granted Authorities");
         }
         return sb.toString();
+    }
+    
+    @Transient
+	public String getEditableId() {
+		return getClass().getName() + "-" + getId();
+	}
+    
+    @Transient
+    public TypeDef getTypeDef()
+    {
+    	TypeDef typeDef = new TypeDef();
+    	typeDef.setSuperClassName("java.lang.Object");
+    	typeDef.setClassName(getClass().getName());
+    	typeDef.setDescription("A user");
+    	typeDef.setId(getEditableId());
+    	typeDef.setJcrPath("/Site/users");
+    	typeDef.setLabelProperty("fullName");
+    	//typeDef.addProperty(new PropertyDef("id", "number", null, null, true));
+    	typeDef.addProperty(new PropertyDef("email", "string", null, null, true));
+    	typeDef.addProperty(new PropertyDef("username", "string", null, null));
+    	typeDef.addProperty(new PropertyDef("firstName", "string", null, null));
+    	typeDef.addProperty(new PropertyDef("lastName", "string", null, null));
+    	typeDef.addProperty(new PropertyDef("enabled", "boolean", null, null));
+    	typeDef.addProperty(new PropertyDef("passwordHint", "string", null, null));
+    	
+    	return typeDef;
     }
 }

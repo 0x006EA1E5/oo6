@@ -42,9 +42,9 @@ public class BindServiceImpl implements BindService
     }
 
     @SuppressWarnings("unchecked")
-    public BindingResult bind(DynaNode dynaNode, HttpServletRequest request)
+    public BindingResult bind(Object item, TypeDef typeDef, HttpServletRequest request)
     {
-        ServletRequestDataBinder binder = new ServletRequestDataBinder(dynaNode);
+        ServletRequestDataBinder binder = new ServletRequestDataBinder(item);
 
         // Create sub-objects where required
         Enumeration<String> parameterNames = request.getParameterNames();
@@ -52,7 +52,7 @@ public class BindServiceImpl implements BindService
         {
             String propertyName = parameterNames.nextElement();
             // FIXME Add caching here so easy level is processed only once 
-            prepareObject(dynaNode, dynaNode.getTypeDef(), propertyName, propertyName, binder);
+            prepareObject(item, typeDef, propertyName, propertyName, binder);
 
         }
 

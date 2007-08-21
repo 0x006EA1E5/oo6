@@ -137,7 +137,7 @@ OO.EditForm = function(){
 	
 			// Create map to store hidden fields
 			var hiddenFields = {};
-			hiddenFields["id"] = obj.id;
+			hiddenFields["id"] = obj.editableId;
 			
 			// Create form
 		    form = new Ext.form.Form({

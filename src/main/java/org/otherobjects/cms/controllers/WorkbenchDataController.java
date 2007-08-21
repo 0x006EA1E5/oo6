@@ -14,6 +14,7 @@ import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.dao.GenericDao;
 import org.otherobjects.cms.dao.PagedResult;
+import org.otherobjects.cms.model.CompositeDatabaseId;
 import org.otherobjects.cms.model.DbFolder;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.model.Folder;
@@ -21,6 +22,7 @@ import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.cms.util.IdentifierUtils;
 import org.otherobjects.cms.views.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,12 +74,25 @@ public class WorkbenchDataController implements Controller
         String id = path.substring(path.lastIndexOf("/") + 1);
 
         logger.info("Sending item data: {} ", id);
-
-        DynaNode dynaNode = dynaNodeDao.get(id);
-        Assert.notNull(dynaNode, "No item found: " + id);
-
+        Object item = null;
+        if(IdentifierUtils.isUUID(id))
+        {
+	        item = dynaNodeDao.get(id);
+	    }
+        else
+        {
+        	CompositeDatabaseId compositeDatabaseId = IdentifierUtils.getCompositeIdPart(id);
+        	if(compositeDatabaseId != null)
+        	{
+        		GenericDao genericDao = daoService.getDao(compositeDatabaseId.getClazz());
+        		item = genericDao.get(compositeDatabaseId.getId());
+        	}
+        }
+        
+        Assert.notNull(item, "No item found: " + id);
+        
         ModelAndView view = new ModelAndView("jsonView");
-        view.addObject(JsonView.JSON_DATA_KEY, dynaNode);
+        view.addObject(JsonView.JSON_DATA_KEY, item);
         view.addObject(JsonView.JSON_DEEP_SERIALIZE, true);
         return view;
     }

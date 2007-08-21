@@ -122,7 +122,8 @@ OO.Workbench = function()
 		{
 			var row = grid.dataSource.getAt(index);
 			// TODO Move grid specific login to grid.js
-			currentItem = row.data.id;
+			currentItem = row.data.editableId;
+			console.log("Current item in selectItem: " + currentItem);
 	        console.log("Selected item: "+ currentItem + " => " + row.data.linkPath);
 			var previewPanel = layout.getRegion("center").getPanel("preview-panel");
 			previewPanel.setSrc(row.data.linkPath);

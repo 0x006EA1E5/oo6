@@ -20,6 +20,7 @@ OO.ListingGrid = function() {
 			
 			mappings = [
 	            {name: 'id', mapping: 'id'},
+	            {name: 'editableId', mapping: 'editableId'},
 	            {name: 'label', mapping: 'label'},
 	            {name: 'ooType', mapping: 'ooType'},
 	            {name: 'linkPath', mapping: 'linkPath'},
@@ -39,7 +40,7 @@ OO.ListingGrid = function() {
 			    reader: new Ext.data.JsonReader({
 			        root: 'items',
 			        totalProperty: 'totalItems',
-			        id: 'id'
+			        id: 'editableId'
 			        }, mappings),
 			
 			    // turn on remote sorting

@@ -24,7 +24,7 @@ import org.springframework.util.Assert;
  */
 @SuppressWarnings("unchecked")
 //TODO @Configurable("dynaNode")
-public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo
+public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
 {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -291,6 +291,10 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo
 
 	public void setChangeNumber(int changeNumber) {
 		this.changeNumber = changeNumber;
+	}
+
+	public String getEditableId() {
+		return getId();
 	}
     
     

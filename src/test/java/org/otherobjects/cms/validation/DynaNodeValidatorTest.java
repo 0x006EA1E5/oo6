@@ -53,7 +53,7 @@ public class DynaNodeValidatorTest extends BaseDynaNodeTest
     {
         PropertyUtils.setSimpleProperty(dynaNode, "testString", null);
 
-        BindingResult errors = bindService.bind(dynaNode, generateMockRequest());
+        BindingResult errors = bindService.bind(dynaNode, dynaNode.getTypeDef(), generateMockRequest());
         assertEquals(0,errors.getErrorCount());
 
         validator.validate(dynaNode, errors);
