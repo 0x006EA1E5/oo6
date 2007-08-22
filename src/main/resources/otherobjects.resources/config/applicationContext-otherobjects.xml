@@ -103,6 +103,7 @@
 		<property name="requestContextAttribute" value="requestContext" />
 		<property name="dateToolAttribute" value="dateTool" />
 		<property name="numberToolAttribute" value="numberTool" />
+		<property name="viewClass" value="org.otherobjects.cms.views.VelocityView" />
 	</bean>
 
 	<!-- 
