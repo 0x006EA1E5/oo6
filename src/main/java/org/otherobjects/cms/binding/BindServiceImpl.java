@@ -77,7 +77,7 @@ public class BindServiceImpl implements BindService
     @SuppressWarnings("unchecked")
     protected void prepareObject(Object parent, TypeDef typeDef, String propertyPath, String fullPath, ServletRequestDataBinder binder)
     {
-        if(propertyPath.equals("id") || propertyPath.startsWith("_")) // ignore id field and _ fields that are to help the binding process to discover unchecked checkboxes
+        if(propertyPath.equals("id") || propertyPath.startsWith("_") || propertyPath.startsWith("editableId")) // ignore id field and _ fields that are to help the binding process to discover unchecked checkboxes
             return;
             
         Matcher matcher = listPattern.matcher(propertyPath);
