@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 public class PagedResultImplTest extends TestCase {
 	
 	private List<String> testList;
-	private List<TestBean> testList2;
+	private List<SampleBean> testList2;
 	
 
 	@Override
@@ -23,19 +23,19 @@ public class PagedResultImplTest extends TestCase {
 		testList.add("Item5");
 		
 		
-		testList2 = new ArrayList<TestBean>();
-		testList2.add(new TestBean("Item2"));
-		testList2.add(new TestBean("Item6"));
-		testList2.add(new TestBean("Item4"));
-		testList2.add(new TestBean("Item1"));
-		testList2.add(new TestBean("Item5"));
-		testList2.add(new TestBean("Item3"));
+		testList2 = new ArrayList<SampleBean>();
+		testList2.add(new SampleBean("Item2"));
+		testList2.add(new SampleBean("Item6"));
+		testList2.add(new SampleBean("Item4"));
+		testList2.add(new SampleBean("Item1"));
+		testList2.add(new SampleBean("Item5"));
+		testList2.add(new SampleBean("Item3"));
 		
 	}
 	
 	public void testWithComparator()
 	{
-		PagedResultImpl<TestBean> pr = new PagedResultImpl<TestBean>(3, 2, testList2, new BeanPropertyComparator("testProp"));
+		PagedResultImpl<SampleBean> pr = new PagedResultImpl<SampleBean>(3, 2, testList2, new BeanPropertyComparator("testProp"));
 		assertEquals("Item4", pr.next().getTestProp());
 		assertEquals("Item5", pr.next().getTestProp());
 		assertEquals("Item6", pr.next().getTestProp());

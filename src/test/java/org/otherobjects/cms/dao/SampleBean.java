@@ -1,9 +1,9 @@
 package org.otherobjects.cms.dao;
 
-public class TestBean {
+public class SampleBean {
 	String testProp;
 	
-	public TestBean(String testProp)
+	public SampleBean(String testProp)
 	{
 		this.testProp = testProp;
 	}
