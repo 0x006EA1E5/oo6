@@ -1,5 +1,6 @@
 package org.otherobjects.cms.controllers;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
@@ -21,6 +23,7 @@ import org.otherobjects.cms.model.Folder;
 import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.TypeDef;
+import org.otherobjects.cms.types.TypeDefBuilder;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.IdentifierUtils;
 import org.otherobjects.cms.views.JsonView;
@@ -46,6 +49,7 @@ public class WorkbenchDataController implements Controller
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     private DynaNodeDao dynaNodeDao;
+    private TypeDefBuilder typeDefBuilder;
     private TypeService typeService;
     private DaoService daoService;
 
@@ -86,6 +90,11 @@ public class WorkbenchDataController implements Controller
         	{
         		GenericDao genericDao = daoService.getDao(compositeDatabaseId.getClazz());
         		item = genericDao.get(compositeDatabaseId.getId());
+        		try {
+					PropertyUtils.setSimpleProperty(item, "typeDef", typeDefBuilder.getTypeDef(item.getClass()));
+				} catch (Exception e) {	
+					item = null; // an item without a typeDef is useless so nullify it
+				} 
         	}
         }
         
@@ -302,6 +311,10 @@ public class WorkbenchDataController implements Controller
 
 	public void setDaoService(DaoService daoService) {
 		this.daoService = daoService;
+	}
+
+	public void setTypeDefBuilder(TypeDefBuilder typeDefBuilder) {
+		this.typeDefBuilder = typeDefBuilder;
 	}
     
     

@@ -3,6 +3,7 @@ package org.otherobjects.cms.views;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -31,14 +32,26 @@ public class VelocityView extends
 		objectMethods.add("wait");
 	}
 	
+	private ViewToolsService viewToolsService;
 	
+	
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		super.afterPropertiesSet();
+		this.viewToolsService = (ViewToolsService) getApplicationContext().getBean("viewToolsService");
+	}
+
 	@Override
 	protected void doRender(Context context, HttpServletResponse response)
 			throws Exception {
+		viewToolsService.populateContext(context);
 		context.put("ctxInfo", new ContextInspector(context));
 		super.doRender(context, response);
 	}
 	
+	
+
 	public class ContextInspector{
 		
 		private Context context;

@@ -21,8 +21,10 @@ import org.acegisecurity.GrantedAuthority;
 import org.acegisecurity.userdetails.UserDetails;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
+import org.otherobjects.cms.types.annotation.PropertyDefAnnotation;
+import org.otherobjects.cms.types.annotation.PropertyType;
+import org.otherobjects.cms.types.annotation.TypeDefAnnotation;
 
 
 /**
@@ -36,6 +38,7 @@ import org.otherobjects.cms.types.TypeDef;
  */
 @Entity
 @Table(name = "app_user")
+@TypeDefAnnotation(jcrPath="/Site/users", description="A User", labelProperty="fullName")
 public class User implements Serializable, UserDetails, Editable
 {
 
@@ -55,6 +58,8 @@ public class User implements Serializable, UserDetails, Editable
     protected boolean accountExpired;
     protected boolean accountLocked;
     protected boolean credentialsExpired;
+    
+    protected TypeDef typeDef;
 
     public User()
     {
@@ -73,6 +78,7 @@ public class User implements Serializable, UserDetails, Editable
     }
 
     @Column(nullable = false, length = 50, unique = true)
+    @PropertyDefAnnotation(type=PropertyType.STRING, required=true, label="Username")
     public String getUsername()
     {
         return username;
@@ -91,24 +97,28 @@ public class User implements Serializable, UserDetails, Editable
     }
 
     @Column(name = "password_hint")
+    @PropertyDefAnnotation(type=PropertyType.STRING, label="Password hint")
     public String getPasswordHint()
     {
         return passwordHint;
     }
 
     @Column(name = "first_name", nullable = false, length = 50)
+    @PropertyDefAnnotation(type=PropertyType.STRING, label="First name")
     public String getFirstName()
     {
         return firstName;
     }
 
     @Column(name = "last_name", nullable = false, length = 50)
+    @PropertyDefAnnotation(type=PropertyType.STRING, label="Last name")
     public String getLastName()
     {
         return lastName;
     }
 
     @Column(nullable = false, unique = true)
+    @PropertyDefAnnotation(required=true, type=PropertyType.STRING, label="Email")
     public String getEmail()
     {
         return email;
@@ -156,6 +166,7 @@ public class User implements Serializable, UserDetails, Editable
     }
 
     @Column(name = "account_enabled")
+    @PropertyDefAnnotation(type=PropertyType.BOOLEAN, label="Enabled?")
     public boolean isEnabled()
     {
         return enabled;
@@ -326,23 +337,35 @@ public class User implements Serializable, UserDetails, Editable
 	}
     
     @Transient
-    public TypeDef getTypeDef()
-    {
-    	TypeDef typeDef = new TypeDef();
-    	typeDef.setSuperClassName("java.lang.Object");
-    	typeDef.setClassName(getClass().getName());
-    	typeDef.setDescription("A user");
-    	typeDef.setId(getEditableId());
-    	typeDef.setJcrPath("/Site/users");
-    	typeDef.setLabelProperty("fullName");
-    	//typeDef.addProperty(new PropertyDef("id", "number", null, null, true));
-    	typeDef.addProperty(new PropertyDef("email", "string", null, null, true));
-    	typeDef.addProperty(new PropertyDef("username", "string", null, null));
-    	typeDef.addProperty(new PropertyDef("firstName", "string", null, null));
-    	typeDef.addProperty(new PropertyDef("lastName", "string", null, null));
-    	typeDef.addProperty(new PropertyDef("enabled", "boolean", null, null));
-    	typeDef.addProperty(new PropertyDef("passwordHint", "string", null, null));
-    	
-    	return typeDef;
-    }
+	public TypeDef getTypeDef() {
+		return typeDef;
+	}
+
+	public void setTypeDef(TypeDef typeDef) {
+		this.typeDef = typeDef;
+	}
+    
+    // the following is not needed anymore as it is done with annotations now
+//    @Transient
+//    public TypeDef getTypeDef()
+//    {
+//    	TypeDef typeDef = new TypeDef();
+//    	typeDef.setSuperClassName("java.lang.Object");
+//    	typeDef.setClassName(getClass().getName());
+//    	typeDef.setDescription("A user");
+//    	typeDef.setId(getEditableId());
+//    	typeDef.setJcrPath("/Site/users");
+//    	typeDef.setLabelProperty("fullName");
+//    	//typeDef.addProperty(new PropertyDef("id", "number", null, null, true));
+//    	typeDef.addProperty(new PropertyDef("email", "string", null, null, true));
+//    	typeDef.addProperty(new PropertyDef("username", "string", null, null));
+//    	typeDef.addProperty(new PropertyDef("firstName", "string", null, null));
+//    	typeDef.addProperty(new PropertyDef("lastName", "string", null, null));
+//    	typeDef.addProperty(new PropertyDef("enabled", "boolean", null, null));
+//    	typeDef.addProperty(new PropertyDef("passwordHint", "string", null, null));
+//    	
+//    	return typeDef;
+//    }
+    
+    
 }

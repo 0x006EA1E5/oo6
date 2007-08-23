@@ -35,6 +35,7 @@
 		<property name="typeService" ref="typeService" />
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
 		<property name="daoService" ref="daoService" />
+		<property name="typeDefBuilder" ref="typeDefBuilder"></property>
 	</bean>
 
 	<bean name="formController" class="org.otherobjects.cms.controllers.FormController">
@@ -42,6 +43,7 @@
 		<property name="daoService" ref="daoService" />
 		<property name="validator" ref="dynaNodeValidator" />
 		<property name="bindService" ref="bindService" />
+		<property name="typeDefBuilder" ref="typeDefBuilder" />
 	</bean>
 
 	<bean name="navigatorService" class="org.otherobjects.cms.workbench.NavigatorServiceImpl">
@@ -54,13 +56,17 @@
 		<dwr:remote javascript="ContentService" />
 	</bean>
 
-	<bean name="bindService" class="org.otherobjects.cms.binding.BindServiceImpl">
+	<bean id="bindService" class="org.otherobjects.cms.binding.BindServiceImpl">
 		<property name="daoService" ref="daoService" />
 		<property name="dateFormat">
 			<value>dd/MM/yy</value>
 		</property>
 	</bean>
-
+	
+	<bean id="typeDefBuilder" class="org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder">
+	
+	</bean>
+	
 	<bean name="bootstrapUtils" class="org.otherobjects.cms.util.BootstrapUtils" init-method="bootstrap">
 		<property name="daoService" ref="daoService" />
 	</bean>
@@ -104,6 +110,29 @@
 		<property name="dateToolAttribute" value="dateTool" />
 		<property name="numberToolAttribute" value="numberTool" />
 		<property name="viewClass" value="org.otherobjects.cms.views.VelocityView" />
+	</bean>
+	
+	<bean id="viewToolsService" class="org.otherobjects.cms.views.ViewToolsServiceImpl">
+		<property name="toolsMap">
+			<map>
+				<entry>
+					<key>
+						<value>stringTool</value>
+					</key>
+					<value>org.apache.commons.lang.StringUtils</value>
+				</entry>
+			</map>
+		</property>
+		<property name="beansMap">
+			<map>
+				<entry>
+					<key>
+						<value>daoService</value>
+					</key>
+					<ref bean="daoService" />
+				</entry>
+			</map>
+		</property>
 	</bean>
 
 	<!-- 
