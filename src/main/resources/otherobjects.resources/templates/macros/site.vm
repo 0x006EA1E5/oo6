@@ -1,0 +1,19 @@
+##
+## Velcoity macro library for use in sites.
+##
+## TODO Add support for including home folder
+## TODO Add support for depths
+
+#macro(ooNavigation $container $outerTags)
+#if($outerTags)<ul>#end
+
+#foreach($item in $container)
+    <li><a href="$item.linkPath">$item.label</a></li>
+	#set($children = $navigatorService.getSubContainers($item.id))
+    #if($children.size()>0)
+    ##nav($children true)
+    #end
+#end
+
+#if($outerTags)</ul>#end
+#end

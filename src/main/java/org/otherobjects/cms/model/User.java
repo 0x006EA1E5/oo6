@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
@@ -38,6 +39,7 @@ import org.otherobjects.cms.types.annotation.TypeDefAnnotation;
  */
 @Entity
 @Table(name = "app_user")
+@SequenceGenerator(name="UserSeq", sequenceName="app_user_seq")
 @TypeDefAnnotation(jcrPath="/Site/users", description="A User", labelProperty="fullName")
 public class User implements Serializable, UserDetails, Editable
 {
@@ -71,7 +73,7 @@ public class User implements Serializable, UserDetails, Editable
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="UserSeq")
     public Long getId()
     {
         return id;

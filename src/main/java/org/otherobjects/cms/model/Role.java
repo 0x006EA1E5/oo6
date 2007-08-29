@@ -35,9 +35,10 @@ public class Role implements Serializable, GrantedAuthority
     {
     }
 
-    public Role(String name)
+    public Role(String name, String description)
     {
         this.name = name;
+        this.description = description;
     }
 
     @Id

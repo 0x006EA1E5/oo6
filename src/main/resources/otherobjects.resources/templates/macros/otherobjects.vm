@@ -1,3 +1,7 @@
+##
+## Velcoity macros used by the OTHERobjects.
+##
+
 #macro(ooLayoutBlock $blockCode)
   #parse("/site.resources/templates/blocks/$blockCode")
 #end

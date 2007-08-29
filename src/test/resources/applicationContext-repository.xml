@@ -6,15 +6,15 @@
 	<!-- Repository -->
 
 	<bean id="repository" class="org.springmodules.jcr.jackrabbit.RepositoryFactoryBean">
-		<property name="configuration" value="${jackrabbit.config.path}" />
-		<property name="homeDir" value="${jackrabbit.repository.path}" />
+		<property name="configuration" value="${jcr.config.path}" />
+		<property name="homeDir" value="${jcr.repository.location}" />
 	</bean>
 
 	<bean id="jcrSessionFactory" class="org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory">
 		<property name="repository" ref="repository" />
 		<property name="credentials">
 			<bean class="javax.jcr.SimpleCredentials">
-				<constructor-arg index="0" value="jackrabbit" />
+				<constructor-arg index="0" value="${jcr.username}" />
 				<constructor-arg index="1">
 					<bean factory-bean="password" factory-method="toCharArray" />
 				</constructor-arg>
@@ -23,7 +23,7 @@
 	</bean>
 
 	<bean id="password" class="java.lang.String">
-		<constructor-arg index="0" value="jackrabbit" />
+		<constructor-arg index="0" value="${jcr.password}" />
 	</bean>
 
 	<!-- Mapping -->

@@ -269,7 +269,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
                     while (nodes.hasNext())
                     {
                         Node n = nodes.nextNode();
-                        if (n.getUUID().equals(target.getUUID()))
+                        if (n.isSame(target))
                         {
                             found = true;
                             break;
@@ -431,7 +431,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
                         p = path.substring(0, path.length() - 1); // cut of trailing slash
                     
                     javax.jcr.query.QueryManager queryManager = manager.getSession().getWorkspace().getQueryManager();
-                    javax.jcr.query.Query query = queryManager.createQuery("/jcr:root" + p + "//element(*, oo:node)", javax.jcr.query.Query.XPATH);
+                    javax.jcr.query.Query query = queryManager.createQuery("/jcr:root" + p + "/element(*, oo:node)", javax.jcr.query.Query.XPATH);
                     
                     
                     javax.jcr.query.QueryResult queryResult = query.execute();
@@ -485,7 +485,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
             		StringBuffer queryString = new StringBuffer();
             		queryString.append("/jcr:root");
             		queryString.append(path);
-            		queryString.append("//");
+            		queryString.append("/");
             		queryString.append("element(*, oo:node)");
             		queryString.append(" ");
             		
@@ -526,8 +526,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
             		{
             			queryString.append(" order by jcr:score() descending");
             		}
-            		
-            		
+            		            		
 	            	javax.jcr.query.QueryManager queryManager = manager.getSession().getWorkspace().getQueryManager();
 	                javax.jcr.query.Query query = queryManager.createQuery(queryString.toString(), javax.jcr.query.Query.XPATH);
 	                

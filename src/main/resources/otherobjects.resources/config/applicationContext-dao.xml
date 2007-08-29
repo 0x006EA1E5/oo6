@@ -4,10 +4,13 @@
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="configLocation" value="${hibernate.config}"/>
+        <property name="configLocation" value="${hibernate.config.path}"/>
+        <!-- 
+        <property name="schemaUpdate" value="true" />
+        -->
         <property name="hibernateProperties">
             <value>
-                hibernate.dialect=${spring.hibernate.dialect}
+                hibernate.dialect=${hibernate.dialect}
                 hibernate.query.substitutions=true 'Y', false 'N'
                 hibernate.cache.use_second_level_cache=true
                 hibernate.cache.provider_class=org.hibernate.cache.EhCacheProvider

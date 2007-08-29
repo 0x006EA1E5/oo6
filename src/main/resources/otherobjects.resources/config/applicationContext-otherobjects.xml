@@ -67,10 +67,17 @@
 	
 	</bean>
 	
-	<bean name="bootstrapUtils" class="org.otherobjects.cms.util.BootstrapUtils" init-method="bootstrap">
-		<property name="daoService" ref="daoService" />
+	<bean name="setupUtils" class="org.otherobjects.cms.util.SetupUtils" init-method="bootstrap">
+		<property name="sessionFactory" ref="&amp;sessionFactory" />
+		<property name="jcrSessionFactory" ref="jcrSessionFactory" />
+		<property name="nodeTypesConfig" value="classpath:otherobjects.resources/config/node-types.cnd" />
+		<property name="dataTypes" value="classpath:otherobjects.resources/bootstrap-data/jcr-data-types.xml" />
 	</bean>
-
+	
+	<bean name="bootstrapUtils" class="org.otherobjects.cms.util.BootstrapUtils" init-method="bootstrap" depends-on="typeService">
+		<property name="daoService" ref="daoService" />
+		<property name="bootstrapScript" value="classpath:otherobjects.resources/bootstrap-data/setup.groovy" />
+	</bean>
 
 	<bean name="singletonBeanLocator" class="org.otherobjects.cms.SingletonBeanLocator" />
 
@@ -95,7 +102,7 @@
 				<prop key="velocimacro.permissions.allow.inline.to.replace.global">true</prop>
 				<prop key="velocimacro.arguments.strict">true</prop>
 				<prop key="velocimacro.library.autoreload">true</prop>
-				<prop key="velocimacro.library">otherobjects.resources/templates/macros/workbench.vm</prop>
+				<prop key="velocimacro.library">otherobjects.resources/templates/macros/otherobjects.vm,otherobjects.resources/templates/macros/site.vm</prop>
 				<prop key="file.resource.loader.cache">false</prop>
 				<prop key="encoding.default">UTF-8</prop>
 				<prop key="directive.set.null.allowed">true</prop>

@@ -55,6 +55,9 @@ of new templating/block model with efficient caching.
 ==================================================================
 
 [DONE] * Paging/sorting/filtering in data grid
+[DONE] * Date/number formatting tools
+ + ContextManager / ToolService / In template ToolDoc 
+ + Localisation
 [IN TEST] * Enhanced forms support for components, references and lists
 [IN TEST] * Publishing and versioning
  + Change folder icon based publish state
@@ -62,15 +65,13 @@ of new templating/block model with efficient caching.
  + Change state of chid items on publish
  + Publish without descending
 [IN TEST] * Page template support
- + Block properties
-[IN TEST] * Date/number formatting tools -- Joerg
- + Localisation
- + ContextManager / ToolService / In template ToolDoc 
+ + Block properties -- global and inplace
 
-[JOERG] * Support for JDBC (database) objects in Workbench  -- Joerg
+[IN TEST] * Support for JDBC (database) objects in Workbench  -- Joerg
 * Libraries: image, file and rich media (external image libary support), thumnail grid for images -- Rich
 * Site Toolbar / Page performance reporting (queries per page via AOP) and disableable -- Rich/Joerg
 
+* Smart folders
 [IN PROGRESS] * Licensing finalised 
 [IN PROGRESS] * Build test hosting environment (Simon to lead)
 [IN PROGRESS] * Global search (for JCR and JDBC)
@@ -112,8 +113,9 @@ webservices and plugins
 * Integrate OTHERclicks
 * Method level security -- waiting for Spring Security 2.0
 * Instance level security -- waiting for Spring Security 2.0
-
-
+* Embed rules engine with scripting integration
+* Support blog publishing APIs http://www.blogger.com/developers/api/1_docs/
+* Email support inc logging and testing with Wiser: http://subethasmtp.tigris.org/wiser.html
 
 ==================================================================
 M4 (end November) The interface release.

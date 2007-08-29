@@ -24,7 +24,6 @@ public interface GenericDao <T, PK extends Serializable> {
      */
     public List<T> getAll();
     
-    
     public PagedResult<T> getAllPaged(int pageSize, int pageNo, String filterQuery, String sortField, boolean asc);
     
     public PagedResult<T> getPagedByQuery(String query, int pageSize, int pageNo, String filterQuery, String sortField, boolean asc);

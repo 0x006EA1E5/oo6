@@ -6,12 +6,11 @@
     
     <bean name="singletonBeanLocator" class="org.otherobjects.cms.SingletonBeanLocator" />
     
-    <!-- For mail settings and future properties files -->
+    <!-- For properties -->
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
-                <value>classpath:site.resources/config/jackrabbit.properties</value>
-                <value>classpath:site.resources/config/jdbc.properties</value>
+                <value>classpath:site.resources/config/pom.properties</value>
             </list>
         </property>
     </bean>
@@ -20,10 +19,10 @@
     <!--<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/appfuse"/>-->
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="${spring.jdbc.driverClassName}"/>
-        <property name="url" value="${spring.jdbc.url}"/>
-        <property name="username" value="${spring.jdbc.username}"/>
-        <property name="password" value="${spring.jdbc.password}"/>
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
         <property name="maxActive" value="100"/>
         <property name="maxIdle" value="30"/>
         <property name="maxWait" value="1000"/>

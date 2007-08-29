@@ -9,6 +9,7 @@ import java.util.Map;
 import org.otherobjects.cms.OtherObjectsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 public abstract class AbstactTypeService implements TypeService
 {
@@ -39,7 +40,10 @@ public abstract class AbstactTypeService implements TypeService
 
     public TypeDef getType(String name)
     {
-        return types.get(name);
+        TypeDef typeDef = types.get(name);
+        Assert.notNull(typeDef, "Type not found: " + name);
+        return typeDef;
+        
     }
 
     public Collection<TypeDef> getTypes()

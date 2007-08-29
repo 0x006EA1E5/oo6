@@ -38,8 +38,7 @@ public class RoleDaoTest extends BaseDaoTestCase
 
     public void testAddAndRemoveRole() throws Exception
     {
-        Role role = new Role("testrole");
-        role.setDescription("new role descr");
+        Role role = new Role("testrole","test description");
         dao.save(role);
         flush();
 

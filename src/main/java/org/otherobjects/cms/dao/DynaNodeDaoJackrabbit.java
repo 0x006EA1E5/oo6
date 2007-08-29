@@ -217,7 +217,8 @@ public class DynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> imp
 	        			
 	        			
 	        			// create version and assign the current changeNumber as the label
-	        			manager.checkin(jcrPath, new String[]{dynaNode.getChangeNumber() + ""});
+	        			dynaNode.setChangeNumber(dynaNode.getChangeNumber()+1); 
+	        			manager.checkin(jcrPath, new String[]{(dynaNode.getChangeNumber()) + ""});
 	        			manager.checkout(jcrPath);
 	            	}
 	            	finally
