@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<types xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:rep="internal" xmlns:oo="http://www.otherobjects.org/system/oo"
+	xmlns:ocm="http://jackrabbit.apache.org/ocm" xmlns:sv="http://www.jcp.org/jcr/sv/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.SiteFolder" ooType="org.otherobjects.cms.model.SiteFolder"
+	label="${dataTypes.label}" jcr:uuid="4f737239-9428-4def-af07-02897b8ff0d5" cssClass="datatypes">
+
+	<!-- CMS Design Types -->
+	<Template jcr:primaryType="oo:node" labelProperty="code" ocm:classname="org.otherobjects.cms.types.TypeDef">
+		<properties jcr:primaryType="nt:unstructured">
+			<property jcr:primaryType="nt:unstructured" name="code" type="string" required="true" />
+			<property jcr:primaryType="nt:unstructured" name="layout" type="reference" relatedType="TemplateLayout" required="true" />
+			<property jcr:primaryType="nt:unstructured" name="regions" type="list" collectionElementType="component" relatedType="TemplateRegion" />
+		</properties>
+	</Template>
+	<TemplateLayout jcr:primaryType="oo:node" labelProperty="label" ocm:classname="org.otherobjects.cms.types.TypeDef">
+		<properties jcr:primaryType="nt:unstructured">
+			<property jcr:primaryType="nt:unstructured" name="code" type="string" required="true" />
+			<property jcr:primaryType="nt:unstructured" name="label" type="string" />
+			<property jcr:primaryType="nt:unstructured" name="description" type="text" />
+		</properties>
+	</TemplateLayout>
+	<TemplateBlock jcr:primaryType="oo:node" labelProperty="label" ocm:classname="org.otherobjects.cms.types.TypeDef">
+		<properties jcr:primaryType="nt:unstructured">
+			<property jcr:primaryType="nt:unstructured" name="code" type="string" required="true" />
+			<property jcr:primaryType="nt:unstructured" name="label" type="string" />
+			<property jcr:primaryType="nt:unstructured" name="description" type="text" />
+		</properties>
+	</TemplateBlock>
+	<TemplateRegion jcr:primaryType="oo:node" labelProperty="name" ocm:classname="org.otherobjects.cms.types.TypeDef">
+		<properties jcr:primaryType="nt:unstructured">
+			<property jcr:primaryType="nt:unstructured" name="name" type="string" required="true" />
+			<property jcr:primaryType="nt:unstructured" name="blocks" type="list" collectionElementType="reference" relatedType="TemplateBlock" />
+		</properties>
+	</TemplateRegion>
+
+	<!-- CMS Content Types -->
+	<MetaData jcr:primaryType="oo:node" jcr:uuid="1c1b15a5-c949-42cd-ba07-f831e578d54e" labelProperty="title" ocm:classname="org.otherobjects.cms.types.TypeDef">
+		<properties jcr:primaryType="nt:unstructured">
+			<property jcr:primaryType="nt:unstructured" required="false" type="string" label="${title.label}" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="title" />
+			<property jcr:primaryType="nt:unstructured" type="text" label="${description.label}" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="description" />
+			<property jcr:primaryType="nt:unstructured" type="list" label="${keywords.label}" collectionElementType="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="keywords" />
+		</properties>
+	</MetaData>
+	<CmsImage jcr:primaryType="oo:node" jcr:uuid="8b79bc82-d4a6-4a22-aaff-8c216f5bc5d6" labelProperty="label" ocm:classname="org.otherobjects.cms.types.TypeDef">
+		<properties jcr:primaryType="nt:unstructured">
+			<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
+			<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" />
+			<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="originalFileName" />
+			<property jcr:primaryType="nt:unstructured" type="number" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="originalWidth" />
+			<property jcr:primaryType="nt:unstructured" type="number" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="originalHeight" />
+		</properties>
+	</CmsImage>
+
+	<!-- Site -->
+	<org.otherobjects.cms.model.SiteFolder jcr:primaryType="oo:node" jcr:uuid="4b299ada-1f0e-4999-a623-e1ddb3eaab7e" labelProperty="label" ocm:classname="org.otherobjects.cms.types.TypeDef"
+		className="org.otherobjects.cms.model.SiteFolder">
+		<properties jcr:primaryType="nt:unstructured">
+			<property jcr:primaryType="nt:unstructured" required="true" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
+			<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" />
+			<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="cssClass" />
+			<property jcr:primaryType="nt:unstructured" type="list" label="${allowedTypes.label}" collectionElementType="reference" relatedType="org.otherobjects.cms.types.TypeDef"
+				ocm:classname="org.otherobjects.cms.types.PropertyDef" name="allowedTypes" />
+		</properties>
+	</org.otherobjects.cms.model.SiteFolder>
+	<org.otherobjects.cms.model.DbFolder jcr:primaryType="oo:node" jcr:uuid="57761d52-fc9e-4289-a9f0-21fd1c4e2374" labelProperty="label" ocm:classname="org.otherobjects.cms.types.TypeDef"
+		className="org.otherobjects.cms.model.DbFolder">
+		<properties jcr:primaryType="nt:unstructured">
+			<property jcr:primaryType="nt:unstructured" required="true" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
+			<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" />
+			<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="mainType" />
+			<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="mainTypeQuery" />
+			<property jcr:primaryType="nt:unstructured" type="list" label="${allowedTypes.label}" collectionElementType="reference" relatedType="org.otherobjects.cms.types.TypeDef"
+				ocm:classname="org.otherobjects.cms.types.PropertyDef" name="allowedTypes" />
+		</properties>
+	</org.otherobjects.cms.model.DbFolder>
+
+</types>
