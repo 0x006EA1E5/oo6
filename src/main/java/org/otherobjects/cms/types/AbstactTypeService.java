@@ -74,7 +74,7 @@ public abstract class AbstactTypeService implements TypeService
             List<TypeDef> matches = new ArrayList<TypeDef>();
             for (TypeDef t : types.values())
             {
-                Class cls = Class.forName(t.getSuperClassName());
+                Class<?> cls = Class.forName(t.getSuperClassName());
                 if (superClass.isAssignableFrom(cls))
                     matches.add(t);
             }

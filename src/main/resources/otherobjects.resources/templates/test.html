@@ -8,7 +8,7 @@
 <script type="text/javascript" src="/resources/otherobjects.resources/static/extjs/src/ext-base.js"></script>
 <script type="text/javascript" src="/resources/otherobjects.resources/static/extjs/src/ext-all-debug.js"></script>
 <script type="text/javascript" src="/resources/otherobjects.resources/static/edit.js"></script>
-<script type="text/javascript" src="/resources/otherobjects.resources/static/list-field.js"></script>
+<script type="text/javascript" src="/resources/otherobjects.resources/static/chooser-field.js"></script>
 <script type="text/javascript" src="/dwr/engine.js"></script>
 <script type="text/javascript" src="/dwr/interface/ContentService.js"></script>
 <script type="text/javascript" src="/dwr/interface/NavigatorService.js"></script>
@@ -30,7 +30,6 @@ var frm;
 
 function addField() {
 	var values = {title:'Rich', tags:["T One","T Two","T Three"]};
-	frm.setValues(values);
 }
 
 
@@ -51,9 +50,23 @@ function buildForm()
     });
 
 
-	frm.add(OO.EditForm.buildField({name:'one', type:'reference', relatedType:'Article', label:'Test'}));
-	
-	//form.add(new Ext.form.OOListField({fieldLabel:'ID', id:"idx", name:'idx', width:'200px', allowBlank:true, disabled:false}));
+		var f = new Ext.form.OOChooserField({
+						
+						fieldLabel: "Image",
+			            name: "image",
+			            allowBlank:true,
+					    //store: store,
+					    displayField:'label',
+					    valueField:'id',
+					    typeAhead: true,
+					    //mode: 'local',
+					    triggerAction: 'all',
+					    emptyText:'Select...',
+					    valueNotFoundText: '???',
+					    selectOnFocus:true
+					});
+					
+	frm.add(f);
 
     frm.addButton('Save', function() {
 		form.submit({url:'/', bindForm:true, waitMsg:'Saving Data...' });   

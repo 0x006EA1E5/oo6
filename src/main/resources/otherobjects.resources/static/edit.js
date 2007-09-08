@@ -63,6 +63,25 @@ OO.EditForm = function(){
 					var f = new Ext.form.Checkbox(config);
 					hiddenFields["_"+propDef.name] = "";
 				}
+				else if(propDef.type=="reference" && propDef.name=="image")
+				{
+					var f = new Ext.form.OOChooserField({
+						
+						fieldLabel: propDef.label,
+			            name: propDef.name,
+			            hiddenName: propDef.name, 
+			            allowBlank:true,
+					    //store: store,
+					    displayField:'label',
+					    valueField:'id',
+					    typeAhead: true,
+					    //mode: 'local',
+					    triggerAction: 'all',
+					    emptyText:'',
+					    valueNotFoundText: '???',
+					    selectOnFocus:true
+					});
+				}
 				else if(propDef.type=="reference")
 				{
 				    var store = new Ext.data.Store({
@@ -76,7 +95,7 @@ OO.EditForm = function(){
 				        }, [
 				            {name: 'id', mapping: 'id'},
 				            {name: 'label', mapping: 'label'}
-				        ]),
+				        ])
 				    });
 					var f = new Ext.form.OOComboBox({
 						

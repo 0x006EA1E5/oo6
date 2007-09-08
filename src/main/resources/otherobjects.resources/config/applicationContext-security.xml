@@ -133,4 +133,18 @@
 	<!-- This bean is optional; it isn't used by any other bean as it only listens and logs -->
 	<bean id="loggerListener" class="org.acegisecurity.event.authentication.LoggerListener" />
 
+	<!-- BasicAuth support: may need this later -->
+	<bean id="basicProcessingFilter" class="org.acegisecurity.ui.basicauth.BasicProcessingFilter">
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="ignoreFailure" value="true" />
+		<property name="authenticationEntryPoint" ref="authenticationEntryPoint" />
+	</bean>
+
+	<bean id="authenticationEntryPoint" class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilterEntryPoint">
+		<property name="loginFormUrl" value="/go/workbench/login.html" />
+		<property name="forceHttps">
+			<value>false</value>
+		</property>
+	</bean>
+
 </beans>

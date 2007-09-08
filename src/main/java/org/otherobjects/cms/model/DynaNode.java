@@ -26,6 +26,10 @@ import org.springframework.util.Assert;
 //TODO @Configurable("dynaNode")
 public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
 {
+    // FIXME Are these a good idea?
+    // getParent()
+    // getChildren(String type)
+    
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     /** GUID */
@@ -45,10 +49,13 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
 
     /** The defining type for this node */
     private String ooType;
-    
-    /** Indication of whether this node is published or not */
+
+    /** Indication of whether this node is published or not. */
     private boolean published = false;
-    
+
+    /** Indication of whether this node is a folder or not. */
+    private boolean folder = false;
+
     // Audit properties
     private String userName;
     private String userId;
@@ -119,6 +126,11 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
         int slashPos = jcrPath.lastIndexOf("/");
         setPath(jcrPath.substring(0, slashPos + 1));
         setCode(jcrPath.substring(slashPos + 1));
+    }
+
+    public boolean hasProperty(String name)
+    {
+        return getTypeDef().getProperty(name) != null;
     }
 
     public Object get(String name)
@@ -245,57 +257,79 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
         setOoType(typeDef.getName());
     }
 
-	public boolean isPublished() {
-		return published;
-	}
+    public boolean isPublished()
+    {
+        return published;
+    }
 
-	public void setPublished(boolean published) {
-		this.published = published;
-	}
+    public void setPublished(boolean published)
+    {
+        this.published = published;
+    }
 
-	public String getUserName() {
-		return userName;
-	}
+    public String getUserName()
+    {
+        return userName;
+    }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public void setUserName(String userName)
+    {
+        this.userName = userName;
+    }
 
-	public String getUserId() {
-		return userId;
-	}
+    public String getUserId()
+    {
+        return userId;
+    }
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    public void setUserId(String userId)
+    {
+        this.userId = userId;
+    }
 
-	public Date getModificationTimestamp() {
-		return modificationTimestamp;
-	}
+    public Date getModificationTimestamp()
+    {
+        return modificationTimestamp;
+    }
 
-	public void setModificationTimestamp(Date modificationTimestamp) {
-		this.modificationTimestamp = modificationTimestamp;
-	}
+    public void setModificationTimestamp(Date modificationTimestamp)
+    {
+        this.modificationTimestamp = modificationTimestamp;
+    }
 
-	public String getComment() {
-		return comment;
-	}
+    public String getComment()
+    {
+        return comment;
+    }
 
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
+    public void setComment(String comment)
+    {
+        this.comment = comment;
+    }
 
-	public int getChangeNumber() {
-		return changeNumber;
-	}
+    public int getChangeNumber()
+    {
+        return changeNumber;
+    }
 
-	public void setChangeNumber(int changeNumber) {
-		this.changeNumber = changeNumber;
-	}
+    public void setChangeNumber(int changeNumber)
+    {
+        this.changeNumber = changeNumber;
+    }
 
-	public String getEditableId() {
-		return getId();
-	}
-    
-    
+    public String getEditableId()
+    {
+        return getId();
+    }
+
+    public boolean isFolder()
+    {
+        return folder;
+    }
+
+    public void setFolder(boolean folder)
+    {
+        this.folder = folder;
+    }
+
 }

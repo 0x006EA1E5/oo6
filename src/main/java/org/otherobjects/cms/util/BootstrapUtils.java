@@ -3,7 +3,9 @@ package org.otherobjects.cms.util;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,6 +31,7 @@ import org.springframework.core.io.Resource;
  * 
  * @author rich
  */
+@SuppressWarnings("unchecked")
 public class BootstrapUtils
 {
     private final Logger logger = LoggerFactory.getLogger(BootstrapUtils.class);
@@ -55,20 +58,25 @@ public class BootstrapUtils
 
         try
         {
-            createUser();
-
-            UserDao userDao = (UserDao) daoService.getDao(User.class);
+            UserDao userDao = (UserDao) this.daoService.getDao(User.class);
             UserDetails adminUser = userDao.loadUserByUsername("admin");
 
-            // FIXME Can this be done in a cleaner way?
-            Authentication authentication = new UsernamePasswordAuthenticationToken(adminUser, null, adminUser.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            // Create admin user if one does not exist and then run setup script
+            if (adminUser == null)
+            {
+                adminUser = createUser();
 
-            runEssentialScripts();
+                // FIXME Can this be done in a cleaner way?
+                Authentication authentication = new UsernamePasswordAuthenticationToken(adminUser, null, adminUser.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                runScript(this.bootstrapScript.getInputStream());
+                runScript(new FileInputStream("src/main/resources/site.resources/bootstrap-data/setup.groovy"));
+            }
         }
         catch (Exception e)
         {
-            logger.error("Could not bootstrap data.", e);
+            this.logger.error("Could not bootstrap data.", e);
             throw new OtherObjectsException("Could not bootstrap data.", e);
         }
         finally
@@ -78,12 +86,12 @@ public class BootstrapUtils
         }
     }
 
-    private void createUser()
+    protected User createUser()
     {
         Role role = new Role("ROLE_ADMIN", "Adminstrator role");
-        role = (Role) daoService.getDao(Role.class).save(role);
+        role = (Role) this.daoService.getDao(Role.class).save(role);
         Role role2 = new Role("ROLE_USER", "User role");
-        role2 = (Role) daoService.getDao(Role.class).save(role2);
+        role2 = (Role) this.daoService.getDao(Role.class).save(role2);
 
         Set<Role> roles = new HashSet();
         roles.add(role);
@@ -101,19 +109,19 @@ public class BootstrapUtils
         adminUser.setAccountLocked(false);
         adminUser.setEnabled(true);
         adminUser.setPasswordHint("See the command line output for the temporary admin password.");
-        daoService.getDao(User.class).save(adminUser);
+        return (User) this.daoService.getDao(User.class).save(adminUser);
     }
 
-    private void runEssentialScripts() throws IOException
+    protected void runScript(InputStream is) throws IOException
     {
         //        BSFManager manager = new BSFManager();
         //        manager.declareBean("daoService", daoService, daoService.getClass());
         //        manager.eval("groovy", "script.groovy", 0, 0, script);
 
         Binding binding = new Binding();
-        binding.setVariable("daoService", daoService);
+        binding.setVariable("daoService", this.daoService);
         GroovyShell shell = new GroovyShell(binding);
-        String script = IOUtils.toString(bootstrapScript.getInputStream());
+        String script = IOUtils.toString(is);
         shell.evaluate(script);
     }
 }

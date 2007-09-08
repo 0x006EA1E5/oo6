@@ -14,14 +14,14 @@ import org.apache.velocity.context.Context;
  */
 public class ViewToolsServiceImpl implements ViewToolsService {
 	
-	private Map<String, Class> toolsMap;
+	private Map<String, Class<?>> toolsMap;
 	private Map<String, Object> beansMap;
 	
-	public Map<String, Class> getToolsMap() {
+	public Map<String, Class<?>> getToolsMap() {
 		return toolsMap;
 	}
 
-	public void setToolsMap(Map<String, Class> toolsMap) {
+	public void setToolsMap(Map<String, Class<?>> toolsMap) {
 		this.toolsMap = toolsMap;
 	}
 
@@ -34,7 +34,7 @@ public class ViewToolsServiceImpl implements ViewToolsService {
 	}
 
 	public void populateContext(Context context) throws Exception {
-		for(Entry<String, Class> entry: toolsMap.entrySet())
+		for(Entry<String, Class<?>> entry: toolsMap.entrySet())
 		{
 			context.put(entry.getKey(), entry.getValue().newInstance());
 		}

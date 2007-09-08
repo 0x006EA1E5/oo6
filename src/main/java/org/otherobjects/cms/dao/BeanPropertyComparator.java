@@ -4,6 +4,7 @@ import java.util.Comparator;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
+@SuppressWarnings("unchecked")
 public class BeanPropertyComparator implements Comparator {
 	
 	private String propertyName;

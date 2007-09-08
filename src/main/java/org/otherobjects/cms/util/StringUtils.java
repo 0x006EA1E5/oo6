@@ -35,6 +35,7 @@ public class StringUtils
 
     public static String generateUrlCode(String name)
     {
+        if(name==null) return null;
         return name.toLowerCase().replaceAll("\\s+", "-").replaceAll("[^a-z0-9-\\s]", "");
     }
     

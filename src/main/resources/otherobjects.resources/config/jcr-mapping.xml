@@ -14,11 +14,11 @@
 		<field-descriptor fieldName="className" jcrName="className" />
 		<field-descriptor fieldName="superClassName" jcrName="superClassName" />
 		<collection-descriptor fieldName="properties" jcrName="properties"
-			elementClassName="org.otherobjects.cms.types.PropertyDef" />
+			elementClassName="org.otherobjects.cms.types.PropertyDef"/>
 	</class-descriptor>
 
 	<class-descriptor className="org.otherobjects.cms.types.PropertyDef">
-		<field-descriptor fieldName="name" jcrName="name" />
+		<field-descriptor fieldName="name" jcrName="name" id="true"/>
 		<field-descriptor fieldName="label" jcrName="label" />
 		<field-descriptor fieldName="type" jcrName="type" />
 		<field-descriptor fieldName="required" jcrName="required" />

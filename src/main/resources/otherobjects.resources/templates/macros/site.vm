@@ -1,14 +1,23 @@
 ##
 ## Velcoity macro library for use in sites.
 ##
+
+
+## 
+## ooNavigation macro
+##
 ## TODO Add support for including home folder
 ## TODO Add support for depths
-
+##
 #macro(ooNavigation $container $outerTags)
 #if($outerTags)<ul>#end
 
 #foreach($item in $container)
-    <li><a href="$item.linkPath">$item.label</a></li>
+    <li>
+    #if($resourceObject.jcrPath.startsWith($item.jcrPath))<strong>#end
+    <a href="$item.linkPath">$item.label</a>
+    #if($resourceObject.jcrPath.startsWith($item.jcrPath))</strong>#end
+    </li>
 	#set($children = $navigatorService.getSubContainers($item.id))
     #if($children.size()>0)
     ##nav($children true)
@@ -16,4 +25,12 @@
 #end
 
 #if($outerTags)</ul>#end
+#end
+
+## 
+## ooImage macros
+##
+#macro(ooImage $image $width $height $cssClass)##
+#set($ims=$cmsImageTool.getSize($image,$width))##
+<img src="$ims.dataFile.externalUrl" class="$!cssClass" width="$ims.width" height="$ims.height" alt="$!image.label" title="$!image.description"/>
 #end

@@ -902,6 +902,23 @@
 			<artifactId>asm-all-otherobjects</artifactId>
 			<version>3.0</version>
 		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>rome</groupId>
+			<artifactId>rome</artifactId>
+			<version>0.9</version>
+		</dependency>
+		<!-- 
+		<dependency>
+			<groupId>xmlrpc</groupId>
+			<artifactId>xmlrpc</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		 -->
 		<!-- lib for generating uuids, used in groovy xml generator, not in official maven rep -->
 		<!--		<dependency>-->
 		<!--			<groupId>com.eaio</groupId>-->

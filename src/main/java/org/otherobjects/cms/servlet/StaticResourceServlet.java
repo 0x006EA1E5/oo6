@@ -30,8 +30,9 @@ public class StaticResourceServlet extends HttpServlet
 {
     private final Logger logger = LoggerFactory.getLogger(StaticResourceServlet.class);
 
-    private MimeTypes mimeTypes = new MimeTypes();
-    
+    // FIXME We should unify this this DataFile mime type support
+    private final MimeTypes mimeTypes = new MimeTypes();
+
     private static final long serialVersionUID = 3970455238515527584L;
 
     @Override
@@ -46,23 +47,22 @@ public class StaticResourceServlet extends HttpServlet
         if ((!path.contains("/static/") && !path.contains("/templates/")) || path.contains(".."))
             return;
 
-        logger.info("Requested static resource: {}", path);
+        this.logger.info("Requested static resource: {}", path);
 
         // FIXME Is there a faster way of serving these?
         // FIXME Cache?
         InputStream in = getClass().getResourceAsStream(path);
-        if(in==null)
+        if (in == null)
         {
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-        
+
         // Add cache header
         resp.addHeader("Cache-Control", "max-age=3600");
-        resp.setContentType(mimeTypes.getMimeByExtension(path).toString());
+        resp.setContentType(this.mimeTypes.getMimeByExtension(path).toString());
         resp.setCharacterEncoding("UTF-8");
 
-        
         OutputStream out = resp.getOutputStream();
         try
         {
@@ -79,7 +79,7 @@ public class StaticResourceServlet extends HttpServlet
         }
         catch (Exception e)
         {
-            logger.error("Error sending static resource: " + path, e);
+            this.logger.error("Error sending static resource: " + path, e);
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         finally

@@ -1,9 +1,11 @@
 package org.otherobjects.cms.types;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.model.DynaNode;
 import org.springframework.util.Assert;
@@ -19,7 +21,7 @@ public class TypeDef implements CmsNode
 {
     private static final String JCR_ROOT_PATH = "/types";
     private static final String DEFAULT_SUPER_CLASS_NAME = DynaNode.class.getName();
-    
+
     /** JCR GUID. */
     private String id;
 
@@ -28,7 +30,7 @@ public class TypeDef implements CmsNode
 
     /** The class name of the backing class (if not using CmsNode). */
     private String className;
-   
+
     /** 
      * The name of the class that this type extends. Defaults to DynaNode.
      * 
@@ -40,7 +42,7 @@ public class TypeDef implements CmsNode
     private Map<String, PropertyDef> properties = new LinkedHashMap<String, PropertyDef>();
     //    private List<PropertyDef> properties = new ArrayList<PropertyDef>();
 
-    /** Human friendly name for type. Can be inferred from name */
+    /** Human friendly name for type. TODO Can be inferred from name. */
     private String label;
 
     /** Description for this type. */
@@ -96,7 +98,9 @@ public class TypeDef implements CmsNode
 
     public Collection<PropertyDef> getProperties()
     {
-        return (Collection<PropertyDef>) properties.values();
+        ArrayList<PropertyDef> properties = new ArrayList<PropertyDef>();
+        properties.addAll((Collection<PropertyDef>) this.properties.values());
+        return properties;
     }
 
     public void addProperty(PropertyDef pd)
@@ -109,7 +113,12 @@ public class TypeDef implements CmsNode
 
     public String getLabel()
     {
-        return label != null ? label :getName();
+        return label != null ? label : createLabel(getName());
+    }
+
+    protected String createLabel(String name2)
+    {
+        return StringUtils.substringAfterLast(name, ".");
     }
 
     public void setLabel(String label)
@@ -214,7 +223,7 @@ public class TypeDef implements CmsNode
 
     public String getSuperClassName()
     {
-        return superClassName != null ? superClassName : DEFAULT_SUPER_CLASS_NAME ;
+        return superClassName != null ? superClassName : DEFAULT_SUPER_CLASS_NAME;
     }
 
     public void setSuperClassName(String superClassName)

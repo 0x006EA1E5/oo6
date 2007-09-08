@@ -1,35 +1,21 @@
 package org.otherobjects.cms.util;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import javax.jcr.Credentials;
 import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.LoginException;
 import javax.jcr.NamespaceRegistry;
+import javax.jcr.Node;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.SimpleCredentials;
 import javax.jcr.Workspace;
 
-import org.acegisecurity.Authentication;
-import org.acegisecurity.context.SecurityContextHolder;
-import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
-import org.acegisecurity.userdetails.UserDetails;
-import org.apache.bsf.BSFException;
-import org.apache.bsf.BSFManager;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.core.WorkspaceImpl;
 import org.apache.jackrabbit.core.nodetype.InvalidNodeTypeDefException;
 import org.apache.jackrabbit.core.nodetype.NodeTypeDef;
@@ -37,24 +23,12 @@ import org.apache.jackrabbit.core.nodetype.NodeTypeManagerImpl;
 import org.apache.jackrabbit.core.nodetype.NodeTypeRegistry;
 import org.apache.jackrabbit.core.nodetype.compact.CompactNodeTypeDefReader;
 import org.apache.jackrabbit.core.nodetype.compact.ParseException;
-import org.apache.jackrabbit.ocm.spring.JcrMappingTemplate;
 import org.apache.jackrabbit.util.name.NamespaceMapping;
-import org.hibernate.HibernateException;
-import org.hibernate.dialect.Dialect;
-import org.hibernate.tool.hbm2ddl.DatabaseMetadata;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
-import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.dao.DaoService;
-import org.otherobjects.cms.dao.UserDao;
 import org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory;
-import org.otherobjects.cms.model.Role;
-import org.otherobjects.cms.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.core.io.Resource;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean;
 import org.springmodules.jcr.JcrSessionFactory;
 
@@ -68,22 +42,24 @@ import org.springmodules.jcr.JcrSessionFactory;
  */
 public class SetupUtils
 {
+    private static final String STRUCTURE_VERSION_PROPERTY_NAME = "structureVersion";
+
     private final Logger logger = LoggerFactory.getLogger(SetupUtils.class);
 
-    private DaoService daoService;
     private AnnotationSessionFactoryBean sessionFactory;
     private JcrSessionFactory jcrSessionFactory;
     private Resource nodeTypesConfig;
-    private Resource dataTypes;
+    private Resource systemDataTypes;
+    private Resource siteDataTypes;
 
-    public void setDataTypes(Resource dataTypes)
+    public void setSystemDataTypes(Resource systemDataTypes)
     {
-        this.dataTypes = dataTypes;
+        this.systemDataTypes = systemDataTypes;
     }
 
-    public void setDaoService(DaoService daoService)
+    public void setSiteDataTypes(Resource siteDataTypes)
     {
-        this.daoService = daoService;
+        this.siteDataTypes = siteDataTypes;
     }
 
     /**
@@ -94,8 +70,12 @@ public class SetupUtils
         // FIXME Run on first startup only
         try
         {
-            prepareRepository();
-            updateSchema();
+            if (getRepositoryStructureVersion() == 0)
+            {
+                prepareRepository();
+                updateSchema();
+                setRepositoryStructureVersion(1001);
+            }
         }
         catch (Exception e)
         {
@@ -107,13 +87,13 @@ public class SetupUtils
     {
         try
         {
-            sessionFactory.dropDatabaseSchema();
+            this.sessionFactory.dropDatabaseSchema();
         }
         catch (Exception e)
         {
             // do nothing if can't drop
         }
-        sessionFactory.createDatabaseSchema();
+        this.sessionFactory.createDatabaseSchema();
     }
 
     /**
@@ -132,7 +112,7 @@ public class SetupUtils
         NamespaceRegistry namespaceRegistry = ws.getNamespaceRegistry();
 
         // Read in the CND file
-        Reader fileReader = new InputStreamReader(nodeTypesConfig.getInputStream());
+        Reader fileReader = new InputStreamReader(this.nodeTypesConfig.getInputStream());
         CompactNodeTypeDefReader cndReader = new CompactNodeTypeDefReader(fileReader, "systemId"); //FIXME What is systemId for?
 
         // Register all un-registered namespaces
@@ -146,13 +126,13 @@ public class SetupUtils
             try
             {
                 namespaceRegistry.getPrefix(nsURI);
-                logger.info("Namespace " + nsPrefix + ":" + nsURI + " arleady exists.");
+                this.logger.info("Namespace " + nsPrefix + ":" + nsURI + " arleady exists.");
             }
             catch (Exception e)
             {
                 // Doesn't exist so register it
-                logger.info("Namespace " + nsPrefix + ":" + nsURI + " doesn't exist. Creating...");
-                session.getWorkspace().getNamespaceRegistry().registerNamespace(nsPrefix, (String) nsURI);
+                this.logger.info("Namespace " + nsPrefix + ":" + nsURI + " doesn't exist. Creating...");
+                session.getWorkspace().getNamespaceRegistry().registerNamespace(nsPrefix, nsURI);
             }
 
         }
@@ -171,12 +151,12 @@ public class SetupUtils
             try
             {
                 ntreg.getNodeTypeDef(ntd.getName());
-                logger.info("Node type " + ntd.getName() + " already registered.");
+                this.logger.info("Node type " + ntd.getName() + " already registered.");
             }
             catch (Exception e)
             {
                 // ...and register it
-                logger.info("Registering node type " + ntd.getName());
+                this.logger.info("Registering node type " + ntd.getName());
                 ntreg.registerNodeType(ntd);
             }
         }
@@ -191,11 +171,18 @@ public class SetupUtils
     protected void setupDataTypes() throws LoginException, RepositoryException, IOException
     {
         Session session = getSession(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
-        session.getWorkspace().importXML("/", dataTypes.getInputStream(), ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
-        session.save();
-
         Session liveSession = getSession(OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
-        liveSession.getWorkspace().importXML("/", dataTypes.getInputStream(), ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+
+        // System types
+        session.getWorkspace().importXML("/", this.systemDataTypes.getInputStream(), ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+        session.save();
+        liveSession.getWorkspace().importXML("/", this.systemDataTypes.getInputStream(), ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+        liveSession.save();
+
+        //Site types
+        session.getWorkspace().importXML("/types", this.siteDataTypes.getInputStream(), ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+        session.save();
+        liveSession.getWorkspace().importXML("/types", this.siteDataTypes.getInputStream(), ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
         liveSession.save();
     }
 
@@ -237,5 +224,32 @@ public class SetupUtils
     public void setSessionFactory(AnnotationSessionFactoryBean sessionFactory)
     {
         this.sessionFactory = sessionFactory;
+    }
+
+    /**
+     * Returns the version number of JCR reposistory structure. This will typically increase
+     * on every release of OTHERobjects. It is used during upgrades to determine which updates 
+     * to apply.
+     * 
+     * @return
+     * @throws RepositoryException 
+     * @throws PathNotFoundException 
+     */
+    protected int getRepositoryStructureVersion() throws PathNotFoundException, RepositoryException
+    {
+        Session session = this.jcrSessionFactory.getSession();
+        Node rootNode = session.getRootNode();
+
+        if (!rootNode.hasProperty(STRUCTURE_VERSION_PROPERTY_NAME))
+            return 0;
+        else
+            return (int) rootNode.getProperty(STRUCTURE_VERSION_PROPERTY_NAME).getLong();
+    }
+
+    protected void setRepositoryStructureVersion(int version) throws PathNotFoundException, RepositoryException
+    {
+        Session session = this.jcrSessionFactory.getSession();
+        session.getRootNode().setProperty(STRUCTURE_VERSION_PROPERTY_NAME, version);
+        session.save();
     }
 }

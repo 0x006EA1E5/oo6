@@ -14,6 +14,7 @@ import org.springframework.util.Assert;
  *
  * @param <T>
  */
+@SuppressWarnings("unchecked")
 public class PagedResultImpl<T> implements PagedResult<T> {
 
 	protected int pageSize;

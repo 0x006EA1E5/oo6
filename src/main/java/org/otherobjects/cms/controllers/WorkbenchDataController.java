@@ -1,6 +1,5 @@
 package org.otherobjects.cms.controllers;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +42,7 @@ import org.springframework.web.servlet.mvc.Controller;
  * 
  * @author rich
  */
+@SuppressWarnings("unchecked")
 public class WorkbenchDataController implements Controller
 {
 	public static final int ITEMS_PER_PAGE = 25;

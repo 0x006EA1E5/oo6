@@ -10,6 +10,7 @@ import org.otherobjects.cms.types.annotation.TypeDefAnnotation;
 import org.springframework.core.annotation.AnnotationUtils;
 
 
+@SuppressWarnings("unchecked")
 public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder {
 	
 
@@ -18,7 +19,7 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder {
 		return getTypeDef(Class.forName(type));
 	}
 
-	public TypeDef getTypeDef(Class clazz) throws Exception {
+    public TypeDef getTypeDef(Class clazz) throws Exception {
 		
 		if(!clazz.isAnnotationPresent(TypeDefAnnotation.class))
 			throw new OtherObjectsException("TypeDef can't be build as there are no annotations present on type " + clazz.getName());

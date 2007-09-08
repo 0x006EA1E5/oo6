@@ -1,43 +1,27 @@
 def dao = daoService.getDao("DynaNode");
 
+def createFolder(dao, path, label, cssClass) {
+	def f = dao.getByPath(path)
+	if(f) return f;
+	
+	f = dao.create("org.otherobjects.cms.model.SiteFolder");
+	f.jcrPath=path
+	f.label=label
+	f.cssClass=cssClass
+	f = dao.save(f)
+	dao.publish(f)
+	return f
+}
+
 // Create base structure
-def site = dao.create("org.otherobjects.cms.model.SiteFolder");
-site.jcrPath="/site";
-site.label="\${site.label}";
-site.cssClass="site";
-//site.id="ed587d28-eee9-4c6d-8887-a1b5332ca262";
-site = dao.save(site);
-dao.publish(site);
-
-def libraries = dao.create("org.otherobjects.cms.model.SiteFolder");
-libraries.jcrPath="/libraries";
-libraries.label="\${libraries.label}";
-libraries.cssClass="libraries";
-//libraries.id="988cb444-7179-4303-9c41-0a45c27083e4";
-dao.save(libraries);
-dao.publish(libraries);
-
-def images = dao.create("org.otherobjects.cms.model.SiteFolder");
-images.jcrPath="/libraries/images";
-images.label="\${images.label}";
-dao.save(images);
-dao.publish(images);
-
-def designer = dao.create("org.otherobjects.cms.model.SiteFolder");
-designer.jcrPath="/designer";
-designer.label="\${designer.label}";
-designer.cssClass="designer";
-//trash.id="69259992-e7a6-4acf-9170-af77478a295d";
-designer = dao.save(designer);
-dao.publish(designer);
-
-def trash = dao.create("org.otherobjects.cms.model.SiteFolder");
-trash.jcrPath="/trash";
-trash.label="\${trash.label}";
-trash.cssClass="trash";
-//trash.id="e6399253-140c-48f6-9f73-dd79fe1b628f";
-dao.save(trash);
-dao.publish(trash);
+createFolder(dao, "/site", "\${site.label}", "site")
+createFolder(dao, "/libraries", "\${libraries.label}", "libraries")
+createFolder(dao, "/libraries/images", "\${images.label}", null)
+def designer = createFolder(dao, "/designer", "\${designer.label}", "designer")
+createFolder(dao, "/designer/blocks", "\${designer.blocks.label}", null)
+createFolder(dao, "/designer/templates", "\${designer.templates.label}", null)
+createFolder(dao, "/designer/layouts", "\${designer.layouts.label}", null)
+createFolder(dao, "/trash", "\${trash.label}","trash")
 
 // Move pre-created data types to proper location
 def types = dao.getByPath("/types");

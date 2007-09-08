@@ -7,6 +7,7 @@ import org.otherobjects.cms.types.TypeService;
 
 import flexjson.JSON;
 
+@SuppressWarnings("unchecked")
 public class DbFolder extends DynaNode implements Folder {
 
 	private String label;

@@ -8,18 +8,18 @@
 		Temporary disble AOP
 		-javaagent:/Users/rich/.m2/repository/aspectj/aspectjweaver/1.5.3/aspectjweaver-1.5.3.jar
 		<aop:spring-configured/>
-	-->
 
 	<bean id="performanceInterceptor" class="org.otherobjects.cms.PerformanceInterceptor" />
 
 	<aop:config>
 		<aop:aspect ref="performanceInterceptor">
-			<!-- <aop:pointcut id="myCutLogging" expression="execution(* org.otherobjects.cms.controllers.SiteController*.*(..))" />
-				<aop:pointcut id="myCutLogging" expression="execution(* org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImpl*.*(..))" />  -->
+			//<aop:pointcut id="myCutLogging" expression="execution(* org.otherobjects.cms.controllers.SiteController*.*(..))" />
+			//	<aop:pointcut id="myCutLogging" expression="execution(* org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImpl*.*(..))" />  
 			<aop:pointcut id="myCutLogging" expression="execution(* org.otherobjects.cms.dao.DynaNodeDao.*(..))" />
 			<aop:around pointcut-ref="myCutLogging" method="log" />
 		</aop:aspect>
 	</aop:config>
+	-->
 
 	<bean name="siteController" class="org.otherobjects.cms.controllers.SiteController">
 		<property name="navigatorService" ref="navigatorService" />
@@ -62,18 +62,19 @@
 			<value>dd/MM/yy</value>
 		</property>
 	</bean>
-	
+
 	<bean id="typeDefBuilder" class="org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder">
-	
+
 	</bean>
-	
+
 	<bean name="setupUtils" class="org.otherobjects.cms.util.SetupUtils" init-method="bootstrap">
 		<property name="sessionFactory" ref="&amp;sessionFactory" />
 		<property name="jcrSessionFactory" ref="jcrSessionFactory" />
 		<property name="nodeTypesConfig" value="classpath:otherobjects.resources/config/node-types.cnd" />
-		<property name="dataTypes" value="classpath:otherobjects.resources/bootstrap-data/jcr-data-types.xml" />
+		<property name="systemDataTypes" value="classpath:otherobjects.resources/bootstrap-data/jcr-data-types.xml" />
+		<property name="siteDataTypes" value="classpath:site.resources/bootstrap-data/jcr-data-types.xml" />
 	</bean>
-	
+
 	<bean name="bootstrapUtils" class="org.otherobjects.cms.util.BootstrapUtils" init-method="bootstrap" depends-on="typeService">
 		<property name="daoService" ref="daoService" />
 		<property name="bootstrapScript" value="classpath:otherobjects.resources/bootstrap-data/setup.groovy" />
@@ -89,9 +90,27 @@
 				<prop key="/go/workbench/*">workbenchController</prop>
 				<prop key="/go/**">siteController</prop>
 				<prop key="/go/*">siteController</prop>
+				<prop key="/go/workbench/api/**">xmlRpcController</prop>
 			</props>
 		</property>
 		<property name="alwaysUseFullPath" value="true" />
+	</bean>
+
+	<bean name="metaWeblogApiHandler" class="org.otherobjects.cms.api.MetaWeblogApiHandler">
+		<property name="daoService" ref="daoService" />
+	</bean>
+
+	<bean id="xmlRpcController" class="org.otherobjects.cms.ws.XmlRpcController">
+		<property name="handlers">
+			<map>
+				<entry>
+					<key>
+						<value>metaWeblog</value>
+					</key>
+					<ref bean="metaWeblogApiHandler" />
+				</entry>
+			</map>
+		</property>
 	</bean>
 
 	<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
@@ -118,7 +137,7 @@
 		<property name="numberToolAttribute" value="numberTool" />
 		<property name="viewClass" value="org.otherobjects.cms.views.VelocityView" />
 	</bean>
-	
+
 	<bean id="viewToolsService" class="org.otherobjects.cms.views.ViewToolsServiceImpl">
 		<property name="toolsMap">
 			<map>

@@ -15,6 +15,20 @@ public class SiteFolder extends DynaNode implements Folder
     //FIXME This List should be TypeDefs but they are really DynaNodes...
     private List allowedTypes;
 
+    @Override
+    public boolean isFolder()
+    {
+        return true;
+    }
+    
+    public List getAllAllowedTypes()
+    {
+        if (getAllowedTypes() != null && getAllowedTypes().size() > 0)
+            return getAllowedTypes();
+        else
+            return (List) ((TypeService)SingletonBeanLocator.getBean("typeService")).getTypesBySuperClass(DynaNode.class);
+    }
+    
     public String getCssClass()
     {
         return cssClass;
@@ -24,15 +38,7 @@ public class SiteFolder extends DynaNode implements Folder
     {
         this.cssClass = cssClass;
     }
-
-    public List getAllAllowedTypes()
-    {
-        if (getAllowedTypes() != null && getAllowedTypes().size() > 0)
-            return getAllowedTypes();
-        else
-            return (List) ((TypeService)SingletonBeanLocator.getBean("typeService")).getTypesBySuperClass(DynaNode.class);
-    }
-
+    
     @JSON(include = false)
     public List getAllowedTypes()
     {
@@ -46,7 +52,8 @@ public class SiteFolder extends DynaNode implements Folder
 
     public String getLabel()
     {
-        return label;
+        // FIXME Label should be fetched via dedicated method
+        return (String) (label != null ? label : (get(getLabelProperty()) != null ? get(getLabelProperty()) : getCode()));
     }
 
     public void setLabel(String label)

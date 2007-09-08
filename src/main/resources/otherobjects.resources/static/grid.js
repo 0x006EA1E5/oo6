@@ -22,7 +22,7 @@ OO.ListingGrid = function() {
 	            {name: 'id', mapping: 'id'},
 	            {name: 'editableId', mapping: 'editableId'},
 	            {name: 'label', mapping: 'label'},
-	            {name: 'ooType', mapping: 'ooType'},
+	            {name: 'ooType', mapping: 'typeDef.label'},
 	            {name: 'linkPath', mapping: 'linkPath'},
 	            {name: 'published', mapping: 'published'}
 			];
@@ -115,7 +115,7 @@ OO.ListingGrid = function() {
 							var fn = function(ev) {
 								OO.ListingGrid.addItem(ev.code, ev);
 								};
-							var item = new Ext.menu.Item({text: types[i].label, code:types[i].label});
+							var item = new Ext.menu.Item({text: types[i].label, code:types[i].name});
 							item.on("click", fn, this);
 							e.menu.addItem(item);
 						}
