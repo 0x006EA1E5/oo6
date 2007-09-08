@@ -1,52 +1,4 @@
 ==================================================================
-M1 (mid July): The Foundations release
-
-Create initial structure for the project. Get major new components
-working. Create solid build and test infrastucture.
-
-[RELEASED 23/July/2007]
-==================================================================
-
-[DONE] * Workbench
-[DONE]  + Ajax based interfaced based on the Ext Javascript library.
-[DONE]  + Drag and drop interface.
-[DONE]  + Localisation support.
-[DONE]  + Strong form validation.
-[DONE] * Data storage
-[DONE]  + Flexible object storage via Jackrabbit Content Repository.
-[DONE]  + Support for database access via Hibernate 3.2.
-[DONE] * Security
-[DONE]  + Support for administrators and guests.
-[DONE]  + Passwords are stored securely and your login details can be remembered.
-[DONE]  + Usernames do not have to be email addresses although it is strongly 
-[DONE]    recommended that they are and this will probably be enforced for most sites.
-[DONE] * Architecture
-[DONE]  + Based on the industry standard Spring framework.
-[DONE] * Infrastructure
-[DONE]  + Built with Maven to automate testing, packaging and deployment.
-[DONE]  + Comprehensive test coverage — over 60%
-
-
-
-==================================================================
-M1.1 (start August): Initial High Availability release
-
-Customised release of M1 with support for running in a clustered
-environment for high availability.
-==================================================================
-
-[DONE] * Add in support for PostgreSQL as a database
-[DONE] * Add in clustering support for Jackrabbit
-[DONE] * Test running under Tomcat (best supported servlet container)
-[DONE] * Provide sample Terracotta configuration files
-[DONE] * Provide reliable test-data setup procedures
-[DONE] * Design test hosting environment (Martin/Simon)
-[DONE] * Allow simple customisation of server specific properties
-[DONE] * JMX hooks for important runtime information
-[DONE] * Canoo Webtest scripts for functional testing 
-
-
-==================================================================
 M2 (end August): The CMS release
 
 Feature parity with OO5 for object editing and publishing 
@@ -83,7 +35,6 @@ of new templating/block model with efficient caching.
 * Status page -- what I'm editing, what happened today
 ? Maven project archetype
 ? Audit log / AOP
-
 + See todo.txt
 
 [September 12-14: Rich to visit London to present M2]
@@ -157,3 +108,60 @@ Beta 1 (end January) First Beta release
 + Other stuff we've forgotten
 + Migrate www.othermedia.com to Beta 1 via migration tooling.
 + Start OTHERcommerce planning/development
+
+
+
+
+
+
+****************************************************************
+****************************************************************
+****************************************************************
+
+==================================================================
+M1 (mid July): The Foundations release
+
+Create initial structure for the project. Get major new components
+working. Create solid build and test infrastucture.
+
+[RELEASED 23/July/2007]
+==================================================================
+
+[DONE] * Workbench
+[DONE]  + Ajax based interfaced based on the Ext Javascript library.
+[DONE]  + Drag and drop interface.
+[DONE]  + Localisation support.
+[DONE]  + Strong form validation.
+[DONE] * Data storage
+[DONE]  + Flexible object storage via Jackrabbit Content Repository.
+[DONE]  + Support for database access via Hibernate 3.2.
+[DONE] * Security
+[DONE]  + Support for administrators and guests.
+[DONE]  + Passwords are stored securely and your login details can be remembered.
+[DONE]  + Usernames do not have to be email addresses although it is strongly 
+[DONE]    recommended that they are and this will probably be enforced for most sites.
+[DONE] * Architecture
+[DONE]  + Based on the industry standard Spring framework.
+[DONE] * Infrastructure
+[DONE]  + Built with Maven to automate testing, packaging and deployment.
+[DONE]  + Comprehensive test coverage — over 60%
+
+
+
+==================================================================
+M1.1 (start August): Initial High Availability release
+
+Customised release of M1 with support for running in a clustered
+environment for high availability.
+==================================================================
+
+[DONE] * Add in support for PostgreSQL as a database
+[DONE] * Add in clustering support for Jackrabbit
+[DONE] * Test running under Tomcat (best supported servlet container)
+[DONE] * Provide sample Terracotta configuration files
+[DONE] * Provide reliable test-data setup procedures
+[DONE] * Design test hosting environment (Martin/Simon)
+[DONE] * Allow simple customisation of server specific properties
+[DONE] * JMX hooks for important runtime information
+[DONE] * Canoo Webtest scripts for functional testing 
+

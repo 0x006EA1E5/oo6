@@ -1,17 +1,24 @@
 Demo
 
-* Sort and serach in grid
-* Libaries with web service integration
-* Database objects
 * Smart folders
-* Rules engine integration
+* Performance analysis tools + request headers/params + template info + page headers
+* Folder and page publishing
+* Sort and serach in grid
+* Database objects
+* IPTC/Exif Data
+* External link bookmarlet
+* My action list
+* Libaries with web service integration
 * Edit/stats site toolbar
 * International sites (via IP lookup?)
 * Versioning diffs and rollbacks
+* Rules engine integration
+* Blogger API
 
 Developer demo
 
 * Annotations
+* Groovy as scripting language
 * References vs components
 * Maven
 * Maven archetypes
@@ -20,4 +27,5 @@ Discussions
 
 * Licensing
 * Naming
-* Getting project infrastructure in place: Trac, svnview
+* Site structure
+* Libraries -- is publishing a good idea. Duplicate data directories.

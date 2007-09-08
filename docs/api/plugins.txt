@@ -8,3 +8,4 @@ Extension points
 * Events
 * Blocks
 * Tools (utility objects provided to templates)
+* System depedencies check eg is ImageMagick installed

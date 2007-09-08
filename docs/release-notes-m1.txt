@@ -1,0 +1,56 @@
+Welcome to OTHERobjects CMS Milestone 1
+
+This is the first milestone release of the next generation of OTHERobjects. You can create folders and articles and see the site update in realtime.
+
+Note that this workbench interface in only a prototype. The final version will look different but will contain similar functionality.
+
+A quick guide to using the workbench
+
+Click on a folder in the Navigator to view its contents.
+In the Listing panel click to select a resource. Double-click to edit.
+The Preview panel will always preview the currently selected resource.
+Right click on a folder to rename or add a sub folder.
+You can drag folders to move and reorder them.
+Drag resources to different folders if you wish to move them.
+To delete a folder or resource drag it to the trash.
+
+Known issues
+
+Items within a folder must have unique names. If you move or rename a folder that will result in a name clash then you will get an error. The tree will still update but the change will not be made.
+A timing conflict can result in duplicate folders after being dropped. Workaound: wait for target folder to expand before dropping.
+WYSYWYG editor is a preview only and has not been tested.
+Firebug in Firefox will cause page times to be very slow whilst it loads the debugger. Workaround: disable Firebug for this site. A simle console can still be shown via F12.
+Safari 3 Beta may not cache resources properly resulting in much longer page load times.
+
+New and noteworthy
+
+Workbench
+Ajax based interfaced based on the Ext Javascript library.
+Drag and drop interface.
+Localisation support.
+Strong form validation.
+
+Data storage
+Flexible object storage via Jackrabbit Content Repository.
+Support for database access via Hibernate 3.2.
+
+Security
+Support for administrators and guests.
+Passwords are stored securely and your login details can be remembered.
+Usernames do not have to be email addresses although it is strongly recommended that they are and this will probably be enforced for most sites.
+
+Architecture
+Based on the industry standard Spring framework.
+
+Infrastructure
+Built with Maven to automate testing, packaging and deployment.
+Comprehensive test coverage — over 60%
+
+Coming in Milestone 2
+
+Publishing and workflow support.
+Multiple templates.
+Live data types editing.
+Image, file and rich media libraries.
+Full localisation of workbench and support for multi-lingual sites.
+And more....

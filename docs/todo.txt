@@ -1,3 +1,6 @@
+Moving/trashing/publishing
+Start documentation
+Tidy up DAO methods
 Lists: component testing, remove, reordering
 Regexp validator: eg *.html
 Default values on types
@@ -5,6 +8,8 @@ Order of nodes after update
 Type standard fields: esp id, code, label
 Don't filter binary resources in maven
 Reference Fields to have custom queries/selectors
+
+
 
 System indicators:
    - JCR (schema version)
@@ -20,3 +25,4 @@ Rich media FLV: http://www.jeroenwijering.com/?item=Flash_video_Player
 Rich media MP3: http://www.1pixelout.net/code/audio-player-wordpress-plugin
 Data generator: http://www.generatedata.com/#generator
 Security: change salts
+Work out how to extend basic library types eg CmsImage
