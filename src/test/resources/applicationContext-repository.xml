@@ -62,19 +62,27 @@
 		<property name="jcrBeanService" ref="jcrBeanService" />
 	</bean>
 
-	<bean name="jcrBeanService" class="org.otherobjects.cms.beans.JcrBeanService">
-	</bean>
-	
+	<bean name="jcrBeanService" class="org.otherobjects.cms.beans.JcrBeanService"></bean>
+
 	<!-- Domain objects 
-	<bean name="dynaNode" scope="prototype">
+		<bean name="dynaNode" scope="prototype">
 		<property name="typeService" ref="typeService" />
-	</bean>
+		</bean>
 	-->
-	
+
 	<!-- DAOs -->
 	<bean id="dynaNodeDao" parent="baseTransactionProxy">
 		<property name="target">
 			<bean class="org.otherobjects.cms.dao.DynaNodeDaoJackrabbit">
+				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
+				<property name="typeService" ref="typeService" />
+				<property name="sessionFactory" ref="jcrSessionFactory" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="cmsImageDao" parent="baseTransactionProxy">
+		<property name="target">
+			<bean class="org.otherobjects.cms.model.CmsImageDaoImpl">
 				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
 				<property name="typeService" ref="typeService" />
 				<property name="sessionFactory" ref="jcrSessionFactory" />

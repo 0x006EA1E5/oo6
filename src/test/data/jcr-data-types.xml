@@ -22,4 +22,20 @@
 		</properties>
 	</Article>
 
+	<org.otherobjects.cms.model.CmsImage jcr:primaryType="oo:node" label="Image" jcr:uuid="8b79bc82-d4a6-4a22-aaff-8c216f5bc5d6" labelProperty="label"
+		ocm:classname="org.otherobjects.cms.types.TypeDef" className="org.otherobjects.cms.model.CmsImage">
+		<properties jcr:primaryType="nt:unstructured">
+			<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
+			<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" />
+			<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="description" />
+			<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="keywords" />
+			<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="copyright" />
+			<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="originalFileId" required="true" />
+			<property jcr:primaryType="nt:unstructured" type="number" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="originalWidth" required="true" />
+			<property jcr:primaryType="nt:unstructured" type="number" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="originalHeight" required="true" />
+			<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="originalProvider" />
+			<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="originalId" />
+		</properties>
+	</org.otherobjects.cms.model.CmsImage>
+
 </types>
