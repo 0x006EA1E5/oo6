@@ -49,11 +49,12 @@ OO.ListingGrid = function() {
 			
 			// create the column model
 			cm = new Ext.grid.ColumnModel([
-				{ header: 'State', width: 100, sortable: true, dataIndex: 'published', renderer:renderState },
-				{ header: 'Label', width: 200, sortable: true, dataIndex: 'label' },
-				{ header: 'Type', width: 100, sortable: true, dataIndex: 'ooType' },
-				{ header: 'Path', width: 300, sortable: false, dataIndex: 'linkPath' },
-				{ header: 'UUID', width: 300, sortable: false, dataIndex: 'id' }
+//				{ header: 'State', width: 100, sortable: true, dataIndex: 'published', renderer:renderState },
+//				{ header: 'Label', width: 200, sortable: true, dataIndex: 'label' },
+//				{ header: 'Type', width: 100, sortable: true, dataIndex: 'ooType' },
+//				{ header: 'Path', width: 300, sortable: false, dataIndex: 'linkPath' },
+//				{ header: 'UUID', width: 300, sortable: false, dataIndex: 'id' },
+				{ header: 'editableId', width: 300, sortable: false, dataIndex: 'editableId' }
 			]);
 			
 			// create the grid

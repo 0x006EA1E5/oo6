@@ -29,3 +29,4 @@ Discussions
 * Naming
 * Site structure
 * Libraries -- is publishing a good idea. Duplicate data directories.
+* Settign up maven repository

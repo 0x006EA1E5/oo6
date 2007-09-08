@@ -6,12 +6,5 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
-	<classpathentry kind="lib" path="/Users/rich/Desktop/rome-propono-0/lib/rome-propono-0.5.jar" sourcepath="/Users/rich/Desktop/rome-propono-0-1/src"/>
-	<classpathentry kind="lib" path="/Users/rich/Desktop/metadata-extractor-2.3.1.jar"/>
-	<classpathentry kind="lib" path="/Users/rich/Desktop/xmlrpc-3.1/lib/xmlrpc-server-3.1.jar" sourcepath="/Users/rich/Desktop/xmlrpc-3.1/lib/xmlrpc-server-3.1-sources.jar"/>
-	<classpathentry kind="lib" path="/Users/rich/Desktop/xmlrpc-3.1/lib/xmlrpc-common-3.1.jar"/>
-	<classpathentry kind="lib" path="/Users/rich/Desktop/redstone-xmlrpc-1/xmlrpc-client-1.1.jar"/>
-	<classpathentry kind="lib" path="/Users/rich/Desktop/redstone-xmlrpc-1/xmlrpc-1.1.jar" sourcepath="/Users/rich/Desktop/redstone-xmlrpc-src-1/redstone.zip"/>
-	<classpathentry kind="lib" path="/Users/rich/Desktop/flickrapi-1.0b4/flickrapi-1.0b4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
