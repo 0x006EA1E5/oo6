@@ -19,9 +19,9 @@ OO.Workbench = function()
 	var listing; // OO.Listing
 	var editForm; // OO.EditForm
 	
-	var currentContainer = "ed587d28-eee9-4c6d-8887-a1b5332ca262";
+	var currentContainer = "/site";
 	var currentItem;
-    
+	
     return {
 		
 		// FIXME Use getters/setters intead?
@@ -53,8 +53,8 @@ OO.Workbench = function()
 	        });
 			
 			// Create welcome panel
-			var welcomePanel = new Ext.ContentPanel('welcome-panel', {autoCreate:true, title:'Welcome', background:false, closable:true});
-			welcomePanel.setUrl('/go/workbench/welcome.html',null,true); //loadOnce
+			var welcomePanel = new Ext.ContentPanel('welcome-panel', {autoCreate:true, title:'Welcome', background:false, closable:true, url:'/go/workbench/welcome.html'});
+			//welcomePanel.setUrl('/go/workbench/welcome.html',null,true); //loadOnce
 
 			// Create preview panel
 			var previewPanel = new OO.PreviewPanel('preview-panel', {autoCreate:true, src:'/go/workbench/preview-help.html', title:'Preview', background:true, closable:false});
@@ -87,6 +87,17 @@ OO.Workbench = function()
 				}
 			});
 			
+			// Creat upload tab
+			var bulkUploadPanel = new Ext.ContentPanel('bulk-upload-panel', {autoCreate:true, title:'Bulk upload', background:true, closable:true, scripts:true, url:'/go/workbench/uploader.html'});
+			bulkUploadPanel.on("activate", function(t) {	
+				var updater = t.getUpdateManager();
+		        updater.update({
+		        	url: "/go/workbench/uploader.html",
+		        	scripts:true,
+					params:{}
+		        });
+			});
+			
 			// Create navigator
 			navigator = OO.Navigator;
 			navigator.init();
@@ -99,6 +110,7 @@ OO.Workbench = function()
 	        layout.add('center', listingPanel);
 	        layout.add('center', editPanel);
 	        layout.add('center', previewPanel);
+	        layout.add('center', bulkUploadPanel);
 	        // layout.add('south', new Ext.ContentPanel('status'));
 	        layout.endUpdate();
 			

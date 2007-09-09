@@ -29,7 +29,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
     // FIXME Are these a good idea?
     // getParent()
     // getChildren(String type)
-    
+
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     /** GUID */
@@ -74,6 +74,12 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
     {
     }
 
+    public String getTypeLabel()
+    {
+        // FIXME Temp hack to sort out type labels in grid
+        return getTypeDef().getLabel();
+    }
+
     /**
      * Creates a node of the specified type. The type definition 
      * in required to ensure that this node conforms.
@@ -101,7 +107,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
         if (getPath() == null || getPath() == null)
             return null;
 
-        Assert.isTrue(path.endsWith("/"), "Path must end with a forward slash");
+        Assert.isTrue(this.path.endsWith("/"), "Path must end with a forward slash");
         return getPath() + getCode();
     }
 
@@ -165,7 +171,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
 
     public String getId()
     {
-        return id;
+        return this.id;
     }
 
     public void setId(String id)
@@ -175,7 +181,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
 
     public String getPath()
     {
-        return path;
+        return this.path;
     }
 
     public void setPath(String path)
@@ -200,14 +206,14 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
         }
         catch (Exception e)
         {
-            if (logger.isDebugEnabled())
-                logger.debug("Couldn't set label property", e);
+            if (this.logger.isDebugEnabled())
+                this.logger.debug("Couldn't set label property", e);
         }
     }
 
     public String getCode()
     {
-        return code != null ? code : StringUtils.generateUrlCode(getLabel());
+        return this.code != null ? this.code : StringUtils.generateUrlCode(getLabel());
     }
 
     public void setCode(String code)
@@ -219,7 +225,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
 
     public String getOoType()
     {
-        return ooType;
+        return this.ooType;
     }
 
     /**
@@ -259,7 +265,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
 
     public boolean isPublished()
     {
-        return published;
+        return this.published;
     }
 
     public void setPublished(boolean published)
@@ -269,7 +275,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
 
     public String getUserName()
     {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName)
@@ -279,7 +285,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
 
     public String getUserId()
     {
-        return userId;
+        return this.userId;
     }
 
     public void setUserId(String userId)
@@ -289,7 +295,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
 
     public Date getModificationTimestamp()
     {
-        return modificationTimestamp;
+        return this.modificationTimestamp;
     }
 
     public void setModificationTimestamp(Date modificationTimestamp)
@@ -299,7 +305,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
 
     public String getComment()
     {
-        return comment;
+        return this.comment;
     }
 
     public void setComment(String comment)
@@ -309,7 +315,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
 
     public int getChangeNumber()
     {
-        return changeNumber;
+        return this.changeNumber;
     }
 
     public void setChangeNumber(int changeNumber)
@@ -324,7 +330,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
 
     public boolean isFolder()
     {
-        return folder;
+        return this.folder;
     }
 
     public void setFolder(boolean folder)

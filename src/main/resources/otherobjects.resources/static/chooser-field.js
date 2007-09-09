@@ -1,3 +1,8 @@
+function test()
+{
+	alert("TEST");
+}
+
 Ext.form.OOChooserField = function(config){
     Ext.form.OOChooserField.superclass.constructor.call(this, config);
 };
@@ -15,7 +20,8 @@ Ext.extend(Ext.form.OOChooserField, Ext.form.TriggerField,  {
         this.choose();
 	},
 	
-	insertImage : function(data, b, c){
+	
+	insertImage : function(data){
 		console.log(data.id);
     	this.setValue(data.id);
     	this.thumbnail.dom.src=data.thumbnailPath;
@@ -25,12 +31,13 @@ Ext.extend(Ext.form.OOChooserField, Ext.form.TriggerField,  {
     	if(!this.chooser){
     		this.chooser = new ImageChooser({
     			url:'/go/workbench/data/select/org.otherobjects.cms.model.CmsImage',
+    			//url:'/go/workbench/data/image-services/flickr',
     			width:515, 
     			height:400
     		});
     		this.chooser.on("choose", this.insertImage, this);
     	}
-    	this.chooser.show(this.thumbnail, this.insertImage);
+    	this.chooser.show(this.thumbnail);
     },
     
     setValue : function(v){
@@ -112,7 +119,12 @@ var ImageChooser = function(config){
 	this.txtFilter.on('focus', function(){this.dom.select();});
 	this.txtFilter.on('keyup', this.filter, this, {buffer:500});
 	
-	this.tb.add('Filter:', this.txtFilter.dom);//, 'separator', 'Sort By:', this.sortSelect.dom);
+	this.tb.add('Filter:', this.txtFilter.dom, '|');//;, 'Sort By:', this.sortSelect.dom);
+	var iscButton = this.tb.addButton({text:'Add from flickr'});
+    iscButton.on("click",function(e){this.createImageServiceChooser(e, this)}, this);
+	
+	var refreshButton = this.tb.addButton({text:'Refresh'});
+    refreshButton.on("click",this.load, this);
 	
 	// add the panels to the layout
 	layout.beginUpdate();
@@ -197,6 +209,23 @@ var ImageChooser = function(config){
 
 Ext.extend(ImageChooser, Ext.util.Observable,  {
 
+	createImageServiceChooser : function(be, parentChooser) {
+		var isc = new ImageChooser({
+			//url:'/go/workbench/data/select/org.otherobjects.cms.model.CmsImage',
+			url:'/go/workbench/data/image-services/flickr',
+			width:515, 
+			height:400
+		});
+		isc.on("choose", parentChooser.saveImage, parentChooser);
+    	isc.show(be.el);
+	},
+
+	saveImage : function(data){
+		console.log("Creating image: " + data.id);
+		var o = this;
+		ContentService.createImage("FLICKR",data.id, function(e){o.load()});
+	},
+	
 	show : function(el, callback){
 	    this.reset();
 	    this.dlg.show(el);
@@ -211,9 +240,9 @@ Ext.extend(ImageChooser, Ext.util.Observable,  {
 	},
 	
 	load : function(){
-		if(!this.loaded){
+		//if(!this.loaded){
 			this.view.load({url: this.url, params:this.params, callback:this.onLoad.createDelegate(this)});
-		}
+		//}
 	},
 	
 	onLoadException : function(v,o){

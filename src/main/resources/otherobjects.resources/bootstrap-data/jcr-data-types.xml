@@ -78,11 +78,17 @@
 			<properties jcr:primaryType="nt:unstructured">
 				<property jcr:primaryType="nt:unstructured" required="true" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
 				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" />
-				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="mainType" />
+				<property jcr:primaryType="nt:unstructured" required="true" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="mainType" />
 				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="mainTypeQuery" />
-				<property jcr:primaryType="nt:unstructured" type="list" label="${allowedTypes.label}" collectionElementType="reference" relatedType="org.otherobjects.cms.types.TypeDef"
-					ocm:classname="org.otherobjects.cms.types.PropertyDef" name="allowedTypes" />
 			</properties>
 		</org.otherobjects.cms.model.DbFolder>
+		<org.otherobjects.cms.model.SmartFolder jcr:primaryType="oo:node" labelProperty="label" ocm:classname="org.otherobjects.cms.types.TypeDef"
+			className="org.otherobjects.cms.model.SmartFolder">
+			<properties jcr:primaryType="nt:unstructured">
+				<property jcr:primaryType="nt:unstructured" required="true" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
+				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" />
+				<property jcr:primaryType="nt:unstructured" required="true" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="query" />
+			</properties>
+		</org.otherobjects.cms.model.SmartFolder>
 	</system>
 </types>

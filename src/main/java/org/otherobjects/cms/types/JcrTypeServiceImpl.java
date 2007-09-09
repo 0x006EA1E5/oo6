@@ -22,6 +22,7 @@ public class JcrTypeServiceImpl extends AbstactTypeService
 
     private TypeDefDao typeDefDao;
     private JcrBeanService jcrBeanService;
+    private AnnotationBasedTypeDefBuilder annotationBasedTypeDefBuilder;
 
     public void init()
     {
@@ -30,17 +31,37 @@ public class JcrTypeServiceImpl extends AbstactTypeService
         generateClasses();
     }
 
+    @Override
+    public TypeDef getType(String name)
+    {
+        TypeDef type = super.getType(name);
+        if (type == null)
+        {
+            // Look for annotation type
+            try
+            {
+                type = this.annotationBasedTypeDefBuilder.getTypeDef(name);
+                type.setTypeService(this);
+            }
+            catch (Exception e)
+            {
+                throw new OtherObjectsException("Could not find type def annotation for: " + name);
+            }
+        }
+        return type;
+    }
+
     /**
      * Loads TypeDefs from JCR. Types are stored in the default workspace at /types.
      */
     private void loadTypes()
     {
-        List<TypeDef> typeDefs = typeDefDao.getAll();
+        List<TypeDef> typeDefs = this.typeDefDao.getAll();
         for (TypeDef t : typeDefs)
         {
             registerType(t);
         }
-        
+
         // FIXME Nasty
         TypeDef td = new TypeDef(TypeDef.class.getName());
         td.setClassName(TypeDef.class.getName());
@@ -57,7 +78,7 @@ public class JcrTypeServiceImpl extends AbstactTypeService
             if (!t.hasClass())
             {
                 // Create bean class
-                t.setClassName(jcrBeanService.createCustomDynaNodeClass(t));
+                t.setClassName(this.jcrBeanService.createCustomDynaNodeClass(t));
             }
         }
     }
@@ -80,7 +101,7 @@ public class JcrTypeServiceImpl extends AbstactTypeService
 
     public Map<String, AtomicTypeConverter> getJcrAtomicConverters()
     {
-        return jcrAtomicConverters;
+        return this.jcrAtomicConverters;
     }
 
     public void setJcrAtomicConverters(Map<String, AtomicTypeConverter> jcrAtomicConverters)
@@ -90,7 +111,7 @@ public class JcrTypeServiceImpl extends AbstactTypeService
 
     public Map<String, Class<?>> getJcrClassMappings()
     {
-        return jcrClassMappings;
+        return this.jcrClassMappings;
     }
 
     public void setJcrClassMappings(Map<String, Class<?>> jcrClassMappings)
@@ -106,40 +127,40 @@ public class JcrTypeServiceImpl extends AbstactTypeService
 
     public String getClassNameForType(String type)
     {
-        return jcrClassMappings.get(type).getName();
+        return this.jcrClassMappings.get(type).getName();
     }
 
     private void registerConverters()
     {
-        jcrAtomicConverters = new HashMap<String, AtomicTypeConverter>();
-        jcrAtomicConverters.put("string", new StringTypeConverterImpl());
-        jcrAtomicConverters.put("text", new StringTypeConverterImpl());
-        jcrAtomicConverters.put("html", new StringTypeConverterImpl());
-        jcrAtomicConverters.put("date", new Date2LongTypeConverterImpl());
-        jcrAtomicConverters.put("time", new Date2LongTypeConverterImpl());
-        jcrAtomicConverters.put("timestamp", new Date2LongTypeConverterImpl());
-        jcrAtomicConverters.put("boolean", new BooleanTypeConverterImpl());
-        jcrAtomicConverters.put("number", new LongTypeConverterImpl());
-        jcrAtomicConverters.put("decimal", new BigDecimalTypeConverterImpl());
+        this.jcrAtomicConverters = new HashMap<String, AtomicTypeConverter>();
+        this.jcrAtomicConverters.put("string", new StringTypeConverterImpl());
+        this.jcrAtomicConverters.put("text", new StringTypeConverterImpl());
+        this.jcrAtomicConverters.put("html", new StringTypeConverterImpl());
+        this.jcrAtomicConverters.put("date", new Date2LongTypeConverterImpl());
+        this.jcrAtomicConverters.put("time", new Date2LongTypeConverterImpl());
+        this.jcrAtomicConverters.put("timestamp", new Date2LongTypeConverterImpl());
+        this.jcrAtomicConverters.put("boolean", new BooleanTypeConverterImpl());
+        this.jcrAtomicConverters.put("number", new LongTypeConverterImpl());
+        this.jcrAtomicConverters.put("decimal", new BigDecimalTypeConverterImpl());
     }
 
     private void registerClassMappings()
     {
-        jcrClassMappings = new HashMap<String, Class<?>>();
-        jcrClassMappings.put("string", String.class);
-        jcrClassMappings.put("text", String.class);
-        jcrClassMappings.put("html", String.class);
-        jcrClassMappings.put("date", Date.class);
-        jcrClassMappings.put("time", Date.class);
-        jcrClassMappings.put("timestamp", Date.class);
-        jcrClassMappings.put("boolean", Boolean.class);
-        jcrClassMappings.put("number", Long.class);
-        jcrClassMappings.put("decimal", BigDecimal.class);
+        this.jcrClassMappings = new HashMap<String, Class<?>>();
+        this.jcrClassMappings.put("string", String.class);
+        this.jcrClassMappings.put("text", String.class);
+        this.jcrClassMappings.put("html", String.class);
+        this.jcrClassMappings.put("date", Date.class);
+        this.jcrClassMappings.put("time", Date.class);
+        this.jcrClassMappings.put("timestamp", Date.class);
+        this.jcrClassMappings.put("boolean", Boolean.class);
+        this.jcrClassMappings.put("number", Long.class);
+        this.jcrClassMappings.put("decimal", BigDecimal.class);
     }
 
     public TypeDefDao getTypeDefDao()
     {
-        return typeDefDao;
+        return this.typeDefDao;
     }
 
     public void setTypeDefDao(TypeDefDao typeDefDao)
@@ -150,5 +171,10 @@ public class JcrTypeServiceImpl extends AbstactTypeService
     public void setJcrBeanService(JcrBeanService jcrBeanService)
     {
         this.jcrBeanService = jcrBeanService;
+    }
+
+    public void setAnnotationBasedTypeDefBuilder(AnnotationBasedTypeDefBuilder annotationBasedTypeDefBuilder)
+    {
+        this.annotationBasedTypeDefBuilder = annotationBasedTypeDefBuilder;
     }
 }

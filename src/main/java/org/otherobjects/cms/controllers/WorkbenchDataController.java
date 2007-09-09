@@ -1,5 +1,6 @@
 package org.otherobjects.cms.controllers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,22 +16,30 @@ import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.dao.GenericDao;
 import org.otherobjects.cms.dao.PagedResult;
+import org.otherobjects.cms.dao.PagedResultImpl;
+import org.otherobjects.cms.model.CmsImage;
+import org.otherobjects.cms.model.CmsImageDao;
 import org.otherobjects.cms.model.CompositeDatabaseId;
 import org.otherobjects.cms.model.DbFolder;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.model.Folder;
 import org.otherobjects.cms.model.SiteFolder;
+import org.otherobjects.cms.model.SmartFolder;
 import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.TypeDef;
-import org.otherobjects.cms.types.TypeDefBuilder;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.IdentifierUtils;
 import org.otherobjects.cms.views.JsonView;
+import org.otherobjects.cms.ws.FlickrImageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
+import org.xml.sax.SAXException;
+
+import com.aetrion.flickr.FlickrException;
+import com.aetrion.flickr.photos.Photo;
 
 /**
  * Controller providing a REST style interface to site data. Currently supports navigator structure and
@@ -40,16 +49,17 @@ import org.springframework.web.servlet.mvc.Controller;
  * <br>/listing?node= (sends items in specified container)
  * <br/>/type/typeName (sends typeDef info)
  * 
+ * <p>FIXME Turn this into subclasses
+ * 
  * @author rich
  */
 @SuppressWarnings("unchecked")
 public class WorkbenchDataController implements Controller
 {
-	public static final int ITEMS_PER_PAGE = 25;
+    public static final int ITEMS_PER_PAGE = 25;
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     private DynaNodeDao dynaNodeDao;
-    private TypeDefBuilder typeDefBuilder;
     private TypeService typeService;
     private DaoService daoService;
 
@@ -68,8 +78,40 @@ public class WorkbenchDataController implements Controller
             return generateSelectData(request);
         else if (path.endsWith("/navigator"))
             return generateNavigatorData(request);
+        else if (path.contains("/image-services/"))
+            return generateImageServiceData(request);
         else
             return null;
+    }
+
+    private ModelAndView generateImageServiceData(HttpServletRequest request) throws IOException, SAXException, FlickrException
+    {
+        //String path = request.getPathInfo();
+
+        FlickrImageService flickr = new FlickrImageService();
+        List results = new ArrayList();
+        for (Photo p : flickr.getImages())
+        {
+            results.add(convertToCmsImage(p));
+        }
+
+        ModelAndView view = new ModelAndView("jsonView");
+        view.addObject(JsonView.JSON_DATA_KEY, results);
+        view.addObject(JsonView.JSON_DEEP_SERIALIZE, true);
+        return view;
+    }
+
+    private CmsImage convertToCmsImage(Photo photo)
+    {
+        CmsImage image = ((CmsImageDao) this.daoService.getDao(CmsImage.class)).createCmsImage();
+        image.setLabel(photo.getTitle());
+        //image.setKeywords(photo.getTags());
+        image.setOriginalWidth(1L);
+        image.setOriginalHeight(1L);
+        image.setThumbnailPath(photo.getSmallSquareUrl());
+        image.setId(photo.getId());
+        image.setOriginalProvider("FLICKR");
+        return image;
     }
 
     private ModelAndView generateItemData(HttpServletRequest request)
@@ -77,29 +119,33 @@ public class WorkbenchDataController implements Controller
         String path = request.getPathInfo();
         String id = path.substring(path.lastIndexOf("/") + 1);
 
-        logger.info("Sending item data: {} ", id);
+        this.logger.info("Sending item data: {} ", id);
         Object item = null;
-        if(IdentifierUtils.isUUID(id))
+        if (IdentifierUtils.isUUID(id))
         {
-	        item = dynaNodeDao.get(id);
-	    }
+            item = this.dynaNodeDao.get(id);
+        }
         else
         {
-        	CompositeDatabaseId compositeDatabaseId = IdentifierUtils.getCompositeIdPart(id);
-        	if(compositeDatabaseId != null)
-        	{
-        		GenericDao genericDao = daoService.getDao(compositeDatabaseId.getClazz());
-        		item = genericDao.get(compositeDatabaseId.getId());
-        		try {
-					PropertyUtils.setSimpleProperty(item, "typeDef", typeDefBuilder.getTypeDef(item.getClass()));
-				} catch (Exception e) {	
-					item = null; // an item without a typeDef is useless so nullify it
-				} 
-        	}
+            CompositeDatabaseId compositeDatabaseId = IdentifierUtils.getCompositeIdPart(id);
+            if (compositeDatabaseId != null)
+            {
+                GenericDao genericDao = this.daoService.getDao(compositeDatabaseId.getClazz());
+                item = genericDao.get(compositeDatabaseId.getId());
+                try
+                {
+                    //FIXME Can we put this somewhere else?
+                    PropertyUtils.setSimpleProperty(item, "typeDef", this.typeService.getType(item.getClass().getName()));
+                }
+                catch (Exception e)
+                {
+                    item = null; // an item without a typeDef is useless so nullify it
+                }
+            }
         }
-        
+
         Assert.notNull(item, "No item found: " + id);
-        
+
         ModelAndView view = new ModelAndView("jsonView");
         view.addObject(JsonView.JSON_DATA_KEY, item);
         view.addObject(JsonView.JSON_DEEP_SERIALIZE, true);
@@ -111,40 +157,43 @@ public class WorkbenchDataController implements Controller
     {
         String path = request.getPathInfo();
         String typeName = path.substring(path.lastIndexOf("/") + 1);
-        
-        logger.info("Sending select data of type: {} ", typeName);
-        
-        List allByType =null;
+
+        this.logger.info("Sending select data of type: {} ", typeName);
+
+        List allByType = null;
         // FIXME Temp hack
-        if(typeName.equals("org.otherobjects.cms.types.TypeDef"))
+        if (typeName.equals("org.otherobjects.cms.types.TypeDef"))
         {
-            allByType = ((JcrTypeServiceImpl)typeService).getTypeDefDao().getAll();
+            allByType = ((JcrTypeServiceImpl) this.typeService).getTypeDefDao().getAll();
+        }
+        else if (typeName.equals("org.otherobjects.cms.model.CmsImage"))
+        {
+            allByType = this.dynaNodeDao.getAllByJcrExpression("/jcr:root//element(*, oo:node) [@ooType = 'org.otherobjects.cms.model.CmsImage'] order by @modificationTimestamp descending");
         }
         else
         {
-            allByType = dynaNodeDao.getAllByType(typeName);
+            allByType = this.dynaNodeDao.getAllByType(typeName);
         }
-        
-        
+
         ModelAndView view = new ModelAndView("jsonView");
         view.addObject(JsonView.JSON_DATA_KEY, allByType);
         view.addObject(JsonView.JSON_DEEP_SERIALIZE, false);
         return view;
     }
-    
+
     private ModelAndView generateTypeData(HttpServletRequest request)
     {
         String path = request.getPathInfo();
         String typeName = path.substring(path.lastIndexOf("/") + 1);
 
-        logger.info("Sending type definition: {} ", typeName);
+        this.logger.info("Sending type definition: {} ", typeName);
 
-        TypeDef type = typeService.getType(typeName);
+        TypeDef type = this.typeService.getType(typeName);
         Assert.notNull(type, "No type found: " + typeName);
 
         ModelAndView view = new ModelAndView("jsonView");
         view.addObject(JsonView.JSON_DATA_KEY, type);
-//        view.addObject(JsonView.JSON_INCLUDES_KEY, "properties");
+        //        view.addObject(JsonView.JSON_INCLUDES_KEY, "properties");
         view.addObject(JsonView.JSON_DEEP_SERIALIZE, true);
         return view;
     }
@@ -157,13 +206,13 @@ public class WorkbenchDataController implements Controller
         String jcrPath = "/";
         if (nodeId != null && nodeId.length() > 10)
         {
-            DynaNode node = dynaNodeDao.get(nodeId);
+            DynaNode node = this.dynaNodeDao.get(nodeId);
             jcrPath = node.getJcrPath();
         }
 
         // FIXME M2 Use NavigatorService
         List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
-        List<DynaNode> contents = dynaNodeDao.getAllByPath(jcrPath);
+        List<DynaNode> contents = this.dynaNodeDao.getAllByPath(jcrPath);
 
         for (DynaNode dynaNode : contents)
         {
@@ -172,19 +221,19 @@ public class WorkbenchDataController implements Controller
                 Map<String, Object> n1 = new HashMap<String, Object>();
                 n1.put("id", dynaNode.getId());
                 n1.put("code", dynaNode.getCode());
-                
+
                 n1.put("allAllowedTypes", dynaNode.get("allAllowedTypes"));
 
                 // Localise labels
                 String label = dynaNode.getLabel();
                 // TODO This has moved to JsonView -- may move back!
-//                if (label.startsWith("$"))
-//                {
-//                    label = label.substring(2, label.length() -1);
-//                    label = requestContext.getMessage(label);
-//                }
+                //                if (label.startsWith("$"))
+                //                {
+                //                    label = label.substring(2, label.length() -1);
+                //                    label = requestContext.getMessage(label);
+                //                }
                 n1.put("text", label);
-                
+
                 if (!StringUtils.isEmpty((String) dynaNode.get("cssClass")))
                 {
                     n1.put("cls", dynaNode.get("cssClass") + "-nav-item");
@@ -202,7 +251,7 @@ public class WorkbenchDataController implements Controller
         view.addObject(JsonView.JSON_DATA_KEY, nodes);
         return view;
     }
-    
+
     /**
      * Called to populate an ext grid
      * ext will always send the parameters 
@@ -230,58 +279,59 @@ public class WorkbenchDataController implements Controller
         String sort = request.getParameter("sort");
 
         String nodeId = request.getParameter("node");
-        
+
         if (nodeId != null && nodeId.length() > 10)
         {
-            node = dynaNodeDao.get(nodeId);
+            node = this.dynaNodeDao.get(nodeId);
             jcrPath = node.getJcrPath();
         }
         else
         {
-        	node = dynaNodeDao.getByPath(jcrPath);
+            node = this.dynaNodeDao.getByPath(jcrPath);
         }
 
-        // FIXME M2 Can we exclude folders in the query?
-//        List<DynaNode> contents = dynaNodeDao.getAllByPath(jcrPath);
-//
-//        List<DynaNode> nonFolders = new ArrayList<DynaNode>();
-//        for (DynaNode dynaNode : contents)
-//        {
-//            if (! (dynaNode instanceof SiteFolder))
-//                nonFolders.add(dynaNode);
-//        }
-//        
-//        PagedResult<DynaNode> pageResult = new PagedResultImpl<DynaNode>(25, getRequestedPage(request), nonFolders);
-        
+        // FIXME M3 Can we exclude folders in the query?
         boolean asc = false;
         String dir = request.getParameter("dir");
-        if(dir == null || dir.equals("ASC"))
-        	asc = true;
-        
+        if (dir == null || dir.equals("ASC"))
+            asc = true;
+
         PagedResult pagedResult = null;
-        if(node instanceof SiteFolder)
+        if (node instanceof SiteFolder)
         {
-        	pagedResult = dynaNodeDao.getPagedByPath(jcrPath, ITEMS_PER_PAGE, getRequestedPage(request), q, sort, asc);
+            pagedResult = this.dynaNodeDao.getPagedByPath(jcrPath, ITEMS_PER_PAGE, getRequestedPage(request), q, sort, asc);
+        }
+        else if (node instanceof SmartFolder)
+        {
+            SmartFolder dbFolder = (SmartFolder) node;
+            String query = dbFolder.getQuery();
+
+            query = "/jcr:root/site//*[jcr:contains(., '" + query + "') and not(jcr:like(@ooType,'%Folder'))] order by @modificationTimestamp descending";
+
+            Assert.hasText(query, "SmartFolder must have a query.");
+            List<DynaNode> results = this.dynaNodeDao.getAllByJcrExpression(query);
+
+            pagedResult = new PagedResultImpl<DynaNode>(ITEMS_PER_PAGE, results.size(), getRequestedPage(request), results, true);
         }
         else if (node instanceof DbFolder)
         {
-        	DbFolder dbFolder = (DbFolder) node;
-        	String dbType = dbFolder.getMainType();
-        	String dbQuery = dbFolder.getMainTypeQuery();
-        	
-        	GenericDao genericDao = daoService.getDao(dbType);
-        	if(StringUtils.isNotBlank(dbQuery))
-        		pagedResult = genericDao.getPagedByQuery(dbQuery, ITEMS_PER_PAGE, getRequestedPage(request), q, sort, asc);
-        	else
-        		pagedResult = genericDao.getAllPaged(ITEMS_PER_PAGE, getRequestedPage(request), q, sort, asc);
+            DbFolder dbFolder = (DbFolder) node;
+            String dbType = dbFolder.getMainType();
+            String dbQuery = dbFolder.getMainTypeQuery();
+
+            GenericDao genericDao = this.daoService.getDao(dbType);
+            if (StringUtils.isNotBlank(dbQuery))
+                pagedResult = genericDao.getPagedByQuery(dbQuery, ITEMS_PER_PAGE, getRequestedPage(request), q, sort, asc);
+            else
+                pagedResult = genericDao.getAllPaged(ITEMS_PER_PAGE, getRequestedPage(request), q, sort, asc);
         }
         else
-        	throw new OtherObjectsException("Currently only listings for SiteFolder or DbFolder are supporter");
-        	
+            throw new OtherObjectsException("Currently only listings for SiteFolder or DbFolder are supporter");
+
         Map resultMap = new HashMap();
         resultMap.put("items", pagedResult);
         resultMap.put("totalItems", pagedResult.getItemTotal());
-        
+
         view.addObject(JsonView.JSON_DATA_KEY, resultMap);
         view.addObject(JsonView.JSON_INCLUDES_KEY, new String[]{"data"});
         return view;
@@ -293,13 +343,14 @@ public class WorkbenchDataController implements Controller
      * @param request
      * @return
      */
-    private int getRequestedPage(HttpServletRequest request) {
-		int start = Integer.parseInt(request.getParameter("start"));
-		int limit = Integer.parseInt(request.getParameter("limit"));
-		return (start/limit) + 1; 
-	}
+    private int getRequestedPage(HttpServletRequest request)
+    {
+        int start = Integer.parseInt(request.getParameter("start"));
+        int limit = Integer.parseInt(request.getParameter("limit"));
+        return (start / limit) + 1;
+    }
 
-	public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
+    public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
     {
         this.dynaNodeDao = dynaNodeDao;
     }
@@ -309,13 +360,8 @@ public class WorkbenchDataController implements Controller
         this.typeService = typeService;
     }
 
-	public void setDaoService(DaoService daoService) {
-		this.daoService = daoService;
-	}
-
-	public void setTypeDefBuilder(TypeDefBuilder typeDefBuilder) {
-		this.typeDefBuilder = typeDefBuilder;
-	}
-    
-    
+    public void setDaoService(DaoService daoService)
+    {
+        this.daoService = daoService;
+    }
 }

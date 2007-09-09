@@ -10,13 +10,15 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface TypeDefAnnotation {
-	
-	String superClassName() default "java.lang.object";
-	
-	String description();
-	
-	String jcrPath();
-	
-	String labelProperty() default "label";
-	
+
+    String superClassName() default "java.lang.object";
+
+    String description();
+
+    String label();
+
+    String jcrPath();
+
+    String labelProperty() default "label";
+
 }

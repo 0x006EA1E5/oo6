@@ -56,10 +56,14 @@
 		<property name="typeService" ref="typeService" />
 	</bean>
 
+	<bean id="annotationBasedTypeDefBuilder" class="org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder" />
+
+
 	<!-- Types service -->
 	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl" init-method="init" depends-on="setupUtils">
 		<property name="typeDefDao" ref="typeDefDao" />
 		<property name="jcrBeanService" ref="jcrBeanService" />
+		<property name="annotationBasedTypeDefBuilder" ref="annotationBasedTypeDefBuilder"></property>
 	</bean>
 
 	<bean name="jcrBeanService" class="org.otherobjects.cms.beans.JcrBeanService"></bean>

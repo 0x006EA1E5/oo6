@@ -88,6 +88,7 @@ mvn install:install-file -DgroupId=org.hibernate -DartifactId=hibernate-search -
 mvn install:install-file -DgroupId=com.drewnoakes -DartifactId=metadata-extractor -Dversion=2.3.1 -Dpackaging=jar -Dfile=metadata-extractor.jar -DgeneratePom=true
 mvn install:install-file -DgroupId=net.sourceforge -DartifactId=xmlrpc -Dversion=1.1 -Dpackaging=jar -DgeneratePom=true -Dfile=xmlrpc-1.1.jar 
 mvn install:install-file -DgroupId=net.sourceforge -DartifactId=flickrj -Dversion=1.0b4 -Dpackaging=jar -DgeneratePom=true -Dfile=flickrapi-1.0b4.jar 
+mvn install:install-file -DgroupId=net.sourceforge -DartifactId=delicious-java -Dversion=1.14 -Dpackaging=jar -DgeneratePom=true -Dfile=delicious-java-1.14.jar 
 
 Todo
 ----

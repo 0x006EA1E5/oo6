@@ -9,6 +9,7 @@ import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.DynaNode;
 
+@SuppressWarnings("unchecked")
 public class MetaWeblogApiHandler
 {
     private DaoService daoService;

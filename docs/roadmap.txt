@@ -6,39 +6,30 @@ Feature parity with OO5 for object editing and publishing
 of new templating/block model with efficient caching.
 ==================================================================
 
-[DONE] * Paging/sorting/filtering in data grid
-[DONE] * Date/number formatting tools
- + ContextManager / ToolService / In template ToolDoc 
- + Localisation
-[IN TEST] * Enhanced forms support for components, references and lists
-[IN TEST] * Publishing and versioning
- + Change folder icon based publish state
- + UI for rolling back versions
- + Change state of chid items on publish
- + Publish without descending
-[IN TEST] * Page template support
- + Block properties -- global and inplace
-
-[IN TEST] * Support for JDBC (database) objects in Workbench  -- Joerg
-* Libraries: image, file and rich media (external image libary support), thumnail grid for images -- Rich
-* Site Toolbar / Page performance reporting (queries per page via AOP) and disableable -- Rich/Joerg
-
-* Smart folders
+[IN PROGRESS] * Site Toolbar / Page performance reporting (queries per page via AOP) and disableable -- Rich/Joerg
 [IN PROGRESS] * Licensing finalised 
-[IN PROGRESS] * Build test hosting environment (Simon to lead)
-[IN PROGRESS] * Global search (for JCR and JDBC)
-* Action/event/scripting framework
-* Apache Jmeter scripts for performance testing (Martin/Simon)
-* Use Selenium scripts for functional testing ajax
-* Widget publish/consume
-* Debug page: System and server status indicators (check for common server problems)
-* Status page -- what I'm editing, what happened today
-? Maven project archetype
-? Audit log / AOP
-+ See todo.txt
+[FROM M3] * Embed Quartz as job scheduler
+[FROM M3] * Support blog publishing APIs http://www.blogger.com/developers/api/1_docs/
+
+[DONE] * Publishing and versioning
+[DONE] * Enhanced forms support for components, references and lists
+[DONE] * Support for JDBC (database) objects in Workbench
+[DONE] * Paging/sorting/filtering in data grid
+[DONE] * Libraries: image, file and rich media (external image libary support), thumnail grid for images -- Rich
+[DONE] * Page template support
+[DONE] * Smart folders
+[DONE] * Status page -- what I'm editing, what happened today
+[DONE] * Date/number formatting tools
+
+[DEFERRED M3: Bug in Hibernate] * Global search (for JCR and JDBC)
+[DEFERRED M3: API needed] * Action/event/scripting framework -- see old UploadController
+[DEFERRED M3: API needed] * Widget publish/consume
+[DEFERRED M3: API needed]* Debug page: System and server status indicators (check for common server problems)
+[DEFERRED M4: Test environment needed] * Build test hosting environment (Simon to lead)
+[DEFERRED M4: Test environment needed] * Apache Jmeter scripts for performance testing (Martin/Simon)
+[DEFERRED M4: Test environment needed] * Use Selenium scripts for functional testing ajax
 
 [September 12-14: Rich to visit London to present M2]
-
 
 ==================================================================
 M3 (mid October) The API release.
@@ -50,7 +41,8 @@ webservices and plugins
 * Project naming finalised
 * Runtime data-type manipulation: UI 
 * Localized sites
-* Site structure finalised + navigation macros
+* JCR based properties and pick-lists
+* Site structure finalised + nav/titles/crumbs macros + redirection support
 * Internal link libraries + link integrity
 * Path tooling inc robust SSL support
 * Web services API
@@ -59,14 +51,14 @@ webservices and plugins
 * Syndication support (publish and subscribe RSS/Atom feeds)
 * Non-HTML output support (PDF, XLS, JPG, XML)
 * Robust Import/export tools
-* Embed Quartz as job scheduler
 * Preliminary reporting integration
 * Integrate OTHERclicks
+* Extra CMS features: Make a copy/delete. 
 * Method level security -- waiting for Spring Security 2.0
 * Instance level security -- waiting for Spring Security 2.0
 * Embed rules engine with scripting integration
-* Support blog publishing APIs http://www.blogger.com/developers/api/1_docs/
 * Email support inc logging and testing with Wiser: http://subethasmtp.tigris.org/wiser.html
+* Test staging workflow for site updates
 
 ==================================================================
 M4 (end November) The interface release.
@@ -82,9 +74,11 @@ with Chris and the design team during M4.
  + Favourites
  + HTML editor
  + History and bookmark support: http://www.sproutcore.com/blog
+ + Bulk actions
 * Filtering
 * Usability testing
-* Template designer
+* Template designer + auto-detect templates from FS
+* Start documentation
 
 
 ==================================================================

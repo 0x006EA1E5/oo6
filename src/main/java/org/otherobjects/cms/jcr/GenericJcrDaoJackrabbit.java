@@ -130,10 +130,31 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     }
 
     @SuppressWarnings("unchecked")
-    public List<T> getAllByJcrExpression(String jcrExpression)
+    public List<T> getAllByJcrExpression(final String jcrExpression)
     {
-        // FIXME What is this doing here?
-        return null;
+        return (List<T>) getJcrMappingTemplate().execute(new JcrMappingCallback()
+        {
+            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+            {
+                try
+                {
+                    javax.jcr.query.QueryManager queryManager = manager.getSession().getWorkspace().getQueryManager();
+                    javax.jcr.query.Query query = queryManager.createQuery(jcrExpression, javax.jcr.query.Query.XPATH);
+                    javax.jcr.query.QueryResult queryResult = query.execute();
+                    NodeIterator nodeIterator = queryResult.getNodes();
+                    List<T> results = new ArrayList<T>();
+                    //FIXME This is a double lookup. Can we convert node directly?
+                    while (nodeIterator.hasNext())
+                        results.add((T) manager.getObjectByUuid(nodeIterator.nextNode().getUUID()));
+
+                    return results;
+                }
+                catch (Exception e)
+                {
+                    throw new JcrMappingException(e);
+                }
+            }
+        });
     }
 
     /**

@@ -103,7 +103,7 @@ public class BootstrapUtils
         adminUser.setFirstName("Administrator");
         adminUser.setLastName("User");
         adminUser.setPassword("d033e22ae348aeb5660fc2140aec35850c4da997");
-        adminUser.setEmail("admin");
+        adminUser.setEmail("admin@mycompany.com");
         adminUser.setRoles(roles);
         adminUser.setAccountExpired(false);
         adminUser.setAccountLocked(false);

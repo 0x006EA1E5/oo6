@@ -9,10 +9,14 @@ OO.ListingGrid = function() {
 	var cm, ds, grid, mappings;
 	
 	function renderState(value, p, record) {
-		if(value)
+		console.log("State: " + value)
+		if(value.length==0)
+			return '<span style="padding-left:15px; background:url(/resources/otherobjects.resources/static/icons/bullet-black.png) no-repeat -2px -2px">Database</span>';
+		else if (value == true)
 			return '<span style="padding-left:15px; background:url(/resources/otherobjects.resources/static/icons/bullet-green.png) no-repeat -2px -2px">Live</span>';
 		else
-			return '<span style="padding-left:15px; background:url(/resources/otherobjects.resources/static/icons/bullet-red.png) no-repeat -2px -2px">Edited</span>';	
+			return '<span style="padding-left:15px; background:url(/resources/otherobjects.resources/static/icons/bullet-red.png) no-repeat -2px -2px">Edited</span>';
+				
 	}
 	
 	return {
@@ -22,7 +26,7 @@ OO.ListingGrid = function() {
 	            {name: 'id', mapping: 'id'},
 	            {name: 'editableId', mapping: 'editableId'},
 	            {name: 'label', mapping: 'label'},
-	            {name: 'ooType', mapping: 'typeDef.label'},
+	            {name: 'ooType', mapping: 'ooType'},
 	            {name: 'linkPath', mapping: 'linkPath'},
 	            {name: 'published', mapping: 'published'}
 			];
@@ -49,12 +53,11 @@ OO.ListingGrid = function() {
 			
 			// create the column model
 			cm = new Ext.grid.ColumnModel([
-//				{ header: 'State', width: 100, sortable: true, dataIndex: 'published', renderer:renderState },
-//				{ header: 'Label', width: 200, sortable: true, dataIndex: 'label' },
-//				{ header: 'Type', width: 100, sortable: true, dataIndex: 'ooType' },
-//				{ header: 'Path', width: 300, sortable: false, dataIndex: 'linkPath' },
-//				{ header: 'UUID', width: 300, sortable: false, dataIndex: 'id' },
-				{ header: 'editableId', width: 300, sortable: false, dataIndex: 'editableId' }
+				{ header: 'State', width: 100, sortable: true, dataIndex: 'published', renderer:renderState },
+				{ header: 'Label', width: 200, sortable: true, dataIndex: 'label' },
+				{ header: 'Type', width: 100, sortable: true, dataIndex: 'ooType' },
+				{ header: 'Path', width: 300, sortable: false, dataIndex: 'linkPath' },
+				{ header: 'UUID', width: 300, sortable: false, dataIndex: 'id' }
 			]);
 			
 			// create the grid

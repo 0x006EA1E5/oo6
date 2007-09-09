@@ -30,6 +30,7 @@ public class CmsImage extends DynaNode
 
     // Temporary holder for new and relacement files
     private File newFile;
+    private String thumbnailPath;
 
     /**
      * FIXME Temp hack to allow thumbnails in Workbench interface.
@@ -38,11 +39,24 @@ public class CmsImage extends DynaNode
      */
     public String getThumbnailPath()
     {
+        if (this.thumbnailPath != null)
+            return this.thumbnailPath;
+
         if (getOriginalFileId() != null)
             return "/data" + getOriginalFileId().replaceAll("originals", "100x100%23FFFFFF");
         else
             return null;
 
+    }
+
+    /**
+     * Needed for external image services.
+     * 
+     * @return
+     */
+    public void setThumbnailPath(String url)
+    {
+        this.thumbnailPath = url;
     }
 
     public double getAspectRatio()

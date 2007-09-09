@@ -8,23 +8,27 @@
 		Temporary disble AOP
 		-javaagent:/Users/rich/.m2/repository/aspectj/aspectjweaver/1.5.3/aspectjweaver-1.5.3.jar
 		<aop:spring-configured/>
-
-	<bean id="performanceInterceptor" class="org.otherobjects.cms.PerformanceInterceptor" />
-
-	<aop:config>
+		
+		<bean id="performanceInterceptor" class="org.otherobjects.cms.PerformanceInterceptor" />
+		
+		<aop:config>
 		<aop:aspect ref="performanceInterceptor">
-			//<aop:pointcut id="myCutLogging" expression="execution(* org.otherobjects.cms.controllers.SiteController*.*(..))" />
-			//	<aop:pointcut id="myCutLogging" expression="execution(* org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImpl*.*(..))" />  
-			<aop:pointcut id="myCutLogging" expression="execution(* org.otherobjects.cms.dao.DynaNodeDao.*(..))" />
-			<aop:around pointcut-ref="myCutLogging" method="log" />
+		//<aop:pointcut id="myCutLogging" expression="execution(* org.otherobjects.cms.controllers.SiteController*.*(..))" />
+		//	<aop:pointcut id="myCutLogging" expression="execution(* org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImpl*.*(..))" />  
+		<aop:pointcut id="myCutLogging" expression="execution(* org.otherobjects.cms.dao.DynaNodeDao.*(..))" />
+		<aop:around pointcut-ref="myCutLogging" method="log" />
 		</aop:aspect>
-	</aop:config>
+		</aop:config>
 	-->
 
 	<bean name="siteController" class="org.otherobjects.cms.controllers.SiteController">
 		<property name="navigatorService" ref="navigatorService" />
 		<property name="daoService" ref="daoService" />
 		<property name="userDao" ref="userDao" />
+	</bean>
+
+	<bean name="uploadController" class="org.otherobjects.cms.controllers.UploadController">
+		<property name="daoService" ref="daoService" />
 	</bean>
 
 	<bean name="workbenchController" class="org.otherobjects.cms.controllers.WorkbenchController">
@@ -35,7 +39,6 @@
 		<property name="typeService" ref="typeService" />
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
 		<property name="daoService" ref="daoService" />
-		<property name="typeDefBuilder" ref="typeDefBuilder"></property>
 	</bean>
 
 	<bean name="formController" class="org.otherobjects.cms.controllers.FormController">
@@ -43,7 +46,7 @@
 		<property name="daoService" ref="daoService" />
 		<property name="validator" ref="dynaNodeValidator" />
 		<property name="bindService" ref="bindService" />
-		<property name="typeDefBuilder" ref="typeDefBuilder" />
+		<property name="typeDefBuilder" ref="annotationBasedTypeDefBuilder" />
 	</bean>
 
 	<bean name="navigatorService" class="org.otherobjects.cms.workbench.NavigatorServiceImpl">
@@ -53,6 +56,7 @@
 
 	<bean name="contentService" class="org.otherobjects.cms.workbench.ContentServiceImpl">
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
+		<property name="daoService" ref="daoService" />
 		<dwr:remote javascript="ContentService" />
 	</bean>
 
@@ -61,10 +65,6 @@
 		<property name="dateFormat">
 			<value>dd/MM/yy</value>
 		</property>
-	</bean>
-
-	<bean id="typeDefBuilder" class="org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder">
-
 	</bean>
 
 	<bean name="setupUtils" class="org.otherobjects.cms.util.SetupUtils" init-method="bootstrap">
@@ -85,9 +85,12 @@
 	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
 			<props>
+				<prop key="/go/upload">uploadController</prop>
+				<prop key="/go/workbench/upload">uploadController</prop>
+				<prop key="/go/workbench/upload/**">uploadController</prop>
 				<prop key="/go/workbench/form/**">formController</prop>
 				<prop key="/go/workbench/data/**">workbenchDataController</prop>
-				<prop key="/go/workbench/*">workbenchController</prop>
+				<prop key="/go/workbench/**">workbenchController</prop>
 				<prop key="/go/**">siteController</prop>
 				<prop key="/go/*">siteController</prop>
 				<prop key="/go/workbench/api/**">xmlRpcController</prop>
@@ -161,11 +164,10 @@
 		</property>
 	</bean>
 
-	<!-- 
-		<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="10000000" />
-		</bean>
-	-->
+	</bean>
+
 	<bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
 		<property name="order">
 			<value>1</value>

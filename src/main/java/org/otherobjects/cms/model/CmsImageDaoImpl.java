@@ -34,6 +34,7 @@ public class CmsImageDaoImpl extends AbstractDynaNodeDaoJackrabbit implements Cm
     @Override
     public DynaNode save(DynaNode o)
     {
+
         CmsImage image = (CmsImage) o;
         if (image.getNewFile() != null)
         {
@@ -41,6 +42,7 @@ public class CmsImageDaoImpl extends AbstractDynaNodeDaoJackrabbit implements Cm
             image.setOriginalWidth(new Double(imageDimensions.getWidth()).longValue());
             image.setOriginalHeight(new Double(imageDimensions.getHeight()).longValue());
             DataFile original = new DataFile(image.getNewFile());
+            original.setFileName(image.getCode());
             original.setCollection(CmsImage.DATA_FILE_COLLECTION_NAME);
             original.setPath(CmsImage.ORIGINALS_PATH);
             original = this.dataFileDao.save(original);

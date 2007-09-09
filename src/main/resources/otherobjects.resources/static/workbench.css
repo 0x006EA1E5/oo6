@@ -16,6 +16,10 @@
 .welcome P {padding-bottom:10px;}
 .welcome UL {list-style:square; padding-left:20px; margin-top:5px; padding-bottom:10px}
 .welcome LI {padding-bottom:3px}
+.welcome .edits LI {list-style-image: url('/resources/otherobjects.resources/static/icons/bullet-red.png');}
+
+.welcome .bookmarklet {background:#666666; color:#ffffff; text-decoration:none; padding:1px 5px 1px 5px;}
+/* Can't use this: -moz-border-radius:5px; -khtml-border-radius:5px; */
 
 /* Panels */
 #edit-panel .x-form {padding:10px;}
@@ -26,11 +30,13 @@
 
 /* Navigator */
 .folder .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/extjs/images/default/tree/folder.gif)!important; }
+.smart-folders-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/zoom.png) 0px 1px no-repeat!important; }
 .site-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/sitemap-color.png) 0px 1px no-repeat!important; }
 .libraries-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/book.png) 0px 1px no-repeat!important; }
+.security-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/key.png) 0px 1px no-repeat!important; }
 .designer-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/palette.png) 0px 1px no-repeat!important; }
 .trash-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/bin-closed.png) -2px 1px no-repeat!important; }
-.datatypes-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/database.png) 0px 1px no-repeat!important; }
+.datatypes-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/database-gear.png) 0px 1px no-repeat!important; }
 
 /* Toolbar icons */
 .add-btn .x-btn-text { background-image:url(/resources/otherobjects.resources/static/extjs/images/default/tree/drop-add.gif); }
@@ -38,7 +44,7 @@
 .publish-btn .x-btn-text { background-image:url(/resources/otherobjects.resources/static/icons/tick.png); }
 
 
-/* Chooser */
+/* Image chooser */
 .details {padding: 10px; text-align: center; }
 .details-info {border-top: 1px solid #cccccc; font: 11px Arial, Helvetica, sans-serif; margin-top: 5px; padding-top: 5px; text-align: left; }
 .details-info b {color: #555555; display: block; margin-bottom: 4px;}
@@ -52,6 +58,26 @@
 .ychooser-view .x-view-selected {background: #ffffff; border: 1px solid #c3daf9; padding: 3px; }
 .ychooser-view .x-view-selected .thumb {background:transparent; }
 .ychooser-view .loading-indicator {font-size:11px; background-image:url('../../resources/images/grid/loading.gif'); background-repeat: no-repeat; background-position: left; padding-left:20px; margin:10px; }
+
+/* Uploader */
+.swfuploadbtn {display: block; width: 100px; padding: 0 0 0 20px;}
+.cancelbtn {display: block; width: 16px; height: 16px; float: right; background: url(/resources/otherobjects.resources/static/icons/cancel.png) no-repeat; }
+#cancelqueuebtn {display: block; display: none; background: url(/static/icons/cancel.png) no-repeat 0 4px; margin: 10px 0;}
+#SWFUploadFileListingFiles ul {margin: 0; padding: 0; list-style: none;}
+.SWFUploadFileItem {display: block; width: 230px; height: 70px; float: left; background: #eaefea; margin: 0 10px 10px 0; padding: 5px;}
+.fileUploading {background: #fee727;}
+.uploadCompleted {background: #d2fa7c;}
+.uploadCancelled {background: #f77c7c;}
+.uploadFailed {background: #ff0000;}
+.uploadCompleted .cancelbtn, .uploadCancelled .cancelbtn {display: none;}
+SPAN.progressBar {width: 200px; display: block; font-size: 10px; height: 4px; margin-top: 2px; margin-bottom: 10px; background-color: #CCC;}
+.queueinfo {clear:both; font-weight:bold; padding:10px 0px 10px 0px;}
+.uploader .x-btn-text-icon {float:left; padding:0px 10px 0px 0px;}
+
+/* Content */
+.content {font:80% Arial; padding:10px;}
+.content H1 {font:bold 130% Arial; padding-bottom:20px;}
+.content P {padding-bottom:10px;}
 
 
 /* Pending 

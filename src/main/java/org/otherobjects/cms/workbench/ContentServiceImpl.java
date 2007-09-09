@@ -1,8 +1,22 @@
 package org.otherobjects.cms.workbench;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Date;
+
+import org.apache.commons.io.FileUtils;
+import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.DynaNodeDao;
+import org.otherobjects.cms.model.CmsImage;
+import org.otherobjects.cms.model.CmsImageDao;
 import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.ws.FlickrImageService;
 import org.springframework.util.Assert;
+import org.xml.sax.SAXException;
+
+import com.aetrion.flickr.FlickrException;
+import com.aetrion.flickr.photos.Photo;
 
 /**
  * Default implementaion of content service.
@@ -11,46 +25,81 @@ import org.springframework.util.Assert;
  */
 public class ContentServiceImpl implements ContentService
 {
+    private DaoService daoService;
     private DynaNodeDao dynaNodeDao;
+
+    public DynaNode createImage(String provider, String imageId) throws IOException, SAXException, FlickrException
+    {
+        Assert.notNull("provider must be specified.", provider);
+        Assert.notNull("imageId must be specified.", imageId);
+
+        FlickrImageService flickr = new FlickrImageService();
+        CmsImageDao cmsImageDao = ((CmsImageDao) this.daoService.getDao(CmsImage.class));
+
+        Photo photo = flickr.getImage(imageId);
+
+        // FIXME Sort out unique temp path
+        File tmpFile = new File("/tmp/flickr.jpg");
+        FileUtils.copyURLToFile(new URL(photo.getLargeUrl()), tmpFile);
+        CmsImage image = cmsImageDao.createCmsImage();
+        image.setPath("/libraries/images/");
+        image.setCode("" + new Date().getTime());
+        //        image.setCode(StringUtils.substringAfterLast(photo.getSmallUrl(), "/"));
+        image.setNewFile(tmpFile);
+        image.setLabel(photo.getTitle());
+        //image.setKeywords(photo.getTags());
+        image.setOriginalId(photo.getId());
+        image.setOriginalProvider("FLICKR");
+        image = (CmsImage) cmsImageDao.save(image);
+        return image;
+
+    }
 
     public DynaNode createItem(String container, String typeName)
     {
-        Assert.notNull("container must be specified.",container);
-        Assert.notNull("typeName must be specified.",typeName);
-        
+        Assert.notNull("container must be specified.", container);
+        Assert.notNull("typeName must be specified.", typeName);
+
         //TODO Make sure this throws exception is not exists
-        DynaNode parent = dynaNodeDao.get(container);
-        dynaNodeDao.create(typeName);
-        
+        DynaNode parent = this.dynaNodeDao.get(container);
+        this.dynaNodeDao.create(typeName);
+
         //TODO M2 Merge this code with NavService version
         int c = 0;
         do
         {
-            String newPath = parent.getJcrPath() + "/untitled-" + ++c +".html";
-            boolean alreadyExists = (dynaNodeDao.existsAtPath(newPath));
-            if(!alreadyExists) break;
-            
-        } while(true);
-        
-        DynaNode newNode = dynaNodeDao.create(typeName);
+            String newPath = parent.getJcrPath() + "/untitled-" + ++c + ".html";
+            boolean alreadyExists = (this.dynaNodeDao.existsAtPath(newPath));
+            if (!alreadyExists)
+                break;
+
+        }
+        while (true);
+
+        DynaNode newNode = this.dynaNodeDao.create(typeName);
         newNode.setPath(parent.getJcrPath());
-        newNode.setCode("untitled-" + c +".html"); //TODO M2 Auto generate
+        newNode.setCode("untitled-" + c + ".html"); //TODO M2 Auto generate
         newNode.setLabel("Untitled " + c);
-        return dynaNodeDao.save(newNode);
+        return this.dynaNodeDao.save(newNode);
     }
-    
+
     public DynaNode publishItem(String uuid)
     {
-        Assert.notNull("item must be specified.",uuid);
-        
-        DynaNode item = dynaNodeDao.get(uuid);
-        dynaNodeDao.publish(item);
+        Assert.notNull("item must be specified.", uuid);
+
+        DynaNode item = this.dynaNodeDao.get(uuid);
+        this.dynaNodeDao.publish(item);
         return item;
     }
 
     public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
     {
         this.dynaNodeDao = dynaNodeDao;
+    }
+
+    public void setDaoService(DaoService daoService)
+    {
+        this.daoService = daoService;
     }
 
 }

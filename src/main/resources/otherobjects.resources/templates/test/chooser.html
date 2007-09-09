@@ -9,8 +9,6 @@
 <script type="text/javascript" src="/resources/otherobjects.resources/static/extjs/src/ext-all-debug.js"></script>
 <script type="text/javascript" src="/resources/otherobjects.resources/static/edit.js"></script>
 <script type="text/javascript" src="/resources/otherobjects.resources/static/chooser-field.js"></script>
-<script type="text/javascript" src="/resources/otherobjects.resources/static/swfupload-1.0.2/SWFUpload.js"></script>
-<script type="text/javascript" src="/resources/otherobjects.resources/static/swfupload-1.0.2/callbacks.js"></script>
 <script type="text/javascript" src="/dwr/engine.js"></script>
 <script type="text/javascript" src="/dwr/interface/ContentService.js"></script>
 <script type="text/javascript" src="/dwr/interface/NavigatorService.js"></script>
@@ -23,7 +21,67 @@
 
 <body>
 
-#parse("otherobjects.resources/templates/uploader.html")
+<div id="test" style="padding:10px"></div>
+
+<a href="javascript:addField()">Add</a>
+
+<script>
+var frm;
+
+function addField() {
+	var values = {title:'Rich', tags:["T One","T Two","T Three"]};
+}
+
+
+function buildForm()
+{
+	// TODO Find out about QuickTips
+	Ext.QuickTips.init();
+	
+	// Show form validation warnings next to each field
+	Ext.form.Field.prototype.msgTarget = 'side';
+	
+	// Create form
+    frm = new Ext.form.Form({
+		labelAlign: 'left',
+		buttonAlign: 'left',
+		monitorValid: true,
+		labelWidth: 120
+    });
+
+
+		var f = new Ext.form.OOChooserField({
+						
+						fieldLabel: "Image",
+			            name: "image",
+			            allowBlank:true,
+					    //store: store,
+					    displayField:'label',
+					    valueField:'id',
+					    typeAhead: true,
+					    //mode: 'local',
+					    triggerAction: 'all',
+					    emptyText:'Select...',
+					    valueNotFoundText: '???',
+					    selectOnFocus:true
+					});
+					
+	frm.add(f);
+
+    frm.addButton('Save', function() {
+		form.submit({url:'/', bindForm:true, waitMsg:'Saving Data...' });   
+	});
+	
+    frm.render('test');
+}
+
+Ext.onReady(buildForm);
+
+
+
+
+
+</script>
 
 </body>
 </html>

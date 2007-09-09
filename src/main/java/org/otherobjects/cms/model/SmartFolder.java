@@ -1,20 +1,14 @@
 package org.otherobjects.cms.model;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import org.otherobjects.cms.SingletonBeanLocator;
-import org.otherobjects.cms.types.TypeService;
 
 import flexjson.JSON;
 
 @SuppressWarnings("unchecked")
-public class DbFolder extends DynaNode implements Folder
+public class SmartFolder extends DynaNode implements Folder
 {
-
     private String label;
-    private String mainType;
-    private String mainTypeQuery;
+    private String query;
     private String cssClass;
 
     public List getAllAllowedTypes()
@@ -25,10 +19,8 @@ public class DbFolder extends DynaNode implements Folder
     @JSON(include = false)
     public List getAllowedTypes()
     {
-        // Only allowed type is the main type...    
-        List types = new ArrayList();
-        types.add(((TypeService) SingletonBeanLocator.getBean("typeService")).getType(this.mainType));
-        return types;
+        // Smart folders are read only
+        return null;
     }
 
     public void setAllowedTypes(List allowedTypes)
@@ -48,24 +40,14 @@ public class DbFolder extends DynaNode implements Folder
         this.label = label;
     }
 
-    public String getMainType()
+    public String getQuery()
     {
-        return this.mainType;
+        return this.query;
     }
 
-    public void setMainType(String mainType)
+    public void setQuery(String query)
     {
-        this.mainType = mainType;
-    }
-
-    public String getMainTypeQuery()
-    {
-        return this.mainTypeQuery;
-    }
-
-    public void setMainTypeQuery(String mainTypeQuery)
-    {
-        this.mainTypeQuery = mainTypeQuery;
+        this.query = query;
     }
 
     public String getCssClass()

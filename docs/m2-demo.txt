@@ -1,19 +1,18 @@
 Demo
 
-* Smart folders
-* Performance analysis tools + request headers/params + template info + page headers
+* Improved welcome page
+* Folder overview pages
 * Folder and page publishing
 * Sort and serach in grid
 * Database objects
-* IPTC/Exif Data
-* External link bookmarlet
-* My action list
-* Libaries with web service integration
-* Edit/stats site toolbar
-* International sites (via IP lookup?)
+* Smart folders
+* Performance analysis tools + request headers/params + template info + page headers
+* Bulk upload, folder objecrs, IPTC data
+* Delicious external links
+* Flickr images
 * Versioning diffs and rollbacks
-* Rules engine integration
 * Blogger API
+* Edit/stats site toolbar
 
 Developer demo
 
@@ -21,7 +20,6 @@ Developer demo
 * Groovy as scripting language
 * References vs components
 * Maven
-* Maven archetypes
 
 Discussions
 
@@ -30,3 +28,4 @@ Discussions
 * Site structure
 * Libraries -- is publishing a good idea. Duplicate data directories.
 * Settign up maven repository
+* Setup up trac/svnview

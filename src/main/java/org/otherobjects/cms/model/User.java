@@ -27,7 +27,6 @@ import org.otherobjects.cms.types.annotation.PropertyDefAnnotation;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.TypeDefAnnotation;
 
-
 /**
  * This class represents the basic "user" object in AppFuse that allows for authentication
  * and user management.  It implements Acegi Security's UserDetails interface.
@@ -39,8 +38,8 @@ import org.otherobjects.cms.types.annotation.TypeDefAnnotation;
  */
 @Entity
 @Table(name = "app_user")
-@SequenceGenerator(name="UserSeq", sequenceName="app_user_seq")
-@TypeDefAnnotation(jcrPath="/Site/users", description="A User", labelProperty="fullName")
+@SequenceGenerator(name = "UserSeq", sequenceName = "app_user_seq")
+@TypeDefAnnotation(jcrPath = "/Site/users", label = "User", description = "A User", labelProperty = "email")
 public class User implements Serializable, UserDetails, Editable
 {
 
@@ -60,7 +59,7 @@ public class User implements Serializable, UserDetails, Editable
     protected boolean accountExpired;
     protected boolean accountLocked;
     protected boolean credentialsExpired;
-    
+
     protected TypeDef typeDef;
 
     public User()
@@ -72,58 +71,65 @@ public class User implements Serializable, UserDetails, Editable
         this.username = username;
     }
 
+    @Transient
+    public String getLabel()
+    {
+        // FIXME Move this to an superclass? Fetch via annotation?
+        return getEmail();
+    }
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="UserSeq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "UserSeq")
     public Long getId()
     {
-        return id;
+        return this.id;
     }
 
     @Column(nullable = false, length = 50, unique = true)
-    @PropertyDefAnnotation(type=PropertyType.STRING, required=true, label="Username")
+    @PropertyDefAnnotation(type = PropertyType.STRING, required = true, label = "Username")
     public String getUsername()
     {
-        return username;
+        return this.username;
     }
 
     @Column(nullable = false)
     public String getPassword()
     {
-        return password;
+        return this.password;
     }
 
     @Transient
     public String getConfirmPassword()
     {
-        return confirmPassword;
+        return this.confirmPassword;
     }
 
     @Column(name = "password_hint")
-    @PropertyDefAnnotation(type=PropertyType.STRING, label="Password hint")
+    @PropertyDefAnnotation(type = PropertyType.TEXT, label = "Password hint")
     public String getPasswordHint()
     {
-        return passwordHint;
+        return this.passwordHint;
     }
 
     @Column(name = "first_name", nullable = false, length = 50)
-    @PropertyDefAnnotation(type=PropertyType.STRING, label="First name")
+    @PropertyDefAnnotation(type = PropertyType.STRING, label = "First name")
     public String getFirstName()
     {
-        return firstName;
+        return this.firstName;
     }
 
     @Column(name = "last_name", nullable = false, length = 50)
-    @PropertyDefAnnotation(type=PropertyType.STRING, label="Last name")
+    @PropertyDefAnnotation(type = PropertyType.STRING, label = "Last name")
     public String getLastName()
     {
-        return lastName;
+        return this.lastName;
     }
 
     @Column(nullable = false, unique = true)
-    @PropertyDefAnnotation(required=true, type=PropertyType.STRING, label="Email")
+    @PropertyDefAnnotation(required = true, type = PropertyType.STRING, label = "Email")
     public String getEmail()
     {
-        return email;
+        return this.email;
     }
 
     /**
@@ -133,14 +139,15 @@ public class User implements Serializable, UserDetails, Editable
     @Transient
     public String getFullName()
     {
-        return firstName + ' ' + lastName;
+        return this.firstName + ' ' + this.lastName;
     }
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @PropertyDefAnnotation(type = PropertyType.LIST, label = "Roles", collectionElementType = PropertyType.REFERENCE, relatedType = "org.otherobjects.cms.model.Role")
     public Set<Role> getRoles()
     {
-        return roles;
+        return this.roles;
     }
 
     /**
@@ -158,26 +165,26 @@ public class User implements Serializable, UserDetails, Editable
     @Transient
     public GrantedAuthority[] getAuthorities()
     {
-        return roles.toArray(new GrantedAuthority[0]);
+        return this.roles.toArray(new GrantedAuthority[0]);
     }
 
     @Version
     public Integer getVersion()
     {
-        return version;
+        return this.version;
     }
 
     @Column(name = "account_enabled")
-    @PropertyDefAnnotation(type=PropertyType.BOOLEAN, label="Enabled?")
+    @PropertyDefAnnotation(type = PropertyType.BOOLEAN, label = "Enabled")
     public boolean isEnabled()
     {
-        return enabled;
+        return this.enabled;
     }
 
     @Column(name = "account_expired", nullable = false)
     public boolean isAccountExpired()
     {
-        return accountExpired;
+        return this.accountExpired;
     }
 
     /**
@@ -192,7 +199,7 @@ public class User implements Serializable, UserDetails, Editable
     @Column(name = "account_locked", nullable = false)
     public boolean isAccountLocked()
     {
-        return accountLocked;
+        return this.accountLocked;
     }
 
     /**
@@ -207,7 +214,7 @@ public class User implements Serializable, UserDetails, Editable
     @Column(name = "credentials_expired", nullable = false)
     public boolean isCredentialsExpired()
     {
-        return credentialsExpired;
+        return this.credentialsExpired;
     }
 
     /**
@@ -216,7 +223,7 @@ public class User implements Serializable, UserDetails, Editable
     @Transient
     public boolean isCredentialsNonExpired()
     {
-        return !credentialsExpired;
+        return !this.credentialsExpired;
     }
 
     public void setId(Long id)
@@ -289,6 +296,7 @@ public class User implements Serializable, UserDetails, Editable
         this.credentialsExpired = credentialsExpired;
     }
 
+    @Override
     public boolean equals(Object o)
     {
         if (this == o)
@@ -298,21 +306,23 @@ public class User implements Serializable, UserDetails, Editable
 
         final User user = (User) o;
 
-        return !(username != null ? !username.equals(user.getUsername()) : user.getUsername() != null);
+        return !(this.username != null ? !this.username.equals(user.getUsername()) : user.getUsername() != null);
 
     }
 
+    @Override
     public int hashCode()
     {
-        return (username != null ? username.hashCode() : 0);
+        return (this.username != null ? this.username.hashCode() : 0);
     }
 
+    @Override
     public String toString()
     {
         ToStringBuilder sb = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE).append("username", this.username).append("enabled", this.enabled).append("accountExpired", this.accountExpired)
                 .append("credentialsExpired", this.credentialsExpired).append("accountLocked", this.accountLocked);
 
-        GrantedAuthority[] auths = this.getAuthorities();
+        GrantedAuthority[] auths = getAuthorities();
         if (auths != null)
         {
             sb.append("Granted Authorities: ");
@@ -332,42 +342,44 @@ public class User implements Serializable, UserDetails, Editable
         }
         return sb.toString();
     }
-    
-    @Transient
-	public String getEditableId() {
-		return getClass().getName() + "-" + getId();
-	}
-    
-    @Transient
-	public TypeDef getTypeDef() {
-		return typeDef;
-	}
 
-	public void setTypeDef(TypeDef typeDef) {
-		this.typeDef = typeDef;
-	}
-    
+    @Transient
+    public String getEditableId()
+    {
+        return getClass().getName() + "-" + getId();
+    }
+
+    @Transient
+    public TypeDef getTypeDef()
+    {
+        return this.typeDef;
+    }
+
+    public void setTypeDef(TypeDef typeDef)
+    {
+        this.typeDef = typeDef;
+    }
+
     // the following is not needed anymore as it is done with annotations now
-//    @Transient
-//    public TypeDef getTypeDef()
-//    {
-//    	TypeDef typeDef = new TypeDef();
-//    	typeDef.setSuperClassName("java.lang.Object");
-//    	typeDef.setClassName(getClass().getName());
-//    	typeDef.setDescription("A user");
-//    	typeDef.setId(getEditableId());
-//    	typeDef.setJcrPath("/Site/users");
-//    	typeDef.setLabelProperty("fullName");
-//    	//typeDef.addProperty(new PropertyDef("id", "number", null, null, true));
-//    	typeDef.addProperty(new PropertyDef("email", "string", null, null, true));
-//    	typeDef.addProperty(new PropertyDef("username", "string", null, null));
-//    	typeDef.addProperty(new PropertyDef("firstName", "string", null, null));
-//    	typeDef.addProperty(new PropertyDef("lastName", "string", null, null));
-//    	typeDef.addProperty(new PropertyDef("enabled", "boolean", null, null));
-//    	typeDef.addProperty(new PropertyDef("passwordHint", "string", null, null));
-//    	
-//    	return typeDef;
-//    }
-    
-    
+    //    @Transient
+    //    public TypeDef getTypeDef()
+    //    {
+    //    	TypeDef typeDef = new TypeDef();
+    //    	typeDef.setSuperClassName("java.lang.Object");
+    //    	typeDef.setClassName(getClass().getName());
+    //    	typeDef.setDescription("A user");
+    //    	typeDef.setId(getEditableId());
+    //    	typeDef.setJcrPath("/Site/users");
+    //    	typeDef.setLabelProperty("fullName");
+    //    	//typeDef.addProperty(new PropertyDef("id", "number", null, null, true));
+    //    	typeDef.addProperty(new PropertyDef("email", "string", null, null, true));
+    //    	typeDef.addProperty(new PropertyDef("username", "string", null, null));
+    //    	typeDef.addProperty(new PropertyDef("firstName", "string", null, null));
+    //    	typeDef.addProperty(new PropertyDef("lastName", "string", null, null));
+    //    	typeDef.addProperty(new PropertyDef("enabled", "boolean", null, null));
+    //    	typeDef.addProperty(new PropertyDef("passwordHint", "string", null, null));
+    //    	
+    //    	return typeDef;
+    //    }
+
 }
