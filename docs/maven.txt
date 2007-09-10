@@ -84,6 +84,11 @@ Hibernate search
 get hibernate search 3.0.0 beta4 from www.hibernate.org
 mvn install:install-file -DgroupId=org.hibernate -DartifactId=hibernate-search -Dversion=3.0.0.beta4 -Dpackaging=jar -Dfile=/path/to/hibernate-search.jar
 
+UUID
+http://johannburkard.de/software/uuid/
+mvn install:install-file -DgroupId=com.eaio -DartifactId=uuid -Dversion=2.1.3 -Dpackaging=jar -Dfile=uuid-2.1.3.jar -DgeneratePom=true
+mvn install:install-file -DgroupId=com.eaio -DartifactId=uuid -Dversion=2.1.3 -Dpackaging=jar -Dfile=uuid.jar -Dclassifier=sources
+
 
 mvn install:install-file -DgroupId=com.drewnoakes -DartifactId=metadata-extractor -Dversion=2.3.1 -Dpackaging=jar -Dfile=metadata-extractor.jar -DgeneratePom=true
 mvn install:install-file -DgroupId=net.sourceforge -DartifactId=xmlrpc -Dversion=1.1 -Dpackaging=jar -DgeneratePom=true -Dfile=xmlrpc-1.1.jar 
