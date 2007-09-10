@@ -30,8 +30,8 @@ public class ContentServiceImpl implements ContentService
     {
         try
         {
-            Assert.notNull("provider must be specified.", service);
-            Assert.notNull("imageId must be specified.", imageId);
+            Assert.hasText("provider must be specified.", service);
+            Assert.hasText("imageId must be specified.", imageId);
 
             FlickrImageService flickr = new FlickrImageService();
             CmsImageDao cmsImageDao = ((CmsImageDao) this.daoService.getDao(CmsImage.class));
@@ -62,8 +62,8 @@ public class ContentServiceImpl implements ContentService
 
     public DynaNode createItem(String container, String typeName)
     {
-        Assert.notNull("container must be specified.", container);
-        Assert.notNull("typeName must be specified.", typeName);
+        Assert.hasText("container must be specified.", container);
+        Assert.hasText("typeName must be specified.", typeName);
 
         //TODO Make sure this throws exception is not exists
         DynaNode parent = this.dynaNodeDao.get(container);
@@ -90,10 +90,19 @@ public class ContentServiceImpl implements ContentService
 
     public DynaNode publishItem(String uuid, String message)
     {
-        Assert.notNull("item must be specified.", uuid);
+        Assert.hasText("item must be specified.", uuid);
 
         DynaNode item = this.dynaNodeDao.get(uuid);
         this.dynaNodeDao.publish(item, message);
+        return item;
+    }
+
+    public DynaNode restoreItemVersion(String uuid, int changeNumber, String message)
+    {
+        Assert.hasText("item must be specified.", uuid);
+
+        DynaNode item = this.dynaNodeDao.get(uuid);
+        this.dynaNodeDao.restoreVersionByChangeNumber(item, changeNumber, true);
         return item;
     }
 

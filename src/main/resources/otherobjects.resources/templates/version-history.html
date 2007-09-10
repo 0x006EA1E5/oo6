@@ -1,0 +1,94 @@
+#set($id = $request.getParameter("id"))
+#set($dao = $daoService.getDao("DynaNode"))
+#set($current = $dao.get($id))
+
+<script>
+function toggleDiffs(btn, id) {
+	var d = Ext.get(id);
+	d.enableDisplayMode();
+	d.toggle();
+	if(d.isDisplayed()) {
+		btn.setText("Hide differences");
+		btn.getEl().addClass("hide-below-btn");
+		btn.getEl().removeClass("show-below-btn");
+	}
+	else {
+		btn.setText("Show differences");
+		btn.getEl().removeClass("hide-below-btn");
+		btn.getEl().addClass("show-below-btn");
+	}
+}
+
+function restoreVersion(changeNo) {
+	ContentService.restoreItemVersion('$current.id', changeNo, '', restoreComplete);
+}
+
+function restoreComplete() {
+	Ext.MessageBox.alert('Status', 'Version rolled back successfully.');
+}
+
+
+
+
+</script>
+
+<div class="content">
+
+<h1>Version history</h1>
+ 
+<p id="test">This page shows the history of evers time the selected item was published. 
+You can compare the current version to a previous one, and rollback if you want to.</p>
+
+<style>
+.version {background:#cccccc; border:1px solid #000000; padding:3px; margin-bottom:10px;}
+.version H2 {float:left; padding:3px 0px 0px 5px;}
+.button {float:left;display:table;margin-right:10px;}
+TABLE.diffs {margin:10px 10px 30px 0px; width:100%; border-collapse:collapse;} 
+.diffs TR, .diffs TD, .diffs TH {border-bottom:1px solid #CCCCCC;}
+.diffs TH {padding:5px 5px 0px 5px; text-align:left; background-color:#F6F6F6; font-weight:bold;}
+.diffs TD {padding:5px 5px 0px 5px; vertical-align:top;}
+.diffs TD P {padding:0px 0px 5px 0px;}
+.diffs STRONG {font-style:italic;} 
+</style>
+
+<div class="version">
+<h2>Current version: <strong>$current.label</strong> modified at $dateTool.format("HH:mm", $current.modificationTimestamp) by $current.userName ($current.changeNumber)</h2>
+<span class="clear"></span>
+</div>
+
+#foreach($v in $dao.getVersions($current))
+
+<div class="version">
+<span class="button" id="actions-$velocityCount"></span><span class="button" id="actions2-$velocityCount"></span>
+<h2>Version: <strong>$v.label</strong> published at $dateTool.format("HH:mm", $v.modificationTimestamp) by $v.userName ($v.changeNumber)</h2>
+<script>
+new Ext.Button('actions-$velocityCount',{text:'Show differences', cls:"x-btn-text-icon show-below-btn", handler:function(e) {toggleDiffs(e, 'diffs-$velocityCount')}});
+new Ext.Button('actions2-$velocityCount',{text:'Rollback to this version', cls:"x-btn-text-icon undo-btn", handler:function() { restoreVersion($v.changeNumber) }});
+</script>
+<span class="clear"></span>
+</div>
+
+
+<table class="diffs" id="diffs-$velocityCount" style="display:none;">
+<tr>
+<th width="150"><p>Property</p></th>
+<th><p>Current value</p></th>
+<th><p>Old value</p></th>
+</tr>
+#foreach($p in $current.typeDef.properties)
+#set($currentValue=$!current.get($p.name))
+#set($oldValue=$!v.get($p.name))
+<tr #if($oldValue != $currentValue)style="background:#FFBBBB;"#end>
+<td><p><strong>$p.name</strong></p></td>
+<td><p>$!currentValue</p></td>
+<td><p>$!oldValue</p></td>
+</tr>
+#end
+</table>
+
+
+#end
+
+</div>
+
+

@@ -87,7 +87,7 @@ OO.Workbench = function()
 				}
 			});
 			
-			// Creat upload tab
+			// Create upload tab
 			var bulkUploadPanel = new Ext.ContentPanel('bulk-upload-panel', {autoCreate:true, title:'Bulk upload', background:true, closable:true, scripts:true, url:'/go/workbench/uploader.html'});
 			bulkUploadPanel.on("activate", function(t) {	
 				var updater = t.getUpdateManager();
@@ -97,6 +97,17 @@ OO.Workbench = function()
 					params:{}
 		        });
 			});
+			
+			// Create version history tab
+			var versionHistoryPanel = new Ext.ContentPanel('version-history-panel', {autoCreate:true, title:'Version history', background:true, closable:true, scripts:true, url:'/go/workbench/version-history.html'});
+			versionHistoryPanel.on("activate", function(t) {	
+				var updater = t.getUpdateManager();
+		        updater.update({
+		        	url: "/go/workbench/version-history.html?id="+currentItem,
+		        	scripts:true,
+					params:{}
+		        });
+			}, this);
 			
 			// Create navigator
 			navigator = OO.Navigator;
@@ -111,10 +122,12 @@ OO.Workbench = function()
 	        layout.add('center', editPanel);
 	        layout.add('center', previewPanel);
 	        layout.add('center', bulkUploadPanel);
+	        layout.add('center', versionHistoryPanel);
 	        // layout.add('south', new Ext.ContentPanel('status'));
 	        layout.endUpdate();
 			
-			layout.getRegion("center").showPanel("listing-panel");
+//			layout.getRegion("center").showPanel("listing-panel");
+			layout.getRegion("center").showPanel("version-history-panel");
 
         },
 		

@@ -215,7 +215,7 @@ SWFUpload.prototype.loadUI = function() {
 			//uploadlink.onclick = function() { instance.upload(); return false; }
 			//uploadlink.innerHTML = this.getSetting("upload_link_innerhtml");
 			//target.appendChild(uploadlink);
-			new Ext.Button(target,{text:'Start upload', icon:'/resources/otherobjects.resources/static/icons/arrow_up.png', cls:"x-btn-text-icon", handler:function() { instance.upload(); return false; }});
+			new Ext.Button(target,{text:'Start upload', icon:'/resources/otherobjects.resources/static/icons/arrow-up.png', cls:"x-btn-text-icon", handler:function() { instance.upload(); return false; }});
 		
 		}
 	

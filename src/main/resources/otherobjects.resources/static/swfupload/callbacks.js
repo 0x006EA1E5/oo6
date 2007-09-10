@@ -1,4 +1,4 @@
-var swfu;
+ var swfu;
 function initSwfUpload()
 {
 	var target = "/go/workbench/upload;jsessionid=" + readCookie('JSESSIONID');
@@ -6,7 +6,7 @@ function initSwfUpload()
 	swfu = new SWFUpload({
 		upload_script : target,
 		target : "SWFUploadTarget",
-		flash_path : "/resources/otherobjects.resources/static/swfupload-1.0.2/SWFUpload.swf",
+		flash_path : "/resources/otherobjects.resources/static/swfupload/SWFUpload.swf",
 		allowed_filesize : 30720,	// 30 MB
 		allowed_filetypes : "*.jpg;*.gif;*.png",
 		allowed_filetypes_description : "All image files...",

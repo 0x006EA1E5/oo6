@@ -41,11 +41,13 @@
 .trash-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/bin-closed.png) -2px 1px no-repeat!important; }
 .datatypes-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/database-gear.png) 0px 1px no-repeat!important; }
 
-/* Toolbar icons */
-.add-btn .x-btn-text { background-image:url(/resources/otherobjects.resources/static/extjs/images/default/tree/drop-add.gif); }
-.refresh-btn .x-btn-text { background-image:url(/resources/otherobjects.resources/static/icons/arrow-refresh-small.png); }
-.publish-btn .x-btn-text { background-image:url(/resources/otherobjects.resources/static/icons/tick.png); }
-
+/* Button icons */
+.add-btn .x-btn-text {background-image:url(/resources/otherobjects.resources/static/extjs/images/default/tree/drop-add.gif);}
+.refresh-btn .x-btn-text {background-image:url(/resources/otherobjects.resources/static/icons/arrow-refresh-small.png);}
+.publish-btn .x-btn-text {background-image:url(/resources/otherobjects.resources/static/icons/tick.png);}
+.undo-btn .x-btn-text {background-image:url(/resources/otherobjects.resources/static/icons/arrow-undo.png);}
+.show-below-btn .x-btn-text {background-image:url(/resources/otherobjects.resources/static/icons/bullet-arrow-down.png);}
+.hide-below-btn .x-btn-text {background-image:url(/resources/otherobjects.resources/static/icons/bullet-arrow-up.png);}
 
 /* Image chooser */
 .details {padding: 10px; text-align: center; }

@@ -23,6 +23,7 @@ import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.dao.PagedResult;
 import org.otherobjects.cms.dao.PagedResultImpl;
 import org.otherobjects.cms.model.CmsNode;
+import org.otherobjects.cms.model.DynaNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.orm.ObjectRetrievalFailureException;
@@ -439,10 +440,21 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
                     Session session = manager.getSession();
                     Node node = session.getNodeByUUID(object.getId());
                     printVersionHistory(node.getVersionHistory());
-                    String requestedVersionName = node.getVersionHistory().getVersionByLabel(changeNumber + "").getName();
+
+                    // FIXME We need to increment the version by 1? Something iffy here 
+                    String requestedVersionName = node.getVersionHistory().getVersionByLabel(changeNumber + 1 + "").getName();
                     Version requestedVersion = node.getVersionHistory().getVersion(requestedVersionName);
                     node.restore(requestedVersion, removeExisting);
-                    // reget object
+
+                    // Checkout so changes can be made again
+                    node.checkout();
+
+                    // Update change number
+                    int newChangeNumber = ((DynaNode) object).getChangeNumber() + 1;
+                    node.setProperty("changeNumber", newChangeNumber);
+                    node.save();
+
+                    // re-get object
                     return manager.getObjectByUuid(object.getId());
                 }
                 catch (Exception e)
@@ -466,7 +478,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
         {
             Version version = vi.nextVersion();
             if (!version.getName().equals("jcr:rootVersion"))
-                System.out.println("label(s):" + versionHistory.getVersionLabels(version)[0] + " name: " + version.getName());
+                System.err.println("label(s):" + versionHistory.getVersionLabels(version)[0] + " name: " + version.getName());
         }
     }
 

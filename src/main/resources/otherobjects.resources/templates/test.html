@@ -19,6 +19,35 @@
 
 <body>
 
+#set($dao = $daoService.getDao("DynaNode"))
+#set($home = $dao.getByPath("/site/welcome-2.html"))
+
+
+
+
+#foreach($v in $dao.getVersions($home))
+<hr/>
+
+<table>
+<tr>
+<th>Property</th>
+<th>Current value</th>
+<th>Old value</th>
+</tr>
+#foreach($p in $home.typeDef.properties)
+#set($current=$!home.get($p.name))
+#set($old=$!v.get($p.name))
+<tr #if($old != $current)style="background:#FFBBBB;"#end>
+<td>$p.name</td>
+<td>$!current</td>
+<td>$!old</td>
+</tr>
+#end
+</table>
+
+
+#end
+
 <a id="go" href="#">Go</a>
 
 <script>

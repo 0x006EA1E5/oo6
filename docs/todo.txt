@@ -1,33 +1,27 @@
 M2 TODO
 -------
-
-[IN PROGRESS] * Site Toolbar / Page performance reporting (queries per page via AOP) and disableable
-[FROM M3] * Embed Quartz as job scheduler
 [FROM M3] * Support blog publishing APIs http://www.blogger.com/developers/api/1_docs/ (Joerg)
-
 * DbFolder: Finish role selector  (Joerg)
 * DbFolder Fix annotation ordering in user/role. Is this even possible?  (Joerg)
 * Validators on user email addresses (Joerg)
 * Translate workbench.properties (Joerg)
-* Flickr/delicious + url service 
-* Scheduler + embargo
-* Remove rogue metaData and other components
+
+[IN PROGRESS] * Site Toolbar / Page performance reporting (queries per page via AOP) and disableable
 * Folder overview page
-* Finish up recent changes and my edits
-* Moving/trashing/publishing bugs
 * Object inspector (html/string/log)
-* Flickr/image search
+* Version history and rollback
 * Limit types per folder
-* Libraries
- + Bookmarklet
- + Delicous support
- + Rich media
+* Remove rogue metaData and other components
+* Moving/trashing/publishing bugs
+* Flickr/image search
+* External link library: bookmarklet +delicous support
+* Rich media library
 * Publishing fixes  
  + Change folder icon based publish state
- + UI for rolling back versions
  + Change state of chid items on publish
  + Publish without descending 
 * PublishingOptions: template, emargo until, exipre on, show in menu, do not index or put in sitemap, hotkey
+[FROM M3] * Embed Quartz as job scheduler
 
 M2 Done
 -------
