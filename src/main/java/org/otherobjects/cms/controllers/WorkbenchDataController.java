@@ -16,7 +16,6 @@ import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.dao.GenericDao;
 import org.otherobjects.cms.dao.PagedResult;
-import org.otherobjects.cms.dao.PagedResultImpl;
 import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.CmsImageDao;
 import org.otherobjects.cms.model.CompositeDatabaseId;
@@ -299,7 +298,9 @@ public class WorkbenchDataController implements Controller
         PagedResult pagedResult = null;
         if (node instanceof SiteFolder)
         {
-            pagedResult = this.dynaNodeDao.getPagedByPath(jcrPath, ITEMS_PER_PAGE, getRequestedPage(request), q, sort, asc);
+            //pagedResult = this.dynaNodeDao.getPagedByPath(jcrPath, ITEMS_PER_PAGE, getRequestedPage(request), q, sort, asc);
+            String query = "/jcr:root" + jcrPath + "/* [not(jcr:like(@ooType,'%Folder')) and not(jcr:like(@ooType,'%MetaData'))] order by @modificationTimestamp descending";
+            pagedResult = this.dynaNodeDao.pageByJcrExpression(query, ITEMS_PER_PAGE, getRequestedPage(request));
         }
         else if (node instanceof SmartFolder)
         {
@@ -309,9 +310,8 @@ public class WorkbenchDataController implements Controller
             query = "/jcr:root/site//*[jcr:contains(., '" + query + "') and not(jcr:like(@ooType,'%Folder'))] order by @modificationTimestamp descending";
 
             Assert.hasText(query, "SmartFolder must have a query.");
-            List<DynaNode> results = this.dynaNodeDao.getAllByJcrExpression(query);
+            pagedResult = this.dynaNodeDao.pageByJcrExpression(query, ITEMS_PER_PAGE, getRequestedPage(request));
 
-            pagedResult = new PagedResultImpl<DynaNode>(ITEMS_PER_PAGE, results.size(), getRequestedPage(request), results, true);
         }
         else if (node instanceof DbFolder)
         {

@@ -9,9 +9,7 @@ M2 TODO
 [IN PROGRESS] * Site Toolbar / Page performance reporting (queries per page via AOP) and disableable
 * Folder overview page
 * Object inspector (html/string/log)
-* Version history and rollback
 * Limit types per folder
-* Remove rogue metaData and other components
 * Moving/trashing/publishing bugs
 * Flickr/image search
 * External link library: bookmarklet +delicous support
@@ -29,10 +27,17 @@ M2 Done
 * Tidy up artist page
 * Improve artwork page.
 * Google sitemap
+* Remove rogue metaData and other components
 [IN PROGRESS] * Smart folders
+* Version history and rollback
 
 Post M2
 -------
+Properly remove components
+Version History
++ Not for DB objects
++ Deal with components
++ Relative times
 Template support
  + Block properties -- global and inplace
  + Component support

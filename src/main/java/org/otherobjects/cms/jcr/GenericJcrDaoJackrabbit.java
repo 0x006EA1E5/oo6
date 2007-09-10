@@ -7,6 +7,7 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
@@ -150,6 +151,28 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
                         results.add((T) manager.getObjectByUuid(nodeIterator.nextNode().getUUID()));
 
                     return results;
+                }
+                catch (Exception e)
+                {
+                    throw new JcrMappingException(e);
+                }
+            }
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    public PagedResult<T> pageByJcrExpression(final String jcrExpression, final int pageSize, final int pageNo)
+    {
+        return (PagedResult<T>) getJcrMappingTemplate().execute(new JcrMappingCallback()
+        {
+            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+            {
+                try
+                {
+                    javax.jcr.query.QueryManager queryManager = manager.getSession().getWorkspace().getQueryManager();
+                    javax.jcr.query.Query query = queryManager.createQuery(jcrExpression, javax.jcr.query.Query.XPATH);
+                    javax.jcr.query.QueryResult queryResult = query.execute();
+                    return createPagedResults(manager, queryResult, pageSize, pageNo);
                 }
                 catch (Exception e)
                 {
@@ -596,36 +619,44 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
                     javax.jcr.query.Query query = queryManager.createQuery(queryString.toString(), javax.jcr.query.Query.XPATH);
 
                     javax.jcr.query.QueryResult queryResult = query.execute();
-                    // first count results
-                    NodeIterator nodeIterator = queryResult.getNodes();
-                    long count = nodeIterator.getSize();
-
-                    int startIndex = PagedResultImpl.calcStartIndex(pageSize, pageNo);
-                    int endIndex = PagedResultImpl.calcEndIndex(pageSize, (int) count, startIndex); //FIXME we are downcasting to int here which could theoretically cause problems ...
-
-                    // now do a loop and store the range of interest in a list
-                    List<T> nodes = new ArrayList<T>();
-                    int i = 0;
-                    while (nodeIterator.hasNext())
-                    {
-                        if (i >= startIndex && i < endIndex)
-                            nodes.add((T) manager.getObjectByUuid(nodeIterator.nextNode().getUUID()));
-                        else
-                            nodeIterator.nextNode();
-
-                        if (i >= endIndex)
-                            break;
-                        i++;
-                    }
-
-                    return new PagedResultImpl<T>(pageSize, (int) count, pageNo, nodes, false);
+                    return createPagedResults(manager, queryResult, pageSize, pageNo);
                 }
                 catch (Exception e)
                 {
                     throw new JcrMappingException(e);
                 }
             }
+
         }, true);
+    }
+
+    @SuppressWarnings("unchecked")
+    private Object createPagedResults(ObjectContentManager manager, javax.jcr.query.QueryResult queryResult, int pageSize, int pageNo) throws RepositoryException,
+            UnsupportedRepositoryOperationException
+    {
+        // first count results
+        NodeIterator nodeIterator = queryResult.getNodes();
+        long count = nodeIterator.getSize();
+
+        int startIndex = PagedResultImpl.calcStartIndex(pageSize, pageNo);
+        int endIndex = PagedResultImpl.calcEndIndex(pageSize, (int) count, startIndex); //FIXME we are downcasting to int here which could theoretically cause problems ...
+
+        // now do a loop and store the range of interest in a list
+        List<T> nodes = new ArrayList<T>();
+        int i = 0;
+        while (nodeIterator.hasNext())
+        {
+            if (i >= startIndex && i < endIndex)
+                nodes.add((T) manager.getObjectByUuid(nodeIterator.nextNode().getUUID()));
+            else
+                nodeIterator.nextNode();
+
+            if (i >= endIndex)
+                break;
+            i++;
+        }
+
+        return new PagedResultImpl<T>(pageSize, (int) count, pageNo, nodes, false);
     }
 
     public PagedResult<T> getAllPaged(int pageSize, int pageNo, String filterQuery, String sortField, boolean asc)

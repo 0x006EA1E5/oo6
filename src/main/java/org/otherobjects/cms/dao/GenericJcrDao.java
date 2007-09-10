@@ -28,9 +28,11 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
 
     public PagedResult<T> getPagedByPath(String path, int pageSize, int pageNo, String search, String sortField, boolean asc);
 
-    public T getByJcrExpression(String xpath);
+    public T getByJcrExpression(String expression);
 
-    public List<T> getAllByJcrExpression(String xpath);
+    public List<T> getAllByJcrExpression(String expression);
+
+    public PagedResult<T> pageByJcrExpression(String expression, int pageSize, int pageNo);
 
     public List<T> getVersions(T object);
 

@@ -1,16 +1,15 @@
 Demo
 
 * Improved welcome page
+* Sort and search in grid, database objects
 * Folder overview pages
 * Folder and page publishing
-* Sort and serach in grid
-* Database objects
+* Versioning diffs and rollbacks
 * Smart folders
 * Performance analysis tools + request headers/params + template info + page headers
-* Bulk upload, folder objecrs, IPTC data
-* Delicious external links
 * Flickr images
-* Versioning diffs and rollbacks
+* Bulk upload, folder objects, IPTC data
+* Delicious external links
 * Blogger API
 * Edit/stats site toolbar
 
