@@ -20,6 +20,7 @@ of new templating/block model with efficient caching.
 [DONE] * Smart folders
 [DONE] * Status page -- what I'm editing, what happened today
 [DONE] * Date/number formatting tools
+[DONE] * MetaData support and sitemap.xml
 
 [DEFERRED M3: Bug in Hibernate] * Global search (for JCR and JDBC)
 [DEFERRED M3: API needed] * Action/event/scripting framework -- see old UploadController

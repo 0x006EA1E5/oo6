@@ -33,7 +33,6 @@ function(){
                 buttonAlign: 'right', 
                 id: "loginFormId",
                 method: "POST",
-                url:'/j_security_check', 
                 baseParams:{module:'login'} 
         }); 
         form.add( 
@@ -55,7 +54,7 @@ function(){
             }) 
         ); 
         form.addButton('Login', function(){ 
-			form.el.dom.action='/j_security_check';
+			form.el.dom.action='/go/j_security_check';
         	form.el.dom.submit();
         }, form); 
 		

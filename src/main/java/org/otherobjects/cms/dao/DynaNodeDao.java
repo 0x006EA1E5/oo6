@@ -13,4 +13,6 @@ public interface DynaNodeDao extends GenericJcrDao<DynaNode>
     public List<DynaNode> findByPathAndType(String path, String typeName);
 
     public void publish(DynaNode dynaNode);
+
+    public void publish(DynaNode dynaNode, String message);
 }

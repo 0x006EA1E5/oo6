@@ -109,6 +109,24 @@ OO.ListingGrid = function() {
 		        id: 'mainMenu'
 			});
 			
+			var publishButton = new Ext.Toolbar.MenuButton({
+		            text: 'Publish',
+		            handler: function(){OO.ListingGrid.publishSelected("");},
+		            tooltip: {text:'This is a QuickTip with autoHide set to false and a title', title:'Tip Title', autoHide:false},
+		            cls: 'x-btn-text-icon publish-btn',
+					menu: {items: [{text: 'Publish with comment', handler:function(e){
+				        Ext.MessageBox.show({
+				           title: 'Publishing comment',
+				           msg: 'Please describe the changes you have made:',
+				           width:300,
+				           buttons: Ext.MessageBox.OKCANCEL,
+				           animEl:publishButton.el,
+				           fn:function(btn, msg){OO.ListingGrid.publishSelected(msg)},
+				           multiline: true
+				       });
+					}}]}	            
+		        });
+			
 			var gridHeader = grid.getView().getHeaderPanel(true);
 			var gridToolbar = new Ext.Toolbar(gridHeader, [
 		  		{cls:'x-btn-text-icon add-btn', text:'Add object', menu:addMenu, handler:function(e){
@@ -130,7 +148,7 @@ OO.ListingGrid = function() {
 					}
 				}},
 				'-',
-		  		{cls:'x-btn-text-icon publish-btn', text:'Publish', handler:function(e){OO.ListingGrid.publishSelected();}},
+				publishButton,
 				'-',
 		  		{cls:'x-btn-text-icon refresh-btn', text:'Refresh', handler:function(e){OO.ListingGrid.refresh();}}
 			]);
@@ -150,12 +168,12 @@ OO.ListingGrid = function() {
 	      ds.load({params:{start:0, limit:25}});
 	    },
 		
-		publishSelected : function()
+		publishSelected : function(message)
 		{
 			var r = grid.getSelectionModel().getSelected();
 			var id = r.data.id;
 			console.log("Publishing record: " + id);
-			ContentService.publishItem(id, function(item) { OO.ListingGrid.updateItem(item);});
+			ContentService.publishItem(id, message, function(item) { OO.ListingGrid.updateItem(item);});
 		},
 		
 		updateItem : function(item)

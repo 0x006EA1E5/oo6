@@ -1,11 +1,11 @@
 package org.otherobjects.cms.workbench;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
+import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.CmsImage;
@@ -13,9 +13,7 @@ import org.otherobjects.cms.model.CmsImageDao;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.ws.FlickrImageService;
 import org.springframework.util.Assert;
-import org.xml.sax.SAXException;
 
-import com.aetrion.flickr.FlickrException;
 import com.aetrion.flickr.photos.Photo;
 
 /**
@@ -28,30 +26,37 @@ public class ContentServiceImpl implements ContentService
     private DaoService daoService;
     private DynaNodeDao dynaNodeDao;
 
-    public DynaNode createImage(String provider, String imageId) throws IOException, SAXException, FlickrException
+    public DynaNode createImage(String service, String imageId)
     {
-        Assert.notNull("provider must be specified.", provider);
-        Assert.notNull("imageId must be specified.", imageId);
+        try
+        {
+            Assert.notNull("provider must be specified.", service);
+            Assert.notNull("imageId must be specified.", imageId);
 
-        FlickrImageService flickr = new FlickrImageService();
-        CmsImageDao cmsImageDao = ((CmsImageDao) this.daoService.getDao(CmsImage.class));
+            FlickrImageService flickr = new FlickrImageService();
+            CmsImageDao cmsImageDao = ((CmsImageDao) this.daoService.getDao(CmsImage.class));
 
-        Photo photo = flickr.getImage(imageId);
+            Photo photo = flickr.getImage(imageId);
 
-        // FIXME Sort out unique temp path
-        File tmpFile = new File("/tmp/flickr.jpg");
-        FileUtils.copyURLToFile(new URL(photo.getLargeUrl()), tmpFile);
-        CmsImage image = cmsImageDao.createCmsImage();
-        image.setPath("/libraries/images/");
-        image.setCode("" + new Date().getTime());
-        //        image.setCode(StringUtils.substringAfterLast(photo.getSmallUrl(), "/"));
-        image.setNewFile(tmpFile);
-        image.setLabel(photo.getTitle());
-        //image.setKeywords(photo.getTags());
-        image.setOriginalId(photo.getId());
-        image.setOriginalProvider("FLICKR");
-        image = (CmsImage) cmsImageDao.save(image);
-        return image;
+            // FIXME Sort out unique temp path
+            File tmpFile = new File("/tmp/flickr.jpg");
+            FileUtils.copyURLToFile(new URL(photo.getLargeUrl()), tmpFile);
+            CmsImage image = cmsImageDao.createCmsImage();
+            image.setPath("/libraries/images/");
+            image.setCode("" + new Date().getTime());
+            //        image.setCode(StringUtils.substringAfterLast(photo.getSmallUrl(), "/"));
+            image.setNewFile(tmpFile);
+            image.setLabel(photo.getTitle());
+            //image.setKeywords(photo.getTags());
+            image.setOriginalId(photo.getId());
+            image.setOriginalProvider("FLICKR");
+            image = (CmsImage) cmsImageDao.save(image);
+            return image;
+        }
+        catch (Exception e)
+        {
+            throw new OtherObjectsException("Could not create image: " + service + " " + imageId, e);
+        }
 
     }
 
@@ -83,12 +88,12 @@ public class ContentServiceImpl implements ContentService
         return this.dynaNodeDao.save(newNode);
     }
 
-    public DynaNode publishItem(String uuid)
+    public DynaNode publishItem(String uuid, String message)
     {
         Assert.notNull("item must be specified.", uuid);
 
         DynaNode item = this.dynaNodeDao.get(uuid);
-        this.dynaNodeDao.publish(item);
+        this.dynaNodeDao.publish(item, message);
         return item;
     }
 

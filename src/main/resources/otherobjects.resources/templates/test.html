@@ -7,10 +7,6 @@
 <script type="text/javascript" src="/resources/otherobjects.resources/static/firebug/firebug.js"></script>
 <script type="text/javascript" src="/resources/otherobjects.resources/static/extjs/src/ext-base.js"></script>
 <script type="text/javascript" src="/resources/otherobjects.resources/static/extjs/src/ext-all-debug.js"></script>
-<script type="text/javascript" src="/resources/otherobjects.resources/static/edit.js"></script>
-<script type="text/javascript" src="/resources/otherobjects.resources/static/chooser-field.js"></script>
-<script type="text/javascript" src="/resources/otherobjects.resources/static/swfupload-1.0.2/SWFUpload.js"></script>
-<script type="text/javascript" src="/resources/otherobjects.resources/static/swfupload-1.0.2/callbacks.js"></script>
 <script type="text/javascript" src="/dwr/engine.js"></script>
 <script type="text/javascript" src="/dwr/interface/ContentService.js"></script>
 <script type="text/javascript" src="/dwr/interface/NavigatorService.js"></script>
@@ -23,7 +19,28 @@
 
 <body>
 
-#parse("otherobjects.resources/templates/uploader.html")
+<a id="go" href="#">Go</a>
+
+<script>
+function done(msg){
+	  alert(msg);
+}
+function init(){
+	   Ext.get('go').on('click', function(e){
+        Ext.MessageBox.show({
+           title: 'Publishing comment',
+           msg: 'Please describe the changes you have made:',
+           width:300,
+           buttons: Ext.MessageBox.OKCANCEL,
+           animEl: 'go',
+           fn: done,
+           multiline: true
+       });
+    });
+}
+
+Ext.onReady(init);
+</script>
 
 </body>
 </html>

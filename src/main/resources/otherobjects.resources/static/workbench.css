@@ -16,8 +16,11 @@
 .welcome P {padding-bottom:10px;}
 .welcome UL {list-style:square; padding-left:20px; margin-top:5px; padding-bottom:10px}
 .welcome LI {padding-bottom:3px}
-.welcome .edits LI {list-style-image: url('/resources/otherobjects.resources/static/icons/bullet-red.png');}
+.welcome UL.states {list-style:none; margin-top:5px; padding-left:0px}
+.welcome LI.published-true {list-style:none; background: url('/resources/otherobjects.resources/static/icons/bullet-green.png') no-repeat 0px 0px; padding:0px 0px 8px 20px!important;}
+.welcome LI.published-false {list-style:none; background: url('/resources/otherobjects.resources/static/icons/bullet-red.png') no-repeat 0px 0px; padding:0px 0px 8px 20px!important;}
 
+.welcome A {text-decoration:none; color:#083772;}
 .welcome .bookmarklet {background:#666666; color:#ffffff; text-decoration:none; padding:1px 5px 1px 5px;}
 /* Can't use this: -moz-border-radius:5px; -khtml-border-radius:5px; */
 

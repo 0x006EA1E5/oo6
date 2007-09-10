@@ -8,6 +8,7 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.Workspace;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.ocm.exception.JcrMappingException;
 import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
 import org.apache.jackrabbit.ocm.query.Filter;
@@ -89,7 +90,7 @@ public abstract class AbstractDynaNodeDaoJackrabbit extends GenericJcrDaoJackrab
             if (errors.getErrorCount() > 0)
                 throw new OtherObjectsException("DynaNode " + object.getLabel() + "couldn't be validated and therefore didn't get saved");
         }
-        updateAuditInfo(object, "Saved");
+        updateAuditInfo(object, null);
         object.setPublished(false); // on saving the publish state gets set to false
         return super.save(object, false);
     }
@@ -200,7 +201,12 @@ public abstract class AbstractDynaNodeDaoJackrabbit extends GenericJcrDaoJackrab
         return false;
     }
 
-    public void publish(final DynaNode dynaNode)
+    public void publish(DynaNode dynaNode)
+    {
+        publish(dynaNode, null);
+    }
+
+    public void publish(final DynaNode dynaNode, final String message)
     {
         //FIXME this should display proper transactional behaviour which it doesn't at the moment as there are multiple jcr sessions involved
         if (dynaNode.isPublished())
@@ -240,7 +246,7 @@ public abstract class AbstractDynaNodeDaoJackrabbit extends GenericJcrDaoJackrab
                         }
 
                         // we got here so we successfully published
-                        updateAuditInfo(dynaNode, "Published");
+                        updateAuditInfo(dynaNode, message);
                         saveInternal(dynaNode, true); // set the status to published
 
                         // create version and assign the current changeNumber as the label
@@ -273,7 +279,8 @@ public abstract class AbstractDynaNodeDaoJackrabbit extends GenericJcrDaoJackrab
             dynaNode.setUserId(user.getId().toString());
         }
         dynaNode.setModificationTimestamp(new Date());
-        dynaNode.setComment(comment);
+        if (StringUtils.isNotEmpty(comment))
+            dynaNode.setComment(comment);
         dynaNode.setChangeNumber(dynaNode.getChangeNumber() + 1);
     }
 

@@ -144,7 +144,8 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
                     NodeIterator nodeIterator = queryResult.getNodes();
                     List<T> results = new ArrayList<T>();
                     //FIXME This is a double lookup. Can we convert node directly?
-                    while (nodeIterator.hasNext())
+                    int count = 0;
+                    while (nodeIterator.hasNext() && count++ < 10)
                         results.add((T) manager.getObjectByUuid(nodeIterator.nextNode().getUUID()));
 
                     return results;

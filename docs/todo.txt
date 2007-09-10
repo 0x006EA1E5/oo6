@@ -11,15 +11,12 @@ M2 TODO
 * Translate workbench.properties (Joerg)
 * Flickr/delicious + url service 
 * Scheduler + embargo
-* Improve artwork page.
-* My edits + publishing comments
 * Remove rogue metaData and other components
 * Folder overview page
 * Finish up recent changes and my edits
 * Moving/trashing/publishing bugs
 * Object inspector (html/string/log)
 * Flickr/image search
-* Google sitemap
 * Limit types per folder
 * Libraries
  + Bookmarklet
@@ -34,7 +31,10 @@ M2 TODO
 
 M2 Done
 -------
+* My edits + publishing comments
 * Tidy up artist page
+* Improve artwork page.
+* Google sitemap
 [IN PROGRESS] * Smart folders
 
 Post M2
@@ -56,6 +56,7 @@ Rich media MP3: http://www.1pixelout.net/code/audio-player-wordpress-plugin
 Data generator: http://www.generatedata.com/#generator
 Security: change salts
 Work out how to extend basic library types eg CmsImage
+MetaData/DC improvements
 
 System indicators:
    - JCR (schema version)

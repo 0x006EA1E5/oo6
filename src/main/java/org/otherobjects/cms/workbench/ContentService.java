@@ -9,6 +9,9 @@ import org.otherobjects.cms.model.DynaNode;
  */
 public interface ContentService
 {
+    public DynaNode createImage(String service, String id);
+
     public DynaNode createItem(String container, String typeName);
-    public DynaNode publishItem(String uuid);  
+
+    public DynaNode publishItem(String uuid, String message);
 }

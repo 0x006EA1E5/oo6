@@ -57,7 +57,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
     private boolean folder = false;
 
     // Audit properties
-    private String userName;
+    private String userName; // FIXME Should this be username to match UserDetails?
     private String userId;
     private Date modificationTimestamp;
     private String comment;
