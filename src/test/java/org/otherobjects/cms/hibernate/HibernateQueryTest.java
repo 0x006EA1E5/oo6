@@ -4,6 +4,8 @@ import groovy.lang.GroovyShell;
 
 import java.util.Map;
 
+import org.otherobjects.cms.model.User;
+
 import junit.framework.TestCase;
 
 public class HibernateQueryTest extends TestCase {
@@ -27,5 +29,16 @@ public class HibernateQueryTest extends TestCase {
 		
 		System.out.println(hq.toHqlString());
 	}
+	
+	public void testToString()
+	{
+		HibernateQuery hq = new HibernateQuery(User.class);
+		hq.setWhereClause("o.username=:name");
+		hq.addParameter("name", "test");
+		assertTrue(hq.toString().contains("test"));
+		System.out.println(hq.toString());
+	}
+	
+	
 	
 }
