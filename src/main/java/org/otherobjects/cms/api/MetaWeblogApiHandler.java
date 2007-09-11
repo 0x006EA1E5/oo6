@@ -9,6 +9,10 @@ import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.DynaNode;
 
+/**
+ * See API documentation is available at <a href="http://www.xmlrpc.com/metaWeblogApi">http://www.xmlrpc.com/metaWeblogApi</a> 
+ * @author rich
+ */
 @SuppressWarnings("unchecked")
 public class MetaWeblogApiHandler
 {
