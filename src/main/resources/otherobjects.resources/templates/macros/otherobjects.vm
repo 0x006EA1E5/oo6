@@ -15,3 +15,46 @@
     #end
   #end
 #end
+
+
+#macro(ooToolbar)
+
+<script type="text/javascript" src="/resources/otherobjects.resources/static/extjs/src/ext-base.js"></script>
+<script type="text/javascript" src="/resources/otherobjects.resources/static/extjs/src/ext-all.js"></script>
+
+<div id="OoToolbar">
+<p id="ooLogo" class="logo"></p>
+<p class="info-$resourceObject.published">$resourceObject.typeDef.label: $resourceObject.label &nbsp;&nbsp;
+| &nbsp;&nbsp;<a href="#">Edit</a> &nbsp;&nbsp;
+| &nbsp;&nbsp; <a href="#">Publish</a> </p>
+</div>
+
+<style>
+#OoToolbar {position:fixed;bottom:0px; width:30px; height:30px; color:white; background:#000000; opacity:0.75; font:80% Arial;}
+#OoToolbar A {color:white;}
+#OoToolbar .logo {float:left; width:30px; height:30px; background:#FFFFFF url('/resources/otherobjects.resources/static/graphics/favicon.ico') no-repeat 7px 7px; opacity:1.0;}
+#OoToolbar .info-false {float:left; padding:7px 0px 5px 25px; background:url('/resources/otherobjects.resources/static/icons/bullet-red.png') no-repeat 7px 7px;}
+#OoToolbar .info-true {float:left; padding:7px 0px 5px 25px; background:url('/resources/otherobjects.resources/static/icons/bullet-green.png') no-repeat 7px 7px;}
+</style>
+
+<script>
+var expanded = false;
+function init() {
+	Ext.get('ooLogo').on('dblclick', function() {
+		window.location='/go/workbench/';
+	});
+	Ext.get('ooLogo').on('click', function() {
+		if(expanded) {
+			Ext.get('OoToolbar').animate({width:{ to:'0' }},0.5);
+			expanded = false;
+		}	
+		else {
+			Ext.get('OoToolbar').animate({width:{ to:'1500' }},0.5);
+			expanded = true;
+		}
+	});
+}
+Ext.onReady(init);
+</script>
+
+#end

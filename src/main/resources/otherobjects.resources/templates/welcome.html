@@ -7,12 +7,12 @@
 It now has more CMS features including image support and publishing.</p>
 <p>Note that this workbench interface in only a prototype. The final version will 
 look different but will contain similar functionality.</p>
-
+#*
 <p>Drag this link: 
 <a href="javascript:location.href='http://del.icio.us/post?v=4;url='+encodeURIComponent(location.href)+';title='+encodeURIComponent(document.title.replace(/^\s*|\s*$/g,''))" 
 title="post to del.icio.us" onclick="window.alert('Drag this link to your bookmarks bar, or right-click it and choose Add Link to Bookmarks...');return false;"
 class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
-
+*#
 </div>
 
 <div class="welcome-block">
@@ -34,9 +34,11 @@ class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
 
 </div>
 
+</div>
+<div class="welcome-col">
 <div class="welcome-block">
 <h1>What happened recently</h1>
-<p>Here are the last few changes to pages.</p>
+<p>Here are the last few changes to pages across the site:</p>
 
 #set($changes = $daoService.getDao("dynaNode").pageByJcrExpression("/jcr:root/site//element(*, oo:node) order by @modificationTimestamp descending",10,1))
 
@@ -48,55 +50,7 @@ class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
 </small></li>
 #end
 </ul>
-<p>These are the items that have not been published</p>
 
-</div>
-
-</div>
-<div class="welcome-col">
-
-<div class="welcome-block">
-<h1>New and noteworthy</h1>
-<h2>Workbench</h2>
-<ul>
-<li>Ajax based interfaced based on the Ext Javascript library.</li>
-<li>Drag and drop interface.</li>
-<li>Localisation support.</li>
-<li>Strong form validation.</li>
-</ul>
-<h2>Data storage</h2>
-<ul>
-<li>Flexible object storage via Jackrabbit Content Repository.</li>
-<li>Support for database access via Hibernate 3.2.</li>
-</ul>
-<h2>Security</h2>
-<ul>
-<li>Support for administrators and guests.</li>
-<li>Passwords are stored securely and your login details can be remembered.</li>
-<li>Usernames do not have to be email addresses although it is strongly recommended that they are 
-and this will probably be enforced for most sites.</li>
-</ul>
-<h2>Architecture</h2>
-<ul>
-<li>Based on the industry standard Spring framework.</li>
-</ul>
-<h2>Infrastructure</h2>
-<ul>
-<li>Built with Maven to automate testing, packaging and deployment.</li>
-<li>Comprehensive test coverage &mdash; over 60%</li>
-</ul>
-</div>
-
-<div class="welcome-block">
-<h1>Coming in Milestone 2</h1>
-<ul>
-<li>Publishing and workflow support.</li>
-<li>Multiple templates.</li>
-<li>Live data types editing.</li>
-<li>Image, file and rich media libraries.</li>
-<li>Full localisation of workbench and support for multi-lingual sites.</li>
-<li>And more....</li>
-</ul>
 </div>
 
 </div>

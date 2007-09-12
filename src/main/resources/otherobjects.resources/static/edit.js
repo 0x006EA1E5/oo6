@@ -47,9 +47,31 @@ OO.EditForm = function(){
 				}
 				else if(propDef.type=="html")
 				{
+					function btn(id, f, handler){
+			            return {
+			                id : id,
+			                cls : 'x-btn-icon',
+			                enableToggle:false,
+			                scope: f,
+			                handler:handler,
+							icon: '/resources/otherobjects.resources/static/icons/add.png',
+			                clickEvent:'mousedown',
+			                //tooltip: editor.buttonTips[id] || undefined,
+			                tabIndex:-1
+			            };
+			        }
+
+					
+					//TODO Replace with WYMeditor?
 					config.width=null; // FIXME Ext bug: can't set width of HtmlEditor
 					// config.growMax=500;// FIXME Ext bug: can't grow HtmlEditor
 					var f = new Ext.form.HtmlEditor(config);
+					f.on("initialize", function(ed) {
+						ed.getToolbar().addButton(btn('undersline',f,function(e)
+						{
+  						    this.execCmd('InsertImage', 'http://www.google.es/intl/en_com/images/logo_plain.png');
+						}));
+					});
 				}
 				else if(propDef.type=="text")
 				{

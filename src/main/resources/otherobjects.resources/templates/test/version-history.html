@@ -7,7 +7,6 @@
 <script type="text/javascript" src="/resources/otherobjects.resources/static/firebug/firebug.js"></script>
 <script type="text/javascript" src="/resources/otherobjects.resources/static/extjs/src/ext-base.js"></script>
 <script type="text/javascript" src="/resources/otherobjects.resources/static/extjs/src/ext-all-debug.js"></script>
-<script type="text/javascript" src="/resources/otherobjects.resources/static/edit.js"></script>
 <script type="text/javascript" src="/dwr/engine.js"></script>
 <script type="text/javascript" src="/dwr/interface/ContentService.js"></script>
 <script type="text/javascript" src="/dwr/interface/NavigatorService.js"></script>
@@ -20,7 +19,34 @@
 
 <body>
 
-<div id="div"></div>
+#set($dao = $daoService.getDao("DynaNode"))
+#set($home = $dao.getByPath("/site/welcome-2.html"))
+
+
+
+
+#foreach($v in $dao.getVersions($home))
+<hr/>
+
+<table>
+<tr>
+<th>Property</th>
+<th>Current value</th>
+<th>Old value</th>
+</tr>
+#foreach($p in $home.typeDef.properties)
+#set($current=$!home.get($p.name))
+#set($old=$!v.get($p.name))
+<tr #if($old != $current)style="background:#FFBBBB;"#end>
+<td>$p.name</td>
+<td>$!current</td>
+<td>$!old</td>
+</tr>
+#end
+</table>
+
+
+#end
 
 <a id="go" href="#">Go</a>
 
@@ -29,28 +55,17 @@ function done(msg){
 	  alert(msg);
 }
 function init(){
-	   	// TODO Find out about QuickTips
-	Ext.QuickTips.init();
-	
-	// Show form validation warnings next to each field
-	Ext.form.Field.prototype.msgTarget = 'side';
-	
-	// Create form
-    frm = new Ext.form.Form({
-		labelAlign: 'left',
-		buttonAlign: 'left',
-		monitorValid: true,
-		labelWidth: 120
+	   Ext.get('go').on('click', function(e){
+        Ext.MessageBox.show({
+           title: 'Publishing comment',
+           msg: 'Please describe the changes you have made:',
+           width:300,
+           buttons: Ext.MessageBox.OKCANCEL,
+           animEl: 'go',
+           fn: done,
+           multiline: true
+       });
     });
-
-
-	frm.add(OO.EditForm.buildField({name:'one', type:'html', relatedType:'Article', label:'Test'}));
-	
-    frm.addButton('Save', function() {
-		form.submit({url:'/', bindForm:true, waitMsg:'Saving Data...' });   
-	});
-	
-    frm.render('div');
 }
 
 Ext.onReady(init);
