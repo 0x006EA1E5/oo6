@@ -1,6 +1,7 @@
 package org.otherobjects.cms.api;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,10 +41,10 @@ public class MetaWeblogApiHandler
     private Map<String, Object> convertNodeToPost(DynaNode node)
     {
         Map<String, Object> post = new HashMap<String, Object>();
-        post.put("postid", node.getId());
+        post.put("postid", node.getJcrPath());
         post.put("title", node.getLabel());
-        post.put("description", node.get("content"));
-        post.put("link", node.getLinkPath());
+        post.put("description", node.get("content") != null ? node.get("content") : "");
+        post.put("link", node.getJcrPath());
         return post;
     }
 
@@ -51,8 +52,8 @@ public class MetaWeblogApiHandler
     {
         DynaNodeDao dao = (DynaNodeDao) this.daoService.getDao("DynaNode");
         DynaNode node = null;
-        if (post.containsKey("postid"))
-            node = dao.get((String) post.get("postid"));
+        if (post.containsKey("link"))
+            node = dao.getByPath((String) post.get("link"));
         else
         {
             node = dao.create("com.maureenmichaelson.site.model.NewsStory");
@@ -60,6 +61,7 @@ public class MetaWeblogApiHandler
         }
         node.setLabel((String) post.get("title"));
         node.set("content", post.get("description"));
+        node.set("publicationDate", new Date());
         return node;
     }
 
@@ -70,7 +72,7 @@ public class MetaWeblogApiHandler
         dao.save(node);
         if (publish)
             dao.publish(node);
-        return node.getId();
+        return node.getJcrPath();
     }
 
     public boolean editPost(String postId, String username, String password, Map post, boolean publish)
@@ -85,7 +87,9 @@ public class MetaWeblogApiHandler
 
     public Object getPost(String postId, String username, String password)
     {
-        return null;
+        DynaNodeDao dao = (DynaNodeDao) this.daoService.getDao("DynaNode");
+        DynaNode node = dao.getByPath(postId);
+        return convertNodeToPost(node);
     }
 
     public void newMediaObject(String blogid, String username, String password, Object struct)
