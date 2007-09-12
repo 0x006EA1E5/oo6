@@ -9,6 +9,7 @@
 				<![CDATA[
 				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
 				PATTERN_TYPE_APACHE_ANT
+				/go/workbench/api/**=httpSessionContextIntegrationFilter,logoutFilter,metaWeblogProcessingFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
 				/go/workbench/upload=httpSessionContextIntegrationFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
 				/**=httpSessionContextIntegrationFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,rememberMeProcessingFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
 				]]>
@@ -80,6 +81,7 @@
 				<![CDATA[
 				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON 
 				PATTERN_TYPE_APACHE_ANT
+				/go/workbench/api/**=IS_AUTHENTICATED_ANONYMOUSLY
 				/go/workbench/login.html=IS_AUTHENTICATED_ANONYMOUSLY
 				/go/workbench/**=IS_AUTHENTICATED_REMEMBERED
 				/go**=IS_AUTHENTICATED_ANONYMOUSLY
@@ -137,15 +139,26 @@
 	<!-- BasicAuth support: may need this later -->
 	<bean id="basicProcessingFilter" class="org.acegisecurity.ui.basicauth.BasicProcessingFilter">
 		<property name="authenticationManager" ref="authenticationManager" />
-		<property name="ignoreFailure" value="true" />
-		<property name="authenticationEntryPoint" ref="authenticationEntryPoint" />
+<!--		<property name="ignoreFailure" value="true" />-->
+		<property name="authenticationEntryPoint" ref="basicAuthenticationEntryPoint" />
 	</bean>
-
-	<bean id="authenticationEntryPoint" class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilterEntryPoint">
-		<property name="loginFormUrl" value="/go/workbench/login.html" />
-		<property name="forceHttps">
-			<value>false</value>
+	
+	<bean id="basicAuthenticationEntryPoint"
+		class="org.acegisecurity.ui.basicauth.BasicProcessingFilterEntryPoint">
+		<property name="realmName">
+			<value>xml-rpc</value>
 		</property>
 	</bean>
 
+<!--	<bean id="authenticationEntryPoint" class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilterEntryPoint">-->
+<!--		<property name="loginFormUrl" value="/go/workbench/login.html" />-->
+<!--		<property name="forceHttps">-->
+<!--			<value>false</value>-->
+<!--		</property>-->
+<!--	</bean>-->
+	
+	<bean id="metaWeblogProcessingFilter" class="org.otherobjects.cms.security.MetaWeblogProcessingFilter">
+		<property name="authenticationManager" ref="authenticationManager" />
+	</bean>
+	
 </beans>
