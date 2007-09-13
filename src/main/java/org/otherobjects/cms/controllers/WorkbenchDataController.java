@@ -169,6 +169,10 @@ public class WorkbenchDataController implements Controller
         {
             allByType = this.dynaNodeDao.getAllByJcrExpression("/jcr:root//element(*, oo:node) [@ooType = 'org.otherobjects.cms.model.CmsImage'] order by @modificationTimestamp descending");
         }
+        else if (daoService.hasDao(typeName))
+        {
+        	allByType = daoService.getDao(typeName).getAll();
+        }
         else
         {
             allByType = this.dynaNodeDao.getAllByType(typeName);

@@ -6,5 +6,7 @@ public interface DaoService
     public GenericDao getDao(Class clazz);
 
     public GenericDao getDao(String type);
-
+    
+    public boolean hasDao(String type);
+    
 }

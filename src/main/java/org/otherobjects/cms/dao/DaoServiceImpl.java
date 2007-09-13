@@ -82,4 +82,19 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
     {
         this.beanFactory = beanFactory;
     }
+
+	public boolean hasDao(String type) {
+		GenericDao dao = daoMap.get(type);
+        if (dao == null)
+        {
+        	String daoBeanName = determineDaoBeanName(type);
+            if (beanFactory.containsBean(daoBeanName))
+                dao = (GenericDao) beanFactory.getBean(daoBeanName);
+            else
+                // If no specific dao found then use dynaNode Dao
+                dao = daoMap.get(DYNA_NODE_DAO_KEY);
+        }
+        
+        return (dao != null);
+	}
 }
