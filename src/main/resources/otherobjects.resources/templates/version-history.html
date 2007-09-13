@@ -67,7 +67,7 @@ TABLE.diffs {margin:10px 10px 30px 0px; width:100%; border-collapse:collapse;}
 </style>
 
 <div class="version">
-<h2>Current version: <strong>$current.label</strong> modified at $dateTool.format("HH:mm", $current.modificationTimestamp) by $current.userName ($current.changeNumber)</h2>
+<h2>Current version: <strong>$current.label</strong> modified at $dateTool.format("HH:mm", $current.modificationTimestamp) by $current.userName ($current.changeNumber) <strong>$!current.comment</strong></h2>
 <span class="clear"></span>
 </div>
 
@@ -75,7 +75,7 @@ TABLE.diffs {margin:10px 10px 30px 0px; width:100%; border-collapse:collapse;}
 #if($v.changeNumber != $current.changeNumber) ## Don't allow rollback to current version FIXME enforce in Java too
 <div class="version">
 <span class="button" id="actions-$velocityCount"></span><span class="button" id="actions2-$velocityCount"></span>
-<h2>Version: <strong>$v.label</strong> published at $dateTool.format("HH:mm", $v.modificationTimestamp) by $v.userName ($v.changeNumber)</h2>
+<h2>Version: <strong>$v.label</strong> published at $dateTool.format("HH:mm", $v.modificationTimestamp) by $v.userName ($v.changeNumber) <strong>$!v.comment</strong></h2>
 <script>
 new Ext.Button('actions-$velocityCount',{text:'Show differences', cls:"x-btn-text-icon show-below-btn", handler:function(e) {toggleDiffs(e, 'diffs-$velocityCount')}});
 new Ext.Button('actions2-$velocityCount',{text:'Rollback to this version', cls:"x-btn-text-icon undo-btn", handler:function() { restoreVersion($v.changeNumber) }});

@@ -20,4 +20,10 @@ public class DeliciousLinkService
     {
         return delicious.getPostForURL(id);
     }
+
+    public Object postLink(String id, String title)
+    {
+        return delicious.getPostForURL(id);
+    }
+
 }

@@ -19,6 +19,22 @@ OO.ListingGrid = function() {
 				
 	}
 	
+	function renderDate(value, p, record) {
+		// FIXME Temp hack. Need better data formatting class.
+		function pad(v) { if(v.length==1) return "0"+v; else return "" + v;}
+		var d = new Date();
+		d.setTime(value)
+		return pad(""+d.getHours()) + ":" + pad(""+d.getMinutes()) + " on " + d.dateFormat("d M Y");
+	}
+	
+	function renderThumbnail(value, p, record) {
+		// FIXME Temp hack. Need better data formatting class.
+		function pad(v) { if(v.length==1) return "0"+v; else return "" + v;}
+		var d = new Date();
+		d.setTime(value)
+		return '<img src="' + value + '" height="100" width="100">';
+	}
+	
 	return {
 	    init : function() {
 			
@@ -26,9 +42,11 @@ OO.ListingGrid = function() {
 	            {name: 'id', mapping: 'id'},
 	            {name: 'editableId', mapping: 'editableId'},
 	            {name: 'label', mapping: 'label'},
+	            {name: 'modificationTimestamp', mapping: 'modificationTimestamp'},
 	            {name: 'ooType', mapping: 'ooType'},
 	            {name: 'linkPath', mapping: 'linkPath'},
-	            {name: 'published', mapping: 'published'}
+	            {name: 'published', mapping: 'published'},
+	            {name: 'thumbnailPath', mapping: 'thumbnailPath'}
 			];
 			
 			// create the Data Store
@@ -55,9 +73,11 @@ OO.ListingGrid = function() {
 			cm = new Ext.grid.ColumnModel([
 				{ header: 'State', width: 100, sortable: true, dataIndex: 'published', renderer:renderState },
 				{ header: 'Label', width: 200, sortable: true, dataIndex: 'label' },
-				{ header: 'Type', width: 100, sortable: true, dataIndex: 'ooType' },
-				{ header: 'Path', width: 300, sortable: false, dataIndex: 'linkPath' },
-				{ header: 'UUID', width: 300, sortable: false, dataIndex: 'id' }
+				{ header: 'Type', width: 300, sortable: true, dataIndex: 'ooType' },
+				{ header: 'Last modified', width: 300, sortable: true, dataIndex: 'modificationTimestamp', renderer:renderDate },
+				{ header: 'Path', width: 300, sortable: false, dataIndex: 'linkPath', hidden:true  },
+				{ header: 'UUID', width: 300, sortable: false, dataIndex: 'id', hidden:true },
+				{ header: 'Thumbnail', width: 300, sortable: false, dataIndex: 'thumbnailPath', hidden:true, renderer:renderThumbnail }
 			]);
 			
 			// create the grid

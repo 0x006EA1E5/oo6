@@ -9,6 +9,7 @@ public class SmartFolder extends DynaNode implements Folder
 {
     private String label;
     private String query;
+    private String searchTerm;
     private String cssClass;
 
     public List getAllAllowedTypes()
@@ -58,6 +59,16 @@ public class SmartFolder extends DynaNode implements Folder
     public void setCssClass(String cssClass)
     {
         this.cssClass = cssClass;
+    }
+
+    public String getSearchTerm()
+    {
+        return this.searchTerm;
+    }
+
+    public void setSearchTerm(String searchTerm)
+    {
+        this.searchTerm = searchTerm;
     }
 
 }

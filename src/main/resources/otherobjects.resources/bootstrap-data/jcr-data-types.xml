@@ -46,6 +46,15 @@
 				<property jcr:primaryType="nt:unstructured" type="list" label="${keywords.label}" collectionElementType="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="keywords" />
 			</properties>
 		</org.otherobjects.cms.model.MetaData>
+		<org.otherobjects.cms.model.PublishingData jcr:primaryType="oo:node" labelProperty="hotKey" ocm:classname="org.otherobjects.cms.types.TypeDef">
+			<properties jcr:primaryType="nt:unstructured">
+				<property jcr:primaryType="nt:unstructured" required="false" type="date" label="Embargo until" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="embargoUntil" />
+				<property jcr:primaryType="nt:unstructured" required="false" type="date" label="Expire on" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="expireOn" />
+				<property jcr:primaryType="nt:unstructured" required="false" type="boolean" label="Show in menu" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="showInMenu" />
+				<property jcr:primaryType="nt:unstructured" required="false" type="boolean" label="Exclude from site map" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="hidden" />
+				<property jcr:primaryType="nt:unstructured" required="false" type="boolean" label="Accessibility hot key" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="hotKey" />
+			</properties>
+		</org.otherobjects.cms.model.PublishingData>
 		<org.otherobjects.cms.model.CmsImage jcr:primaryType="oo:node" label="Image" jcr:uuid="8b79bc82-d4a6-4a22-aaff-8c216f5bc5d6" labelProperty="label"
 			ocm:classname="org.otherobjects.cms.types.TypeDef" className="org.otherobjects.cms.model.CmsImage">
 			<properties jcr:primaryType="nt:unstructured">
@@ -61,6 +70,19 @@
 				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="originalId" />
 			</properties>
 		</org.otherobjects.cms.model.CmsImage>
+		<org.otherobjects.cms.model.CmsExternalLink jcr:primaryType="oo:node" label="External Link" labelProperty="label"
+			ocm:classname="org.otherobjects.cms.types.TypeDef">
+			<properties jcr:primaryType="nt:unstructured">
+				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
+				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" />
+				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="description" />
+				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="keywords" />
+				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="copyright" />
+				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="url" />
+				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="originalProvider" />
+				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="originalId" />
+			</properties>
+		</org.otherobjects.cms.model.CmsExternalLink>
 
 		<!-- Site -->
 		<org.otherobjects.cms.model.SiteFolder jcr:primaryType="oo:node" jcr:uuid="4b299ada-1f0e-4999-a623-e1ddb3eaab7e" labelProperty="label" ocm:classname="org.otherobjects.cms.types.TypeDef"
@@ -88,6 +110,7 @@
 				<property jcr:primaryType="nt:unstructured" required="true" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
 				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" />
 				<property jcr:primaryType="nt:unstructured" required="true" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="query" />
+				<property jcr:primaryType="nt:unstructured" required="true" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="searchTerm" />
 			</properties>
 		</org.otherobjects.cms.model.SmartFolder>
 	</system>

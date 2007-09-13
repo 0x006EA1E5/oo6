@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>OTHERobjects Workbench</title>
+<script type="text/javascript" src="/resources/otherobjects.resources/static/firebug/firebug.js"></script>
+<script type="text/javascript" src="/resources/otherobjects.resources/static/extjs/src/ext-base.js"></script>
+<script type="text/javascript" src="/resources/otherobjects.resources/static/extjs/src/ext-all-debug.js"></script>
+<link rel="stylesheet" type="text/css" href="/resources/otherobjects.resources/static/workbench.css" />
+<link rel="stylesheet" type="text/css" href="/resources/otherobjects.resources/static/extjs/src/ext-all.css" />
+</head>
+
+<body>
+
+<div class="welcome">
+<div class="welcome-col">
+
+<div class="welcome-block">
+<h1>You link has been saved</h1>
+<p>We have created an external link for your page.</p>
+<p>Title: <strong>$newTitle</strong></p>
+<p>URL: <strong>$newUrl</strong></p>
+
+<div id="btn-1"></div>
+<br/>
+<div id="btn-2"></div>
+</div>
+
+</div>
+</div>
+
+<script>
+new Ext.Button('btn-1', {text:'Go to workbench', cls:"x-btn-text-icon refresh-btn", handler:function(e) {window.location="/go/workbench/"}});
+new Ext.Button('btn-2', {text:'Back to submitted page', cls:"x-btn-text-icon refresh-btn", handler:function(e) {window.location='$newUrl'}});
+</script>
+
+</body>
+</html>
+

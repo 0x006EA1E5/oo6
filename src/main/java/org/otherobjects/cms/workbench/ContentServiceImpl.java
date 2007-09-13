@@ -38,9 +38,11 @@ public class ContentServiceImpl implements ContentService
 
             Photo photo = flickr.getImage(imageId);
 
+            // FIXME Sort out medium/large url problems
             // FIXME Sort out unique temp path
             File tmpFile = new File("/tmp/flickr.jpg");
-            FileUtils.copyURLToFile(new URL(photo.getLargeUrl()), tmpFile);
+            System.err.println(photo.getMediumUrl());
+            FileUtils.copyURLToFile(new URL(photo.getMediumUrl()), tmpFile);
             CmsImage image = cmsImageDao.createCmsImage();
             image.setPath("/libraries/images/");
             image.setCode("" + new Date().getTime());
@@ -51,6 +53,7 @@ public class ContentServiceImpl implements ContentService
             image.setOriginalId(photo.getId());
             image.setOriginalProvider("FLICKR");
             image = (CmsImage) cmsImageDao.save(image);
+            cmsImageDao.publish(image);
             return image;
         }
         catch (Exception e)

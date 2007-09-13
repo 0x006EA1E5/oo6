@@ -299,7 +299,14 @@ public class WorkbenchDataController implements Controller
         if (node instanceof SiteFolder)
         {
             //pagedResult = this.dynaNodeDao.getPagedByPath(jcrPath, ITEMS_PER_PAGE, getRequestedPage(request), q, sort, asc);
-            String query = "/jcr:root" + jcrPath + "/* [not(jcr:like(@ooType,'%Folder')) and not(jcr:like(@ooType,'%MetaData'))] order by @modificationTimestamp descending";
+            String search = "";
+            String sortString = "order by @modificationTimestamp descending";
+
+            if (StringUtils.isNotEmpty(sort))
+                sortString = "order by @" + sort + " " + (asc ? "" : "descending");
+            if (StringUtils.isNotEmpty(q))
+                search = "and jcr:contains(.,'" + q + "')";
+            String query = "/jcr:root" + jcrPath + "/* [not(jcr:like(@ooType,'%Folder')) and not(jcr:like(@ooType,'%MetaData')) " + search + "] " + sortString;
             pagedResult = this.dynaNodeDao.pageByJcrExpression(query, ITEMS_PER_PAGE, getRequestedPage(request));
         }
         else if (node instanceof SmartFolder)

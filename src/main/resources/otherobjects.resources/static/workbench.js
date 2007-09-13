@@ -126,7 +126,8 @@ OO.Workbench = function()
 	        // layout.add('south', new Ext.ContentPanel('status'));
 	        layout.endUpdate();
 			
-			layout.getRegion("center").showPanel("listing-panel");
+			layout.getRegion("center").showPanel("welcome-panel");
+//			layout.getRegion("center").showPanel("listing-panel");
 
         },
 		

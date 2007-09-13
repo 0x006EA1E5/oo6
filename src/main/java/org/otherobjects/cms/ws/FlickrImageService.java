@@ -28,6 +28,7 @@ public class FlickrImageService
         params.setUserId(peopleInterface.findByUsername("raston").getId());
         params.setSort(SearchParameters.DATE_POSTED_DESC);
         return photosInterface.search(params, 25, 1);
+        //        return photosInterface.getRecent(12, 1);
     }
 
     public Photo getImage(String id) throws IOException, SAXException, FlickrException

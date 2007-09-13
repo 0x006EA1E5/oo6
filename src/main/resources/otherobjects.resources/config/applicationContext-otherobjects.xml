@@ -26,13 +26,17 @@
 		<property name="daoService" ref="daoService" />
 		<property name="userDao" ref="userDao" />
 	</bean>
-	
+
 	<bean name="siteMapController" class="org.otherobjects.cms.controllers.SiteMapController">
 		<property name="navigatorService" ref="navigatorService" />
 		<property name="daoService" ref="daoService" />
 	</bean>
 
 	<bean name="uploadController" class="org.otherobjects.cms.controllers.UploadController">
+		<property name="daoService" ref="daoService" />
+	</bean>
+
+	<bean name="bookmarkletController" class="org.otherobjects.cms.controllers.BookmarkletController">
 		<property name="daoService" ref="daoService" />
 	</bean>
 
@@ -91,6 +95,7 @@
 		<property name="mappings">
 			<props>
 				<prop key="/go/upload">uploadController</prop>
+				<prop key="/go/workbench/bookmarklet">bookmarkletController</prop>
 				<prop key="/go/workbench/upload">uploadController</prop>
 				<prop key="/go/workbench/upload/**">uploadController</prop>
 				<prop key="/go/workbench/form/**">formController</prop>

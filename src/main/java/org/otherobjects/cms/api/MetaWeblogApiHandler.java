@@ -27,7 +27,7 @@ public class MetaWeblogApiHandler
     public List<Map<String, Object>> getRecentPosts(String blogid, String username, String password, int numberOfPosts)
     {
         DynaNodeDao dao = (DynaNodeDao) this.daoService.getDao("DynaNode");
-        List<DynaNode> news = dao.getAllByPath("/site/news/");
+        List<DynaNode> news = dao.getAllByJcrExpression("/jcr:root/site/news/* [@ooType='com.maureenmichaelson.site.model.NewsStory']");
         List<Map<String, Object>> posts = new ArrayList<Map<String, Object>>();
 
         for (DynaNode newsStory : news)
