@@ -6,6 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.springframework.core.Ordered;
+
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
@@ -30,5 +32,7 @@ public @interface PropertyDefAnnotation {
     // TODO Can we have null defaults or make this optional
     // TODO Should this type be a class? Prob not for the sake or linking to DynaNodes. Maybe a relatedTypeClass aswell?
     String relatedType() default "";
+    
+    int order() default Ordered.LOWEST_PRECEDENCE;
 
 }

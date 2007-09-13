@@ -86,7 +86,7 @@ public class User implements Serializable, UserDetails, Editable
     }
 
     @Column(nullable = false, length = 50, unique = true)
-    @PropertyDefAnnotation(type = PropertyType.STRING, required = true, label = "Username")
+    @PropertyDefAnnotation(type = PropertyType.STRING, required = true, label = "Username", order = 1)
     public String getUsername()
     {
         return this.username;
@@ -105,28 +105,28 @@ public class User implements Serializable, UserDetails, Editable
     }
 
     @Column(name = "password_hint")
-    @PropertyDefAnnotation(type = PropertyType.TEXT, label = "Password hint")
+    @PropertyDefAnnotation(type = PropertyType.TEXT, label = "Password hint", order = 4)
     public String getPasswordHint()
     {
         return this.passwordHint;
     }
 
     @Column(name = "first_name", nullable = false, length = 50)
-    @PropertyDefAnnotation(type = PropertyType.STRING, label = "First name")
+    @PropertyDefAnnotation(type = PropertyType.STRING, label = "First name", order = 2)
     public String getFirstName()
     {
         return this.firstName;
     }
 
     @Column(name = "last_name", nullable = false, length = 50)
-    @PropertyDefAnnotation(type = PropertyType.STRING, label = "Last name")
+    @PropertyDefAnnotation(type = PropertyType.STRING, label = "Last name", order = 3)
     public String getLastName()
     {
         return this.lastName;
     }
 
     @Column(nullable = false, unique = true)
-    @PropertyDefAnnotation(required = true, type = PropertyType.STRING, label = "Email")
+    @PropertyDefAnnotation(required = true, type = PropertyType.STRING, label = "Email", order = 0)
     public String getEmail()
     {
         return this.email;
@@ -144,7 +144,7 @@ public class User implements Serializable, UserDetails, Editable
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @PropertyDefAnnotation(type = PropertyType.LIST, label = "Roles", collectionElementType = PropertyType.REFERENCE, relatedType = "org.otherobjects.cms.model.Role")
+    @PropertyDefAnnotation(type = PropertyType.LIST, label = "Roles", collectionElementType = PropertyType.REFERENCE, relatedType = "org.otherobjects.cms.model.Role", order = 6)
     public Set<Role> getRoles()
     {
         return this.roles;
@@ -175,7 +175,7 @@ public class User implements Serializable, UserDetails, Editable
     }
 
     @Column(name = "account_enabled")
-    @PropertyDefAnnotation(type = PropertyType.BOOLEAN, label = "Enabled")
+    @PropertyDefAnnotation(type = PropertyType.BOOLEAN, label = "Enabled", order = 5)
     public boolean isEnabled()
     {
         return this.enabled;

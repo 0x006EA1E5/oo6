@@ -3,6 +3,7 @@ package org.otherobjects.cms.types;
 import java.util.ArrayList;
 
 import org.otherobjects.cms.util.StringUtils;
+import org.springframework.core.Ordered;
 import org.springframework.util.Assert;
 
 import flexjson.JSON;
@@ -44,7 +45,7 @@ import flexjson.JSON;
  * @author rich
  *
  */
-public class PropertyDef
+public class PropertyDef implements Ordered
 {
     public static final Object LIST = "list";
     public static final Object REFERENCE = "reference";
@@ -94,6 +95,8 @@ public class PropertyDef
 
     /** Reference to parent TypeDef. */
     private TypeDef parentTypeDef;
+    
+    private int order = Ordered.LOWEST_PRECEDENCE;
 
     public PropertyDef()
     {
@@ -290,6 +293,14 @@ public class PropertyDef
 
 	public void setCollectionElementType(String collectionElementType) {
 		this.collectionElementType = collectionElementType;
+	}
+
+	public int getOrder() {
+		return order;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
 	}
     
     

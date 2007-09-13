@@ -1,6 +1,9 @@
 package org.otherobjects.cms.types;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -8,6 +11,7 @@ import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.types.annotation.PropertyDefAnnotation;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.TypeDefAnnotation;
+import org.springframework.core.OrderComparator;
 import org.springframework.core.annotation.AnnotationUtils;
 
 @SuppressWarnings("unchecked")
@@ -32,7 +36,10 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder
         typeDef.setLabel(typeDefAnnotation.label());
         typeDef.setDescription(typeDefAnnotation.description());
         typeDef.setLabelProperty(typeDefAnnotation.labelProperty());
-
+        
+        //Create a list as a container to allow for ordered addition of found PropertyDefs
+        List<PropertyDef> propDefs = new ArrayList<PropertyDef>(); 
+        
         // iterate all public methods (including inherited ones)
         Method[] methods = clazz.getMethods();
         for (Method method : methods)
@@ -50,14 +57,22 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder
                 propertyDef.setSize(propertyDefAnnotation.size());
                 propertyDef.setType(propertyDefAnnotation.type().value());
                 propertyDef.setValang(propertyDefAnnotation.valang());
+                propertyDef.setOrder(propertyDefAnnotation.order());
                 // TODO Reference and component support
                 if (propertyDefAnnotation.type().equals(PropertyType.LIST))
                 {
                     propertyDef.setRelatedType(propertyDefAnnotation.relatedType());
                     propertyDef.setCollectionElementType(propertyDefAnnotation.collectionElementType().value());
                 }
-                typeDef.addProperty(propertyDef);
+                propDefs.add(propertyDef);
             }
+        }
+        
+        Collections.sort(propDefs, new OrderComparator());
+        
+        for(PropertyDef orderedPropertyDef : propDefs)
+        {
+        	typeDef.addProperty(orderedPropertyDef);
         }
 
         return typeDef;
