@@ -1,7 +1,8 @@
 package org.otherobjects.cms.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -54,7 +55,7 @@ public class User implements Serializable, UserDetails, Editable
     protected String passwordHint;
     protected String firstName; // required
     protected String lastName; // required
-    protected Set<Role> roles = new HashSet<Role>();
+    protected List<Role> roles = new ArrayList<Role>();
     protected boolean enabled;
     protected boolean accountExpired;
     protected boolean accountLocked;
@@ -143,9 +144,10 @@ public class User implements Serializable, UserDetails, Editable
     }
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @org.hibernate.annotations.IndexColumn(name = "position")
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = @JoinColumn(name = "role_id"))
     @PropertyDefAnnotation(type = PropertyType.LIST, label = "Roles", collectionElementType = PropertyType.REFERENCE, relatedType = "org.otherobjects.cms.model.Role", order = 6)
-    public Set<Role> getRoles()
+    public List<Role> getRoles()
     {
         return this.roles;
     }
@@ -266,7 +268,7 @@ public class User implements Serializable, UserDetails, Editable
         this.email = email;
     }
 
-    public void setRoles(Set<Role> roles)
+    public void setRoles(List<Role> roles)
     {
         this.roles = roles;
     }

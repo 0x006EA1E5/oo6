@@ -6,8 +6,8 @@ import groovy.lang.GroovyShell;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.acegisecurity.Authentication;
 import org.acegisecurity.context.SecurityContextHolder;
@@ -71,7 +71,7 @@ public class BootstrapUtils
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
                 runScript(this.bootstrapScript.getInputStream());
-                runScript(new FileInputStream("src/main/resources/site.resources/bootstrap-data/setup.groovy"));
+                runScript(new FileInputStream("src/main/resources/site.resources/bootstrap-data/setup.script"));
             }
         }
         catch (Exception e)
@@ -92,8 +92,10 @@ public class BootstrapUtils
         role = (Role) this.daoService.getDao(Role.class).save(role);
         Role role2 = new Role("ROLE_USER", "User role");
         role2 = (Role) this.daoService.getDao(Role.class).save(role2);
+        Role role3 = new Role("ROLE_TEST", "Test role with no function");
+        role3 = (Role) this.daoService.getDao(Role.class).save(role3);
 
-        Set<Role> roles = new HashSet();
+        List<Role> roles = new ArrayList<Role>();
         roles.add(role);
         roles.add(role2);
 
