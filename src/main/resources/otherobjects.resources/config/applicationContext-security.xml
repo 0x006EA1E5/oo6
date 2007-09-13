@@ -81,7 +81,7 @@
 				<![CDATA[
 				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON 
 				PATTERN_TYPE_APACHE_ANT
-				/go/workbench/api/**=IS_AUTHENTICATED_ANONYMOUSLY
+				/go/workbench/api/**=ROLE_USER
 				/go/workbench/login.html=IS_AUTHENTICATED_ANONYMOUSLY
 				/go/workbench/**=IS_AUTHENTICATED_REMEMBERED
 				/go**=IS_AUTHENTICATED_ANONYMOUSLY
@@ -159,6 +159,9 @@
 	
 	<bean id="metaWeblogProcessingFilter" class="org.otherobjects.cms.security.MetaWeblogProcessingFilter">
 		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="authenticationEntryPoint" ref="metaWeblogProcessingFilterEntryPoint" />
 	</bean>
 	
+	<bean id="metaWeblogProcessingFilterEntryPoint" class="org.otherobjects.cms.security.MetaWeblogProcessingFilterEntryPoint">
+	</bean>
 </beans>

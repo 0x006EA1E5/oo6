@@ -19,6 +19,7 @@ import org.acegisecurity.context.SecurityContextHolder;
 import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.acegisecurity.ui.AuthenticationDetailsSource;
 import org.acegisecurity.ui.AuthenticationDetailsSourceImpl;
+import org.acegisecurity.ui.AuthenticationEntryPoint;
 import org.dom4j.Document;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
@@ -30,11 +31,21 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.Ordered;
 import org.springframework.util.Assert;
 
+/**
+ * This is a MMetaWeblogApi specific spring security filter that inspects the xml-rpc workload and extracts username and password from that
+ * to do authentication. The actual classes implementing the rpc methods then can safely ignore the credentials.
+ * 
+ * It assumes that the username is always the 2. and the password alyways the 3. argument in the payload
+ * 
+ * @author joerg
+ *
+ */
 public class MetaWeblogProcessingFilter implements Filter, InitializingBean, Ordered {
 	private final Logger logger = LoggerFactory.getLogger(MetaWeblogProcessingFilter.class);
 	
 	private AuthenticationDetailsSource authenticationDetailsSource = new AuthenticationDetailsSourceImpl();
     private AuthenticationManager authenticationManager;
+    private AuthenticationEntryPoint authenticationEntryPoint;
     private int order;
 	
 	public void destroy() {}
@@ -72,6 +83,9 @@ public class MetaWeblogProcessingFilter implements Filter, InitializingBean, Ord
             }
 
             SecurityContextHolder.getContext().setAuthentication(null);
+            
+            authenticationEntryPoint.commence(request, response, failed);
+            
             return;
         }
 
@@ -149,6 +163,15 @@ public class MetaWeblogProcessingFilter implements Filter, InitializingBean, Ord
 
 	public void setOrder(int order) {
 		this.order = order;
+	}
+
+	public AuthenticationEntryPoint getAuthenticationEntryPoint() {
+		return authenticationEntryPoint;
+	}
+
+	public void setAuthenticationEntryPoint(
+			AuthenticationEntryPoint authenticationEntryPoint) {
+		this.authenticationEntryPoint = authenticationEntryPoint;
 	}
 	
 	
