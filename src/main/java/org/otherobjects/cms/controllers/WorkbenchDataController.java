@@ -311,10 +311,14 @@ public class WorkbenchDataController implements Controller
         }
         else if (node instanceof SmartFolder)
         {
-            SmartFolder dbFolder = (SmartFolder) node;
-            String query = dbFolder.getQuery();
+            SmartFolder smartFolder = (SmartFolder) node;
+            String query = smartFolder.getSearchTerm();
+            String jcr = smartFolder.getQuery();
 
-            query = "/jcr:root/site//*[jcr:contains(., '" + query + "') and not(jcr:like(@ooType,'%Folder'))] order by @modificationTimestamp descending";
+            if (StringUtils.isNotEmpty(jcr))
+                query = jcr;
+            else
+                query = "/jcr:root/site//*[jcr:contains(., '" + query + "') and not(jcr:like(@ooType,'%Folder'))] order by @modificationTimestamp descending";
 
             Assert.hasText(query, "SmartFolder must have a query.");
             pagedResult = this.dynaNodeDao.pageByJcrExpression(query, ITEMS_PER_PAGE, getRequestedPage(request));

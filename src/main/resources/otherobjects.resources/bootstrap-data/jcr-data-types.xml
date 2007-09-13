@@ -109,8 +109,8 @@
 			<properties jcr:primaryType="nt:unstructured">
 				<property jcr:primaryType="nt:unstructured" required="true" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
 				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" />
-				<property jcr:primaryType="nt:unstructured" required="true" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="query" />
-				<property jcr:primaryType="nt:unstructured" required="true" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="searchTerm" />
+				<property jcr:primaryType="nt:unstructured" required="false" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="query" />
+				<property jcr:primaryType="nt:unstructured" required="false" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="searchTerm" />
 			</properties>
 		</org.otherobjects.cms.model.SmartFolder>
 	</system>
