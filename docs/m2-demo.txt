@@ -1,17 +1,22 @@
 Demo
 
+* Who's watched M1 Screencast? (Drag drop, trash, edit, localisation)
+* Site walkthough: home, artists, news
+* Site toolbar
 * Improved welcome page
-* Sort and search in grid, database objects
-* Folder overview pages
+* Sort and search in grid (exhibitions)
 * Folder and page publishing
 * Versioning diffs and rollbacks
-* Smart folders
-* Performance analysis tools + request headers/params + template info + page headers
+* Database objects and smart folders
+
+* Sitemap
 * Flickr images
 * Bulk upload, folder objects, IPTC data
 * Delicious external links
 * Blogger API
 * Edit/stats site toolbar
+* Template tools introsepction
+* Head attributes
 
 Developer demo
 

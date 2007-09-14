@@ -34,7 +34,7 @@ createFolder(dao, "/libraries/images", "\${libraries.images.label}", null)
 createFolder(dao, "/libraries/files", "\${libraries.files.label}", null)
 createFolder(dao, "/libraries/links", "\${libraries.links.label}", null)
 def designer = createFolder(dao, "/designer", "\${designer.label}", "designer")
-createFolder(dao, "/security", "\${security.label}", "security")
+def security = createFolder(dao, "/security", "\${security.label}", "security")
 createDbFolder(dao, "/security/users", "\${security.users.label}", "org.otherobjects.cms.model.User")
 createDbFolder(dao, "/security/roles", "\${security.roles.label}", "org.otherobjects.cms.model.Role")
 createFolder(dao, "/designer/blocks", "\${designer.blocks.label}", null)
@@ -45,5 +45,5 @@ createFolder(dao, "/trash", "\${trash.label}","trash")
 // Move pre-created data types to proper location
 def types = dao.getByPath("/types");
 assert types : "Could not find types folder";
-dao.moveItem(types.id, designer.id, "below");
+dao.moveItem(types.id, security.id, "below");
 dao.publish(types);

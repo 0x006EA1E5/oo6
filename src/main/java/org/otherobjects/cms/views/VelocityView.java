@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.context.Context;
 
 /**
@@ -65,16 +66,16 @@ public class VelocityView extends org.springframework.web.servlet.view.velocity.
         public String describeContext()
         {
             StringBuffer buf = new StringBuffer();
-            buf.append("The current model context contains these objects: ");
-            buf.append("<ul>");
+            //buf.append("The current model context contains these objects: ");
+            //buf.append("<ul>");
             for (int i = 0; i < this.context.getKeys().length; i++)
             {
-                buf.append("<li>");
-                buf.append(this.context.getKeys()[i].toString());
-                buf.append("</li>");
+                // buf.append("<li>");
+                buf.append(this.context.getKeys()[i].toString() + ", ");
+                // buf.append("</li>");
 
             }
-            buf.append("</ul>");
+            //buf.append("</ul>");
             return buf.toString();
         }
 
@@ -91,28 +92,34 @@ public class VelocityView extends org.springframework.web.servlet.view.velocity.
 
             Method[] methods = tool.getClass().getMethods();
 
-            buf.append("<ul>");
             for (int i = 0; i < methods.length; i++)
             {
                 if (!objectMethods.contains(methods[i].getName())) // only list methods that are not inherited from Object
                 {
-                    buf.append("<li>");
+                    buf.append("$" + toolName + ".");
                     buf.append(methods[i].getName());
                     Class<?>[] parameters = methods[i].getParameterTypes();
                     if (parameters.length > 0)
                     {
                         buf.append("(");
+                        boolean first = true;
                         for (Class<?> element : parameters)
                         {
-                            buf.append(element.getName());
-                            buf.append(" ");
+                            if (!first)
+                            {
+                                buf.append(", ");
+                            }
+                            buf.append(StringUtils.substringAfterLast(element.getName(), "."));
+                            first = false;
                         }
                         buf.append(")");
                     }
-                    buf.append("</li>");
+                    else
+                        buf.append("()");
+
+                    buf.append("<br/>");
                 }
             }
-            buf.append("</ul>");
             return buf.toString();
         }
 
