@@ -156,8 +156,16 @@ public class BindServiceImpl implements BindService
                 }
                 else if (collectionElementType.equals(PropertyDef.REFERENCE)) 
                 {
-                    // Add reference editors to all the reference propreties                    
-                    binder.registerCustomEditor(DynaNode.class, fullPath, new DynaNodeReferenceEditor(daoService, propertyDef.getRelatedType()));
+                	String relatedType = propertyDef.getRelatedType();
+                	if(daoService.hasDao(relatedType))
+                	{	
+                		Class relatedPropertyClass = Class.forName(relatedType);
+                		binder.registerCustomEditor(relatedPropertyClass, fullPath, new EntityReferenceEditor(daoService, relatedPropertyClass));
+                	}
+                	else { //FIXME default to DynaNodeDao, should be more precise
+	                    // Add reference editors to all the reference properties                    
+	                    binder.registerCustomEditor(DynaNode.class, fullPath, new DynaNodeReferenceEditor(daoService, relatedType));
+                	}
                 }
             }
             catch (Exception e)
