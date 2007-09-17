@@ -494,7 +494,9 @@
 				</exclusion>
 				<exclusion>
 					<groupId>geronimo-spec</groupId>
-					<artifactId>geronimo-spec-j2ee-connector</artifactId>
+					<artifactId>
+						geronimo-spec-j2ee-connector
+					</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>org.apache.jackrabbit</groupId>
@@ -601,7 +603,9 @@
 				</exclusion>
 				<exclusion>
 					<groupId>geronimo-spec</groupId>
-					<artifactId>geronimo-spec-j2ee-connector</artifactId>
+					<artifactId>
+						geronimo-spec-j2ee-connector
+					</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>org.apache.jackrabbit</groupId>
@@ -954,12 +958,17 @@
 			<version>2.0.1</version>
 			</dependency>
 		-->
-		<!-- lib for generating uuids, used in groovy xml generator, not in official maven rep -->
-		<!--		<dependency>-->
-		<!--			<groupId>com.eaio</groupId>-->
-		<!--			<artifactId>uuid</artifactId>-->
-		<!--			<version>2.1.3</version>-->
-		<!--		</dependency>-->
+		<!--		 lib for generating uuids, used in groovy xml generator, not in official maven rep -->
+<!--		<dependency>-->
+<!--			<groupId>com.eaio</groupId>-->
+<!--			<artifactId>uuid</artifactId>-->
+<!--			<version>2.1.3</version>-->
+<!--		</dependency>-->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-ldap</artifactId>
+			<version>1.1.2</version>
+		</dependency>
 	</dependencies>
 </project>
 
