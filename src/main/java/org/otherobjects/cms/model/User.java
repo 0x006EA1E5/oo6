@@ -3,7 +3,6 @@ package org.otherobjects.cms.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -144,7 +143,7 @@ public class User implements Serializable, UserDetails, Editable
     }
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @org.hibernate.annotations.IndexColumn(name = "position")
+    @org.hibernate.annotations.IndexColumn(name = "index")
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = @JoinColumn(name = "role_id"))
     @PropertyDefAnnotation(type = PropertyType.LIST, label = "Roles", collectionElementType = PropertyType.REFERENCE, relatedType = "org.otherobjects.cms.model.Role", order = 6)
     public List<Role> getRoles()
