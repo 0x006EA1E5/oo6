@@ -1,0 +1,90 @@
+Quick start
+-----------
+
+mvn jetty:run
+  Runs app from source
+
+mvn jetty:run-war
+  Builds war and runs from that
+
+mvn package
+mvn war:war
+  Builds war
+
+mvn site
+  Builds docs in target/site
+
+mvn hibernate3:hbm2ddl
+  Generates and executes db schema
+  
+mvn dbunit:operation
+  Seed database with default data
+
+mvn jackrabbit:import
+  Seed JCR with default data  
+  
+mvn clean
+  Remove all generated artifacts
+
+mvn project-info-reports:dependencies
+mvn surefire-report:report
+
+Running tests against H2 testdatabase
+-------------------------------------
+
+There is a maven profile called testdb that creates and populates the database as an H2 database
+rather than in postgres and then runs the tests against that. 
+To use that use something like this:
+
+mvn -P testdb test
+
+
+Using our jackrabbit plugin
+---------------------------
+
+svn co maven-jackrabbit-plugin
+cd maven-jackrabbit-plugin
+mvn install
+
+mvn org.otherobjects.maven.plugins:maven-jackrabbit-plugin:export
+
+Plugin dev guide: http://maven.apache.org/guides/plugin/guide-java-plugin-development.html
+
+How to install source for a project
+-----------------------------------
+
+Note you must have v2.2 of the install-plugin for this to work
+Use -U option to make sure plugins are up to date?
+
+mvn -U install:install-file -Dfile=spring-src.jar -DgroupId=org.springframework -DartifactId=spring -Dversion=2.0.4 -Dclassifier=sources -Dpackaging=jar
+
+
+Reports
+-------
+
+A whole bunch of useful reports (and a project website) can be created by running:
+ 
+ mvn site
+ 
+Then check in target/site/ 
+
+
+Repository
+----------------
+
+http://repo1.maven.org/maven2/
+http://maven.otherobjects.org/repository/
+
+To host your own: http://www.jfrog.org/sites/artifactory/latest/
+
+Creating plugins
+----------------
+
+mvn plugin:xdoc
+  Generate docs
+  
+Docs
+----
+
+http://www.sonatype.com/book/ 
+http://www.mvnrepository.com/

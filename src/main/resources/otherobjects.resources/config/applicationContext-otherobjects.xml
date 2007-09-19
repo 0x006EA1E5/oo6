@@ -86,7 +86,7 @@
 
 	<bean name="bootstrapUtils" class="org.otherobjects.cms.util.BootstrapUtils" init-method="bootstrap" depends-on="typeService">
 		<property name="daoService" ref="daoService" />
-		<property name="bootstrapScript" value="classpath:otherobjects.resources/bootstrap-data/setup.groovy" />
+		<property name="bootstrapScript" value="classpath:otherobjects.resources/bootstrap-data/setup.script" />
 	</bean>
 
 	<bean name="singletonBeanLocator" class="org.otherobjects.cms.SingletonBeanLocator" />

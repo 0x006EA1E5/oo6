@@ -1,0 +1,41 @@
+Eclipse 3.3
+===========
+
+Base install
+
+* Download Eclipse for JEE developers
+  http://www.eclipse.org/downloads/
+
+Required plugins
+
+* Subclipse 1.1.7 (SVN integration)
+  http://www.polarion.org/projects/subversive/download/1.1/update-site/
+  
+* M2Eclipse 0.10 (Maven integration) 
+  http://m2eclipse.codehaus.org/update-dev/
+ 
+* MoreUnit 0.8.2 (Test case utils)
+  http://moreunit.sourceforge.net/org.moreunit.updatesite/
+
+* SpringIDE 2.0.1 (Spring utils) 
+  http://springide.org/updatesite/
+  
+Optional plugins
+
+* JCR Browser (http://sourceforge.net/projects/jcrbrowser)
+* Veloeclipse
+* Logback plugin
+* Find bugs?
+* Eclipse-cs? (Checksyle integration)
+* Clover (Test coverage stats)
+* http://www.spket.com (Ext JS editor)
+* Aptana (JS IDE) http://update.aptana.com/install/3.2/
+
+WTP
+
+* Preview server (Jetty)
+* Glassfish integration: https://glassfishplugins.dev.java.net/eclipse33/index.html
+
+Other notes
+
+http://www.vasanth.in/2004/01/13/EclipseTipKeepingPluginsAndWorkspaceSeparate.aspx

@@ -1,0 +1,48 @@
+<!-- 
+
+Copy this file to ~/.m2/setting.xml to use the OTHERobjects Maven Repository.
+
+This repository together with the master repository should contain all the
+dependencies you will need to build, test and run OTHERobjects.
+
+-->
+<settings>
+	<!-- Set up maven to use a HTTP proxy (optional) -->
+    <!-- 
+	<proxies>
+		<proxy>
+			<active>true</active>
+			<protocol>http</protocol>
+			<host>172.16.30.200</host>
+			<port>8888</port>
+			<username>proxyuser</username>
+			<password>somepassword</password>
+			<nonProxyHosts>maven.otherobjects.org</nonProxyHosts>
+		</proxy>
+	</proxies>
+	-->
+	<profiles>
+		<profile>
+			<id>otherobjects-repository</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<repositories>
+				<repository>
+					<id>otherobjects</id>
+					<name>OTHERobjects repository</name>
+					<url>http://maven.otherobjects.org/repository/</url>
+					<layout>default</layout>
+				</repository>
+			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>otherobjects</id>
+					<name>OTHERobjects repository</name>
+					<url>http://maven.otherobjects.org/repository/</url>
+					<layout>default</layout>
+				</pluginRepository>
+			</pluginRepositories>
+		</profile>
+	</profiles>
+</settings>
