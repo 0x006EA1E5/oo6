@@ -30,5 +30,16 @@
         <property name="removeAbandoned" value="true"/>
         <property name="removeAbandonedTimeout" value="60"/>
     </bean>
+    
+    <bean id="contextSource" class="org.springframework.ldap.support.LdapContextSource">
+      <property name="url" value="ldap://localhost:10389" />
+      <property name="base" value="o=sevenseas" />
+      <property name="userName" value="uid=admin,ou=system" />
+      <property name="password" value="secret" />
+   </bean>
+
+   <bean id="ldapTemplate" class="org.springframework.ldap.LdapTemplate">
+      <constructor-arg ref="contextSource" />
+   </bean>
 
 </beans>
