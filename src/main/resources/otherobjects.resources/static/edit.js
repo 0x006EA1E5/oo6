@@ -60,6 +60,7 @@ OO.EditForm = function(){
 			                tabIndex:-1
 			            };
 			        }
+					
 
 					
 					//TODO Replace with WYMeditor?
@@ -67,10 +68,22 @@ OO.EditForm = function(){
 					// config.growMax=500;// FIXME Ext bug: can't grow HtmlEditor
 					var f = new Ext.form.HtmlEditor(config);
 					f.on("initialize", function(ed) {
-						ed.getToolbar().addButton(btn('undersline',f,function(e)
-						{
-  						    this.execCmd('InsertImage', 'http://www.google.es/intl/en_com/images/logo_plain.png');
-						}));
+						ed.getToolbar().addButton(btn('undersline',f, function() {
+						var chooser = new ImageChooser({
+				    			url:'/go/workbench/data/select/org.otherobjects.cms.model.CmsImage',
+				    			//url:'/go/workbench/data/image-services/flickr',
+				    			width:515, 
+				    			height:400
+    					});
+						chooser.show();
+    					chooser.on("choose", function(data){
+							console.log(data.id);
+    						//this.setValue(data.id);
+    						//this.thumbnail.dom.src=data.thumbnailPath;
+							this.execCmd('InsertImage', data.thumbnailPath);
+						}, this);
+					}
+						));
 					});
 				}
 				else if(propDef.type=="text")
