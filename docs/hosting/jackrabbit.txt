@@ -24,3 +24,12 @@ http://www.openwfe.org/openwfe-jcr-beancoder.html
 Gotchas
 
 http://mail-archives.apache.org/mod_mbox/jackrabbit-dev/200608.mbox/%3c44D9A26C.9030209@gmx.net%3e
+
+Docs
+
+this is good:
+http://www.ibm.com/developerworks/java/library/j-jcr/
+otherwise the jackrabbit docs (not very good):
+http://jackrabbit.apache.org/
+or the spec itself (which is good):
+http://www.day.com/etc/medialib/day_download_documents/white_papers.Par.0001.File.tmp/JSR_170_White_Paper.pdf

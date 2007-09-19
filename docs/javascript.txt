@@ -5,3 +5,4 @@ http://www-128.ibm.com/developerworks/web/library/wa-memleak/
 http://www.thinksharp.org/
 http://www.crockford.com/javascript/private.html
 http://developer.yahoo.com/yui/theater/
+http://javascript.crockford.com/style2.html
