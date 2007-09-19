@@ -19,6 +19,8 @@ import org.springframework.ldap.support.DistinguishedName;
  * 
  * Note: No precautions have been implemented yet to check the update method whether it needs to do a rename because of the uid having changed (that would be
  * neccessary as the uid is part of the DN which without renaming must not change)
+ * 
+ * Note: No handling of passwords yet
  * @author joerg
  *
  */
