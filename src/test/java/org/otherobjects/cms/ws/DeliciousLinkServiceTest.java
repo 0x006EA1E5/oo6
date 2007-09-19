@@ -12,6 +12,6 @@ public class DeliciousLinkServiceTest extends TestCase
         DeliciousLinkService dls = new DeliciousLinkService();
         List<Post> links = dls.getLinks();
         assertNotNull(links);
-        assertEquals(2, links.size());
+        assertEquals(15, links.size());
     }
 }

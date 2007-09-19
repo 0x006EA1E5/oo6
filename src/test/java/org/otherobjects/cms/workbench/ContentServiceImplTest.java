@@ -1,47 +1,35 @@
 package org.otherobjects.cms.workbench;
 
-import org.otherobjects.cms.dao.DynaNodeDao;
+import org.otherobjects.cms.beans.BaseDynaNodeTest;
 import org.otherobjects.cms.model.DynaNode;
-import org.otherobjects.cms.test.BaseJcrTestCase;
 
-public class ContentServiceImplTest extends BaseJcrTestCase
+public class ContentServiceImplTest extends BaseDynaNodeTest
 {
     // Injected by Spring
-    private DynaNodeDao dynaNodeDao;
     private ContentServiceImpl contentService;
 
     @Override
     protected void onSetUp() throws Exception
     {
         super.onSetUp();
-        contentService = new ContentServiceImpl();
-        contentService.setDynaNodeDao(dynaNodeDao);
+        this.contentService = new ContentServiceImpl();
+        this.contentService.setDynaNodeDao(this.dynaNodeDao);
     }
 
     public void testTestDependencies()
     {
         // Create item in site root
-        assertNotNull(dynaNodeDao);
-        assertNotNull(contentService);
-    }
-
-    public DynaNodeDao getDynaNodeDao()
-    {
-        return dynaNodeDao;
-    }
-
-    public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
-    {
-        this.dynaNodeDao = dynaNodeDao;
+        assertNotNull(this.dynaNodeDao);
+        assertNotNull(this.contentService);
     }
 
     public void testCreateItem()
     {
-    	adminLogin();
-        DynaNode siteRoot = dynaNodeDao.getByPath("/site/");
-        DynaNode new1 = contentService.createItem(siteRoot.getId(), "Article");
-        assertEquals("Untitled 1", new1.getLabel()); 
-        DynaNode new2 = contentService.createItem(siteRoot.getId(), "Article");
+        adminLogin();
+        DynaNode siteRoot = this.dynaNodeDao.getByPath("/site/");
+        DynaNode new1 = this.contentService.createItem(siteRoot.getId(), "Article");
+        assertEquals("Untitled 1", new1.getLabel());
+        DynaNode new2 = this.contentService.createItem(siteRoot.getId(), "Article");
         assertEquals("Untitled 2", new2.getLabel());
         logout();
     }
