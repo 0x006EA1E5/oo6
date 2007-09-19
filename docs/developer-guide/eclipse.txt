@@ -1,24 +1,8 @@
 Eclipse 3.3
 ===========
 
-Base install
+*** See Developer Guide for base install info ***
 
-* Download Eclipse for JEE developers
-  http://www.eclipse.org/downloads/
-
-Required plugins
-
-* Subclipse 1.1.7 (SVN integration)
-  http://www.polarion.org/projects/subversive/download/1.1/update-site/
-  
-* M2Eclipse 0.10 (Maven integration) 
-  http://m2eclipse.codehaus.org/update-dev/
- 
-* MoreUnit 0.8.2 (Test case utils)
-  http://moreunit.sourceforge.net/org.moreunit.updatesite/
-
-* SpringIDE 2.0.1 (Spring utils) 
-  http://springide.org/updatesite/
   
 Optional plugins
 

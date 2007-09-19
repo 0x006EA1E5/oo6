@@ -1,0 +1,6 @@
+Alcyone
+
+export PATH=$PATH:/home/rich/maven/bin/
+export JAVA_HOME=/opt/java_15/
+export JDK_HOME=/opt/java_15/
+export PATH=/opt/java_15/bin:$PATH
