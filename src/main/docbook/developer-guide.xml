@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3CR3//EN"
+"http://www.oasis-open.org/docbook/xml/4.3CR3/docbookx.dtd">
+<book lang="en">
+  <bookinfo>
+    <title>OTHERobjects CMS</title>
+
+    <subtitle>Developer Guide</subtitle>
+
+    <releaseinfo>0.3</releaseinfo>
+  </bookinfo>
+
+  <toc></toc>
+
+  <preface id="preface">
+    <title>Preface</title>
+
+    <section id="section-why-another-framework">
+      <title>Who is this guide for?</title>
+
+      <para>This guide is for developers who want to extend the capabilites of
+      OTHERobjects beyond what is possible via the web interface and third
+      party plugins. You'll need this guide if you want to:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Create custom site components</para>
+        </listitem>
+
+        <listitem>
+          <para>Develop your own plugins</para>
+        </listitem>
+
+        <listitem>
+          <para>Update and improve OTHERobjects itself</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>If you are just interested in building a standard website then you
+      should read the Site Builder Guide instead. If you're not sure then you
+      should start off with the Site Builder Guide and come back here when you
+      need to.</para>
+    </section>
+  </preface>
+
+  <chapter id="chapter-using-the-framework">
+    <title>Getting ready</title>
+
+    <section id="section-how-to-set-up">
+      <title>Introduction</title>
+
+      <para>OTHERobjects in a pure Java project based on the Spring framework
+      and build with Maven. If you are an experienced Java developer you will
+      probably have your own preferences for an IDE. build process and app
+      server. In this case just skip ahead to the next section.</para>
+
+      <para>However, if you're fairly new to Java or want a setup that will
+      work with the minimum of fuss then this section will help you get your
+      environment set up.</para>
+    </section>
+
+    <section>
+      <title>Supported platforms</title>
+
+      <para>OTHERobjects should run well on any platform that supports Java
+      5.0. This includes Apple Mac OS X 10.4+, Microsoft Windows 2000/XP/Vista
+      and most distributions of Linux.</para>
+
+      <para>Although, OTHERobjects runs on Windows it is happiest on UNIX-like
+      systems such an Mac OS X and Linux. Windown users may need to install
+      CygWin.</para>
+    </section>
+
+    <section id="section-configuring-your-documentation">
+      <title>Installing required software</title>
+
+      <para>There is some key software that you will need before you can start
+      developing with OTHERobjects.</para>
+
+      <section>
+        <title>Java</title>
+
+        <para>You will need a JVM installed and version 5.0 is required. If
+        your system does not come with a JVM installed we would recomment the
+        latest Sun JDK from java.sun.com/download. Check that your JVM is
+        installed:</para>
+
+        <programlisting>brushed:~ rich$ java -version java version
+"1.5.0_07" Java(TM) 2 Runtime Environment, Standard
+Edition (build 1.5.0_07-164) Java HotSpot(TM) Client
+VM (build 1.5.0_07-87, mixed mode, sharing)
+brushed:~ rich$
+</programlisting>
+      </section>
+
+      <section>
+        <title>Apache Maven</title>
+
+        <para>Next you'll need Apache Maven version 2.0.7 or greater. You can
+        dowload it from: <uri>http://maven.apache.org/download.html</uri> .
+        Once you have donwloaded and installed Maven you should make sure that
+        the <emphasis role="bold">mvn</emphasis> command is included in your
+        path:</para>
+
+        <para><programlisting>brushed:~ rich$ mvn -version 
+Maven version: 2.0.7
+brushed:~ rich$
+</programlisting> ImageMagick</para>
+      </section>
+
+      <section>
+        <title>ImageMagick</title>
+
+        <para>We use ImageMagick for high quality image resizing. You need
+        version 6.3 or later. Download a binary package from <uri>
+        http://www.imagemagick.org/script/binary-releases.php </uri> and
+        install it. You will need to set your paths and environment variables
+        correctly. To test that you have the correct version is installed run
+        the followin command:</para>
+
+        <para><programlisting>brushed:~ rich$ convert -version Version:
+ImageMagick 6.3.4 05/19/07 Q16
+http://www.imagemagick.org Copyright: Copyright
+(C) 1999-2007 ImageMagick Studio LLC
+
+brushed:~ rich$
+</programlisting></para>
+      </section>
+
+      <section>
+        <title>Eclipse</title>
+
+        <para>Finally you will need an IDE. We recommend Eclipse 3.3. Download
+        <emphasis>Eclipse for JEE Developers</emphasis> from
+        http://www.eclipse.org/downloads/.</para>
+
+        <para>Once this is installed you should add the following plugins via
+        the Update Manager:</para>
+
+        <!-- 
+				<table>
+					<title>Recommended Eclipse plugins</title>
+
+					<tgroup cols="3">
+						<thead>
+							<row>
+								<entry align="center">Plugin</entry>
+
+								<entry align="center">
+									Update Site
+								</entry>
+
+								<entry align="center">
+									Functionality
+								</entry>
+							</row>
+						</thead>
+
+						<tbody>
+							<row>
+								<entry>Subversive 1.1.7</entry>
+
+								<entry>
+									http://www.polarion.org/projects/subversive/download/1.1/update-site/
+								</entry>
+
+								<entry>
+									Subversion SCM intergation
+								</entry>
+							</row>
+
+							<row>
+								<entry>M2Eclipse 0.10</entry>
+
+								<entry>
+									http://m2eclipse.codehaus.org/update-dev/
+								</entry>
+
+								<entry>Maven integration</entry>
+							</row>
+
+							<row>
+								<entry>SpringIDE 2.0.1</entry>
+
+								<entry>
+									http://springide.org/updatesite/
+								</entry>
+
+								<entry>Spring integration</entry>
+							</row>
+
+							<row>
+								<entry>MoreUnit 0.8.2</entry>
+
+								<entry>
+									http://moreunit.sourceforge.net/org.moreunit.updatesite/
+								</entry>
+
+								<entry>Unit testing utilities</entry>
+							</row>
+						</tbody>
+					</tgroup>
+				</table>
+				 -->
+
+        <para>See http://open.ncsu.edu/se/tutorials/install_plugin/ for a
+        instructions on installing plugins.</para>
+
+        <para>There are other plugins that you wish to add later but for now
+        these essential ones will do.</para>
+
+        <para>You should now launch Eclipse and check that your plugins are
+        installed via the About Eclipse Platform menu option.</para>
+
+        <para>This guide assumes a basic knowledge of Eclipse. A good short
+        tutorial on using Eclipse is available at
+        http://www.cs.umd.edu/class/fall2004/cmsc131/EclipseTutorial/.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Checking out the source code</title>
+
+      <para>The next step is to check out the soucres code to OTHERobjects and
+      to the sample project that we will use throughout the rest of this
+      guide.</para>
+
+      <para>First of all switch to the SVN Repository Exploring and create a
+      new Repository Location. OTHERobjects and the sample project are located
+      at:</para>
+
+      <programlisting>svn+ssh://svn.otherworks.com/data/svn/repos-ng
+</programlisting>
+
+      <para>You will be able to connect anonymously since you will not be
+      checking changes to the repository.</para>
+
+      <important>
+        <para>OTHERobjects develops will need to authorise with their private
+        key when creating the repository.</para>
+      </important>
+
+      <figure>
+        <title>Creating a repository location</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/svn-setup.png" scale="50" />
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+  </chapter>
+</book>

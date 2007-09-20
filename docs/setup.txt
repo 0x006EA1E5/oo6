@@ -4,7 +4,7 @@ Setup steps
 Download eclipse and essential plugins. See eclipse.txt
 
 Set up Svn repository:
-svn+ssh://svn.otherworks.com/data/svn/repos-ng
+	svn+ssh://svn.otherworks.com/data/svn/repos-ng
 
 PIC
 
