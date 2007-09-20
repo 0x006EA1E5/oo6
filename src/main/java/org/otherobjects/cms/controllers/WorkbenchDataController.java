@@ -126,7 +126,7 @@ public class WorkbenchDataController implements Controller
         }
         else
         {
-            CompositeDatabaseId compositeDatabaseId = IdentifierUtils.getCompositeIdPart(id);
+            CompositeDatabaseId compositeDatabaseId = IdentifierUtils.getCompositeDatabaseId(id);
             if (compositeDatabaseId != null)
             {
                 GenericDao genericDao = this.daoService.getDao(compositeDatabaseId.getClazz());
