@@ -26,7 +26,7 @@ public class IdentifierUtils
      * @param compositeId compositeId of form com.some.package.Class-123
      * @return CompositeDatabaseId object or null if compositeId was of wrong format or some error occurred
      */
-    public static CompositeDatabaseId getCompositeIdPart(String compositeId)
+    public static CompositeDatabaseId getCompositeDatabaseId(String compositeId)
     {
         CompositeDatabaseId compositeDatabaseId = null;
         try

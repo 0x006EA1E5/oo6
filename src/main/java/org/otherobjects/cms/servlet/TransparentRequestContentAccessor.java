@@ -10,10 +10,16 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+/**
+ * This is an HttpServletRequest Wrapper that allows you to read the request body multiple times, which is needed if
+ * you want to read the request body in a filter. It achieves this by storing the request body in an instance variable, so
+ * beware of memory issues if you use this on requests that carry large bodies.
+ * 
+ * @author joerg
+ *
+ */
 public class TransparentRequestContentAccessor extends HttpServletRequestWrapper
 {
-	public static final String DEFAULT_CHAR_ENCODING = "8859_1";
-	
 	private ByteArrayOutputStream baos;
 	private boolean getReaderCalled = false;
 	private boolean getInpuStreamCalled = false;
@@ -63,13 +69,33 @@ public class TransparentRequestContentAccessor extends HttpServletRequestWrapper
 		
 		String encoding = super.getCharacterEncoding();
 		if (encoding == null) {
-            encoding = DEFAULT_CHAR_ENCODING;
+            encoding = getDefaultEncoding();
         }
 		
 		InputStreamReader isr = new InputStreamReader(new ByteArrayInputStream(baos.toByteArray()), encoding);
 		return new BufferedReader(isr);
 	}
+	
+	public static String getDefaultEncoding()
+	{
+		return new InputStreamReader(
+				new ByteArrayInputStream(new
+						byte[0])).getEncoding();
+	}
 
+	public class ServletInputStreamWrapper extends ServletInputStream {
+		
+		InputStream in;
+		
+		public ServletInputStreamWrapper(InputStream inputStream) {
+			super();
+			this.in = inputStream;
+		}
 
+		@Override
+		public int read() throws IOException {
+			return in.read();
+		}
+	}
 
 }
