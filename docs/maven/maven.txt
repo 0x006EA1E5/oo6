@@ -25,6 +25,9 @@ mvn jackrabbit:import
   
 mvn clean
   Remove all generated artifacts
+  
+mvn jdocbook:generate
+  Creates documentation in target/docbook/
 
 mvn project-info-reports:dependencies
 mvn surefire-report:report

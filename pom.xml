@@ -114,6 +114,7 @@
 	</scm>
 	<build>
 		<plugins>
+		<!--  Documentation generation -->
 			<plugin>
 				<groupId>org.jboss.maven.plugins</groupId>
 				<artifactId>maven-jdocbook-plugin</artifactId>

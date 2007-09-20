@@ -238,7 +238,7 @@
     <!--###################################################-->
     <!--##               Fonts & Styles                  ##-->
     <!--###################################################-->
-    <xsl:param name="body.font.master">11</xsl:param>
+    <xsl:param name="body.font.master">10</xsl:param>
 
     <xsl:attribute-set name="monospace.properties">
         <xsl:attribute name="font-family">
