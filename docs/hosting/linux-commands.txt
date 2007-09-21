@@ -1,0 +1,3 @@
+Search recursivey land pring matching file name
+
+grep searchtext -RH *

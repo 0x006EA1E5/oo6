@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.otherobjects.cms</groupId>
@@ -19,31 +18,17 @@
 		<jdbc.url>jdbc:h2:${data.path}database</jdbc.url>
 		<jdbc.username>admin</jdbc.username>
 		<jdbc.password>admin</jdbc.password>
-		<hibernate.config.path>
-			file:src/test/resources/hibernate.cfg.xml
-		</hibernate.config.path>
-		<hibernate.dialect>
-			org.hibernate.dialect.H2Dialect
-		</hibernate.dialect>
-		<jcr.config.path>
-			classpath:otherobjects.resources/config/jackrabbit-repo.xml
-		</jcr.config.path>
-		<jcr.repository.location>
-			${data.path}repository/
-		</jcr.repository.location>
+		<hibernate.config.path>file:src/test/resources/hibernate.cfg.xml</hibernate.config.path>
+		<hibernate.dialect>org.hibernate.dialect.H2Dialect</hibernate.dialect>
+		<jcr.config.path>classpath:otherobjects.resources/config/jackrabbit-repo.xml</jcr.config.path>
+		<jcr.repository.location>${data.path}repository/</jcr.repository.location>
 		<jcr.username>admin</jcr.username>
 		<jcr.password>admin</jcr.password>
 		<!-- Extra test setup properties -->
-		<hibernate.jdbc.properties.file>
-			target/test-classes/pom.properties
-		</hibernate.jdbc.properties.file>
-		<dbunit-load-file>
-			src/test/data/jdbc-h2-data-users.xml
-		</dbunit-load-file>
+		<hibernate.jdbc.properties.file>target/test-classes/pom.properties</hibernate.jdbc.properties.file>
+		<dbunit-load-file>src/test/data/jdbc-h2-data-users.xml</dbunit-load-file>
 		<dbunit.operation.type>CLEAN_INSERT</dbunit.operation.type>
-		<dbunit.dataTypeFactoryName>
-			org.dbunit.ext.hsqldb.HsqldbDataTypeFactory
-		</dbunit.dataTypeFactoryName>
+		<dbunit.dataTypeFactoryName>org.dbunit.ext.hsqldb.HsqldbDataTypeFactory</dbunit.dataTypeFactoryName>
 	</properties>
 	<developers>
 		<developer>
@@ -73,27 +58,19 @@
 				<dbunit.dataTypeFactoryName>
 					org.dbunit.dataset.datatype.DefaultDataTypeFactory
 				</dbunit.dataTypeFactoryName>
-				<dbunit.operation.type>
-					CLEAN_INSERT
-				</dbunit.operation.type>
-				<hibernate.dialect>
-					org.hibernate.dialect.PostgreSQLDialect
-				</hibernate.dialect>
+				<dbunit.operation.type>CLEAN_INSERT</dbunit.operation.type>
+				<hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
 				<jdbc.groupId>postgresql</jdbc.groupId>
 				<jdbc.artifactId>postgresql</jdbc.artifactId>
 				<jdbc.version>8.1-408.jdbc3</jdbc.version>
-				<jdbc.driverClassName>
-					org.postgresql.Driver
-				</jdbc.driverClassName>
+				<jdbc.driverClassName>org.postgresql.Driver</jdbc.driverClassName>
 				<jdbc.url><![CDATA[jdbc:postgresql://localhost/oong]]></jdbc.url>
 				<jdbc.username>postgres</jdbc.username>
 				<jdbc.password>postgres</jdbc.password>
 				<hibernate.jdbc.properties.file>
 					target/classes/otherobjects.resources/config/jdbc.properties
 				</hibernate.jdbc.properties.file>
-				<dbunit-load-file>
-					bootstrap-data/jdbc-data-users.xml
-				</dbunit-load-file>
+				<dbunit-load-file>bootstrap-data/jdbc-data-users.xml</dbunit-load-file>
 			</properties>
 		</profile>
 	</profiles>
@@ -104,9 +81,7 @@
 		</repository>
 	</distributionManagement>
 	<scm>
-		<connection>
-			scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/trunk
-		</connection>
+		<connection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/trunk</connection>
 		<developerConnection>
 			scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/trunk
 		</developerConnection>
@@ -114,7 +89,7 @@
 	</scm>
 	<build>
 		<plugins>
-		<!--  Documentation generation -->
+			<!--  Documentation generation -->
 			<plugin>
 				<groupId>org.jboss.maven.plugins</groupId>
 				<artifactId>maven-jdocbook-plugin</artifactId>
@@ -133,12 +108,8 @@
 							</format>
 						-->
 					</formats>
-					<sourceDocumentName>
-						developer-guide.xml
-					</sourceDocumentName>
-					<imagesDirectory>
-						src/main/docbook
-					</imagesDirectory>
+					<sourceDocumentName>developer-guide.xml</sourceDocumentName>
+					<imagesDirectory>src/main/docbook</imagesDirectory>
 					<options>
 						<xincludeSupported>false</xincludeSupported>
 					</options>
@@ -189,14 +160,10 @@
 				<version>2.3</version>
 				<configuration>
 					<additionalProjectnatures>
-						<projectnature>
-							org.springframework.ide.eclipse.core.springnature
-						</projectnature>
+						<projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
 					</additionalProjectnatures>
 					<additionalBuildcommands>
-						<buildcommand>
-							org.springframework.ide.eclipse.core.springbuilder
-						</buildcommand>
+						<buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand>
 					</additionalBuildcommands>
 					<downloadSources>true</downloadSources>
 					<downloadJavadocs>true</downloadJavadocs>
@@ -211,21 +178,15 @@
 					<components>
 						<component>
 							<name>hbm2ddl</name>
-							<implementation>
-								annotationconfiguration
-							</implementation>
+							<implementation>annotationconfiguration</implementation>
 						</component>
 					</components>
 					<componentProperties>
 						<drop>true</drop>
 						<jdk5>true</jdk5>
-						<propertyfile>
-							${hibernate.jdbc.properties.file}
-						</propertyfile>
+						<propertyfile>${hibernate.jdbc.properties.file}</propertyfile>
 						<skip>${maven.test.skip}</skip>
-						<configurationfile>
-							src/test/resources/hibernate.cfg.xml
-						</configurationfile>
+						<configurationfile>src/test/resources/hibernate.cfg.xml</configurationfile>
 					</componentProperties>
 				</configuration>
 				<executions>
@@ -257,9 +218,7 @@
 				<artifactId>dbunit-maven-plugin</artifactId>
 				<version>1.0-beta-1</version>
 				<configuration>
-					<dataTypeFactoryName>
-						${dbunit.dataTypeFactoryName}
-					</dataTypeFactoryName>
+					<dataTypeFactoryName>${dbunit.dataTypeFactoryName}</dataTypeFactoryName>
 					<driver>${jdbc.driverClassName}</driver>
 					<username>${jdbc.username}</username>
 					<password>${jdbc.password}</password>
@@ -301,22 +260,14 @@
 					<dataFiles>
 						<param>src/test/data/jcr-data-types.xml</param>
 						<param>src/test/data/jcr-data-site.xml</param>
-						<param>
-							live:src/test/data/jcr-data-types.xml
-						</param>
-						<param>
-							live:src/test/data/jcr-data-site.xml
-						</param>
+						<param>live:src/test/data/jcr-data-types.xml</param>
+						<param>live:src/test/data/jcr-data-site.xml</param>
 					</dataFiles>
-					<repositoryLocation>
-						${jcr.repository.location}
-					</repositoryLocation>
+					<repositoryLocation>${jcr.repository.location}</repositoryLocation>
 					<configurationFile>
 						src/main/resources/otherobjects.resources/config/jackrabbit-repo.xml
 					</configurationFile>
-					<nodeTypesFile>
-						src/main/resources/otherobjects.resources/config/node-types.cnd
-					</nodeTypesFile>
+					<nodeTypesFile>src/main/resources/otherobjects.resources/config/node-types.cnd</nodeTypesFile>
 				</configuration>
 				<executions>
 					<execution>
@@ -338,7 +289,7 @@
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
+				<filtering>false</filtering>
 			</resource>
 		</resources>
 		<testResources>
@@ -385,14 +336,10 @@
 				<configuration>
 					<instrumentation>
 						<ignores>
-							<ignore>
-								org.otherobjects.cms.controllers
-							</ignore>
+							<ignore>org.otherobjects.cms.controllers</ignore>
 						</ignores>
 						<excludes>
-							<exclude>
-								org/otherobjects/cms/controllers/**/*.class
-							</exclude>
+							<exclude>org/otherobjects/cms/controllers/**/*.class</exclude>
 						</excludes>
 					</instrumentation>
 				</configuration>
@@ -406,18 +353,10 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
 					<links>
-						<link>
-							http://static.springframework.org/spring/docs/2.0.x/api
-						</link>
-						<link>
-							http://java.sun.com/j2se/1.5.0/docs/api
-						</link>
-						<link>
-							http://java.sun.com/j2ee/1.4/docs/api
-						</link>
-						<link>
-							http://www.acegisecurity.org/multiproject/acegi-security/apidocs
-						</link>
+						<link>http://static.springframework.org/spring/docs/2.0.x/api</link>
+						<link>http://java.sun.com/j2se/1.5.0/docs/api</link>
+						<link>http://java.sun.com/j2ee/1.4/docs/api</link>
+						<link>http://www.acegisecurity.org/multiproject/acegi-security/apidocs</link>
 					</links>
 				</configuration>
 			</plugin>
@@ -589,9 +528,7 @@
 				</exclusion>
 				<exclusion>
 					<groupId>geronimo-spec</groupId>
-					<artifactId>
-						geronimo-spec-j2ee-connector
-					</artifactId>
+					<artifactId>geronimo-spec-j2ee-connector</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>org.apache.jackrabbit</groupId>
@@ -698,9 +635,7 @@
 				</exclusion>
 				<exclusion>
 					<groupId>geronimo-spec</groupId>
-					<artifactId>
-						geronimo-spec-j2ee-connector
-					</artifactId>
+					<artifactId>geronimo-spec-j2ee-connector</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>org.apache.jackrabbit</groupId>
