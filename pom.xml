@@ -80,6 +80,12 @@
 			<url>scpexe://static.media70.com/var/maven</url>
 		</repository>
 	</distributionManagement>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>jboss</id>
+			<url>http://repository.jboss.com/maven2</url>
+		</pluginRepository>
+	</pluginRepositories>
 	<scm>
 		<connection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/trunk</connection>
 		<developerConnection>
