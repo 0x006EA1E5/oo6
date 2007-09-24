@@ -1,5 +1,13 @@
 M2 TODO
 -------
+
+* Hardcoded IM path
+* Hardcoded localhost in image paths
+* Flickr image names. 
+* Flickr search and paging?
+
+
+
 [FROM M3] * Support blog publishing APIs http://www.blogger.com/developers/api/1_docs/ (Joerg)
 * DbFolder: Finish role selector  (Joerg)
 * DbFolder Fix annotation ordering in user/role. Is this even possible?  (Joerg)

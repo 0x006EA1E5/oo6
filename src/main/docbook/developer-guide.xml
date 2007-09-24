@@ -81,10 +81,10 @@
         latest Sun JDK from java.sun.com/download. Check that your JVM is
         installed:</para>
 
-        <programlisting>brushed:~ rich$ java -version java version
-"1.5.0_07" Java(TM) 2 Runtime Environment, Standard
-Edition (build 1.5.0_07-164) Java HotSpot(TM) Client
-VM (build 1.5.0_07-87, mixed mode, sharing)
+        <programlisting>brushed:~ rich$ java -version
+java version "1.5.0_07" 
+Java(TM) 2 Runtime Environment, Standard Edition (build 1.5.0_07-164)
+Java HotSpot(TM) Client VM (build 1.5.0_07-87, mixed mode, sharing)
 brushed:~ rich$
 </programlisting>
       </section>
@@ -149,10 +149,9 @@ brushed:~ rich$
         correctly. To test that you have the correct version is installed run
         the following command:</para>
 
-        <para><programlisting>brushed:~ rich$ convert -version Version:
-ImageMagick 6.3.4 05/19/07 Q16
-http://www.imagemagick.org Copyright: Copyright
-(C) 1999-2007 ImageMagick Studio LLC
+        <para><programlisting>brushed:~ rich$ convert -version
+Version: ImageMagick 6.3.4 05/19/07 Q16 http://www.imagemagick.org 
+Copyright: Copyright (C) 1999-2007 ImageMagick Studio LLC
 
 brushed:~ rich$
 </programlisting></para>
@@ -161,8 +160,9 @@ brushed:~ rich$
       <section>
         <title>Eclipse</title>
 
-        <para>Finally, you will need an IDE. We recommend Eclipse 3.3.
-        Download <emphasis>Eclipse for JEE Developers</emphasis> from
+        <para>Finally, you will need an IDE. We recommend Eclipse 3.3 with the
+        WTP (Web Tools Project) extensions, so download <emphasis>Eclipse for
+        JEE Developers</emphasis> from
         http://www.eclipse.org/downloads/.</para>
 
         <para>Once this is installed you should add the following plugins via
@@ -222,9 +222,9 @@ brushed:~ rich$
     </section>
 
     <section>
-      <title>Checking out the source code</title>
+      <title>Checking out the code</title>
 
-      <para>The next step is to check out the sources code to OTHERobjects and
+      <para>The next step is to check out the source code to OTHERobjects and
       to the sample project that we will use throughout the rest of this
       guide.</para>
 
@@ -248,7 +248,7 @@ brushed:~ rich$
         </mediaobject>
       </figure>
 
-      <para>At this stage the projects you will to checkout are:</para>
+      <para>At this stage the projects you will need to checkout are:</para>
 
       <programlisting>otherobjects/trunk
 www.maureenmichaelson.com/trunk</programlisting>
@@ -304,11 +304,11 @@ www.maureenmichaelson.com/trunk</programlisting>
       </note>
 
       <para>The console should show the application starting up (they may be
-      some stack traces as it looks for then creates the database structure
-      but these can be safely ignored). If all has gone well you should see a
-      message stating that OTHERobjects is running and you will be given the
-      URL to both the site homepage and the administration workbench.
-      <emphasis></emphasis><programlisting>**************************************************************
+      some SQL error stack traces as the database structure is created for the
+      first time but these can be safely ignored). If all has gone well you
+      should see a message stating that OTHERobjects is running and you will
+      be given the URL to both the site homepage and the administration
+      workbench. <emphasis></emphasis><programlisting>**************************************************************
   ___ _____ _   _ _____ ____       _     _           _       
  / _ \_   _| | | | ____|  _ \ ___ | |__ (_) ___  ___| |_ ___ 
 | | | || | | |_| |  _| | |_) / _ \| '_ \| |/ _ \/ __| __/ __|
@@ -338,7 +338,7 @@ Admin : http://localhost:8080/go/workbench/
     XSL from Hibernate.</para>
 
     <para>Information on customising DocBook XSL is here:
-    http://www.sagehill.net/docbookxsl/.</para>
+    <uri>http://www.sagehill.net/docbookxsl/</uri>.</para>
 
     <para>Documentation stuff do to still:</para>
 
