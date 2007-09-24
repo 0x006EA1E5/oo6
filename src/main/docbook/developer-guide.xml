@@ -300,7 +300,7 @@ www.maureenmichaelson.com/trunk</programlisting>
 
       <note>
         <para>Information on launching via WTP or custom Jetty plugin needed
-        here. </para>
+        here. How to use -Djava.awt.headless=true.</para>
       </note>
 
       <para>The console should show the application starting up (they may be
