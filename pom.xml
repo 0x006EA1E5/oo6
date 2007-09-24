@@ -1011,6 +1011,11 @@
 			<artifactId>ldapbp</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>quartz</groupId>
+			<artifactId>quartz</artifactId>
+			<version>1.6</version>
+		</dependency>
 	</dependencies>
 </project>
 
