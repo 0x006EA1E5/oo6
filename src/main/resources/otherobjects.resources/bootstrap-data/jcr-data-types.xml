@@ -83,17 +83,6 @@
 				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="originalId" />
 			</properties>
 		</org.otherobjects.cms.model.CmsExternalLink>
-		<org.otherobjects.cms.scheduler.PersistentJobDescription jcr:primaryType="oo:node" label="Scheduled Job" labelProperty="jobName"
-			ocm:classname="org.otherobjects.cms.types.TypeDef" className="org.otherobjects.cms.scheduler.PersistentJobDescription">
-			<properties jcr:primaryType="nt:unstructured">
-				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
-				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="jobName" />
-				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="groupName" />
-				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="jobClassName" />
-				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="cronExpression" />
-				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="groovyScript" />
-			</properties>
-		</org.otherobjects.cms.scheduler.PersistentJobDescription>
 
 		<!-- Site -->
 		<org.otherobjects.cms.model.SiteFolder jcr:primaryType="oo:node" jcr:uuid="4b299ada-1f0e-4999-a623-e1ddb3eaab7e" labelProperty="label" ocm:classname="org.otherobjects.cms.types.TypeDef"
