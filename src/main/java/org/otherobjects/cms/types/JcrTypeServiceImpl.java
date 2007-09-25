@@ -42,6 +42,7 @@ public class JcrTypeServiceImpl extends AbstactTypeService
             {
                 type = this.annotationBasedTypeDefBuilder.getTypeDef(name);
                 type.setTypeService(this);
+                registerType(type);
             }
             catch (Exception e)
             {
