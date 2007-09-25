@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface TypeDefAnnotation {
 
-    String superClassName() default "java.lang.object";
+    String superClassName() default "java.lang.Object";
 
     String description();
 
