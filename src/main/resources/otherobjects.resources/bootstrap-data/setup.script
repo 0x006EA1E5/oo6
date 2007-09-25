@@ -26,18 +26,6 @@ def createDbFolder(dao, path, label, mainType) {
 	return f
 }
 
-def createScheduleFolder(dao, path, label) {
-	def f = dao.getByPath(path)
-	if(f) return f;
-	
-	f = dao.create("org.otherobjects.cms.model.SchedulerFolder");
-	f.jcrPath=path
-	f.label=label
-	f = dao.save(f)
-	dao.publish(f)
-	return f
-}
-
 // Create base structure
 createFolder(dao, "/smart", "\${smartFolders.label}", "smart-folders")
 createFolder(dao, "/site", "\${site.label}", "site")
@@ -52,7 +40,7 @@ createDbFolder(dao, "/security/roles", "\${security.roles.label}", "org.otherobj
 createFolder(dao, "/designer/blocks", "\${designer.blocks.label}", null)
 createFolder(dao, "/designer/templates", "\${designer.templates.label}", null)
 createFolder(dao, "/designer/layouts", "\${designer.layouts.label}", null)
-//createScheduleFolder(dao, "/scheduler", "\${scheduler.label}")
+createFolder(dao, "/scheduler", "\${scheduler.label}", "scheduler")
 createFolder(dao, "/trash", "\${trash.label}","trash")
 
 // Move pre-created data types to proper location
