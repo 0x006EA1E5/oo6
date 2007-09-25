@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3CR3//EN"
+"http://www.oasis-open.org/docbook/xml/4.3CR3/docbookx.dtd">
+<book lang="en">
+  <bookinfo>
+    <title>OTHERobjects CMS</title>
+
+    <subtitle>Site Designer Guide</subtitle>
+
+    <releaseinfo>0.3</releaseinfo>
+  </bookinfo>
+
+  <toc></toc>
+
+  <preface id="preface">
+    <title>Preface</title>
+
+    <section id="section-why-another-framework">
+      <title>Who is this guide for?</title>
+
+      <para>This guide is for users who wish to build their own website. It
+      covers installing and runnign OTHERobjects, configuring data types and
+      building templates and adding action logic to events and scheduled
+      tasks.</para>
+
+      <para>For information on adding content and maintaining an existing site
+      please see the User Guide.</para>
+
+      <para>Move advanced users wishing to extend OTHERobjects should read the
+      Developer Guide.</para>
+    </section>
+  </preface>
+
+  <chapter id="chapter-using-the-framework">
+    <title>Getting started</title>
+
+    <para>Installing OTHERobjects</para>
+
+    <para>Starting OTHERobjects</para>
+
+    <para>Setting up admin user (for more info see Users and permissions
+    chapter).</para>
+  </chapter>
+
+  <chapter>
+    <title>Building templates</title>
+
+    <para></para>
+  </chapter>
+
+  <chapter>
+    <title>Users and permissions</title>
+
+    <para></para>
+  </chapter>
+
+  <chapter>
+    <title>Scheduling tasks</title>
+
+    <para>How to create scheduled tasks.</para>
+
+    <para>Setting the user to run as.</para>
+
+    <para>How to configuer timings. See:
+    http://quartz.sourceforge.net/javadoc/org/quartz/CronTrigger.html</para>
+  </chapter>
+
+  <chapter>
+    <title>Common problems</title>
+
+    <para>Something already runnign on the port?</para>
+  </chapter>
+</book>

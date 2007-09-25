@@ -5,7 +5,7 @@
   <bookinfo>
     <title>OTHERobjects CMS</title>
 
-    <subtitle>Developer Guide</subtitle>
+    <subtitle>User Guide</subtitle>
 
     <releaseinfo>0.3</releaseinfo>
   </bookinfo>
@@ -15,28 +15,32 @@
   <preface id="preface">
     <title>Preface</title>
 
-    <para>This guide is for developers who want to extend the capabilities of
-    OTHERobjects beyond what is possible via the web interface and third party
-    plugins. You'll need this guide if you want to:</para>
+    <section id="section-why-another-framework">
+      <title>Who is this guide for?</title>
 
-    <itemizedlist>
-      <listitem>
-        <para>Create custom site components</para>
-      </listitem>
+      <para>This guide is for developers who want to extend the capabilities
+      of OTHERobjects beyond what is possible via the web interface and third
+      party plugins. You'll need this guide if you want to:</para>
 
-      <listitem>
-        <para>Develop your own plugins</para>
-      </listitem>
+      <itemizedlist>
+        <listitem>
+          <para>Create custom site components</para>
+        </listitem>
 
-      <listitem>
-        <para>Update and improve OTHERobjects itself</para>
-      </listitem>
-    </itemizedlist>
+        <listitem>
+          <para>Develop your own plugins</para>
+        </listitem>
 
-    <para>If you are just interested in building a standard website then you
-    should read the Site Builder Guide instead. If you're not sure then you
-    should start off with that simpler guide and come back here when you need
-    to.</para>
+        <listitem>
+          <para>Update and improve OTHERobjects itself</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>If you are just interested in building a standard website then you
+      should read the Site Builder Guide instead. If you're not sure then you
+      should start off with that simpler guide and come back here when you
+      need to.</para>
+    </section>
   </preface>
 
   <chapter id="chapter-using-the-framework">
@@ -275,11 +279,10 @@ www.maureenmichaelson.com/trunk</programlisting>
     <section>
       <title>Running the tests</title>
 
-      <para>The final step of the preparation is to <ulink
-      url="http://www.google.com/">make</ulink> sure that the test suite runs
-      correctly. This will ensure that you have everything set up properly and
-      puts you in a good position to add to the suite as you develop new
-      functionality.</para>
+      <para>The final step of the preparation is to make sure that the test
+      suite runs correctly. This will ensure that you have everything set up
+      properly and puts you in a good position to add to the suite as you
+      develop new functionality.</para>
 
       <para>All the tests for the otherobjects project are in src/test/java.
       Select this folder in the Package Explorer and then select Run As...
@@ -296,18 +299,16 @@ www.maureenmichaelson.com/trunk</programlisting>
       choose Debug As... Java Application.</para>
 
       <note>
-        <para>TODO Information on launching via WTP or custom Jetty plugin
-        needed here. How to use -Djava.awt.headless=true. Using -server,
-        -Xms256m -Xmx256m. See <link linkend="performance">performance
-        tuning</link></para>
+        <para>Information on launching via WTP or custom Jetty plugin needed
+        here. How to use -Djava.awt.headless=true.</para>
       </note>
 
       <para>The console should show the application starting up (they may be
-      some SQL error stack <uri>traces</uri> as the database structure is
-      created for the first time but these can be safely ignored). If all has
-      gone well you should see a message stating that OTHERobjects is running
-      and you will be given the URL to both the site homepage and the
-      administration workbench. <emphasis></emphasis><programlisting>**************************************************************
+      some SQL error stack traces as the database structure is created for the
+      first time but these can be safely ignored). If all has gone well you
+      should see a message stating that OTHERobjects is running and you will
+      be given the URL to both the site homepage and the administration
+      workbench. <emphasis></emphasis><programlisting>**************************************************************
   ___ _____ _   _ _____ ____       _     _           _       
  / _ \_   _| | | | ____|  _ \ ___ | |__ (_) ___  ___| |_ ___ 
 | | | || | | |_| |  _| | |_) / _ \| '_ \| |/ _ \/ __| __/ __|
@@ -358,142 +359,11 @@ Admin : http://localhost:8080/go/workbench/
         <para>Icons and background for info, warning, important
         paragraphs.</para>
       </listitem>
-
-      <listitem>
-        <para>Change colour on internal links</para>
-      </listitem>
-
-      <listitem>
-        <para>Don't duplicate URL in ulinks</para>
-      </listitem>
     </orderedlist>
 
     <para><important>
         <para>Here is a sample important paragraph.</para>
       </important></para>
-  </chapter>
-
-  <chapter id="performance">
-    <title>Performance tuning</title>
-
-    <para>http://java.sun.com/performance/reference/whitepapers/tuning.html</para>
-
-    <para>Setting -Xms256m -Xmx256m and -server.</para>
-  </chapter>
-
-  <chapter>
-    <title>Remote management with JMX</title>
-
-    <para>Much of OTHERobjects can be monitored and controlled remotely via
-    JMX (Java Management Extensions). Examples on what can be monitored
-    include:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>Logging</para>
-      </listitem>
-
-      <listitem>
-        <para>Current users (TODO)</para>
-      </listitem>
-
-      <listitem>
-        <para>Scheduler</para>
-      </listitem>
-    </itemizedlist>
-
-    <para></para>
-
-    <section>
-      <title>Enabling JMX</title>
-
-      <para>To allow a management console to connect we first need to enable
-      JMX. Add the following to the Java options when starting up
-      OTHERobjects:</para>
-
-      <programlisting>-Dcom.sun.management.jmxremote</programlisting>
-    </section>
-
-    <section>
-      <title>Connect a management console</title>
-
-      <para>Any JMX compliant service should be able to connect to a running
-      OTHERobjects instance. The easiest and most widely available one is
-      Sun's JConsole what ships with JDK 5.0 and later. To start the console
-      put the following command:</para>
-
-      <programlisting>jconsole &amp;</programlisting>
-
-      <para>If the site is running locally then you should see it listed in
-      the Connect dialog. For remote sites you will need to do something more
-      advanced. TODO Work out what this is!</para>
-
-      <figure>
-        <title>JConsole connection dialog</title>
-
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/jmx-connect-dialog.png" />
-          </imageobject>
-        </mediaobject>
-      </figure>
-
-      <para>After connecting you will be able to browse information about the
-      running instance:</para>
-
-      <figure>
-        <title>JConsole example view</title>
-
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/jmx-example-window.png" />
-          </imageobject>
-        </mediaobject>
-      </figure>
-
-      <para>For more information on usign JConsole see:
-      http://java.sun.com/j2se/1.5.0/docs/guide/management/jconsole.html.</para>
-    </section>
-
-    <section>
-      <title>JMX services</title>
-
-      <para>The following services are JMX enabled: </para>
-
-      <table>
-        <title>JMX enabled services</title>
-
-        <tgroup cols="2">
-          <thead>
-            <row>
-              <entry align="center">Service</entry>
-
-              <entry align="center">MBeans</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry>Logging</entry>
-
-              <entry>ch.qos.logback.classic:default</entry>
-            </row>
-
-            <row>
-              <entry>Scheduler</entry>
-
-              <entry>otherobjects:scheduler</entry>
-            </row>
-
-            <row>
-              <entry></entry>
-
-              <entry></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-    </section>
   </chapter>
 
   <chapter>
