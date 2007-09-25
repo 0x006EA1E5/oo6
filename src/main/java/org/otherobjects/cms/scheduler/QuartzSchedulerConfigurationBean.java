@@ -9,7 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-
+/**
+ * Simple bean that configures the built-in quartz scheduler by querying for all {@link PersistentJobDescription} objects under a certain
+ * repository path. Configuration happens at application context startup. 
+ * @author joerg
+ *
+ */
 public class QuartzSchedulerConfigurationBean implements InitializingBean {
 	
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -36,6 +41,7 @@ public class QuartzSchedulerConfigurationBean implements InitializingBean {
 
 	public void afterPropertiesSet() throws Exception {
 		logger.debug("Scheduler name: " + scheduler.getSchedulerName() + " started?:" + scheduler.isStarted());
+		typeService.getType(PersistentJobDescription.class.getName());
 		configure();
 	}
 
@@ -47,7 +53,8 @@ public class QuartzSchedulerConfigurationBean implements InitializingBean {
 			if(node instanceof PersistentJobDescription)
 			{
 				PersistentJobDescription jobDescription = (PersistentJobDescription) node;
-				scheduler.scheduleJob(jobDescription.getJobDetail(), jobDescription.getTrigger());
+				if(jobDescription.isValid())
+					scheduler.scheduleJob(jobDescription.getJobDetail(), jobDescription.getTrigger());
 			}
 		}
 	}
