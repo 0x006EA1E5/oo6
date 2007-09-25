@@ -113,5 +113,12 @@
 				<property jcr:primaryType="nt:unstructured" required="false" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="searchTerm" />
 			</properties>
 		</org.otherobjects.cms.model.SmartFolder>
+		<org.otherobjects.cms.model.SchedulerFolder jcr:primaryType="oo:node" labelProperty="label" ocm:classname="org.otherobjects.cms.types.TypeDef"
+			className="org.otherobjects.cms.model.SchedulerFolder">
+			<properties jcr:primaryType="nt:unstructured">
+				<property jcr:primaryType="nt:unstructured" required="true" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
+				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" />
+			</properties>
+		</org.otherobjects.cms.model.SchedulerFolder>
 	</system>
 </types>
