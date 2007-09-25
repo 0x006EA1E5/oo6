@@ -2,15 +2,34 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd ">
-	
-	<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		
+
+	<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" />
+
+<!-- 
+	<bean id="schedulerController" class="org.otherobjects.cms.scheduler.SchedulerController">
+		<property name="scheduler" ref="scheduler" />
 	</bean>
-	
+ -->
+
 	<bean id="schedulerConfiguration" class="org.otherobjects.cms.scheduler.QuartzSchedulerConfigurationBean">
 		<property name="scheduler" ref="scheduler" />
 		<property name="dynaNodeDao" ref="dynaNodeDao" />
 		<property name="typeService" ref="typeService" />
 	</bean>
-	
+
+	<bean id="exporter" class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">
+		<property name="beans">
+			<map>
+				<entry key="otherobjects:name=scheduler" value-ref="scheduler" />
+			</map>
+		</property>
+		<property name="assembler">
+			<bean class="org.springframework.jmx.export.assembler.MethodNameBasedMBeanInfoAssembler">
+				<property name="managedMethods">
+					<value>getCurrentlyExecutingJobs,getTriggerNames,getJobNames,pauseAll,resumeAll,pauseJob,resumeJob,pauseTrigger,resumeTrigger</value>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
 </beans>
