@@ -45,6 +45,9 @@ public class PersistentJobDescription extends DynaNode {
 		JobDetail jobDetail = new JobDetail();
 		jobDetail.setName((StringUtils.isNotBlank(jobName)) ? jobName : getId());
 		jobDetail.setGroup((StringUtils.isNotBlank(groupName)) ? groupName : GROUP_NAME);
+		jobDetail.setVolatility(true);
+		jobDetail.setDurability(false);
+		jobDetail.setRequestsRecovery(false);
 		
 		if(isValidJobClass())
 		{
