@@ -84,7 +84,8 @@
 		<property name="siteDataTypes" value="classpath:site.resources/bootstrap-data/jcr-data-types.xml" />
 	</bean>
 
-	<bean name="bootstrapUtils" class="org.otherobjects.cms.util.BootstrapUtils" init-method="bootstrap" depends-on="typeService">
+	<bean name="bootstrapUtils" class="org.otherobjects.cms.util.BootstrapUtils" init-method="bootstrap">
+		<property name="jcrTypeService" ref="typeService" />
 		<property name="daoService" ref="daoService" />
 		<property name="bootstrapScript" value="classpath:otherobjects.resources/bootstrap-data/setup.script" />
 	</bean>

@@ -163,7 +163,7 @@ public class WorkbenchDataController implements Controller
         // FIXME Temp hack
         if (typeName.equals("org.otherobjects.cms.types.TypeDef"))
         {
-            allByType = ((JcrTypeServiceImpl) this.typeService).getTypeDefDao().getAll();
+            allByType = daoService.getDao(TypeDef.class).getAll();
         }
         else if (typeName.equals("org.otherobjects.cms.model.CmsImage"))
         {

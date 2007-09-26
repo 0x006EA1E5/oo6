@@ -19,6 +19,10 @@ import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.UserDao;
 import org.otherobjects.cms.model.Role;
 import org.otherobjects.cms.model.User;
+import org.otherobjects.cms.types.JcrTypeServiceImpl;
+import org.otherobjects.cms.types.TypeDef;
+import org.otherobjects.cms.types.TypeDefDao;
+import org.otherobjects.cms.types.TypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -38,8 +42,13 @@ public class BootstrapUtils //implements ApplicationListener
 
     private DaoService daoService;
     private Resource bootstrapScript;
+    private JcrTypeServiceImpl jcrTypeService; 
 
-    public void setBootstrapScript(Resource bootstrapScript)
+    public void setJcrTypeService(JcrTypeServiceImpl jcrTypeService) {
+		this.jcrTypeService = jcrTypeService;
+	}
+
+	public void setBootstrapScript(Resource bootstrapScript)
     {
         this.bootstrapScript = bootstrapScript;
     }
@@ -58,7 +67,7 @@ public class BootstrapUtils //implements ApplicationListener
 
         try
         {
-            UserDao userDao = (UserDao) this.daoService.getDao(User.class);
+        	UserDao userDao = (UserDao) this.daoService.getDao(User.class);
             UserDetails adminUser = userDao.loadUserByUsername("admin");
 
             // Create admin user if one does not exist and then run setup script
@@ -69,9 +78,17 @@ public class BootstrapUtils //implements ApplicationListener
                 // FIXME Can this be done in a cleaner way?
                 Authentication authentication = new UsernamePasswordAuthenticationToken(adminUser, null, adminUser.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                
+                // load jcr backed typeDefs
+            	jcrTypeService.loadJcrBackedTypes((TypeDefDao) daoService.getDao(TypeDef.class));
 
                 runScript(this.bootstrapScript.getInputStream());
                 runScript(new FileInputStream("src/main/resources/site.resources/bootstrap-data/setup.script"));
+            }
+            else
+            {
+            	// load jcr backed typeDefs
+            	jcrTypeService.loadJcrBackedTypes((TypeDefDao) daoService.getDao(TypeDef.class));
             }
         }
         catch (Exception e)

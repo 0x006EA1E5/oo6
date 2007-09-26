@@ -16,6 +16,7 @@ import org.apache.jackrabbit.ocm.query.Query;
 import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.apache.jackrabbit.ocm.spring.JcrMappingCallback;
 import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.cms.events.PublishEvent;
 import org.otherobjects.cms.jcr.GenericJcrDaoJackrabbit;
 import org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory;
 import org.otherobjects.cms.model.DynaNode;
@@ -23,6 +24,9 @@ import org.otherobjects.cms.model.User;
 import org.otherobjects.cms.security.SecurityTool;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
@@ -32,10 +36,11 @@ import org.springframework.validation.Errors;
  * @author rich
  *
  */
-public abstract class AbstractDynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> implements DynaNodeDao
+public abstract class AbstractDynaNodeDaoJackrabbit extends GenericJcrDaoJackrabbit<DynaNode> implements DynaNodeDao, ApplicationContextAware
 {
     private TypeService typeService;
     private OtherObjectsJackrabbitSessionFactory sessionFactory;
+    protected ApplicationContext appCtx;
 
     //    private DynaNodeValidator dynaNodeValidator;
 
@@ -48,6 +53,11 @@ public abstract class AbstractDynaNodeDaoJackrabbit extends GenericJcrDaoJackrab
     {
         super(DynaNode.class);
     }
+    
+    public void setApplicationContext(ApplicationContext applicationContext)
+		throws BeansException {
+    	this.appCtx = applicationContext;
+	}
 
     public DynaNode create(String typeName)
     {
@@ -253,6 +263,8 @@ public abstract class AbstractDynaNodeDaoJackrabbit extends GenericJcrDaoJackrab
                         dynaNode.setChangeNumber(dynaNode.getChangeNumber() + 1);
                         manager.checkin(jcrPath, new String[]{(dynaNode.getChangeNumber()) + ""});
                         manager.checkout(jcrPath);
+                        
+                        appCtx.publishEvent(new PublishEvent(this, dynaNode));
                     }
                     finally
                     {

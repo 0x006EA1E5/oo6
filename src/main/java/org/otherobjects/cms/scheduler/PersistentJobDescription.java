@@ -21,16 +21,18 @@ import flexjson.JSON;
  * Quartz scheduler. The trigger can be configured by giving a full cron expression or by giving the individual fields that make up a cron expression. The full expression takes
  * precendence.
  * 
+ * All jobs get their UUID as the job name and the value of JOB_GROUP_NAME as group name. The triggers get the same name as the job and the group name TRIGGER_GROUP_NAME.
+ * 
  * @author joerg
  *
  */
-@TypeDefAnnotation(jcrPath = "/scheduler", label = "Scheduled Job", description = "Scheduled Job", labelProperty = "jobName",superClassName = "org.otherobjects.cms.model.DynaNode")
+@TypeDefAnnotation(jcrPath = "/scheduler", label = "Scheduled Job", description = "Scheduled Job", labelProperty = "jobName", superClassName = "org.otherobjects.cms.model.DynaNode")
 public class PersistentJobDescription extends DynaNode {
 	
-	public final String GROUP_NAME = "default";
+	public static final String JOB_GROUP_NAME = "jcr-job-group";
+	public static final String TRIGGER_GROUP_NAME = "jcr-trigger-group";
 	
-	private String jobName;
-	private String groupName;
+	private String label;
 	private String jobClassName;
 	private String cronExpression;
 	private String groovyScript;
@@ -63,7 +65,7 @@ public class PersistentJobDescription extends DynaNode {
 			else
 				cronExpression = buildCronExpression();
 				
-			Trigger trigger = new CronTrigger((StringUtils.isNotBlank(jobName)) ? jobName : getId(), (StringUtils.isNotBlank(groupName)) ? groupName : GROUP_NAME, cronExpression);
+			Trigger trigger = new CronTrigger(getId(), TRIGGER_GROUP_NAME, cronExpression);
 			this.trigger = trigger;
 			return trigger;
 		} catch (Exception e) {
@@ -101,8 +103,8 @@ public class PersistentJobDescription extends DynaNode {
 			return this.jobDetail;
 		
 		JobDetail jobDetail = new JobDetail();
-		jobDetail.setName((StringUtils.isNotBlank(jobName)) ? jobName : getId());
-		jobDetail.setGroup((StringUtils.isNotBlank(groupName)) ? groupName : GROUP_NAME);
+		jobDetail.setName(getId());
+		jobDetail.setGroup(JOB_GROUP_NAME);
 		jobDetail.setVolatility(true);
 		jobDetail.setDurability(false);
 		jobDetail.setRequestsRecovery(false);
@@ -129,6 +131,9 @@ public class PersistentJobDescription extends DynaNode {
 	
 	public boolean isValid()
 	{
+		if(!this.isPublished())
+			return false;
+		
 		try{
 			Trigger trigger = getTrigger();
 			if(trigger == null)
@@ -158,23 +163,16 @@ public class PersistentJobDescription extends DynaNode {
 		}
 	}
 	
-	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Name of job", order = 1)
-	public String getJobName() {
-		return jobName;
+	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Label", order = 1)
+	public String getLabel() {
+		return label;
 	}
-	public void setJobName(String jobName) {
-		this.jobName = jobName;
-	}
-	
-	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Name of group", order = 2)
-	public String getGroupName() {
-		return groupName;
-	}
-	public void setGroupName(String groupName) {
-		this.groupName = groupName;
+	public void setLabel(String label) {
+		this.label = label;
 	}
 	
-	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Name of job class", order = 3)
+		
+	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Name of job class", order = 2)
 	public String getJobClassName() {
 		return jobClassName;
 	}
@@ -182,7 +180,7 @@ public class PersistentJobDescription extends DynaNode {
 		this.jobClassName = jobClassName;
 	}
 	
-	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Cron expression", order = 4)
+	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Cron expression", order = 3)
 	public String getCronExpression() {
 		return cronExpression;
 	}
@@ -190,7 +188,7 @@ public class PersistentJobDescription extends DynaNode {
 		this.cronExpression = cronExpression;
 	}
 	
-	@PropertyDefAnnotation(type = PropertyType.TEXT, label = "Groovy script source", order = 5, size = 500)
+	@PropertyDefAnnotation(type = PropertyType.TEXT, label = "Groovy script source", order = 4, size = 500)
 	public String getGroovyScript() {
 		return groovyScript;
 	}
@@ -198,7 +196,7 @@ public class PersistentJobDescription extends DynaNode {
 		this.groovyScript = groovyScript;
 	}
 	
-	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Cron seconds", order = 6)
+	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Cron seconds", order = 5)
 	public String getSecond() {
 		return second;
 	}
@@ -207,7 +205,7 @@ public class PersistentJobDescription extends DynaNode {
 		this.second = second;
 	}
 	
-	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Cron minutes", order = 7)
+	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Cron minutes", order = 6)
 	public String getMinute() {
 		return minute;
 	}
@@ -216,7 +214,7 @@ public class PersistentJobDescription extends DynaNode {
 		this.minute = minute;
 	}
 	
-	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Cron hours", order = 8)
+	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Cron hours", order = 7)
 	public String getHour() {
 		return hour;
 	}
@@ -225,7 +223,7 @@ public class PersistentJobDescription extends DynaNode {
 		this.hour = hour;
 	}
 	
-	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Cron day of month", order = 9)
+	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Cron day of month", order = 8)
 	public String getDayOfMonth() {
 		return dayOfMonth;
 	}
@@ -234,7 +232,7 @@ public class PersistentJobDescription extends DynaNode {
 		this.dayOfMonth = dayOfMonth;
 	}
 	
-	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Cron month", order = 10)
+	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Cron month", order = 9)
 	public String getMonth() {
 		return month;
 	}
@@ -243,7 +241,7 @@ public class PersistentJobDescription extends DynaNode {
 		this.month = month;
 	}
 	
-	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Cron day of week", order = 11)
+	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Cron day of week", order = 10)
 	public String getDayOfWeek() {
 		return dayOfWeek;
 	}
@@ -252,7 +250,7 @@ public class PersistentJobDescription extends DynaNode {
 		this.dayOfWeek = dayOfWeek;
 	}
 	
-	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Cron year", order = 12)
+	@PropertyDefAnnotation(type = PropertyType.STRING, label = "Cron year", order = 11)
 	public String getYear() {
 		return year;
 	}

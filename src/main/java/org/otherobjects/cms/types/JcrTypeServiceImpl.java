@@ -20,15 +20,21 @@ public class JcrTypeServiceImpl extends AbstactTypeService
     private Map<String, AtomicTypeConverter> jcrAtomicConverters;
     private Map<String, Class<?>> jcrClassMappings;
 
-    private TypeDefDao typeDefDao;
+//    private TypeDefDao typeDefDao;
     private JcrBeanService jcrBeanService;
     private AnnotationBasedTypeDefBuilder annotationBasedTypeDefBuilder;
 
     public void init()
     {
-        reset();
-        loadTypes();
-        generateClasses();
+    	reset();
+    	//loadTypes();
+    	
+    	// FIXME Nasty
+    	TypeDef td = new TypeDef(TypeDef.class.getName());
+    	td.setClassName(TypeDef.class.getName());
+    	
+    	registerType(td);
+    	generateClasses();
     }
 
     @Override
@@ -55,18 +61,28 @@ public class JcrTypeServiceImpl extends AbstactTypeService
     /**
      * Loads TypeDefs from JCR. Types are stored in the default workspace at /types.
      */
-    private void loadTypes()
+//    private void loadTypes()
+//    {
+//        List<TypeDef> typeDefs = this.typeDefDao.getAll();
+//        for (TypeDef t : typeDefs)
+//        {
+//            registerType(t);
+//        }
+//
+//        // FIXME Nasty
+//        TypeDef td = new TypeDef(TypeDef.class.getName());
+//        td.setClassName(TypeDef.class.getName());
+//        registerType(td);
+//    }
+    
+    public void loadJcrBackedTypes(TypeDefDao typeDefDao)
     {
-        List<TypeDef> typeDefs = this.typeDefDao.getAll();
-        for (TypeDef t : typeDefs)
-        {
-            registerType(t);
-        }
-
-        // FIXME Nasty
-        TypeDef td = new TypeDef(TypeDef.class.getName());
-        td.setClassName(TypeDef.class.getName());
-        registerType(td);
+    	List<TypeDef> typeDefs = typeDefDao.getAll();
+    	for (TypeDef t : typeDefs)
+    	{
+    		registerType(t);
+    	}
+    	generateClasses();
     }
 
     /**
@@ -159,15 +175,15 @@ public class JcrTypeServiceImpl extends AbstactTypeService
         this.jcrClassMappings.put("decimal", BigDecimal.class);
     }
 
-    public TypeDefDao getTypeDefDao()
-    {
-        return this.typeDefDao;
-    }
-
-    public void setTypeDefDao(TypeDefDao typeDefDao)
-    {
-        this.typeDefDao = typeDefDao;
-    }
+//    public TypeDefDao getTypeDefDao()
+//    {
+//        return this.typeDefDao;
+//    }
+//
+//    public void setTypeDefDao(TypeDefDao typeDefDao)
+//    {
+//        this.typeDefDao = typeDefDao;
+//    }
 
     public void setJcrBeanService(JcrBeanService jcrBeanService)
     {
