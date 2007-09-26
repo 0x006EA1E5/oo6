@@ -104,8 +104,14 @@ brushed:~ rich$
         Maven repository but are few are only available from the OTHERobjects
         repository. You will need to add this repository to the Maven
         setting.xml file at <emphasis
-        role="bold">~/.m2/settings.xml</emphasis> (if the file does not exist
-        then you should create it with the contents below.</para>
+        role="bold">~/.m2/settings.xml</emphasis>. If the folder or the file
+        does not exist then you should create them manually. </para>
+
+        <note>
+          <para>TODO Can we move this information into the pom instead?</para>
+        </note>
+
+        <para>Now add the contents below:</para>
 
         <programlisting>&lt;settings&gt;
   &lt;profiles&gt;
@@ -335,6 +341,10 @@ Admin : http://localhost:8080/go/workbench/
     <para>http://java.sun.com/performance/reference/whitepapers/tuning.html</para>
 
     <para>Setting -Xms256m -Xmx256m and -server.</para>
+
+    <para>Using http://www.glassbox.com/glassbox/Project.html</para>
+
+    <para>http://www.ibm.com/developerworks/java/library/j-aopwork10/</para>
   </chapter>
 
   <chapter>
@@ -602,5 +612,18 @@ Admin : http://localhost:8080/go/workbench/
         connectivity.</para>
       </listitem>
     </orderedlist>
+  </chapter>
+
+  <chapter>
+    <title>Systems adminstation</title>
+
+    <section>
+      <title>Setting environment variables</title>
+
+      <para>On Mac OS X 10.4+ you should edit the .profile file in your home
+      folder.</para>
+
+      <programlisting>export PATH=$PATH:/opt/app/bin</programlisting>
+    </section>
   </chapter>
 </book>

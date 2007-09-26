@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
 	<!-- 
 		Temporary disble AOP
 		-javaagent:/Users/rich/.m2/repository/aspectj/aspectjweaver/1.5.3/aspectjweaver-1.5.3.jar
 		<aop:spring-configured/>
-		
-		<bean id="performanceInterceptor" class="org.otherobjects.cms.PerformanceInterceptor" />
-		
-		<aop:config>
-		<aop:aspect ref="performanceInterceptor">
-		//<aop:pointcut id="myCutLogging" expression="execution(* org.otherobjects.cms.controllers.SiteController*.*(..))" />
-		//	<aop:pointcut id="myCutLogging" expression="execution(* org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImpl*.*(..))" />  
-		<aop:pointcut id="myCutLogging" expression="execution(* org.otherobjects.cms.dao.DynaNodeDao.*(..))" />
-		<aop:around pointcut-ref="myCutLogging" method="log" />
-		</aop:aspect>
-		</aop:config>
+		RequestContextListener
 	-->
+	<bean id="performanceInfo" class="org.otherobjects.cms.util.PerformanceInfoImpl" scope="request">
+		<aop:scoped-proxy />
+	</bean>
+
+	<bean id="performanceInterceptor" class="org.otherobjects.cms.util.PerformanceInterceptor">
+		<property name="performanceInfo" ref="performanceInfo" />
+	</bean>
+
+	<aop:config>
+		<aop:aspect ref="performanceInterceptor">
+			<!-- 
+				<aop:pointcut id="myCutLogging" expression="execution(* org.otherobjects.cms.controllers.SiteController*.*(..))" />
+				<aop:pointcut id="myCutLogging" expression="execution(* org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImpl*.*(..))" />
+				 
+			-->
+			<!-- Intercept all dynaNode queries that happens inside requests -->
+			<aop:pointcut id="myCutLogging"   expression="execution(* org.otherobjects.cms.dao.DynaNodeDao.*(..))" />
+			<aop:around pointcut-ref="myCutLogging"  method="log"  />
+		</aop:aspect>
+	</aop:config>
+
 
 	<bean name="siteController" class="org.otherobjects.cms.controllers.SiteController">
 		<property name="navigatorService" ref="navigatorService" />
@@ -89,9 +100,8 @@
 		<property name="daoService" ref="daoService" />
 		<property name="bootstrapScript" value="classpath:otherobjects.resources/bootstrap-data/setup.script" />
 	</bean>
-	
-	<bean name="startupMessage" class="org.otherobjects.cms.util.StartupMessage">
-	</bean>
+
+	<bean name="startupMessage" class="org.otherobjects.cms.util.StartupMessage"></bean>
 
 	<bean name="singletonBeanLocator" class="org.otherobjects.cms.SingletonBeanLocator" />
 
@@ -139,7 +149,9 @@
 				<prop key="velocimacro.permissions.allow.inline.to.replace.global">true</prop>
 				<prop key="velocimacro.arguments.strict">true</prop>
 				<prop key="velocimacro.library.autoreload">true</prop>
-				<prop key="velocimacro.library">otherobjects.resources/templates/macros/otherobjects.vm,otherobjects.resources/templates/macros/site.vm</prop>
+				<prop key="velocimacro.library">
+					otherobjects.resources/templates/macros/otherobjects.vm,otherobjects.resources/templates/macros/site.vm
+				</prop>
 				<prop key="file.resource.loader.cache">false</prop>
 				<prop key="encoding.default">UTF-8</prop>
 				<prop key="directive.set.null.allowed">true</prop>

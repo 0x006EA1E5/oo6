@@ -22,6 +22,8 @@
 
 
 <style>
+@import url('/resources/otherobjects.resources/static/extjs/src/ext-all.css');
+
 #OoToolbar {position:fixed;bottom:0px; width:30px; height:30px; color:white; background:#000000; opacity:0.75; font:80% Arial;}
 #OoToolbar A {color:white;}
 #OoToolbar .logo {float:left; width:30px; height:30px; background:#FFFFFF url('/resources/otherobjects.resources/static/graphics/favicon.ico') no-repeat 7px 7px; opacity:1.0;}
@@ -57,6 +59,11 @@ $ctxInfo.describeTool("numberTool")
 <p><strong>Keywords:</strong> $!keywords</p>
 <p><strong>Description:</strong> $!description</p>
 <p><strong>Creator:</strong> $!creator</p>
+</div>
+
+<div id="OoStats" style="visibility:hidden;position:absolute;top:0px;">
+	<div class="x-dlg-hd">Performance statistics</div>
+	<div class="x-dlg-bd" id="grid-example" style="height:50px;"></div>
 </div>
 
 <div id="OoToolbar">
@@ -102,5 +109,62 @@ function init() {
 	});
 }
 Ext.onReady(init);
+
+Ext.onReady(function() {
+  var map = new Ext.KeyMap("Body", {
+      key: Ext.EventObject.ESC,
+      fn: toggleStats
+  });
+});
+
+var dialog;
+function toggleStats()
+{
+	if(!dialog) {
+		var ds = new Ext.data.Store({
+			proxy: new Ext.data.MemoryProxy(ooQueries),
+		  	reader: new Ext.data.ArrayReader({}, [
+		               {name: 'type'},
+		               {name: 'details'},
+		               {name: 'time', type: 'float'}
+		          ])
+		});
+		ds.load();
+	
+		// custom or reusable ColumnModels
+		var colModel = new Ext.grid.ColumnModel([
+		  {header: "Type", width: 50, sortable: true, dataIndex: 'type'},
+		  {header: "Details", width: 350, sortable: true, dataIndex: 'details'},
+		  {header: "Time (ms)", width: 75, sortable: true, dataIndex: 'time'}
+		]);
+		
+		var grid = new Ext.grid.Grid('grid-example', {
+		    ds: ds,
+		    cm: colModel
+		});
+    
+		dialog = new Ext.BasicDialog("OoStats", {
+		        modal:true,
+		        autoTabs:true,
+		        width:500,
+		        height:300,
+		        shadow:true,
+		        minWidth:300,
+		        minHeight:300
+		});
+		// TODO Doesn't work: 
+		// dialog.addKeyListener(Ext.EventObject.ENTER, dialog.hide, dialog);
+		dialog.addButton('Close', dialog.hide, dialog);
+		grid.render();
+	}
+	
+	// Toggle display
+	if(dialog.isVisible())
+		dialog.hide();
+	else
+		dialog.show();
+}
+
+
 </script>
 #end

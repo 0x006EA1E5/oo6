@@ -1,5 +1,6 @@
 package org.otherobjects.cms.views;
 
+import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
@@ -8,6 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.context.Context;
+import org.otherobjects.cms.SingletonBeanLocator;
+import org.otherobjects.cms.util.PerformanceInterceptor;
+import org.otherobjects.cms.util.PerformanceInfoImpl.PerformanceEvent;
 
 /**
  * An otherobjects specific subclass of Springs {@link org.springframework.web.servlet.view.velocity.VelocityView VelocityView} that
@@ -19,7 +23,6 @@ import org.apache.velocity.context.Context;
  */
 public class VelocityView extends org.springframework.web.servlet.view.velocity.VelocityView
 {
-
     private static Set<String> objectMethods = new HashSet<String>();
     {
         objectMethods.add("clone");
@@ -47,6 +50,15 @@ public class VelocityView extends org.springframework.web.servlet.view.velocity.
         this.viewToolsService.populateContext(context);
         context.put("ctxInfo", new ContextInspector(context));
         super.doRender(context, response);
+        PrintWriter writer = response.getWriter();
+        writer.write("<script>");
+        PerformanceInterceptor performanceInterceptor = (PerformanceInterceptor) SingletonBeanLocator.getBean("performanceInterceptor");
+        writer.write("var ooQueries = [");
+        for (PerformanceEvent qi : performanceInterceptor.getPerformanceInfo().getEvents())
+        {
+            writer.write("[\"" + qi.getType() + "\",\"" + qi.getDetails() + "\",'" + qi.getTime() + "'],");
+        }
+        writer.write("[]];</script>");
     }
 
     public class ContextInspector
@@ -145,5 +157,4 @@ public class VelocityView extends org.springframework.web.servlet.view.velocity.
         }
 
     }
-
 }
