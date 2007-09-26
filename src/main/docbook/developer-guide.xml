@@ -135,6 +135,12 @@ brushed:~ rich$
           &lt;url&gt;http://maven.otherobjects.org/repository/&lt;/url&gt;
           &lt;layout&gt;default&lt;/layout&gt;
         &lt;/pluginRepository&gt;
+        &lt;pluginRepository&gt;
+          &lt;id&gt;otherobjects&lt;/id&gt;
+          &lt;name&gt;JBoss repository&lt;/name&gt;
+          &lt;url&gt;http://repository.jboss.org/maven2/&lt;/url&gt;
+          &lt;layout&gt;default&lt;/layout&gt;
+        &lt;/pluginRepository&gt;
       &lt;/pluginRepositories&gt;
     &lt;/profile&gt;
   &lt;/profiles&gt;
@@ -238,7 +244,8 @@ brushed:~ rich$
 </programlisting>
 
       <para>You will be able to connect anonymously since you will only need
-      read-only access to the repository.</para>
+      read-only access to the repository -- NB othermedia users should use
+      their normal SVN logins for now.</para>
 
       <figure>
         <title>Creating a repository location</title>
@@ -399,7 +406,7 @@ Admin : http://localhost:8080/go/workbench/
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="images/jmx-connect-dialog.png" />
+            <imagedata fileref="images/jmx-connect-dialog.png" scale="50" />
           </imageobject>
         </mediaobject>
       </figure>
@@ -412,7 +419,7 @@ Admin : http://localhost:8080/go/workbench/
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="images/jmx-example-window.png" />
+            <imagedata fileref="images/jmx-example-window.png" scale="50" />
           </imageobject>
         </mediaobject>
       </figure>

@@ -131,8 +131,51 @@
   </chapter>
 
   <chapter>
+    <title>Improving performance</title>
+
+    <para>OTHERobjects uses caching at several levels to keep your site
+    peforming well even under heavy loads. However, it is important to
+    understand how the caching works in order to get the best performance out
+    of it.</para>
+
+    <section>
+      <title>Understanding caching</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Monitoring page performance</title>
+
+      <para>To view the performance characteristics of a page press the Escape
+      key. A dialog will appear showing the major events that occured whilst
+      building the page and how long they took.</para>
+
+      <figure>
+        <title>Performance statistics dialog. Press Escape to show.</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/performance-stats-dialog.png"
+                       scale="50" />
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>TODO Warning indicator on pages with heavy loads eg &gt; 100
+      calls, or &gt; 5 seconds.</para>
+    </section>
+  </chapter>
+
+  <chapter>
     <title>Common problems</title>
 
     <para>Something already runnign on the port?</para>
+
+    <section>
+      <title></title>
+
+      <para></para>
+    </section>
   </chapter>
 </book>

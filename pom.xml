@@ -114,9 +114,14 @@
 							</format>
 						-->
 					</formats>
-					<sourceDocumentName>developer-guide.xml</sourceDocumentName>
-					<imagesDirectory>src/main/docbook</imagesDirectory>
+					<sourceDocumentName>${docbook.name}.xml</sourceDocumentName>
+					<imageResource>
+							<directory>src/main/docbook/images</directory>
+							<targetPath>images</targetPath>
+							<filtering>false</filtering>
+					</imageResource>
 					<options>
+						<useRelativeImageUris>false</useRelativeImageUris>
 						<xincludeSupported>false</xincludeSupported>
 					</options>
 				</configuration>
