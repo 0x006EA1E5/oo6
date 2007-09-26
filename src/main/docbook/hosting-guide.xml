@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3CR3//EN"
+"http://www.oasis-open.org/docbook/xml/4.3CR3/docbookx.dtd">
+<book lang="en">
+  <bookinfo>
+    <title>OTHERobjects CMS</title>
+
+    <subtitle>Hosting Guide</subtitle>
+
+    <releaseinfo>0.3</releaseinfo>
+  </bookinfo>
+
+  <toc></toc>
+
+  <preface id="preface">
+    <title>Preface</title>
+
+    <para>This guide explains the various options for hosting your
+    OTHERobjects powered site and making it highly available. It assumes a
+    good level of system administartion experience.</para>
+
+    <para>The standard installation will be fine for small and medium sized
+    sites but large or transaction sites will need more advanced hosting
+    options descripbed in this guide.</para>
+  </preface>
+
+  <chapter>
+    <title>Clustering</title>
+
+    <para>Clustering involves running the application on more than one
+    server.</para>
+
+    <section>
+      <title>Potential pitfalls</title>
+
+      <para>Stale objects on nodes.</para>
+
+      <para>Scheduler running same task simultaneously on each node.</para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Databases</title>
+
+    <para></para>
+  </chapter>
+
+  <chapter>
+    <title>Java Content Repository</title>
+
+    <para></para>
+  </chapter>
+
+  <chapter>
+    <title>Static content</title>
+
+    <para></para>
+  </chapter>
+
+  <chapter>
+    <title>Monitoring availability</title>
+
+    <para></para>
+  </chapter>
+</book>

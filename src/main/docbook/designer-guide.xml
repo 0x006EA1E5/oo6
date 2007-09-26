@@ -66,6 +66,71 @@
   </chapter>
 
   <chapter>
+    <title>Common features</title>
+
+    <note>
+      <para>This may become a separate Patterns Guide.</para>
+    </note>
+
+    <para>Print versions</para>
+
+    <para>Text only</para>
+
+    <para>Calendaring</para>
+
+    <para>Commenting</para>
+
+    <para>Header data</para>
+
+    <para>Images and links</para>
+
+    <para>Navigation</para>
+  </chapter>
+
+  <chapter>
+    <title>Writing tests</title>
+
+    <para>A stable and high-quality website requires thorough testing. All too
+    often this testing is on the form "Does this page look sort of right?" or
+    "Well It worked for me when I built it so it's OK to go live". Whilst this
+    approach will work for very simple sites, as soon as the complexity
+    increases there just isn't time to look at every page and try every action
+    manually after each change. This in where automated testing comes
+    in.</para>
+
+    <para>People who are new to testing often bemoan the amount of time they
+    spend writing tests, especially at first when the tools and techniques are
+    new and need to be mastered. This, however, is a small price to pay to
+    reduce the time spent debugging and fixing broken code. And as the testign
+    techniques become more familiar the tests become correspondingly easier to
+    write.</para>
+
+    <section>
+      <title>What needs testing</title>
+
+      <para>In a word: everything. </para>
+    </section>
+
+    <section>
+      <title>Testing scripts</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Testing templates</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Functional testing</title>
+
+      <para></para>
+    </section>
+  </chapter>
+
+  <chapter>
     <title>Common problems</title>
 
     <para>Something already runnign on the port?</para>

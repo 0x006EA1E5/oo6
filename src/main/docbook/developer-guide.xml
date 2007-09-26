@@ -329,50 +329,6 @@ Admin : http://localhost:8080/go/workbench/
     </section>
   </chapter>
 
-  <chapter>
-    <title>Writing documentation</title>
-
-    <para>The documentation for OTHERobjects is written in DocBook format and
-    processed via JBoss's jdocbook Maven plugin. The design is based on the
-    XSL from Hibernate.</para>
-
-    <para>Information on customising DocBook XSL is here:
-    <uri>http://www.sagehill.net/docbookxsl/</uri>.</para>
-
-    <para>Documentation stuff do to still:</para>
-
-    <orderedlist>
-      <listitem>
-        <para>Make figure label font smaller.</para>
-      </listitem>
-
-      <listitem>
-        <para>Learn how to do links.</para>
-      </listitem>
-
-      <listitem>
-        <para>Style for suggesting menu commands.</para>
-      </listitem>
-
-      <listitem>
-        <para>Icons and background for info, warning, important
-        paragraphs.</para>
-      </listitem>
-
-      <listitem>
-        <para>Change colour on internal links</para>
-      </listitem>
-
-      <listitem>
-        <para>Don't duplicate URL in ulinks</para>
-      </listitem>
-    </orderedlist>
-
-    <para><important>
-        <para>Here is a sample important paragraph.</para>
-      </important></para>
-  </chapter>
-
   <chapter id="performance">
     <title>Performance tuning</title>
 
@@ -494,6 +450,144 @@ Admin : http://localhost:8080/go/workbench/
         </tgroup>
       </table>
     </section>
+  </chapter>
+
+  <chapter>
+    <title>Using Maven</title>
+
+    <para></para>
+  </chapter>
+
+  <chapter>
+    <title>Using Eclipse</title>
+
+    <para></para>
+
+    <section>
+      <title>Launching with WTP</title>
+
+      <para>WTP allows your webapp to be launched on a variety of servers.
+      OTHERobjects has been tested against the follownig:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Jetty</para>
+        </listitem>
+
+        <listitem>
+          <para>Tomcat</para>
+        </listitem>
+
+        <listitem>
+          <para>Glassfish v2 (see
+          https://glassfishplugins.dev.java.net/eclipse33/index.html)</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Optional plugins</title>
+
+      <para>Here are some other Eclipse plugins that you may find useful
+      during OTHERobjects development.</para>
+
+      <table>
+        <title>Optional Eclipse plugins</title>
+
+        <tgroup cols="1">
+          <thead>
+            <row>
+              <entry align="center">Plugin</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>JCR Browser:
+              http://sourceforge.net/projects/jcrbrowser</entry>
+            </row>
+
+            <row>
+              <entry>Veloeclipse: Velocity editor</entry>
+            </row>
+
+            <row>
+              <entry>Clover: test coverage tool</entry>
+            </row>
+
+            <row>
+              <entry>Spket / Aptana: advanced JS editors</entry>
+            </row>
+
+            <row>
+              <entry>Logback: logger plugin allows linking back to
+              code</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section>
+      <title>Other tips</title>
+
+      <para>http://www.vasanth.in/2004/01/13/EclipseTipKeepingPluginsAndWorkspaceSeparate.aspx</para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Testing</title>
+
+    <para>This extends the testing discussion in the Site Designer
+    Guide.</para>
+
+    <para>How to write good Junit tests</para>
+
+    <para>http://unitils.sourceforge.net/spring_article.html</para>
+  </chapter>
+
+  <chapter>
+    <title>Writing documentation</title>
+
+    <para>The documentation for OTHERobjects is written in DocBook format and
+    processed via JBoss's jdocbook Maven plugin. The design is based on the
+    XSL from Hibernate.</para>
+
+    <para>Information on customising DocBook XSL is here:
+    <uri>http://www.sagehill.net/docbookxsl/</uri>.</para>
+
+    <para>Documentation stuff do to still:</para>
+
+    <orderedlist>
+      <listitem>
+        <para>Make figure label font smaller.</para>
+      </listitem>
+
+      <listitem>
+        <para>Learn how to do links.</para>
+      </listitem>
+
+      <listitem>
+        <para>Style for suggesting menu commands.</para>
+      </listitem>
+
+      <listitem>
+        <para>Icons and background for info, warning, important
+        paragraphs.</para>
+      </listitem>
+
+      <listitem>
+        <para>Change colour on internal links</para>
+      </listitem>
+
+      <listitem>
+        <para>Don't duplicate URL in ulinks</para>
+      </listitem>
+    </orderedlist>
+
+    <para><important>
+        <para>Here is a sample important paragraph.</para>
+      </important></para>
   </chapter>
 
   <chapter>
