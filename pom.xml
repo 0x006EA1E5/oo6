@@ -441,7 +441,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-search</artifactId>
-			<version>3.0.0.beta4</version>
+			<version>3.0.0.cr1</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
