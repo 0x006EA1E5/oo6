@@ -26,6 +26,7 @@ M2 TODO
  + Publish without descending 
 * PublishingOptions: template, emargo until, exipre on, show in menu, do not index or put in sitemap, hotkey
 [FROM M3] * Embed Quartz as job scheduler
+* Timezone od Debug page
 
 M2 Done
 -------

@@ -19,11 +19,10 @@ public class SiteMapGeneratorTest extends TestCase
 
     public void testFormatW3CDateTime()
     {
-        DateTime dt = new DateTime(2007, 9, 22, 12, 23, 34, 0, DateTimeZone.forID("+0200"));
-        //YYYY-MM-DDThh:mmTZD (eg 1997-07-16T19:20+01:00)
+        DateTime dt = new DateTime(2007, 9, 22, 12, 23, 34, 0, DateTimeZone.forID("UTC"));
         SiteMapGenerator smg = new SiteMapGenerator();
         String s = smg.formatW3CDateTime(dt.toDate());
-        assertEquals("2007-09-22T12:23:34+02:00", s);
+        assertEquals("2007-09-22T12:23:34+00:00", s);
     }
 
     public void testGenerateSiteMap() throws IOException

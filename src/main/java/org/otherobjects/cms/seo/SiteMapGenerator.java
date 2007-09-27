@@ -6,6 +6,7 @@ import java.util.List;
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.otherobjects.cms.model.DynaNode;
@@ -62,6 +63,8 @@ public class SiteMapGenerator
      * 
      * <p>See <a href="http://www.w3.org/TR/NOTE-datetime">http://www.w3.org/TR/NOTE-datetime</a> for the specification.
      * 
+     * <p>Note that this will always return the time in UTC.
+     * 
      * TODO Move to a utility package?
      * 
      * @param date
@@ -69,6 +72,6 @@ public class SiteMapGenerator
      */
     public String formatW3CDateTime(Date date)
     {
-        return w3cDateFormatter.print(date.getTime());
+        return w3cDateFormatter.withZone(DateTimeZone.forID("UTC")).print(date.getTime());
     }
 }
