@@ -4,9 +4,10 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
 import org.codehaus.groovy.control.CompilationFailedException;
-import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Helper class to allow for groovy scripts to be executed by quartz scheduled jobs.
@@ -14,7 +15,8 @@ import org.quartz.JobExecutionException;
  * @author joerg
  *
  */
-public class QuartzGroovyJobExecutor implements Job {
+public class QuartzGroovyJobExecutor extends AbstractSpringQuartzJob {
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	public static final String GROOVY_SCRIPT_KEY = "scriptsource";
 	
@@ -24,6 +26,12 @@ public class QuartzGroovyJobExecutor implements Job {
 		String script = (String) context.getJobDetail().getJobDataMap().get(GROOVY_SCRIPT_KEY);
 		
 		Binding binding = new Binding();
+		
+		try {
+			binding.setVariable("appCtx", getApplicationContext(context));
+		} catch (Exception e) {
+			logger.warn("Problems making applicationContext available to groovy script");
+		}
 		executeScript(binding, script);
 	}
 	
