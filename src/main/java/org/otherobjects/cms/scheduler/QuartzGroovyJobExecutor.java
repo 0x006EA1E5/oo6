@@ -20,7 +20,7 @@ public class QuartzGroovyJobExecutor extends AbstractSpringQuartzJob {
 	
 	public static final String GROOVY_SCRIPT_KEY = "scriptsource";
 	
-	public void execute(JobExecutionContext context)
+	public void executeJob(JobExecutionContext context)
 			throws JobExecutionException {
 		
 		String script = (String) context.getJobDetail().getJobDataMap().get(GROOVY_SCRIPT_KEY);

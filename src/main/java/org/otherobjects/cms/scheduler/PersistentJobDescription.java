@@ -109,6 +109,11 @@ public class PersistentJobDescription extends DynaNode {
 		jobDetail.setDurability(false);
 		jobDetail.setRequestsRecovery(false);
 		
+		JobDataMap jobDataMap = new JobDataMap();
+		jobDetail.setJobDataMap(jobDataMap);
+		
+		jobDataMap.put(AbstractSpringQuartzJob.USERID_KEY, getUserId()); //put the username of the user having created this jobDescription into the jobData map so that the job can be run as that user
+		
 		if(isValidJobClass())
 		{
 			jobDetail.setJobClass(jobClass);
@@ -119,11 +124,7 @@ public class PersistentJobDescription extends DynaNode {
 				return null; //FIXME should really throw an exception but interferes with dwr marshalling
 			
 			jobDetail.setJobClass(QuartzGroovyJobExecutor.class);
-			
-			JobDataMap jobDataMap = new JobDataMap();
 			jobDataMap.put(QuartzGroovyJobExecutor.GROOVY_SCRIPT_KEY, groovyScript);
-			
-			jobDetail.setJobDataMap(jobDataMap);
 		}
 		this.jobDetail = jobDetail;
 		return jobDetail;
