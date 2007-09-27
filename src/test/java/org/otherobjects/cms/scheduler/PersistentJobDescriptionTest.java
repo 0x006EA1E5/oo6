@@ -12,6 +12,6 @@ public class PersistentJobDescriptionTest extends TestCase {
 		pjd.setHour("*");
 		pjd.setMonth("8");
 		
-		assertEquals("0 * * * 8 *", pjd.buildCronExpression());
+		assertEquals("0 * * * 8 ? *", pjd.buildCronExpression());
 	}
 }

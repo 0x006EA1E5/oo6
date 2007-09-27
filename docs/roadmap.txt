@@ -1,45 +1,27 @@
 ==================================================================
-M2 (end August): The CMS release
-
-Feature parity with OO5 for object editing and publishing 
-(with the exception of internal links). Introduction
-of new templating/block model with efficient caching.
-==================================================================
-
-[IN PROGRESS] * Site Toolbar / Page performance reporting (queries per page via AOP) and disableable -- Rich/Joerg
-[IN PROGRESS] * Licensing finalised 
-[FROM M3] * Embed Quartz as job scheduler
-[FROM M3] * Support blog publishing APIs http://www.blogger.com/developers/api/1_docs/
-
-[DONE] * Publishing and versioning
-[DONE] * Enhanced forms support for components, references and lists
-[DONE] * Support for JDBC (database) objects in Workbench
-[DONE] * Paging/sorting/filtering in data grid
-[DONE] * Libraries: image, file and rich media (external image libary support), thumnail grid for images -- Rich
-[DONE] * Page template support
-[DONE] * Smart folders
-[DONE] * Status page -- what I'm editing, what happened today
-[DONE] * Date/number formatting tools
-[DONE] * MetaData support and sitemap.xml
-
-[DEFERRED M3: Bug in Hibernate] * Global search (for JCR and JDBC)
-[DEFERRED M3: API needed] * Action/event/scripting framework -- see old UploadController
-[DEFERRED M3: API needed] * Widget publish/consume
-[DEFERRED M3: API needed]* Debug page: System and server status indicators (check for common server problems)
-[DEFERRED M4: Test environment needed] * Build test hosting environment (Simon to lead)
-[DEFERRED M4: Test environment needed] * Apache Jmeter scripts for performance testing (Martin/Simon)
-[DEFERRED M4: Test environment needed] * Use Selenium scripts for functional testing ajax
-
-[September 12-14: Rich to visit London to present M2]
-
-==================================================================
 M3 (mid October) The API release.
 
 Finalise site structure and internal links. Then expose API to 
 webservices and plugins
 ==================================================================
 
-* Project naming finalised
+[IN PROGRESS] * Start documentation
+
+[DONE] * Site Toolbar / Page performance reporting (queries per page via AOP) and disableable -- Rich/Joerg
+
+[IN PROGRESS] * Embed Quartz as job scheduler
++ Run As...
+
+[IN PROGRESS] * Support blog publishing APIs http://www.blogger.com/developers/api/1_docs/
++ Flexible configuration
++ Media support 
+
+* Global search (for JCR and JDBC)
+* Action/event/scripting framework -- see old UploadController
+* Widget publish/consume
+* Debug page: System and server status indicators (check for common server problems)
+
+* Non-HTML output support (PDF, XLS, JPG, XML)
 * Runtime data-type manipulation: UI 
 * Localized sites
 * JCR based properties and pick-lists
@@ -50,11 +32,10 @@ webservices and plugins
 * Plugin architecture
 * SVN integration for site design data
 * Syndication support (publish and subscribe RSS/Atom feeds)
-* Non-HTML output support (PDF, XLS, JPG, XML)
 * Robust Import/export tools
 * Preliminary reporting integration
-* Integrate OTHERclicks
-* Extra CMS features: Make a copy/delete. 
+* Integrate OTHERclicks: SubscriberMail, Bronto, CoolerEMail
+* Extra CMS features: duplicate,delete,unpublish,activate/deactivate	
 * Method level security -- waiting for Spring Security 2.0
 * Instance level security -- waiting for Spring Security 2.0
 * Embed rules engine with scripting integration
@@ -70,6 +51,8 @@ Rich back in office from start of November. Will need to work closely
 with Chris and the design team during M4.
 ==================================================================
 
+* Licensing finalised 
+* Project naming finalised
 * Site toolbar improvements
 * Workbench improvements
  + Favourites
@@ -79,8 +62,9 @@ with Chris and the design team during M4.
 * Filtering
 * Usability testing
 * Template designer + auto-detect templates from FS
-* Start documentation
-
+[DEFERRED M4: Test environment needed] * Build test hosting environment (Simon to lead)
+[DEFERRED M4: Test environment needed] * Apache Jmeter scripts for performance testing (Martin/Simon)
+[DEFERRED M4: Test environment needed] * Use Selenium scripts for functional testing ajax
 
 ==================================================================
 Beta 1 (end January) First Beta release
@@ -141,8 +125,6 @@ working. Create solid build and test infrastucture.
 [DONE]  + Built with Maven to automate testing, packaging and deployment.
 [DONE]  + Comprehensive test coverage — over 60%
 
-
-
 ==================================================================
 M1.1 (start August): Initial High Availability release
 
@@ -160,3 +142,23 @@ environment for high availability.
 [DONE] * JMX hooks for important runtime information
 [DONE] * Canoo Webtest scripts for functional testing 
 
+==================================================================
+M2 (end August): The CMS release
+
+Feature parity with OO5 for object editing and publishing 
+(with the exception of internal links). Introduction
+of new templating/block model with efficient caching.
+==================================================================
+
+[DONE] * Publishing and versioning
+[DONE] * Enhanced forms support for components, references and lists
+[DONE] * Support for JDBC (database) objects in Workbench
+[DONE] * Paging/sorting/filtering in data grid
+[DONE] * Libraries: image, file and rich media (external image libary support), thumnail grid for images -- Rich
+[DONE] * Page template support
+[DONE] * Smart folders
+[DONE] * Status page -- what I'm editing, what happened today
+[DONE] * Date/number formatting tools
+[DONE] * MetaData support and sitemap.xml
+
+[September 12-14: Rich to visit London to present M2]

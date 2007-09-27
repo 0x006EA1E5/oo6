@@ -116,9 +116,9 @@
 					</formats>
 					<sourceDocumentName>${docbook.name}.xml</sourceDocumentName>
 					<imageResource>
-							<directory>src/main/docbook/images</directory>
-							<targetPath>images</targetPath>
-							<filtering>false</filtering>
+						<directory>src/main/docbook/images</directory>
+						<targetPath>images</targetPath>
+						<filtering>false</filtering>
 					</imageResource>
 					<options>
 						<useRelativeImageUris>false</useRelativeImageUris>
@@ -1020,6 +1020,11 @@
 			<groupId>quartz</groupId>
 			<artifactId>quartz</artifactId>
 			<version>1.6.0</version>
+		</dependency>
+		<dependency>
+			<groupId>jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>1.0.5</version>
 		</dependency>
 	</dependencies>
 </project>

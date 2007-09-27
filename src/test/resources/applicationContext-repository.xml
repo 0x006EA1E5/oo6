@@ -58,8 +58,13 @@
 
 	<!-- Types service -->
 	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl" init-method="init">
-		<property name="typeDefDao" ref="typeDefDao" />
 		<property name="jcrBeanService" ref="jcrBeanService" />
+	</bean>
+	
+	<!-- Bootstrap types but nothing else -->
+	<bean name="bootstrapUtils" class="org.otherobjects.cms.util.BootstrapUtils" init-method="loadTypes">
+		<property name="jcrTypeService" ref="typeService" />
+		<property name="daoService" ref="daoService" />
 	</bean>
 
 	<bean name="jcrBeanService" class="org.otherobjects.cms.beans.JcrBeanService"></bean>

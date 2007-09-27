@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd">
 
 	<!-- Repository -->
@@ -14,7 +15,7 @@
 		<property name="repository" ref="repository" />
 		<property name="credentials">
 			<bean class="javax.jcr.SimpleCredentials">
-				<constructor-arg index="0" value="jackrabbit" />
+				<constructor-arg index="0" value="${jcr.username}" />
 				<constructor-arg index="1">
 					<bean factory-bean="password" factory-method="toCharArray" />
 				</constructor-arg>
@@ -23,7 +24,21 @@
 	</bean>
 
 	<bean id="password" class="java.lang.String">
-		<constructor-arg index="0" value="jackrabbit" />
+		<constructor-arg index="0" value="${jcr.password}" />
+	</bean>
+
+	<!-- Setup -->
+	<bean name="setupUtils" class="org.otherobjects.cms.util.SetupUtils" init-method="bootstrap">
+		<property name="sessionFactory" ref="&amp;sessionFactory" />
+		<property name="jcrSessionFactory" ref="jcrSessionFactory" />
+		<property name="nodeTypesConfig" value="classpath:otherobjects.resources/config/node-types.cnd" />
+		<property name="systemDataTypes" value="classpath:otherobjects.resources/bootstrap-data/jcr-data-types.xml" />
+		<property name="siteDataTypes" value="classpath:site.resources/bootstrap-data/jcr-data-types.xml" />
+	</bean>
+
+	<bean name="bootstrapUtils" class="org.otherobjects.cms.util.BootstrapUtils" init-method="bootstrap">
+		<property name="jcrTypeService" ref="typeService" />
+		<property name="daoService" ref="daoService" />
 	</bean>
 
 	<!-- Mapping -->
@@ -43,7 +58,8 @@
 		<property name="sessionFactory" ref="jcrSessionFactory" />
 	</bean>
 
-	<bean id="baseTransactionProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" abstract="true">
+	<bean id="baseTransactionProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+		abstract="true">
 		<property name="transactionManager" ref="jcrTransactionManager" />
 		<property name="transactionAttributes">
 			<props>
@@ -60,8 +76,9 @@
 
 
 	<!-- Types service -->
-	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl" init-method="init" depends-on="setupUtils">
-<!--		<property name="typeDefDao" ref="typeDefDao" />-->
+	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl" init-method="init"
+		depends-on="setupUtils">
+		<!--		<property name="typeDefDao" ref="typeDefDao" />-->
 		<property name="jcrBeanService" ref="jcrBeanService" />
 		<property name="annotationBasedTypeDefBuilder" ref="annotationBasedTypeDefBuilder"></property>
 	</bean>

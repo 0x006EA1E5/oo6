@@ -42,13 +42,13 @@
 					<url>http://maven.otherobjects.org/repository/</url>
 					<layout>default</layout>
 				</pluginRepository>
-			</pluginRepositories>
 			<pluginRepository>
-				<id>otherobjects</id>
+				<id>jboss</id>
 				<name>JBoss repository</name>
 				<url>http://repository.jboss.org/maven2/</url>
 				<layout>default</layout>
 			</pluginRepository>
+			</pluginRepositories>
 		</profile>
 	</profiles>
 </settings>

@@ -79,9 +79,8 @@ public class BootstrapUtils //implements ApplicationListener
                 Authentication authentication = new UsernamePasswordAuthenticationToken(adminUser, null, adminUser.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 
-                // load jcr backed typeDefs
-            	jcrTypeService.loadJcrBackedTypes((TypeDefDao) daoService.getDao(TypeDef.class));
-
+                loadTypes();
+                
                 runScript(this.bootstrapScript.getInputStream());
                 runScript(new FileInputStream("src/main/resources/site.resources/bootstrap-data/setup.script"));
             }
@@ -103,6 +102,12 @@ public class BootstrapUtils //implements ApplicationListener
         }
     }
 
+    public void loadTypes()
+    {
+        // load jcr backed typeDefs
+        jcrTypeService.loadJcrBackedTypes((TypeDefDao) daoService.getDao(TypeDef.class));
+    }
+    
     protected User createUser()
     {
         Role role = new Role("ROLE_ADMIN", "Adminstrator role");
