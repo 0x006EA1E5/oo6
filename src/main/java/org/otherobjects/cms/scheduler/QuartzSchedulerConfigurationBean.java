@@ -46,7 +46,7 @@ public class QuartzSchedulerConfigurationBean implements ApplicationListener
     public void onApplicationEvent(ApplicationEvent event)
     {
         //initialise when ctx is ready
-        if (event instanceof ContextRefreshedEvent)
+        if (event instanceof ContextRefreshedEvent && ((ContextRefreshedEvent)event).getApplicationContext().getParent() == null) // only do for root context refresh
         {
             init();
         }
@@ -80,6 +80,10 @@ public class QuartzSchedulerConfigurationBean implements ApplicationListener
     {
         try
         {
+        	if(scheduler.deleteJob(jobDescription.getId(), PersistentJobDescription.JOB_GROUP_NAME))
+        	{
+        		logger.info("Job with name " + jobDescription.getId() + " already existed and was therefore deleted before scheduling it again");
+        	}
             scheduler.scheduleJob(jobDescription.getJobDetail(), jobDescription.getTrigger());
         }
         catch (Exception e)
