@@ -22,7 +22,6 @@ import org.otherobjects.cms.model.User;
 import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeDefDao;
-import org.otherobjects.cms.types.TypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -86,8 +85,8 @@ public class BootstrapUtils //implements ApplicationListener
             }
             else
             {
-            	// load jcr backed typeDefs
-            	jcrTypeService.loadJcrBackedTypes((TypeDefDao) daoService.getDao(TypeDef.class));
+                // just load types
+                loadTypes();
             }
         }
         catch (Exception e)
