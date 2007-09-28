@@ -42,6 +42,75 @@
     chapter).</para>
   </chapter>
 
+  <chapter id="chapter-overview-of-steps">
+    <title>Overview of steps involved to build a site</title>
+
+    <para>There are a couple of steps that you will need to go through each
+    tme you build a site with OTHERobjects. We will very briefly go over these
+    here to give you an idea of what's involved.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>First you will need to think about the various different types
+        (or objects if you are coming from a programming background) you will
+        need in your site. Obvious ones that almost all sites will need are
+        articles and news items. But there might also be things like jobs,
+        events, products, press releases to name but a few. </para>
+      </listitem>
+
+      <listitem>
+        <para>Then you will need to define those in a file called
+        src/main/resources/site.resources/bootstrap-data/jcr-data-types.xml in
+        your sites project folder. Have a look at that file and its sibling in
+        the OTHERobjects project folder in
+        src/main/resources/otherobjects.resources/bootstrap-data/jcr-data-types.xml
+        to get a feeling on what that involves. We might add a type designer
+        in the wrokbench in the future to do that.</para>
+      </listitem>
+
+      <listitem>
+        <para>Then log in to the workbench and create the overall folder
+        structure of your site (at least the first level).</para>
+      </listitem>
+
+      <listitem>
+        <para>Then create at least one layout file in
+        src/main/resources/site.resources/templates/layouts. Create a
+        corresponding entry in the workbench in Designer &gt; Layouts giving
+        the filename (without the path) as the content of the 'Code' field. A
+        layout is the main document making up your site's html documents. It
+        contains the Doctype and HTML head and body sections and controls the
+        overall layout of your sites pages (as the name implies). You can have
+        as many layout files as you want but it is advisable to keep the
+        number down. A useful scheme that has evolved over time is to have one
+        layout for the home page, one for the subfolder index listing pages
+        and one for all other content pages.</para>
+      </listitem>
+
+      <listitem>
+        <para>Then create a block for at least one of your types in
+        src/main/resources/site.resources/templates/blocks. A block is a mini
+        template that controls with what markup the properties of your types
+        are inserted into the site pages. It can also contain simple content
+        logic, like list the 5 latest news items etc. </para>
+      </listitem>
+
+      <listitem>
+        <para>Now that you have types and layouts and blocks you can create
+        templates (Designer &gt; Templates). A template wires together blocks
+        and layouts by specifying which blocks go into which designated
+        regions in a layout in what order. </para>
+      </listitem>
+
+      <listitem>
+        <para>Now when you create any of your types by going to a folder
+        listing and choosing 'Add Object' you can choose from the template(s)
+        you created and whatever template you choose is then used to view (and
+        preview) that type. </para>
+      </listitem>
+    </itemizedlist>
+  </chapter>
+
   <chapter>
     <title>Building templates</title>
 
@@ -59,7 +128,39 @@
 
     <para>How to create scheduled tasks.</para>
 
-    <para>Setting the user to run as.</para>
+    <para>Currently we support two types of scheduled Jobs:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Jobs written in Java</para>
+      </listitem>
+
+      <listitem>
+        <para>Jobs written in Groovy</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Both Job types share the same abstract base class as executor:
+    org.otherobjects.cms.scheduler.AbstractSpringQuartzJob whose main purpose
+    is to provide some contextual setup extracted from the JobExecutionContext
+    and to setup security so as to not run these jobs without any security
+    context (remember that these jobs are run asynchronously outside of any
+    http reqest scope).</para>
+
+    <para>To create a Java job, write a java class extending above mentioned
+    AbstractSpringQuartzJob. In your class you can get access to the root web
+    application context by calling getApplicationContext(). Then create a
+    Scheduled Job in the scheduler folder in workbench and fill in the fully
+    qualified class name in the 'Name of job class' field. The job only gets
+    added to the scheduler once you publish it.</para>
+
+    <para>To create a groovy job, follow the same steps aas above but instead
+    of filling in the 'Name of job class' field, type or paste your script in
+    'Groovy script source' field. The script will have access to the root web
+    application context via the 'appCtx' variable.</para>
+
+    <para>The jobs are always run under the security context of the user that
+    created them.</para>
 
     <para>How to configuer timings. See:
     http://quartz.sourceforge.net/javadoc/org/quartz/CronTrigger.html</para>
@@ -108,7 +209,7 @@
     <section>
       <title>What needs testing</title>
 
-      <para>In a word: everything. </para>
+      <para>In a word: everything.</para>
     </section>
 
     <section>
