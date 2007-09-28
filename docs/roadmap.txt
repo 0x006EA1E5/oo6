@@ -5,42 +5,34 @@ Finalise site structure and internal links. Then expose API to
 webservices and plugins
 ==================================================================
 
-[IN PROGRESS] * Start documentation
-
 [DONE] * Site Toolbar / Page performance reporting (queries per page via AOP) and disableable -- Rich/Joerg
+[DONE] * Embed Quartz as job scheduler
 
-[IN PROGRESS] * Embed Quartz as job scheduler
-+ Run As...
-
+[IN PROGRESS] * Start documentation
 [IN PROGRESS] * Support blog publishing APIs http://www.blogger.com/developers/api/1_docs/
 + Flexible configuration
 + Media support 
+[IN PROGRESS] * Syndication support (publish and subscribe RSS/Atom feeds)
+[IN PROGRESS] * Non-HTML output support (PDF, XLS, JPG, XML)
 
-* Global search (for JCR and JDBC)
 * Action/event/scripting framework -- see old UploadController
-* Widget publish/consume
-* Debug page: System and server status indicators (check for common server problems)
-
-* Non-HTML output support (PDF, XLS, JPG, XML)
-* Runtime data-type manipulation: UI 
+* Debug page: System and server status indicators, timezone (check for common server problems)
+* Script/action/long-task/import-export logging
+* Trsansaction email support inc logging and testing with Wiser: http://subethasmtp.tigris.org/wiser.html
 * Localized sites
 * JCR based properties and pick-lists
-* Site structure finalised + nav/titles/crumbs macros + redirection support
+* NavigatorService: Site structure finalised + nav/titles/crumbs macros + redirection support
 * Internal link libraries + link integrity
 * Path tooling inc robust SSL support
 * Web services API
 * Plugin architecture
-* SVN integration for site design data
-* Syndication support (publish and subscribe RSS/Atom feeds)
 * Robust Import/export tools
-* Preliminary reporting integration
-* Integrate OTHERclicks: SubscriberMail, Bronto, CoolerEMail
+* Preliminary reporting integration: BIRT/Pentaho
+* Integrate OTHERclicks as plugin: Responsys, SilverPOP, SubscriberMail, Bronto, CoolerEMail
 * Extra CMS features: duplicate,delete,unpublish,activate/deactivate	
-* Method level security -- waiting for Spring Security 2.0
-* Instance level security -- waiting for Spring Security 2.0
-* Embed rules engine with scripting integration
-* Email support inc logging and testing with Wiser: http://subethasmtp.tigris.org/wiser.html
-* Test staging workflow for site updates
+* Embed rules engine with scripting integration: JBossRules
+* Runtime data-type manipulation: UI 
+* Widget publish/consume
 
 ==================================================================
 M4 (end November) The interface release.
@@ -65,6 +57,11 @@ with Chris and the design team during M4.
 [DEFERRED M4: Test environment needed] * Build test hosting environment (Simon to lead)
 [DEFERRED M4: Test environment needed] * Apache Jmeter scripts for performance testing (Martin/Simon)
 [DEFERRED M4: Test environment needed] * Use Selenium scripts for functional testing ajax
+[DEFERRED M4: Lucene conlfict]* Global search (for JCR and JDBC)
+* Test staging workflow for site updates
+[DEFERRED M4: ] * SVN integration for site design data
+* Method level security -- waiting for Spring Security 2.0
+* Instance level security -- waiting for Spring Security 2.0
 
 ==================================================================
 Beta 1 (end January) First Beta release

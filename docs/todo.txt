@@ -1,46 +1,27 @@
 M2 TODO
 -------
 
+* Object inspector (html/string/log)
+* Validators on user email addresses (Joerg)
 * Hardcoded IM path
 * Hardcoded localhost in image paths
 * Flickr image names. 
 * Flickr search and paging?
-
-[FROM M3] * Support blog publishing APIs http://www.blogger.com/developers/api/1_docs/ (Joerg)
-* DbFolder: Finish role selector  (Joerg)
-* DbFolder Fix annotation ordering in user/role. Is this even possible?  (Joerg)
-* Validators on user email addresses (Joerg)
-* Translate workbench.properties (Joerg)
-
-[IN PROGRESS] * Site Toolbar / Page performance reporting (queries per page via AOP) and disableable
 * Folder overview page
-* Object inspector (html/string/log)
 * Limit types per folder
-* Moving/trashing/publishing bugs
-* Flickr/image search
-* External link library: bookmarklet +delicous support
+* Moving/trashing/publishing bugs: name-clashes
+* External link library: bookmarklet + delicous support
 * Rich media library
 * Publishing fixes  
  + Change folder icon based publish state
  + Change state of chid items on publish
  + Publish without descending 
 * PublishingOptions: template, emargo until, exipre on, show in menu, do not index or put in sitemap, hotkey
-[FROM M3] * Embed Quartz as job scheduler
-* Timezone od Debug page
 
-M2 Done
--------
-* My edits + publishing comments
-* Tidy up artist page
-* Improve artwork page.
-* Google sitemap
-* Remove rogue metaData and other components
-[IN PROGRESS] * Smart folders
-* Version history and rollback
 
 Post M2
 -------
-Properly remove components
+Properly remove components from listings
 Version History
 + Not for DB objects
 + Deal with components
