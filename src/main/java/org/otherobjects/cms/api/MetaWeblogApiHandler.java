@@ -1,14 +1,30 @@
 package org.otherobjects.cms.api;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.DynaNodeDao;
+import org.otherobjects.cms.model.CmsImage;
+import org.otherobjects.cms.model.CmsImageDao;
 import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.tools.CmsImageTool;
+import org.otherobjects.cms.util.ImageUtils;
+
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.iptc.IptcDirectory;
 
 /**
  * See API documentation is available at <a href="http://www.xmlrpc.com/metaWeblogApi">http://www.xmlrpc.com/metaWeblogApi</a> 
@@ -17,6 +33,8 @@ import org.otherobjects.cms.model.DynaNode;
 @SuppressWarnings("unchecked")
 public class MetaWeblogApiHandler
 {
+	private final Log logger = LogFactory.getLog(getClass());
+	
     private DaoService daoService;
 
     public void setDaoService(DaoService daoService)
@@ -92,8 +110,84 @@ public class MetaWeblogApiHandler
         return convertNodeToPost(node);
     }
 
-    public void newMediaObject(String blogid, String username, String password, Object struct)
+    public Object newMediaObject(String blogid, String username, String password, Map struct)
     {
+    	// post should have the elements name, type and bits where name is just a label, type is the mime-type of the object and bits is the base64 encoded content
+    	String type = (String) struct.get("type");
+    	String name = (String) struct.get("name");
+    	
+    	if(type == null || !type.equalsIgnoreCase("image/jpeg")) //FIXME we need a more generic way to also be able to deal with other media types
+    		return null;
+    	
+    	OutputStream out = null;
+    	File newFile = null;
+    	Map<String, String> returnStruct = new HashMap<String,String>();
+    	try {
+			// create temp file
+			newFile = File.createTempFile("image", "jpeg");
+			
+			// open file for writing
+			out = new BufferedOutputStream(new FileOutputStream(newFile));
+			
+			// copy posted content to temp file
+			byte[] content = (byte[]) struct.get("bits");
+			
+			IOUtils.write(content, out);
+			
+			CmsImageDao cmsImageDao = (CmsImageDao) daoService.getDao("org.otherobjects.cms.model.CmsImage");
+			
+			CmsImage cmsImage = cmsImageDao.createCmsImage();
+	        cmsImage.setPath("/libraries/images/");
+	        cmsImage.setCode(name.replaceAll("/", "")); //our name mustn't contain slashes but MarsEdits calls do
+	        cmsImage.setLabel(name.replaceAll("/", ""));
+	        cmsImage.setNewFile(newFile);
+
+	        // Look for IPTC tags to read
+	        Metadata imageMetadata = ImageUtils.getImageMetadata(newFile);
+	        if (imageMetadata.containsDirectory(IptcDirectory.class))
+	        {
+	            Directory iptc = imageMetadata.getDirectory(IptcDirectory.class);
+	            if (iptc.containsTag(IptcDirectory.TAG_OBJECT_NAME))
+	                cmsImage.setLabel(iptc.getString(IptcDirectory.TAG_OBJECT_NAME));
+	            if (iptc.containsTag(IptcDirectory.TAG_CAPTION))
+	                cmsImage.setDescription(iptc.getString(IptcDirectory.TAG_CAPTION));
+	            if (iptc.containsTag(IptcDirectory.TAG_COPYRIGHT_NOTICE))
+	                cmsImage.setCopyright(iptc.getString(IptcDirectory.TAG_COPYRIGHT_NOTICE));
+	            if (iptc.containsTag(IptcDirectory.TAG_KEYWORDS))
+	                cmsImage.setKeywords(iptc.getString(IptcDirectory.TAG_KEYWORDS));
+	        }
+
+	        // Get file proprerties
+	        cmsImageDao.save(cmsImage);
+	        
+	        CmsImageTool cmsImageTool = new CmsImageTool();
+	        
+	        returnStruct.put("url", cmsImageTool.getOriginal(cmsImage).getDataFile().getExternalUrl());
+	        
+    	} catch (Exception e) {
+			logger.error("newMediaObject failed as the xml-rpc wasn't valid or couldn't be read", e);
+		}
+		finally
+		{
+			if(out != null)
+			{
+				try {
+					out.close();
+				} catch (Exception e) {
+					//noop
+				}
+			}	
+			if(newFile != null)
+			{
+				try {
+					newFile.delete();
+				} catch (Exception e) {
+					//noop
+				}
+			}
+		}
+		return returnStruct;
+    	
     }
 
     public Object[] getCategories(String blogid, String username, String password)
