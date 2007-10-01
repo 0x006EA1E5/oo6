@@ -3,6 +3,7 @@ package org.otherobjects.cms.api;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,14 +11,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.DynaNodeDao;
+import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.CmsImageDao;
+import org.otherobjects.cms.model.CmsImageDaoImpl;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.tools.CmsImageTool;
 import org.otherobjects.cms.util.ImageUtils;
@@ -109,7 +112,16 @@ public class MetaWeblogApiHandler
         DynaNode node = dao.getByPath(postId);
         return convertNodeToPost(node);
     }
-
+    
+    /**
+     * //FIXME this needs to be genericized once we have the means to handle other media files as well (flash, video, etc.)
+     * 
+     * @param blogid
+     * @param username
+     * @param password
+     * @param struct
+     * @return
+     */
     public Object newMediaObject(String blogid, String username, String password, Map struct)
     {
     	// post should have the elements name, type and bits where name is just a label, type is the mime-type of the object and bits is the base64 encoded content
@@ -136,10 +148,18 @@ public class MetaWeblogApiHandler
 			
 			CmsImageDao cmsImageDao = (CmsImageDao) daoService.getDao("org.otherobjects.cms.model.CmsImage");
 			
+			
 			CmsImage cmsImage = cmsImageDao.createCmsImage();
 	        cmsImage.setPath("/libraries/images/");
 	        cmsImage.setCode(name.replaceAll("/", "")); //our name mustn't contain slashes but MarsEdits calls do
 	        cmsImage.setLabel(name.replaceAll("/", ""));
+	        
+	        //now check whether an image with the same path already exists and fail if that is the case.
+	        GenericJcrDao genJcrDao = (GenericJcrDao) daoService.getDao(DynaNode.class);
+	        if(genJcrDao.existsAtPath(cmsImage.getJcrPath()))
+	        	throw new OtherObjectsException("Couldn't create media object as an object with the same name already exists");
+	        
+	        
 	        cmsImage.setNewFile(newFile);
 
 	        // Look for IPTC tags to read
@@ -164,8 +184,9 @@ public class MetaWeblogApiHandler
 	        
 	        returnStruct.put("url", cmsImageTool.getOriginal(cmsImage).getDataFile().getExternalUrl());
 	        
-    	} catch (Exception e) {
+    	} catch (IOException e) {
 			logger.error("newMediaObject failed as the xml-rpc wasn't valid or couldn't be read", e);
+			throw new OtherObjectsException("newMediaObject() failed.", e);
 		}
 		finally
 		{
