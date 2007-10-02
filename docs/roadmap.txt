@@ -11,7 +11,7 @@ webservices and plugins
 [IN PROGRESS] * Start documentation
 [IN PROGRESS] * Support blog publishing APIs http://www.blogger.com/developers/api/1_docs/
 + Flexible configuration
-+ Media support 
+[IN PROGRESS]+ Media support 
 [IN PROGRESS] * Syndication support (publish and subscribe RSS/Atom feeds)
 [IN PROGRESS] * Non-HTML output support (PDF, XLS, JPG, XML)
 
