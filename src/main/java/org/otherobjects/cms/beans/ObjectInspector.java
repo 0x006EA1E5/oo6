@@ -1,0 +1,153 @@
+package org.otherobjects.cms.beans;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+public class ObjectInspector {
+	private final static Log logger = LogFactory.getLog(ObjectInspector.class);
+	
+	static Pattern READ_ACCESSOR_PATTERN = Pattern.compile("^(?:(?:get)|(?:is))(\\w{1})(.*)$");
+	
+	public static String toString(Object object, boolean multiline)
+	{
+		StringBuffer buf = new StringBuffer();
+		Map<String,Object> contentMap = getContent(object);
+		for(Map.Entry<String, Object> entry : contentMap.entrySet())
+		{
+			buf.append(entry.getKey());
+			buf.append(": ");
+			Object value = preprocessValue(entry.getValue());
+			if(List.class.isAssignableFrom(value.getClass())) // we have a list
+			{
+				List<String> values = (List<String>) value;
+				buf.append("{");
+				for(String simpleValue : values)
+				{
+					buf.append("[");
+					buf.append(simpleValue);
+					buf.append("]");
+				}
+				buf.append("}");
+			}
+			else
+			{
+				buf.append(value);
+			}
+			if(multiline)
+				buf.append("\n");
+		}
+		return buf.toString();
+	}
+	
+	public static String toString(Object object)
+	{
+		return toString(object, false);
+	}
+	
+	public static String toHtml(Object object)
+	{
+		StringBuffer buf = new StringBuffer();
+		buf.append("<div>\n");
+		buf.append("<ul>\n");
+		Map<String,Object> contentMap = getContent(object);
+		for(Map.Entry<String, Object> entry : contentMap.entrySet())
+		{
+			buf.append("<li><span class=\"fielName\">");
+			buf.append(entry.getKey());
+			buf.append(":</span>");
+			Object value = preprocessValue(entry.getValue());
+			if(List.class.isAssignableFrom(value.getClass())) // we have a list
+			{
+				List<String> values = (List<String>) value;
+				buf.append("<ol>");
+				for(String simpleValue : values)
+				{
+					buf.append("<li><span class=\"fieldValue\">");
+					buf.append(simpleValue);
+					buf.append("</span></li>");
+				}
+				buf.append("</ol>");
+			}
+			else // single value
+			{
+				buf.append(" \n<span class=\"fieldValue\">");
+				buf.append(value);
+				buf.append("</span>");
+			}
+			buf.append("</li>\n");
+		}
+		buf.append("</ul>\n");
+		buf.append("</div>\n");
+		return buf.toString();
+	}
+	
+	private static Object preprocessValue(Object value)
+	{
+		Class clazz = value.getClass();
+		//Class componentClass = clazz.getComponentType();
+		
+		if(clazz.getName().equals(String.class.getName()))
+		{
+			return StringUtils.abbreviate(value.toString(), 30);
+		}
+		else if(clazz.isArray()) // we are looking at an array
+		{
+			List<String> strings = new ArrayList<String>();
+			Object[] values = (Object[]) value;
+			for(Object simpleValue : values)
+			{
+				strings.add(StringUtils.abbreviate((String) simpleValue, 30));
+			}
+			return strings;
+		}
+		else if(Collection.class.isAssignableFrom(clazz))
+		{
+			List<String> strings = new ArrayList<String>();
+			for(Object entry : (Collection)value)
+			{
+				strings.add(StringUtils.abbreviate(entry.toString(), 30));
+			}
+			return strings;
+		}
+		else
+		{
+			return value.toString();
+		}
+	}
+	
+	private static Map<String, Object> getContent(Object object)
+	{ 
+		Map<String, Object> contentMap = new HashMap<String, Object>();
+		
+		Method[] methods = object.getClass().getMethods();
+		
+		for(int i = 0; i < methods.length; i++)
+		{
+			Matcher matcher = READ_ACCESSOR_PATTERN.matcher(methods[i].getName());
+			if(matcher.matches())
+			{
+				try {
+					Object value = methods[i].invoke(object, null);
+					String fieldname = matcher.group(1).toLowerCase() + matcher.group(2);
+					contentMap.put(fieldname, value);
+					
+				} catch (Exception e) {
+					logger.debug("Couldn't inspect accessor method", e);
+				}
+			}
+		}
+		
+		return contentMap;
+	}
+	
+}
