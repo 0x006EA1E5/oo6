@@ -39,6 +39,7 @@
 .security-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/key.png) 0px 1px no-repeat!important; }
 .designer-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/palette.png) 0px 1px no-repeat!important; }
 .trash-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/bin-closed.png) -2px 1px no-repeat!important; }
+.scripts-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/script-gear.png) 0px 1px no-repeat!important; }
 .scheduler-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/time.png) 0px 1px no-repeat!important; }
 .datatypes-nav-item .x-tree-node-icon { background:transparent url(/resources/otherobjects.resources/static/icons/database-gear.png) 0px 1px no-repeat!important; }
 

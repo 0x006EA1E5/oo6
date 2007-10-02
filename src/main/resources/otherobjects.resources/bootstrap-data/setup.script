@@ -40,6 +40,7 @@ createDbFolder(dao, "/security/roles", "\${security.roles.label}", "org.otherobj
 createFolder(dao, "/designer/blocks", "\${designer.blocks.label}", null)
 createFolder(dao, "/designer/templates", "\${designer.templates.label}", null)
 createFolder(dao, "/designer/layouts", "\${designer.layouts.label}", null)
+createFolder(dao, "/scripts", "\${scripts.label}", "scripts")
 createFolder(dao, "/scheduler", "\${scheduler.label}", "scheduler")
 createFolder(dao, "/trash", "\${trash.label}","trash")
 

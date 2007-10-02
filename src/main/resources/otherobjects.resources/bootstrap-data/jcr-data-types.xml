@@ -113,5 +113,22 @@
 				<property jcr:primaryType="nt:unstructured" required="false" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="searchTerm" />
 			</properties>
 		</org.otherobjects.cms.model.SmartFolder>
+		<org.otherobjects.cms.model.RedirectResource jcr:primaryType="oo:node" labelProperty="label" ocm:classname="org.otherobjects.cms.types.TypeDef"
+			className="org.otherobjects.cms.model.RedirectResource">
+			<properties jcr:primaryType="nt:unstructured">
+				<property jcr:primaryType="nt:unstructured" required="true" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
+				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" />
+				<property jcr:primaryType="nt:unstructured" required="true" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="url" />
+				<property jcr:primaryType="nt:unstructured" required="false" type="boolean" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="temporary" />
+			</properties>
+		</org.otherobjects.cms.model.RedirectResource>
+		<org.otherobjects.cms.model.ScriptResource jcr:primaryType="oo:node" labelProperty="label" ocm:classname="org.otherobjects.cms.types.TypeDef"
+			className="org.otherobjects.cms.model.ScriptResource">
+			<properties jcr:primaryType="nt:unstructured">
+				<property jcr:primaryType="nt:unstructured" required="true" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
+				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" />
+				<property jcr:primaryType="nt:unstructured" required="false" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="scriptPath" />
+			</properties>
+		</org.otherobjects.cms.model.ScriptResource>
 	</system>
 </types>

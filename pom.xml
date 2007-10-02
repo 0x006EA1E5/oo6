@@ -438,11 +438,11 @@
 			<artifactId>hibernate</artifactId>
 			<version>3.2.5.ga</version>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.hibernate</groupId>-->
-<!--			<artifactId>hibernate-search</artifactId>-->
-<!--			<version>3.0.0.cr1</version>-->
-<!--		</dependency>-->
+		<!--		<dependency>-->
+		<!--			<groupId>org.hibernate</groupId>-->
+		<!--			<artifactId>hibernate-search</artifactId>-->
+		<!--			<version>3.0.0.cr1</version>-->
+		<!--		</dependency>-->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
@@ -1025,6 +1025,16 @@
 			<groupId>jfree</groupId>
 			<artifactId>jfreechart</artifactId>
 			<version>1.0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.jexcelapi</groupId>
+			<artifactId>jxl</artifactId>
+			<version>2.6.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.lowagie</groupId>
+			<artifactId>itext</artifactId>
+			<version>1.4.8</version>
 		</dependency>
 	</dependencies>
 </project>
