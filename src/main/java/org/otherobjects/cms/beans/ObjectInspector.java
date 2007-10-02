@@ -13,6 +13,13 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/**
+ * Class to create String representations of bean style objects. The toString and toHtml methods will introspect the object given and find all
+ * read accessors and get their values. It will iterate arrays and collections and will then create either a string or an html snippet containing
+ * everything found.
+ * @author joerg
+ *
+ */
 public class ObjectInspector {
 	private final static Log logger = LogFactory.getLog(ObjectInspector.class);
 	
@@ -91,6 +98,11 @@ public class ObjectInspector {
 		return buf.toString();
 	}
 	
+	/**
+	 * Preprocesses the given object and always returns either a string or a list of strings.
+	 * @param value
+	 * @return
+	 */
 	private static Object preprocessValue(Object value)
 	{
 		Class clazz = value.getClass();
