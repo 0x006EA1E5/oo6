@@ -23,6 +23,8 @@ import org.apache.commons.logging.LogFactory;
 public class ObjectInspector {
 	private final static Log logger = LogFactory.getLog(ObjectInspector.class);
 	
+	private static final int ABBREVIATION_MAX = 100;
+	
 	static Pattern READ_ACCESSOR_PATTERN = Pattern.compile("^(?:(?:get)|(?:is))(\\w{1})(.*)$");
 	
 	public static String toString(Object object, boolean multiline)
@@ -110,7 +112,7 @@ public class ObjectInspector {
 		
 		if(clazz.getName().equals(String.class.getName()))
 		{
-			return StringUtils.abbreviate(value.toString(), 30);
+			return StringUtils.abbreviate(value.toString(), ABBREVIATION_MAX);
 		}
 		else if(clazz.isArray()) // we are looking at an array
 		{
@@ -118,7 +120,7 @@ public class ObjectInspector {
 			Object[] values = (Object[]) value;
 			for(Object simpleValue : values)
 			{
-				strings.add(StringUtils.abbreviate((String) simpleValue, 30));
+				strings.add(simpleValue.toString());
 			}
 			return strings;
 		}
@@ -127,7 +129,7 @@ public class ObjectInspector {
 			List<String> strings = new ArrayList<String>();
 			for(Object entry : (Collection)value)
 			{
-				strings.add(StringUtils.abbreviate(entry.toString(), 30));
+				strings.add(entry.toString());
 			}
 			return strings;
 		}
