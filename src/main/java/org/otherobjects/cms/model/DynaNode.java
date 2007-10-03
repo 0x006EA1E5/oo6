@@ -30,6 +30,8 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
     // getParent()
     // getChildren(String type)
 
+    private static final String DEFAULT_ICON_PATH = "otherobjects.resources/static/icons/page-white-text.png";
+
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     /** GUID */
@@ -90,10 +92,20 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
     {
         setOoType(type);
     }
-
+    
     public void setOoType(String ooType)
     {
         this.ooType = ooType;
+    }
+
+    /**
+     * Returns the path to an icon representing this resource.
+
+     * @return
+     */
+    public String getOoIcon()
+    {
+        return DEFAULT_ICON_PATH;
     }
 
     /**

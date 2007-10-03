@@ -9,7 +9,6 @@ OO.ListingGrid = function() {
 	var cm, ds, grid, mappings;
 	
 	function renderState(value, p, record) {
-		console.log("State: " + value)
 		if(value.length==0)
 			return '<span style="padding-left:15px; background:url(/resources/otherobjects.resources/static/icons/bullet-black.png) no-repeat -2px -2px">Database</span>';
 		else if (value == true)
@@ -17,6 +16,11 @@ OO.ListingGrid = function() {
 		else
 			return '<span style="padding-left:15px; background:url(/resources/otherobjects.resources/static/icons/bullet-red.png) no-repeat -2px -2px">Edited</span>';
 				
+	}
+	function renderLabel(value, p, record) {
+	console.log(record);
+	
+		return '<span style="display:block; height:20px; padding-left:20px; background:url(/resources/'+record.data.ooIcon+') no-repeat 0px 0px">' + value +'</span>';
 	}
 	
 	function renderDate(value, p, record) {
@@ -44,6 +48,7 @@ OO.ListingGrid = function() {
 	            {name: 'label', mapping: 'label'},
 	            {name: 'modificationTimestamp', mapping: 'modificationTimestamp'},
 	            {name: 'ooType', mapping: 'ooType'},
+	            {name: 'ooIcon', mapping: 'ooIcon'},
 	            {name: 'linkPath', mapping: 'linkPath'},
 	            {name: 'published', mapping: 'published'},
 	            {name: 'thumbnailPath', mapping: 'thumbnailPath'}
@@ -72,7 +77,7 @@ OO.ListingGrid = function() {
 			// create the column model
 			cm = new Ext.grid.ColumnModel([
 				{ header: 'State', width: 100, sortable: true, dataIndex: 'published', renderer:renderState },
-				{ header: 'Label', width: 200, sortable: true, dataIndex: 'label' },
+				{ header: 'Label', width: 200, sortable: true, dataIndex: 'label',  renderer:renderLabel },
 				{ header: 'Type', width: 300, sortable: true, dataIndex: 'ooType' },
 				{ header: 'Last modified', width: 300, sortable: true, dataIndex: 'modificationTimestamp', renderer:renderDate },
 				{ header: 'Path', width: 300, sortable: false, dataIndex: 'linkPath', hidden:true  },

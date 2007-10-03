@@ -83,7 +83,16 @@
 				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="originalId" />
 			</properties>
 		</org.otherobjects.cms.model.CmsExternalLink>
-
+		<org.otherobjects.cms.model.Script jcr:primaryType="oo:node" labelProperty="label" ocm:classname="org.otherobjects.cms.types.TypeDef"
+			className="org.otherobjects.cms.model.Script">
+			<properties jcr:primaryType="nt:unstructured">
+				<property jcr:primaryType="nt:unstructured" required="true" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
+				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" />
+				<property jcr:primaryType="nt:unstructured" required="false" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="language" />
+				<property jcr:primaryType="nt:unstructured" required="false" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="scriptCode" />
+				<property jcr:primaryType="nt:unstructured" required="false" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="scriptPath" />
+			</properties>
+		</org.otherobjects.cms.model.Script>
 		<!-- Site -->
 		<org.otherobjects.cms.model.SiteFolder jcr:primaryType="oo:node" jcr:uuid="4b299ada-1f0e-4999-a623-e1ddb3eaab7e" labelProperty="label" ocm:classname="org.otherobjects.cms.types.TypeDef"
 			className="org.otherobjects.cms.model.SiteFolder">
@@ -127,8 +136,19 @@
 			<properties jcr:primaryType="nt:unstructured">
 				<property jcr:primaryType="nt:unstructured" required="true" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
 				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" />
-				<property jcr:primaryType="nt:unstructured" required="false" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="scriptPath" />
+				<property jcr:primaryType="nt:unstructured" required="false" type="reference" relatedType="org.otherobjects.cms.model.Script" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="script" />
 			</properties>
 		</org.otherobjects.cms.model.ScriptResource>
+		<org.otherobjects.cms.model.SyndicationFeedResource jcr:primaryType="oo:node" labelProperty="label" ocm:classname="org.otherobjects.cms.types.TypeDef"
+			className="org.otherobjects.cms.model.SyndicationFeedResource">
+			<properties jcr:primaryType="nt:unstructured">
+				<property jcr:primaryType="nt:unstructured" required="true" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
+				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" />
+				<property jcr:primaryType="nt:unstructured" required="false" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="description" />
+				<property jcr:primaryType="nt:unstructured" required="false" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="query" />
+				<property jcr:primaryType="nt:unstructured" required="false" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="mapping" />
+				<property jcr:primaryType="nt:unstructured" required="false" type="boolean" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="rssFormat" />
+			</properties>
+		</org.otherobjects.cms.model.SyndicationFeedResource>
 	</system>
 </types>

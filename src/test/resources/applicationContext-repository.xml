@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!-- Repository -->
 
@@ -43,7 +43,8 @@
 		<property name="sessionFactory" ref="jcrSessionFactory" />
 	</bean>
 
-	<bean id="baseTransactionProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" abstract="true">
+	<bean id="baseTransactionProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+		abstract="true">
 		<property name="transactionManager" ref="jcrTransactionManager" />
 		<property name="transactionAttributes">
 			<props>
@@ -60,7 +61,7 @@
 	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl" init-method="init">
 		<property name="jcrBeanService" ref="jcrBeanService" />
 	</bean>
-	
+
 	<!-- Bootstrap types but nothing else -->
 	<bean name="bootstrapUtils" class="org.otherobjects.cms.util.BootstrapUtils" init-method="loadTypes">
 		<property name="jcrTypeService" ref="typeService" />

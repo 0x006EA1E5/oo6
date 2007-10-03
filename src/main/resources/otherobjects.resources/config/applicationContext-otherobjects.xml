@@ -2,7 +2,7 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.directwebremoting.org/schema/spring-dwr http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.directwebremoting.org/schema/spring-dwr http://maven.otherobjects.org/spring-dwr.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
 	<!-- 
 		Temporary disble AOP
@@ -39,6 +39,7 @@
 				<entry key="*" value-ref="pageHandler" />
 				<entry key="org.otherobjects.cms.model.ScriptResource" value-ref="scriptHandler" />
 				<entry key="org.otherobjects.cms.model.RedirectResource" value-ref="redirectHandler" />
+				<entry key="org.otherobjects.cms.model.SyndicationFeedResource" value-ref="syndicationFeedHandler" />
 			</map>
 		</property>
 	</bean>
@@ -51,6 +52,10 @@
 	<bean name="redirectHandler" class="org.otherobjects.cms.controllers.handlers.RedirectHandler">
 	</bean>
 
+	<bean name="syndicationFeedHandler" class="org.otherobjects.cms.controllers.handlers.SyndicationFeedHandler">
+		<property name="daoService" ref="daoService" />
+	</bean>
+	
 	<bean name="scriptHandler" class="org.otherobjects.cms.controllers.handlers.ScriptHandler">
 		<property name="daoService" ref="daoService" />
 	</bean>
