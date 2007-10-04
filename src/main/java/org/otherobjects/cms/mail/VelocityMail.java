@@ -10,6 +10,26 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.OtherObjectsException;
 
+/**
+ * Simple but hopefully powerful mail class. It can send simpe plain text emails as well as multipart mails with plain text, html and attachment parts.
+ * All email addresses (from, replyTo, To, CC, BCC) are validated and not added if validation fails (a runtime exception is thrown).
+ * Textual (plain and html) content can be specified directly in String form or by passing in the path to a velocity template and a map to be used as a model when rendering the template.
+ * The simplest possible use looks  like this:
+ * 
+ * <code>
+ * 	VelocityMail mail = new VelocityMail();
+ * 	mail.setFromAddress(new EmailAddress("me@mail.com"));
+ * 	mail.addToRecipient(new EmailAddress("me@mail.com"));
+ * 	mail.setSubject("Hello World!");
+ * 	mail.setBody("A test email");
+ * 
+ *  mailService.send(mail);
+ * </code>
+ * 
+ * See {@link MailService} 
+ * @author joerg
+ *
+ */
 public class VelocityMail {
 	
 	/** A TO recipient. */
