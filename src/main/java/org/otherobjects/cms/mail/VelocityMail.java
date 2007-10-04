@@ -14,6 +14,7 @@ import org.otherobjects.cms.OtherObjectsException;
  * Simple but hopefully powerful mail class. It can send simpe plain text emails as well as multipart mails with plain text, html and attachment parts.
  * All email addresses (from, replyTo, To, CC, BCC) are validated and not added if validation fails (a runtime exception is thrown).
  * Textual (plain and html) content can be specified directly in String form or by passing in the path to a velocity template and a map to be used as a model when rendering the template.
+ * Beware: if the plain or html body is specified directly as a string it will take precedence over an additionaly provided map/template.
  * The simplest possible use looks  like this:
  * 
  * <code>
