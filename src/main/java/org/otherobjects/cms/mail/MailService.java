@@ -153,7 +153,7 @@ public class MailService implements ResourceLoaderAware {
 				
 				BodyPart attachmentBodyPart = new MimeBodyPart();
 	            attachmentBodyPart.setDataHandler(new DataHandler(new URLDataSource(attachmentResource.getURL())));
-
+	            attachmentBodyPart.setFileName(attachmentResource.getFilename());
 				return attachmentBodyPart;
 			}
 
