@@ -8,12 +8,13 @@
 	<!-- Mail -->
 	<bean id="mailSender"
 		class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="intra.woerd.de" />
+		<property name="host" value="localhost" />
+		<property name="port" value="2500"></property>
 	</bean>
 
 	<bean id="mailVelocityEngine"
 		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
-		<property name="resourceLoaderPath" value=""></property>
+		<property name="resourceLoaderPath" value="classpath:org/otherobjects/cms/mail"></property>
 		<!--		<property name="velocityProperties">-->
 		<!--			<value>-->
 		<!--				resource.loader=class-->
