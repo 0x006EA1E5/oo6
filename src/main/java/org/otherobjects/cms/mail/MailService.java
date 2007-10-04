@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.ui.velocity.VelocityEngineUtils;
@@ -192,7 +193,14 @@ public class MailService implements ResourceLoaderAware {
 		        return messagebody;
 			}
 		};
-		mailSender.send(preparator);
+		try{
+			mailSender.send(preparator);
+			logger.info("mail to " + mail.getToRecipients().get(0).getEmail() + " from " + mail.getFromAddress().getEmail() + " with subject: " + mail.getSubject() + " was sent successfully!");
+		}
+		catch(MailException e)
+		{
+			logger.warn("mail to " + mail.getToRecipients().get(0).getEmail() + " from " + mail.getFromAddress().getEmail() + " with subject: " + mail.getSubject() + " couldn't be send!", e);
+		}
 	}
 	
 	private InternetAddress translateAddress(EmailAddress emailAddress) throws UnsupportedEncodingException, AddressException
