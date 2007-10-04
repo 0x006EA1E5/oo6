@@ -168,7 +168,7 @@ public class MailServiceTest extends AbstractSingleSpringContextTests {
 			String bodyText = "This is a test email body";
 			mail.setBody(bodyText);
 			
-			mail.addAttachment("classpath:/org/otherobjects/cms/mail/test.jpg");
+			mail.addAttachment("classpath:/org/otherobjects/cms/mail/DummyPic.jpg");
 
 			mailService.send(mail);
 
@@ -184,13 +184,10 @@ public class MailServiceTest extends AbstractSingleSpringContextTests {
 				
 				Part attachment = main.getBodyPart(1);
 				
-				assertEquals("image/jpeg", attachment.getContentType());
+				assertTrue(attachment.getContentType().startsWith("image/jpeg"));
+				assertEquals("DummyPic.jpg", attachment.getFileName());
 				
 				MimeBodyPart att = (MimeBodyPart) attachment;
-				System.out.println(att.getFileName());
-				
-				
-				
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -202,4 +199,5 @@ public class MailServiceTest extends AbstractSingleSpringContextTests {
 				wiser.stop();
 		}
 	}
+	
 }
