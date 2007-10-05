@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	
+	All content copyright (c) 2003-2007 Terracotta, Inc.,
+	except as may otherwise be noted in a separate copyright notice.
+	All rights reserved.
+	
+-->
+<tc:tc-config xmlns:tc="http://www.terracotta.org/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.terracotta.org/schema/terracotta-4.xsd">
+
+	<servers>
+		<server host="127.0.0.1" name="localhost"></server>
+	</servers>
+
+	<clients>
+		<logs>%(user.home)/terracotta/client-logs/otherdemo/%D</logs>
+	</clients>
+
+	<application>
+		<!-- See the Terracotta Spring Guide for more details of the the <spring/> 
+			section of the  tc-config file -->
+		<spring>
+			<!-- Tell DSO about the webapp we're sharing -->
+			<jee-application name="otherdemo">
+				<session-support>true</session-support>
+				<application-contexts>
+					<application-context>
+						<!-- Tell DSO the location of the bean definition file for this 
+							application context -->
+						<paths>
+							<path>classpath:/otherobjects.resources/config/applicationContext-resources.xml</path>
+							<path>classpath:/otherobjects.resources/config/applicationContext-messages.xml</path>
+							<path>classpath:/otherobjects.resources/config/applicationContext-repository.xml</path>
+							<path>classpath:/otherobjects.resources/config/applicationContext-dwr.xml</path>
+							<path>classpath:/otherobjects.resources/config/applicationContext-dao.xml</path>
+							<path>classpath:/otherobjects.resources/config/applicationContext-otherobjects.xml</path>
+							<path>classpath:/otherobjects.resources/config/applicationContext-security.xml</path>
+						</paths>
+						<!-- Here we're telling DSO about the list of Spring beans that we
+							we wish to share -->
+						<beans>
+							<bean name="org.acegisecurity.context.SecurityContextImpl" />
+						</beans>
+					</application-context>
+				</application-contexts>
+				<instrumented-classes>
+					<include>
+						<class-expression>org.acegisecurity.context.SecurityContextImpl</class-expression>
+					</include>
+					<include>
+						<class-expression>org.acegisecurity.providers.rememberme.RememberMeAuthenticationToken</class-expression>
+					</include>
+					<include>
+						<class-expression>org.acegisecurity.providers.AbstractAuthenticationToken</class-expression>
+					</include>
+					<include>
+						<class-expression>org.acegisecurity.providers.anonymous.AnonymousAuthenticationToken</class-expression>
+					</include>
+					<include>
+						<class-expression>org.acegisecurity.ui.WebAuthenticationDetails</class-expression>
+					</include>
+					<include>
+						<class-expression>org.acegisecurity.GrantedAuthorityImpl</class-expression>
+					</include>
+					<include>
+						<class-expression>org.acegisecurity.ui.savedrequest.SavedRequest</class-expression>
+					</include>
+				</instrumented-classes>
+			</jee-application>
+		</spring>
+	</application>
+</tc:tc-config>

@@ -54,6 +54,7 @@ with Chris and the design team during M4.
 * Filtering
 * Usability testing
 * Template designer + auto-detect templates from FS
+* MagicForms
 [DEFERRED M4: Test environment needed] * Build test hosting environment (Simon to lead)
 [DEFERRED M4: Test environment needed] * Apache Jmeter scripts for performance testing (Martin/Simon)
 [DEFERRED M4: Test environment needed] * Use Selenium scripts for functional testing ajax
