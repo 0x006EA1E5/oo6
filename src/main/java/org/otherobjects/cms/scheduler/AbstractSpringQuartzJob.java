@@ -13,7 +13,7 @@ import org.springframework.context.ApplicationContext;
  * @author joerg
  *
  */
-abstract class AbstractSpringQuartzJob implements Job {
+public abstract class AbstractSpringQuartzJob implements Job {
 
 	private static final String APPLICATION_CONTEXT_KEY = "applicationContext"; // needs to correspond with whatever was specified for the applicationContextSchedulerContextKey property
 																				// in the application context defining org.springframework.scheduling.quartz.SchedulerFactoryBean
