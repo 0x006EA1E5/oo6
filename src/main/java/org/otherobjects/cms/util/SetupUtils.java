@@ -51,8 +51,14 @@ public class SetupUtils
     private Resource nodeTypesConfig;
     private Resource systemDataTypes;
     private Resource siteDataTypes;
+    
+    private boolean standalone = false;
 
-    public void setSystemDataTypes(Resource systemDataTypes)
+    public void setStandalone(boolean standalone) {
+		this.standalone = standalone;
+	}
+
+	public void setSystemDataTypes(Resource systemDataTypes)
     {
         this.systemDataTypes = systemDataTypes;
     }
@@ -180,10 +186,13 @@ public class SetupUtils
         liveSession.save();
 
         //Site types
-        session.getWorkspace().importXML("/types", this.siteDataTypes.getInputStream(), ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
-        session.save();
-        liveSession.getWorkspace().importXML("/types", this.siteDataTypes.getInputStream(), ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
-        liveSession.save();
+        if(!standalone)
+        {
+        	session.getWorkspace().importXML("/types", this.siteDataTypes.getInputStream(), ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+        	session.save();
+        	liveSession.getWorkspace().importXML("/types", this.siteDataTypes.getInputStream(), ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+        	liveSession.save();
+        }
     }
 
     protected Session getSession(String workspaceName) throws LoginException, RepositoryException

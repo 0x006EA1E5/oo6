@@ -34,8 +34,8 @@ public abstract class BaseJcrTestCase extends AbstractTransactionalSpringContext
     @Override
     protected String[] getConfigLocations()
     {
-        setAutowireMode(AUTOWIRE_BY_TYPE);
-        return new String[]{"file:src/test/resources/applicationContext-resources.xml", "file:src/test/resources/applicationContext-repository.xml"};
+        setAutowireMode(AUTOWIRE_BY_NAME);
+        return new String[]{"file:src/test/resources/applicationContext-resources.xml", "file:src/test/resources/applicationContext-repository.xml","file:src/main/resources/otherobjects.resources/config/applicationContext-dao.xml"};
     }
 
     public BaseJcrTestCase()

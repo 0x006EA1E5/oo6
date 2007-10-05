@@ -26,6 +26,22 @@
 		<constructor-arg index="0" value="${jcr.password}" />
 	</bean>
 
+	<!-- Setup -->
+	<bean name="setupUtils" class="org.otherobjects.cms.util.SetupUtils" init-method="bootstrap">
+		<property name="standalone" value="true" />
+		<property name="sessionFactory" ref="&amp;sessionFactory" />
+		<property name="jcrSessionFactory" ref="jcrSessionFactory" />
+		<property name="nodeTypesConfig" value="classpath:otherobjects.resources/config/node-types.cnd" />
+		<property name="systemDataTypes" value="classpath:otherobjects.resources/bootstrap-data/jcr-data-types.xml" />
+	</bean>
+
+	<bean name="bootstrapUtils" class="org.otherobjects.cms.util.BootstrapUtils" init-method="bootstrap">
+		<property name="standalone" value="true" />
+		<property name="jcrTypeService" ref="typeService" />
+		<property name="daoService" ref="daoService" />
+		<property name="bootstrapScript" value="file:target/test-classses/setup.script" />
+	</bean>
+
 	<!-- Mapping -->
 	<bean id="jcrMappingDescriptor" class="org.otherobjects.cms.jcr.TypeServiceMapperImpl">
 		<constructor-arg index="0" value="classpath:otherobjects.resources/config/jcr-mapping.xml" />
@@ -57,15 +73,15 @@
 		<property name="typeService" ref="typeService" />
 	</bean>
 
-	<!-- Types service -->
-	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl" init-method="init">
-		<property name="jcrBeanService" ref="jcrBeanService" />
-	</bean>
+	<bean id="annotationBasedTypeDefBuilder" class="org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder" />
 
-	<!-- Bootstrap types but nothing else -->
-	<bean name="bootstrapUtils" class="org.otherobjects.cms.util.BootstrapUtils" init-method="loadTypes">
-		<property name="jcrTypeService" ref="typeService" />
-		<property name="daoService" ref="daoService" />
+
+	<!-- Types service -->
+	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl" init-method="init"
+		depends-on="setupUtils">
+		<!--		<property name="typeDefDao" ref="typeDefDao" />-->
+		<property name="jcrBeanService" ref="jcrBeanService" />
+		<property name="annotationBasedTypeDefBuilder" ref="annotationBasedTypeDefBuilder"></property>
 	</bean>
 
 	<bean name="jcrBeanService" class="org.otherobjects.cms.beans.JcrBeanService"></bean>
@@ -95,7 +111,6 @@
 			</bean>
 		</property>
 	</bean>
-
 	<bean id="typeDefDao" parent="baseTransactionProxy">
 		<property name="target">
 			<bean class="org.otherobjects.cms.types.TypeDefDaoJackrabbit">
@@ -119,6 +134,18 @@
 						<value>org.otherobjects.cms.model.DynaNode</value>
 					</key>
 					<ref bean="dynaNodeDao" />
+				</entry>
+				<entry>
+					<key>
+						<value>org.otherobjects.cms.model.CmsImage</value>
+					</key>
+					<ref bean="cmsImageDao" />
+				</entry>
+				<entry>
+					<key>
+						<value>org.otherobjects.cms.model.User</value>
+					</key>
+					<ref bean="userDao" />
 				</entry>
 			</map>
 		</property>

@@ -42,6 +42,8 @@ public class BootstrapUtils //implements ApplicationListener
     private DaoService daoService;
     private Resource bootstrapScript;
     private JcrTypeServiceImpl jcrTypeService; 
+    
+    private boolean standalone = false;
 
     public void setJcrTypeService(JcrTypeServiceImpl jcrTypeService) {
 		this.jcrTypeService = jcrTypeService;
@@ -81,7 +83,8 @@ public class BootstrapUtils //implements ApplicationListener
                 loadTypes();
                 
                 runScript(this.bootstrapScript.getInputStream());
-                runScript(new FileInputStream("src/main/resources/site.resources/bootstrap-data/setup.script"));
+                if(!standalone)
+                	runScript(new FileInputStream("src/main/resources/site.resources/bootstrap-data/setup.script"));
             }
             else
             {
@@ -147,4 +150,8 @@ public class BootstrapUtils //implements ApplicationListener
         String script = IOUtils.toString(is);
         shell.evaluate(script);
     }
+
+	public void setStandalone(boolean standalone) {
+		this.standalone = standalone;
+	}
 }
