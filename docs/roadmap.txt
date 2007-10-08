@@ -7,6 +7,7 @@ webservices and plugins
 
 [DONE] * Site Toolbar / Page performance reporting (queries per page via AOP) and disableable -- Rich/Joerg
 [DONE] * Embed Quartz as job scheduler
+[DONE] * Transaction email support incl. logging and testing with Wiser: http://subethasmtp.tigris.org/wiser.html
 
 [IN PROGRESS] * Start documentation
 [IN PROGRESS] * Support blog publishing APIs http://www.blogger.com/developers/api/1_docs/
@@ -18,7 +19,7 @@ webservices and plugins
 * Action/event/scripting framework -- see old UploadController
 * Debug page: System and server status indicators, timezone (check for common server problems)
 * Script/action/long-task/import-export logging
-* Trsansaction email support inc logging and testing with Wiser: http://subethasmtp.tigris.org/wiser.html
+
 * Localized sites
 * JCR based properties and pick-lists
 * NavigatorService: Site structure finalised + nav/titles/crumbs macros + redirection support
