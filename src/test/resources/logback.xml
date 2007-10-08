@@ -29,11 +29,17 @@
 	<logger name="org.otherobjects.cms.controllers.SiteController">
 		<level value="INFO" />
 	</logger>
+	<logger name="org.otherobjects.cms.controllers.WorkbenchController">
+		<level value="DEBUG" />
+	</logger>
 	<logger name="org.otherobjects.cms.servlet.StaticResourceServlet">
 		<level value="INFO" />
 	</logger>
 	<!-- Show JSON output -->
 	<logger name="org.otherobjects.cms.views.JsonView">
+		<level value="DEBUG" />
+	</logger>
+	<logger name="org.otherobjects.cms.mail.MailService">
 		<level value="DEBUG" />
 	</logger>
 </configuration>

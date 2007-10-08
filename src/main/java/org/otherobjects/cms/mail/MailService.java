@@ -195,11 +195,11 @@ public class MailService implements ResourceLoaderAware {
 		};
 		try{
 			mailSender.send(preparator);
-			logger.info("mail to " + mail.getToRecipients().get(0).getEmail() + " from " + mail.getFromAddress().getEmail() + " with subject: " + mail.getSubject() + " was sent successfully!");
+			logger.info("mail to " + mail.getToRecipients().get(0).getEmail() + " from " + mail.getFromAddress().getEmail() + " with subject: '" + mail.getSubject() + "' was sent successfully!");
 		}
 		catch(MailException e)
 		{
-			logger.warn("mail to " + mail.getToRecipients().get(0).getEmail() + " from " + mail.getFromAddress().getEmail() + " with subject: " + mail.getSubject() + " couldn't be send!", e);
+			logger.warn("mail to " + mail.getToRecipients().get(0).getEmail() + " from " + mail.getFromAddress().getEmail() + " with subject: '" + mail.getSubject() + "' couldn't be send!", e);
 		}
 	}
 	
