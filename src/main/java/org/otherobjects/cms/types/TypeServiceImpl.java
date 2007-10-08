@@ -34,7 +34,7 @@ public class TypeServiceImpl extends AbstactTypeService
     	// FIXME Temp hack to manually load annotated types
     	try
         {
-            Set<Class<?>> annotatedClasses = annotationBasedTypeDefBuilder.findAnnotatedClasses("org.otherobjects.cms.model");
+            Set<Class<?>> annotatedClasses = annotationBasedTypeDefBuilder.findAnnotatedClasses("org.otherobjects.cms");
             for(Class c : annotatedClasses)
                 registerType(annotationBasedTypeDefBuilder.getTypeDef(c));
         }
