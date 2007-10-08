@@ -2,6 +2,10 @@ package org.otherobjects.cms.model;
 
 import java.io.File;
 
+import org.otherobjects.cms.types.annotation.Property;
+import org.otherobjects.cms.types.annotation.PropertyType;
+import org.otherobjects.cms.types.annotation.Type;
+
 /**
  * Represents a content managed image object.
  * 
@@ -10,6 +14,7 @@ import java.io.File;
  * 
  * @author rich
  */
+@Type(labelProperty = "label")
 public class CmsImage extends DynaNode
 {
     public static final String DATA_FILE_COLLECTION_NAME = "images";
@@ -65,6 +70,7 @@ public class CmsImage extends DynaNode
     }
 
     @Override
+    @Property(order = 10)
     public String getLabel()
     {
         return this.label;
@@ -76,6 +82,7 @@ public class CmsImage extends DynaNode
         this.label = label;
     }
 
+    @Property(order = 20, type = PropertyType.TEXT)
     public String getDescription()
     {
         return this.description;
@@ -86,6 +93,7 @@ public class CmsImage extends DynaNode
         this.description = description;
     }
 
+    @Property(order = 30, type = PropertyType.TEXT)
     public String getKeywords()
     {
         return this.keywords;
@@ -96,6 +104,7 @@ public class CmsImage extends DynaNode
         this.keywords = keywords;
     }
 
+    @Property(order = 40, type = PropertyType.TEXT)
     public String getCopyright()
     {
         return this.copyright;
@@ -106,6 +115,7 @@ public class CmsImage extends DynaNode
         this.copyright = copyright;
     }
 
+    @Property(order = 70)
     public Long getOriginalWidth()
     {
         return this.originalWidth;
@@ -116,6 +126,7 @@ public class CmsImage extends DynaNode
         this.originalWidth = originalWidth;
     }
 
+    @Property(order = 80)
     public Long getOriginalHeight()
     {
         return this.originalHeight;
@@ -126,6 +137,7 @@ public class CmsImage extends DynaNode
         this.originalHeight = originalHeight;
     }
 
+    @Property(order = 100)
     public String getOriginalProvider()
     {
         return this.originalProvider;
@@ -136,6 +148,7 @@ public class CmsImage extends DynaNode
         this.originalProvider = originalProvider;
     }
 
+    @Property(order = 110)
     public String getOriginalId()
     {
         return this.originalId;
@@ -151,6 +164,7 @@ public class CmsImage extends DynaNode
         this.newFile = newFile;
     }
 
+    @Property(order = 90)
     public String getOriginalFileId()
     {
         return this.originalFileId;

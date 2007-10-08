@@ -2,9 +2,14 @@ package org.otherobjects.cms.model;
 
 import java.util.List;
 
+import org.otherobjects.cms.types.annotation.Property;
+import org.otherobjects.cms.types.annotation.PropertyType;
+import org.otherobjects.cms.types.annotation.Type;
+
 import flexjson.JSON;
 
 @SuppressWarnings("unchecked")
+@Type
 public class SmartFolder extends DynaNode implements Folder
 {
     private String label;
@@ -18,7 +23,8 @@ public class SmartFolder extends DynaNode implements Folder
     }
 
     @JSON(include = false)
-    public List getAllowedTypes()
+   // @Property(order = 50, collectionElementType = PropertyType.STRING)
+    public List<String> getAllowedTypes()
     {
         // Smart folders are read only
         return null;
@@ -30,6 +36,7 @@ public class SmartFolder extends DynaNode implements Folder
     }
 
     @Override
+    @Property(order = 10)
     public String getLabel()
     {
         return this.label;
@@ -41,6 +48,7 @@ public class SmartFolder extends DynaNode implements Folder
         this.label = label;
     }
 
+    @Property(order = 20)
     public String getQuery()
     {
         return this.query;
@@ -51,6 +59,7 @@ public class SmartFolder extends DynaNode implements Folder
         this.query = query;
     }
 
+    @Property(order = 40)
     public String getCssClass()
     {
         return this.cssClass;
@@ -61,6 +70,7 @@ public class SmartFolder extends DynaNode implements Folder
         this.cssClass = cssClass;
     }
 
+    @Property(order = 30)
     public String getSearchTerm()
     {
         return this.searchTerm;

@@ -4,31 +4,35 @@ import java.util.List;
 
 import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.cms.types.annotation.Property;
+import org.otherobjects.cms.types.annotation.PropertyType;
+import org.otherobjects.cms.types.annotation.Type;
 
 import flexjson.JSON;
 
-@SuppressWarnings("unchecked")
+@Type
 public class SiteFolder extends DynaNode implements Folder
 {
     private String label;
     private String cssClass;
-    //FIXME This List should be TypeDefs but they are really DynaNodes...
-    private List allowedTypes;
+    private List<String> allowedTypes;
 
     @Override
     public boolean isFolder()
     {
         return true;
     }
-    
-    public List getAllAllowedTypes()
+
+    @SuppressWarnings("unchecked")
+    public List<String> getAllAllowedTypes()
     {
         if (getAllowedTypes() != null && getAllowedTypes().size() > 0)
             return getAllowedTypes();
         else
-            return (List) ((TypeService)SingletonBeanLocator.getBean("typeService")).getTypesBySuperClass(DynaNode.class);
+            return (List) ((TypeService) SingletonBeanLocator.getBean("typeService")).getTypesBySuperClass(DynaNode.class);
     }
-    
+
+    @Property(order = 40)
     public String getCssClass()
     {
         return cssClass;
@@ -38,18 +42,20 @@ public class SiteFolder extends DynaNode implements Folder
     {
         this.cssClass = cssClass;
     }
-    
+
     @JSON(include = false)
-    public List getAllowedTypes()
+    @Property(order = 50, collectionElementType = PropertyType.STRING)
+    public List<String> getAllowedTypes()
     {
         return allowedTypes;
     }
 
-    public void setAllowedTypes(List allowedTypes)
+    public void setAllowedTypes(List<String> allowedTypes)
     {
         this.allowedTypes = allowedTypes;
     }
 
+    @Property(order = 20)
     public String getLabel()
     {
         // FIXME Label should be fetched via dedicated method

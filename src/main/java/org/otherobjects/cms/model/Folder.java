@@ -11,9 +11,9 @@ public interface Folder
 
     public List getAllowedTypes();
 
-    public void setAllowedTypes(List allowedTypes);
+    public void setAllowedTypes(List<String> allowedTypes);
 
-    public List getAllAllowedTypes();
+    public List<String> getAllAllowedTypes();
 
     public String getCssClass();
 

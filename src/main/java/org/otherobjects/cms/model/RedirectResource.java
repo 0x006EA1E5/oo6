@@ -1,10 +1,13 @@
 package org.otherobjects.cms.model;
 
+import org.otherobjects.cms.types.annotation.Property;
+import org.otherobjects.cms.types.annotation.Type;
+
+@Type
 public class RedirectResource extends DynaNode
 {
     private static final String ICON_PATH = "otherobjects.resources/static/icons/page-white-go.png";
-    
-    
+
     private String label;
     private String url;
     private Boolean temporary;
@@ -14,8 +17,8 @@ public class RedirectResource extends DynaNode
     {
         return ICON_PATH;
     }
-     
-    
+
+    @Property(order = 10)
     public String getLabel()
     {
         return label;
@@ -26,6 +29,7 @@ public class RedirectResource extends DynaNode
         this.label = label;
     }
 
+    @Property(order = 10)
     public String getUrl()
     {
         return url;
@@ -36,6 +40,7 @@ public class RedirectResource extends DynaNode
         this.url = url;
     }
 
+    @Property(order = 10)
     public Boolean getTemporary()
     {
         return temporary;

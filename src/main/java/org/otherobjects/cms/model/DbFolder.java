@@ -5,17 +5,33 @@ import java.util.List;
 
 import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.cms.types.annotation.Property;
+import org.otherobjects.cms.types.annotation.PropertyType;
+import org.otherobjects.cms.types.annotation.Type;
 
 import flexjson.JSON;
 
 @SuppressWarnings("unchecked")
+@Type
 public class DbFolder extends DynaNode implements Folder
 {
-
+    private String code;
     private String label;
     private String mainType;
     private String mainTypeQuery;
     private String cssClass;
+
+    
+    @Property(order=0)
+    public String getCode()
+    {
+        return code;
+    }
+
+    public void setCode(String code)
+    {
+        this.code = code;
+    }
 
     public List getAllAllowedTypes()
     {
@@ -23,7 +39,8 @@ public class DbFolder extends DynaNode implements Folder
     }
 
     @JSON(include = false)
-    public List getAllowedTypes()
+    //@Property(order = 50, collectionElementType = PropertyType.STRING)
+    public List<String> getAllowedTypes()
     {
         // Only allowed type is the main type...    
         List types = new ArrayList();
@@ -37,6 +54,7 @@ public class DbFolder extends DynaNode implements Folder
     }
 
     @Override
+    @Property(order = 10)
     public String getLabel()
     {
         return this.label;
@@ -48,6 +66,7 @@ public class DbFolder extends DynaNode implements Folder
         this.label = label;
     }
 
+    @Property(order = 20)
     public String getMainType()
     {
         return this.mainType;
@@ -58,6 +77,7 @@ public class DbFolder extends DynaNode implements Folder
         this.mainType = mainType;
     }
 
+    @Property(order = 30)
     public String getMainTypeQuery()
     {
         return this.mainTypeQuery;
@@ -68,6 +88,7 @@ public class DbFolder extends DynaNode implements Folder
         this.mainTypeQuery = mainTypeQuery;
     }
 
+    @Property(order = 40)
     public String getCssClass()
     {
         return this.cssClass;
