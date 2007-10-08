@@ -105,7 +105,7 @@ brushed:~ rich$
         repository. You will need to add this repository to the Maven
         setting.xml file at <emphasis
         role="bold">~/.m2/settings.xml</emphasis>. If the folder or the file
-        does not exist then you should create them manually. </para>
+        does not exist then you should create them manually.</para>
 
         <note>
           <para>TODO Can we move this information into the pom instead?</para>
@@ -431,7 +431,7 @@ Admin : http://localhost:8080/go/workbench/
     <section>
       <title>JMX services</title>
 
-      <para>The following services are JMX enabled: </para>
+      <para>The following services are JMX enabled:</para>
 
       <table>
         <title>JMX enabled services</title>
@@ -472,7 +472,121 @@ Admin : http://localhost:8080/go/workbench/
   <chapter>
     <title>Using Maven</title>
 
-    <para></para>
+    <para>Maven is the software managment tool we use for OTHERobjects. It
+    handles tasks suchas building, testing, packaging and dependecy
+    management.</para>
+
+    <section>
+      <title>Maven goals</title>
+
+      <table>
+        <title>Maven tasks</title>
+
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry align="center">Command</entry>
+
+              <entry align="center">Task</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>mvn clean</entry>
+
+              <entry>Removes build artifacts</entry>
+            </row>
+
+            <row>
+              <entry>mvn compile</entry>
+
+              <entry>Compiles project source</entry>
+            </row>
+
+            <row>
+              <entry>mvn jetty:run</entry>
+
+              <entry>Runs app from source</entry>
+            </row>
+
+            <row>
+              <entry>mvn jetty:run-war</entry>
+
+              <entry>Builds war and runs from that</entry>
+            </row>
+
+            <row>
+              <entry>mvn war:war</entry>
+
+              <entry>Builds war (note: must compile first)</entry>
+            </row>
+
+            <row>
+              <entry>mvn site</entry>
+
+              <entry>Builds docs in target/site. Includes test results and
+              coverage.</entry>
+            </row>
+
+            <row>
+              <entry>mvn hibernate3:hbm2ddl</entry>
+
+              <entry>Generates and executes db schema</entry>
+            </row>
+
+            <row>
+              <entry>mvn jackrabbit:import</entry>
+
+              <entry>Seeds JCR with default data</entry>
+            </row>
+
+            <row>
+              <entry>mvn dbunit:operation</entry>
+
+              <entry>Seed database with default data</entry>
+            </row>
+
+            <row>
+              <entry>mvn surefire-report:report</entry>
+
+              <entry>Runs unit tests and generates test report</entry>
+            </row>
+
+            <row>
+              <entry>mvn jdocbook:generate</entry>
+
+              <entry>Creates documentation in target/docbook/</entry>
+            </row>
+
+            <row>
+              <entry>mvn plugin:xdoc</entry>
+
+              <entry>Generates plugin documentation</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section>
+      <title>Useful resources</title>
+
+      <para>Offictial book: http://www.sonatype.com/book/</para>
+
+      <para>Repository search: http://www.mvnrepository.com/</para>
+
+      <para>Default repository: http://repo1.maven.org/maven2/ </para>
+
+      <para>Our repository: http://maven.otherobjects.org/repository/ </para>
+
+      <para>Host your own repository server:
+      http://www.jfrog.org/sites/artifactory/latest/ </para>
+
+      <para>Plugin dev guide:
+      http://maven.apache.org/guides/plugin/guide-java-plugin-development.html
+      </para>
+    </section>
   </chapter>
 
   <chapter>
