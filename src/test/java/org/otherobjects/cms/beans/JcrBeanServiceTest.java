@@ -4,12 +4,12 @@ import junit.framework.TestCase;
 
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.types.TypeServiceImpl;
-import org.otherobjects.cms.types.PropertyDef;
-import org.otherobjects.cms.types.TypeDef;
+import org.otherobjects.cms.types.PropertyDefImpl;
+import org.otherobjects.cms.types.TypeDefImpl;
 
 public class JcrBeanServiceTest extends TestCase//AbstractDependencyInjectionSpringContextTests
 {
-    private TypeDef td;
+    private TypeDefImpl td;
     private TypeServiceImpl typeService;
     private JcrBeanService jcrBeanService;
 
@@ -26,17 +26,17 @@ public class JcrBeanServiceTest extends TestCase//AbstractDependencyInjectionSpr
     {
         typeService = new TypeServiceImpl();
         typeService.reset();
-        td = new TypeDef("org.otherobjects.cms.test.TestObject");
-        td.addProperty(new PropertyDef("testString", "string", null, null));
-        td.addProperty(new PropertyDef("testText", "text", null, null));
-        td.addProperty(new PropertyDef("testDate", "date", null, null));
-        td.addProperty(new PropertyDef("testTime", "time", null, null));
-        td.addProperty(new PropertyDef("testTimestamp", "timestamp", null, null));
-        td.addProperty(new PropertyDef("testNumber", "number", null, null));
-        td.addProperty(new PropertyDef("testDecimal", "decimal", null, null));
-        td.addProperty(new PropertyDef("testBoolean", "boolean", null, null));
-        td.addProperty(new PropertyDef("testReference", "reference", "org.otherobjects.cms.test.TestObject", null));
-        td.addProperty(new PropertyDef("testStringsList", "string", null, "list"));
+        td = new TypeDefImpl("org.otherobjects.cms.test.TestObject");
+        td.addProperty(new PropertyDefImpl("testString", "string", null, null));
+        td.addProperty(new PropertyDefImpl("testText", "text", null, null));
+        td.addProperty(new PropertyDefImpl("testDate", "date", null, null));
+        td.addProperty(new PropertyDefImpl("testTime", "time", null, null));
+        td.addProperty(new PropertyDefImpl("testTimestamp", "timestamp", null, null));
+        td.addProperty(new PropertyDefImpl("testNumber", "number", null, null));
+        td.addProperty(new PropertyDefImpl("testDecimal", "decimal", null, null));
+        td.addProperty(new PropertyDefImpl("testBoolean", "boolean", null, null));
+        td.addProperty(new PropertyDefImpl("testReference", "reference", "org.otherobjects.cms.test.TestObject", null));
+        td.addProperty(new PropertyDefImpl("testStringsList", "string", null, "list"));
         td.setLabelProperty("testString");
         typeService.registerType(td);
 

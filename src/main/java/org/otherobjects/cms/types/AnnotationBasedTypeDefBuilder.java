@@ -2,6 +2,7 @@ package org.otherobjects.cms.types;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,11 +50,22 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder
         Assert.isTrue(clazz.isAnnotationPresent(Type.class), "TypeDef can't be built as there are no Type annotations present: " + clazz.getName());
 
         Type typeDefAnnotation = clazz.getAnnotation(Type.class);
-        TypeDef typeDef = new TypeDef();
+        TypeDefImpl typeDef = new TypeDefImpl();
         typeDef.setName(clazz.getName());
         typeDef.setClassName(clazz.getName());
         typeDef.setSuperClassName(typeDefAnnotation.superClassName());
+
         typeDef.setLabel(typeDefAnnotation.label());
+        // Infer label if not set
+        if (StringUtils.isEmpty(typeDefAnnotation.label()))
+        {
+            typeDef.setLabel(org.otherobjects.cms.util.StringUtils.generateLabel(typeDefAnnotation.label()));
+        }
+        else
+        {
+            typeDef.setLabel(typeDefAnnotation.label());
+        }
+
         typeDef.setDescription(typeDefAnnotation.description());
         typeDef.setLabelProperty(typeDefAnnotation.labelProperty());
 
@@ -68,7 +80,7 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder
             Property propertyDefAnnotation = method.getAnnotation(Property.class);
             if (propertyDefAnnotation != null)
             {
-                PropertyDef propertyDef = new PropertyDef();
+                PropertyDefImpl propertyDef = new PropertyDefImpl();
                 propertyDef.setName(getPropertyNameFromGetterOrSetter(method.getName()));
                 propertyDef.setDescription(propertyDefAnnotation.description());
                 propertyDef.setHelp(propertyDefAnnotation.help());
@@ -100,11 +112,45 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder
                 propertyDef.setSize(propertyDefAnnotation.size());
                 propertyDef.setValang(propertyDefAnnotation.valang());
                 propertyDef.setOrder(propertyDefAnnotation.order());
-                // TODO Reference and component support
-                if (propertyDefAnnotation.type().equals(PropertyType.LIST))
+                Class relatedType = null;
+                if (propertyDef.getType().equals(PropertyType.LIST.value()) || propertyDef.getType().equals(PropertyType.COMPONENT.value())
+                        || propertyDef.getType().equals(PropertyType.REFERENCE.value()))
                 {
-                    propertyDef.setRelatedType(propertyDefAnnotation.relatedType());
-                    propertyDef.setCollectionElementType(propertyDefAnnotation.collectionElementType().value());
+                    if (StringUtils.isEmpty(propertyDefAnnotation.relatedType()))
+                    {
+                        // Infer related type based on return type
+                        if (propertyDef.getType().equals(PropertyType.LIST.value()))
+                        {
+                            // List -- so look at generic type
+                            java.lang.reflect.ParameterizedType genericReturnType = (ParameterizedType) method.getGenericReturnType();
+                            if (genericReturnType != null)
+                            {
+                                relatedType = (Class) genericReturnType.getActualTypeArguments()[0];
+                            }
+                        }
+                        else
+                        {
+                            relatedType = method.getReturnType();
+                        }
+                    }
+                    else
+                    {
+                        relatedType = Class.forName(propertyDefAnnotation.relatedType());
+                    }
+
+                    propertyDef.setRelatedType(relatedType.getName());
+                }
+                if (propertyDef.getType().equals(PropertyType.LIST.value()))
+                {
+                    if (propertyDefAnnotation.collectionElementType().equals(PropertyType.STRING) && !relatedType.equals(String.class))
+                    {
+                        PropertyType pt = getDefaultTypeForClass(relatedType);
+                        propertyDef.setCollectionElementType(pt.value());
+                    }
+                    else
+                    {
+                        propertyDef.setCollectionElementType(propertyDefAnnotation.collectionElementType().value());
+                    }
                 }
                 propDefs.add(propertyDef);
             }
@@ -137,6 +183,9 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder
         else if (DynaNode.class.isAssignableFrom(type))
             return PropertyType.REFERENCE;
 
+        else if (List.class.isAssignableFrom(type))
+            return PropertyType.LIST;
+
         // No suitable default available
         return null;
     }
@@ -162,7 +211,8 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder
         for (Resource resource : resources)
         {
             Class<?> c = getClassFromResource(resource);
-            if (c.isAnnotationPresent(Type.class)){
+            if (c.isAnnotationPresent(Type.class))
+            {
                 matches.add(c);
             }
         }

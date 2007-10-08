@@ -13,7 +13,7 @@ public @interface Type {
 
     String superClassName() default "org.otherobjects.cms.model.DynaNode";
 
-    String label();
+    String label() default "";
 
     String description() default "";
 

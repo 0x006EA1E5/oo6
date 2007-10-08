@@ -8,9 +8,9 @@ import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.test.BaseJcrTestCase;
+import org.otherobjects.cms.types.PropertyDefImpl;
+import org.otherobjects.cms.types.TypeDefImpl;
 import org.otherobjects.cms.types.TypeServiceImpl;
-import org.otherobjects.cms.types.PropertyDef;
-import org.otherobjects.cms.types.TypeDef;
 
 public abstract class BaseDynaNodeTest extends BaseJcrTestCase
 {
@@ -62,60 +62,60 @@ public abstract class BaseDynaNodeTest extends BaseJcrTestCase
 
     protected void setupTypesService(TypeServiceImpl typeService)
     {
-        TypeDef td2 = new TypeDef("org.otherobjects.Dyna.jcr.TestReferenceObject");
-        td2.addProperty(new PropertyDef("name", "string", null, null));
+        TypeDefImpl td2 = new TypeDefImpl("org.otherobjects.Dyna.jcr.TestReferenceObject");
+        td2.addProperty(new PropertyDefImpl("name", "string", null, null));
         td2.setLabelProperty("name");
         typeService.registerType(td2);
 
-        TypeDef td3 = new TypeDef("org.otherobjects.Dyna.jcr.TestComponentObject");
-        td3.addProperty(new PropertyDef("name", "string", null, null));
-        td3.addProperty(new PropertyDef("requiredString", "string", null, null, true));
+        TypeDefImpl td3 = new TypeDefImpl("org.otherobjects.Dyna.jcr.TestComponentObject");
+        td3.addProperty(new PropertyDefImpl("name", "string", null, null));
+        td3.addProperty(new PropertyDefImpl("requiredString", "string", null, null, true));
         // FIXME Nestsed components
-        // td3.addProperty(new PropertyDef("component", "component", "org.otherobjects.Dyna.jcr.TestComponentObject", null));
+        // td3.addProperty(new PropertyDefImpl("component", "component", "org.otherobjects.Dyna.jcr.TestComponentObject", null));
         td3.setLabelProperty("name");
         typeService.registerType(td3);
 
-        TypeDef td4 = new TypeDef("org.otherobjects.Dyna.jcr.TestComponentObjectWithSimpleList");
-        td4.addProperty(new PropertyDef("name", "string", null, null));
-        td4.addProperty(new PropertyDef("testSimpleList", "list", null, "string"));
+        TypeDefImpl td4 = new TypeDefImpl("org.otherobjects.Dyna.jcr.TestComponentObjectWithSimpleList");
+        td4.addProperty(new PropertyDefImpl("name", "string", null, null));
+        td4.addProperty(new PropertyDefImpl("testSimpleList", "list", null, "string"));
         td4.setLabelProperty("name");
         typeService.registerType(td4);
 
-        TypeDef td5 = new TypeDef("org.otherobjects.Dyna.jcr.TestComponentObjectWithComponentList");
-        td5.addProperty(new PropertyDef("name", "string", null, null));
-        td5.addProperty(new PropertyDef("testComponentsList2", "list", "org.otherobjects.Dyna.jcr.TestComponentObjectWithSimpleList", "component"));
+        TypeDefImpl td5 = new TypeDefImpl("org.otherobjects.Dyna.jcr.TestComponentObjectWithComponentList");
+        td5.addProperty(new PropertyDefImpl("name", "string", null, null));
+        td5.addProperty(new PropertyDefImpl("testComponentsList2", "list", "org.otherobjects.Dyna.jcr.TestComponentObjectWithSimpleList", "component"));
         td5.setLabelProperty("name");
         typeService.registerType(td5);
 
-        TypeDef td6 = new TypeDef("org.otherobjects.Dyna.jcr.TestSimpleSubComponent");
-        td6.addProperty(new PropertyDef("name", "string", null, null));
-        td6.addProperty(new PropertyDef("reference", "reference", "org.otherobjects.Dyna.jcr.TestReferenceObject", null));
+        TypeDefImpl td6 = new TypeDefImpl("org.otherobjects.Dyna.jcr.TestSimpleSubComponent");
+        td6.addProperty(new PropertyDefImpl("name", "string", null, null));
+        td6.addProperty(new PropertyDefImpl("reference", "reference", "org.otherobjects.Dyna.jcr.TestReferenceObject", null));
         td6.setLabelProperty("name");
         typeService.registerType(td6);
 
-        TypeDef td7 = new TypeDef("org.otherobjects.Dyna.jcr.TestComponentObjectWithSubComponent");
-        td7.addProperty(new PropertyDef("name", "string", null, null));
-        td7.addProperty(new PropertyDef("subComponent", "component", "org.otherobjects.Dyna.jcr.TestSimpleSubComponent", null));
+        TypeDefImpl td7 = new TypeDefImpl("org.otherobjects.Dyna.jcr.TestComponentObjectWithSubComponent");
+        td7.addProperty(new PropertyDefImpl("name", "string", null, null));
+        td7.addProperty(new PropertyDefImpl("subComponent", "component", "org.otherobjects.Dyna.jcr.TestSimpleSubComponent", null));
         td7.setLabelProperty("name");
         typeService.registerType(td7);
 
-        TypeDef td = new TypeDef("org.otherobjects.Dyna.jcr.TestObject");
-        td.addProperty(new PropertyDef("testString", "string", null, null));
-        td.addProperty(new PropertyDef("testText", "text", null, null));
-        td.addProperty(new PropertyDef("testDate", "date", null, null));
-        td.addProperty(new PropertyDef("testTime", "time", null, null));
-        td.addProperty(new PropertyDef("testTimestamp", "timestamp", null, null));
-        td.addProperty(new PropertyDef("testNumber", "number", null, null));
-        td.addProperty(new PropertyDef("testDecimal", "decimal", null, null));
-        td.addProperty(new PropertyDef("testBoolean", "boolean", null, null));
-        td.addProperty(new PropertyDef("testComponent", "component", "org.otherobjects.Dyna.jcr.TestComponentObject", null));
-        td.addProperty(new PropertyDef("testReference", "reference", "org.otherobjects.Dyna.jcr.TestReferenceObject", null));
-        td.addProperty(new PropertyDef("testReference2", "reference", "org.otherobjects.Dyna.jcr.TestReferenceObject", null, true));
-        td.addProperty(new PropertyDef("testStringsList", "list", null, "string"));
-        td.addProperty(new PropertyDef("testComponentsList", "list", "org.otherobjects.Dyna.jcr.TestComponentObject", "component"));
-        td.addProperty(new PropertyDef("testReferencesList", "list", "org.otherobjects.Dyna.jcr.TestReferenceObject", "reference"));
-        td.addProperty(new PropertyDef("testDeepComponentsList", "list", "org.otherobjects.Dyna.jcr.TestComponentObjectWithComponentList", "component"));
-        td.addProperty(new PropertyDef("testDeepComponent", "component", "org.otherobjects.Dyna.jcr.TestComponentObjectWithSubComponent", null));
+        TypeDefImpl td = new TypeDefImpl("org.otherobjects.Dyna.jcr.TestObject");
+        td.addProperty(new PropertyDefImpl("testString", "string", null, null));
+        td.addProperty(new PropertyDefImpl("testText", "text", null, null));
+        td.addProperty(new PropertyDefImpl("testDate", "date", null, null));
+        td.addProperty(new PropertyDefImpl("testTime", "time", null, null));
+        td.addProperty(new PropertyDefImpl("testTimestamp", "timestamp", null, null));
+        td.addProperty(new PropertyDefImpl("testNumber", "number", null, null));
+        td.addProperty(new PropertyDefImpl("testDecimal", "decimal", null, null));
+        td.addProperty(new PropertyDefImpl("testBoolean", "boolean", null, null));
+        td.addProperty(new PropertyDefImpl("testComponent", "component", "org.otherobjects.Dyna.jcr.TestComponentObject", null));
+        td.addProperty(new PropertyDefImpl("testReference", "reference", "org.otherobjects.Dyna.jcr.TestReferenceObject", null));
+        td.addProperty(new PropertyDefImpl("testReference2", "reference", "org.otherobjects.Dyna.jcr.TestReferenceObject", null, true));
+        td.addProperty(new PropertyDefImpl("testStringsList", "list", null, "string"));
+        td.addProperty(new PropertyDefImpl("testComponentsList", "list", "org.otherobjects.Dyna.jcr.TestComponentObject", "component"));
+        td.addProperty(new PropertyDefImpl("testReferencesList", "list", "org.otherobjects.Dyna.jcr.TestReferenceObject", "reference"));
+        td.addProperty(new PropertyDefImpl("testDeepComponentsList", "list", "org.otherobjects.Dyna.jcr.TestComponentObjectWithComponentList", "component"));
+        td.addProperty(new PropertyDefImpl("testDeepComponent", "component", "org.otherobjects.Dyna.jcr.TestComponentObjectWithSubComponent", null));
         td.setLabelProperty("testString");
         typeService.registerType(td);
 

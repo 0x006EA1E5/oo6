@@ -5,27 +5,27 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-public class TypeDefTest extends TestCase
+public class TypeDefImplTest extends TestCase
 {
     public void testSetProperties()
     {
-        TypeDef td = new TypeDef("Test");
+        TypeDefImpl td = new TypeDefImpl("Test");
         List<PropertyDef> properties = new ArrayList<PropertyDef>();
-        properties.add(new PropertyDef("name", "string", null, null));
+        properties.add(new PropertyDefImpl("name", "string", null, null));
         td.setProperties(properties);
         assertNotNull(td.getProperty("name"));
     }
 
     public void testAddProperty()
     {
-        TypeDef td = new TypeDef("Test");
-        td.addProperty(new PropertyDef("name", "string", null, null));
+        TypeDefImpl td = new TypeDefImpl("Test");
+        td.addProperty(new PropertyDefImpl("name", "string", null, null));
         assertNotNull(td.getProperty("name"));
         
         // Duplicate checking
         try
         {
-            td.addProperty(new PropertyDef("name", "string", null, null));
+            td.addProperty(new PropertyDefImpl("name", "string", null, null));
             fail();
         }
         catch (Exception e)

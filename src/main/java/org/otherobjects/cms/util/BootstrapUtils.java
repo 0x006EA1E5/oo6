@@ -16,12 +16,12 @@ import org.acegisecurity.userdetails.UserDetails;
 import org.apache.commons.io.IOUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
+import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.dao.UserDao;
 import org.otherobjects.cms.model.Role;
 import org.otherobjects.cms.model.User;
-import org.otherobjects.cms.types.TypeServiceImpl;
 import org.otherobjects.cms.types.TypeDef;
-import org.otherobjects.cms.types.TypeDefDao;
+import org.otherobjects.cms.types.TypeServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -107,7 +107,7 @@ public class BootstrapUtils //implements ApplicationListener
     public void loadTypes()
     {
         // load jcr backed typeDefs
-        jcrTypeService.loadJcrBackedTypes((TypeDefDao) daoService.getDao(TypeDef.class));
+        jcrTypeService.loadJcrBackedTypes((DynaNodeDao) daoService.getDao(TypeDef.class));
     }
     
     protected User createUser()
@@ -146,6 +146,7 @@ public class BootstrapUtils //implements ApplicationListener
 
         Binding binding = new Binding();
         binding.setVariable("daoService", this.daoService);
+        binding.setVariable("typeService", this.jcrTypeService);
         GroovyShell shell = new GroovyShell(binding);
         String script = IOUtils.toString(is);
         shell.evaluate(script);

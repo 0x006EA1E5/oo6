@@ -10,6 +10,7 @@ import org.otherobjects.cms.beans.BaseDynaNodeTest;
 import org.otherobjects.cms.binding.BindServiceImpl;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.types.PropertyDef;
+import org.otherobjects.cms.types.PropertyDefImpl;
 import org.otherobjects.cms.types.TypeDef;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.BindingResult;
@@ -36,13 +37,13 @@ public class DynaNodeValidatorTest extends BaseDynaNodeTest
         // modify the test type to include some stuff that needs to be validated
 
         TypeDef typeDef = typeService.getType(BaseDynaNodeTest.TEST_TYPE_NAME);
-        PropertyDef testString = typeDef.getProperty("testString");
+        PropertyDefImpl testString = (PropertyDefImpl) typeDef.getProperty("testString");
         testString.setRequired(true);
 
-        PropertyDef testText = typeDef.getProperty("testText");
+        PropertyDefImpl testText = (PropertyDefImpl) typeDef.getProperty("testText");
         testText.setSize(10);
 
-        PropertyDef testNumber = typeDef.getProperty("testNumber");
+        PropertyDefImpl testNumber = (PropertyDefImpl) typeDef.getProperty("testNumber");
         testNumber.setValang("{ ? : ? between 0 and 10 : 'out of range' : 'out.of.specified.range' : 0, 10 }");
 
         validator = new DynaNodeValidator();

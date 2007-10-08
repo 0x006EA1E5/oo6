@@ -49,13 +49,12 @@
 		<property name="daoService" ref="daoService" />
 	</bean>
 
-	<bean name="redirectHandler" class="org.otherobjects.cms.controllers.handlers.RedirectHandler">
-	</bean>
+	<bean name="redirectHandler" class="org.otherobjects.cms.controllers.handlers.RedirectHandler"></bean>
 
 	<bean name="syndicationFeedHandler" class="org.otherobjects.cms.controllers.handlers.SyndicationFeedHandler">
 		<property name="daoService" ref="daoService" />
 	</bean>
-	
+
 	<bean name="scriptHandler" class="org.otherobjects.cms.controllers.handlers.ScriptHandler">
 		<property name="daoService" ref="daoService" />
 	</bean>
@@ -144,6 +143,9 @@
 		</property>
 	</bean>
 
+	<!-- 
+		FIXME Classpath loader means autoreload for macro library can not work
+	-->
 	<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
 		<property name="resourceLoaderPath" value="/" />
 		<property name="velocityProperties">

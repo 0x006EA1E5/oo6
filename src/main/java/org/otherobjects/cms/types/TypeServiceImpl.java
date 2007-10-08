@@ -14,84 +14,75 @@ import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.LongTypeConver
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.StringTypeConverterImpl;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.beans.JcrBeanService;
+import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.jcr.BigDecimalTypeConverterImpl;
+import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.JcrTypeDef;
 
 public class TypeServiceImpl extends AbstactTypeService
 {
     private Map<String, AtomicTypeConverter> jcrAtomicConverters;
     private Map<String, Class<?>> jcrClassMappings;
 
-//    private TypeDefDao typeDefDao;
+    //    private TypeDefDao typeDefDao;
     private JcrBeanService jcrBeanService;
     private AnnotationBasedTypeDefBuilder annotationBasedTypeDefBuilder;
 
     @SuppressWarnings("unchecked")
     public void init()
     {
-    	reset();
-    	//loadTypes();
+        reset();
+        //loadTypes();
 
-    	// FIXME Temp hack to manually load annotated types
-    	try
+        // FIXME Temp hack to manually load annotated types
+        try
         {
-            Set<Class<?>> annotatedClasses = annotationBasedTypeDefBuilder.findAnnotatedClasses("org.otherobjects.cms");
-            for(Class c : annotatedClasses)
+            Set<Class<?>> annotatedClasses = annotationBasedTypeDefBuilder.findAnnotatedClasses("org.otherobjects.cms.model");
+            for (Class c : annotatedClasses)
                 registerType(annotationBasedTypeDefBuilder.getTypeDef(c));
         }
         catch (Exception e)
         {
-           throw new OtherObjectsException("Error loading annotated classes.", e);
+            throw new OtherObjectsException("Error loading annotated classes.", e);
         }
-    	
-    	generateClasses();
+
+        generateClasses();
     }
 
     @Override
     public TypeDef getType(String name)
     {
         TypeDef type = super.getType(name);
-//        if (type == null)
-//        {
-//            // Look for annotation type
-//            try
-//            {
-//                type = this.annotationBasedTypeDefBuilder.getTypeDef(name);
-//                type.setTypeService(this);
-//                registerType(type);
-//            }
-//            catch (Exception e)
-//            {
-//                throw new OtherObjectsException("Could not find type def annotation for: " + name);
-//            }
-//        }
+        //        if (type == null)
+        //        {
+        //            // Look for annotation type
+        //            try
+        //            {
+        //                type = this.annotationBasedTypeDefBuilder.getTypeDef(name);
+        //                type.setTypeService(this);
+        //                registerType(type);
+        //            }
+        //            catch (Exception e)
+        //            {
+        //                throw new OtherObjectsException("Could not find type def annotation for: " + name);
+        //            }
+        //        }
         return type;
     }
 
     /**
      * Loads TypeDefs from JCR. Types are stored in the default workspace at /types.
+     * 
+     * Called from BootstrapUtils.
      */
-//    private void loadTypes()
-//    {
-//        List<TypeDef> typeDefs = this.typeDefDao.getAll();
-//        for (TypeDef t : typeDefs)
-//        {
-//            registerType(t);
-//        }
-//
-//        // FIXME Nasty
-//        TypeDef td = new TypeDef(TypeDef.class.getName());
-//        td.setClassName(TypeDef.class.getName());
-//        registerType(td);
-//    }
-    
-    public void loadJcrBackedTypes(TypeDefDao typeDefDao)
+    public void loadJcrBackedTypes(DynaNodeDao dynaNodeDao)
     {
-    	List<TypeDef> typeDefs = typeDefDao.getAll();
-    	for (TypeDef t : typeDefs)
-    	{
-    		registerType(t);
-    	}
-    	generateClasses();
+        List<DynaNode> typeDefs = dynaNodeDao.getAllByType(JcrTypeDef.class.getName());
+        for (DynaNode t : typeDefs)
+        {
+            registerType((TypeDef) t);
+        }
+        generateClasses();
     }
 
     /**
@@ -101,11 +92,16 @@ public class TypeServiceImpl extends AbstactTypeService
     {
         for (TypeDef t : getTypes())
         {
-            if (!t.hasClass())
-            {
-                // Create bean class
-                t.setClassName(this.jcrBeanService.createCustomDynaNodeClass(t));
-            }
+            generateClass(t);
+        }
+    }
+
+    public void generateClass(TypeDef t)
+    {
+        if (!t.hasClass())
+        {
+            // Create bean class
+            t.setClassName(this.jcrBeanService.createCustomDynaNodeClass(t));;
         }
     }
 
@@ -184,15 +180,15 @@ public class TypeServiceImpl extends AbstactTypeService
         this.jcrClassMappings.put("decimal", BigDecimal.class);
     }
 
-//    public TypeDefDao getTypeDefDao()
-//    {
-//        return this.typeDefDao;
-//    }
-//
-//    public void setTypeDefDao(TypeDefDao typeDefDao)
-//    {
-//        this.typeDefDao = typeDefDao;
-//    }
+    //    public TypeDefDao getTypeDefDao()
+    //    {
+    //        return this.typeDefDao;
+    //    }
+    //
+    //    public void setTypeDefDao(TypeDefDao typeDefDao)
+    //    {
+    //        this.typeDefDao = typeDefDao;
+    //    }
 
     public void setJcrBeanService(JcrBeanService jcrBeanService)
     {

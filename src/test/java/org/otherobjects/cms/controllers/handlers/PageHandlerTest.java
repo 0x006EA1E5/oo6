@@ -5,8 +5,8 @@ import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.model.SitePage;
 import org.otherobjects.cms.test.BaseJcrTestCase;
-import org.otherobjects.cms.types.PropertyDef;
-import org.otherobjects.cms.types.TypeDef;
+import org.otherobjects.cms.types.PropertyDefImpl;
+import org.otherobjects.cms.types.TypeDefImpl;
 import org.otherobjects.cms.types.TypeService;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -55,10 +55,10 @@ public class PageHandlerTest extends BaseJcrTestCase {
 		SitePage resource = new SitePage();
 		resource.setTemplate(template);
 		
-		TypeDef resourceTypeDef = new TypeDef("SitePage");
+		TypeDefImpl resourceTypeDef = new TypeDefImpl("SitePage");
 		resourceTypeDef.setClassName(SitePage.class.getName());
 		resourceTypeDef.setSuperClassName(DynaNode.class.getName());
-		resourceTypeDef.addProperty(new PropertyDef("template","reference","org.otherobjects.cms.model.Template",null));
+		resourceTypeDef.addProperty(new PropertyDefImpl("template","reference","org.otherobjects.cms.model.Template",null));
 
 		resource.setTypeDef(resourceTypeDef);
 		

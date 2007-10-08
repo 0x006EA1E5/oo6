@@ -211,6 +211,9 @@ OO.EditForm = function(){
 		    form.addButton('Save', function() {
 				form.submit({url:'/go/workbench/form', bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });   
 			});
+		    form.addButton('Save and continue editing', function() {
+				form.submit({url:'/go/workbench/form', bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });   
+			});
 			
 			form.on('actioncomplete', function(event,action) {
 				// Update listing panel

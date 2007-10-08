@@ -63,6 +63,8 @@ public abstract class AbstractDynaNodeDaoJackrabbit extends GenericJcrDaoJackrab
     {
         Assert.notNull(typeName, "typeName must not be null.");
         TypeDef type = this.typeService.getType(typeName);
+        Assert.notNull(type, "No type found: " + typeName);
+        Assert.notNull(type.getClassName(), "Type does not have backing class specified: " + typeName);
         try
         {
             DynaNode n = (DynaNode) Class.forName(type.getClassName()).newInstance();

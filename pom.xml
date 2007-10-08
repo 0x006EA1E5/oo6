@@ -292,6 +292,7 @@
 					<configurationFile>
 						src/main/resources/otherobjects.resources/config/jackrabbit-repo.xml
 					</configurationFile>
+					<view>document</view>
 					<nodeTypesFile>src/main/resources/otherobjects.resources/config/node-types.cnd</nodeTypesFile>
 				</configuration>
 				<executions>
@@ -302,13 +303,6 @@
 						</goals>
 					</execution>
 				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>${jdbc.groupId}</groupId>
-						<artifactId>${jdbc.artifactId}</artifactId>
-						<version>${jdbc.version}</version>
-					</dependency>
-				</dependencies>
 			</plugin>
 		</plugins>
 		<resources>

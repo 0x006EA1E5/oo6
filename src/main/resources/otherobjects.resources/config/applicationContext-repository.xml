@@ -110,24 +110,10 @@
 			</bean>
 		</property>
 	</bean>
-	<bean id="typeDefDao" parent="baseTransactionProxy">
-		<property name="target">
-			<bean class="org.otherobjects.cms.types.TypeDefDaoJackrabbit">
-				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
-			</bean>
-		</property>
-	</bean>
-
 
 	<bean name="daoService" class="org.otherobjects.cms.dao.DaoServiceImpl">
 		<property name="daoMap">
 			<map>
-				<entry>
-					<key>
-						<value>org.otherobjects.cms.types.TypeDef</value>
-					</key>
-					<ref bean="typeDefDao" />
-				</entry>
 				<entry>
 					<key>
 						<value>org.otherobjects.cms.model.DynaNode</value>

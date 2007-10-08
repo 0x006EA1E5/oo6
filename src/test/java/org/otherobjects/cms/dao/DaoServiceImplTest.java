@@ -5,7 +5,6 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
-import org.otherobjects.cms.types.TypeDefDaoJackrabbit;
 import org.springframework.context.support.GenericApplicationContext;
 
 @SuppressWarnings("unchecked")
@@ -19,7 +18,7 @@ public class DaoServiceImplTest extends TestCase
         this.daoService = new DaoServiceImpl();
 
         Map daoMap = new HashMap();
-        daoMap.put("org.otherobjects.cms.types.TypeDef", new TypeDefDaoJackrabbit());
+        daoMap.put("org.otherobjects.cms.model.User", new UserDaoHibernate());
         daoMap.put("org.otherobjects.cms.model.DynaNode", new DynaNodeDaoJackrabbit());
         this.daoService.setDaoMap(daoMap);
 
@@ -32,9 +31,9 @@ public class DaoServiceImplTest extends TestCase
 
     public void testGetDao()
     {
-        GenericDao dao = this.daoService.getDao("org.otherobjects.cms.types.TypeDef");
+        GenericDao dao = this.daoService.getDao("org.otherobjects.cms.model.User");
         assertNotNull(dao);
-        assertTrue(dao instanceof TypeDefDaoJackrabbit);
+        assertTrue(dao instanceof UserDaoHibernate);
 
         dao = this.daoService.getDao("Article");
         assertNotNull(dao);
