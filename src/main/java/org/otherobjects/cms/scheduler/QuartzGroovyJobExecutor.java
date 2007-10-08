@@ -15,37 +15,42 @@ import org.slf4j.LoggerFactory;
  * @author joerg
  *
  */
-public class QuartzGroovyJobExecutor extends AbstractSpringQuartzJob {
-	private final Logger logger = LoggerFactory.getLogger(getClass());
-	
-	public static final String GROOVY_SCRIPT_KEY = "scriptsource";
-	
-	public void executeJob(JobExecutionContext context)
-			throws JobExecutionException {
-		
-		String script = (String) context.getJobDetail().getJobDataMap().get(GROOVY_SCRIPT_KEY);
-		
-		Binding binding = new Binding();
-		
-		try {
-			binding.setVariable("appCtx", getApplicationContext(context));
-		} catch (Exception e) {
-			logger.warn("Problems making applicationContext available to groovy script");
-		}
-		executeScript(binding, script);
-	}
-	
-	protected Binding executeScript(Binding binding, String script) throws JobExecutionException
-	{
-		GroovyShell shell = new GroovyShell(binding);
-		try{
-			shell.evaluate(script);
-			return binding;
-		}
-		catch(CompilationFailedException e)
-		{
-			throw new JobExecutionException("Couldn't compile script", e);
-		}
-	}
+public class QuartzGroovyJobExecutor extends AbstractSpringQuartzJob
+{
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    public static final String GROOVY_SCRIPT_KEY = "scriptsource";
+
+    public void executeJob(JobExecutionContext context) throws JobExecutionException
+    {
+
+        String script = (String) context.getJobDetail().getJobDataMap().get(GROOVY_SCRIPT_KEY);
+
+        Binding binding = new Binding();
+
+        try
+        {
+            binding.setVariable("appCtx", getApplicationContext(context));
+        }
+        catch (Exception e)
+        {
+            logger.warn("Problems making applicationContext available to groovy script");
+        }
+        executeScript(binding, script);
+    }
+
+    protected Binding executeScript(Binding binding, String script) throws JobExecutionException
+    {
+        GroovyShell shell = new GroovyShell(binding);
+        try
+        {
+            shell.evaluate(script);
+            return binding;
+        }
+        catch (CompilationFailedException e)
+        {
+            throw new JobExecutionException("Couldn't compile script", e);
+        }
+    }
 
 }

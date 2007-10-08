@@ -15,15 +15,18 @@ import org.springframework.context.ApplicationContext;
  */
 public abstract class AbstractSpringQuartzJob implements Job {
 
-	private static final String APPLICATION_CONTEXT_KEY = "applicationContext"; // needs to correspond with whatever was specified for the applicationContextSchedulerContextKey property
-																				// in the application context defining org.springframework.scheduling.quartz.SchedulerFactoryBean
+    /* 
+     * Needs to correspond with whatever was specified for the applicationContextSchedulerContextKey property
+     * in the application context defining org.springframework.scheduling.quartz.SchedulerFactoryBean. 
+     */
+	private static final String APPLICATION_CONTEXT_KEY = "applicationContext";
 	
-	public static final String USERID_KEY = "jobUsername";
+	public static final String USER_ID_KEY = "jobUsername";
 
 	public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException
 	{
 		try{
-			SecurityTool.setupAuthenticationForNamesUser(getUserDao(jobExecutionContext), (String) jobExecutionContext.getJobDetail().getJobDataMap().get(USERID_KEY));
+			SecurityTool.setupAuthenticationForNamesUser(getUserDao(jobExecutionContext), (String) jobExecutionContext.getJobDetail().getJobDataMap().get(USER_ID_KEY));
 			executeJob(jobExecutionContext);
 		} catch (Exception e) {
 			throw new JobExecutionException("Couldn't execute Job: ", e);

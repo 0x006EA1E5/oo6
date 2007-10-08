@@ -19,7 +19,7 @@ import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.UserDao;
 import org.otherobjects.cms.model.Role;
 import org.otherobjects.cms.model.User;
-import org.otherobjects.cms.types.JcrTypeServiceImpl;
+import org.otherobjects.cms.types.TypeServiceImpl;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeDefDao;
 import org.slf4j.Logger;
@@ -41,11 +41,11 @@ public class BootstrapUtils //implements ApplicationListener
 
     private DaoService daoService;
     private Resource bootstrapScript;
-    private JcrTypeServiceImpl jcrTypeService; 
-    
+    private TypeServiceImpl jcrTypeService; 
+
     private boolean standalone = false;
 
-    public void setJcrTypeService(JcrTypeServiceImpl jcrTypeService) {
+    public void setJcrTypeService(TypeServiceImpl jcrTypeService) {
 		this.jcrTypeService = jcrTypeService;
 	}
 

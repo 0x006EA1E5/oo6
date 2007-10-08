@@ -23,9 +23,9 @@ import org.acegisecurity.userdetails.UserDetails;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.otherobjects.cms.types.TypeDef;
-import org.otherobjects.cms.types.annotation.PropertyDefAnnotation;
+import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
-import org.otherobjects.cms.types.annotation.TypeDefAnnotation;
+import org.otherobjects.cms.types.annotation.Type;
 
 /**
  * This class represents the basic "user" object in AppFuse that allows for authentication
@@ -39,7 +39,7 @@ import org.otherobjects.cms.types.annotation.TypeDefAnnotation;
 @Entity
 @Table(name = "app_user")
 @SequenceGenerator(name = "UserSeq", sequenceName = "app_user_seq")
-@TypeDefAnnotation(jcrPath = "/Site/users", label = "User", description = "A User", labelProperty = "email")
+@Type(label = "User", description = "A User", labelProperty = "email")
 public class User implements Serializable, UserDetails, Editable
 {
 
@@ -86,7 +86,7 @@ public class User implements Serializable, UserDetails, Editable
     }
 
     @Column(nullable = false, length = 50, unique = true)
-    @PropertyDefAnnotation(type = PropertyType.STRING, required = true, label = "Username", order = 1)
+    @Property(type = PropertyType.STRING, required = true, label = "Username", order = 1)
     public String getUsername()
     {
         return this.username;
@@ -105,28 +105,28 @@ public class User implements Serializable, UserDetails, Editable
     }
 
     @Column(name = "password_hint")
-    @PropertyDefAnnotation(type = PropertyType.TEXT, label = "Password hint", order = 4)
+    @Property(type = PropertyType.TEXT, label = "Password hint", order = 4)
     public String getPasswordHint()
     {
         return this.passwordHint;
     }
 
     @Column(name = "first_name", nullable = false, length = 50)
-    @PropertyDefAnnotation(type = PropertyType.STRING, label = "First name", order = 2)
+    @Property(type = PropertyType.STRING, label = "First name", order = 2)
     public String getFirstName()
     {
         return this.firstName;
     }
 
     @Column(name = "last_name", nullable = false, length = 50)
-    @PropertyDefAnnotation(type = PropertyType.STRING, label = "Last name", order = 3)
+    @Property(type = PropertyType.STRING, label = "Last name", order = 3)
     public String getLastName()
     {
         return this.lastName;
     }
 
     @Column(nullable = false, unique = true)
-    @PropertyDefAnnotation(required = true, type = PropertyType.STRING, label = "Email", order = 0)
+    @Property(required = true, type = PropertyType.STRING, label = "Email", order = 0)
     public String getEmail()
     {
         return this.email;
@@ -145,7 +145,7 @@ public class User implements Serializable, UserDetails, Editable
     @ManyToMany(fetch = FetchType.EAGER)
     @org.hibernate.annotations.IndexColumn(name = "index")
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @PropertyDefAnnotation(type = PropertyType.LIST, label = "Roles", collectionElementType = PropertyType.REFERENCE, relatedType = "org.otherobjects.cms.model.Role", order = 6)
+    @Property(type = PropertyType.LIST, label = "Roles", collectionElementType = PropertyType.REFERENCE, relatedType = "org.otherobjects.cms.model.Role", order = 6)
     public List<Role> getRoles()
     {
         return this.roles;
@@ -176,7 +176,7 @@ public class User implements Serializable, UserDetails, Editable
     }
 
     @Column(name = "account_enabled")
-    @PropertyDefAnnotation(type = PropertyType.BOOLEAN, label = "Enabled", order = 5)
+    @Property(type = PropertyType.BOOLEAN, label = "Enabled", order = 5)
     public boolean isEnabled()
     {
         return this.enabled;

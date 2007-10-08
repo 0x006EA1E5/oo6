@@ -1,5 +1,9 @@
 package org.otherobjects.cms.model;
 
+import org.otherobjects.cms.types.annotation.Property;
+import org.otherobjects.cms.types.annotation.PropertyType;
+import org.otherobjects.cms.types.annotation.Type;
+
 /**
  * Mappings example:
  * 
@@ -10,9 +14,11 @@ package org.otherobjects.cms.model;
  * 
  * @author rich
  */
+@Type(label = "Syndication Feed")
 public class SyndicationFeedResource extends DynaNode
 {
     private static final String ICON_PATH = "otherobjects.resources/static/icons/feed.png";
+
     private String label;
     private String description;
     private String query;
@@ -24,7 +30,8 @@ public class SyndicationFeedResource extends DynaNode
     {
         return ICON_PATH;
     }
-     
+
+    @Property(order = 10)
     public String getLabel()
     {
         return label;
@@ -35,6 +42,7 @@ public class SyndicationFeedResource extends DynaNode
         this.label = label;
     }
 
+    @Property(type = PropertyType.TEXT, order = 20)
     public String getQuery()
     {
         return query;
@@ -45,6 +53,7 @@ public class SyndicationFeedResource extends DynaNode
         this.query = query;
     }
 
+    @Property(type = PropertyType.TEXT, order = 30)
     public String getMapping()
     {
         return mapping;
@@ -55,6 +64,7 @@ public class SyndicationFeedResource extends DynaNode
         this.mapping = mapping;
     }
 
+    @Property(order = 40)
     public Boolean getRssFormat()
     {
         return rssFormat;
@@ -65,6 +75,7 @@ public class SyndicationFeedResource extends DynaNode
         this.rssFormat = rssFormat;
     }
 
+    @Property(type = PropertyType.TEXT, order = 15)
     public String getDescription()
     {
         return description;

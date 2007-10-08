@@ -8,7 +8,7 @@ import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.test.BaseJcrTestCase;
-import org.otherobjects.cms.types.JcrTypeServiceImpl;
+import org.otherobjects.cms.types.TypeServiceImpl;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 
@@ -18,7 +18,7 @@ public abstract class BaseDynaNodeTest extends BaseJcrTestCase
     public static final String TEST_TYPE_NAME = "org.otherobjects.Dyna.jcr.TestObject";
     public static final String TEST_REFERENCE_TYPE_NAME = "org.otherobjects.Dyna.jcr.TestReferenceObject";
 
-    protected JcrTypeServiceImpl typeService;
+    protected TypeServiceImpl typeService;
     protected DaoService daoService;
     protected DynaNodeDao dynaNodeDao;
     protected DynaNode dynaNode;
@@ -60,7 +60,7 @@ public abstract class BaseDynaNodeTest extends BaseJcrTestCase
         this.now = null;
     }
 
-    protected void setupTypesService(JcrTypeServiceImpl typeService)
+    protected void setupTypesService(TypeServiceImpl typeService)
     {
         TypeDef td2 = new TypeDef("org.otherobjects.Dyna.jcr.TestReferenceObject");
         td2.addProperty(new PropertyDef("name", "string", null, null));
@@ -141,7 +141,7 @@ public abstract class BaseDynaNodeTest extends BaseJcrTestCase
         return c;
     }
 
-    public void setTypeService(JcrTypeServiceImpl typeService)
+    public void setTypeService(TypeServiceImpl typeService)
     {
         this.typeService = typeService;
     }

@@ -3,6 +3,7 @@ package org.otherobjects.cms.util;
 /**
  * Various string manipulation functions. 
  * 
+ * <p>TODO Should this extend commons-lang stringutisl
  * <p>TODO Can we replace entirely with commons-lang?
  * 
  * @author rich

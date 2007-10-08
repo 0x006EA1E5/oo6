@@ -159,7 +159,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
         }
         catch (Exception e)
         {
-            throw new OtherObjectsException("Could not get property value for: " + name, e);
+            throw new OtherObjectsException("Could not get property value for '" + name + "' in: " + toString(), e);
         }
     }
 
@@ -207,7 +207,8 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
 
     public String getLabel()
     {
-        return (String) (get(getLabelProperty()) != null ? get(getLabelProperty()) : getCode());
+        // FIXME Rename this to getOoLabel()?
+        return (String) (get(getLabelProperty()) != null ? get(getLabelProperty()) : getId());
     }
 
     public void setLabel(String label)
@@ -249,7 +250,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
             return null;
 
         String linkPath = getJcrPath().replaceAll("/site/", "/go/");
-        if (!linkPath.contains(".") && !linkPath.endsWith("/"))
+        if (isFolder())
             linkPath += "/";
         return linkPath;
     }

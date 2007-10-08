@@ -68,26 +68,25 @@ public class ContentServiceImpl implements ContentService
         Assert.hasText("container must be specified.", container);
         Assert.hasText("typeName must be specified.", typeName);
 
+        //TODO M2 Merge this code with NavService version
         //TODO Make sure this throws exception is not exists
         DynaNode parent = this.dynaNodeDao.get(container);
         this.dynaNodeDao.create(typeName);
 
-        //TODO M2 Merge this code with NavService version
+        DynaNode newNode = this.dynaNodeDao.create(typeName);
+        newNode.setPath(parent.getJcrPath());
+        
         int c = 0;
         do
         {
-            String newPath = parent.getJcrPath() + "/untitled-" + ++c + ".html";
+            newNode.setLabel("Untitled " + (++c));
+            String newPath = newNode.getJcrPath();
             boolean alreadyExists = (this.dynaNodeDao.existsAtPath(newPath));
             if (!alreadyExists)
                 break;
-
         }
         while (true);
 
-        DynaNode newNode = this.dynaNodeDao.create(typeName);
-        newNode.setPath(parent.getJcrPath());
-        newNode.setCode("untitled-" + c + ".html"); //TODO M2 Auto generate
-        newNode.setLabel("Untitled " + c);
         return this.dynaNodeDao.save(newNode);
     }
 

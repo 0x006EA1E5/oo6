@@ -24,7 +24,6 @@ import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.model.Folder;
 import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.cms.model.SmartFolder;
-import org.otherobjects.cms.types.JcrTypeServiceImpl;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.IdentifierUtils;
@@ -169,7 +168,8 @@ public class WorkbenchDataController implements Controller
         {
             allByType = this.dynaNodeDao.getAllByJcrExpression("/jcr:root//element(*, oo:node) [@ooType = 'org.otherobjects.cms.model.CmsImage'] order by @modificationTimestamp descending");
         }
-        else if (daoService.hasDao(typeName))
+        // FIXME Must be a better way of testing for specfic daos
+        else if (! (daoService.getDao(typeName) instanceof DynaNodeDao))
         {
         	allByType = daoService.getDao(typeName).getAll();
         }

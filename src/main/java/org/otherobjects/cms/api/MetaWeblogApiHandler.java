@@ -20,7 +20,6 @@ import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.CmsImageDao;
-import org.otherobjects.cms.model.CmsImageDaoImpl;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.tools.CmsImageTool;
 import org.otherobjects.cms.util.ImageUtils;

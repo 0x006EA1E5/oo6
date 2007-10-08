@@ -3,14 +3,14 @@ package org.otherobjects.cms.beans;
 import junit.framework.TestCase;
 
 import org.otherobjects.cms.model.DynaNode;
-import org.otherobjects.cms.types.JcrTypeServiceImpl;
+import org.otherobjects.cms.types.TypeServiceImpl;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 
 public class JcrBeanServiceTest extends TestCase//AbstractDependencyInjectionSpringContextTests
 {
     private TypeDef td;
-    private JcrTypeServiceImpl typeService;
+    private TypeServiceImpl typeService;
     private JcrBeanService jcrBeanService;
 
     //    @Override
@@ -24,7 +24,7 @@ public class JcrBeanServiceTest extends TestCase//AbstractDependencyInjectionSpr
     @Override
     protected void setUp() throws Exception
     {
-        typeService = new JcrTypeServiceImpl();
+        typeService = new TypeServiceImpl();
         typeService.reset();
         td = new TypeDef("org.otherobjects.cms.test.TestObject");
         td.addProperty(new PropertyDef("testString", "string", null, null));

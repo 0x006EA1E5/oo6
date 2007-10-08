@@ -31,7 +31,7 @@ import org.apache.jackrabbit.ocm.mapper.model.ClassDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.CollectionDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.FieldDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.MappingDescriptor;
-import org.otherobjects.cms.types.JcrTypeServiceImpl;
+import org.otherobjects.cms.types.TypeServiceImpl;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
@@ -180,7 +180,7 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
                     }
                     else
                     {
-                        cld.setElementClassName(((JcrTypeServiceImpl) typeService).getJcrClassMapping(collectionElementType).getName());
+                        cld.setElementClassName(((TypeServiceImpl) typeService).getJcrClassMapping(collectionElementType).getName());
                         cld.setCollectionConverter(MultiValueCollectionConverterImpl.class.getName());
                     }
 
@@ -207,7 +207,7 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
                     FieldDescriptor f = new FieldDescriptor();
                     f.setFieldName(propDef.getName());
                     f.setJcrName(propDef.getName());
-                    f.setConverter(((JcrTypeServiceImpl) typeService).getJcrConverter(propertyType).getClass().getName());
+                    f.setConverter(((TypeServiceImpl) typeService).getJcrConverter(propertyType).getClass().getName());
                     cd.addFieldDescriptor(f);
                 }
             }
@@ -283,7 +283,7 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
 
     public void afterPropertiesSet() throws Exception
     {
-        Assert.isInstanceOf(JcrTypeServiceImpl.class, typeService);
+        Assert.isInstanceOf(TypeServiceImpl.class, typeService);
         buildMapper();
     }
 }

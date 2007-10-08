@@ -100,7 +100,7 @@
 				<property jcr:primaryType="nt:unstructured" required="true" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
 				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" />
 				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="cssClass" />
-				<property jcr:primaryType="nt:unstructured" type="list" label="${allowedTypes.label}" collectionElementType="reference" relatedType="org.otherobjects.cms.types.TypeDef"
+				<property jcr:primaryType="nt:unstructured" type="list" label="${allowedTypes.label}" collectionElementType="string"
 					ocm:classname="org.otherobjects.cms.types.PropertyDef" name="allowedTypes" />
 			</properties>
 		</org.otherobjects.cms.model.SiteFolder>
@@ -139,16 +139,6 @@
 				<property jcr:primaryType="nt:unstructured" required="false" type="reference" relatedType="org.otherobjects.cms.model.Script" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="script" />
 			</properties>
 		</org.otherobjects.cms.model.ScriptResource>
-		<org.otherobjects.cms.model.SyndicationFeedResource jcr:primaryType="oo:node" labelProperty="label" ocm:classname="org.otherobjects.cms.types.TypeDef"
-			className="org.otherobjects.cms.model.SyndicationFeedResource">
-			<properties jcr:primaryType="nt:unstructured">
-				<property jcr:primaryType="nt:unstructured" required="true" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="code" />
-				<property jcr:primaryType="nt:unstructured" type="string" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="label" />
-				<property jcr:primaryType="nt:unstructured" required="false" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="description" />
-				<property jcr:primaryType="nt:unstructured" required="false" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="query" />
-				<property jcr:primaryType="nt:unstructured" required="false" type="text" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="mapping" />
-				<property jcr:primaryType="nt:unstructured" required="false" type="boolean" ocm:classname="org.otherobjects.cms.types.PropertyDef" name="rssFormat" />
-			</properties>
-		</org.otherobjects.cms.model.SyndicationFeedResource>
+
 	</system>
 </types>

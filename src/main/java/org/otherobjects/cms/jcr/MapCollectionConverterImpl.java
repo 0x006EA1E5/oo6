@@ -51,7 +51,7 @@ import org.apache.jackrabbit.ocm.mapper.model.BeanDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.CollectionDescriptor;
 import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.model.DynaNode;
-import org.otherobjects.cms.types.JcrTypeServiceImpl;
+import org.otherobjects.cms.types.TypeServiceImpl;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 
@@ -60,7 +60,7 @@ public class MapCollectionConverterImpl extends AbstractCollectionConverterImpl
 {
 
     private AtomicTypeConverterProvider atomicTypeConverterProvider = new DefaultAtomicTypeConverterProvider();
-    private JcrTypeServiceImpl typeService;
+    private TypeServiceImpl typeService;
     private ObjectConverter objectConverter = new ObjectConverterImpl(this.mapper, atomicTypeConverterProvider);
 
     /**
@@ -73,7 +73,7 @@ public class MapCollectionConverterImpl extends AbstractCollectionConverterImpl
     public MapCollectionConverterImpl(Map atomicTypeConverters, ObjectConverter objectConverter, Mapper mapper)
     {
         super(atomicTypeConverters, objectConverter, mapper);
-        typeService = (JcrTypeServiceImpl) SingletonBeanLocator.getBean("typeService");
+        typeService = (TypeServiceImpl) SingletonBeanLocator.getBean("typeService");
     }
 
     /**

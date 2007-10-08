@@ -14,9 +14,9 @@ import org.acegisecurity.GrantedAuthority;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.otherobjects.cms.types.TypeDef;
-import org.otherobjects.cms.types.annotation.PropertyDefAnnotation;
+import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
-import org.otherobjects.cms.types.annotation.TypeDefAnnotation;
+import org.otherobjects.cms.types.annotation.Type;
 
 /**
  * This class is used to represent available roles in the database.
@@ -28,8 +28,7 @@ import org.otherobjects.cms.types.annotation.TypeDefAnnotation;
  */
 @Entity
 @Table(name = "role")
-//FIXME Do we need a jcrPath?
-@TypeDefAnnotation(jcrPath = "/seucrity/roles", label = "Role", description = "", labelProperty = "name")
+@Type(label = "Role", description = "", labelProperty = "name")
 public class Role implements Serializable, GrantedAuthority, Editable
 {
     private static final long serialVersionUID = 3690197650654049848L;
@@ -91,14 +90,14 @@ public class Role implements Serializable, GrantedAuthority, Editable
     }
 
     @Column(length = 20)
-    @PropertyDefAnnotation(type = PropertyType.STRING, required = true, label = "Name")
+    @Property(type = PropertyType.STRING, required = true, label = "Name")
     public String getName()
     {
         return this.name;
     }
 
     @Column(length = 64)
-    @PropertyDefAnnotation(type = PropertyType.TEXT, required = true, label = "Description")
+    @Property(type = PropertyType.TEXT, required = true, label = "Description")
     public String getDescription()
     {
         return this.description;

@@ -32,12 +32,12 @@ public class QuartzSchedulerConfigurationBean implements ApplicationListener
     private TypeService typeService;
 
     /**
-     * listen to contextRefreshed and publish events to initialize / refresh jobs 
+     * Listens to contextRefreshed and publish events to initialize / refresh jobs. 
      */
     public void onApplicationEvent(ApplicationEvent event)
     {
         //initialise when ctx is ready
-        if (event instanceof ContextRefreshedEvent && ((ContextRefreshedEvent)event).getApplicationContext().getParent() == null) // only do for root context refresh
+        if (event instanceof ContextRefreshedEvent && ((ContextRefreshedEvent) event).getApplicationContext().getParent() == null) // only do for root context refresh
         {
             init();
         }
@@ -52,14 +52,14 @@ public class QuartzSchedulerConfigurationBean implements ApplicationListener
             }
         }
     }
-    
+
     /**
-     * schedule all valid jobs from repository's /scheduler path
+     * Schedules all valid jobs from repository's <code>/scheduler</code> path.
      */
     private void init()
     {
         typeService.getType(PersistentJobDescription.class.getName());
-        
+
         List<DynaNode> jobs = dynaNodeDao.getAllByPath("/scheduler");
         for (DynaNode node : jobs)
         {
@@ -69,9 +69,13 @@ public class QuartzSchedulerConfigurationBean implements ApplicationListener
                 if (jobDescription.isValid())
                     scheduleJob(jobDescription);
             }
+            else
+            {
+                logger.warn("Non JobDescription found in scheduler folder: " + node.getCode());
+            }
         }
     }
-    
+
     /**
      * Schedule given job, deleting any existing job with the same name beforehand.
      * 
@@ -81,15 +85,15 @@ public class QuartzSchedulerConfigurationBean implements ApplicationListener
     {
         try
         {
-        	if(scheduler.deleteJob(jobDescription.getId(), PersistentJobDescription.JOB_GROUP_NAME))
-        	{
-        		logger.info("Job " + jobDescription.getLabel() + " [" + jobDescription.getId() + "] already existed and was therefore deleted before scheduling it again");
-        	}
+            if (scheduler.deleteJob(jobDescription.getId(), PersistentJobDescription.JOB_GROUP_NAME))
+            {
+                logger.info("Job " + jobDescription.getLabel() + " [" + jobDescription.getId() + "] already existed and was therefore deleted before scheduling it again");
+            }
             scheduler.scheduleJob(jobDescription.getJobDetail(), jobDescription.getTrigger());
         }
         catch (Exception e)
         {
-            logger.warn("Couldn't schedule Job " + jobDescription.getLabel() + " [" + jobDescription.getId() + "]", e);
+            logger.warn("Couldn't schedule Job: " + jobDescription.getLabel() + " [" + jobDescription.getId() + "]", e);
         }
     }
 

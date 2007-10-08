@@ -2,7 +2,7 @@ package org.otherobjects.cms.types;
 
 import org.otherobjects.cms.test.BaseJcrTestCase;
 
-public class JcrTypeServiceImplTest extends BaseJcrTestCase
+public class TypeServiceImplTest extends BaseJcrTestCase
 {
     /* Autowired */
     private TypeService typeService;
