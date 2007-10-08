@@ -11,7 +11,7 @@ import org.springframework.core.Ordered;
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
-public @interface PropertyDefAnnotation {
+public @interface Property {
 
     PropertyType type() default PropertyType.STRING;
 
@@ -29,8 +29,6 @@ public @interface PropertyDefAnnotation {
 
     PropertyType collectionElementType() default PropertyType.REFERENCE;
 
-    // TODO Can we have null defaults or make this optional
-    // TODO Should this type be a class? Prob not for the sake or linking to DynaNodes. Maybe a relatedTypeClass aswell?
     String relatedType() default "";
     
     int order() default Ordered.LOWEST_PRECEDENCE;

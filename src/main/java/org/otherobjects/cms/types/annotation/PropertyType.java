@@ -1,5 +1,6 @@
 package org.otherobjects.cms.types.annotation;
 
+// FIXME Is this the best place for this?
 public enum PropertyType {
     STRING("string"), TEXT("text"), DATE("date"), TIME("time"), TIMESTAMP("timestamp"), BOOLEAN("boolean"), NUMBER("number"), DECIMAL("decimal"), COMPONENT("component"), REFERENCE("reference"), LIST(
             "list");
@@ -15,5 +16,4 @@ public enum PropertyType {
     {
         return this.value;
     }
-
 }

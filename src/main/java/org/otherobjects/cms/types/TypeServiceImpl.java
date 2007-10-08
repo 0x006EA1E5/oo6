@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter;
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.BooleanTypeConverterImpl;
@@ -15,7 +16,7 @@ import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.beans.JcrBeanService;
 import org.otherobjects.cms.jcr.BigDecimalTypeConverterImpl;
 
-public class JcrTypeServiceImpl extends AbstactTypeService
+public class TypeServiceImpl extends AbstactTypeService
 {
     private Map<String, AtomicTypeConverter> jcrAtomicConverters;
     private Map<String, Class<?>> jcrClassMappings;
@@ -24,16 +25,24 @@ public class JcrTypeServiceImpl extends AbstactTypeService
     private JcrBeanService jcrBeanService;
     private AnnotationBasedTypeDefBuilder annotationBasedTypeDefBuilder;
 
+    @SuppressWarnings("unchecked")
     public void init()
     {
     	reset();
     	//loadTypes();
+
+    	// FIXME Temp hack to manually load annotated types
+    	try
+        {
+            Set<Class<?>> annotatedClasses = annotationBasedTypeDefBuilder.findAnnotatedClasses("org.otherobjects.cms.model");
+            for(Class c : annotatedClasses)
+                registerType(annotationBasedTypeDefBuilder.getTypeDef(c));
+        }
+        catch (Exception e)
+        {
+           throw new OtherObjectsException("Error loading annotated classes.", e);
+        }
     	
-    	// FIXME Nasty
-    	TypeDef td = new TypeDef(TypeDef.class.getName());
-    	td.setClassName(TypeDef.class.getName());
-    	
-    	registerType(td);
     	generateClasses();
     }
 
@@ -41,20 +50,20 @@ public class JcrTypeServiceImpl extends AbstactTypeService
     public TypeDef getType(String name)
     {
         TypeDef type = super.getType(name);
-        if (type == null)
-        {
-            // Look for annotation type
-            try
-            {
-                type = this.annotationBasedTypeDefBuilder.getTypeDef(name);
-                type.setTypeService(this);
-                registerType(type);
-            }
-            catch (Exception e)
-            {
-                throw new OtherObjectsException("Could not find type def annotation for: " + name);
-            }
-        }
+//        if (type == null)
+//        {
+//            // Look for annotation type
+//            try
+//            {
+//                type = this.annotationBasedTypeDefBuilder.getTypeDef(name);
+//                type.setTypeService(this);
+//                registerType(type);
+//            }
+//            catch (Exception e)
+//            {
+//                throw new OtherObjectsException("Could not find type def annotation for: " + name);
+//            }
+//        }
         return type;
     }
 

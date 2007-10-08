@@ -9,16 +9,14 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
-public @interface TypeDefAnnotation {
+public @interface Type {
 
-    String superClassName() default "java.lang.Object";
-
-    String description();
+    String superClassName() default "org.otherobjects.cms.model.DynaNode";
 
     String label();
 
-    String jcrPath();
+    String description() default "";
 
-    String labelProperty() default "label";
+    String labelProperty() default "code";
 
 }

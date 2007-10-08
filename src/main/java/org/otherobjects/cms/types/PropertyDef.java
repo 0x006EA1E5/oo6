@@ -146,7 +146,7 @@ public class PropertyDef implements Ordered
         else if (getType().equals(REFERENCE) || getType().equals(COMPONENT))
             className = getRelatedTypeDef().getClassName();
         else
-            className = ((JcrTypeServiceImpl) getTypeService()).getClassNameForType(this.type);
+            className = ((TypeServiceImpl) getTypeService()).getClassNameForType(this.type);
         Assert.notNull(className, "No class found for property: " + getName() + " of type: " + getType() + ".");
         return className;
     }
