@@ -95,6 +95,20 @@
 	</scm>
 	<build>
 		<plugins>
+			<!-- Fix for Cobertura 100% coverage problem. See: http://jira.codehaus.org/browse/MCOBERTURA-61 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<systemProperties>
+						<property>
+							<name>net.sourceforge.cobertura.datafile</name>
+							<value>${project.build.directory}/cobertura/cobertura.ser</value>
+						</property>
+					</systemProperties>
+				</configuration>
+			</plugin>
+			-->
 			<!--  Documentation generation -->
 			<plugin>
 				<groupId>org.jboss.maven.plugins</groupId>
@@ -890,7 +904,7 @@
 		<dependency>
 			<groupId>net.sourceforge</groupId>
 			<artifactId>flexjson</artifactId>
-			<version>1.2</version>
+			<version>1.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.directwebremoting</groupId>
