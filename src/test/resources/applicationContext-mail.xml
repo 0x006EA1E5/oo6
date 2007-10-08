@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd ">
 
 	<!-- Mail -->
-	<bean id="mailSender"
-		class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="localhost" />
 		<property name="port" value="2500"></property>
 	</bean>
 
-	<bean id="mailVelocityEngine"
-		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+	<bean id="mailVelocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
 		<property name="resourceLoaderPath" value="classpath:org/otherobjects/cms/mail"></property>
 		<!--		<property name="velocityProperties">-->
 		<!--			<value>-->
@@ -23,8 +20,7 @@
 		<!--		</property>-->
 	</bean>
 
-	<bean id="mailService"
-		class="org.otherobjects.cms.mail.MailService">
+	<bean id="mailService" class="org.otherobjects.cms.mail.MailService">
 		<property name="velocityEngine" ref="mailVelocityEngine" />
 		<property name="mailSender" ref="mailSender" />
 	</bean>
