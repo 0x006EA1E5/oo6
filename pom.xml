@@ -10,7 +10,7 @@
 	<description>OTHERobjects Content Management System.</description>
 	<inceptionYear>2007</inceptionYear>
 	<properties>
-		<data.path>/tmp/otherobjects/test/</data.path>
+		<data.path>${project.build.directory}/data/</data.path>
 		<jdbc.groupId>com.h2database</jdbc.groupId>
 		<jdbc.artifactId>h2</jdbc.artifactId>
 		<jdbc.version>1.0.20070617</jdbc.version>
@@ -282,24 +282,18 @@
 				<artifactId>maven-jackrabbit-plugin</artifactId>
 				<version>1.0-SNAPSHOT</version>
 				<configuration>
-					<dataFiles>
-						<param>src/test/data/jcr-data-types.xml</param>
-						<param>src/test/data/jcr-data-site.xml</param>
-						<param>live:src/test/data/jcr-data-types.xml</param>
-						<param>live:src/test/data/jcr-data-site.xml</param>
-					</dataFiles>
 					<repositoryLocation>${jcr.repository.location}</repositoryLocation>
 					<configurationFile>
 						src/main/resources/otherobjects.resources/config/jackrabbit-repo.xml
 					</configurationFile>
-					<view>document</view>
 					<nodeTypesFile>src/main/resources/otherobjects.resources/config/node-types.cnd</nodeTypesFile>
+					<importDirectory>src/test/jcr-data</importDirectory>
 				</configuration>
 				<executions>
 					<execution>
 						<phase>test-compile</phase>
 						<goals>
-							<goal>import</goal>
+							<goal>import2</goal>
 						</goals>
 					</execution>
 				</executions>

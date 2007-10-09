@@ -106,11 +106,11 @@ public class HibernateQuery {
 	 * 
 	 * @param clauses
 	 */
+	@SuppressWarnings("unchecked")
     public HibernateQuery(String clauses)
 	{
 		this();
 		GroovyShell shell = new GroovyShell();
-		@SuppressWarnings("unchecked")
 		Map<String, String> clausesMap = (Map<String, String>) shell.evaluate("def map = " + clauses + "; return map;");
 		try {
 			for(int i = 0; i < CLAUSE_KEYS.length; i++)  

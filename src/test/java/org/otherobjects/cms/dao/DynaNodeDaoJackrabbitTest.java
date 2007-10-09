@@ -15,6 +15,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.beans.BaseDynaNodeTest;
 import org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory;
 import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.cms.util.StringUtils;
 
 public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
@@ -27,19 +28,38 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
         this.sessionFactory = sessionFactory;
     }
 
+    private DynaNode createSampleArticle(String path, String name)
+    {
+        DynaNode a1 = dynaNodeDao.create("Article");
+        a1.setPath(path);
+        a1.set("title", name);
+        return a1;
+    }
+
+    private DynaNode createSampleFolder(String path, String name)
+    {
+        DynaNode a1 = dynaNodeDao.create(SiteFolder.class.getName());
+        a1.setPath(path);
+        a1.set("label", name);
+        return dynaNodeDao.save(a1);
+    }
+
     public void testGet()
     {
-        DynaNode node = dynaNodeDao.get("756ec0e7-300c-4d41-b9b6-6a2ccf823675");
+        DynaNode a1 = createSampleArticle("/site/", "A1 Title");
+        DynaNode a1s = dynaNodeDao.save(a1);
+
+        DynaNode node = dynaNodeDao.get(a1s.getId());
         assertNotNull(node);
-        assertEquals("/site/about", node.getJcrPath());
+        assertEquals(a1.getJcrPath(), node.getJcrPath());
     }
 
     public void testGetByPath()
     {
         // Resources
-        DynaNode node = dynaNodeDao.getByPath("/site/about/index.html");
+        DynaNode node = dynaNodeDao.getByPath("/site/welcome.html");
         assertNotNull(node);
-        assertEquals("About us", node.get("title"));
+        assertEquals("Welcome", node.get("title"));
 
         // Folders
         node = dynaNodeDao.getByPath("/site/about/");
@@ -49,19 +69,25 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
 
     public void testGetAllByPath()
     {
+        // TODO Test if this includes folders
+
         adminLogin();
         // Testing that it is transaction safe
-        List<DynaNode> contents = dynaNodeDao.getAllByPath("/site/test");
-        assertEquals(3, contents.size());
+        List<DynaNode> contents = dynaNodeDao.getAllByPath("/site/about/");
+        assertEquals(1, contents.size());
 
-        DynaNode folder = dynaNodeDao.create("org.otherobjects.cms.model.SiteFolder");
-        folder.setPath("/site/test/");
-        folder.setLabel("Test 4");
-        folder.setCode("test4");
-        dynaNodeDao.save(folder);
-        contents = dynaNodeDao.getAllByPath("/site/test");
-        assertEquals(4, contents.size());
+        DynaNode a1 = createSampleArticle("/site/about/", "A1 Title");
+        dynaNodeDao.save(a1);
+        contents = dynaNodeDao.getAllByPath("/site/about/");
+        assertEquals(2, contents.size());
         logout();
+    }
+
+    public void testGetAllByType()
+    {
+        List<DynaNode> nodes = dynaNodeDao.getAllByType("Article");
+        assertNotNull(nodes);
+        assertEquals(2, nodes.size());
     }
 
     public void testCreate()
@@ -71,17 +97,26 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
 
     public void testRemove()
     {
-        DynaNode node = dynaNodeDao.getByPath("/site/about/index.html");
+        DynaNode node = dynaNodeDao.getByPath("/site/welcome.html");
         assertNotNull(node);
 
         dynaNodeDao.remove(node.getId());
         assertNull(dynaNodeDao.get(node.getId()));
     }
 
+    public void testExists()
+    {
+        DynaNode node = dynaNodeDao.getByPath("/site/welcome.html");
+        assertTrue(dynaNodeDao.exists(node.getId()));
+        // Corrupt UUID to create non-existing id
+        assertFalse(dynaNodeDao.exists(node.getId().replaceAll("[0-9a-f]", "0")));
+        assertFalse(dynaNodeDao.exists(null));
+    }
+
     public void testExistsAtPath()
     {
-        assertTrue(dynaNodeDao.existsAtPath("/site/about/index.html"));
-        assertFalse(dynaNodeDao.existsAtPath("/site/about/not-about-us.html"));
+        assertTrue(dynaNodeDao.existsAtPath("/site/welcome.html"));
+        assertFalse(dynaNodeDao.existsAtPath("/site/not-welcome.html"));
         try
         {
             dynaNodeDao.existsAtPath(null);
@@ -89,20 +124,19 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
         }
         catch (RuntimeException e)
         {
-
         }
     }
 
     public void testRename()
     {
-
+        // TODO Implement me
     }
 
     public void testMove1()
     {
-        DynaNode c = dynaNodeDao.getByPath("/site/contact");
-        DynaNode m = dynaNodeDao.getByPath("/site/test");
-
+        DynaNode c = createSampleFolder("/site/", "contact");
+        DynaNode m = createSampleFolder("/site/", "test");
+        
         // 1. Append to folder
         assertFalse(dynaNodeDao.existsAtPath("/site/test/contact"));
         dynaNodeDao.moveItem(c.getId(), m.getId(), "append");
@@ -111,9 +145,11 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
 
     public void testMove2()
     {
-        DynaNode t2 = dynaNodeDao.getByPath("/site/test/test2");
-        DynaNode t3 = dynaNodeDao.getByPath("/site/test/test3");
-
+        createSampleFolder("/site/", "Test");
+        createSampleFolder("/site/test", "Test 1");
+        DynaNode t2 = createSampleFolder("/site/test", "Test 2");
+        DynaNode t3 = createSampleFolder("/site/test", "Test 3");
+        
         // 2. Move above in same folder
         dynaNodeDao.moveItem(t3.getId(), t2.getId(), "above");
         List<DynaNode> aContents = dynaNodeDao.getAllByPath("/site/test");
@@ -123,9 +159,11 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
 
     public void testMove3()
     {
-        DynaNode t1 = dynaNodeDao.getByPath("/site/test/test1");
-        DynaNode t3 = dynaNodeDao.getByPath("/site/test/test3");
-
+        createSampleFolder("/site/", "Test");
+        DynaNode t1 = createSampleFolder("/site/test", "Test 1");
+        createSampleFolder("/site/test", "Test 2");
+        DynaNode t3 = createSampleFolder("/site/test", "Test 3");
+        
         // 3. Move below in same folder
         dynaNodeDao.moveItem(t1.getId(), t3.getId(), "below");
         List<DynaNode> aContents = dynaNodeDao.getAllByPath("/site/test");
@@ -135,34 +173,32 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
 
     public void testMove4()
     {
-        DynaNode c = dynaNodeDao.getByPath("/site/contact");
-        DynaNode t2 = dynaNodeDao.getByPath("/site/test/test2");
-
+        DynaNode a = dynaNodeDao.getByPath("/site/about");
+        createSampleFolder("/site/", "Test");
+        createSampleFolder("/site/test", "Test 1");
+        DynaNode t2 = createSampleFolder("/site/test", "Test 2");
+        createSampleFolder("/site/test", "Test 3");
+        
         // 4. Move above different folder
-        dynaNodeDao.moveItem(c.getId(), t2.getId(), "above");
+        dynaNodeDao.moveItem(a.getId(), t2.getId(), "above");
         List<DynaNode> contents = dynaNodeDao.getAllByPath("/site/test");
         assertEquals(4, contents.size());
-        assertEquals(c.getCode(), contents.get(1).getCode());
+        assertEquals(a.getCode(), contents.get(1).getCode());
     }
 
     public void testMove5()
     {
-        DynaNode c = dynaNodeDao.getByPath("/site/contact");
-        DynaNode t2 = dynaNodeDao.getByPath("/site/test/test2");
-
+        DynaNode a = dynaNodeDao.getByPath("/site/about");
+        createSampleFolder("/site/", "Test");
+        createSampleFolder("/site/test", "Test 1");
+        DynaNode t2 = createSampleFolder("/site/test", "Test 2");
+        createSampleFolder("/site/test", "Test 3");
+        
         // 5. Move below different folder
-        dynaNodeDao.moveItem(c.getId(), t2.getId(), "below");
+        dynaNodeDao.moveItem(a.getId(), t2.getId(), "below");
         List<DynaNode> contents = dynaNodeDao.getAllByPath("/site/test");
         assertEquals(4, contents.size());
-        assertEquals(c.getCode(), contents.get(2).getCode());
-    }
-
-    public void testExists()
-    {
-        DynaNode node = dynaNodeDao.getByPath("/site/about/index.html");
-        assertTrue(dynaNodeDao.exists(node.getId()));
-        assertFalse(dynaNodeDao.exists(node.getId().replaceAll("[0-9a-f]", "0")));
-        assertFalse(dynaNodeDao.exists(null));
+        assertEquals(a.getCode(), contents.get(2).getCode());
     }
 
     @SuppressWarnings("unchecked")
@@ -246,18 +282,11 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
         logout();
     }
 
-    public void testGetAllByType()
-    {
-        List<DynaNode> nodes = dynaNodeDao.getAllByType("Article");
-        assertNotNull(nodes);
-        assertEquals(3, nodes.size());
-    }
-
     public void testPublish() throws Exception
     {
         adminLogin();
 
-        DynaNode node = dynaNodeDao.getByPath("/site/about/index.html");
+        DynaNode node = dynaNodeDao.getByPath("/site/welcome.html");
 
         assertNotNull(node);
 
@@ -292,7 +321,7 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
 
     public void testGetAllVersions() throws Exception
     {
-        DynaNode node = dynaNodeDao.getByPath("/site/about/index.html");
+        DynaNode node = dynaNodeDao.getByPath("/site/welcome.html");
         long versionCount = getVersionCount(node);
 
         List<DynaNode> versions = dynaNodeDao.getVersions(node);
@@ -309,7 +338,7 @@ public class DynaNodeDaoJackrabbitTest extends BaseDynaNodeTest
     public void testGetVersionByChangeNumber() throws Exception
     {
         adminLogin();
-        DynaNode node = dynaNodeDao.getByPath("/site/about/index.html");
+        DynaNode node = dynaNodeDao.getByPath("/site/welcome.html");
 
         String firstVersionTitle = "title1";
 

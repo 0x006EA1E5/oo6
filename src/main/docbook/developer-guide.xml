@@ -576,23 +576,24 @@ Admin : http://localhost:8080/go/workbench/
 
       <para>Repository search: http://www.mvnrepository.com/</para>
 
-      <para>Default repository: http://repo1.maven.org/maven2/ </para>
+      <para>Default repository: http://repo1.maven.org/maven2/</para>
 
-      <para>Our repository: http://maven.otherobjects.org/repository/ </para>
+      <para>Our repository: http://maven.otherobjects.org/repository/</para>
 
       <para>Host your own repository server:
-      http://www.jfrog.org/sites/artifactory/latest/ </para>
+      http://www.jfrog.org/sites/artifactory/latest/</para>
 
       <para>Plugin dev guide:
-      http://maven.apache.org/guides/plugin/guide-java-plugin-development.html
-      </para>
+      http://maven.apache.org/guides/plugin/guide-java-plugin-development.html</para>
     </section>
   </chapter>
 
   <chapter>
     <title>Using Eclipse</title>
 
-    <para></para>
+    <para>OTHERobjects was developed using the Eclipse IDE. Other IDEs will
+    wokr just fine but Eclipse will be the best supported. This chapter
+    describes how to set up Eclipse </para>
 
     <section>
       <title>Launching with WTP</title>
@@ -672,9 +673,66 @@ Admin : http://localhost:8080/go/workbench/
     <para>This extends the testing discussion in the Site Designer
     Guide.</para>
 
-    <para>How to write good Junit tests</para>
+    <section>
+      <title>Running the tests</title>
 
-    <para>http://unitils.sourceforge.net/spring_article.html</para>
+      <para>The tests can run either from Maven or within Eclipse. Before the
+      tests can run though the database and content repository need to be
+      seeded with sample data. This is done via Maven goals
+      (hibernate3:hdm2ddl, dbunit:operation, jackrabbit:import2) that are run
+      automatically before the main test goal.</para>
+
+      <para>To run the tests via Maven:</para>
+
+      <para><programlisting>mvn clean test site</programlisting> This runs
+      three Maven goals that:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Cleans out any old compiled classes and sample data</para>
+        </listitem>
+
+        <listitem>
+          <para>Compiles all the project code, prepares sample data and runs
+          the tests</para>
+        </listitem>
+
+        <listitem>
+          <para>Generates HTML versions of test results and coverage and puts
+          them in the target/site directory</para>
+        </listitem>
+      </orderedlist>
+
+      <para>Once the tests have been run via Maven once the sample data will
+      be in place and the tests can then be run as required inside Eclipse.
+      </para>
+    </section>
+
+    <section>
+      <title>Modifing the sample data</title>
+
+      <para>The sample data is stored in a set of XML files inside the
+      src/test folder.</para>
+
+      <section>
+        <title>Updating JCR data</title>
+
+        <para>The easiest way to do this in to set up and run the otherdemo
+        project. Add sample data as required (ideally via setup.script so that
+        it can be re-generated easily if the intenal JCR structure is
+        changed). The data can then be exported via:</para>
+
+        <para><programlisting>mvn jackrabbit:export2</programlisting>This will
+        dump the JCR data into target/jcr-data and this folder can now be
+        moved to src/test for use in seeding the tests.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Writing tests</title>
+
+      <para>http://unitils.sourceforge.net/spring_article.html</para>
+    </section>
   </chapter>
 
   <chapter>
