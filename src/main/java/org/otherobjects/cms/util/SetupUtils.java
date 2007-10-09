@@ -32,6 +32,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean;
 import org.springmodules.jcr.JcrSessionFactory;
 
+import ch.qos.logback.classic.Level;
+
 /**
  * Bootstrap utility that runs on site start up. Ensures all initial config data 
  * is correctly initalised.
@@ -93,7 +95,13 @@ public class SetupUtils
     {
         try
         {
+            // Temporarily turn off warning logging during drops
+            // We expect warnings so don't need report them
+            Class<?> loggedClass = AnnotationSessionFactoryBean.class;
+            Level originalLoggerLevel = LoggerUtils.getLoggerLevel(loggedClass);
+            LoggerUtils.setLoggerLevel(loggedClass, Level.ERROR);
             this.sessionFactory.dropDatabaseSchema();
+            LoggerUtils.setLoggerLevel(loggedClass, originalLoggerLevel);
         }
         catch (Exception e)
         {

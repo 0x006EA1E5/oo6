@@ -1,60 +1,53 @@
 package org.otherobjects.cms.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-import org.otherobjects.cms.types.PropertyDef;
-import org.otherobjects.cms.types.PropertyDefImpl;
 import org.otherobjects.cms.types.TypeDef;
-import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.cms.types.TypeDefImpl;
+import org.otherobjects.cms.types.annotation.Property;
+import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
-import org.springframework.util.Assert;
-
-import flexjson.JSON;
 
 /**
+ * FIXME Add validation
  * 
  * @author rich
  */
-@Type
-public class JcrTypeDef extends DynaNode implements TypeDef
+@Type(label = "Type Def")
+public class JcrTypeDef extends DynaNode
 {
-    private static final String JCR_ROOT_PATH = "/types";
-    private static final String DEFAULT_SUPER_CLASS_NAME = DynaNode.class.getName();
-
     private String name;
-    private String className;
-    private String superClassName;
-    private Map<String, PropertyDef> properties = new LinkedHashMap<String, PropertyDef>();
     private String label;
     private String description;
     private String help;
+    private String superClassName;
     private String labelProperty;
-    private TypeService typeService;
+    private List<JcrPropertyDef> properties;
 
     public JcrTypeDef()
     {
     }
 
-    public JcrTypeDef(String name)
+    public TypeDef toTypeDef()
     {
-        setName(name);
+        TypeDefImpl td = new TypeDefImpl();
+        td.setName(getName());
+        td.setLabel(getLabel());
+        td.setDescription(getDescription());
+        td.setHelp(getHelp());
+        td.setSuperClassName(getSuperClassName());
+        td.setLabelProperty(getLabelProperty());
+        if (getProperties() != null)
+        {
+            for (JcrPropertyDef pd : getProperties())
+            {
+                td.addProperty(pd.toPropertyDef());
+            }
+        }
+        return td;
     }
 
-    @Override
-    public String toString()
-    {
-        return "[Type: " + getName() + "]";
-    }
-
-    public PropertyDef getProperty(String name)
-    {
-        return properties.get(name);
-    }
-
+    @Property(order = 10)
     public String getName()
     {
         return name;
@@ -65,38 +58,10 @@ public class JcrTypeDef extends DynaNode implements TypeDef
         this.name = name;
     }
 
-    public void setProperties(Collection<PropertyDefImpl> properties)
-    {
-        this.properties = new LinkedHashMap<String, PropertyDef>();
-        if (properties == null)
-            return;
-        for (PropertyDefImpl pd : properties)
-            addProperty(pd);
-    }
-
-    public Collection<PropertyDef> getProperties()
-    {
-        ArrayList<PropertyDef> properties = new ArrayList<PropertyDef>();
-        properties.addAll((Collection<PropertyDef>) this.properties.values());
-        return properties;
-    }
-
-    public void addProperty(PropertyDefImpl pd)
-    {
-        // Check for duplicates 
-        Assert.isNull(getProperty(pd.getName()));
-        pd.setParentTypeDef(this);
-        this.properties.put(pd.getName(), pd);
-    }
-
+    @Property(order = 20)
     public String getLabel()
     {
-        return label != null ? label : createLabel(getName());
-    }
-
-    protected String createLabel(String name2)
-    {
-        return StringUtils.substringAfterLast(name, ".");
+        return label;
     }
 
     public void setLabel(String label)
@@ -104,6 +69,7 @@ public class JcrTypeDef extends DynaNode implements TypeDef
         this.label = label;
     }
 
+    @Property(order = 30, type = PropertyType.TEXT)
     public String getDescription()
     {
         return description;
@@ -114,6 +80,7 @@ public class JcrTypeDef extends DynaNode implements TypeDef
         this.description = description;
     }
 
+    @Property(order = 40, type = PropertyType.TEXT)
     public String getHelp()
     {
         return help;
@@ -124,41 +91,18 @@ public class JcrTypeDef extends DynaNode implements TypeDef
         this.help = help;
     }
 
-    public String getClassName()
+    @Property(order = 50)
+    public String getSuperClassName()
     {
-        if (this.className != null)
-            return this.className;
-        else
-            return getName();
+        return superClassName;
     }
 
-    public void setClassName(String className)
+    public void setSuperClassName(String superClassName)
     {
-        this.className = className;
+        this.superClassName = superClassName;
     }
 
- 
-    public String getJcrPath()
-    {
-        return JCR_ROOT_PATH + "/" + getName();
-    }
-
-    /** FIXME Copied from dynaNode */
-    public void setJcrPath(String jcrPath)
-    {
-        if (jcrPath == null)
-        {
-            setName(null);
-            return;
-        }
-
-        Assert.isTrue(jcrPath.lastIndexOf("/") >= 0, "jcrPath must contain at least one forward slash");
-        Assert.isTrue(!jcrPath.endsWith("/"), "jcrPath must not end with a forward slash");
-
-        int slashPos = jcrPath.lastIndexOf("/");
-        setName(jcrPath.substring(slashPos + 1));
-    }
-
+    @Property(order = 60)
     public String getLabelProperty()
     {
         return labelProperty;
@@ -169,35 +113,15 @@ public class JcrTypeDef extends DynaNode implements TypeDef
         this.labelProperty = labelProperty;
     }
 
-    @JSON(include = false)
-    public TypeService getTypeService()
+    @Property(order = 100, collectionElementType = PropertyType.COMPONENT)
+    public List<JcrPropertyDef> getProperties()
     {
-        return typeService;
+        return properties;
     }
 
-    public void setTypeService(TypeService typeService)
+    public void setProperties(List<JcrPropertyDef> properties)
     {
-        this.typeService = typeService;
-    }
-
-    /**
-     * Determines if this TypeDef has a class associated with it. This 
-     * only return true if the backing class exists or has been generated.
-     * @return
-     */
-    public boolean hasClass()
-    {
-        return (this.className != null);
-    }
-
-    public String getSuperClassName()
-    {
-        return superClassName != null ? superClassName : DEFAULT_SUPER_CLASS_NAME;
-    }
-
-    public void setSuperClassName(String superClassName)
-    {
-        this.superClassName = superClassName;
+        this.properties = properties;
     }
 
 }

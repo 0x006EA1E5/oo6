@@ -272,7 +272,7 @@ public class PropertyDefImpl implements PropertyDef, Ordered
     {
         // FIXME Remove singleton access
         TypeService typeService = getParentTypeDef().getTypeService();
-        Assert.notNull(typeService, "No TypeService registered with this proprerty's typeDef.");
+        Assert.notNull(typeService, "No TypeService registered with this property's typeDef.");
         return typeService;
     }
 

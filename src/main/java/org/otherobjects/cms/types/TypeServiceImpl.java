@@ -19,12 +19,11 @@ import org.otherobjects.cms.jcr.BigDecimalTypeConverterImpl;
 import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.model.JcrTypeDef;
 
-public class TypeServiceImpl extends AbstactTypeService
+public class TypeServiceImpl extends AbstractTypeService
 {
     private Map<String, AtomicTypeConverter> jcrAtomicConverters;
     private Map<String, Class<?>> jcrClassMappings;
 
-    //    private TypeDefDao typeDefDao;
     private JcrBeanService jcrBeanService;
     private AnnotationBasedTypeDefBuilder annotationBasedTypeDefBuilder;
 
@@ -32,7 +31,6 @@ public class TypeServiceImpl extends AbstactTypeService
     public void init()
     {
         reset();
-        //loadTypes();
 
         // FIXME Temp hack to manually load annotated types
         try
@@ -53,20 +51,6 @@ public class TypeServiceImpl extends AbstactTypeService
     public TypeDef getType(String name)
     {
         TypeDef type = super.getType(name);
-        //        if (type == null)
-        //        {
-        //            // Look for annotation type
-        //            try
-        //            {
-        //                type = this.annotationBasedTypeDefBuilder.getTypeDef(name);
-        //                type.setTypeService(this);
-        //                registerType(type);
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                throw new OtherObjectsException("Could not find type def annotation for: " + name);
-        //            }
-        //        }
         return type;
     }
 
@@ -80,7 +64,9 @@ public class TypeServiceImpl extends AbstactTypeService
         List<DynaNode> typeDefs = dynaNodeDao.getAllByType(JcrTypeDef.class.getName());
         for (DynaNode t : typeDefs)
         {
-            registerType((TypeDef) t);
+            TypeDef t2 = ((JcrTypeDef) t).toTypeDef();
+            t2.setTypeService(this);
+            registerType(t2);
         }
         generateClasses();
     }
@@ -179,16 +165,6 @@ public class TypeServiceImpl extends AbstactTypeService
         this.jcrClassMappings.put("number", Long.class);
         this.jcrClassMappings.put("decimal", BigDecimal.class);
     }
-
-    //    public TypeDefDao getTypeDefDao()
-    //    {
-    //        return this.typeDefDao;
-    //    }
-    //
-    //    public void setTypeDefDao(TypeDefDao typeDefDao)
-    //    {
-    //        this.typeDefDao = typeDefDao;
-    //    }
 
     public void setJcrBeanService(JcrBeanService jcrBeanService)
     {

@@ -92,7 +92,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
     {
         setOoType(type);
     }
-    
+
     public void setOoType(String ooType)
     {
         this.ooType = ooType;
@@ -208,7 +208,8 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
     public String getLabel()
     {
         // FIXME Rename this to getOoLabel()?
-        return (String) (get(getLabelProperty()) != null ? get(getLabelProperty()) : getId());
+        Assert.notNull(getLabelProperty(), "Could not get label since labelProperty is not set for: " +getOoType());
+        return (String) get(getLabelProperty());
     }
 
     public void setLabel(String label)
@@ -219,8 +220,7 @@ public class DynaNode implements CmsNode, WorkbenchItem, AuditInfo, Editable
         }
         catch (Exception e)
         {
-            if (this.logger.isDebugEnabled())
-                this.logger.debug("Couldn't set label property", e);
+            this.logger.debug("Couldn't set label property", e);
         }
     }
 

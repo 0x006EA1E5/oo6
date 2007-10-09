@@ -2,8 +2,13 @@ package org.otherobjects.cms.workbench;
 
 import java.util.List;
 
+import org.apache.jackrabbit.ocm.manager.objectconverter.impl.SimpleFieldsHelper;
 import org.otherobjects.cms.beans.BaseDynaNodeTest;
 import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.types.AbstractTypeService;
+import org.otherobjects.cms.util.LoggerUtils;
+
+import ch.qos.logback.classic.Level;
 
 public class NavigatorServiceImplTest extends BaseDynaNodeTest
 {
@@ -12,6 +17,8 @@ public class NavigatorServiceImplTest extends BaseDynaNodeTest
     @Override
     protected void onSetUp() throws Exception
     {
+        LoggerUtils.setLoggerLevel(SimpleFieldsHelper.class, Level.ERROR);
+        LoggerUtils.setLoggerLevel(AbstractTypeService.class, Level.ERROR);
         super.onSetUp();
         this.navigatorService = new NavigatorServiceImpl();
         this.navigatorService.setDynaNodeDao(this.dynaNodeDao);
@@ -80,13 +87,11 @@ public class NavigatorServiceImplTest extends BaseDynaNodeTest
         WorkbenchItem item = this.navigatorService.addItem(root.getId(), "");
 
         DynaNode newNode = (DynaNode) item;
-        this.navigatorService.renameItem(newNode.getId(), "asdasdasdasdasd");
+        String newName = newNode.getLabel() + " Renamed";
+        WorkbenchItem renamedItem = this.navigatorService.renameItem(newNode.getId(), newName);
 
-        System.out.println(newNode.getLabel());
-
-        //assertTrue(newNode.getLabel().equals("asdasdasdasdasd"));
+        assertTrue(renamedItem.getLabel().equals(newName));
         logout();
-
     }
 
     public void testMoveItem()

@@ -79,8 +79,8 @@ public class NavigatorServiceImpl implements NavigatorService
         DynaNode node = dynaNodeDao.get(uuid);
         node.setCode(StringUtils.generateUrlCode(newName));
         node.set("label", newName);
-        dynaNodeDao.save(node);
-        return null;
+        DynaNode renamed = dynaNodeDao.save(node);
+        return renamed;
     }
 
     public void moveItem(String itemId, String targetId, String point)

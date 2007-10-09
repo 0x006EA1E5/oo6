@@ -14,7 +14,6 @@ import org.apache.jackrabbit.ocm.spring.JcrMappingTemplate;
 import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory;
 import org.otherobjects.cms.model.User;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.AbstractTransactionalSpringContextTests;
 
@@ -27,7 +26,7 @@ import org.springframework.test.AbstractTransactionalSpringContextTests;
  */
 public abstract class BaseJcrTestCase extends AbstractTransactionalSpringContextTests
 {
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+    protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
     protected ResourceBundle rb;
     protected JcrMappingTemplate jcrMappingTemplate;
 
@@ -90,6 +89,7 @@ public abstract class BaseJcrTestCase extends AbstractTransactionalSpringContext
 	protected void logout() {
 		SecurityContextHolder.clearContext();
 	}
+
 
     //    public void exportDocument(String filePath, String nodePath, boolean skipBinary, boolean noRecurse)
     //    {

@@ -10,9 +10,9 @@ import org.otherobjects.cms.OtherObjectsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AbstactTypeService implements TypeService
+public abstract class AbstractTypeService implements TypeService
 {
-    private final Logger logger = LoggerFactory.getLogger(AbstactTypeService.class);
+    private final Logger logger = LoggerFactory.getLogger(AbstractTypeService.class);
 
     private Map<String, TypeDef> types = new HashMap<String, TypeDef>();
 

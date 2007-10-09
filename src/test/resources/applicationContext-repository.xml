@@ -77,9 +77,8 @@
 
 
 	<!-- Types service -->
-	<bean name="typeService" class="org.otherobjects.cms.types.JcrTypeServiceImpl" init-method="init"
+	<bean name="typeService" class="org.otherobjects.cms.types.TypeServiceImpl" init-method="init"
 		depends-on="setupUtils">
-		<!--		<property name="typeDefDao" ref="typeDefDao" />-->
 		<property name="jcrBeanService" ref="jcrBeanService" />
 		<property name="annotationBasedTypeDefBuilder" ref="annotationBasedTypeDefBuilder"></property>
 	</bean>
@@ -111,24 +110,10 @@
 			</bean>
 		</property>
 	</bean>
-	<bean id="typeDefDao" parent="baseTransactionProxy">
-		<property name="target">
-			<bean class="org.otherobjects.cms.types.TypeDefDaoJackrabbit">
-				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
-			</bean>
-		</property>
-	</bean>
-
 
 	<bean name="daoService" class="org.otherobjects.cms.dao.DaoServiceImpl">
 		<property name="daoMap">
 			<map>
-				<entry>
-					<key>
-						<value>org.otherobjects.cms.types.TypeDef</value>
-					</key>
-					<ref bean="typeDefDao" />
-				</entry>
 				<entry>
 					<key>
 						<value>org.otherobjects.cms.model.DynaNode</value>
