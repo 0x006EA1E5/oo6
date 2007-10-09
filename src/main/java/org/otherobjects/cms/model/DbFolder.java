@@ -6,7 +6,6 @@ import java.util.List;
 import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.types.annotation.Property;
-import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
 
 import flexjson.JSON;

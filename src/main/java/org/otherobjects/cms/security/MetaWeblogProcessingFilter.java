@@ -32,7 +32,7 @@ import org.springframework.core.Ordered;
 import org.springframework.util.Assert;
 
 /**
- * This is a MMetaWeblogApi specific spring security filter that inspects the xml-rpc workload and extracts username and password from that
+ * This is a MetaWeblogApi specific spring security filter that inspects the xml-rpc workload and extracts username and password from that
  * to do authentication. The actual classes implementing the rpc methods then can safely ignore the credentials.
  * 
  * It assumes that the username is always the 2. and the password alyways the 3. argument in the payload
@@ -40,140 +40,140 @@ import org.springframework.util.Assert;
  * @author joerg
  *
  */
-public class MetaWeblogProcessingFilter implements Filter, InitializingBean, Ordered {
-	private final Logger logger = LoggerFactory.getLogger(MetaWeblogProcessingFilter.class);
-	
-	private AuthenticationDetailsSource authenticationDetailsSource = new AuthenticationDetailsSourceImpl();
+public class MetaWeblogProcessingFilter implements Filter, InitializingBean, Ordered
+{
+    private final Logger logger = LoggerFactory.getLogger(MetaWeblogProcessingFilter.class);
+
+    private AuthenticationDetailsSource authenticationDetailsSource = new AuthenticationDetailsSourceImpl();
     private AuthenticationManager authenticationManager;
     private AuthenticationEntryPoint authenticationEntryPoint;
-    private int order;
-	
-	public void destroy() {}
 
-	public void doFilter(ServletRequest request, ServletResponse response,
-			FilterChain chain) throws IOException, ServletException {
-		if (!(request instanceof HttpServletRequest)) {
+    public void destroy()
+    {
+    }
+
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
+    {
+        if (!(request instanceof HttpServletRequest))
+        {
             throw new ServletException("Can only process HttpServletRequest");
         }
 
-        if (!(response instanceof HttpServletResponse)) {
+        if (!(response instanceof HttpServletResponse))
+        {
             throw new ServletException("Can only process HttpServletResponse");
         }
 
         HttpServletRequest httpRequest = new TransparentRequestContentAccessor((HttpServletRequest) request);
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
-        
-        if (logger.isDebugEnabled()) {
-            //logger.debug("MetaWeblog request: " + request.get);
-        }
-        
+
         UsernamePasswordAuthenticationToken authRequest = getUsernameAndPassword(httpRequest);
-        
-        
+
         authRequest.setDetails(authenticationDetailsSource.buildDetails(httpRequest));
 
         Authentication authResult;
 
-        try {
+        try
+        {
             authResult = authenticationManager.authenticate(authRequest);
-        } catch (AuthenticationException failed) {
+        }
+        catch (AuthenticationException failed)
+        {
             // Authentication failed
-            if (logger.isDebugEnabled()) {
+            if (logger.isDebugEnabled())
+            {
                 logger.debug("Authentication request for user: " + authRequest.getPrincipal() + " failed: " + failed.toString());
             }
 
             SecurityContextHolder.getContext().setAuthentication(null);
-            
+
             authenticationEntryPoint.commence(request, response, failed);
-            
+
             return;
         }
 
         // Authentication success
-        if (logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled())
+        {
             logger.debug("Authentication success: " + authResult.toString());
         }
 
         SecurityContextHolder.getContext().setAuthentication(authResult);
-        
-		
+
         chain.doFilter(httpRequest, response);
-	}
+    }
 
-	private UsernamePasswordAuthenticationToken getUsernameAndPassword(
-			ServletRequest request) {
-		
-		try {
-			SAXReader parser = new SAXReader();
-			Document doc = parser.read(request.getInputStream());
-			if(logger.isDebugEnabled())
-			{
-				StringWriter sw = new StringWriter();
-				XMLWriter writer = new XMLWriter(sw, new OutputFormat("    ", false));
-				writer.write(doc);
+    private UsernamePasswordAuthenticationToken getUsernameAndPassword(ServletRequest request)
+    {
 
-				logger.debug("payload: " + sw.toString());
-			}
-			
-			String username = doc.valueOf("/methodCall/params/param[2]/value/string");
-			logger.debug("xml-rpc Username:" + username);
-			if(username == null)
-				username = doc.valueOf("/methodCall/params/param[2]/value");
-			
-			
-			
-			String password = doc.valueOf("/methodCall/params/param[3]/value/string");
-			logger.debug("xml-rpc password: " + password);
-			if(password == null)
-				password = doc.valueOf("/methodCall/params/param[3]/value");
-			
-			logger.debug("xml-rpc Username:" + username + " password: " + password);
-			
-			if(password != null && username != null)
-				return new UsernamePasswordAuthenticationToken(username, password);
-			
-		} catch (Exception e) {
-			logger.debug("Couldn't read username/password from xml-rpc payload");
-		} 
-		
-		return null;
-	}
+        try
+        {
+            SAXReader parser = new SAXReader();
+            Document doc = parser.read(request.getInputStream());
+            if (logger.isDebugEnabled())
+            {
+                StringWriter sw = new StringWriter();
+                XMLWriter writer = new XMLWriter(sw, new OutputFormat("    ", false));
+                writer.write(doc);
 
-	public void init(FilterConfig filterConfig) throws ServletException {
-		// TODO Auto-generated method stub
-		
-	}
+                logger.debug("payload: " + sw.toString());
+            }
 
-	public void afterPropertiesSet() throws Exception {
-		Assert.notNull(this.authenticationManager, "An AuthenticationManager is required");
-	}
+            String username = doc.valueOf("/methodCall/params/param[2]/value/string");
+            logger.debug("xml-rpc Username:" + username);
+            if (username == null)
+                username = doc.valueOf("/methodCall/params/param[2]/value");
 
-	public int getOrder() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+            String password = doc.valueOf("/methodCall/params/param[3]/value/string");
+            logger.debug("xml-rpc password: " + password);
+            if (password == null)
+                password = doc.valueOf("/methodCall/params/param[3]/value");
 
-	public AuthenticationManager getAuthenticationManager() {
-		return authenticationManager;
-	}
+            logger.debug("xml-rpc Username:" + username + " password: " + password);
 
-	public void setAuthenticationManager(AuthenticationManager authenticationManager) {
-		this.authenticationManager = authenticationManager;
-	}
+            if (password != null && username != null)
+                return new UsernamePasswordAuthenticationToken(username, password);
 
-	public void setOrder(int order) {
-		this.order = order;
-	}
+        }
+        catch (Exception e)
+        {
+            logger.debug("Couldn't read username/password from xml-rpc payload");
+        }
 
-	public AuthenticationEntryPoint getAuthenticationEntryPoint() {
-		return authenticationEntryPoint;
-	}
+        return null;
+    }
 
-	public void setAuthenticationEntryPoint(
-			AuthenticationEntryPoint authenticationEntryPoint) {
-		this.authenticationEntryPoint = authenticationEntryPoint;
-	}
-	
-	
+    public void init(FilterConfig filterConfig) throws ServletException
+    {
+    }
+
+    public void afterPropertiesSet() throws Exception
+    {
+        Assert.notNull(this.authenticationManager, "An AuthenticationManager is required");
+    }
+
+    public int getOrder()
+    {
+        return 0;
+    }
+
+    public AuthenticationManager getAuthenticationManager()
+    {
+        return authenticationManager;
+    }
+
+    public void setAuthenticationManager(AuthenticationManager authenticationManager)
+    {
+        this.authenticationManager = authenticationManager;
+    }
+
+    public AuthenticationEntryPoint getAuthenticationEntryPoint()
+    {
+        return authenticationEntryPoint;
+    }
+
+    public void setAuthenticationEntryPoint(AuthenticationEntryPoint authenticationEntryPoint)
+    {
+        this.authenticationEntryPoint = authenticationEntryPoint;
+    }
 
 }

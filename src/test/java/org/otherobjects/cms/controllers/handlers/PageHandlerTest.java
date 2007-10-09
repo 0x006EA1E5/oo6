@@ -7,7 +7,6 @@ import org.otherobjects.cms.model.SitePage;
 import org.otherobjects.cms.test.BaseJcrTestCase;
 import org.otherobjects.cms.types.PropertyDefImpl;
 import org.otherobjects.cms.types.TypeDefImpl;
-import org.otherobjects.cms.types.TypeService;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,12 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class PageHandlerTest extends BaseJcrTestCase {
 	
 	private DaoService daoService;
-	private TypeService typeService;
-	
-	
-	public void setTypeService(TypeService typeService) {
-		this.typeService = typeService;
-	}
 
 	public void setDaoService(DaoService daoService) {
 		this.daoService = daoService;

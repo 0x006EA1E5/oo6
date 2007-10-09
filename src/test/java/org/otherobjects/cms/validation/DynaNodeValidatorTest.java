@@ -9,7 +9,6 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.beans.BaseDynaNodeTest;
 import org.otherobjects.cms.binding.BindServiceImpl;
 import org.otherobjects.cms.model.DynaNode;
-import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.PropertyDefImpl;
 import org.otherobjects.cms.types.TypeDef;
 import org.springframework.mock.web.MockHttpServletRequest;

@@ -57,7 +57,8 @@ public class UserDAOLdap implements UserDetailsService {
 	      }
 	   }
 	
-	public List<LdapUser> listAll()
+	@SuppressWarnings("unchecked")
+    public List<LdapUser> listAll()
 	{
 		return (List<LdapUser>)ldapTemplate.search("ou=users", "(objectClass=person)", getContextMapper());
 	}

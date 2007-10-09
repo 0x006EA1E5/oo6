@@ -1,7 +1,6 @@
 package org.otherobjects.cms.security;
 
 import org.acegisecurity.Authentication;
-import org.acegisecurity.context.SecurityContext;
 import org.acegisecurity.context.SecurityContextHolder;
 import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.acegisecurity.userdetails.UserDetails;

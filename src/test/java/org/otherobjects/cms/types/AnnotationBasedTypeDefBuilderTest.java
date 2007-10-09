@@ -39,7 +39,7 @@ public class AnnotationBasedTypeDefBuilderTest extends TestCase
     {
         try
         {
-            TypeDef typeDef = new AnnotationBasedTypeDefBuilder().getTypeDef(TestBean2.class);
+            new AnnotationBasedTypeDefBuilder().getTypeDef(TestBean2.class);
             fail();
         }
         catch (Exception e)
@@ -51,7 +51,7 @@ public class AnnotationBasedTypeDefBuilderTest extends TestCase
     {
         try
         {
-            TypeDef typeDef = new AnnotationBasedTypeDefBuilder().getTypeDef(TestBean3.class);
+            new AnnotationBasedTypeDefBuilder().getTypeDef(TestBean3.class);
             fail();
         }
         catch (OtherObjectsException e)

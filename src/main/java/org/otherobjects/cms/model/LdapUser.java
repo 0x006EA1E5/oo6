@@ -7,14 +7,15 @@ import org.springframework.ldap.support.DistinguishedName;
 
 public class LdapUser implements UserDetails, Editable {
 	
-	private String username;
+    private static final long serialVersionUID = -897291766936195523L;
+
+    private String username;
 	private String firstName;
 	private String lastName;
 	private String description;
 	private String email;
 	private DistinguishedName distinguishedName;
 	
-
 	public String getId() {
 		return distinguishedName.toString();
 	}

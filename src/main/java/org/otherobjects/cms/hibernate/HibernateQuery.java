@@ -53,7 +53,7 @@ import org.otherobjects.cms.dao.PagedResultImpl;
  * You can make use of hibernate named parameters. If you do you can check the resulting query by calling the toString() method which will replace
  * the named parameters by the actual values (if they have been set), which mmight be useful in debugging.
  * 
- * 
+ * FIXME Make this parametized
  * 
  * @author joerg
  *
@@ -95,7 +95,7 @@ public class HibernateQuery {
 		this.namedParameters = new HashMap<String, Object>();
 	}
 	
-	public HibernateQuery(Class clazz)
+	public HibernateQuery(Class<?> clazz)
 	{
 		this();
 		setFromClause(clazz.getName());
@@ -106,13 +106,14 @@ public class HibernateQuery {
 	 * 
 	 * @param clauses
 	 */
-	public HibernateQuery(String clauses)
+    public HibernateQuery(String clauses)
 	{
 		this();
 		GroovyShell shell = new GroovyShell();
+		@SuppressWarnings("unchecked")
 		Map<String, String> clausesMap = (Map<String, String>) shell.evaluate("def map = " + clauses + "; return map;");
 		try {
-			for(int i = 0; i < CLAUSE_KEYS.length; i++)
+			for(int i = 0; i < CLAUSE_KEYS.length; i++)  
 			{
 				String clause = CLAUSE_KEYS[i];
 
@@ -206,7 +207,8 @@ public class HibernateQuery {
 		return ( (Integer) (query.iterate().next()) ).intValue();
 	}
 	
-	public PagedResult getPagedResult(int pageSize, int pageNo, Session session)
+	@SuppressWarnings("unchecked")
+    public PagedResult getPagedResult(int pageSize, int pageNo, Session session)
 	{
 		int recordCount = getRecordCount(session);
 		int offset = PagedResultImpl.calcStartIndex(pageSize, pageNo);

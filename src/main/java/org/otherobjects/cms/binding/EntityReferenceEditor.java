@@ -7,20 +7,19 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.dao.DaoService;
 import org.springframework.util.StringUtils;
 
-
-
-public class EntityReferenceEditor extends PropertyEditorSupport {
-	private Class type;
+public class EntityReferenceEditor extends PropertyEditorSupport
+{
+    private Class<?> type;
     private DaoService daoService;
-    
-    public EntityReferenceEditor(DaoService daoService, Class type)
+
+    public EntityReferenceEditor(DaoService daoService, Class<?> type)
     {
         this.daoService = daoService;
         this.type = type;
     }
-    
+
     private static Pattern pattern = Pattern.compile("^\\d+$");
-    
+
     /**
      * Lookup an Entity from an id string.
      */
@@ -47,23 +46,30 @@ public class EntityReferenceEditor extends PropertyEditorSupport {
      * //TODO we might need a marker interface for Entities 
      */
     public String getAsText()
-    {	
-    	boolean hasId = false;
-    	try{
-    		hasId = getValue().getClass().getMethod("getId", null) != null;
-    	}
-    	catch(Exception e){}
-    	
-    	if(hasId)
-    	{
-    		Long id = null;
-    		try {
-				id = (Long) PropertyUtils.getSimpleProperty(getValue(),"id");
-			} catch (Exception e) {}
-			
-			return (id != null) ? id.toString() : null;
-    	}
-    	else
-    		return null;
+    {
+        boolean hasId = false;
+        try
+        {
+            hasId = getValue().getClass().getMethod("getId") != null;
+        }
+        catch (Exception e)
+        {
+        }
+
+        if (hasId)
+        {
+            Long id = null;
+            try
+            {
+                id = (Long) PropertyUtils.getSimpleProperty(getValue(), "id");
+            }
+            catch (Exception e)
+            {
+            }
+
+            return (id != null) ? id.toString() : null;
+        }
+        else
+            return null;
     }
 }
