@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd ">
+
+	<bean id="navService" class="org.otherobjects.cms.site.XmlBackedSiteNavigatorService">
+		<property name="xmlConfig" value="classpath:org/otherobjects/cms/site/SampleXmlSiteConfig.xml" />
+	</bean>
+	
+	
+	<bean id="testVelocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+		<property name="resourceLoaderPath" value="/,classpath:org/otherobjects/cms/site" />
+		<property name="velocityProperties">
+			<props>
+				<prop key="velocimacro.permissions.allow.inline.local.scope">true</prop>
+				<prop key="velocimacro.permissions.allow.inline.to.replace.global">true</prop>
+				<prop key="velocimacro.arguments.strict">true</prop>
+				<prop key="velocimacro.library.autoreload">true</prop>
+				<prop key="velocimacro.library">
+					otherobjects.resources/templates/macros/otherobjects.vm,otherobjects.resources/templates/macros/site.vm
+				</prop>
+				<prop key="file.resource.loader.cache">false</prop>
+				<prop key="encoding.default">UTF-8</prop>
+				<prop key="directive.set.null.allowed">true</prop>
+			</props>
+		</property>
+	</bean>
+</beans>
