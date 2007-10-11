@@ -22,7 +22,7 @@ public class XmlBackedSiteNavigatorService implements SiteNavigatorService, Init
 	}
 
 	public List<SiteItem> getSiteItems(SiteItem siteItem, int parentLevel) {
-		if(siteItem == null)
+		if(siteItem == null || parentLevel == 0)
 		{
 			if(parentLevel > 0)
 				return null;

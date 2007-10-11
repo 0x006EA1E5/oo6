@@ -1,5 +1,5 @@
 ##
-## Velcoity macro library for use in sites.
+## Velocity macro library for use in sites.
 ##
 
 
@@ -26,6 +26,38 @@
 
 #if($outerTags)</ul>#end
 #end
+
+## 
+## ooNavigation macro Mk II
+##
+## TODO Add support for including home folder
+## TODO Add support for depths
+##
+#*
+#macro(nav $container $outerTags)
+#if($outerTags)<ul>#end
+
+#foreach($item in $navigatorService.getSiteItems($container))
+    <li>#set($current = $resourceObject.href.equals($item.href))#if($current)<strong>#end<a href="$item.href">$item.title</a>#if($current)</strong>#end</li>
+    #if($item.folder) #nav($item true) #end
+#end
+
+#if($outerTags)</ul>#end
+#end
+*#
+
+#macro(nav $siteItem $outerTags $minLevel $maxLevel)
+#if($outerTags)<ul>#end
+
+#foreach($item in $navigatorService.getSiteItems($siteItem, $minLevel))
+    <li>#set($current = $resourceObject.href.equals($item.href))#if($current)<strong>#end<a href="$item.href">$item.title</a>#if($current)</strong>#end</li>
+	##set($newMin = $item.depth)
+    #if($item.folder && $item.depth < $maxLevel) #nav($item true $item.depth $maxLevel) #end
+#end
+
+#if($outerTags)</ul>#end
+#end
+
 
 ## 
 ## ooImage macros

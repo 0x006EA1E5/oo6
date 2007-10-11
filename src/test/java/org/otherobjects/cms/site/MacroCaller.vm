@@ -1,2 +1,1 @@
-Cat1 $category1.depth
-#nav( $category1 true 0 3)
+#nav( $category1 true 0 2)
