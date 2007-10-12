@@ -10,10 +10,14 @@ public interface CmsNode
 {
     //TODO Only needed until OCM set's id on insert itself
     public void setId(String id);
-   
+
     public String getId();
 
     public String getJcrPath();
 
-    public String getLabel();
+    public String getOoLabel();
+
+    public boolean isPublished();
+
+    public void setPublished(boolean published);
 }

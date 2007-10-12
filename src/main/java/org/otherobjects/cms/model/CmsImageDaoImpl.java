@@ -2,37 +2,40 @@ package org.otherobjects.cms.model;
 
 import java.awt.Dimension;
 
-import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.dao.AbstractDynaNodeDaoJackrabbit;
+import org.otherobjects.cms.jcr.GenericJcrDaoJackrabbit;
 import org.otherobjects.cms.tools.CmsImageTool;
-import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.util.ImageUtils;
 
-public class CmsImageDaoImpl extends AbstractDynaNodeDaoJackrabbit implements CmsImageDao
+public class CmsImageDaoImpl extends GenericJcrDaoJackrabbit<CmsImage> implements CmsImageDao
 {
+    public CmsImageDaoImpl()
+    {
+        super(CmsImage.class);
+    }
+
     private final DataFileDao dataFileDao = new DataFileDaoFileSystem();
     private final CmsImageTool cmsImageTool = new CmsImageTool();
 
-    public CmsImage createCmsImage()
-    {
-        /// FIXME This should never be needed -- need better DAOs
-        String typeName = CmsImage.class.getName();
-        TypeDef type = getTypeService().getType(typeName);
-        try
-        {
-            CmsImage n = new CmsImage();
-            n.setTypeDef(type);
-            return n;
-        }
-        catch (Exception e)
-        {
-            //TODO Better exception?
-            throw new OtherObjectsException("Could not create new instance of type: " + typeName, e);
-        }
-    }
+//    public CmsImage createCmsImage()
+//    {
+//        /// FIXME This should never be needed -- need better DAOs
+//        String typeName = CmsImage.class.getName();
+//        TypeDef type = getTypeService().getType(typeName);
+//        try
+//        {
+//            CmsImage n = new CmsImage();
+//            n.setTypeDef(type);
+//            return n;
+//        }
+//        catch (Exception e)
+//        {
+//            //TODO Better exception?
+//            throw new OtherObjectsException("Could not create new instance of type: " + typeName, e);
+//        }
+//    }
 
-    @Override
-    public DynaNode save(DynaNode o)
+//    @Override
+    public CmsImage save(CmsImage o)
     {
 
         CmsImage image = (CmsImage) o;
@@ -52,6 +55,6 @@ public class CmsImageDaoImpl extends AbstractDynaNodeDaoJackrabbit implements Cm
             // Create thumbnail
             this.cmsImageTool.getThumbnail(image);
         }
-        return super.save(image);
+        return (CmsImage) super.save(image);
     }
 }

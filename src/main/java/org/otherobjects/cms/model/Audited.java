@@ -2,7 +2,7 @@ package org.otherobjects.cms.model;
 
 import java.util.Date;
 
-public interface AuditInfo {
+public interface Audited {
 	public String getUserName();
 	public void setUserName(String userName);
 	public String getUserId();

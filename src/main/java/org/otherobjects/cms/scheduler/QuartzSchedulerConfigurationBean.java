@@ -2,11 +2,11 @@ package org.otherobjects.cms.scheduler;
 
 import java.util.List;
 
-import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.events.PublishEvent;
+import org.otherobjects.cms.jcr.UniversalJcrDao;
+import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsNode;
-import org.otherobjects.cms.model.DynaNode;
-import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.cms.model.PersistentJobDescription;
 import org.quartz.Scheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +28,7 @@ public class QuartzSchedulerConfigurationBean implements ApplicationListener
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private Scheduler scheduler;
-    private DynaNodeDao dynaNodeDao;
-    private TypeService typeService;
+    private UniversalJcrDao universalJcrDao;
 
     /**
      * Listens to contextRefreshed and publish events to initialize / refresh jobs. 
@@ -58,20 +57,19 @@ public class QuartzSchedulerConfigurationBean implements ApplicationListener
      */
     private void init()
     {
-        typeService.getType(PersistentJobDescription.class.getName());
-
-        List<DynaNode> jobs = dynaNodeDao.getAllByPath("/scheduler");
-        for (DynaNode node : jobs)
+        // FIXME How to handle non-jobs in the folder? Don't want an exception.
+        List<BaseNode> jobs = universalJcrDao.getAllByPath("/scheduler");
+        for (BaseNode job : jobs)
         {
-            if (node instanceof PersistentJobDescription)
+            if (job instanceof PersistentJobDescription)
             {
-                PersistentJobDescription jobDescription = (PersistentJobDescription) node;
+                PersistentJobDescription jobDescription = (PersistentJobDescription) job;
                 if (jobDescription.isValid())
                     scheduleJob(jobDescription);
             }
             else
             {
-                logger.warn("Non JobDescription found in scheduler folder: " + node.getCode());
+                logger.warn("Non JobDescription found in scheduler folder: " + job.getJcrPath());
             }
         }
     }
@@ -97,19 +95,14 @@ public class QuartzSchedulerConfigurationBean implements ApplicationListener
         }
     }
 
-    public void setTypeService(TypeService typeService)
-    {
-        this.typeService = typeService;
-    }
-
-    public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
-    {
-        this.dynaNodeDao = dynaNodeDao;
-    }
-
     public void setScheduler(Scheduler scheduler)
     {
         this.scheduler = scheduler;
+    }
+
+    public void setUniversalJcrDao(UniversalJcrDao universalJcrDao)
+    {
+        this.universalJcrDao = universalJcrDao;
     }
 
 }

@@ -11,7 +11,7 @@ import org.otherobjects.cms.types.annotation.Type;
 import flexjson.JSON;
 
 @Type
-public class SiteFolder extends DynaNode implements Folder
+public class SiteFolder extends BaseNode implements Folder
 {
     private String label;
     private String cssClass;
@@ -29,7 +29,7 @@ public class SiteFolder extends DynaNode implements Folder
         if (getAllowedTypes() != null && getAllowedTypes().size() > 0)
             return getAllowedTypes();
         else
-            return (List) ((TypeService) SingletonBeanLocator.getBean("typeService")).getTypesBySuperClass(DynaNode.class);
+            return (List) ((TypeService) SingletonBeanLocator.getBean("typeService")).getTypesBySuperClass(BaseNode.class);
     }
 
     @Property(order = 40)

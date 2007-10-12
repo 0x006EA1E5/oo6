@@ -151,7 +151,7 @@ brushed:~ rich$
         <title>ImageMagick</title>
 
         <para>We use ImageMagick for high quality image resizing. You need
-        version 6.3 or later. Download a binary package from <uri>
+        version 6.2 or later. Download a binary package from <uri>
         http://www.imagemagick.org/script/binary-releases.php </uri> and
         install it. You will need to set your paths and environment variables
         correctly. To test that you have the correct version is installed run
@@ -564,6 +564,12 @@ Admin : http://localhost:8080/go/workbench/
 
               <entry>Generates plugin documentation</entry>
             </row>
+
+            <row>
+              <entry>mvn javadoc:javadoc</entry>
+
+              <entry>Generates JavaDoc in target/site/apidocs/</entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
@@ -772,11 +778,73 @@ Admin : http://localhost:8080/go/workbench/
       <listitem>
         <para>Don't duplicate URL in ulinks</para>
       </listitem>
+
+      <listitem>
+        <para>Side bars</para>
+      </listitem>
     </orderedlist>
 
     <para><important>
         <para>Here is a sample important paragraph.</para>
       </important></para>
+
+    <section>
+      <title>JavaDoc</title>
+
+      <para>See: http://java.sun.com/j2se/javadoc/writingdoccomments/. The
+      style guide is particularly important.</para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Style Guide</title>
+
+    <para>This chapter describes the conventions and styles used when working
+    with OTHERobjects.</para>
+
+    <section>
+      <title>Java</title>
+
+      <para>Standard advice applies. Link to resoucre? Also see book?</para>
+
+      <para>Exceptions: start curly brace on new line</para>
+
+      <para>An eclipse code formatting preferences file is provided.</para>
+
+      <para>Avoid all standard compiler warnings. Supress warnings only when
+      essential and in the smallest scope possible (method not class).</para>
+
+      <para>The default eclipse warnings config should be used.</para>
+
+      <para>Templates are provided for common patterns. Use these whenever
+      possible.</para>
+    </section>
+
+    <section>
+      <title>Groovy</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Javascript</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Files on disk</title>
+
+      <para>Always lowercase. Use a hypen (not an underscrore) as a word
+      separator.</para>
+    </section>
+
+    <section>
+      <title>SQL and HQL</title>
+
+      <para>Kewords should be in uppercase. Table and object names in
+      lowercase.</para>
+    </section>
   </chapter>
 
   <chapter>

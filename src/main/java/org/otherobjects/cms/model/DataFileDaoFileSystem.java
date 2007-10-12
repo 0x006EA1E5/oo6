@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.dao.PagedResult;
+import org.otherobjects.cms.dao.PagedList;
 
 /**
  * Filesystem backed implentation of DataFileDao.
@@ -79,12 +79,12 @@ public class DataFileDaoFileSystem implements DataFileDao
         return null;
     }
 
-    public PagedResult<DataFile> getAllPaged(int pageSize, int pageNo, String filterQuery, String sortField, boolean asc)
+    public PagedList<DataFile> getAllPaged(int pageSize, int pageNo, String filterQuery, String sortField, boolean asc)
     {
         return null;
     }
 
-    public PagedResult<DataFile> getPagedByQuery(String query, int pageSize, int pageNo, String filterQuery, String sortField, boolean asc)
+    public PagedList<DataFile> getPagedByQuery(String query, int pageSize, int pageNo, String filterQuery, String sortField, boolean asc)
     {
         return null;
     }

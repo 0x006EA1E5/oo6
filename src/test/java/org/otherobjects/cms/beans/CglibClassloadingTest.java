@@ -9,14 +9,14 @@ import junit.framework.TestCase;
 import net.sf.cglib.beans.BeanGenerator;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.BaseNode;
 
 public class CglibClassloadingTest extends TestCase {
 	
     public void testBeanModification()
     {
         BeanGenerator beanGenerator = new BeanGenerator();
-        beanGenerator.setSuperclass(DynaNode.class);
+        beanGenerator.setSuperclass(BaseNode.class);
         beanGenerator.addProperty("testString", String.class);
     }
     
@@ -84,7 +84,7 @@ public class CglibClassloadingTest extends TestCase {
 	private Object getDynaNodeBean()
 	{
 		BeanGenerator beanGenerator = new BeanGenerator();
-        beanGenerator.setSuperclass(DynaNode.class);
+        beanGenerator.setSuperclass(BaseNode.class);
         
         beanGenerator.addProperty("testString", String.class);
         beanGenerator.addProperty("testLong", Long.class);

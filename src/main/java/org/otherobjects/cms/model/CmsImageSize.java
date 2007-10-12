@@ -10,7 +10,7 @@ import org.springframework.util.Assert;
  * 
  * @author rich
  */
-public class CmsImageSize extends DynaNode
+public class CmsImageSize
 {
     private String fileName;
     private Long width;

@@ -1,6 +1,7 @@
 package org.otherobjects.cms.workbench;
 
-import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.CmsImage;
+import org.otherobjects.cms.model.CmsNode;
 
 /**
  * Primary interface for manipulating site content.
@@ -9,9 +10,9 @@ import org.otherobjects.cms.model.DynaNode;
  */
 public interface ContentService
 {
-    public DynaNode createImage(String service, String id);
+    public CmsImage createImage(String service, String id);
 
-    public DynaNode createItem(String container, String typeName);
+    public CmsNode createItem(String container, String typeName);
 
-    public DynaNode publishItem(String uuid, String message);
+    public CmsNode publishItem(String uuid, String message);
 }

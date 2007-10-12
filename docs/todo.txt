@@ -1,4 +1,7 @@
-* Did we get annotations fully working?
+Disabled Tests
+--------------
+DynaNodeValidator
+JcrBeanService
 
 
 
@@ -7,6 +10,16 @@
 
 
 
+Research Topics
+---------------
+serializableId
+hash/equals builders
+
+
+Back in Office Todo
+-------------------
+Trac server and Mylyn integration
+Maven repo server
 
 
 M2 TODO

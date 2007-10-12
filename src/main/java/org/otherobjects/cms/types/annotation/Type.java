@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface Type {
 
-    String superClassName() default "org.otherobjects.cms.model.DynaNode";
+    String superClassName() default "org.otherobjects.cms.model.BaseNode";
 
     String label() default "";
 

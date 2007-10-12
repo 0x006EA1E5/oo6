@@ -10,7 +10,7 @@ import org.otherobjects.cms.types.annotation.Type;
  * @author rich
  */
 @Type(label = "External Link", labelProperty = "label")
-public class CmsExternalLink extends DynaNode
+public class CmsExternalLink extends BaseNode
 {
     private String url;
 

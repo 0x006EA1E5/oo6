@@ -1,10 +1,14 @@
 package org.otherobjects.cms.model;
 
-import org.otherobjects.cms.dao.GenericDao;
+import org.otherobjects.cms.dao.GenericJcrDao;
 
-public interface CmsImageDao extends GenericDao<DynaNode, String>
+public interface CmsImageDao extends GenericJcrDao<CmsImage>
 {
-    public CmsImage createCmsImage();
+    /**
+     * This method creates a CMSImage.
+     * 
+     * @return
+     */
+    //public CmsImage createCmsImage();
 
-    public void publish(DynaNode dynaNode);
 }

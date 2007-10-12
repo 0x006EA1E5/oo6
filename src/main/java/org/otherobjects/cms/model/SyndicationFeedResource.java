@@ -15,7 +15,7 @@ import org.otherobjects.cms.types.annotation.Type;
  * @author rich
  */
 @Type(label = "Syndication Feed")
-public class SyndicationFeedResource extends DynaNode
+public class SyndicationFeedResource extends BaseNode
 {
     private static final String ICON_PATH = "otherobjects.resources/static/icons/feed.png";
 

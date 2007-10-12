@@ -15,7 +15,7 @@ import org.springframework.util.Assert;
  * @param <T>
  */
 @SuppressWarnings("unchecked")
-public class PagedResultImpl<T> implements PagedResult<T> {
+public class PagedListImpl<T> implements PagedList<T> {
 
 	protected int pageSize;
 	protected int itemTotal;
@@ -34,7 +34,7 @@ public class PagedResultImpl<T> implements PagedResult<T> {
 	 * @param sliceList - set to true if this list contains the whole result rather than just the items for the current page
 	 * @param comparator - if not null this is used to sort items before setting the iterator
 	 */
-	public PagedResultImpl(int pageSize, int itemTotal, int currentPage, List<T> items, boolean sliceList, Comparator comparator)
+	public PagedListImpl(int pageSize, int itemTotal, int currentPage, List<T> items, boolean sliceList, Comparator comparator)
 	{
 		this.pageSize = pageSize;
 		this.itemTotal = itemTotal;
@@ -82,7 +82,7 @@ public class PagedResultImpl<T> implements PagedResult<T> {
 	 * @param items - list of items
 	 * @param sliceList - set to true if this list contains the whole result rather than just the items for the current page
 	 */
-	public PagedResultImpl(int pageSize, int itemTotal, int currentPage, List<T> items, boolean sliceList)
+	public PagedListImpl(int pageSize, int itemTotal, int currentPage, List<T> items, boolean sliceList)
 	{
 		this(pageSize, itemTotal, currentPage, items, sliceList, null);
 	}
@@ -93,7 +93,7 @@ public class PagedResultImpl<T> implements PagedResult<T> {
 	 * @param currentPage - page to display (with 1 based index)
 	 * @param items - list of items
 	 */
-	public PagedResultImpl(int pageSize, int currentPage, List<T> items)
+	public PagedListImpl(int pageSize, int currentPage, List<T> items)
 	{
 		this(pageSize, (items == null) ? 0 : items.size(), currentPage, items, true);
 	}
@@ -105,7 +105,7 @@ public class PagedResultImpl<T> implements PagedResult<T> {
 	 * @param items - list of items
 	 * @param comparator - if not null this is used to sort items before setting the iterator
 	 */
-	public PagedResultImpl(int pageSize, int currentPage, List<T> items, Comparator comparator)
+	public PagedListImpl(int pageSize, int currentPage, List<T> items, Comparator comparator)
 	{
 		this(pageSize, (items == null) ? 0 : items.size(), currentPage, items, true, comparator);
 	}

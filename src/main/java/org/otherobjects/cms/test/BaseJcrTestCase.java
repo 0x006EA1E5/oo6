@@ -11,8 +11,13 @@ import org.acegisecurity.providers.anonymous.AnonymousAuthenticationProvider;
 import org.acegisecurity.providers.anonymous.AnonymousAuthenticationToken;
 import org.apache.jackrabbit.ocm.spring.JcrMappingTemplate;
 import org.otherobjects.cms.SingletonBeanLocator;
+import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory;
+import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.User;
+import org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder;
+import org.otherobjects.cms.types.TypeDef;
+import org.otherobjects.cms.types.TypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.AbstractTransactionalSpringContextTests;
@@ -29,6 +34,9 @@ public abstract class BaseJcrTestCase extends AbstractTransactionalSpringContext
     protected Logger logger = LoggerFactory.getLogger(getClass());
     protected ResourceBundle rb;
     protected JcrMappingTemplate jcrMappingTemplate;
+    protected DaoService daoService;
+    protected TypeService typeService;
+    protected UniversalJcrDao universalJcrDao;
 
     @Override
     protected String[] getConfigLocations()
@@ -77,5 +85,27 @@ public abstract class BaseJcrTestCase extends AbstractTransactionalSpringContext
     protected void logout()
     {
         SecurityContextHolder.clearContext();
+    }
+
+    public void setDaoService(DaoService daoService)
+    {
+        this.daoService = daoService;
+    }
+
+    protected void registerType(Class<?> cls) throws Exception
+    {
+        AnnotationBasedTypeDefBuilder b = new AnnotationBasedTypeDefBuilder();
+        TypeDef typeDef = b.getTypeDef(cls);
+        typeService.registerType(typeDef);
+    }
+
+    public void setTypeService(TypeService typeService)
+    {
+        this.typeService = typeService;
+    }
+
+    public void setUniversalJcrDao(UniversalJcrDao universalJcrDao)
+    {
+        this.universalJcrDao = universalJcrDao;
     }
 }

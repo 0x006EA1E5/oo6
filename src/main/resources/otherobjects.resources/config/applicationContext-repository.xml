@@ -68,9 +68,11 @@
 		</property>
 	</bean>
 
+<!-- 
 	<bean name="dynaNodeValidator" class="org.otherobjects.cms.validation.DynaNodeValidator">
 		<property name="typeService" ref="typeService" />
 	</bean>
+	 -->
 
 	<bean id="annotationBasedTypeDefBuilder" class="org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder" />
 
@@ -91,7 +93,7 @@
 		</bean>
 	-->
 
-	<!-- DAOs -->
+	<!-- DAOs
 	<bean id="dynaNodeDao" parent="baseTransactionProxy">
 		<property name="target">
 			<bean class="org.otherobjects.cms.dao.DynaNodeDaoJackrabbit">
@@ -101,11 +103,19 @@
 			</bean>
 		</property>
 	</bean>
+	 -->
+	<bean id="universalJcrDao" parent="baseTransactionProxy">
+		<property name="target">
+			<bean class="org.otherobjects.cms.jcr.UniversalJcrDaoJackrabbit">
+				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
+				<property name="sessionFactory" ref="jcrSessionFactory" />
+			</bean>
+		</property>
+	</bean>
 	<bean id="cmsImageDao" parent="baseTransactionProxy">
 		<property name="target">
 			<bean class="org.otherobjects.cms.model.CmsImageDaoImpl">
 				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
-				<property name="typeService" ref="typeService" />
 				<property name="sessionFactory" ref="jcrSessionFactory" />
 			</bean>
 		</property>
@@ -114,12 +124,6 @@
 	<bean name="daoService" class="org.otherobjects.cms.dao.DaoServiceImpl">
 		<property name="daoMap">
 			<map>
-				<entry>
-					<key>
-						<value>org.otherobjects.cms.model.DynaNode</value>
-					</key>
-					<ref bean="dynaNodeDao" />
-				</entry>
 				<entry>
 					<key>
 						<value>org.otherobjects.cms.model.CmsImage</value>

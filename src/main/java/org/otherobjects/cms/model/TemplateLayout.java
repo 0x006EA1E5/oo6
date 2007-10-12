@@ -5,7 +5,7 @@ import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
 
 @Type
-public class TemplateLayout extends DynaNode
+public class TemplateLayout extends BaseNode
 {
     private String code;
     private String label;

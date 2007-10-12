@@ -1,7 +1,6 @@
 package org.otherobjects.cms.beans;
 
 import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.types.TypeDef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

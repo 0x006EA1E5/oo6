@@ -3,30 +3,30 @@ package org.otherobjects.cms.workbench;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.otherobjects.cms.dao.DynaNodeDao;
-import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.jcr.UniversalJcrDao;
+import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.Folder;
 import org.otherobjects.cms.model.SiteFolder;
-import org.otherobjects.cms.util.StringUtils;
 import org.springframework.util.Assert;
 
+@SuppressWarnings("unchecked")
 public class NavigatorServiceImpl implements NavigatorService
 {
-    private DynaNodeDao dynaNodeDao;
-
+    private UniversalJcrDao universalJcrDao;
+    
     public WorkbenchItem getRootItem()
     {
-        Object o = dynaNodeDao.getByPath("/site");
+        Object o = universalJcrDao.getByPath("/site");
         return (WorkbenchItem) o;
     }
 
     public List<WorkbenchItem> getSubContainers(String uuid)
     {
-        DynaNode parent = dynaNodeDao.get(uuid);
-        List<DynaNode> all = dynaNodeDao.getAllByPath(parent.getJcrPath());
+        BaseNode parent = universalJcrDao.get(uuid);
+        List<BaseNode> all = universalJcrDao.getAllByPath(parent.getJcrPath());
 
         List<WorkbenchItem> children = new ArrayList<WorkbenchItem>();
-        for (DynaNode n : all)
+        for (BaseNode n : all)
         {
             if (n instanceof Folder)
                 children.add(n);
@@ -36,22 +36,22 @@ public class NavigatorServiceImpl implements NavigatorService
 
     public WorkbenchItem addItem(String uuid, String name)
     {
-        DynaNode parent = dynaNodeDao.get(uuid);
+        BaseNode parent = universalJcrDao.get(uuid);
         Assert.notNull(parent, "Parent node not found: " + uuid);
 
         int c = 0;
         do
         {
             String newPath = parent.getJcrPath() + "/untitled-" + ++c;
-            boolean alreadyExists = (dynaNodeDao.existsAtPath(newPath));
+            boolean alreadyExists = (universalJcrDao.existsAtPath(newPath));
             if(!alreadyExists) break;
             
         } while(true);
 
-        DynaNode newFolder = dynaNodeDao.create("org.otherobjects.cms.model.SiteFolder");
+        BaseNode newFolder = new SiteFolder();
         newFolder.setPath(parent.getJcrPath());
         newFolder.setLabel("Untitled " + c);
-        return dynaNodeDao.save(newFolder);
+        return universalJcrDao.save(newFolder);
     }
 
     public WorkbenchItem getItem(String path)
@@ -61,14 +61,14 @@ public class NavigatorServiceImpl implements NavigatorService
 
     public List<WorkbenchItem> getItemContents(String uuid)
     {
-        DynaNode node = dynaNodeDao.get(uuid);
+        BaseNode node = universalJcrDao.get(uuid);
         
-        List<DynaNode> all = dynaNodeDao.getAllByPath(node.getPath());
+        List<BaseNode> all = universalJcrDao.getAllByPath(node.getPath());
 
         List<WorkbenchItem> children = new ArrayList<WorkbenchItem>();
-        for (DynaNode n : all)
+        for (BaseNode n : all)
         {
-            if (!(n instanceof SiteFolder))
+            if (!(n instanceof Folder))
                 children.add(n);
         }
         return children;
@@ -76,30 +76,26 @@ public class NavigatorServiceImpl implements NavigatorService
 
     public WorkbenchItem renameItem(String uuid, String newName)
     {
-        DynaNode node = dynaNodeDao.get(uuid);
-        node.setCode(StringUtils.generateUrlCode(newName));
-        node.set("label", newName);
-        DynaNode renamed = dynaNodeDao.save(node);
+        BaseNode node = universalJcrDao.get(uuid);
+        node.setOoLabel(newName);
+        BaseNode renamed = universalJcrDao.save(node);
         return renamed;
     }
 
     public void moveItem(String itemId, String targetId, String point)
     {
-        dynaNodeDao.moveItem(itemId, targetId, point);
+        BaseNode item = universalJcrDao.get(itemId);
+        BaseNode target = universalJcrDao.get(targetId);
+        universalJcrDao.reorder(item, target, point);
     }
-    
+
     public void removeItem(String path)
     {
     }
 
-    public DynaNodeDao getDynaNodeDao()
+    public void setUniversalJcrDao(UniversalJcrDao universalJcrDao)
     {
-        return dynaNodeDao;
-    }
-
-    public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
-    {
-        this.dynaNodeDao = dynaNodeDao;
+        this.universalJcrDao = universalJcrDao;
     }
 
 }

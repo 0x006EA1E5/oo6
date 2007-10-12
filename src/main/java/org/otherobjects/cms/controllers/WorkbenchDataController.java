@@ -13,14 +13,13 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
-import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.dao.GenericDao;
-import org.otherobjects.cms.dao.PagedResult;
+import org.otherobjects.cms.dao.PagedList;
+import org.otherobjects.cms.jcr.UniversalJcrDao;
+import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsImage;
-import org.otherobjects.cms.model.CmsImageDao;
 import org.otherobjects.cms.model.CompositeDatabaseId;
 import org.otherobjects.cms.model.DbFolder;
-import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.model.Folder;
 import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.cms.model.SmartFolder;
@@ -51,13 +50,12 @@ import com.aetrion.flickr.photos.Photo;
  * 
  * @author rich
  */
-@SuppressWarnings("unchecked")
 public class WorkbenchDataController implements Controller
 {
     public static final int ITEMS_PER_PAGE = 25;
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private DynaNodeDao dynaNodeDao;
+    private UniversalJcrDao universalJcrDao;
     private TypeService typeService;
     private DaoService daoService;
 
@@ -82,6 +80,7 @@ public class WorkbenchDataController implements Controller
             return null;
     }
 
+    @SuppressWarnings("unchecked")
     private ModelAndView generateImageServiceData(HttpServletRequest request) throws IOException, SAXException, FlickrException
     {
         //String path = request.getPathInfo();
@@ -101,7 +100,8 @@ public class WorkbenchDataController implements Controller
 
     private CmsImage convertToCmsImage(Photo photo)
     {
-        CmsImage image = ((CmsImageDao) this.daoService.getDao(CmsImage.class)).createCmsImage();
+//        CmsImage image = ((CmsImageDao) this.daoService.getDao(CmsImage.class)).createCmsImage();
+        CmsImage image = new CmsImage();//cmsImageDao.createCmsImage();
         image.setLabel(photo.getTitle());
         //image.setKeywords(photo.getTags());
         image.setOriginalWidth(1L);
@@ -112,6 +112,7 @@ public class WorkbenchDataController implements Controller
         return image;
     }
 
+    @SuppressWarnings("unchecked")
     private ModelAndView generateItemData(HttpServletRequest request)
     {
         String path = request.getPathInfo();
@@ -121,7 +122,7 @@ public class WorkbenchDataController implements Controller
         Object item = null;
         if (IdentifierUtils.isUUID(id))
         {
-            item = this.dynaNodeDao.get(id);
+            item = this.universalJcrDao.get(id);
         }
         else
         {
@@ -166,16 +167,17 @@ public class WorkbenchDataController implements Controller
         }
         else if (typeName.equals("org.otherobjects.cms.model.CmsImage"))
         {
-            allByType = this.dynaNodeDao.getAllByJcrExpression("/jcr:root//element(*, oo:node) [@ooType = 'org.otherobjects.cms.model.CmsImage'] order by @modificationTimestamp descending");
+            allByType = this.universalJcrDao.getAllByJcrExpression("/jcr:root//element(*, oo:node) [@ooType = 'org.otherobjects.cms.model.CmsImage'] order by @modificationTimestamp descending");
         }
         // FIXME Must be a better way of testing for specfic daos
-        else if (! (daoService.getDao(typeName) instanceof DynaNodeDao))
-        {
-        	allByType = daoService.getDao(typeName).getAll();
-        }
+//        else if (! (daoService.getDao(typeName) instanceof BaseNodeDao))
+//        {
+//        	allByType = daoService.getDao(typeName).getAll();
+//        }
         else
         {
-            allByType = this.dynaNodeDao.getAllByType(typeName);
+            GenericDao dao = daoService.getDao(typeName);
+            allByType = dao.getAll();
         }
 
         ModelAndView view = new ModelAndView("jsonView");
@@ -209,15 +211,15 @@ public class WorkbenchDataController implements Controller
         String jcrPath = "/";
         if (nodeId != null && nodeId.length() > 10)
         {
-            DynaNode node = this.dynaNodeDao.get(nodeId);
+            BaseNode node = universalJcrDao.get(nodeId);
             jcrPath = node.getJcrPath();
         }
 
         // FIXME M2 Use NavigatorService
         List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
-        List<DynaNode> contents = this.dynaNodeDao.getAllByPath(jcrPath);
+        List<BaseNode> contents = universalJcrDao.getAllByPath(jcrPath);
 
-        for (DynaNode dynaNode : contents)
+        for (BaseNode dynaNode : contents)
         {
             if (dynaNode instanceof Folder)
             {
@@ -271,10 +273,11 @@ public class WorkbenchDataController implements Controller
      * @param request
      * @return
      */
+    @SuppressWarnings("unchecked")
     private ModelAndView generateListingData(HttpServletRequest request)
     {
         String jcrPath = "/site";
-        DynaNode node = null;
+        BaseNode node = null;
 
         ModelAndView view = new ModelAndView("jsonView");
 
@@ -285,12 +288,12 @@ public class WorkbenchDataController implements Controller
 
         if (nodeId != null && nodeId.length() > 10)
         {
-            node = this.dynaNodeDao.get(nodeId);
+            node = universalJcrDao.get(nodeId);
             jcrPath = node.getJcrPath();
         }
         else
         {
-            node = this.dynaNodeDao.getByPath(jcrPath);
+            node = universalJcrDao.getByPath(jcrPath);
         }
 
         // FIXME M3 Can we exclude folders in the query?
@@ -299,10 +302,10 @@ public class WorkbenchDataController implements Controller
         if (dir == null || dir.equals("ASC"))
             asc = true;
 
-        PagedResult pagedResult = null;
+        PagedList pagedResult = null;
         if (node instanceof SiteFolder)
         {
-            //pagedResult = this.dynaNodeDao.getPagedByPath(jcrPath, ITEMS_PER_PAGE, getRequestedPage(request), q, sort, asc);
+            //pagedResult = this.universalJcrDao.getPagedByPath(jcrPath, ITEMS_PER_PAGE, getRequestedPage(request), q, sort, asc);
             String search = "";
             String sortString = "order by @modificationTimestamp descending";
 
@@ -311,7 +314,7 @@ public class WorkbenchDataController implements Controller
             if (StringUtils.isNotEmpty(q))
                 search = "and jcr:contains(.,'" + q + "')";
             String query = "/jcr:root" + jcrPath + "/* [not(jcr:like(@ooType,'%Folder')) and not(jcr:like(@ooType,'%MetaData')) " + search + "] " + sortString;
-            pagedResult = this.dynaNodeDao.pageByJcrExpression(query, ITEMS_PER_PAGE, getRequestedPage(request));
+            pagedResult = this.universalJcrDao.pageByJcrExpression(query, ITEMS_PER_PAGE, getRequestedPage(request));
         }
         else if (node instanceof SmartFolder)
         {
@@ -325,7 +328,7 @@ public class WorkbenchDataController implements Controller
                 query = "/jcr:root/site//*[jcr:contains(., '" + query + "') and not(jcr:like(@ooType,'%Folder'))] order by @modificationTimestamp descending";
 
             Assert.hasText(query, "SmartFolder must have a query.");
-            pagedResult = this.dynaNodeDao.pageByJcrExpression(query, ITEMS_PER_PAGE, getRequestedPage(request));
+            pagedResult = this.universalJcrDao.pageByJcrExpression(query, ITEMS_PER_PAGE, getRequestedPage(request));
 
         }
         else if (node instanceof DbFolder)
@@ -365,9 +368,9 @@ public class WorkbenchDataController implements Controller
         return (start / limit) + 1;
     }
 
-    public void setDynaNodeDao(DynaNodeDao dynaNodeDao)
+    public void setUniversalJcrDao(UniversalJcrDao universalJcrDao)
     {
-        this.dynaNodeDao = dynaNodeDao;
+        this.universalJcrDao = universalJcrDao;
     }
 
     public void setTypeService(TypeService typeService)

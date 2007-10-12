@@ -78,25 +78,24 @@
 
 	<bean name="workbenchDataController" class="org.otherobjects.cms.controllers.WorkbenchDataController">
 		<property name="typeService" ref="typeService" />
-		<property name="dynaNodeDao" ref="dynaNodeDao" />
 		<property name="daoService" ref="daoService" />
 	</bean>
 
 	<bean name="formController" class="org.otherobjects.cms.controllers.FormController">
-		<property name="dynaNodeDao" ref="dynaNodeDao" />
+		<property name="universalJcrDao" ref="universalJcrDao" />
 		<property name="daoService" ref="daoService" />
-		<property name="validator" ref="dynaNodeValidator" />
+		<!--  FIXME <property name="validator" ref="dynaNodeValidator" />  -->
 		<property name="bindService" ref="bindService" />
 		<property name="typeDefBuilder" ref="annotationBasedTypeDefBuilder" />
 	</bean>
 
 	<bean name="navigatorService" class="org.otherobjects.cms.workbench.NavigatorServiceImpl">
-		<property name="dynaNodeDao" ref="dynaNodeDao" />
+		<property name="universalJcrDao" ref="universalJcrDao" />
 		<dwr:remote javascript="NavigatorService" />
 	</bean>
 
 	<bean name="contentService" class="org.otherobjects.cms.workbench.ContentServiceImpl">
-		<property name="dynaNodeDao" ref="dynaNodeDao" />
+		<property name="universalJcrDao" ref="universalJcrDao" />
 		<property name="daoService" ref="daoService" />
 		<dwr:remote javascript="ContentService" />
 	</bean>
@@ -132,7 +131,6 @@
 	</bean>
 
 	<bean name="metaWeblogApiHandler" class="org.otherobjects.cms.api.MetaWeblogApiHandler">
-		<property name="daoService" ref="daoService" />
 	</bean>
 
 	<bean id="xmlRpcController" class="org.otherobjects.cms.ws.XmlRpcController">

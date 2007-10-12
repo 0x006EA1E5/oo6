@@ -2,23 +2,27 @@ package org.otherobjects.cms.model;
 
 import org.otherobjects.cms.util.StringUtils;
 
-
-public class SitePage extends DynaNode
+/**
+ * FIXME Name should reflect abstract status
+ * @author rich
+ *
+ */
+public abstract class SitePage extends BaseNode
 {
     // FIXME Move to PublishingOptions object?
-    private DynaNode template;
+    private Template template;
     
     public String getCode()
     {
         return StringUtils.generateUrlCode(getLabel()) + ".html";
     }
 
-    public DynaNode getTemplate()
+    public Template getTemplate()
     {
         return template;
     }
 
-    public void setTemplate(DynaNode template)
+    public void setTemplate(Template template)
     {
         this.template = template;
     }

@@ -7,7 +7,7 @@ import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
 
 @Type
-public class Template extends DynaNode
+public class Template extends BaseNode
 {
     private String code;
     private String label;

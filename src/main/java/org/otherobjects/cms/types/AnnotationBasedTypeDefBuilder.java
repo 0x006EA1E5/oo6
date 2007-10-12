@@ -19,7 +19,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.CodeVisitor;
 import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
@@ -86,7 +86,7 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder
                 propertyDef.setHelp(propertyDefAnnotation.help());
 
                 // Infer type if not set
-                if (propertyDefAnnotation.type().equals(PropertyType.STRING) && !method.getReturnType().equals(String.class))
+                if (propertyDefAnnotation.type().equals(PropertyType.UNDEFINED))
                 {
                     PropertyType pt = getDefaultTypeForClass(method.getReturnType());
                     Assert.notNull(pt, "No default type can be inferred for property: " + method.getName());
@@ -112,44 +112,55 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder
                 propertyDef.setSize(propertyDefAnnotation.size());
                 propertyDef.setValang(propertyDefAnnotation.valang());
                 propertyDef.setOrder(propertyDefAnnotation.order());
-                Class relatedType = null;
-                if (propertyDef.getType().equals(PropertyType.LIST.value()) || propertyDef.getType().equals(PropertyType.COMPONENT.value())
-                        || propertyDef.getType().equals(PropertyType.REFERENCE.value()))
+                if (propertyDef.getType().equals(PropertyType.COMPONENT.value()) || propertyDef.getType().equals(PropertyType.REFERENCE.value()))
                 {
+                    // If not specified infer related type for components and references
+                    Class<?> relatedType;
                     if (StringUtils.isEmpty(propertyDefAnnotation.relatedType()))
                     {
-                        // Infer related type based on return type
-                        if (propertyDef.getType().equals(PropertyType.LIST.value()))
-                        {
-                            // List -- so look at generic type
-                            java.lang.reflect.ParameterizedType genericReturnType = (ParameterizedType) method.getGenericReturnType();
-                            if (genericReturnType != null)
-                            {
-                                relatedType = (Class) genericReturnType.getActualTypeArguments()[0];
-                            }
-                        }
-                        else
-                        {
-                            relatedType = method.getReturnType();
-                        }
+                        relatedType = method.getReturnType();
                     }
                     else
                     {
                         relatedType = Class.forName(propertyDefAnnotation.relatedType());
                     }
-
                     propertyDef.setRelatedType(relatedType.getName());
                 }
+
                 if (propertyDef.getType().equals(PropertyType.LIST.value()))
                 {
-                    if (propertyDefAnnotation.collectionElementType().equals(PropertyType.STRING) && !relatedType.equals(String.class))
+                    // Get generic return type
+                    Class<?> listTypeClass = null;
+                    ParameterizedType genericReturnType = (ParameterizedType) method.getGenericReturnType();
+                    if (genericReturnType != null)
+                        listTypeClass = (Class<?>) genericReturnType.getActualTypeArguments()[0];
+
+                    // Infer collection type from list parametized type
+                    if (propertyDefAnnotation.collectionElementType().equals(PropertyType.UNDEFINED))
                     {
-                        PropertyType pt = getDefaultTypeForClass(relatedType);
-                        propertyDef.setCollectionElementType(pt.value());
+                        Assert.notNull(listTypeClass, "Could not infer collectionElementType (List is a raw type) for: " + method.getName());
+                        PropertyType collectionElementType = getDefaultTypeForClass(listTypeClass);
+                        Assert.notNull(collectionElementType, "Could not infer collectionElementType (unknown List type) for: " + method.getName());
+                        propertyDef.setCollectionElementType(collectionElementType.value());
                     }
                     else
                     {
                         propertyDef.setCollectionElementType(propertyDefAnnotation.collectionElementType().value());
+                    }
+
+                    // If collection type is reference or list then infer relatedType
+                    if (propertyDef.getCollectionElementType().equals(PropertyType.COMPONENT.value()) || propertyDef.getCollectionElementType().equals(PropertyType.REFERENCE.value()))
+                    {
+                        // Infer collection type from list parametized type
+                        if (StringUtils.isEmpty(propertyDefAnnotation.relatedType()))
+                        {
+                            Assert.notNull(listTypeClass, "Could not infer collectionElementType (List is a raw type) for: " + method.getName());
+                            propertyDef.setRelatedType(listTypeClass.getName());
+                        }
+                        else
+                        {
+                            propertyDef.setRelatedType(propertyDefAnnotation.relatedType());
+                        }
                     }
                 }
                 propDefs.add(propertyDef);
@@ -168,7 +179,10 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder
 
     private PropertyType getDefaultTypeForClass(Class<?> type)
     {
-        if (type.equals(Boolean.class))
+        if (type.equals(String.class))
+            return PropertyType.STRING;
+
+        else if (type.equals(Boolean.class))
             return PropertyType.BOOLEAN;
 
         else if (type.equals(Date.class))
@@ -180,7 +194,7 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder
         else if (type.equals(BigDecimal.class))
             return PropertyType.DECIMAL;
 
-        else if (DynaNode.class.isAssignableFrom(type))
+        else if (BaseNode.class.isAssignableFrom(type))
             return PropertyType.REFERENCE;
 
         else if (List.class.isAssignableFrom(type))

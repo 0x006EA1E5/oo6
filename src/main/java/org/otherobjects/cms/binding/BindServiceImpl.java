@@ -13,7 +13,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.beans.JcrBeanService;
 import org.otherobjects.cms.dao.DaoService;
-import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -34,7 +34,6 @@ public class BindServiceImpl implements BindService
     private DaoService daoService;
 
     static Pattern listPattern = Pattern.compile("^([\\S&&[^\\.]]*)\\[(\\d+)\\]"); // howevermany non-whitespace characters (apart from the dot) followed by at least one digit in square braces
-
 
     public void setDaoService(DaoService daoService)
     {
@@ -77,9 +76,9 @@ public class BindServiceImpl implements BindService
     @SuppressWarnings("unchecked")
     protected void prepareObject(Object parent, TypeDef typeDef, String propertyPath, String fullPath, ServletRequestDataBinder binder)
     {
-        if(propertyPath.equals("id") || propertyPath.startsWith("_") || propertyPath.startsWith("editableId")) // ignore id field and _ fields that are to help the binding process to discover unchecked checkboxes
+        if (propertyPath.equals("id") || propertyPath.startsWith("_") || propertyPath.startsWith("editableId")) // ignore id field and _ fields that are to help the binding process to discover unchecked checkboxes
             return;
-            
+
         Matcher matcher = listPattern.matcher(propertyPath);
         String propertyName;
         String leftOverPath;
@@ -154,18 +153,19 @@ public class BindServiceImpl implements BindService
                         newParent = listProperty.get(listIndex);
                     }
                 }
-                else if (collectionElementType.equals(PropertyDef.REFERENCE)) 
+                else if (collectionElementType.equals(PropertyDef.REFERENCE))
                 {
-                	String relatedType = propertyDef.getRelatedType();
-                	if(daoService.hasDao(relatedType))
-                	{	
-                		Class relatedPropertyClass = Class.forName(relatedType);
-                		binder.registerCustomEditor(relatedPropertyClass, fullPath, new EntityReferenceEditor(daoService, relatedPropertyClass));
-                	}
-                	else { //FIXME default to DynaNodeDao, should be more precise
-	                    // Add reference editors to all the reference properties                    
-	                    binder.registerCustomEditor(DynaNode.class, fullPath, new DynaNodeReferenceEditor(daoService, relatedType));
-                	}
+                    String relatedType = propertyDef.getRelatedType();
+                    if (daoService.hasDao(relatedType))
+                    {
+                        Class relatedPropertyClass = Class.forName(relatedType);
+                        binder.registerCustomEditor(relatedPropertyClass, fullPath, new EntityReferenceEditor(daoService, relatedPropertyClass));
+                    }
+                    else
+                    {
+                        // Add reference editors to all the reference properties                    
+                        binder.registerCustomEditor(CmsNode.class, fullPath, new CmsNodeReferenceEditor(daoService, relatedType));
+                    }
                 }
             }
             catch (Exception e)
@@ -190,10 +190,10 @@ public class BindServiceImpl implements BindService
                 throw new OtherObjectsException("Error getting or instantiating component property: " + propertyName, e);
             }
         }
-        else if (propertyDef.getType().equals(PropertyDef.REFERENCE)) 
+        else if (propertyDef.getType().equals(PropertyDef.REFERENCE))
         {
             // Add reference editors to all the reference propreties                    
-            binder.registerCustomEditor(DynaNode.class, fullPath, new DynaNodeReferenceEditor(daoService, propertyDef.getRelatedType()));
+            binder.registerCustomEditor(CmsNode.class, fullPath, new CmsNodeReferenceEditor(daoService, propertyDef.getRelatedType()));
         }
         else
         {

@@ -14,9 +14,9 @@ import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.LongTypeConver
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.StringTypeConverterImpl;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.beans.JcrBeanService;
-import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.jcr.BigDecimalTypeConverterImpl;
-import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.jcr.UniversalJcrDao;
+import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.JcrTypeDef;
 
 public class TypeServiceImpl extends AbstractTypeService
@@ -59,10 +59,11 @@ public class TypeServiceImpl extends AbstractTypeService
      * 
      * Called from BootstrapUtils.
      */
-    public void loadJcrBackedTypes(DynaNodeDao dynaNodeDao)
+    public void loadJcrBackedTypes(UniversalJcrDao universalJcrDao)
     {
-        List<DynaNode> typeDefs = dynaNodeDao.getAllByType(JcrTypeDef.class.getName());
-        for (DynaNode t : typeDefs)
+        // FIXME Change to getAllByType
+        List<BaseNode> typeDefs = universalJcrDao.getAllByPath("/types/");
+        for (BaseNode t : typeDefs)
         {
             TypeDef t2 = ((JcrTypeDef) t).toTypeDef();
             t2.setTypeService(this);

@@ -5,6 +5,8 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
+import org.otherobjects.cms.jcr.UniversalJcrDaoJackrabbit;
+import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.support.GenericApplicationContext;
 
 @SuppressWarnings("unchecked")
@@ -19,11 +21,10 @@ public class DaoServiceImplTest extends TestCase
 
         Map daoMap = new HashMap();
         daoMap.put("org.otherobjects.cms.model.User", new UserDaoHibernate());
-        daoMap.put("org.otherobjects.cms.model.DynaNode", new DynaNodeDaoJackrabbit());
         this.daoService.setDaoMap(daoMap);
-
+        
         GenericApplicationContext ac = new GenericApplicationContext();
-        // FIXME Test with beans in the factory
+        ac.registerBeanDefinition("universalJcrDao", new RootBeanDefinition(UniversalJcrDaoJackrabbit.class));
         this.daoService.setBeanFactory(ac);
 
         super.setUp();
@@ -37,7 +38,7 @@ public class DaoServiceImplTest extends TestCase
 
         dao = this.daoService.getDao("Article");
         assertNotNull(dao);
-        assertTrue(dao instanceof DynaNodeDaoJackrabbit);
+        assertTrue(dao instanceof UniversalJcrDaoJackrabbit);
     }
 
     public void testDetermineDaoBeanName()

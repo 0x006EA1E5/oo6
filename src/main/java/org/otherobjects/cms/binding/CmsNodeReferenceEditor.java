@@ -1,15 +1,15 @@
 package org.otherobjects.cms.binding;
 
 import org.otherobjects.cms.dao.DaoService;
-import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.BaseNode;
 import org.springframework.util.StringUtils;
 
-public class DynaNodeReferenceEditor extends java.beans.PropertyEditorSupport
+public class CmsNodeReferenceEditor extends java.beans.PropertyEditorSupport
 {
     private String type;
     private DaoService daoService;
     
-    public DynaNodeReferenceEditor(DaoService daoService, String type)
+    public CmsNodeReferenceEditor(DaoService daoService, String type)
     {
         this.daoService = daoService;
         this.type = type;
@@ -42,7 +42,7 @@ public class DynaNodeReferenceEditor extends java.beans.PropertyEditorSupport
      */
     public String getAsText()
     {
-        DynaNode value = (DynaNode) getValue();
+        BaseNode value = (BaseNode) getValue();
         return value != null ? value.getId() : null;
     }
 }

@@ -13,7 +13,7 @@ import org.springframework.core.Ordered;
 @Inherited
 public @interface Property {
 
-    PropertyType type() default PropertyType.STRING;
+    PropertyType type() default PropertyType.UNDEFINED;
 
     String label() default "";
 
@@ -27,7 +27,7 @@ public @interface Property {
 
     String help() default "";
 
-    PropertyType collectionElementType() default PropertyType.REFERENCE;
+    PropertyType collectionElementType() default PropertyType.UNDEFINED;
 
     String relatedType() default "";
     

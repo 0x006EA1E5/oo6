@@ -5,8 +5,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.otherobjects.cms.dao.DaoService;
-import org.otherobjects.cms.dao.DynaNodeDao;
-import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.jcr.UniversalJcrDao;
+import org.otherobjects.cms.model.BaseNode;
+import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.tools.CmsImageTool;
 import org.otherobjects.cms.workbench.NavigatorService;
 import org.springframework.util.Assert;
@@ -17,8 +18,10 @@ public class PageHandler implements ResourceHandler
     private NavigatorService navigatorService;
     private DaoService daoService;
     
-    public ModelAndView handleRequest(DynaNode resourceObject, HttpServletRequest request, HttpServletResponse response) throws Exception
+    public ModelAndView handleRequest(CmsNode o, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
+        BaseNode resourceObject = (BaseNode) o;
+        
         // Update session counter
         HttpSession session = request.getSession();
         Integer counter = (Integer) session.getAttribute("counter");
@@ -27,7 +30,7 @@ public class PageHandler implements ResourceHandler
         session.setAttribute("counter", ++counter);
 
         // Determine template to use
-        DynaNode template = determineTemplate(resourceObject);
+        BaseNode template = determineTemplate(resourceObject);
         Assert.notNull(template, "No template found for type: " + resourceObject.getTypeDef().getName());
 
         // Return page and context
@@ -46,12 +49,12 @@ public class PageHandler implements ResourceHandler
      * @param resourceObject
      * @return
      */
-    private DynaNode determineTemplate(DynaNode resourceObject)
+    private BaseNode determineTemplate(BaseNode resourceObject)
     {
         if (resourceObject.hasProperty("template") && resourceObject.get("template") != null)
-            return (DynaNode) resourceObject.get("template");
-        DynaNodeDao dynaNodeDao = (DynaNodeDao) this.daoService.getDao(DynaNode.class);
-        DynaNode template = dynaNodeDao.getByPath("/designer/templates/" + resourceObject.getTypeDef().getName());
+            return (BaseNode) resourceObject.get("template");
+        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
+        BaseNode template = universalJcrDao.getByPath("/designer/templates/" + resourceObject.getTypeDef().getName());
         return template;
     }
 

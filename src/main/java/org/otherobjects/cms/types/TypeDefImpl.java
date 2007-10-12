@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.util.StringUtils;
 import org.springframework.util.Assert;
 
@@ -16,7 +16,7 @@ import flexjson.JSON;
  */
 public class TypeDefImpl implements TypeDef
 {
-    private static final String DEFAULT_SUPER_CLASS_NAME = DynaNode.class.getName();
+    private static final String DEFAULT_SUPER_CLASS_NAME = BaseNode.class.getName();
 
     /** The unique name for this type. */
     private String name;

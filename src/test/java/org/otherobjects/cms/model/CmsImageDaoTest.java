@@ -2,9 +2,9 @@ package org.otherobjects.cms.model;
 
 import java.io.File;
 
-import org.otherobjects.cms.beans.BaseDynaNodeTest;
+import org.otherobjects.cms.test.BaseJcrTestCase;
 
-public class CmsImageDaoTest extends BaseDynaNodeTest
+public class CmsImageDaoTest extends BaseJcrTestCase
 {
 
     private final DataFileDao dataFileDao = new DataFileDaoFileSystem();
@@ -27,7 +27,8 @@ public class CmsImageDaoTest extends BaseDynaNodeTest
         im1.setNewFile(dog);
 
         CmsImage im1saved = (CmsImage) this.cmsImageDao.save(im1);
-
+        
+        new CmsImageDaoImpl();
         assertNotNull(im1saved.getId());
         assertNotNull(im1saved.getOriginalFileId());
         assertNull(im1saved.getNewFile());
@@ -37,15 +38,4 @@ public class CmsImageDaoTest extends BaseDynaNodeTest
         assertTrue(this.dataFileDao.exists(im1saved.getOriginalFileId()));
 
     }
-
-    //    public void setCmsImageDao(CmsImageDao cmsImageDao)
-    //    {
-    //        this.cmsImageDao = cmsImageDao;
-    //    }
-
-    //    public void setDataFileDao(DataFileDao dataFileDao)
-    //    {
-    //        this.dataFileDao = dataFileDao;
-    //    }
-
 }

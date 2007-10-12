@@ -9,7 +9,7 @@ import flexjson.JSON;
 
 @SuppressWarnings("unchecked")
 @Type
-public class SmartFolder extends DynaNode implements Folder
+public class SmartFolder extends BaseNode implements Folder
 {
     private String label;
     private String query;

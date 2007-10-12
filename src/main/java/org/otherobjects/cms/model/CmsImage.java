@@ -15,7 +15,7 @@ import org.otherobjects.cms.types.annotation.Type;
  * @author rich
  */
 @Type(labelProperty = "label")
-public class CmsImage extends DynaNode
+public class CmsImage extends BaseNode
 {
     public static final String DATA_FILE_COLLECTION_NAME = "images";
     public static final String ORIGINALS_PATH = "/originals/";

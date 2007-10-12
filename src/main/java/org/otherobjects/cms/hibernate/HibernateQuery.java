@@ -11,8 +11,8 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.dao.PagedResult;
-import org.otherobjects.cms.dao.PagedResultImpl;
+import org.otherobjects.cms.dao.PagedList;
+import org.otherobjects.cms.dao.PagedListImpl;
 
 /**
  * Wrapper/Utility to build hibernate queries without having to do string concatenation while maintaining the individual parts
@@ -208,13 +208,13 @@ public class HibernateQuery {
 	}
 	
 	@SuppressWarnings("unchecked")
-    public PagedResult getPagedResult(int pageSize, int pageNo, Session session)
+    public PagedList getPagedResult(int pageSize, int pageNo, Session session)
 	{
 		int recordCount = getRecordCount(session);
-		int offset = PagedResultImpl.calcStartIndex(pageSize, pageNo);
+		int offset = PagedListImpl.calcStartIndex(pageSize, pageNo);
 		List items = getQuery(session).setMaxResults(pageSize).setFirstResult(offset).list();
 		
-		return new PagedResultImpl(pageSize, recordCount, pageNo, items, false);
+		return new PagedListImpl(pageSize, recordCount, pageNo, items, false);
 	}
 	
 	private void applyParameters(Query query) {

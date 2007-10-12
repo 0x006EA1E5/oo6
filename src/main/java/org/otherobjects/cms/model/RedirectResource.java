@@ -4,7 +4,7 @@ import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.Type;
 
 @Type
-public class RedirectResource extends DynaNode
+public class RedirectResource extends BaseNode
 {
     private static final String ICON_PATH = "otherobjects.resources/static/icons/page-white-go.png";
 

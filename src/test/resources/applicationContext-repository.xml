@@ -27,14 +27,14 @@
 	</bean>
 
 	<!-- Setup
-	<bean name="setupUtils" class="org.otherobjects.cms.util.SetupUtils" init-method="bootstrap">
+		<bean name="setupUtils" class="org.otherobjects.cms.util.SetupUtils" init-method="bootstrap">
 		<property name="standalone" value="true" />
 		<property name="sessionFactory" ref="&amp;sessionFactory" />
 		<property name="jcrSessionFactory" ref="sessionFactory" />
 		<property name="nodeTypesConfig" value="classpath:otherobjects.resources/config/node-types.cnd" />
 		<property name="systemDataTypes" value="classpath:otherobjects.resources/bootstrap-data/jcr-data-types.xml" />
-	</bean>
-	 -->
+		</bean>
+	-->
 
 	<bean name="bootstrapUtils" class="org.otherobjects.cms.util.BootstrapUtils" init-method="loadTypes">
 		<property name="standalone" value="true" />
@@ -70,9 +70,11 @@
 		</property>
 	</bean>
 
+<!-- 
 	<bean name="dynaNodeValidator" class="org.otherobjects.cms.validation.DynaNodeValidator">
 		<property name="typeService" ref="typeService" />
 	</bean>
+	 -->
 
 	<bean id="annotationBasedTypeDefBuilder" class="org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder" />
 
@@ -92,11 +94,10 @@
 	-->
 
 	<!-- DAOs -->
-	<bean id="dynaNodeDao" parent="baseTransactionProxy">
+	<bean id="universalJcrDao" parent="baseTransactionProxy">
 		<property name="target">
-			<bean class="org.otherobjects.cms.dao.DynaNodeDaoJackrabbit">
+			<bean class="org.otherobjects.cms.jcr.UniversalJcrDaoJackrabbit">
 				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
-				<property name="typeService" ref="typeService" />
 				<property name="sessionFactory" ref="jcrSessionFactory" />
 			</bean>
 		</property>
@@ -105,21 +106,13 @@
 		<property name="target">
 			<bean class="org.otherobjects.cms.model.CmsImageDaoImpl">
 				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
-				<property name="typeService" ref="typeService" />
 				<property name="sessionFactory" ref="jcrSessionFactory" />
 			</bean>
 		</property>
 	</bean>
-
 	<bean name="daoService" class="org.otherobjects.cms.dao.DaoServiceImpl">
 		<property name="daoMap">
 			<map>
-				<entry>
-					<key>
-						<value>org.otherobjects.cms.model.DynaNode</value>
-					</key>
-					<ref bean="dynaNodeDao" />
-				</entry>
 				<entry>
 					<key>
 						<value>org.otherobjects.cms.model.CmsImage</value>

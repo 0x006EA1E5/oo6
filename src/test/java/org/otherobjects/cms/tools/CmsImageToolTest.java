@@ -2,12 +2,12 @@ package org.otherobjects.cms.tools;
 
 import java.io.File;
 
-import org.otherobjects.cms.beans.BaseDynaNodeTest;
 import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.CmsImageDao;
 import org.otherobjects.cms.model.CmsImageSize;
+import org.otherobjects.cms.test.BaseJcrTestCase;
 
-public class CmsImageToolTest extends BaseDynaNodeTest
+public class CmsImageToolTest extends BaseJcrTestCase
 {
     private CmsImageDao cmsImageDao;
     private CmsImage sampleImage;

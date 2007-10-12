@@ -7,10 +7,10 @@ import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
 
 /**
- * FIXME Should this extend DynaNode?
+ * FIXME Should this extend BaseNode?
  */
 @Type
-public class MetaData extends DynaNode
+public class MetaData extends BaseNode
 {
     private String title;
     private String description;

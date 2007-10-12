@@ -52,7 +52,7 @@ public class UploadController implements Controller
         File newFile = new File("/tmp/" + file.getOriginalFilename());
         newFile.createNewFile();
         file.transferTo(newFile);
-        CmsImage cmsImage = cmsImageDao.createCmsImage();
+        CmsImage cmsImage = new CmsImage();//cmsImageDao.createCmsImage();
         cmsImage.setPath("/libraries/images/");
         cmsImage.setCode(file.getOriginalFilename());
         cmsImage.setLabel(file.getOriginalFilename());

@@ -13,7 +13,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
-import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.model.Script;
 import org.otherobjects.cms.model.ScriptResource;
 import org.springframework.beans.BeansException;
@@ -33,7 +33,7 @@ public class ScriptHandler implements ResourceHandler, ApplicationContextAware
     private DaoService daoService;
     private ApplicationContext applicationContext;
 
-    public ModelAndView handleRequest(DynaNode resourceObject, HttpServletRequest request, HttpServletResponse response) throws Exception
+    public ModelAndView handleRequest(CmsNode resourceObject, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         Assert.notNull(resourceObject, "resourceObject must not be null");
         Assert.isInstanceOf(ScriptResource.class, resourceObject, "resourceObject must be a ScriptResource not: " + resourceObject.getClass().getName());

@@ -8,18 +8,18 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.otherobjects.cms.beans.BaseDynaNodeTest;
-import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.BaseNode;
+import org.otherobjects.cms.test.BaseJcrTestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-public class BindServiceImplTest extends BaseDynaNodeTest
+public class BindServiceImplTest extends BaseJcrTestCase
 {
-
     private final String dateFormat = "dd/MM/yy";
-    Date testDate;
     private BindServiceImpl bindService;
+    protected Date now = new Date();
+    private Date testDate;
 
     @Override
     protected void onSetUp() throws Exception
@@ -28,30 +28,34 @@ public class BindServiceImplTest extends BaseDynaNodeTest
         this.bindService = new BindServiceImpl();
         this.bindService.setDateFormat(this.dateFormat);
         this.bindService.setDaoService(this.daoService);
-        this.testDate = new SimpleDateFormat(this.dateFormat).parse("01/01/99");
+        registerType(TestObject.class);
+        registerType(TestReferenceObject.class);
+        registerType(TestComponentObject.class);
+        testDate = new SimpleDateFormat(this.dateFormat).parse("01/01/99");
     }
 
     public void testBindValues() throws Exception
     {
-        BindingResult errors = this.bindService.bind(this.dynaNode, this.dynaNode.getTypeDef(), getRequest());
+        TestObject o = new TestObject();
+        BindingResult errors = this.bindService.bind(o, o.getTypeDef(), getRequest());
 
         assertTrue(errors.getErrorCount() == 0);
 
         // Simple properties
-        assertEquals("testString1", PropertyUtils.getNestedProperty(this.dynaNode, "testString"));
-        assertEquals("testText1", PropertyUtils.getNestedProperty(this.dynaNode, "testText"));
-        assertEquals(this.testDate, PropertyUtils.getNestedProperty(this.dynaNode, "testDate"));
-        assertEquals(this.testDate, PropertyUtils.getNestedProperty(this.dynaNode, "testTime"));
-        assertEquals(this.testDate, PropertyUtils.getNestedProperty(this.dynaNode, "testTimestamp"));
-        assertEquals(new Long(7), PropertyUtils.getNestedProperty(this.dynaNode, "testNumber"));
-        assertEquals(new BigDecimal(2.7, new MathContext(2, RoundingMode.HALF_UP)), PropertyUtils.getNestedProperty(this.dynaNode, "testDecimal"));
-        assertEquals(Boolean.FALSE, PropertyUtils.getNestedProperty(this.dynaNode, "testBoolean"));
+        assertEquals("testString1", PropertyUtils.getNestedProperty(o, "testString"));
+        assertEquals("testText1", PropertyUtils.getNestedProperty(o, "testText"));
+        assertEquals(this.testDate, PropertyUtils.getNestedProperty(o, "testDate"));
+        assertEquals(this.testDate, PropertyUtils.getNestedProperty(o, "testTime"));
+        assertEquals(this.testDate, PropertyUtils.getNestedProperty(o, "testTimestamp"));
+        assertEquals(new Long(7), PropertyUtils.getNestedProperty(o, "testNumber"));
+        assertEquals(new BigDecimal(2.7, new MathContext(2, RoundingMode.HALF_UP)), PropertyUtils.getNestedProperty(o, "testDecimal"));
+        assertEquals(Boolean.FALSE, PropertyUtils.getNestedProperty(o, "testBoolean"));
 
         /// Component
-        assertEquals("myName", PropertyUtils.getNestedProperty(this.dynaNode, "testComponent.name"));
+        assertEquals("myName", PropertyUtils.getNestedProperty(o, "testComponent.name"));
 
         // Reference
-        assertEquals("TR1 Name", PropertyUtils.getNestedProperty(this.dynaNode, "testReference.name"));
+        assertEquals("TR1 Name", PropertyUtils.getNestedProperty(o, "testReference.name"));
     }
 
     @SuppressWarnings("unchecked")
@@ -60,59 +64,54 @@ public class BindServiceImplTest extends BaseDynaNodeTest
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addParameter("testStringsList[0]", "testString1");
 
-        this.bindService.bind(this.dynaNode, this.dynaNode.getTypeDef(), request);
+        TestObject o = new TestObject();
+        this.bindService.bind(o, o.getTypeDef(), request);
 
-        assertTrue(List.class.isAssignableFrom(PropertyUtils.getSimpleProperty(this.dynaNode, "testStringsList").getClass()));
-
-        List testStringList = (List) PropertyUtils.getSimpleProperty(this.dynaNode, "testStringsList");
-
+        assertTrue(List.class.isAssignableFrom(PropertyUtils.getSimpleProperty(o, "testStringsList").getClass()));
+        List testStringList = (List) PropertyUtils.getSimpleProperty(o, "testStringsList");
         assertEquals("testString1", testStringList.get(0));
-
     }
 
     public void testBindComponentList() throws Exception
     {
         MockHttpServletRequest request = new MockHttpServletRequest();
-
         request.addParameter("testComponentsList[0].name", "testName");
 
-        this.bindService.bind(this.dynaNode, this.dynaNode.getTypeDef(), request);
+        TestObject o = new TestObject();
+        this.bindService.bind(o, o.getTypeDef(), request);
 
-        assertTrue(List.class.isAssignableFrom(PropertyUtils.getSimpleProperty(this.dynaNode, "testComponentsList").getClass()));
-
-        assertTrue(DynaNode.class.isAssignableFrom(PropertyUtils.getIndexedProperty(this.dynaNode, "testComponentsList", 0).getClass()));
-
-        assertEquals("testName", PropertyUtils.getSimpleProperty(PropertyUtils.getIndexedProperty(this.dynaNode, "testComponentsList", 0), "name"));
-
+        assertTrue(List.class.isAssignableFrom(PropertyUtils.getSimpleProperty(o, "testComponentsList").getClass()));
+        assertTrue(BaseNode.class.isAssignableFrom(PropertyUtils.getIndexedProperty(o, "testComponentsList", 0).getClass()));
+        assertEquals("testName", PropertyUtils.getSimpleProperty(PropertyUtils.getIndexedProperty(o, "testComponentsList", 0), "name"));
     }
 
     public void testBindReferenceList() throws Exception
     {
         MockHttpServletRequest request = new MockHttpServletRequest();
-
         request.addParameter("testReferencesList[2]", "ae9a48f6-8e4e-4bad-8954-3baea6ed416f");
 
-        this.bindService.bind(this.dynaNode, this.dynaNode.getTypeDef(), request);
+        TestObject o = new TestObject();
+        this.bindService.bind(o, o.getTypeDef(), request);
 
-        assertTrue(List.class.isAssignableFrom(PropertyUtils.getSimpleProperty(this.dynaNode, "testReferencesList").getClass()));
+        assertTrue(List.class.isAssignableFrom(PropertyUtils.getSimpleProperty(o, "testReferencesList").getClass()));
         // FIXME This needs fixing
         System.err.println("************** SKIPPING " + getClass().getName() + ".testBindReferenceList ********************");
-        //        assertTrue(DynaNode.class.isAssignableFrom(PropertyUtils.getIndexedProperty(this.dynaNode, "testReferencesList", 2).getClass()));
+        //        assertTrue(BaseNode.class.isAssignableFrom(PropertyUtils.getIndexedProperty(o, "testReferencesList", 2).getClass()));
     }
 
     public void testDeepNestList() throws Exception
     {
         MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addParameter("testComponentsList[0].componentsList[1].stringsList[0]", "testDeepName2");
+        request.addParameter("testComponentsList[0].componentsList[0].stringsList[0]", "testDeepName");
+        request.addParameter("testComponentsList[0].componentsList[2].stringsList[0]", "testDeepName3");
 
-        request.addParameter("testDeepComponentsList[0].testComponentsList2[1].testSimpleList[0]", "testDeepName2");
-        request.addParameter("testDeepComponentsList[0].testComponentsList2[0].testSimpleList[0]", "testDeepName");
-        request.addParameter("testDeepComponentsList[0].testComponentsList2[2].testSimpleList[0]", "testDeepName3");
+        TestObject o = new TestObject();
+        this.bindService.bind(o, o.getTypeDef(), request);
 
-        this.bindService.bind(this.dynaNode, this.dynaNode.getTypeDef(), request);
-
-        Object deepComponentListEntry = PropertyUtils.getIndexedProperty(this.dynaNode, "testDeepComponentsList", 0);
-        Object firstLevelWithComponentsList = PropertyUtils.getIndexedProperty(deepComponentListEntry, "testComponentsList2", 2);
-        Object simpleListEntry = PropertyUtils.getIndexedProperty(firstLevelWithComponentsList, "testSimpleList", 0);
+        Object deepComponentListEntry = PropertyUtils.getIndexedProperty(o, "testComponentsList", 0);
+        Object firstLevelWithComponentsList = PropertyUtils.getIndexedProperty(deepComponentListEntry, "componentsList", 2);
+        Object simpleListEntry = PropertyUtils.getIndexedProperty(firstLevelWithComponentsList, "stringsList", 0);
 
         assertEquals("testDeepName3", simpleListEntry);
 
@@ -120,17 +119,21 @@ public class BindServiceImplTest extends BaseDynaNodeTest
 
     public void testDeepNestComponent() throws Exception
     {
+        TestReferenceObject r1 = createAndSaveReference("R1");
+        
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addParameter("testDeepComponent.subComponent.reference", "ae9a48f6-8e4e-4bad-8954-3baea6ed416f");
-        request.addParameter("testDeepComponent.subComponent.name", "testSubName");
-        request.addParameter("testDeepComponent.name", "testSuperName");
-        this.bindService.bind(this.dynaNode, this.dynaNode.getTypeDef(), request);
+        request.addParameter("testComponent.component.reference", r1.getId());
+        request.addParameter("testComponent.component.name", "testSubName");
+        request.addParameter("testComponent.name", "testSuperName");
 
-        assertEquals("testSuperName", PropertyUtils.getNestedProperty(this.dynaNode, "testDeepComponent.name"));
-        assertEquals("testSubName", PropertyUtils.getNestedProperty(this.dynaNode, "testDeepComponent.subComponent.name"));
+        TestObject o = new TestObject();
+        this.bindService.bind(o, o.getTypeDef(), request);
+
+        assertEquals("testSuperName", PropertyUtils.getNestedProperty(o, "testComponent.name"));
+        assertEquals("testSubName", PropertyUtils.getNestedProperty(o, "testComponent.component.name"));
 
         // FIXME Deep references are broken
-        //assertTrue(DynaNode.class.isAssignableFrom(PropertyUtils.getNestedProperty(dynaNode, "testDeepComponent.subComponent.reference").getClass()));
+        //assertTrue(BaseNode.class.isAssignableFrom(PropertyUtils.getNestedProperty(baseNode, "testDeepComponent.subComponent.reference").getClass()));
     }
 
     public void testBindError()
@@ -138,7 +141,6 @@ public class BindServiceImplTest extends BaseDynaNodeTest
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addParameter("testNumber", "abc"); // the wrong one
-
         request.addParameter("testString", "testString1");
         request.addParameter("testText", "testText1");
         request.addParameter("testDate", "01/01/99");
@@ -147,7 +149,8 @@ public class BindServiceImplTest extends BaseDynaNodeTest
         request.addParameter("testDecimal", "2.7");
         request.addParameter("testBoolean", "false");
 
-        BindingResult errors = this.bindService.bind(this.dynaNode, this.dynaNode.getTypeDef(), request);
+        TestObject o = new TestObject();
+        BindingResult errors = this.bindService.bind(o, o.getTypeDef(), request);
 
         assertTrue(errors.getErrorCount() == 1);
 
@@ -155,8 +158,9 @@ public class BindServiceImplTest extends BaseDynaNodeTest
         assertTrue(numberFieldError.getCode().equals("typeMismatch"));
     }
 
-    public MockHttpServletRequest getRequest()
+    private MockHttpServletRequest getRequest()
     {
+        adminLogin();
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addParameter("testString", "testString1");
         request.addParameter("testText", "testText1");
@@ -168,30 +172,41 @@ public class BindServiceImplTest extends BaseDynaNodeTest
         request.addParameter("testBoolean", "false");
         request.addParameter("testComponent.name", "myName");
 
-        adminLogin();
-        DynaNode tr1 = createReference("TR1");
-        this.dynaNodeDao.save(tr1);
+        BaseNode tr1 = createAndSaveReference("TR1");
         request.addParameter("testReference", tr1.getId());
         logout();
         return request;
     }
 
-    //    public void testCreateSubObjects()
-    //    {     
-    //        // Check that only component (not reference) sub objects are created
-    //        DynaNode node = dynaNodeDao.create(BaseDynaNodeTest.TEST_TYPE_NAME);
-    //        assertNull(node.get("testComponent"));
-    //        bindService.createSubObjects(node, "testComponent.name");
-    //        assertNotNull(node.get("testComponent"));
-    //
-    //        assertNull(node.get("testReference"));
-    //        bindService.createSubObjects(node, "testReference");
-    //        assertNull(node.get("testReference"));
-    //       
-    //        // Make sure it has the type set
-    //        assertNotNull(((DynaNode) node.get("testComponent")).getOoType());
-    //        
-    //        // Check it is correct class
-    //        assertEquals(node.getTypeDef().getProperty("testComponent").getRelatedTypeDef().getClassName(), node.get("testComponent").getClass().getName());
-    //    }
+    protected TestObject createTestObject()
+    {
+        TestObject o = new TestObject();
+        o.setTestString("testString");
+        o.setTestText("testText");
+        o.setTestDate(this.now);
+        o.setTestTime(this.now);
+        o.setTestTimestamp(this.now);
+        o.setTestNumber(new Long(1));
+        o.setTestDecimal(new BigDecimal(1.0));
+        o.setTestBoolean(Boolean.FALSE);
+        o.setPath("/test");
+        o.setCode("testNode");
+        return o;
+    }
+
+    protected TestReferenceObject createAndSaveReference(String name)
+    {
+        TestReferenceObject r = new TestReferenceObject();
+        r.setJcrPath("/" + name + ".html");
+        r.setName(name + " Name");
+        return (TestReferenceObject) universalJcrDao.save(r);
+    }
+
+    protected TestComponentObject createComponent(String name)
+    {
+        TestComponentObject c = new TestComponentObject();
+        c.setJcrPath("/" + name + ".html");
+        c.setName(name + " Name");
+        return (TestComponentObject) universalJcrDao.save(c);
+    }
 }

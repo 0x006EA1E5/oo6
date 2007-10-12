@@ -15,12 +15,10 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.dao.DaoService;
-import org.otherobjects.cms.dao.DynaNodeDao;
-import org.otherobjects.cms.dao.GenericJcrDao;
+import org.otherobjects.cms.jcr.UniversalJcrDao;
+import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.CmsImageDao;
-import org.otherobjects.cms.model.DynaNode;
 import org.otherobjects.cms.tools.CmsImageTool;
 import org.otherobjects.cms.util.ImageUtils;
 
@@ -29,6 +27,8 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.iptc.IptcDirectory;
 
 /**
+ * FIXME Make this extendable.
+ * 
  * See API documentation is available at <a href="http://www.xmlrpc.com/metaWeblogApi">http://www.xmlrpc.com/metaWeblogApi</a> 
  * @author rich
  */
@@ -37,20 +37,15 @@ public class MetaWeblogApiHandler
 {
 	private final Log logger = LogFactory.getLog(getClass());
 	
-    private DaoService daoService;
-
-    public void setDaoService(DaoService daoService)
-    {
-        this.daoService = daoService;
-    }
+    private UniversalJcrDao universalJcrDao;
+    private CmsImageDao cmsImageDao;
 
     public List<Map<String, Object>> getRecentPosts(String blogid, String username, String password, int numberOfPosts)
     {
-        DynaNodeDao dao = (DynaNodeDao) this.daoService.getDao("DynaNode");
-        List<DynaNode> news = dao.getAllByJcrExpression("/jcr:root/site/news/* [@ooType='com.maureenmichaelson.site.model.NewsStory']");
+        List<BaseNode> news = universalJcrDao.getAllByJcrExpression("/jcr:root/site/news/* [@ooType='com.maureenmichaelson.site.model.NewsStory']");
         List<Map<String, Object>> posts = new ArrayList<Map<String, Object>>();
 
-        for (DynaNode newsStory : news)
+        for (BaseNode newsStory : news)
         {
             posts.add(convertNodeToPost(newsStory));
         }
@@ -58,7 +53,7 @@ public class MetaWeblogApiHandler
         return posts;
     }
 
-    private Map<String, Object> convertNodeToPost(DynaNode node)
+    private Map<String, Object> convertNodeToPost(BaseNode node)
     {
         Map<String, Object> post = new HashMap<String, Object>();
         post.put("postid", node.getJcrPath());
@@ -68,15 +63,15 @@ public class MetaWeblogApiHandler
         return post;
     }
 
-    private DynaNode convertPostToNode(Map<String, Object> post)
+    private BaseNode convertPostToNode(Map<String, Object> post)
     {
-        DynaNodeDao dao = (DynaNodeDao) this.daoService.getDao("DynaNode");
-        DynaNode node = null;
+        BaseNode node = null;
         if (post.containsKey("link"))
-            node = dao.getByPath((String) post.get("link"));
+            node = universalJcrDao.getByPath((String) post.get("link"));
         else
         {
-            node = dao.create("com.maureenmichaelson.site.model.NewsStory");
+            // FIXME Make this extendable
+            node = null;//universalJcrDao.create("com.maureenmichaelson.site.model.NewsStory");
             node.setPath("/site/news/");
         }
         node.setLabel((String) post.get("title"));
@@ -87,28 +82,25 @@ public class MetaWeblogApiHandler
 
     public String newPost(String blogid, String username, String password, Map post, boolean publish)
     {
-        DynaNodeDao dao = (DynaNodeDao) this.daoService.getDao("DynaNode");
-        DynaNode node = convertPostToNode(post);
-        dao.save(node);
+        BaseNode node = convertPostToNode(post);
+        universalJcrDao.save(node);
         if (publish)
-            dao.publish(node);
+            universalJcrDao.publish(node, null);
         return node.getJcrPath();
     }
 
     public boolean editPost(String postId, String username, String password, Map post, boolean publish)
     {
-        DynaNodeDao dao = (DynaNodeDao) this.daoService.getDao("DynaNode");
-        DynaNode node = convertPostToNode(post);
-        dao.save(node);
+        BaseNode node = convertPostToNode(post);
+        universalJcrDao.save(node);
         if (publish)
-            dao.publish(node);
+            universalJcrDao.publish(node, null);
         return true;
     }
 
     public Object getPost(String postId, String username, String password)
     {
-        DynaNodeDao dao = (DynaNodeDao) this.daoService.getDao("DynaNode");
-        DynaNode node = dao.getByPath(postId);
+        BaseNode node = universalJcrDao.getByPath(postId);
         return convertNodeToPost(node);
     }
     
@@ -145,17 +137,13 @@ public class MetaWeblogApiHandler
 			
 			IOUtils.write(content, out);
 			
-			CmsImageDao cmsImageDao = (CmsImageDao) daoService.getDao("org.otherobjects.cms.model.CmsImage");
-			
-			
-			CmsImage cmsImage = cmsImageDao.createCmsImage();
+			CmsImage cmsImage = new CmsImage();//cmsImageDao.createCmsImage();
 	        cmsImage.setPath("/libraries/images/");
 	        cmsImage.setCode(name.replaceAll("/", "")); //our name mustn't contain slashes but MarsEdits calls do
 	        cmsImage.setLabel(name.replaceAll("/", ""));
 	        
 	        //now check whether an image with the same path already exists and fail if that is the case.
-	        GenericJcrDao genJcrDao = (GenericJcrDao) daoService.getDao(DynaNode.class);
-	        if(genJcrDao.existsAtPath(cmsImage.getJcrPath()))
+	        if(cmsImageDao.existsAtPath(cmsImage.getJcrPath()))
 	        	throw new OtherObjectsException("Couldn't create media object as an object with the same name already exists");
 	        
 	        
@@ -213,5 +201,10 @@ public class MetaWeblogApiHandler
     public Object[] getCategories(String blogid, String username, String password)
     {
         return null;
+    }
+
+    public void setCmsImageDao(CmsImageDao cmsImageDao)
+    {
+        this.cmsImageDao = cmsImageDao;
     }
 }

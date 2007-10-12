@@ -16,11 +16,11 @@ import org.acegisecurity.userdetails.UserDetails;
 import org.apache.commons.io.IOUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
-import org.otherobjects.cms.dao.DynaNodeDao;
 import org.otherobjects.cms.dao.UserDao;
+import org.otherobjects.cms.jcr.UniversalJcrDao;
+import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.Role;
 import org.otherobjects.cms.model.User;
-import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,7 +107,8 @@ public class BootstrapUtils //implements ApplicationListener
     public void loadTypes()
     {
         // load jcr backed typeDefs
-        jcrTypeService.loadJcrBackedTypes((DynaNodeDao) daoService.getDao(TypeDef.class));
+        // FIXME Should we pass typeDef dao instead?
+        jcrTypeService.loadJcrBackedTypes((UniversalJcrDao) daoService.getDao(BaseNode.class));
     }
     
     protected User createUser()

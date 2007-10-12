@@ -6,6 +6,9 @@ import java.util.Set;
 import junit.framework.TestCase;
 
 import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.cms.binding.TestComponentObject;
+import org.otherobjects.cms.binding.TestObject;
+import org.otherobjects.cms.binding.TestReferenceObject;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
@@ -32,6 +35,23 @@ public class AnnotationBasedTypeDefBuilderTest extends TestCase
         assertEquals(propertiesArray[2].getName(), "dob");
 
         assertEquals(PropertyType.STRING.value(), typeDef.getProperty("others").getCollectionElementType());
+
+    }
+
+    public void testInferredAttributes() throws Exception
+    {
+        TypeDef typeDef = new AnnotationBasedTypeDefBuilder().getTypeDef(TestObject.class);
+
+        assertEquals(PropertyType.LIST.value(), typeDef.getProperty("testStringsList").getType());
+        assertEquals(PropertyType.STRING.value(), typeDef.getProperty("testStringsList").getCollectionElementType());
+
+        assertEquals(PropertyType.LIST.value(), typeDef.getProperty("testReferencesList").getType());
+        assertEquals(PropertyType.REFERENCE.value(), typeDef.getProperty("testReferencesList").getCollectionElementType());
+        assertEquals(TestReferenceObject.class.getName(), typeDef.getProperty("testReferencesList").getRelatedType());
+
+        assertEquals(PropertyType.LIST.value(), typeDef.getProperty("testComponentsList").getType());
+        assertEquals(PropertyType.COMPONENT.value(), typeDef.getProperty("testComponentsList").getCollectionElementType());
+        assertEquals(TestComponentObject.class.getName(), typeDef.getProperty("testComponentsList").getRelatedType());
 
     }
 
@@ -114,7 +134,5 @@ public class AnnotationBasedTypeDefBuilderTest extends TestCase
         {
             this.name = name;
         }
-
     }
-
 }

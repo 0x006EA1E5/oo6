@@ -2,6 +2,8 @@ package org.otherobjects.cms.scheduler;
 
 import junit.framework.TestCase;
 
+import org.otherobjects.cms.model.PersistentJobDescription;
+
 public class PersistentJobDescriptionTest extends TestCase {
 	
 	public void testBuildCronExpression() throws Exception

@@ -1,9 +1,11 @@
-package org.otherobjects.cms.scheduler;
+package org.otherobjects.cms.model;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.scheduler.AbstractSpringQuartzJob;
+import org.otherobjects.cms.scheduler.QuartzGroovyJobExecutor;
+import org.otherobjects.cms.scheduler.QuartzSchedulerConfigurationBean;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
@@ -26,7 +28,7 @@ import flexjson.JSON;
  *
  */
 @Type(label = "Scheduled Job", description = "Scheduled Job", labelProperty = "jobName", superClassName = "org.otherobjects.cms.model.DynaNode")
-public class PersistentJobDescription extends DynaNode
+public class PersistentJobDescription extends BaseNode
 {
 
     public static final String JOB_GROUP_NAME = "jcr-job-group";
@@ -73,7 +75,7 @@ public class PersistentJobDescription extends DynaNode
         }
     }
 
-    protected String buildCronExpression() throws Exception
+    public String buildCronExpression() throws Exception
     {
         StringBuffer buf = new StringBuffer();
         String[] fields = {"second", "minute", "hour", "dayOfMonth", "month", "dayOfWeek", "year"};

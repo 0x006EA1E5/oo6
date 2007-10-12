@@ -10,7 +10,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
 @SuppressWarnings("unchecked")
 public class DaoServiceImpl implements DaoService, BeanFactoryAware
 {
-    private static final String DYNA_NODE_DAO_KEY = "org.otherobjects.cms.model.DynaNode";
+    private static final String UNIVERSAL_JCR_DAO_KEY = "universalJcrDao";
     private Map<String, GenericDao> daoMap;
     private BeanFactory beanFactory;
 
@@ -30,14 +30,14 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
                 dao = (GenericDao) beanFactory.getBean(daoBeanName);
             else
                 // If no specific dao found then use dynaNode Dao
-                dao = daoMap.get(DYNA_NODE_DAO_KEY);
+                dao = (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
         }
 
-        // FIXME Return DynaNodeDao
+        // FIXME Return UniversalJcrDao
         if (dao == null)
         {
             // If no specific dao found then use dynaNode Dao
-            dao = daoMap.get(DYNA_NODE_DAO_KEY);
+            dao = (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
         }
         return dao;
     }
@@ -92,7 +92,7 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
                 dao = (GenericDao) beanFactory.getBean(daoBeanName);
             else
                 // If no specific dao found then use dynaNode Dao
-                dao = daoMap.get(DYNA_NODE_DAO_KEY);
+                dao = (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
         }
         
         return (dao != null);

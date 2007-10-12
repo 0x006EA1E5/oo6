@@ -9,7 +9,7 @@ import org.dom4j.Element;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.BaseNode;
 import org.springframework.util.Assert;
 
 /**
@@ -28,17 +28,16 @@ public class SiteMapGenerator
     /**
      * Generates the XML. 
      * 
-     * <p>FIXME Need a better interface than DynaNode
      * @param items
      * @return
      */
-    public Document generateSiteMap(List<DynaNode> items)
+    public Document generateSiteMap(List<BaseNode> items)
     {
         Document doc = DocumentFactory.getInstance().createDocument();
         // Must be in UTF-8 according to spec
         doc.setXMLEncoding("UTF-8");
         Element urlset = doc.addElement("urlset");
-        for (DynaNode item : items)
+        for (BaseNode item : items)
         {
             String linkPath = item.getLinkPath();
             Date modificationTimestamp = item.getModificationTimestamp();

@@ -34,6 +34,7 @@ webservices and plugins
 * Embed rules engine with scripting integration: JBossRules
 * Runtime data-type manipulation: UI 
 * Widget publish/consume
+* Scripting the workbench: global search and replace. Bulk actions.
 
 ==================================================================
 M4 (end November) The interface release.

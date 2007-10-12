@@ -4,7 +4,7 @@ import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.Type;
 
 @Type
-public class ScriptResource extends DynaNode
+public class ScriptResource extends BaseNode
 {
     private static final String ICON_PATH = "otherobjects.resources/static/icons/page-white-gear.png";
     private String label;

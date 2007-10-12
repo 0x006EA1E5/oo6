@@ -3,14 +3,14 @@ package org.otherobjects.cms.workbench;
 import java.util.List;
 
 import org.apache.jackrabbit.ocm.manager.objectconverter.impl.SimpleFieldsHelper;
-import org.otherobjects.cms.beans.BaseDynaNodeTest;
-import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.BaseNode;
+import org.otherobjects.cms.test.BaseJcrTestCase;
 import org.otherobjects.cms.types.AbstractTypeService;
 import org.otherobjects.cms.util.LoggerUtils;
 
 import ch.qos.logback.classic.Level;
 
-public class NavigatorServiceImplTest extends BaseDynaNodeTest
+public class NavigatorServiceImplTest extends BaseJcrTestCase
 {
     private NavigatorServiceImpl navigatorService;
 
@@ -21,25 +21,18 @@ public class NavigatorServiceImplTest extends BaseDynaNodeTest
         LoggerUtils.setLoggerLevel(AbstractTypeService.class, Level.ERROR);
         super.onSetUp();
         this.navigatorService = new NavigatorServiceImpl();
-        this.navigatorService.setDynaNodeDao(this.dynaNodeDao);
-    }
-
-    public void testTestDependencies()
-    {
-        // Create item in site root
-        assertNotNull(this.dynaNodeDao);
-        assertNotNull(this.navigatorService);
+        this.navigatorService.setUniversalJcrDao(this.universalJcrDao);
     }
 
     public void testGetRootItem()
     {
-        DynaNode dynaNode = this.dynaNodeDao.getByPath("/site");
-        assertNotNull(dynaNode);
+        BaseNode baseNode = this.universalJcrDao.getByPath("/site");
+        assertNotNull(baseNode);
     }
 
     public void testGetSubContainers()
     {
-        DynaNode root = this.dynaNodeDao.getByPath("/site");
+        BaseNode root = this.universalJcrDao.getByPath("/site");
         List<WorkbenchItem> items = this.navigatorService.getSubContainers(root.getId());
         assertTrue(items.size() > 0);
     }
@@ -47,29 +40,29 @@ public class NavigatorServiceImplTest extends BaseDynaNodeTest
     public void testAddItem()
     {
         adminLogin();
-        DynaNode root = this.dynaNodeDao.getByPath("/site");
+        BaseNode root = this.universalJcrDao.getByPath("/site");
         WorkbenchItem item = this.navigatorService.addItem(root.getId(), "");
         System.out.println(item.getId() + " " + item.getLinkPath());
-        assertTrue(item instanceof DynaNode);
-        DynaNode dynaNode = (DynaNode) item;
-        assertTrue(dynaNode.getPath().startsWith("/site"));
+        assertTrue(item instanceof BaseNode);
+        BaseNode baseNode = (BaseNode) item;
+        assertTrue(baseNode.getPath().startsWith("/site"));
         logout();
     }
 
     public void testGetItemContents()
     {
-        DynaNode about = this.dynaNodeDao.getByPath("/site/about");
-        assertTrue(about instanceof DynaNode);
+        BaseNode about = this.universalJcrDao.getByPath("/site/about");
+        assertTrue(about instanceof BaseNode);
 
         List<WorkbenchItem> items = this.navigatorService.getItemContents(about.getId());
 
         assertTrue(items.size() > 0);
 
-        DynaNode article = null;
+        BaseNode article = null;
         for (WorkbenchItem wi : items)
         {
-            assertTrue(wi instanceof DynaNode);
-            DynaNode wiNode = (DynaNode) wi;
+            assertTrue(wi instanceof BaseNode);
+            BaseNode wiNode = (BaseNode) wi;
             if (wiNode.getOoType().equals("Article"))
             {
                 article = wiNode;
@@ -83,21 +76,21 @@ public class NavigatorServiceImplTest extends BaseDynaNodeTest
     public void testRenameItem()
     {
         adminLogin();
-        DynaNode root = this.dynaNodeDao.getByPath("/site");
+        BaseNode root = this.universalJcrDao.getByPath("/site");
         WorkbenchItem item = this.navigatorService.addItem(root.getId(), "");
 
-        DynaNode newNode = (DynaNode) item;
+        BaseNode newNode = (BaseNode) item;
         String newName = newNode.getLabel() + " Renamed";
         WorkbenchItem renamedItem = this.navigatorService.renameItem(newNode.getId(), newName);
 
-        assertTrue(renamedItem.getLabel().equals(newName));
+        assertTrue(renamedItem.getOoLabel().equals(newName));
         logout();
     }
 
     public void testMoveItem()
     {
         adminLogin();
-        DynaNode root = this.dynaNodeDao.getByPath("/site");
+        BaseNode root = this.universalJcrDao.getByPath("/site");
 
         WorkbenchItem item = this.navigatorService.addItem(root.getId(), "");
 
@@ -105,7 +98,7 @@ public class NavigatorServiceImplTest extends BaseDynaNodeTest
 
         WorkbenchItem lastItem = wis.get(wis.size() - 1);
 
-        assertEquals(lastItem.getLabel(), item.getLabel());
+        assertEquals(lastItem.getOoLabel(), item.getOoLabel());
 
         WorkbenchItem firstItem = wis.get(0);
 

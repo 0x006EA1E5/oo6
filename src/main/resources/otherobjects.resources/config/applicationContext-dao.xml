@@ -32,7 +32,7 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
     
-    <bean id="userDaoLdap" class="org.otherobjects.cms.dao.UserDAOLdap">
+    <bean id="userDaoLdap" class="org.otherobjects.cms.dao.UserDaoLdap">
         <property name="ldapTemplate" ref="ldapTemplate"/>
     </bean>
 

@@ -15,7 +15,7 @@ import org.otherobjects.cms.types.annotation.Type;
  * @author rich
  */
 @Type(label = "Property Def")
-public class JcrPropertyDef extends DynaNode
+public class JcrPropertyDef extends BaseNode
 {
     private String name;
     private String type;

@@ -2,13 +2,15 @@ package org.otherobjects.cms.model;
 
 import junit.framework.TestCase;
 
-public class DynaNodeTest extends TestCase
+import org.otherobjects.cms.jcr.TestObject;
+import org.otherobjects.cms.types.TypeDefImpl;
+
+public class BaseNodeTest extends TestCase
 {
 
     public void testSetJcrPath()
     {
-        DynaNode node = new DynaNode();
-
+        TestObject node = new TestObject();
         node.setJcrPath("/folder/code.html");
         assertEquals("/folder/", node.getPath());
         assertEquals("code.html", node.getCode());
@@ -26,8 +28,8 @@ public class DynaNodeTest extends TestCase
 
     public void testGetCode()
     {
-        DynaNode node = new DynaNode();
-
+        TestObject node = new TestObject();
+        
         // Check for null
         try
         {
@@ -52,24 +54,30 @@ public class DynaNodeTest extends TestCase
         {
         }
 
-        // FIXME M2: Check auto generation from label
-//        node.setCode(null);
-//        node.setLabel("Hey! Here is a (really) bad label.");
-//        assertEquals("hey-here-is-a-really-bad-label", node.getCode());
+        
+        // Test auto-generation
+        node = new TestObject();
+        
+        TypeDefImpl td = new TypeDefImpl();
+        td.setLabelProperty("name");
+        node.setTypeDef(td);
+        
+        node.setOoLabel("Hey! Here is a (really) bad url.");
+        assertEquals("hey-here-is-a-really-bad-url", node.getCode());
+        
+        node.setCode("my-code");
+        assertEquals("my-code", node.getCode());
     }
 
-//    FIXME this only works after generation
-//    public void testGetProperty()
-//    {
-//        DynaNode n2 = new DynaNode();
-//        n2.set("p1", "n2p1");
-//
-//        DynaNode n1 = new DynaNode();
-//        n1.set("p1", "n1p1");
-//        n1.set("n2", n2);
-//
-//        assertEquals(n1.get("p1"), n1.getProperty("p1"));
-//        assertEquals(n2.get("p1"), n1.getProperty("n2.p1"));
-//    }
+    public void testGet()
+    {
+        TestObject n1 = new TestObject();
+        n1.set("name", "name1");
+
+        assertEquals("name1", n1.get("name"));
+        
+        // FIXME Test nested properties
+    }
 
 }
+

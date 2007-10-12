@@ -1,11 +1,10 @@
 package org.otherobjects.cms.workbench;
 
-import org.otherobjects.cms.beans.BaseDynaNodeTest;
-import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.SiteFolder;
+import org.otherobjects.cms.test.BaseJcrTestCase;
 
-public class ContentServiceImplTest extends BaseDynaNodeTest
+public class ContentServiceImplTest extends BaseJcrTestCase
 {
-    // Injected by Spring
     private ContentServiceImpl contentService;
 
     @Override
@@ -13,23 +12,18 @@ public class ContentServiceImplTest extends BaseDynaNodeTest
     {
         super.onSetUp();
         this.contentService = new ContentServiceImpl();
-        this.contentService.setDynaNodeDao(this.dynaNodeDao);
-    }
-
-    public void testTestDependencies()
-    {
-        // Create item in site root
-        assertNotNull(this.dynaNodeDao);
-        assertNotNull(this.contentService);
+        this.contentService.setDaoService(daoService);
+        this.contentService.setUniversalJcrDao(universalJcrDao);
+        registerType(TestArticle.class);
     }
 
     public void testCreateItem()
     {
         adminLogin();
-        DynaNode siteRoot = this.dynaNodeDao.getByPath("/site/");
-        DynaNode new1 = this.contentService.createItem(siteRoot.getId(), "Article");
+        SiteFolder siteRoot = (SiteFolder) universalJcrDao.getByPath("/site/");
+        TestArticle new1 = (TestArticle) contentService.createItem(siteRoot.getId(), TestArticle.class.getName());
         assertEquals("Untitled 1", new1.getLabel());
-        DynaNode new2 = this.contentService.createItem(siteRoot.getId(), "Article");
+        TestArticle new2 = (TestArticle) contentService.createItem(siteRoot.getId(), TestArticle.class.getName());
         assertEquals("Untitled 2", new2.getLabel());
         logout();
     }

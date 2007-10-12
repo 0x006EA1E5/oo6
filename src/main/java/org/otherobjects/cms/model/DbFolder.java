@@ -12,7 +12,7 @@ import flexjson.JSON;
 
 @SuppressWarnings("unchecked")
 @Type
-public class DbFolder extends DynaNode implements Folder
+public class DbFolder extends BaseNode implements Folder
 {
     private String code;
     private String label;

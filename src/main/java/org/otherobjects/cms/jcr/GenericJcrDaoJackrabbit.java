@@ -1,13 +1,16 @@
 package org.otherobjects.cms.jcr;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.UnsupportedRepositoryOperationException;
+import javax.jcr.Workspace;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
@@ -20,15 +23,24 @@ import org.apache.jackrabbit.ocm.query.Query;
 import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.apache.jackrabbit.ocm.spring.JcrMappingCallback;
 import org.apache.jackrabbit.ocm.spring.JcrMappingTemplate;
+import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.GenericJcrDao;
-import org.otherobjects.cms.dao.PagedResult;
-import org.otherobjects.cms.dao.PagedResultImpl;
+import org.otherobjects.cms.dao.PagedList;
+import org.otherobjects.cms.dao.PagedListImpl;
+import org.otherobjects.cms.events.PublishEvent;
+import org.otherobjects.cms.model.Audited;
 import org.otherobjects.cms.model.CmsNode;
-import org.otherobjects.cms.model.DynaNode;
+import org.otherobjects.cms.model.User;
+import org.otherobjects.cms.security.SecurityTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.util.Assert;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
 import org.springmodules.jcr.JcrCallback;
 
 /**
@@ -36,156 +48,29 @@ import org.springmodules.jcr.JcrCallback;
  * 
  * @author rich
  */
-public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao<T>
+public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements GenericJcrDao<T>, ApplicationContextAware
 {
     private final Logger logger = LoggerFactory.getLogger(GenericJcrDaoJackrabbit.class);
+    private Class<T> persistentClass = null;
 
-    private final Class<T> persistentClass;
+    // To execute JCR queries
+    private JcrMappingTemplate jcrMappingTemplate;
 
-    protected JcrMappingTemplate jcrMappingTemplate;
+    // To get access to live/edit sessions for publishing
+    private OtherObjectsJackrabbitSessionFactory sessionFactory;
+
+    // To allow publishing of events
+    private ApplicationContext applicationContext;
+
+    public GenericJcrDaoJackrabbit()
+    {
+    }
 
     public GenericJcrDaoJackrabbit(Class<T> persistentClass)
     {
         this.persistentClass = persistentClass;
     }
 
-    @SuppressWarnings("unchecked")
-    public List<T> getAll()
-    {
-        QueryManager queryManager = getJcrMappingTemplate().createQueryManager();
-        Filter filter = queryManager.createFilter(this.persistentClass);
-        Query query = queryManager.createQuery(filter);
-        return (List<T>) getJcrMappingTemplate().getObjects(query);
-    }
-
-    /**
-     * Works in transactions.
-     * 
-     */
-    @SuppressWarnings("unchecked")
-    public List<T> getAllByPath(final String path)
-    {
-        return (List<T>) getJcrMappingTemplate().execute(new JcrMappingCallback()
-        {
-            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
-            {
-                try
-                {
-                    String p = path;
-                    if (path.length() > 1 && path.endsWith("/"))
-                        p = path.substring(0, path.length() - 1);
-
-                    List<T> list = new ArrayList<T>();
-                    Node node;
-                    if (p.equals("/"))
-                        node = manager.getSession().getRootNode();
-                    else
-                        node = manager.getSession().getRootNode().getNode(p.substring(1));
-
-                    NodeIterator nodes = node.getNodes();
-                    while (nodes.hasNext())
-                    {
-                        Node n = nodes.nextNode();
-                        //FIXME Extra lookup is bad. Can we avoid UUID requirement too
-                        //FIXME Avoid jcr: nodes better...
-                        if (!n.getName().startsWith("jcr:"))
-                            list.add((T) manager.getObjectByUuid(n.getUUID()));
-                    }
-                    return list;
-                }
-                catch (Exception e)
-                {
-                    throw new JcrMappingException(e);
-                }
-            }
-        }, true);
-
-        //        QueryManager queryManager = getJcrMappingTemplate().createQueryManager();
-        //        Filter filter = queryManager.createFilter(DynaNode.class);
-        //        Query query = queryManager.createQuery(filter);
-        //        filter.setScope(path + "/");
-        //        return (List<T>) getJcrMappingTemplate().getObjects(query);
-    }
-
-    @SuppressWarnings("unchecked")
-    public T getByJcrExpression(final String jcrExpression)
-    {
-        return (T) getJcrMappingTemplate().execute(new JcrMappingCallback()
-        {
-            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
-            {
-                try
-                {
-                    javax.jcr.query.QueryManager queryManager = manager.getSession().getWorkspace().getQueryManager();
-                    javax.jcr.query.Query query = queryManager.createQuery(jcrExpression, javax.jcr.query.Query.XPATH);
-                    javax.jcr.query.QueryResult queryResult = query.execute();
-                    NodeIterator nodeIterator = queryResult.getNodes();
-                    //FIXME This is a double lookup. Can we convert node directly?
-                    return manager.getObjectByUuid(nodeIterator.nextNode().getUUID());
-                }
-                catch (Exception e)
-                {
-                    throw new JcrMappingException(e);
-                }
-            }
-        });
-    }
-
-    @SuppressWarnings("unchecked")
-    public List<T> getAllByJcrExpression(final String jcrExpression)
-    {
-        return (List<T>) getJcrMappingTemplate().execute(new JcrMappingCallback()
-        {
-            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
-            {
-                try
-                {
-                    javax.jcr.query.QueryManager queryManager = manager.getSession().getWorkspace().getQueryManager();
-                    javax.jcr.query.Query query = queryManager.createQuery(jcrExpression, javax.jcr.query.Query.XPATH);
-                    javax.jcr.query.QueryResult queryResult = query.execute();
-                    NodeIterator nodeIterator = queryResult.getNodes();
-                    List<T> results = new ArrayList<T>();
-                    //FIXME This is a double lookup. Can we convert node directly?
-                    int count = 0;
-                    while (nodeIterator.hasNext() && count++ < 10)
-                        results.add((T) manager.getObjectByUuid(nodeIterator.nextNode().getUUID()));
-
-                    return results;
-                }
-                catch (Exception e)
-                {
-                    throw new JcrMappingException(e);
-                }
-            }
-        });
-    }
-
-    @SuppressWarnings("unchecked")
-    public PagedResult<T> pageByJcrExpression(final String jcrExpression, final int pageSize, final int pageNo)
-    {
-        return (PagedResult<T>) getJcrMappingTemplate().execute(new JcrMappingCallback()
-        {
-            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
-            {
-                try
-                {
-                    javax.jcr.query.QueryManager queryManager = manager.getSession().getWorkspace().getQueryManager();
-                    javax.jcr.query.Query query = queryManager.createQuery(jcrExpression, javax.jcr.query.Query.XPATH);
-                    javax.jcr.query.QueryResult queryResult = query.execute();
-                    return createPagedResults(manager, queryResult, pageSize, pageNo);
-                }
-                catch (Exception e)
-                {
-                    throw new JcrMappingException(e);
-                }
-            }
-        });
-    }
-
-    /**
-     * Saves the object in the repository. If the object already exists then it
-     * is updated, otherwise it is inserted.
-     */
     @SuppressWarnings("unchecked")
     public T save(T object)
     {
@@ -194,17 +79,40 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
 
     public T save(T object, boolean validate)
     {
+        if (!canSaveWithRepositoryCheck(object))
+            throw new OtherObjectsException("Can't save DynaNode '" + object + "' because it has either in use by a different user or has been changed in the repository since being loaded");
+
+        if (validate)
+        {
+            Errors errors = new BeanPropertyBindingResult(object, "target");
+            // FIXME M2 Re-enable validation after dynaNodes are true beans
+            //dynaNodeValidator.validate(object, errors);
+            if (errors.getErrorCount() > 0)
+                throw new OtherObjectsException("DynaNode '" + object + "' couldn't be validated and therefore didn't get saved");
+        }
+        updateAuditInfo(object, null);
+        return saveInternal(object, false);
+    }
+
+    protected T saveInternal(T dynaNode, boolean publishStatus)
+    {
+        dynaNode.setPublished(publishStatus);
+        return saveSimple(dynaNode, false);
+    }
+
+    protected T saveSimple(T object, boolean validate)
+    {
         if (object.getId() == null)
         {
             // New
             Assert.notNull(object.getJcrPath(), "jcrPath must not be null when saving.");
-            getJcrMappingTemplate().insert(object);
+            jcrMappingTemplate.insert(object);
 
             // PERF Extra lookup required to get UUID. Should be done in PM.
             CmsNode newObj = getByPath(object.getJcrPath());
             Assert.notNull(newObj, "Object not saved correctly. Could not read ID.");
             object.setId(newObj.getId());
-            getJcrMappingTemplate().save();
+            jcrMappingTemplate.save();
             return object;
         }
         else
@@ -212,27 +120,80 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
             // PERF Extra lookup required to check path change
             CmsNode existingObj = get(object.getId());
             if (!existingObj.getJcrPath().equals(object.getJcrPath()))
-                getJcrMappingTemplate().move(existingObj.getJcrPath(), object.getJcrPath());
+                jcrMappingTemplate.move(existingObj.getJcrPath(), object.getJcrPath());
 
             // Update
-            getJcrMappingTemplate().update(object);
-            getJcrMappingTemplate().save();
+            jcrMappingTemplate.update(object);
+            jcrMappingTemplate.save();
             return object;
         }
     }
 
-    /**
-     * Moves the object to a new location in the repository. This is also used for 
-     * renaming nodes.
-     * 
-     * <p>FIXME Can we detect path changes automatically?
-     */
-    @SuppressWarnings("unchecked")
-    public T move(T object, String newPath)
+    private boolean canSaveWithRepositoryCheck(T object)
     {
-        getJcrMappingTemplate().move(object.getJcrPath(), newPath);
-        getJcrMappingTemplate().save();
-        return null; //FIXME
+        // check if this is a new node, if so we can safely assume that a save is fine
+        if (object.getId() == null)
+            return true;
+
+        T compareNode = (T) get(object.getId());
+        // if the changeNumber has changed something else has save the dynaNode while we were working on it. So it shouldn't be saved.
+        if (compareNode.getChangeNumber() == object.getChangeNumber())
+            return true;
+
+        // change number is fine so check for the rest 
+        if (object.isPublished())
+            return true;
+
+        if (SecurityTool.isCurrentUser(object.getUserId()))
+            return true;
+
+        return false;
+    }
+
+    public boolean canSave(T object, boolean checkRepository)
+    {
+        if (checkRepository)
+            return canSaveWithRepositoryCheck(object);
+        else
+            return canSaveNoRepositoryCheck(object);
+    }
+
+    private boolean canSaveNoRepositoryCheck(T dynaNode)
+    {
+        // dynaNode is published and we haven't been asked to sync with repository
+        if (dynaNode.isPublished())
+            return true;
+
+        // if it is not we can save only if the current AuditInfo.getUserId()  is equal to the current users id
+        if (SecurityTool.isCurrentUser(dynaNode.getUserId()))
+            return true;
+
+        return false;
+    }
+
+    @SuppressWarnings("unchecked")
+    public T getByPath(String path)
+    {
+        Assert.notNull("path must be specified.", path);
+
+        // Removing trainling slash to make path JCR compatible
+        if (path.endsWith("/"))
+            path = path.substring(0, path.lastIndexOf("/"));
+
+        return (T) jcrMappingTemplate.getObject(path);
+    }
+
+    public boolean exists(String id)
+    {
+        // If there is no id then this object hasn't been saved
+        Assert.notNull(id, "id must not be null.");
+
+        // PERF Access node without conversion for faster check
+        T entity = get(id);
+        if (entity != null)
+            return true;
+        else
+            return false;
     }
 
     public boolean existsAtPath(String path)
@@ -249,37 +210,11 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     }
 
     @SuppressWarnings("unchecked")
-    public T getByPath(String path)
-    {
-        Assert.notNull("path must be specified.", path);
-
-        // Removing trainling slash to make path JCR compatible
-        if (path.endsWith("/"))
-            path = path.substring(0, path.lastIndexOf("/"));
-
-        return (T) getJcrMappingTemplate().getObject(path);
-    }
-
-    public boolean exists(String id)
-    {
-        // If there in no id then this object hasn't been saved
-        if (id == null)
-            return false;
-
-        // PERF Access node without conversion for faster check
-        T entity = get(id);
-        if (entity != null)
-            return true;
-        else
-            return false;
-    }
-
-    @SuppressWarnings("unchecked")
     public T get(String id)
     {
         try
         {
-            return (T) getJcrMappingTemplate().getObjectByUuid(id);
+            return (T) jcrMappingTemplate.getObjectByUuid(id);
         }
         catch (RuntimeException e)
         {
@@ -290,17 +225,25 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     public void remove(String id)
     {
         String path = convertIdToPath(id);
-        getJcrMappingTemplate().remove(path);
+        jcrMappingTemplate.remove(path);
     }
 
-    public void moveItem(final String itemId, final String targetId, final String point)
+    public T rename(T object, String newPath)
     {
-        getJcrMappingTemplate().execute(new JcrCallback()
+        jcrMappingTemplate.move(object.getJcrPath(), newPath);
+        jcrMappingTemplate.save();
+        return null; //FIXME
+    }
+
+    @SuppressWarnings("unchecked")
+    public T reorder(final T object, final T targetObject, final String point)
+    {
+        return (T) jcrMappingTemplate.execute(new JcrCallback()
         {
             public Object doInJcr(Session session) throws RepositoryException
             {
-                Node item = session.getNodeByUUID(itemId);
-                Node target = session.getNodeByUUID(targetId);
+                Node item = session.getNodeByUUID(object.getId());
+                Node target = session.getNodeByUUID(targetObject.getId());
 
                 Assert.doesNotContain(target.getPath(), ".", "Target must be a folder: " + target.getPath());
 
@@ -317,12 +260,12 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
                 if (item.getParent().getPath().equals(target.getParent().getPath()))
                     sameFolder = true;
 
-                if (point.equals("append") || !sameFolder)
+                if (point.equals(GenericJcrDao.REORDER_APPEND) || !sameFolder)
                 {
                     String origPath = item.getPath();
 
                     String newPath;
-                    if (point.equals("append"))
+                    if (point.equals(GenericJcrDao.REORDER_APPEND))
                         // Case 1
                         newPath = target.getPath() + "/" + item.getName();
                     else
@@ -332,12 +275,12 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
                     GenericJcrDaoJackrabbit.this.logger.info("Moving: " + origPath + " to " + newPath);
                     session.move(origPath, newPath);
                 }
-                if (point.equals("above"))
+                if (point.equals(GenericJcrDao.REORDER_ABOVE))
                 {
                     // Case 2, 4
                     item.getParent().orderBefore(item.getName(), target.getName());
                 }
-                else if (point.equals("below"))
+                else if (point.equals(GenericJcrDao.REORDER_BELOW))
                 {
                     // Case 3, 5
                     NodeIterator nodes = target.getParent().getNodes();
@@ -378,7 +321,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     {
         try
         {
-            return getJcrMappingTemplate().getNodeByUUID(uuid).getPath();
+            return jcrMappingTemplate.getNodeByUUID(uuid).getPath();
         }
         catch (RepositoryException e)
         {
@@ -386,20 +329,10 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
         }
     }
 
-    public JcrMappingTemplate getJcrMappingTemplate()
-    {
-        return this.jcrMappingTemplate;
-    }
-
-    public void setJcrMappingTemplate(JcrMappingTemplate jcrMappingTemplate)
-    {
-        this.jcrMappingTemplate = jcrMappingTemplate;
-    }
-
     @SuppressWarnings("unchecked")
     public List<T> getVersions(final T object)
     {
-        return (List<T>) getJcrMappingTemplate().execute(new JcrMappingCallback()
+        return (List<T>) jcrMappingTemplate.execute(new JcrMappingCallback()
         {
             public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
             {
@@ -430,10 +363,91 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
         }, true);
     }
 
+    public void publish(final T dynaNode, final String message)
+    {
+        //FIXME this should display proper transactional behaviour which it doesn't at the moment as there are multiple jcr sessions involved
+        if (dynaNode.isPublished())
+            throw new OtherObjectsException("DynaNode " + dynaNode.getJcrPath() + "[" + dynaNode.getId() + "] couldn't be published as its published flag is already set ");
+
+        jcrMappingTemplate.execute(new JcrMappingCallback()
+        {
+            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+            {
+                try
+                {
+                    Session liveSession = null;
+                    String jcrPath = dynaNode.getJcrPath();
+                    try
+                    {
+                        // get a live workspace session
+                        liveSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
+                        Workspace liveWorkspace = liveSession.getWorkspace();
+
+                        Node liveNode = null;
+                        try
+                        {
+                            //get the corresponding node in the live workspace by UUID in case path has changed
+                            liveNode = liveSession.getNodeByUUID(dynaNode.getId());
+                        }
+                        catch (ItemNotFoundException e)
+                        {
+                            // noop
+                        }
+
+                        if (liveNode == null) // no such node so we can clone
+                        {
+                            liveWorkspace.clone(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME, jcrPath, jcrPath, false);
+                        }
+                        else
+                        {
+                            liveNode.update(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
+                        }
+
+                        // we got here so we successfully published
+                        updateAuditInfo(dynaNode, message);
+                        saveInternal(dynaNode, true); // set the status to published
+
+                        // create version and assign the current changeNumber as the label
+                        dynaNode.setChangeNumber(dynaNode.getChangeNumber() + 1);
+                        manager.checkin(jcrPath, new String[]{(dynaNode.getChangeNumber()) + ""});
+                        manager.checkout(jcrPath);
+
+                        applicationContext.publishEvent(new PublishEvent(this, dynaNode));
+                    }
+                    finally
+                    {
+                        if (liveSession != null)
+                            liveSession.logout();
+                    }
+                    return null;
+                }
+                catch (Exception e)
+                {
+                    throw new JcrMappingException(e);
+                }
+            }
+        }, true);
+    }
+
+    private void updateAuditInfo(T dynaNode, String comment)
+    {
+        User user = SecurityTool.getCurrentUser();
+        if (user != null) // FIXME Need to reanble and then mock in tests
+        {
+            Assert.notNull(user, "auditInfo can't be updated if there is no current user");
+            dynaNode.setUserName(user.getFullName());
+            dynaNode.setUserId(user.getId().toString());
+        }
+        dynaNode.setModificationTimestamp(new Date());
+        if (StringUtils.isNotEmpty(comment))
+            dynaNode.setComment(comment);
+        dynaNode.setChangeNumber(dynaNode.getChangeNumber() + 1);
+    }
+
     @SuppressWarnings("unchecked")
     public T getVersionByChangeNumber(final T object, final int changeNumber)
     {
-        return (T) getJcrMappingTemplate().execute(new JcrMappingCallback()
+        return (T) jcrMappingTemplate.execute(new JcrMappingCallback()
         {
             public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
             {
@@ -451,9 +465,9 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     }
 
     @SuppressWarnings("unchecked")
-    public T restoreVersionByChangeNumber(final T object, final int changeNumber, final boolean removeExisting)
+    public T restoreVersionByChangeNumber(final T object, final int changeNumber)
     {
-        return (T) getJcrMappingTemplate().execute(new JcrMappingCallback()
+        return (T) jcrMappingTemplate.execute(new JcrMappingCallback()
         {
             public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
             {
@@ -467,13 +481,13 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
                     // FIXME We need to increment the version by 1? Something iffy here 
                     String requestedVersionName = node.getVersionHistory().getVersionByLabel(changeNumber + 1 + "").getName();
                     Version requestedVersion = node.getVersionHistory().getVersion(requestedVersionName);
-                    node.restore(requestedVersion, removeExisting);
+                    node.restore(requestedVersion, false);
 
                     // Checkout so changes can be made again
                     node.checkout();
 
                     // Update change number
-                    int newChangeNumber = ((DynaNode) object).getChangeNumber() + 1;
+                    int newChangeNumber = object.getChangeNumber() + 1;
                     node.setProperty("changeNumber", newChangeNumber);
                     node.save();
 
@@ -506,9 +520,141 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     }
 
     @SuppressWarnings("unchecked")
-    public PagedResult<T> getPagedByPath(final String path, final int pageSize, final int pageNo)
+    public List<T> getAll()
     {
-        return (PagedResult<T>) getJcrMappingTemplate().execute(new JcrMappingCallback()
+        QueryManager queryManager = jcrMappingTemplate.createQueryManager();
+        Filter filter = queryManager.createFilter(this.persistentClass);
+        Query query = queryManager.createQuery(filter);
+        return (List<T>) jcrMappingTemplate.getObjects(query);
+    }
+
+    /**
+     * Works in transactions.
+     */
+    @SuppressWarnings("unchecked")
+    public List<T> getAllByPath(final String path)
+    {
+        return (List<T>) jcrMappingTemplate.execute(new JcrMappingCallback()
+        {
+            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+            {
+                try
+                {
+                    String p = path;
+                    if (path.length() > 1 && path.endsWith("/"))
+                        p = path.substring(0, path.length() - 1);
+
+                    List<T> list = new ArrayList<T>();
+                    Node node;
+                    if (p.equals("/"))
+                        node = manager.getSession().getRootNode();
+                    else
+                        node = manager.getSession().getRootNode().getNode(p.substring(1));
+
+                    NodeIterator nodes = node.getNodes();
+                    while (nodes.hasNext())
+                    {
+                        Node n = nodes.nextNode();
+                        //FIXME Extra lookup is bad. Can we avoid UUID requirement too
+                        //FIXME Avoid jcr: nodes better...
+                        if (!n.getName().startsWith("jcr:"))
+                            list.add((T) manager.getObjectByUuid(n.getUUID()));
+                    }
+                    return list;
+                }
+                catch (Exception e)
+                {
+                    throw new JcrMappingException(e);
+                }
+            }
+        }, true);
+
+        //        QueryManager queryManager = jcrMappingTemplate.createQueryManager();
+        //        Filter filter = queryManager.createFilter(DynaNode.class);
+        //        Query query = queryManager.createQuery(filter);
+        //        filter.setScope(path + "/");
+        //        return (List<T>) jcrMappingTemplate.getObjects(query);
+    }
+
+    @SuppressWarnings("unchecked")
+    public T getByJcrExpression(final String jcrExpression)
+    {
+        return (T) jcrMappingTemplate.execute(new JcrMappingCallback()
+        {
+            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+            {
+                try
+                {
+                    javax.jcr.query.QueryManager queryManager = manager.getSession().getWorkspace().getQueryManager();
+                    javax.jcr.query.Query query = queryManager.createQuery(jcrExpression, javax.jcr.query.Query.XPATH);
+                    javax.jcr.query.QueryResult queryResult = query.execute();
+                    NodeIterator nodeIterator = queryResult.getNodes();
+                    //FIXME This is a double lookup. Can we convert node directly?
+                    return manager.getObjectByUuid(nodeIterator.nextNode().getUUID());
+                }
+                catch (Exception e)
+                {
+                    throw new JcrMappingException(e);
+                }
+            }
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<T> getAllByJcrExpression(final String jcrExpression)
+    {
+        return (List<T>) jcrMappingTemplate.execute(new JcrMappingCallback()
+        {
+            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+            {
+                try
+                {
+                    javax.jcr.query.QueryManager queryManager = manager.getSession().getWorkspace().getQueryManager();
+                    javax.jcr.query.Query query = queryManager.createQuery(jcrExpression, javax.jcr.query.Query.XPATH);
+                    javax.jcr.query.QueryResult queryResult = query.execute();
+                    NodeIterator nodeIterator = queryResult.getNodes();
+                    List<T> results = new ArrayList<T>();
+                    //FIXME This is a double lookup. Can we convert node directly?
+                    int count = 0;
+                    while (nodeIterator.hasNext() && count++ < 10)
+                        results.add((T) manager.getObjectByUuid(nodeIterator.nextNode().getUUID()));
+
+                    return results;
+                }
+                catch (Exception e)
+                {
+                    throw new JcrMappingException(e);
+                }
+            }
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    public PagedList<T> pageByJcrExpression(final String jcrExpression, final int pageSize, final int pageNo)
+    {
+        return (PagedList<T>) jcrMappingTemplate.execute(new JcrMappingCallback()
+        {
+            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+            {
+                try
+                {
+                    javax.jcr.query.QueryManager queryManager = manager.getSession().getWorkspace().getQueryManager();
+                    javax.jcr.query.Query query = queryManager.createQuery(jcrExpression, javax.jcr.query.Query.XPATH);
+                    javax.jcr.query.QueryResult queryResult = query.execute();
+                    return createPagedResults(manager, queryResult, pageSize, pageNo);
+                }
+                catch (Exception e)
+                {
+                    throw new JcrMappingException(e);
+                }
+            }
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    public PagedList<T> getPagedByPath(final String path, final int pageSize, final int pageNo)
+    {
+        return (PagedList<T>) jcrMappingTemplate.execute(new JcrMappingCallback()
         {
             public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
             {
@@ -526,8 +672,8 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
                     NodeIterator nodeIterator = queryResult.getNodes();
                     long count = nodeIterator.getSize();
 
-                    int startIndex = PagedResultImpl.calcStartIndex(pageSize, pageNo);
-                    int endIndex = PagedResultImpl.calcEndIndex(pageSize, (int) count, startIndex); //FIXME we are downcasting to int here which could theoretically cause problems ...
+                    int startIndex = PagedListImpl.calcStartIndex(pageSize, pageNo);
+                    int endIndex = PagedListImpl.calcEndIndex(pageSize, (int) count, startIndex); //FIXME we are downcasting to int here which could theoretically cause problems ...
 
                     // now do a loop and store the range of interest in a list
                     List<T> nodes = new ArrayList<T>();
@@ -544,7 +690,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
                         i++;
                     }
 
-                    return new PagedResultImpl<T>(pageSize, (int) count, pageNo, nodes, false);
+                    return new PagedListImpl<T>(pageSize, (int) count, pageNo, nodes, false);
                 }
                 catch (Exception e)
                 {
@@ -555,9 +701,9 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
     }
 
     @SuppressWarnings("unchecked")
-    public PagedResult<T> getPagedByPath(final String path, final int pageSize, final int pageNo, final String search, final String sortField, final boolean asc)
+    public PagedList<T> getPagedByPath(final String path, final int pageSize, final int pageNo, final String search, final String sortField, final boolean asc)
     {
-        return (PagedResult<T>) getJcrMappingTemplate().execute(new JcrMappingCallback()
+        return (PagedList<T>) jcrMappingTemplate.execute(new JcrMappingCallback()
         {
             public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
             {
@@ -567,7 +713,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
                      * 
                      * /jcr:root/path//element(*, oo:node) [@attr1 = 'abc' and @attr2 = 'def' and jcr:contains(., 'some text')] order by @attr3 ascending
                      * |        |     |                   |                                  |    |                           | |                        |
-                     *	rep root        what kind of nodes            where clause                      text search                    order by clause
+                     *  rep root        what kind of nodes            where clause                      text search                    order by clause
                      */
 
                     // basic xpath
@@ -638,8 +784,8 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
         NodeIterator nodeIterator = queryResult.getNodes();
         long count = nodeIterator.getSize();
 
-        int startIndex = PagedResultImpl.calcStartIndex(pageSize, pageNo);
-        int endIndex = PagedResultImpl.calcEndIndex(pageSize, (int) count, startIndex); //FIXME we are downcasting to int here which could theoretically cause problems ...
+        int startIndex = PagedListImpl.calcStartIndex(pageSize, pageNo);
+        int endIndex = PagedListImpl.calcEndIndex(pageSize, (int) count, startIndex); //FIXME we are downcasting to int here which could theoretically cause problems ...
 
         // now do a loop and store the range of interest in a list
         List<T> nodes = new ArrayList<T>();
@@ -656,85 +802,47 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode> implements GenericJcrDao
             i++;
         }
 
-        return new PagedResultImpl<T>(pageSize, (int) count, pageNo, nodes, false);
+        return new PagedListImpl<T>(pageSize, (int) count, pageNo, nodes, false);
     }
 
-    public PagedResult<T> getAllPaged(int pageSize, int pageNo, String filterQuery, String sortField, boolean asc)
+    public PagedList<T> getAllPaged(int pageSize, int pageNo, String filterQuery, String sortField, boolean asc)
     {
         //FIXME needs to be implemented
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    public PagedResult<T> getPagedByQuery(String query, int pageSize, int pageNo, String filterQuery, String sortField, boolean asc)
+    public PagedList<T> getPagedByQuery(String query, int pageSize, int pageNo, String filterQuery, String sortField, boolean asc)
     {
         //FIXME needs to be implemented
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    //    @SuppressWarnings("unchecked")
-    //	public PagedResult<T> getPagedByPath(final DynaNode dynaNode, final int pageSize, final int pageNo, final String sortField, final boolean asc) {
-    //		return (PagedResult<T>) getJcrMappingTemplate().execute(new JcrMappingCallback()
-    //        {
-    //            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
-    //            {
-    //                try
-    //                {
-    //                    String p = dynaNode.getJcrPath();
-    //                    Assert.isTrue(!p.endsWith("/"), "jcr paths obtained from  dynaNodes must not end in a slash");
-    //                    p = p + "/";
-    //                    
-    //                    //Use the jackrabbit-ocm infrastructure to build the jcr query
-    //                    QueryManager queryManager = getJcrMappingTemplate().createQueryManager();
-    //                    Filter filter = queryManager.createFilter(Class.forName(dynaNode.getOoType()));
-    //                    
-    //                    filter.setScope(p);
-    //                    
-    //                    Query query = queryManager.createQuery(filter);
-    //                    if(sortField != null)
-    //                    {
-    //                    	if(asc)
-    //                    		query.addOrderByAscending(sortField);
-    //                    	else
-    //                    		query.addOrderByDescending(sortField);
-    //                    }
-    //                    
-    //                    String xPathQuery = queryManager.buildJCRExpression(query);
-    //                    logger.debug("getPagedByPath query: " + xPathQuery);
-    //                    
-    //                    javax.jcr.query.QueryManager jcrQueryManager = manager.getSession().getWorkspace().getQueryManager();
-    //                    javax.jcr.query.Query jcrQuery = jcrQueryManager.createQuery(xPathQuery, javax.jcr.query.Query.XPATH);
-    //                    
-    //                    
-    //                    javax.jcr.query.QueryResult queryResult = jcrQuery.execute();
-    //                    // first count results
-    //                    NodeIterator nodeIterator = queryResult.getNodes();
-    //                    long count = nodeIterator.getSize();
-    //                    
-    //                    int startIndex = PagedResultImpl.calcStartIndex(pageSize, pageNo);
-    //                    int endIndex = PagedResultImpl.calcEndIndex(pageSize, (int)count, startIndex); //FIXME we are downcasting to int here which could theoretically cause problems ...
-    //                    
-    //                    // now do a loop and store the range of interest in a list
-    //                    List<T> nodes = new ArrayList<T>();
-    //                    int i = 0;
-    //                    while(nodeIterator.hasNext())
-    //                    {
-    //                    	if(i >= startIndex && i < endIndex)
-    //                    		nodes.add((T) manager.getObjectByUuid(nodeIterator.nextNode().getUUID()));
-    //                    	else
-    //                    		nodeIterator.nextNode();
-    //                    	
-    //                    	if(i >= endIndex)
-    //                    		break;
-    //                    	i++;
-    //                    }
-    //                    
-    //                    return new PagedResultImpl<T>(pageSize, (int)count, pageNo, nodes, false);
-    //                }
-    //                catch (Exception e)
-    //                {
-    //                    throw new JcrMappingException(e);
-    //                }
-    //            }
-    //        }, true);
-    //	}
+    /**
+     * @category injector
+     */
+    public void setJcrMappingTemplate(JcrMappingTemplate jcrMappingTemplate)
+    {
+        this.jcrMappingTemplate = jcrMappingTemplate;
+    }
+
+    /**
+     * @category injector
+     */
+    public void setSessionFactory(OtherObjectsJackrabbitSessionFactory sessionFactory)
+    {
+        this.sessionFactory = sessionFactory;
+    }
+
+    /**
+     * @category injector
+     */
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
+    {
+        this.applicationContext = applicationContext;
+    }
+
+    public JcrMappingTemplate getJcrMappingTemplate()
+    {
+        return jcrMappingTemplate;
+    }
 }
