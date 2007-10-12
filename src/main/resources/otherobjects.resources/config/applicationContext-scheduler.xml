@@ -17,8 +17,7 @@
 
 	<bean id="schedulerConfiguration" class="org.otherobjects.cms.scheduler.QuartzSchedulerConfigurationBean" >
 		<property name="scheduler" ref="scheduler" />
-		<property name="dynaNodeDao" ref="dynaNodeDao" />
-		<property name="typeService" ref="typeService" />
+		<property name="universalJcrDao" ref="universalJcrDao" />
 	</bean>
 	
 	<bean id="exporter" class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">

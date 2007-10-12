@@ -11,6 +11,8 @@
 		<config>src/main/resources/otherobjects.resources/config/applicationContext-repository.xml</config>
 		<config>src/main/resources/otherobjects.resources/config/applicationContext-resources.xml</config>
 		<config>src/main/resources/otherobjects.resources/config/applicationContext-security.xml</config>
+		<config>src/main/resources/otherobjects.resources/config/applicationContext-mail.xml</config>
+		<config>src/main/resources/otherobjects.resources/config/applicationContext-scheduler.xml</config>
 	</configs>
 	<configSets>
 		<configSet>
