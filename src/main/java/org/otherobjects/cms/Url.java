@@ -81,6 +81,8 @@ public class Url
 
     public String getAbsoluteLink()
     {
+        //TODO wouldn't it be better to create the the link in any case
+        //TODO shouldn't this throw an exception if this is not modifieable and not absolute?
         if (absolute) // link is already absolute
             return getLink();
         else
@@ -92,6 +94,7 @@ public class Url
             newUrl.append("://");
             newUrl.append(req.getServerName());
             int serverPort = req.getServerPort();
+            //FIXME do we need to get server specific port configuration from GlobalBeanInfo to get this right?
             if (serverPort != STANDARD_HTTP_PORT && serverPort != STANDARD_HTTPS_PORT)
                 newUrl.append(":" + serverPort);
             try
