@@ -70,7 +70,7 @@ public class Url
             path = parsedUrl.getPath();
             query = parsedUrl.getQuery();
             ref = parsedUrl.getFragment();
-            ssl = (parsedUrl.getScheme() != null) ? parsedUrl.getScheme().toLowerCase().equals("https") : false;
+            ssl = (scheme != null) ? scheme.toLowerCase().equals("https") : false;
             absolute = parsedUrl.isAbsolute();
         }
         catch (URISyntaxException e)
