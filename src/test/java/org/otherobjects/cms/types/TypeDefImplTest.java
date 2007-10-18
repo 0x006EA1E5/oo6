@@ -21,7 +21,7 @@ public class TypeDefImplTest extends TestCase
         TypeDefImpl td = new TypeDefImpl("Test");
         td.addProperty(new PropertyDefImpl("name", "string", null, null));
         assertNotNull(td.getProperty("name"));
-        
+
         // Duplicate checking
         try
         {
@@ -31,5 +31,16 @@ public class TypeDefImplTest extends TestCase
         catch (Exception e)
         {
         }
+    }
+
+    public void testGetLabel()
+    {
+        TypeDefImpl td = new TypeDefImpl("org.test.types.TestType");
+        td.setLabel("A custom label");
+        assertEquals("A custom label", td.getLabel());
+
+        // Test infered labels
+        td.setLabel("");
+        assertEquals("Test Type", td.getLabel());
     }
 }

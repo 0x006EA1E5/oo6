@@ -45,7 +45,7 @@ public class TypeDefImpl implements TypeDef
 
     /** Reference to TypeService where this TypeDef is registered. */
     private TypeService typeService;
-    
+
     /** Stores which property should be used for the labe.. */
     private String labelProperty;
 
@@ -91,7 +91,7 @@ public class TypeDefImpl implements TypeDef
     public Collection<PropertyDef> getProperties()
     {
         ArrayList<PropertyDef> properties = new ArrayList<PropertyDef>();
-        properties.addAll((Collection<PropertyDef>) this.properties.values());
+        properties.addAll(this.properties.values());
         return properties;
     }
 
@@ -99,18 +99,17 @@ public class TypeDefImpl implements TypeDef
     {
         // TODO Check for duplicates 
         Assert.isNull(getProperty(pd.getName()));
-        ((PropertyDefImpl)pd).setParentTypeDef(this);
+        ((PropertyDefImpl) pd).setParentTypeDef(this);
         this.properties.put(pd.getName(), pd);
     }
 
     public String getLabel()
     {
-        if (label == null)
-            return StringUtils.generateLabel(getName());
+        if (org.apache.commons.lang.StringUtils.isEmpty(label))
+            return StringUtils.generateLabel(org.apache.commons.lang.StringUtils.substringAfterLast(getName(), "."));
         else
             return label;
     }
-
 
     public void setLabel(String label)
     {

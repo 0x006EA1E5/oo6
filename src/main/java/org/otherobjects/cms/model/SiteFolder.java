@@ -1,8 +1,10 @@
 package org.otherobjects.cms.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.otherobjects.cms.SingletonBeanLocator;
+import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
@@ -24,12 +26,22 @@ public class SiteFolder extends BaseNode implements Folder
     }
 
     @SuppressWarnings("unchecked")
-    public List<String> getAllAllowedTypes()
+    public List<TypeDef> getAllAllowedTypes()
     {
+        TypeService typeService = ((TypeService) SingletonBeanLocator.getBean("typeService"));
         if (getAllowedTypes() != null && getAllowedTypes().size() > 0)
-            return getAllowedTypes();
+        {
+            List<TypeDef> types = new ArrayList<TypeDef>();
+            for (String t : getAllowedTypes())
+            {
+                types.add(typeService.getType(t));
+            }
+            return types;
+        }
         else
-            return (List) ((TypeService) SingletonBeanLocator.getBean("typeService")).getTypesBySuperClass(BaseNode.class);
+        {
+            return (List<TypeDef>) typeService.getTypesBySuperClass(BaseNode.class);
+        }
     }
 
     @Property(order = 40)
@@ -55,6 +67,7 @@ public class SiteFolder extends BaseNode implements Folder
         this.allowedTypes = allowedTypes;
     }
 
+    @Override
     @Property(order = 20)
     public String getLabel()
     {
@@ -62,6 +75,7 @@ public class SiteFolder extends BaseNode implements Folder
         return (String) (label != null ? label : (get(getLabelProperty()) != null ? get(getLabelProperty()) : getCode()));
     }
 
+    @Override
     public void setLabel(String label)
     {
         this.label = label;

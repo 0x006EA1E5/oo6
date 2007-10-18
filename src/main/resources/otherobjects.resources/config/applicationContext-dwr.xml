@@ -7,7 +7,7 @@
 	<dwr:controller id="dwrController" debug="true" />
 
 	<dwr:configuration>
-		<dwr:convert type="bean" class="org.otherobjects.cms.model.DynaNode" />
+		<dwr:convert type="bean" class="org.otherobjects.cms.model.BaseNode" />
 		<dwr:convert type="exception" class="java.lang.Exception" />
 	</dwr:configuration>
 	

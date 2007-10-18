@@ -62,7 +62,6 @@ OO.ListingGrid = function() {
 			        url: '/go/workbench/data/listing'
 			    }),
 			
-			
 			    // create reader that reads the Topic records
 			    reader: new Ext.data.JsonReader({
 			        root: 'items',
@@ -127,7 +126,6 @@ OO.ListingGrid = function() {
 			ds.on('beforeload', function() {
 				ds.baseParams = {node:OO.Workbench.currentContainer, q:filter.getValue()};
 			});
-			
 			
 			// Add toolbar
 			var addMenu = new Ext.menu.Menu({

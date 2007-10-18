@@ -38,6 +38,12 @@ public class TypeServiceImpl extends AbstractTypeService
             Set<Class<?>> annotatedClasses = annotationBasedTypeDefBuilder.findAnnotatedClasses("org.otherobjects.cms.model");
             for (Class c : annotatedClasses)
                 registerType(annotationBasedTypeDefBuilder.getTypeDef(c));
+
+            annotatedClasses = annotationBasedTypeDefBuilder.findAnnotatedClasses("com.example.site.model");
+            for (Class c : annotatedClasses)
+                registerType(annotationBasedTypeDefBuilder.getTypeDef(c));
+
+            // FIXME Add TypeDef Validator here: labelProperty, extends BaseNode etc
         }
         catch (Exception e)
         {
