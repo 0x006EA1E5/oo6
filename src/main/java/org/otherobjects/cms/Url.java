@@ -13,18 +13,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 /**
- * 
+ * Useful representation of Urls in a webapp. Allows you to change individual properties of a url. Its toString() method will try to return a string representation 
+ * suitable for use in the href attribute of an A tag.  
  * @author joerg
  *
  */
 public class Url
 {
+
     protected final static Logger logger = LoggerFactory.getLogger(Url.class);
 
     public static final int STANDARD_HTTP_PORT = 80;
     public static final int STANDARD_HTTPS_PORT = 443;
 
     public static final String STANDARD_URL_CHARACTER_ENCODING = "UTF-8";
+
+    private static final String ILLEGAL_MODIFIATION_MESSAGE = "This URL was created as immuteable. None of its properties can be changed";
 
     //private static Pattern absolutePattern = Pattern.compile("^([a-zA-Z]*)://");
     //private static Pattern urlPattern = Pattern.compile("([a-zA-Z]*)://([^/]*)?(:\\d+)?/(.*)(#(.*))?");
@@ -66,7 +70,7 @@ public class Url
             path = parsedUrl.getPath();
             query = parsedUrl.getQuery();
             ref = parsedUrl.getFragment();
-            ssl = parsedUrl.getScheme().toLowerCase().equals("https");
+            ssl = (parsedUrl.getScheme() != null) ? parsedUrl.getScheme().toLowerCase().equals("https") : false;
             absolute = parsedUrl.isAbsolute();
         }
         catch (URISyntaxException e)
@@ -107,13 +111,25 @@ public class Url
         }
     }
 
+    /**
+     * Returns a URL that is suitable for use in an href attribute of the A tag. If this was set to be immutable the link given at creation time will be returned no matter what.
+     * If this was not set to be immutable the absolute link will only be returned, if the link was created as absolute or if it is a secure link but the current request isn't secure.
+     */
     @Override
     public String toString()
     {
+        if (!modifieable)
+            return getLink();
+
+        if (isSsl() && !RequestContextUtils.isSecureRequest())
+            return getAbsoluteLink();
+
         if (absolute)
             return link;
         else
+        {
             return RequestContextUtils.getContextPath() + getLink();
+        }
     }
 
     public boolean isModifieable()
@@ -133,6 +149,8 @@ public class Url
 
     public void setPath(String path)
     {
+        if (!modifieable)
+            throw new OtherObjectsException(ILLEGAL_MODIFIATION_MESSAGE);
         this.path = path;
     }
 
@@ -143,6 +161,8 @@ public class Url
 
     public void setRef(String ref)
     {
+        if (!modifieable)
+            throw new OtherObjectsException(ILLEGAL_MODIFIATION_MESSAGE);
         this.ref = ref;
     }
 
@@ -153,6 +173,8 @@ public class Url
 
     public void setQuery(String query)
     {
+        if (!modifieable)
+            throw new OtherObjectsException(ILLEGAL_MODIFIATION_MESSAGE);
         this.query = query;
     }
 
@@ -168,6 +190,8 @@ public class Url
 
     public void setScheme(String scheme)
     {
+        if (!modifieable)
+            throw new OtherObjectsException(ILLEGAL_MODIFIATION_MESSAGE);
         this.scheme = scheme;
     }
 
@@ -178,6 +202,8 @@ public class Url
 
     public void setServerName(String serverName)
     {
+        if (!modifieable)
+            throw new OtherObjectsException(ILLEGAL_MODIFIATION_MESSAGE);
         this.serverName = serverName;
     }
 
@@ -188,6 +214,8 @@ public class Url
 
     public void setPort(int port)
     {
+        if (!modifieable)
+            throw new OtherObjectsException(ILLEGAL_MODIFIATION_MESSAGE);
         this.port = port;
     }
 
@@ -198,6 +226,8 @@ public class Url
 
     public void setSsl(boolean ssl)
     {
+        if (!modifieable)
+            throw new OtherObjectsException(ILLEGAL_MODIFIATION_MESSAGE);
         this.ssl = ssl;
     }
 
