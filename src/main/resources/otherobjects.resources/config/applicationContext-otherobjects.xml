@@ -23,7 +23,6 @@
 			<!-- 
 				<aop:pointcut id="myCutLogging" expression="execution(* org.otherobjects.cms.controllers.SiteController*.*(..))" />
 				<aop:pointcut id="myCutLogging" expression="execution(* org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImpl*.*(..))" />
-				
 			-->
 			<!-- Intercept all dynaNode queries that happens inside requests -->
 			<aop:pointcut id="myCutLogging" expression="execution(* org.otherobjects.cms.jcr.UniversalJcrDao.*(..))" />
@@ -79,6 +78,7 @@
 	<bean name="workbenchDataController" class="org.otherobjects.cms.controllers.WorkbenchDataController">
 		<property name="typeService" ref="typeService" />
 		<property name="daoService" ref="daoService" />
+		<property name="universalJcrDao" ref="universalJcrDao" />
 	</bean>
 
 	<bean name="formController" class="org.otherobjects.cms.controllers.FormController">

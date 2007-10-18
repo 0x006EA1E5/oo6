@@ -1,15 +1,18 @@
-def dao = daoService.getDao("DynaNode");
+import org.otherobjects.cms.model.*;
+
+def dao = daoService.getDao("BaseNode");
+System.err.println(dao)
 
 def createFolder(dao, path, label, cssClass) {
 	def f = dao.getByPath(path)
 	if(f) return f;
 	
-	f = dao.create("org.otherobjects.cms.model.SiteFolder");
+	f = new SiteFolder();
 	f.jcrPath=path
 	f.label=label
 	f.cssClass=cssClass
 	f = dao.save(f)
-	dao.publish(f)
+	dao.publish(f, null)
 	return f
 }
 
@@ -17,12 +20,12 @@ def createDbFolder(dao, path, label, mainType) {
 	def f = dao.getByPath(path)
 	if(f) return f;
 	
-	f = dao.create("org.otherobjects.cms.model.DbFolder");
+	f = new DbFolder();
 	f.jcrPath=path
 	f.label=label
 	f.mainType=mainType
 	f = dao.save(f)
-	dao.publish(f)
+	dao.publish(f, null)
 	return f
 }
 

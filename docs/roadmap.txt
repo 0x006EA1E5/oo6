@@ -35,6 +35,7 @@ webservices and plugins
 * Runtime data-type manipulation: UI 
 * Widget publish/consume
 * Scripting the workbench: global search and replace. Bulk actions.
+* YAML Otherdemo
 
 ==================================================================
 M4 (end November) The interface release.

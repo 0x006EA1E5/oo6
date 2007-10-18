@@ -27,7 +27,7 @@ import flexjson.JSON;
  * @author joerg
  *
  */
-@Type(label = "Scheduled Job", description = "Scheduled Job", labelProperty = "jobName", superClassName = "org.otherobjects.cms.model.DynaNode")
+@Type(label = "Scheduled Job", description = "Scheduled Job", labelProperty = "jobName")
 public class PersistentJobDescription extends BaseNode
 {
 
@@ -79,9 +79,8 @@ public class PersistentJobDescription extends BaseNode
     {
         StringBuffer buf = new StringBuffer();
         String[] fields = {"second", "minute", "hour", "dayOfMonth", "month", "dayOfWeek", "year"};
-        for (int i = 0; i < fields.length; i++)
+        for (String field : fields)
         {
-            String field = fields[i];
             String value = (String) PropertyUtils.getSimpleProperty(this, field);
             if (StringUtils.isNotBlank(value))
             {
@@ -175,12 +174,14 @@ public class PersistentJobDescription extends BaseNode
         }
     }
 
+    @Override
     @Property(type = PropertyType.STRING, label = "Label", order = 1)
     public String getLabel()
     {
         return label;
     }
 
+    @Override
     public void setLabel(String label)
     {
         this.label = label;

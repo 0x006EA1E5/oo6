@@ -41,15 +41,16 @@ public class BootstrapUtils //implements ApplicationListener
 
     private DaoService daoService;
     private Resource bootstrapScript;
-    private TypeServiceImpl jcrTypeService; 
+    private TypeServiceImpl jcrTypeService;
 
     private boolean standalone = false;
 
-    public void setJcrTypeService(TypeServiceImpl jcrTypeService) {
-		this.jcrTypeService = jcrTypeService;
-	}
+    public void setJcrTypeService(TypeServiceImpl jcrTypeService)
+    {
+        this.jcrTypeService = jcrTypeService;
+    }
 
-	public void setBootstrapScript(Resource bootstrapScript)
+    public void setBootstrapScript(Resource bootstrapScript)
     {
         this.bootstrapScript = bootstrapScript;
     }
@@ -68,7 +69,7 @@ public class BootstrapUtils //implements ApplicationListener
 
         try
         {
-        	UserDao userDao = (UserDao) this.daoService.getDao(User.class);
+            UserDao userDao = (UserDao) this.daoService.getDao(User.class);
             UserDetails adminUser = userDao.loadUserByUsername("admin");
 
             // Create admin user if one does not exist and then run setup script
@@ -79,12 +80,10 @@ public class BootstrapUtils //implements ApplicationListener
                 // FIXME Can this be done in a cleaner way?
                 Authentication authentication = new UsernamePasswordAuthenticationToken(adminUser, null, adminUser.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                
-                loadTypes();
-                
+
                 runScript(this.bootstrapScript.getInputStream());
-                if(!standalone)
-                	runScript(new FileInputStream("src/main/resources/site.resources/bootstrap-data/setup.script"));
+                if (!standalone)
+                    runScript(new FileInputStream("src/main/resources/site.resources/bootstrap-data/setup.script"));
             }
             else
             {
@@ -110,7 +109,7 @@ public class BootstrapUtils //implements ApplicationListener
         // FIXME Should we pass typeDef dao instead?
         jcrTypeService.loadJcrBackedTypes((UniversalJcrDao) daoService.getDao(BaseNode.class));
     }
-    
+
     protected User createUser()
     {
         Role role = new Role("ROLE_ADMIN", "Adminstrator role");
@@ -153,7 +152,8 @@ public class BootstrapUtils //implements ApplicationListener
         shell.evaluate(script);
     }
 
-	public void setStandalone(boolean standalone) {
-		this.standalone = standalone;
-	}
+    public void setStandalone(boolean standalone)
+    {
+        this.standalone = standalone;
+    }
 }
