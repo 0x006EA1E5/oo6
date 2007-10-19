@@ -1,5 +1,10 @@
 package org.otherobjects.cms.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.otherobjects.cms.Url;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
@@ -23,7 +28,31 @@ public class SyndicationFeedResource extends BaseNode
     private String description;
     private String query;
     private String mapping;
-    private Boolean rssFormat;
+    private String feedFormat;
+    private int defaultImageWidth = 300;
+
+    public Url getFeedUrl()
+    {
+        return new Url(getLinkPath());
+    }
+
+    public Map<String, String> getMappingsMap()
+    {
+        if (StringUtils.isNotBlank(getMapping()))
+        {
+            Map<String, String> mappings = new HashMap<String, String>();
+            for (String mapping : getMapping().split("\\s"))
+            {
+                if (mapping.indexOf(':') > -1)
+                {
+                    String[] keyvalue = mapping.split(":");
+                    mappings.put(keyvalue[0], keyvalue[1]);
+                }
+            }
+            return mappings;
+        }
+        return null;
+    }
 
     @Override
     public String getOoIcon()
@@ -31,12 +60,14 @@ public class SyndicationFeedResource extends BaseNode
         return ICON_PATH;
     }
 
+    @Override
     @Property(order = 10)
     public String getLabel()
     {
         return label;
     }
 
+    @Override
     public void setLabel(String label)
     {
         this.label = label;
@@ -65,14 +96,14 @@ public class SyndicationFeedResource extends BaseNode
     }
 
     @Property(order = 40)
-    public Boolean getRssFormat()
+    public String getFeedFormat()
     {
-        return rssFormat;
+        return feedFormat;
     }
 
-    public void setRssFormat(Boolean rssFormat)
+    public void setFeedFormat(String feedFormat)
     {
-        this.rssFormat = rssFormat;
+        this.feedFormat = feedFormat;
     }
 
     @Property(type = PropertyType.TEXT, order = 15)
@@ -84,6 +115,17 @@ public class SyndicationFeedResource extends BaseNode
     public void setDescription(String description)
     {
         this.description = description;
+    }
+
+    @Property(order = 50)
+    public int getDefaultImageWidth()
+    {
+        return defaultImageWidth;
+    }
+
+    public void setDefaultImageWidth(int defaultImageWidth)
+    {
+        this.defaultImageWidth = defaultImageWidth;
     }
 
 }

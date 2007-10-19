@@ -1,5 +1,6 @@
 package org.otherobjects.cms.model;
 
+import org.otherobjects.cms.Url;
 import org.otherobjects.cms.util.StringUtils;
 
 /**
@@ -7,11 +8,12 @@ import org.otherobjects.cms.util.StringUtils;
  * @author rich
  *
  */
-public abstract class SitePage extends BaseNode
+public abstract class SitePage extends BaseNode implements Linkable
 {
     // FIXME Move to PublishingOptions object?
     private Template template;
-    
+
+    @Override
     public String getCode()
     {
         return StringUtils.generateUrlCode(getLabel()) + ".html";
@@ -26,5 +28,10 @@ public abstract class SitePage extends BaseNode
     {
         this.template = template;
     }
-    
+
+    public Url getHref()
+    {
+        return new Url(getLinkPath());
+    }
+
 }
