@@ -8,7 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.DispatcherServlet;
 
 /**
@@ -99,8 +99,8 @@ public class RequestContextUtils
     public static HttpServletRequest getHttpServletRequest()
     {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes != null && requestAttributes instanceof ServletWebRequest)
-            return ((ServletWebRequest) requestAttributes).getRequest();
+        if (requestAttributes != null && requestAttributes instanceof ServletRequestAttributes)
+            return ((ServletRequestAttributes) requestAttributes).getRequest();
 
         return null;
     }

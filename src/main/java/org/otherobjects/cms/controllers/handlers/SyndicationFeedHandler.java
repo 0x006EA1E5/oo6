@@ -10,9 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.otherobjects.cms.Url;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.PagedList;
-import org.otherobjects.cms.jcr.GenericJcrDaoJackrabbit;
+import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.CmsImageSize;
@@ -65,13 +66,15 @@ public class SyndicationFeedHandler implements ResourceHandler
         feed.setFeedType(feedObject.getFeedFormat());
 
         feed.setTitle(feedObject.getLabel());
-        feed.setLink(feedObject.getFeedUrl().getAbsoluteLink());
+        Url feedUrl = feedObject.getFeedUrl();
+        feed.setLink(feedUrl.getAbsoluteLink());
         feed.setDescription(feedObject.getDescription());
 
         List<SyndEntry> entries = new ArrayList<SyndEntry>();
 
-        GenericJcrDaoJackrabbit<BaseNode> dao = (GenericJcrDaoJackrabbit<BaseNode>) daoService.getDao(BaseNode.class);
-        PagedList<BaseNode> items = dao.pageByJcrExpression(feedObject.getQuery(), 15, 1);
+        Object daoObject = daoService.getDao(BaseNode.class);
+
+        PagedList<BaseNode> items = ((UniversalJcrDao) daoObject).pageByJcrExpression(feedObject.getQuery(), 15, 1);
 
         for (BaseNode node : items)
         {
@@ -81,7 +84,8 @@ public class SyndicationFeedHandler implements ResourceHandler
 
                 entry = new SyndEntryImpl();
 
-                entry.setLink(((Linkable) node).getHref().getAbsoluteLink());
+                String permaLink = ((Linkable) node).getHref().getAbsoluteLink();
+                entry.setLink(permaLink);
 
                 if (mappings.containsKey("description"))
                 {
@@ -105,7 +109,7 @@ public class SyndicationFeedHandler implements ResourceHandler
                     {
                         CmsImage image = (CmsImage) PropertyUtils.getNestedProperty(node, mappings.get("image"));
                         SyndEnclosure enclosure = new SyndEnclosureImpl();
-                        CmsImageSize size = cmsImageTool.getSize(image, feedObject.getDefaultImageWidth());
+                        CmsImageSize size = cmsImageTool.getSize(image, (int) feedObject.getDefaultImageWidth());
                         DataFile dataFile = size.getDataFile();
 
                         enclosure.setUrl(dataFile.getExternalUrl());
@@ -126,7 +130,7 @@ public class SyndicationFeedHandler implements ResourceHandler
                     try
                     {
                         Object sourceValue = PropertyUtils.getNestedProperty(node, singleMapping.getValue());
-                        PropertyUtils.setNestedProperty(entries, singleMapping.getKey(), sourceValue);
+                        PropertyUtils.setNestedProperty(entry, singleMapping.getKey(), sourceValue);
                     }
                     catch (Exception e)
                     {
@@ -134,44 +138,13 @@ public class SyndicationFeedHandler implements ResourceHandler
                     }
                 }
 
+                entry.setAuthor(node.getUserName());
+                entry.setUpdatedDate(node.getModificationTimestamp());
+
                 entries.add(entry);
             }
         }
 
-        //        SyndEntry entry;
-        //        SyndContent description;
-        //
-        //        entry = new SyndEntryImpl();
-        //        entry.setTitle("ROME v1.0");
-        //        entry.setLink("http://wiki.java.net/bin/view/Javawsxml/Rome01");
-        //        entry.setPublishedDate(DATE_PARSER.parse("2004-06-08"));
-        //        description = new SyndContentImpl();
-        //        description.setType("text/plain");
-        //        description.setValue("Initial release of ROME");
-        //        entry.setDescription(description);
-        //        entries.add(entry);
-        //
-        //        entry = new SyndEntryImpl();
-        //        entry.setTitle("ROME v2.0");
-        //        entry.setLink("http://wiki.java.net/bin/view/Javawsxml/Rome02");
-        //        entry.setPublishedDate(DATE_PARSER.parse("2004-06-16"));
-        //        description = new SyndContentImpl();
-        //        description.setType("text/plain");
-        //        description.setValue("Bug fixes, minor API changes and some new features");
-        //        entry.setDescription(description);
-        //        entries.add(entry);
-        //
-        //        entry = new SyndEntryImpl();
-        //        entry.setTitle("ROME v3.0");
-        //        entry.setLink("http://wiki.java.net/bin/view/Javawsxml/Rome03");
-        //        entry.setPublishedDate(DATE_PARSER.parse("2004-07-27"));
-        //        description = new SyndContentImpl();
-        //        description.setType("text/html");
-        //        description.setValue("<p>More Bug fixes, mor API changes, some new features and some Unit testing</p>"
-        //                + "<p>For details check the <a href=\"http://wiki.java.net/bin/view/Javawsxml/RomeChangesLog#RomeV03\">Changes Log</a></p>");
-        //        entry.setDescription(description);
-        //        entries.add(entry);
-        //
         feed.setEntries(entries);
 
         SyndFeedOutput output = new SyndFeedOutput();

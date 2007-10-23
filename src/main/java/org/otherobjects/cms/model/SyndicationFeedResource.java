@@ -9,6 +9,8 @@ import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
 
+import flexjson.JSON;
+
 /**
  * Mappings example:
  * 
@@ -29,13 +31,20 @@ public class SyndicationFeedResource extends BaseNode
     private String query;
     private String mapping;
     private String feedFormat;
-    private int defaultImageWidth = 300;
+    private long defaultImageWidth = 300;
+
+    @Override
+    public String getCode()
+    {
+        return org.otherobjects.cms.util.StringUtils.generateUrlCode(getLabel()) + ".xml";
+    }
 
     public Url getFeedUrl()
     {
         return new Url(getLinkPath());
     }
 
+    @JSON(include = false)
     public Map<String, String> getMappingsMap()
     {
         if (StringUtils.isNotBlank(getMapping()))
@@ -117,13 +126,13 @@ public class SyndicationFeedResource extends BaseNode
         this.description = description;
     }
 
-    @Property(order = 50)
-    public int getDefaultImageWidth()
+    @Property(type = PropertyType.NUMBER, order = 50)
+    public long getDefaultImageWidth()
     {
         return defaultImageWidth;
     }
 
-    public void setDefaultImageWidth(int defaultImageWidth)
+    public void setDefaultImageWidth(long defaultImageWidth)
     {
         this.defaultImageWidth = defaultImageWidth;
     }

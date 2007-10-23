@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
+import flexjson.JSON;
+
 /**
  * Useful representation of Urls in a webapp. Allows you to change individual properties of a url. Its toString() method will try to return a string representation 
  * suitable for use in the href attribute of an A tag.  
@@ -79,6 +81,7 @@ public class Url
         }
     }
 
+    @JSON(include = false)
     public String getAbsoluteLink()
     {
         //TODO wouldn't it be better to create the the link in any case
@@ -99,8 +102,8 @@ public class Url
                 newUrl.append(":" + serverPort);
             try
             {
-                newUrl.append(URLEncoder.encode(RequestContextUtils.getContextPath(), STANDARD_URL_CHARACTER_ENCODING));
-                newUrl.append(URLEncoder.encode(getLink(), STANDARD_URL_CHARACTER_ENCODING));
+                newUrl.append(RequestContextUtils.getContextPath());
+                newUrl.append(getLink());
                 if (getQuery() != null)
                     newUrl.append("?" + URLEncoder.encode(getQuery(), STANDARD_URL_CHARACTER_ENCODING));
                 if (getRef() != null)
