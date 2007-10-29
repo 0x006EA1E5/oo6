@@ -934,16 +934,21 @@
 			<artifactId>janino</artifactId>
 			<version>2.5.7</version>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>groovy</groupId>-->
+<!--			<artifactId>groovy-all</artifactId>-->
+<!--			<version>1.0</version>-->
+<!--			<exclusions>-->
+<!--				<exclusion>-->
+<!--					<groupId>openejb</groupId>-->
+<!--					<artifactId>openejb-loader</artifactId>-->
+<!--				</exclusion>-->
+<!--			</exclusions>-->
+<!--		</dependency>-->
 		<dependency>
-			<groupId>groovy</groupId>
-			<artifactId>groovy-all</artifactId>
-			<version>1.0</version>
-			<exclusions>
-				<exclusion>
-					<groupId>openejb</groupId>
-					<artifactId>openejb-loader</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all-minimal</artifactId>
+			<version>1.1-rc-1</version>
 		</dependency>
 		<dependency>
 			<groupId>bsf</groupId>
