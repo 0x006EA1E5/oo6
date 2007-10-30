@@ -138,6 +138,19 @@ public class Url
         }
     }
 
+    public int getDepth()
+    {
+        int count = 0;
+        int startIndex = 0;
+
+        while ((startIndex = getPath().indexOf('/', startIndex)) > -1)
+        {
+            startIndex++;
+            count++;
+        }
+        return count - 1;
+    }
+
     public boolean isModifieable()
     {
         return modifieable;

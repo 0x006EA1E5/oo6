@@ -6,6 +6,7 @@ import java.util.List;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.otherobjects.cms.Url;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
@@ -113,12 +114,12 @@ public class XmlBackedSiteNavigatorService implements SiteNavigatorService, Init
             this.backingElement = backingElement;
         }
 
-        public String getHref()
+        public Url getHref()
         {
-            return backingElement.getUniquePath();
+            return new Url(backingElement.getUniquePath());
         }
 
-        public String getTitle()
+        public String getLabel()
         {
             return backingElement.attributeValue("title");
         }
@@ -137,7 +138,7 @@ public class XmlBackedSiteNavigatorService implements SiteNavigatorService, Init
                 int count = 0;
                 int startIndex = 0;
 
-                while ((startIndex = getHref().indexOf('/', startIndex)) > -1)
+                while ((startIndex = getHref().toString().indexOf('/', startIndex)) > -1)
                 {
                     startIndex++;
                     count++;

@@ -57,4 +57,10 @@ public class UrlTest extends TestCase
 
         assertTrue(url.toString().endsWith("/test"));
     }
+
+    public void testGetDepth()
+    {
+        Url url = new Url("http://some.server");
+        System.out.println(url.getDepth());
+    }
 }

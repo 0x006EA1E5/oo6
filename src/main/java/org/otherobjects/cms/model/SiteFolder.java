@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.otherobjects.cms.SingletonBeanLocator;
+import org.otherobjects.cms.Url;
+import org.otherobjects.cms.site.SiteItem;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.types.annotation.Property;
@@ -13,11 +15,12 @@ import org.otherobjects.cms.types.annotation.Type;
 import flexjson.JSON;
 
 @Type
-public class SiteFolder extends BaseNode implements Folder
+public class SiteFolder extends BaseNode implements Folder, SiteItem
 {
     private String label;
     private String cssClass;
     private List<String> allowedTypes;
+    private Url url;
 
     @Override
     public boolean isFolder()
@@ -79,5 +82,17 @@ public class SiteFolder extends BaseNode implements Folder
     public void setLabel(String label)
     {
         this.label = label;
+    }
+
+    public int getDepth()
+    {
+        return getHref().getDepth();
+    }
+
+    public Url getHref()
+    {
+        if (url == null)
+            url = new Url(getLinkPath());
+        return url;
     }
 }
