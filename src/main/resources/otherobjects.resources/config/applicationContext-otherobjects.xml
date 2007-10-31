@@ -159,7 +159,7 @@
 				<prop key="velocimacro.arguments.strict">true</prop>
 				<prop key="velocimacro.library.autoreload">true</prop>
 				<prop key="velocimacro.library">
-					otherobjects.resources/templates/macros/otherobjects.vm,otherobjects.resources/templates/macros/site.vm
+					otherobjects.resources/templates/macros/otherobjects.vm,otherobjects.resources/templates/macros/site.vm,site.resources/templates/macros/site.vm
 				</prop>
 				<prop key="file.resource.loader.cache">false</prop>
 				<prop key="encoding.default">UTF-8</prop>
