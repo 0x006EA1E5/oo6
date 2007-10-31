@@ -1,8 +1,9 @@
 package org.otherobjects.cms.site;
 
+import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.model.Linkable;
 
-public interface SiteItem extends Linkable
+public interface SiteItem extends Linkable, CmsNode
 {
     /**
      * Label of this SiteItem. Used in a pages html -> head -> title text, in a breadcrumb or as the caption of a navigational link
@@ -21,4 +22,5 @@ public interface SiteItem extends Linkable
      * @return
      */
     public int getDepth();
+
 }

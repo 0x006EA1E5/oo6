@@ -1,27 +1,90 @@
 package org.otherobjects.cms.site;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.otherobjects.cms.jcr.UniversalJcrDao;
+import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.workbench.NavigatorService;
 
-public class SiteNavigatorServiceImpl implements SiteNavigatorService {
+public class SiteNavigatorServiceImpl implements SiteNavigatorService
+{
 
-	private NavigatorService navigatorService;
-	
-	
-	public void setNavigatorService(NavigatorService navigatorService) {
-		this.navigatorService = navigatorService;
-	}
+    private NavigatorService navigatorService;
+    private UniversalJcrDao universalJcrDao;
 
+    public void setUniversalJcrDao(UniversalJcrDao universalJcrDao)
+    {
+        this.universalJcrDao = universalJcrDao;
+    }
 
-	public List<SiteItem> getSiteItems(SiteItem siteItem) {
-		return null;
-	}
+    public void setNavigatorService(NavigatorService navigatorService)
+    {
+        this.navigatorService = navigatorService;
+    }
 
+    public List<SiteItem> getSiteItems(SiteItem siteItem)
+    {
+        if (siteItem == null)
+            siteItem = (SiteItem) navigatorService.getRootItem();
 
-	public List<SiteItem> getSiteItems(SiteItem siteItem, int minLevel) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        List<SiteItem> result = new ArrayList<SiteItem>();
+
+        for (BaseNode node : universalJcrDao.getAllByPath(siteItem.getJcrPath()))
+        {
+            if (node instanceof SiteItem)
+                result.add((SiteItem) node);
+        }
+
+        return result;
+    }
+
+    public List<SiteItem> getSiteItems(SiteItem siteItem, int minLevel)
+    {
+        if (siteItem == null || minLevel == 0)
+        {
+            if (minLevel > 0)
+                return null;
+            else
+                return getSiteItems(null); // return direct root children
+        }
+
+        int currentLevel = siteItem.getDepth();
+
+        // currentlevel must not be more than one level up from parentLevel
+        if (minLevel - currentLevel > 1)
+            return null;
+
+        if (currentLevel == minLevel)
+        {
+            if (!siteItem.isFolder()) // if currentlevel is parent of parentLevel it must be a folder for us to be able to return something
+                return null;
+            else
+                return getSiteItems(siteItem);
+        }
+
+        //ok currentlevel not above or the same as the requested parentlevel so it is below the requested parentlevel
+        // which means we need to walk up the tree from currentlevel until we reach parentlevel and then get the children
+        while (siteItem.getDepth() != minLevel)
+        {
+            String newPath = removeLastPathPart(siteItem.getJcrPath());
+            if (newPath.equals(siteItem.getJcrPath())) // avoid infinite loop
+                break;
+
+            siteItem = (SiteItem) universalJcrDao.getByPath(newPath);
+        }
+
+        return getSiteItems(siteItem);
+    }
+
+    private String removeLastPathPart(String path)
+    {
+        if (StringUtils.isBlank(path))
+            return path;
+
+        int lastPathDelim = path.lastIndexOf('/');
+        return path.substring(0, lastPathDelim + 1); // leave a trailing slash
+    }
 
 }

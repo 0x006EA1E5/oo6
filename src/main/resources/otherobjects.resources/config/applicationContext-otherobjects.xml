@@ -45,6 +45,7 @@
 
 	<bean name="pageHandler" class="org.otherobjects.cms.controllers.handlers.PageHandler">
 		<property name="navigatorService" ref="navigatorService" />
+		<property name="siteNavigatorService" ref="siteNavigatorService" />
 		<property name="daoService" ref="daoService" />
 	</bean>
 
@@ -92,6 +93,11 @@
 	<bean name="navigatorService" class="org.otherobjects.cms.workbench.NavigatorServiceImpl">
 		<property name="universalJcrDao" ref="universalJcrDao" />
 		<dwr:remote javascript="NavigatorService" />
+	</bean>
+	
+	<bean name="siteNavigatorService" class="org.otherobjects.cms.site.SiteNavigatorServiceImpl">
+		<property name="navigatorService" ref="navigatorService" />
+		<property name="universalJcrDao" ref="universalJcrDao" />
 	</bean>
 
 	<bean name="contentService" class="org.otherobjects.cms.workbench.ContentServiceImpl">
@@ -218,6 +224,19 @@
 		<property name="cookieMaxAge">
 			<value>1000</value>
 		</property>
+	</bean>
+	
+	<!--	Global info   -->
+	<bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate" />
+	
+	<bean id="globalInfo" class="org.otherobjects.cms.context.GlobalInfoBean" >
+		<property name="propertyResources">
+			<list>
+				<value>classpath:otherobjects.resources/config/server.properties</value>
+				<value>classpath:site.resources/config/pom.properties</value>
+			</list>
+		</property>
+		<property name="jndiTemplate" ref="jndiTemplate" />
 	</bean>
 
 </beans>

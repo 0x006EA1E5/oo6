@@ -8,6 +8,7 @@ import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsNode;
+import org.otherobjects.cms.site.SiteNavigatorService;
 import org.otherobjects.cms.tools.CmsImageTool;
 import org.otherobjects.cms.workbench.NavigatorService;
 import org.springframework.util.Assert;
@@ -16,12 +17,13 @@ import org.springframework.web.servlet.ModelAndView;
 public class PageHandler implements ResourceHandler
 {
     private NavigatorService navigatorService;
+    private SiteNavigatorService siteNavigatorService;
     private DaoService daoService;
-    
+
     public ModelAndView handleRequest(CmsNode o, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         BaseNode resourceObject = (BaseNode) o;
-        
+
         // Update session counter
         HttpSession session = request.getSession();
         Integer counter = (Integer) session.getAttribute("counter");
@@ -40,10 +42,11 @@ public class PageHandler implements ResourceHandler
         view.addObject("sessionId", session.getId());
         view.addObject("template", template);
         view.addObject("navigatorService", this.navigatorService);
+        view.addObject("siteNavigator", this.siteNavigatorService);
         view.addObject("cmsImageTool", new CmsImageTool());
         return view;
     }
-    
+
     /**
      * FIXME Classes for TemplateDao and Template?
      * @param resourceObject
@@ -66,5 +69,10 @@ public class PageHandler implements ResourceHandler
     public void setDaoService(DaoService daoService)
     {
         this.daoService = daoService;
+    }
+
+    public void setSiteNavigatorService(SiteNavigatorService siteNavigatorService)
+    {
+        this.siteNavigatorService = siteNavigatorService;
     }
 }

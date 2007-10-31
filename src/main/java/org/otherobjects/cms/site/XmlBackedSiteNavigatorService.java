@@ -148,6 +148,36 @@ public class XmlBackedSiteNavigatorService implements SiteNavigatorService, Init
             }
         }
 
+        public String getId()
+        {
+            return backingElement.getUniquePath();
+        }
+
+        public String getJcrPath()
+        {
+            return backingElement.getUniquePath();
+        }
+
+        public String getOoLabel()
+        {
+            return getLabel();
+        }
+
+        public boolean isPublished()
+        {
+            return true;
+        }
+
+        public void setId(String id)
+        {
+
+        }
+
+        public void setPublished(boolean published)
+        {
+
+        }
+
     }
 
 }
