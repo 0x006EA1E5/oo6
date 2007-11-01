@@ -42,7 +42,9 @@ HibernateUserService
 
 Interesting drupal module: http://drupal.org/node/87679
 
-
+Other Resources
+---------------
+http://opensource.fortifysoftware.com/welcome.html;jsessionid=355C5ADC64A0FF7FE63D1997890B7D7A
 
 Notes on acegi
 --------------

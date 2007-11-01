@@ -8,30 +8,29 @@ webservices and plugins
 [DONE] * Site Toolbar / Page performance reporting (queries per page via AOP) and disableable -- Rich/Joerg
 [DONE] * Embed Quartz as job scheduler
 [DONE] * Transaction email support incl. logging and testing with Wiser: http://subethasmtp.tigris.org/wiser.html
+[DONE] * Start documentation
 
-[IN PROGRESS] * Start documentation
 [IN PROGRESS] * Support blog publishing APIs http://www.blogger.com/developers/api/1_docs/
 + Flexible configuration
 [IN PROGRESS]+ Media support 
 [IN PROGRESS] * Syndication support (publish and subscribe RSS/Atom feeds)
 [IN PROGRESS] * Non-HTML output support (PDF, XLS, JPG, XML)
+[IN PROGRESS] * NavigatorService: Site structure finalised + nav/titles/crumbs macros + redirection support
+[IN PROGRESS] * Path tooling inc robust SSL support
 
+* Embed rules engine with scripting integration: JBossRules
 * Action/event/scripting framework -- see old UploadController
 * Debug page: System and server status indicators, timezone (check for common server problems)
 * Script/action/long-task/import-export logging
-
 * Localized sites
 * JCR based properties and pick-lists
-* NavigatorService: Site structure finalised + nav/titles/crumbs macros + redirection support
 * Internal link libraries + link integrity
-* Path tooling inc robust SSL support
 * Web services API
 * Plugin architecture
 * Robust Import/export tools
 * Preliminary reporting integration: BIRT/Pentaho
 * Integrate OTHERclicks as plugin: Responsys, SilverPOP, SubscriberMail, Bronto, CoolerEMail
 * Extra CMS features: duplicate,delete,unpublish,activate/deactivate	
-* Embed rules engine with scripting integration: JBossRules
 * Runtime data-type manipulation: UI 
 * Widget publish/consume
 * Scripting the workbench: global search and replace. Bulk actions.
