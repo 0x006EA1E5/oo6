@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.GenericDao;
+import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.dao.PagedList;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
@@ -100,7 +101,7 @@ public class WorkbenchDataController implements Controller
 
     private CmsImage convertToCmsImage(Photo photo)
     {
-//        CmsImage image = ((CmsImageDao) this.daoService.getDao(CmsImage.class)).createCmsImage();
+        //        CmsImage image = ((CmsImageDao) this.daoService.getDao(CmsImage.class)).createCmsImage();
         CmsImage image = new CmsImage();//cmsImageDao.createCmsImage();
         image.setLabel(photo.getTitle());
         //image.setKeywords(photo.getTags());
@@ -156,6 +157,16 @@ public class WorkbenchDataController implements Controller
     {
         String path = request.getPathInfo();
         String typeName = path.substring(path.lastIndexOf("/") + 1);
+        Class typeClass = null;
+        try
+        {
+            typeClass = Class.forName(typeName);
+        }
+        catch (ClassNotFoundException e)
+        {
+        }
+
+        Assert.notNull(typeClass, "Can only generate data for existing classes");
 
         this.logger.info("Sending select data of type: {} ", typeName);
 
@@ -170,10 +181,15 @@ public class WorkbenchDataController implements Controller
             allByType = this.universalJcrDao.getAllByJcrExpression("/jcr:root//element(*, oo:node) [@ooType = 'org.otherobjects.cms.model.CmsImage'] order by @modificationTimestamp descending");
         }
         // FIXME Must be a better way of testing for specfic daos
-//        else if (! (daoService.getDao(typeName) instanceof BaseNodeDao))
-//        {
-//        	allByType = daoService.getDao(typeName).getAll();
-//        }
+        //        else if (! (daoService.getDao(typeName) instanceof BaseNodeDao))
+        //        {
+        //        	allByType = daoService.getDao(typeName).getAll();
+        //        }
+        else if (BaseNode.class.isAssignableFrom(typeClass))
+        {
+            GenericJcrDao<BaseNode> dao = (GenericJcrDao<BaseNode>) daoService.getDao(BaseNode.class);
+            allByType = dao.getAllByType(typeClass);
+        }
         else
         {
             GenericDao dao = daoService.getDao(typeName);

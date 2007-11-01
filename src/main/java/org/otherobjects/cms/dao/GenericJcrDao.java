@@ -18,7 +18,9 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
     public static final String REORDER_BELOW = "below";
     public static final String REORDER_ABOVE = "above";
     public static final String REORDER_APPEND = "append";
-    
+
+    public List<T> getAllByType(Class type);
+
     /**
      * Tests to see if a object is present in the current workspace at
      * the path specified.
@@ -27,7 +29,7 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
      * @return true if the object exists
      */
     public boolean existsAtPath(String path);
-    
+
     /**
      * Returns the object at the specified path. If there is no object at
      * the path then an <code>ObjectRetrievalFailureException</code> is
@@ -45,7 +47,7 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
      * <p>FIXME Can we detect path changes automatically? If so this is redundant.
      */
     public T rename(T node, String path);
-    
+
     /**
      * Changes the posisition of a node in the workspace.
      * 
@@ -59,8 +61,7 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
      * @return
      */
     public T reorder(T object, T target, String position);
-    
-    
+
     /**
      * Publishes the object to the live workspace.
      * 
@@ -74,7 +75,7 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
      * @param message an optional message
      */
     public void publish(T object, String message);
-    
+
     /**
      * Returns a list of all published versions for the provided object.
      * An unpublished object will return an empty list. The latest edit
@@ -84,8 +85,7 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
      * @return a list of all published versions of this object
      */
     public List<T> getVersions(T object);
-    
-    
+
     /**
      * Returns a previous version based on its change number. 
      * 
@@ -97,7 +97,7 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
      * @return the requested version
      */
     public T getVersionByChangeNumber(T object, int changeNumber);
-    
+
     /**
      * Rolls back an object to a previous state.
      * 
@@ -109,12 +109,17 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
      * @return
      */
     public T restoreVersionByChangeNumber(T object, int changeNumber);
-    
+
     public List<T> getAllByPath(String path);
+
     public PagedList<T> getPagedByPath(String path, int pageSize, int pageNo);
+
     public PagedList<T> getPagedByPath(String path, int pageSize, int pageNo, String search, String sortField, boolean asc);
+
     public T getByJcrExpression(String expression);
+
     public List<T> getAllByJcrExpression(String expression);
+
     public PagedList<T> pageByJcrExpression(String expression, int pageSize, int pageNo);
 
 }

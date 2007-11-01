@@ -135,7 +135,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         if (object.getId() == null)
             return true;
 
-        T compareNode = (T) get(object.getId());
+        T compareNode = get(object.getId());
         // if the changeNumber has changed something else has save the dynaNode while we were working on it. So it shouldn't be saved.
         if (compareNode.getChangeNumber() == object.getChangeNumber())
             return true;
@@ -522,8 +522,14 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     @SuppressWarnings("unchecked")
     public List<T> getAll()
     {
+        return getAllByType(this.persistentClass);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<T> getAllByType(Class type)
+    {
         QueryManager queryManager = jcrMappingTemplate.createQueryManager();
-        Filter filter = queryManager.createFilter(this.persistentClass);
+        Filter filter = queryManager.createFilter(type);
         Query query = queryManager.createQuery(filter);
         return (List<T>) jcrMappingTemplate.getObjects(query);
     }
