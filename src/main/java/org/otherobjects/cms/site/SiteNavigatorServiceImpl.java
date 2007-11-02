@@ -68,14 +68,27 @@ public class SiteNavigatorServiceImpl implements SiteNavigatorService
         // which means we need to walk up the tree from currentlevel until we reach parentlevel and then get the children
         while (siteItem.getDepth() != minLevel)
         {
-            String newPath = removeLastPathPart(siteItem.getJcrPath());
-            if (newPath.equals(siteItem.getJcrPath())) // avoid infinite loop
-                break;
-
-            siteItem = (SiteItem) universalJcrDao.getByPath(newPath);
+            siteItem = getParentSiteItem(siteItem);
         }
 
         return getSiteItems(siteItem);
+    }
+
+    public SiteLineage getLineage(SiteItem siteItem)
+    {
+        List<SiteItem> siteItemLineage = new ArrayList<SiteItem>();
+        siteItemLineage.add(siteItem);
+        SiteItem parentItem = getParentSiteItem(siteItem);
+        do
+        {
+            if (parentItem == null)
+                break;
+            siteItemLineage.add(parentItem);
+            parentItem = getParentSiteItem(parentItem);
+        }
+        while (true);
+
+        return new SiteLineageImpl(siteItemLineage);
     }
 
     private String removeLastPathPart(String path)
@@ -85,6 +98,22 @@ public class SiteNavigatorServiceImpl implements SiteNavigatorService
 
         int lastPathDelim = path.lastIndexOf('/');
         return path.substring(0, lastPathDelim + 1); // leave a trailing slash
+    }
+
+    public SiteItem getParentSiteItem(SiteItem siteItem)
+    {
+        if (siteItem == null)
+            return siteItem;
+
+        if (siteItem.getDepth() == 0 || siteItem.getJcrPath().equals(SiteNavigatorService.JCR_SITE_ROOT_PATH)) //if we reached out site root stop moving up
+            return null;
+
+        String parentPath = removeLastPathPart(siteItem.getJcrPath());
+
+        if (parentPath.equals(siteItem.getJcrPath()))
+            return null;
+        else
+            return (SiteItem) universalJcrDao.getByPath(parentPath);
     }
 
 }

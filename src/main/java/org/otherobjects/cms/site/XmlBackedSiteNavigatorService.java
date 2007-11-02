@@ -49,7 +49,7 @@ public class XmlBackedSiteNavigatorService implements SiteNavigatorService, Init
         // which means we need to walk up the tree from currentlevel until we reach parentlevel and then get the children
         while (siteItem.getDepth() != parentLevel)
         {
-            siteItem = new XmlSiteItem(((XmlSiteItem) siteItem).getBackingElement().getParent());
+            siteItem = getParentSiteItem(siteItem);
         }
 
         return getSiteItems(siteItem);
@@ -63,6 +63,11 @@ public class XmlBackedSiteNavigatorService implements SiteNavigatorService, Init
             return getChildElementsAsSiteItems(((XmlSiteItem) siteItem).getBackingElement());
         else
             return null;
+    }
+
+    public SiteItem getParentSiteItem(SiteItem siteItem)
+    {
+        return new XmlSiteItem(((XmlSiteItem) siteItem).getBackingElement().getParent());
     }
 
     private List<SiteItem> getChildElementsAsSiteItems(Element parent)
@@ -188,6 +193,12 @@ public class XmlBackedSiteNavigatorService implements SiteNavigatorService, Init
 
         }
 
+    }
+
+    public SiteLineage getLineage(SiteItem siteItem)
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

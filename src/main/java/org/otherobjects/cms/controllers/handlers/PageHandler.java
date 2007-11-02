@@ -8,6 +8,7 @@ import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsNode;
+import org.otherobjects.cms.site.SiteItem;
 import org.otherobjects.cms.site.SiteNavigatorService;
 import org.otherobjects.cms.tools.CmsImageTool;
 import org.otherobjects.cms.workbench.NavigatorService;
@@ -43,6 +44,9 @@ public class PageHandler implements ResourceHandler
         view.addObject("template", template);
         view.addObject("navigatorService", this.navigatorService);
         view.addObject("siteNavigator", this.siteNavigatorService);
+        if (SiteItem.class.isAssignableFrom(resourceObject.getClass())) //put the linegae in the ctx if we are dealing with a SiteItem object
+            view.addObject("lineage", siteNavigatorService.getLineage((SiteItem) resourceObject));
+
         view.addObject("cmsImageTool", new CmsImageTool());
         return view;
     }
