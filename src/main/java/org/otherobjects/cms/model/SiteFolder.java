@@ -3,6 +3,7 @@ package org.otherobjects.cms.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.Url;
 import org.otherobjects.cms.site.SiteItem;
@@ -18,9 +19,11 @@ import flexjson.JSON;
 public class SiteFolder extends BaseNode implements Folder, SiteItem
 {
     private String label;
+    private String extraNavigationLabel;
     private String cssClass;
     private List<String> allowedTypes;
     private Url url;
+    private boolean inMenu = true;
 
     @Override
     public boolean isFolder()
@@ -94,5 +97,32 @@ public class SiteFolder extends BaseNode implements Folder, SiteItem
         if (url == null)
             url = new Url(getLinkPath());
         return url;
+    }
+
+    @Property(order = 35, type = PropertyType.BOOLEAN)
+    public boolean isInMenu()
+    {
+        return inMenu;
+    }
+
+    public void setInMenu(boolean inMenu)
+    {
+        this.inMenu = inMenu;
+    }
+
+    @Property(order = 25)
+    public String getExtraNavigationLabel()
+    {
+        return extraNavigationLabel;
+    }
+
+    public void setExtraNavigationLabel(String extraNavigationLabel)
+    {
+        this.extraNavigationLabel = extraNavigationLabel;
+    }
+
+    public String getNavigationLabel()
+    {
+        return (StringUtils.isNotBlank(getExtraNavigationLabel())) ? getExtraNavigationLabel() : getLabel();
     }
 }

@@ -96,6 +96,16 @@ public class XmlBackedSiteNavigatorService implements SiteNavigatorService, Init
 
     public class XmlSiteItem implements SiteItem
     {
+        public String getNavigationLabel()
+        {
+            return getLabel();
+        }
+
+        public boolean isInMenu()
+        {
+            return true;
+        }
+
         private Element backingElement;
         private int depth = 0;
 
