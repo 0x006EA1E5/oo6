@@ -62,7 +62,6 @@
 
 #macro(breadcrumb)
 	<ul class="breadcrumb">
-		<li><a href="$navigatorService.getRootItem.href">Home</a></li>
 	#foreach($crumb in $lineage.crumbs)
 		<li><a href="$crumb.href">$crumb.navigationLabel</a></li>
 	#end
