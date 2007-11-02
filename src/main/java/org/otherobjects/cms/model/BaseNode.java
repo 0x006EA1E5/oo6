@@ -239,7 +239,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchI
         if (getJcrPath() == null)
             return null;
 
-        String linkPath = getJcrPath().replaceAll("/site", "/go");
+        String linkPath = getJcrPath().replaceAll("^/site", "/go");
         if (isFolder())
             linkPath += "/";
         return linkPath;
