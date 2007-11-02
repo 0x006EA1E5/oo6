@@ -69,7 +69,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchI
         Assert.notNull(getLabelProperty(), "Could not get label since labelProperty is not set for: " + getOoType());
         return (String) get(getLabelProperty());
     }
-    
+
     /**
      * Sets the human readable label for this object.
      * 
@@ -225,6 +225,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchI
     {
         return getClass().getName();
     }
+
     public void setOoType(String ooType)
     {
         // FIXME Just to make this look like a property for ocm
@@ -238,7 +239,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchI
         if (getJcrPath() == null)
             return null;
 
-        String linkPath = getJcrPath().replaceAll("/site/", "/go/");
+        String linkPath = getJcrPath().replaceAll("/site", "/go");
         if (isFolder())
             linkPath += "/";
         return linkPath;
