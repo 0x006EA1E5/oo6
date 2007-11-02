@@ -50,9 +50,11 @@
 #if($outerTags)<ul>#end
 
 #foreach($item in $navigatorService.getSiteItems($siteItem, $minLevel))
-    <li>#set($current = $resourceObject.href.equals($item.href))#if($current)<strong>#end<a href="$item.href">$item.title</a>#if($current)</strong>#end</li>
+	#if($item.inMenu)
+    <li>#set($current = $resourceObject.href.equals($item.href))#if($current)<strong>#end<a href="$item.href">$item.navigationLabel</a>#if($current)</strong>#end</li>
 	##set($newMin = $item.depth)
     #if($item.folder && $item.depth < $maxLevel) #nav($item true $item.depth $maxLevel) #end
+	#end
 #end
 
 #if($outerTags)</ul>#end
