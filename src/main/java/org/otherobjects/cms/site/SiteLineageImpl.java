@@ -27,10 +27,11 @@ public class SiteLineageImpl implements SiteLineage
     public String getFullTitle(String separator)
     {
         StringBuffer buf = new StringBuffer();
-        for (SiteItem siteItem : getReverseLineage())
+        for (Iterator<SiteItem> it = getReverseLineage().iterator(); it.hasNext();)
         {
-            buf.append(siteItem.getNavigationLabel());
-            buf.append(separator);
+            buf.append(it.next().getNavigationLabel());
+            if (it.hasNext())
+                buf.append(separator);
         }
         return buf.toString();
     }
