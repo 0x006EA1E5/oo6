@@ -13,6 +13,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.beans.JcrBeanService;
 import org.otherobjects.cms.dao.DaoService;
+import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
@@ -156,9 +157,9 @@ public class BindServiceImpl implements BindService
                 else if (collectionElementType.equals(PropertyDef.REFERENCE))
                 {
                     String relatedType = propertyDef.getRelatedType();
-                    if (daoService.hasDao(relatedType))
+                    Class relatedPropertyClass = Class.forName(relatedType);
+                    if (!BaseNode.class.isAssignableFrom(relatedPropertyClass)) // only register the (long) id based entity reference editor if it is not a BaseNode subtype
                     {
-                        Class relatedPropertyClass = Class.forName(relatedType);
                         binder.registerCustomEditor(relatedPropertyClass, fullPath, new EntityReferenceEditor(daoService, relatedPropertyClass));
                     }
                     else

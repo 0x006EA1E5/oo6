@@ -3,6 +3,7 @@ package org.otherobjects.cms.dao;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.otherobjects.cms.model.BaseNode;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -54,9 +55,9 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
     protected String determineDaoBeanName(String type)
     {
         String beanName = type;
-        
+
         // Make non-qualified
-        if(type.contains("."))
+        if (type.contains("."))
             beanName = StringUtils.substringAfterLast(beanName, ".");
 
         // Lower case first letter
@@ -64,7 +65,7 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
 
         // Append Dao
         beanName = beanName + "Dao";
-        
+
         return beanName;
     }
 
@@ -83,18 +84,31 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
         this.beanFactory = beanFactory;
     }
 
-	public boolean hasDao(String type) {
-		GenericDao dao = daoMap.get(type);
+    public boolean hasDao(String type)
+    {
+        GenericDao dao = daoMap.get(type);
+
+        Class typeClass = null;
+        try
+        {
+            typeClass = Class.forName(type);
+        }
+        catch (ClassNotFoundException e)
+        {
+        }
+
         if (dao == null)
         {
-        	String daoBeanName = determineDaoBeanName(type);
+            String daoBeanName = determineDaoBeanName(type);
             if (beanFactory.containsBean(daoBeanName))
                 dao = (GenericDao) beanFactory.getBean(daoBeanName);
-            else
+            else if (typeClass != null && BaseNode.class.isAssignableFrom(typeClass))
+            {
                 // If no specific dao found then use dynaNode Dao
                 dao = (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
+            }
         }
-        
+
         return (dao != null);
-	}
+    }
 }
