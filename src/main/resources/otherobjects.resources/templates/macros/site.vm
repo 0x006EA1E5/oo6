@@ -62,7 +62,7 @@
 
 #macro(breadcrumb)
 	<ul class="breadcrumb">
-	#foreach($crumb in $lineage.crumbs)
+	#foreach($crumb in $trail.crumbs)
 		<li><a href="$crumb.href">$crumb.navigationLabel</a></li>
 	#end
 	</ul>

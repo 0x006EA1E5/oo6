@@ -44,8 +44,8 @@ public class PageHandler implements ResourceHandler
         view.addObject("template", template);
         view.addObject("navigatorService", this.navigatorService);
         view.addObject("siteNavigator", this.siteNavigatorService);
-        if (SiteItem.class.isAssignableFrom(resourceObject.getClass())) //put the linegae in the ctx if we are dealing with a SiteItem object
-            view.addObject("lineage", siteNavigatorService.getLineage((SiteItem) resourceObject));
+        if (SiteItem.class.isAssignableFrom(resourceObject.getClass())) //put the trail in the ctx if we are dealing with a SiteItem object
+            view.addObject("trail", siteNavigatorService.getTrail((SiteItem) resourceObject));
 
         view.addObject("cmsImageTool", new CmsImageTool());
         return view;
