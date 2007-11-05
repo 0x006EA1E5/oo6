@@ -195,7 +195,7 @@ public class XmlBackedSiteNavigatorService implements SiteNavigatorService, Init
 
     }
 
-    public SiteLineage getLineage(SiteItem siteItem)
+    public SiteTrail getTrail(SiteItem siteItem)
     {
         // TODO Auto-generated method stub
         return null;

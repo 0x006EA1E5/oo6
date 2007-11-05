@@ -74,21 +74,21 @@ public class SiteNavigatorServiceImpl implements SiteNavigatorService
         return getSiteItems(siteItem);
     }
 
-    public SiteLineage getLineage(SiteItem siteItem)
+    public SiteTrail getTrail(SiteItem siteItem)
     {
-        List<SiteItem> siteItemLineage = new ArrayList<SiteItem>();
-        siteItemLineage.add(siteItem);
+        List<SiteItem> siteItemTrail = new ArrayList<SiteItem>();
+        siteItemTrail.add(siteItem);
         SiteItem parentItem = getParentSiteItem(siteItem);
         do
         {
             if (parentItem == null)
                 break;
-            siteItemLineage.add(parentItem);
+            siteItemTrail.add(parentItem);
             parentItem = getParentSiteItem(parentItem);
         }
         while (true);
 
-        return new SiteLineageImpl(siteItemLineage);
+        return new SiteTrailImpl(siteItemTrail);
     }
 
     private String removeLastPathPart(String path)

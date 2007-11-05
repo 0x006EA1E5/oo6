@@ -33,6 +33,6 @@ public interface SiteNavigatorService
      */
     public SiteItem getParentSiteItem(SiteItem siteItem);
 
-    public SiteLineage getLineage(SiteItem siteItem);
+    public SiteTrail getTrail(SiteItem siteItem);
 
 }
