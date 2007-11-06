@@ -15,7 +15,7 @@ import org.otherobjects.cms.types.annotation.Type;
 
 import flexjson.JSON;
 
-@Type
+@Type(labelProperty = "id")
 public class SiteFolder extends BaseNode implements Folder, SiteItem
 {
     private String label;
@@ -78,7 +78,7 @@ public class SiteFolder extends BaseNode implements Folder, SiteItem
     public String getLabel()
     {
         // FIXME Label should be fetched via dedicated method
-        return (String) (label != null ? label : (get(getLabelProperty()) != null ? get(getLabelProperty()) : getCode()));
+        return (String) (label != null ? label : (get(getLabelProperty()) != null ? get(getLabelProperty()) : getId()));
     }
 
     @Override
