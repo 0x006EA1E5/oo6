@@ -7,6 +7,8 @@ import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
+import org.otherobjects.cms.context.GlobalInfoBean;
 import org.otherobjects.cms.context.RequestContextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,9 @@ public class Url
 
     public static final int STANDARD_HTTP_PORT = 80;
     public static final int STANDARD_HTTPS_PORT = 443;
+
+    public static final String STANDARD_HTTP_SCHEME = "http";
+    public static final String STANDARD_HTTPS_SCHEME = "https";
 
     public static final String STANDARD_URL_CHARACTER_ENCODING = "UTF-8";
 
@@ -91,14 +96,14 @@ public class Url
         else
         // non-absolute link
         {
-            HttpServletRequest req = RequestContextUtils.getHttpServletRequest();
             StringBuffer newUrl = new StringBuffer();
-            newUrl.append(req.getScheme());
+            String scheme = calcScheme();
+            newUrl.append(scheme);
             newUrl.append("://");
-            newUrl.append(req.getServerName());
-            int serverPort = req.getServerPort();
-            //FIXME do we need to get server specific port configuration from GlobalBeanInfo to get this right?
-            if (serverPort != STANDARD_HTTP_PORT && serverPort != STANDARD_HTTPS_PORT)
+            newUrl.append(RequestContextUtils.getServerName());
+            int serverPort = calcPort();
+
+            if (!((scheme.equals(STANDARD_HTTP_SCHEME) && serverPort == STANDARD_HTTP_PORT) || (scheme.equals(STANDARD_HTTPS_SCHEME) && serverPort == STANDARD_HTTPS_PORT)))
                 newUrl.append(":" + serverPort);
             try
             {
@@ -115,6 +120,60 @@ public class Url
             }
             return newUrl.toString();
         }
+    }
+
+    /**
+     * determine the scheme using this pattern:
+     * <ol>
+     *  <li>If this.ssl is true then this will be https</li>
+     *  <li>if this.scheme != null then this.scheme</li>
+     *  <li>if there is a current request use the scheme of that</li>
+     *  <li>default to http</li>
+     * </ol>
+     * @return
+     */
+    private String calcScheme()
+    {
+        if (isSsl())
+            return STANDARD_HTTPS_SCHEME;
+
+        if (StringUtils.isNotBlank(getScheme()))
+            return getScheme();
+
+        HttpServletRequest req = getOngoingRequest();
+        if (req != null)
+            return req.getScheme();
+
+        return STANDARD_HTTP_SCHEME;
+    }
+
+    /**
+     * determine port using this pattern:
+     * <ol>
+     *  <li>if this.ssl is true and there is an ongoing secure request take that port</li>
+     *  <li>if this.ssl is false and there is an ongoing non-secure request take that port</li>
+     *  <li>take globalInfo port depending on this.ssl</li>
+     * </ol>
+     * @return
+     */
+    private int calcPort()
+    {
+        HttpServletRequest req = getOngoingRequest();
+        if (req != null)
+        {
+            if (req.isSecure() == isSsl())
+                return req.getServerPort();
+        }
+
+        if (isSsl())
+            return Integer.parseInt(GlobalInfoBean.getInstance().getProperty(GlobalInfoBean.DEFAULT_SECURE_PORT_KEY));
+        else
+            return Integer.parseInt(GlobalInfoBean.getInstance().getProperty(GlobalInfoBean.DEFAULT_PORT_KEY));
+    }
+
+    private HttpServletRequest getOngoingRequest()
+    {
+        return RequestContextUtils.getHttpServletRequest();
     }
 
     /**

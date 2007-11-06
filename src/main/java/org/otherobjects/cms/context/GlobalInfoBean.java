@@ -21,10 +21,14 @@ public class GlobalInfoBean implements InitializingBean
 
     public static final String SERVER_NAME_KEY = "site.server.name";
     public static final String CONTEXT_PATH_KEY = "site.server.context.path";
+    public static final String DEFAULT_PORT_KEY = "site.server.default.port";
+    public static final String DEFAULT_SECURE_PORT_KEY = "site.server.default.secureport";
 
     public static final String JNDI_BASE = "java:comp/env/";
     public static final String JNDI_SERVER_NAME_PATH = "otherobjects/serverName";
     public static final String JNDI_CONTEXT_PATH_PATH = "otherobjects/contextPath";
+    public static final String JNDI_DEFAULT_PORT_PATH = "otherobjects/defaultPort";
+    public static final String JNDI_DEFAULT_SECURE_PORT_PATH = "otherobjects/defaultSecurePort";
 
     private static GlobalInfoBean instance;
 
@@ -73,6 +77,24 @@ public class GlobalInfoBean implements InitializingBean
         catch (NamingException e)
         {
             logger.warn("Couldn't read jndi value for name: " + JNDI_CONTEXT_PATH_PATH);
+        }
+
+        try
+        {
+            jndiProperties.put(DEFAULT_PORT_KEY, jndiTemplate.lookup(JNDI_BASE + JNDI_DEFAULT_PORT_PATH));
+        }
+        catch (NamingException e)
+        {
+            logger.warn("Couldn't read jndi value for name: " + JNDI_DEFAULT_PORT_PATH);
+        }
+
+        try
+        {
+            jndiProperties.put(DEFAULT_SECURE_PORT_KEY, jndiTemplate.lookup(JNDI_BASE + JNDI_DEFAULT_SECURE_PORT_PATH));
+        }
+        catch (NamingException e)
+        {
+            logger.warn("Couldn't read jndi value for name: " + JNDI_DEFAULT_SECURE_PORT_PATH);
         }
     }
 
