@@ -28,8 +28,13 @@ public class GlobalInfoTest extends TestCase
         SimpleNamingContextBuilder simpleNamingContextBuilder = SimpleNamingContextBuilder.emptyActivatedContextBuilder();
         String serverName = "127.0.0.1";
         String contextPath = "test";
+        String defaultPort = "80";
+        String defaultSecurePort = "443";
+
         simpleNamingContextBuilder.bind("java:comp/env/" + GlobalInfoBean.JNDI_SERVER_NAME_PATH, serverName);
         simpleNamingContextBuilder.bind("java:comp/env/" + GlobalInfoBean.JNDI_CONTEXT_PATH_PATH, contextPath);
+        simpleNamingContextBuilder.bind("java:comp/env/" + GlobalInfoBean.JNDI_DEFAULT_PORT_PATH, defaultPort);
+        simpleNamingContextBuilder.bind("java:comp/env/" + GlobalInfoBean.JNDI_DEFAULT_SECURE_PORT_PATH, defaultSecurePort);
     }
 
 }
