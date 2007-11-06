@@ -137,7 +137,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
 
         T compareNode = get(object.getId());
         // if the changeNumber has changed something else has save the dynaNode while we were working on it. So it shouldn't be saved.
-        if (compareNode.getChangeNumber() == object.getChangeNumber())
+        if (compareNode != null && compareNode.getChangeNumber() == object.getChangeNumber())
             return true;
 
         // change number is fine so check for the rest 
