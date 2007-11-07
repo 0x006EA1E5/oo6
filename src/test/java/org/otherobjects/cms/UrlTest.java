@@ -149,5 +149,14 @@ public class UrlTest extends TestCase
         RequestContextHolder.setRequestAttributes(null);
         System.out.println(url3.getAbsoluteLink());
 
+        setupMockOngoingRequest(true, CONTEXT_PATH, 443);
+        Url url4 = new Url("/some.html");
+        url4.setSsl(true);
+        System.out.println(url4.toString());
+        assertEquals(CONTEXT_PATH + "/some.html", url4.toString());
+
+        setupMockOngoingRequest(false, CONTEXT_PATH, 80);
+        System.out.println(url4.toString());
+        assertEquals("https://" + SERVER_NAME + ":7531" + CONTEXT_PATH + "/some.html", url4.toString());
     }
 }
