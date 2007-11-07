@@ -148,6 +148,7 @@ public class UrlTest extends TestCase
 
         RequestContextHolder.setRequestAttributes(null);
         System.out.println(url3.getAbsoluteLink());
+        assertEquals("https://127.0.0.1:7531/testglobal/some.html", url3.getAbsoluteLink()); //take info from globalBeanInfo rather than request as there isn't one
 
         setupMockOngoingRequest(true, CONTEXT_PATH, 443);
         Url url4 = new Url("/some.html");
