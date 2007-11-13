@@ -113,7 +113,7 @@
 		</property>
 	</bean>
 
-	<bean name="startupMessage" class="org.otherobjects.cms.util.StartupMessage"></bean>
+	
 
 	<bean name="singletonBeanLocator" class="org.otherobjects.cms.SingletonBeanLocator" />
 
@@ -226,17 +226,6 @@
 		</property>
 	</bean>
 	
-	<!--	Global info   -->
-	<bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate" />
 	
-	<bean id="globalInfo" class="org.otherobjects.cms.context.GlobalInfoBean" >
-		<property name="propertyResources">
-			<list>
-				<value>classpath:otherobjects.resources/config/server.properties</value>
-				<value>classpath:site.resources/config/pom.properties</value>
-			</list>
-		</property>
-		<property name="jndiTemplate" ref="jndiTemplate" />
-	</bean>
 
 </beans>
