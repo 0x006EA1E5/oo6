@@ -109,6 +109,7 @@
 			<bean class="org.otherobjects.cms.jcr.UniversalJcrDaoJackrabbit">
 				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
 				<property name="sessionFactory" ref="jcrSessionFactory" />
+				 <property name="ruleExecutor" ref="publishRules"></property> 
 			</bean>
 		</property>
 	</bean>
