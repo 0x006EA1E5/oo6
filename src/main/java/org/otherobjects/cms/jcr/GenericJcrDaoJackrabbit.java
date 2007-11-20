@@ -31,6 +31,7 @@ import org.otherobjects.cms.events.PublishEvent;
 import org.otherobjects.cms.model.Audited;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.model.User;
+import org.otherobjects.cms.rules.RuleExecutor;
 import org.otherobjects.cms.security.SecurityTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +62,9 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
 
     // To allow publishing of events
     private ApplicationContext applicationContext;
+
+    // To get access to rule engine
+    private RuleExecutor ruleExecutor;
 
     public GenericJcrDaoJackrabbit()
     {
@@ -368,6 +372,12 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         //FIXME this should display proper transactional behaviour which it doesn't at the moment as there are multiple jcr sessions involved
         if (dynaNode.isPublished())
             throw new OtherObjectsException("DynaNode " + dynaNode.getJcrPath() + "[" + dynaNode.getId() + "] couldn't be published as its published flag is already set ");
+
+        Object[] result = ruleExecutor.runInStatelessSession(new Object[]{dynaNode}, dynaNode.getClass());
+
+        //if object can be published it's published flag should have been set by the rule engine
+        if (!((CmsNode) dynaNode).isPublished())
+            return;
 
         jcrMappingTemplate.execute(new JcrMappingCallback()
         {
@@ -850,5 +860,10 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     public JcrMappingTemplate getJcrMappingTemplate()
     {
         return jcrMappingTemplate;
+    }
+
+    public void setRuleExecutor(RuleExecutor ruleExecutor)
+    {
+        this.ruleExecutor = ruleExecutor;
     }
 }
