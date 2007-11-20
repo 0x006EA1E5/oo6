@@ -11,8 +11,8 @@
 				name=Publish_first
 			</value>
 		</property>
-		<property name="cacheDir" value="file:src/main/webapp/WEB-INF/drools-cache" />
-		<property name="ruleDir" value="file:src/main/webapp/WEB-INF/drools-rules" />
+		<property name="cacheDir" value="WEB-INF/drools-cache" />
+		<property name="ruleDir" value="WEB-INF/drools-rules" />
 	</bean>
 	
 </beans>
