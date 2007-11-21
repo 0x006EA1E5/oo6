@@ -17,6 +17,7 @@ webservices and plugins
 [IN PROGRESS] * Non-HTML output support (PDF, XLS, JPG, XML)
 [IN PROGRESS] * NavigatorService: Site structure finalised + nav/titles/crumbs macros + redirection support
 [IN PROGRESS] * Path tooling inc robust SSL support
+[IN PROGRESS] * YAML Otherdemo
 
 * Embed rules engine with scripting integration: JBossRules
 * Action/event/scripting framework -- see old UploadController
@@ -34,7 +35,7 @@ webservices and plugins
 * Runtime data-type manipulation: UI 
 * Widget publish/consume
 * Scripting the workbench: global search and replace. Bulk actions.
-* YAML Otherdemo
+
 
 ==================================================================
 M4 (end November) The interface release.
