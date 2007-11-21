@@ -1054,6 +1054,17 @@
 			<artifactId>subethasmtp-wiser</artifactId>
 			<version>1.2</version>
 		</dependency>
+		<dependency>
+			<artifactId>drools-core</artifactId>
+			<groupId>org.drools</groupId>
+			<version>4.0.3</version>
+			<exclusions>
+				<exclusion>
+					<groupId>jsr94</groupId>
+					<artifactId>jsr94-tck</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 	</dependencies>
 </project>
 
