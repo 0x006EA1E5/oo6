@@ -599,7 +599,7 @@ Admin : http://localhost:8080/go/workbench/
 
     <para>OTHERobjects was developed using the Eclipse IDE. Other IDEs will
     wokr just fine but Eclipse will be the best supported. This chapter
-    describes how to set up Eclipse </para>
+    describes how to set up Eclipse</para>
 
     <section>
       <title>Launching with WTP</title>
@@ -674,6 +674,97 @@ Admin : http://localhost:8080/go/workbench/
   </chapter>
 
   <chapter>
+    <title>Using JBoss Drools</title>
+
+    <para>OTHERobjects integrates with JBoss Drools by means of a simple Java
+    Bean that leverages springs resource handling to make setting up a drools
+    rule base really simple. </para>
+
+    <section>
+      <title>How to setup a rule base for your application aspect</title>
+
+      <para>OTHERobjects provides the RuleBaseFactory class to help with
+      inetgrating drools in the org.otherobjects.cms.rules package. To create
+      a a rule base and get access to drools session follow these
+      steps:</para>
+
+      <para><orderedlist>
+          <listitem>
+            <para>Create a spring singleton bean as an instance of
+            RuleBaseFactory using a configuration snippet like the
+            following:</para>
+
+            <para><code>&lt;bean id="myRuleBase"
+            class="org.otherobjects.cms.rules.RuleBaseFactory"&gt;</code></para>
+
+            <para><code> &lt;property name="config"&gt;</code></para>
+
+            <para><code> &lt;value&gt;</code></para>
+
+            <para><code> poll=30</code></para>
+
+            <para><code> name=Publish</code></para>
+
+            <para><code> &lt;/value&gt;</code></para>
+
+            <para><code> &lt;/property&gt;</code></para>
+
+            <para><code> &lt;property name="cacheDir"
+            value="WEB-INF/drools-cache" /&gt;</code></para>
+
+            <para><code> &lt;property name="ruleDir" value="WEB-INF/rules"
+            /&gt;</code></para>
+
+            <para><code>&lt;/bean&gt;</code></para>
+
+            <para><code>The cacheDir and ruleDir properties are handled
+            specially to make use of spring's resource abstraction to </code>
+            make paths portable.</para>
+          </listitem>
+
+          <listitem>
+            <para>Inject a reference to your RuleBaseFactory into a bean where
+            your business logic resides. Make use of the rule engine in code
+            similar to the following:</para>
+
+            <para><code>Object[] result =
+            ruleExecutor.runInStatelessSession(new Object[]{factbean1,
+            factbean2, factbean3},
+            ClassOfResultsYourInterestedIn.class);</code></para>
+
+            <para>where ruleExecutor is the instance variable name that gets
+            injected with the reference to your RuleBaseFactory bean,
+            factbeanX are the objects that your rules work on and
+            ClassOfResultsYourInterestedIn is a class to use as a filter when
+            returning results. You can specify null here to get anything back
+            as a result regardless of the class it is.</para>
+
+            <para>If you need anything other than a statelessSession run call
+            the getRuleBase() method of RuleBaseFactory and consult the drools
+            documentation.</para>
+          </listitem>
+
+          <listitem>
+            <para>Write your rules. You can either write them as .drl files
+            and put these into the ruleDir in which case they get compiled
+            automatically (provided the drools-compiler is on the classpath)
+            or put externally compiled rule packages (.pkg) into the same
+            location.</para>
+          </listitem>
+        </orderedlist></para>
+    </section>
+
+    <section>
+      <title>Caveats</title>
+
+      <para>You need to make sure that your ruleDir is not under SVN or CVS
+      control as the current drools version (4.0.3) can't cope with files or
+      directories in the ruleDir that are not rule source files or compiled
+      packages.</para>
+    </section>
+  </chapter>
+
+  <chapter>
     <title>Testing</title>
 
     <para>This extends the testing discussion in the Site Designer
@@ -710,8 +801,8 @@ Admin : http://localhost:8080/go/workbench/
       </orderedlist>
 
       <para>Once the tests have been run via Maven once the sample data will
-      be in place and the tests can then be run as required inside Eclipse.
-      </para>
+      be in place and the tests can then be run as required inside
+      Eclipse.</para>
     </section>
 
     <section>
