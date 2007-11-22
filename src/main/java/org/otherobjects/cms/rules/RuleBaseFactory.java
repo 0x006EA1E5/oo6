@@ -42,7 +42,7 @@ public class RuleBaseFactory implements InitializingBean, RuleExecutor
     {
         try
         {
-            this.config.put("dir", ruleDir.getFile().getAbsolutePath());
+            //this.config.put("dir", ruleDir.getFile().getAbsolutePath());
             this.config.put("localCacheDir", cacheDir.getFile().getAbsolutePath());
             this.ruleAgent = RuleAgent.newRuleAgent(config);
             //Assert.notNull(this.ruleAgent);
