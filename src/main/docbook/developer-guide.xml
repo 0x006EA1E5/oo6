@@ -694,28 +694,17 @@ Admin : http://localhost:8080/go/workbench/
             RuleBaseFactory using a configuration snippet like the
             following:</para>
 
-            <para><code>&lt;bean id="myRuleBase"
-            class="org.otherobjects.cms.rules.RuleBaseFactory"&gt;</code></para>
-
-            <para><code> &lt;property name="config"&gt;</code></para>
-
-            <para><code> &lt;value&gt;</code></para>
-
-            <para><code> poll=30</code></para>
-
-            <para><code> name=Publish</code></para>
-
-            <para><code> &lt;/value&gt;</code></para>
-
-            <para><code> &lt;/property&gt;</code></para>
-
-            <para><code> &lt;property name="cacheDir"
-            value="WEB-INF/drools-cache" /&gt;</code></para>
-
-            <para><code> &lt;property name="ruleDir" value="WEB-INF/rules"
-            /&gt;</code></para>
-
-            <para><code>&lt;/bean&gt;</code></para>
+            <para><programlisting>&lt;bean id="myRuleBase" class="org.otherobjects.cms.rules.RuleBaseFactory"&gt;  
+  &lt;property name="config"&gt;  
+  &lt;value&gt;   
+    poll=30  
+    name=Publish   
+  &lt;/value&gt;   
+  &lt;/property&gt;   
+  &lt;property name="cacheDir" value="WEB-INF/drools-cache" /&gt;   
+  &lt;property name="ruleDir" value="WEB-INF/rules"/&gt;   
+&lt;/bean&gt;</programlisting>
+			</para>
 
             <para><code>The cacheDir and ruleDir properties are handled
             specially to make use of spring's resource abstraction to </code>
