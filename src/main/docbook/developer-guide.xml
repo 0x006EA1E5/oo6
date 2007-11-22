@@ -163,6 +163,9 @@ Copyright: Copyright (C) 1999-2007 ImageMagick Studio LLC
 
 brushed:~ rich$
 </programlisting></para>
+
+        <para>Note for Mac users: the MacPorts install method is usually the
+        easiest and best way to go.</para>
       </section>
 
       <section>
@@ -678,7 +681,7 @@ Admin : http://localhost:8080/go/workbench/
 
     <para>OTHERobjects integrates with JBoss Drools by means of a simple Java
     Bean that leverages springs resource handling to make setting up a drools
-    rule base really simple. </para>
+    rule base really simple.</para>
 
     <section>
       <title>How to setup a rule base for your application aspect</title>
@@ -703,8 +706,7 @@ Admin : http://localhost:8080/go/workbench/
   &lt;/property&gt;   
   &lt;property name="cacheDir" value="WEB-INF/drools-cache" /&gt;   
   &lt;property name="ruleDir" value="WEB-INF/rules"/&gt;   
-&lt;/bean&gt;</programlisting>
-			</para>
+&lt;/bean&gt;</programlisting></para>
 
             <para><code>The cacheDir and ruleDir properties are handled
             specially to make use of spring's resource abstraction to </code>
