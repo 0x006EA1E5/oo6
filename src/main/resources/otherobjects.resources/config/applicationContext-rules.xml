@@ -8,11 +8,10 @@
 			<value>
 				poll=30
 				name=Publish
-				file=/Volumes/WorkData/europa_workspace/otherdemo/src/main/webapp/WEB-INF/drools-source/Publish.drl
 			</value>
 		</property>
 		<property name="cacheDir" value="WEB-INF/drools-cache" />
-		<property name="ruleDir" value="WEB-INF/drools-rules" />
+		<property name="ruleDir" value="WEB-INF/rules" />
 	</bean>
 	
 </beans>
