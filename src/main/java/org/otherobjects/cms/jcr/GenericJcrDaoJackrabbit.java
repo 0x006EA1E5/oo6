@@ -373,11 +373,15 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         if (dynaNode.isPublished())
             throw new OtherObjectsException("DynaNode " + dynaNode.getJcrPath() + "[" + dynaNode.getId() + "] couldn't be published as its published flag is already set ");
 
-        Object[] result = ruleExecutor.runInStatelessSession(new Object[]{dynaNode}, dynaNode.getClass());
+        // run node through rule engine if it is a CmsNode and cancel publish if rule engine doesn't set publish flag
+        if (dynaNode instanceof CmsNode)
+        {
+            CmsNode nodeToInsertIntoRuleEngine = dynaNode;
+            Object[] result = ruleExecutor.runInStatelessSession(new Object[]{nodeToInsertIntoRuleEngine}, Boolean.class);
 
-        //if object can be published it's published flag should have been set by the rule engine
-        if (!((CmsNode) dynaNode).isPublished())
-            return;
+            if (!(result.length > 0) || !(result[0] instanceof Boolean) || !((Boolean) result[0]).booleanValue())
+                return;
+        }
 
         jcrMappingTemplate.execute(new JcrMappingCallback()
         {
