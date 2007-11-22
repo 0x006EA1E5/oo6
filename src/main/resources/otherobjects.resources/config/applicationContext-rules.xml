@@ -6,9 +6,9 @@
 	<bean id="publishRules" class="org.otherobjects.cms.rules.RuleBaseFactory">
 		<property name="config">
 			<value>
-				url=http://localhost:8090/drools-jbrms/org.drools.brms.JBRMS/package/Publish/first
 				poll=30
-				name=Publish_first
+				name=Publish
+				file=/Volumes/WorkData/europa_workspace/otherdemo/src/main/webapp/WEB-INF/drools-source/Publish.drl
 			</value>
 		</property>
 		<property name="cacheDir" value="WEB-INF/drools-cache" />
