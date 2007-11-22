@@ -1065,6 +1065,17 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+			<artifactId>drools-compiler</artifactId>
+			<groupId>org.drools</groupId>
+			<version>4.0.3</version>
+			<exclusions>
+				<exclusion>
+					<groupId>jsr94</groupId>
+					<artifactId>jsr94-tck</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 	</dependencies>
 </project>
 
