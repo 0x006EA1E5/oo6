@@ -53,14 +53,15 @@ public class SetupUtils
     private Resource nodeTypesConfig;
     private Resource systemDataTypes;
     private Resource siteDataTypes;
-    
+
     private boolean standalone = false;
 
-    public void setStandalone(boolean standalone) {
-		this.standalone = standalone;
-	}
+    public void setStandalone(boolean standalone)
+    {
+        this.standalone = standalone;
+    }
 
-	public void setSystemDataTypes(Resource systemDataTypes)
+    public void setSystemDataTypes(Resource systemDataTypes)
     {
         this.systemDataTypes = systemDataTypes;
     }
@@ -177,7 +178,7 @@ public class SetupUtils
 
         // Create live workspace
         createWorkspace(session, OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
-       // setupDataTypes();
+        // setupDataTypes();
 
         return;
     }
@@ -194,12 +195,12 @@ public class SetupUtils
         liveSession.save();
 
         //Site types
-        if(!standalone)
+        if (!standalone)
         {
-        	session.getWorkspace().importXML("/types", this.siteDataTypes.getInputStream(), ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
-        	session.save();
-        	liveSession.getWorkspace().importXML("/types", this.siteDataTypes.getInputStream(), ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
-        	liveSession.save();
+            session.getWorkspace().importXML("/types", this.siteDataTypes.getInputStream(), ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+            session.save();
+            liveSession.getWorkspace().importXML("/types", this.siteDataTypes.getInputStream(), ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+            liveSession.save();
         }
     }
 
@@ -257,22 +258,22 @@ public class SetupUtils
         Session session = this.jcrSessionFactory.getSession();
         Node rootNode = session.getRootNode();
 
-        if(rootNode.hasNode("site")) 
+        if (rootNode.hasNode("site"))
             return 1001;
         else
             return 0;
-        
-//        
-//        if (!rootNode.hasProperty(STRUCTURE_VERSION_PROPERTY_NAME))
-//            return 0;
-//        else
-//            return (int) rootNode.getNode("site").getProperty(STRUCTURE_VERSION_PROPERTY_NAME).getLong();
+
+        //        
+        //        if (!rootNode.hasProperty(STRUCTURE_VERSION_PROPERTY_NAME))
+        //            return 0;
+        //        else
+        //            return (int) rootNode.getNode("site").getProperty(STRUCTURE_VERSION_PROPERTY_NAME).getLong();
     }
 
     protected void setRepositoryStructureVersion(int version) throws PathNotFoundException, RepositoryException
     {
-//        Session session = this.jcrSessionFactory.getSession();
-//        session.getRootNode().getNode("site").setProperty(STRUCTURE_VERSION_PROPERTY_NAME, version);
-//        session.save();
+        //        Session session = this.jcrSessionFactory.getSession();
+        //        session.getRootNode().getNode("site").setProperty(STRUCTURE_VERSION_PROPERTY_NAME, version);
+        //        session.save();
     }
 }
