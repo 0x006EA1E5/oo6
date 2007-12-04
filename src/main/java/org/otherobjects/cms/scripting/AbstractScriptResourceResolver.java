@@ -45,9 +45,12 @@ public abstract class AbstractScriptResourceResolver implements ScriptResourceRe
     protected Resource findResource(String module, String scriptName)
     {
         String scriptPath = "/" + module + ".resources/" + prefixPath + "/" + scriptName + fileSuffix;
-        Resource scriptResource = applicationContext.getResource(scriptPath);
+        String fileScriptPath = "/WEB-INF" + scriptPath;
+        Resource scriptResource = applicationContext.getResource(fileScriptPath);
 
-        if (!includeClasspath && scriptResource.exists())
+        boolean exists = scriptResource.exists();
+
+        if (!includeClasspath || scriptResource.exists())
             return scriptResource;
 
         String classpathScriptPath = "classpath:" + scriptPath;
