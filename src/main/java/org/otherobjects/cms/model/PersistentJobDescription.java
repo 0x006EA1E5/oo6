@@ -27,7 +27,7 @@ import flexjson.JSON;
  * @author joerg
  *
  */
-@Type(label = "Scheduled Job", description = "Scheduled Job", labelProperty = "jobName")
+@Type(label = "Scheduled Job", description = "Scheduled Job")
 public class PersistentJobDescription extends BaseNode
 {
 
