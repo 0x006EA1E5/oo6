@@ -39,6 +39,9 @@ public class TypeServiceImpl extends AbstractTypeService
             for (Class c : annotatedClasses)
                 registerType(annotationBasedTypeDefBuilder.getTypeDef(c));
 
+            annotatedClasses = annotationBasedTypeDefBuilder.findAnnotatedClasses("com.maureenmichaelson.site.model");
+            for (Class c : annotatedClasses)
+                registerType(annotationBasedTypeDefBuilder.getTypeDef(c));
             annotatedClasses = annotationBasedTypeDefBuilder.findAnnotatedClasses("com.example.site.model");
             for (Class c : annotatedClasses)
                 registerType(annotationBasedTypeDefBuilder.getTypeDef(c));

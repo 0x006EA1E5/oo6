@@ -536,16 +536,10 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     @SuppressWarnings("unchecked")
     public List<T> getAll()
     {
-        return getAllByType(this.persistentClass);
-    }
-
-    @SuppressWarnings("unchecked")
-    public List<T> getAllByType(Class type)
-    {
-        QueryManager queryManager = jcrMappingTemplate.createQueryManager();
-        Filter filter = queryManager.createFilter(type);
+        QueryManager queryManager = getJcrMappingTemplate().createQueryManager();
+        Filter filter = queryManager.createFilter(persistentClass);
         Query query = queryManager.createQuery(filter);
-        return (List<T>) jcrMappingTemplate.getObjects(query);
+        return (List<T>) getJcrMappingTemplate().getObjects(query);
     }
 
     /**

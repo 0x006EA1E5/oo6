@@ -73,6 +73,8 @@
 ## ooImage macros
 ##
 #macro(ooImage $image $width $height $cssClass)##
+#if($image)##
 #set($ims=$cmsImageTool.getSize($image,$width, $height))##
 <img src="$ims.dataFile.externalUrl" class="$!cssClass" width="$ims.width" height="$ims.height" alt="$!image.label" title="$!image.description"/>
+#end##
 #end

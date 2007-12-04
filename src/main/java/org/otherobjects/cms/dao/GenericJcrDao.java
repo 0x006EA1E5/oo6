@@ -19,8 +19,6 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
     public static final String REORDER_ABOVE = "above";
     public static final String REORDER_APPEND = "append";
 
-    public List<T> getAllByType(Class type);
-
     /**
      * Tests to see if a object is present in the current workspace at
      * the path specified.

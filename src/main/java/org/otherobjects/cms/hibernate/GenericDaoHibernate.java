@@ -30,91 +30,102 @@ import org.springframework.util.Assert;
  *
  * @author AppFuse <a href="mailto:bwnoll@gmail.com">Bryan Noll</a>
  */
-public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDaoSupport implements GenericDao<T, PK> {
+public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDaoSupport implements GenericDao<T, PK>
+{
     protected final Logger log = LoggerFactory.getLogger(getClass());
     private Class<T> persistentClass;
 
-    public GenericDaoHibernate(Class<T> persistentClass) {
+    public GenericDaoHibernate(Class<T> persistentClass)
+    {
         this.persistentClass = persistentClass;
     }
 
     @SuppressWarnings("unchecked")
-	public List<T> getAll() {
+    public List<T> getAll()
+    {
         return super.getHibernateTemplate().loadAll(this.persistentClass);
     }
 
     @SuppressWarnings("unchecked")
-	public T get(PK id) {
+    public T get(PK id)
+    {
         T entity = (T) super.getHibernateTemplate().get(this.persistentClass, id);
 
-        if (entity == null) {
+        if (entity == null)
+        {
             log.warn("Uh oh, '" + this.persistentClass + "' object with id '" + id + "' not found...");
             throw new ObjectRetrievalFailureException(this.persistentClass, id);
         }
 
         return entity;
     }
-    
+
     @SuppressWarnings("unchecked")
-	public boolean exists(PK id) {
+    public boolean exists(PK id)
+    {
         T entity = (T) super.getHibernateTemplate().get(this.persistentClass, id);
-        if (entity == null) {
+        if (entity == null)
+        {
             return false;
-        } else {
+        }
+        else
+        {
             return true;
         }
     }
 
     @SuppressWarnings("unchecked")
-	public T save(T object) {
+    public T save(T object)
+    {
         return save(object, true);
     }
-    
-	@SuppressWarnings("unchecked")
-    public T save(T object, boolean validate) {
-    	return (T) super.getHibernateTemplate().merge(object);
-	}
 
-    public void remove(PK id) {
+    @SuppressWarnings("unchecked")
+    public T save(T object, boolean validate)
+    {
+        return (T) super.getHibernateTemplate().merge(object);
+    }
+
+    public void remove(PK id)
+    {
         super.getHibernateTemplate().delete(this.get(id));
     }
 
-	public PagedList<T> getAllPaged(int pageSize, int pageNo,
-			String filterQuery, String sortField, boolean asc) {
-			return getPagedByQuery("from " + persistentClass.getName(), pageSize, pageNo, filterQuery, sortField, asc);
-	}
+    public PagedList<T> getAllPaged(int pageSize, int pageNo, String filterQuery, String sortField, boolean asc)
+    {
+        return getPagedByQuery("from " + persistentClass.getName(), pageSize, pageNo, filterQuery, sortField, asc);
+    }
 
     @SuppressWarnings("unchecked")
-	public PagedList<T> getPagedByQuery(final String queryString, final int pageSize,
-			final int pageNo, final String filterQuery, final String sortField, final boolean asc) {
-			Assert.isTrue(queryString.trim().toLowerCase().startsWith("from"), "Currently only object hql queries are supported - those that start directly with 'from'");
-			
-			return (PagedList<T>)getHibernateTemplate().execute(new HibernateCallback(){
-				public Object doInHibernate(Session session)
-				{
-					//FIXME we need to take into account filter and order
-					Query query = session.createQuery("Select count(*) " + queryString);
-					Long count = (Long) query.iterate().next();
-					
-					if(count > 0)
-					{
-						int startIndex = PagedListImpl.calcStartIndex(pageSize, pageNo);
-						
-						query = session.createQuery(queryString);
-						query.setFirstResult(startIndex);
-						query.setMaxResults(pageSize);
-						
-						List results = query.list();
-						return new PagedListImpl<T>(pageSize, (int)count.longValue(), pageNo, results, false);
-					}
-					else
-					{
-						return new PagedListImpl<T>(pageSize, 0, pageNo, null, false);
-					}
-				}
-			}
-			);
-	}
+    public PagedList<T> getPagedByQuery(final String queryString, final int pageSize, final int pageNo, final String filterQuery, final String sortField, final boolean asc)
+    {
+        Assert.isTrue(queryString.trim().toLowerCase().startsWith("from"), "Currently only object hql queries are supported - those that start directly with 'from'");
 
-	
+        return (PagedList<T>) getHibernateTemplate().execute(new HibernateCallback()
+        {
+            public Object doInHibernate(Session session)
+            {
+                //FIXME we need to take into account filter and order
+                Query query = session.createQuery("SELECT COUNT(*) " + queryString);
+                Long count = (Long) query.iterate().next();
+
+                if (count > 0)
+                {
+                    int startIndex = PagedListImpl.calcStartIndex(pageSize, pageNo);
+
+                    query = session.createQuery(queryString);
+                    query.setFirstResult(startIndex);
+                    query.setMaxResults(pageSize);
+
+                    List results = query.list();
+                    return new PagedListImpl<T>(pageSize, (int) count.longValue(), pageNo, results, false);
+                }
+                else
+                {
+                    return new PagedListImpl<T>(pageSize, 0, pageNo, null, false);
+                }
+            }
+        });
+    }
+
 }

@@ -19,8 +19,8 @@ import flexjson.JSON;
 /**
  * Useful representation of Urls in a webapp. Allows you to change individual properties of a url. Its toString() method will try to return a string representation 
  * suitable for use in the href attribute of an A tag.  
+ * 
  * @author joerg
- *
  */
 public class Url
 {

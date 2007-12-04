@@ -9,33 +9,30 @@ webservices and plugins
 [DONE] * Embed Quartz as job scheduler
 [DONE] * Transaction email support incl. logging and testing with Wiser: http://subethasmtp.tigris.org/wiser.html
 [DONE] * Start documentation
+[DONE] * Embed rules engine with scripting integration: JBossRules
 
 [IN PROGRESS] * Support blog publishing APIs http://www.blogger.com/developers/api/1_docs/
 + Flexible configuration
-[IN PROGRESS]+ Media support 
++ Media support 
 [IN PROGRESS] * Syndication support (publish and subscribe RSS/Atom feeds)
 [IN PROGRESS] * Non-HTML output support (PDF, XLS, JPG, XML)
 [IN PROGRESS] * NavigatorService: Site structure finalised + nav/titles/crumbs macros + redirection support
 [IN PROGRESS] * Path tooling inc robust SSL support
+[IN PROGRESS] * Action/event/scripting framework -- see old UploadController
 [IN PROGRESS] * YAML Otherdemo
 
-* Embed rules engine with scripting integration: JBossRules
-* Action/event/scripting framework -- see old UploadController
+* Project override config files [Joerg]
+* Textile property type [Joerg]
+* Preliminary reporting integration: BIRT/Pentaho [Joerg]
+* Web services API [Rich]
+* Plugin architecture [Rich]
 * Debug page: System and server status indicators, timezone (check for common server problems)
 * Script/action/long-task/import-export logging
 * Localized sites
 * JCR based properties and pick-lists
-* Internal link libraries + link integrity
-* Web services API
-* Plugin architecture
-* Robust Import/export tools
-* Preliminary reporting integration: BIRT/Pentaho
-* Integrate OTHERclicks as plugin: Responsys, SilverPOP, SubscriberMail, Bronto, CoolerEMail
 * Extra CMS features: duplicate,delete,unpublish,activate/deactivate	
-* Runtime data-type manipulation: UI 
 * Widget publish/consume
 * Scripting the workbench: global search and replace. Bulk actions.
-
 
 ==================================================================
 M4 (end November) The interface release.
@@ -46,6 +43,8 @@ Rich back in office from start of November. Will need to work closely
 with Chris and the design team during M4.
 ==================================================================
 
+* Template and block properties
+* Internal link libraries + link integrity
 * Licensing finalised 
 * Project naming finalised
 * Site toolbar improvements
@@ -90,8 +89,15 @@ Beta 1 (end January) First Beta release
 + Start OTHERcommerce planning/development
 
 
+****************************************************************
+****************************************************************
+****************************************************************
 
+Possibly Deferred
 
+* Robust Import/export tools
+* Runtime data-type manipulation: UI 
+* Integrate OTHERclicks as plugin: Responsys, SilverPOP, SubscriberMail, Bronto, CoolerEMail
 
 
 ****************************************************************

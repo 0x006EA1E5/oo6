@@ -187,7 +187,7 @@ public class WorkbenchDataController implements Controller
         //        }
         else if (BaseNode.class.isAssignableFrom(typeClass))
         {
-            GenericJcrDao<BaseNode> dao = (GenericJcrDao<BaseNode>) daoService.getDao(BaseNode.class);
+            UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao(BaseNode.class);
             allByType = dao.getAllByType(typeClass);
         }
         else
@@ -354,6 +354,9 @@ public class WorkbenchDataController implements Controller
             String dbQuery = dbFolder.getMainTypeQuery();
 
             GenericDao genericDao = this.daoService.getDao(dbType);
+
+            Assert.isTrue(!(genericDao instanceof GenericJcrDao), "Dao must be defined for this database object.");
+
             if (StringUtils.isNotBlank(dbQuery))
                 pagedResult = genericDao.getPagedByQuery(dbQuery, ITEMS_PER_PAGE, getRequestedPage(request), q, sort, asc);
             else

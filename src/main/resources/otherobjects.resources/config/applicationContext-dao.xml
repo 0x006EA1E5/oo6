@@ -32,6 +32,11 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
     
+    <bean id="orderDao" class="org.otherobjects.cms.hibernate.GenericDaoHibernate">
+     	<constructor-arg value="com.maureenmichaelson.site.model.Order"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
     <bean id="userDaoLdap" class="org.otherobjects.cms.dao.UserDaoLdap">
         <property name="ldapTemplate" ref="ldapTemplate"/>
     </bean>

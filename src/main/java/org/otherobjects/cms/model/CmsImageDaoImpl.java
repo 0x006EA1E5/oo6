@@ -16,29 +16,30 @@ public class CmsImageDaoImpl extends GenericJcrDaoJackrabbit<CmsImage> implement
     private final DataFileDao dataFileDao = new DataFileDaoFileSystem();
     private final CmsImageTool cmsImageTool = new CmsImageTool();
 
-//    public CmsImage createCmsImage()
-//    {
-//        /// FIXME This should never be needed -- need better DAOs
-//        String typeName = CmsImage.class.getName();
-//        TypeDef type = getTypeService().getType(typeName);
-//        try
-//        {
-//            CmsImage n = new CmsImage();
-//            n.setTypeDef(type);
-//            return n;
-//        }
-//        catch (Exception e)
-//        {
-//            //TODO Better exception?
-//            throw new OtherObjectsException("Could not create new instance of type: " + typeName, e);
-//        }
-//    }
+    //    public CmsImage createCmsImage()
+    //    {
+    //        /// FIXME This should never be needed -- need better DAOs
+    //        String typeName = CmsImage.class.getName();
+    //        TypeDef type = getTypeService().getType(typeName);
+    //        try
+    //        {
+    //            CmsImage n = new CmsImage();
+    //            n.setTypeDef(type);
+    //            return n;
+    //        }
+    //        catch (Exception e)
+    //        {
+    //            //TODO Better exception?
+    //            throw new OtherObjectsException("Could not create new instance of type: " + typeName, e);
+    //        }
+    //    }
 
-//    @Override
+    //    @Override
+    @Override
     public CmsImage save(CmsImage o)
     {
 
-        CmsImage image = (CmsImage) o;
+        CmsImage image = o;
         if (image.getNewFile() != null)
         {
             Dimension imageDimensions = ImageUtils.getImageDimensions(image.getNewFile());
@@ -55,6 +56,12 @@ public class CmsImageDaoImpl extends GenericJcrDaoJackrabbit<CmsImage> implement
             // Create thumbnail
             this.cmsImageTool.getThumbnail(image);
         }
-        return (CmsImage) super.save(image);
+        return super.save(image);
+    }
+
+    @Override
+    public void publish(CmsImage dynaNode, String message)
+    {
+        super.publish(dynaNode, message);
     }
 }

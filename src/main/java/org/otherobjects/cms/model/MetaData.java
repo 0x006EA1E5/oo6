@@ -3,7 +3,6 @@ package org.otherobjects.cms.model;
 import java.util.List;
 
 import org.otherobjects.cms.types.annotation.Property;
-import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
 
 /**
@@ -15,6 +14,12 @@ public class MetaData extends BaseNode
     private String title;
     private String description;
     private List<String> keywords;
+
+    @Override
+    public String getCode()
+    {
+        return "metaData";
+    }
 
     @Property(order = 10)
     public String getTitle()
@@ -38,7 +43,7 @@ public class MetaData extends BaseNode
         this.description = description;
     }
 
-    @Property(order = 30, type = PropertyType.LIST, collectionElementType = PropertyType.STRING)
+    @Property(order = 30)
     public List<String> getKeywords()
     {
         return keywords;

@@ -3,6 +3,7 @@ package org.otherobjects.cms.dao;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.model.BaseNode;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -20,6 +21,10 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
         return getDao(clazz.getName());
     }
 
+    /**
+     * Returns a Dao for provided type. First looks in daoMap and then in the application context. IF nothing found return UnivesalJcrDao (for Jcr objects) 
+     * or GenericDaoHibernate for database objects.
+     */
     public GenericDao getDao(String type)
     {
         GenericDao dao = daoMap.get(type);
@@ -30,15 +35,29 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
             if (beanFactory.containsBean(daoBeanName))
                 dao = (GenericDao) beanFactory.getBean(daoBeanName);
             else
-                // If no specific dao found then use dynaNode Dao
-                dao = (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
-        }
+            {
+                // FIXME Remove dynaNode stuff
+                if (type.equals("dynaNode") || type.equalsIgnoreCase("baseNode"))
+                    return (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
 
-        // FIXME Return UniversalJcrDao
-        if (dao == null)
-        {
-            // If no specific dao found then use dynaNode Dao
-            dao = (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
+                try
+                {
+                    Class cls = Class.forName(type);
+                    if (BaseNode.class.isAssignableFrom(cls))
+                    {
+                        dao = (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
+
+                    }
+                    else
+                    {
+                        throw new OtherObjectsException("No Dao in context for type: " + type);
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new OtherObjectsException("Could not fetch DAO for non-instantiatable type: " + type, e);
+                }
+            }
         }
         return dao;
     }
@@ -86,29 +105,6 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
 
     public boolean hasDao(String type)
     {
-        GenericDao dao = daoMap.get(type);
-
-        Class typeClass = null;
-        try
-        {
-            typeClass = Class.forName(type);
-        }
-        catch (ClassNotFoundException e)
-        {
-        }
-
-        if (dao == null)
-        {
-            String daoBeanName = determineDaoBeanName(type);
-            if (beanFactory.containsBean(daoBeanName))
-                dao = (GenericDao) beanFactory.getBean(daoBeanName);
-            else if (typeClass != null && BaseNode.class.isAssignableFrom(typeClass))
-            {
-                // If no specific dao found then use dynaNode Dao
-                dao = (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
-            }
-        }
-
-        return (dao != null);
+        return (getDao(type) != null);
     }
 }

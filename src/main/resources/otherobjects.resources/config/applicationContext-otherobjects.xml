@@ -45,6 +45,11 @@
 		</property>
 	</bean>
 
+	<bean name="actionController" class="org.otherobjects.cms.controllers.ActionController">
+		<property name="daoService" ref="daoService" />
+		<property name="supportedMethods" value="GET,POST" />
+	</bean>
+
 	<bean name="pageHandler" class="org.otherobjects.cms.controllers.handlers.PageHandler">
 		<property name="navigatorService" ref="navigatorService" />
 		<property name="siteNavigatorService" ref="siteNavigatorService" />
@@ -115,13 +120,12 @@
 		</property>
 	</bean>
 
-	
-
 	<bean name="singletonBeanLocator" class="org.otherobjects.cms.SingletonBeanLocator" />
 
 	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
 			<props>
+				<prop key="/go/action/*">actionController</prop>
 				<prop key="/go/upload">uploadController</prop>
 				<prop key="/go/workbench/bookmarklet">bookmarkletController</prop>
 				<prop key="/go/workbench/upload">uploadController</prop>

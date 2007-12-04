@@ -1,6 +1,10 @@
-Cleanup WorkbenchDataController
-Overriding spring config from site
-
+* Cleanup WorkbenchDataController/Content service to support DB and JCR objects
+* ScriptResolver (for Actions, Scheduler, ScriptHandler)
+* Flow controller into OO servlet
+* URL mapping to be be extenralised
+* HBM config to be externalised
+* Context population service and config
+* Look at custom VelocityViewResolver
 
 
 Disabled Tests
@@ -8,24 +12,15 @@ Disabled Tests
 DynaNodeValidator
 JcrBeanService
 
-
-
-
-
-
-
-
 Research Topics
 ---------------
 serializableId
 hash/equals builders
 
-
 Back in Office Todo
 -------------------
 Trac server and Mylyn integration
 Maven repo server
-
 
 M2 TODO
 -------

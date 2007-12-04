@@ -68,11 +68,11 @@
 		</property>
 	</bean>
 
-<!-- 
-	<bean name="dynaNodeValidator" class="org.otherobjects.cms.validation.DynaNodeValidator">
+	<!-- 
+		<bean name="dynaNodeValidator" class="org.otherobjects.cms.validation.DynaNodeValidator">
 		<property name="typeService" ref="typeService" />
-	</bean>
-	 -->
+		</bean>
+	-->
 
 	<bean id="annotationBasedTypeDefBuilder" class="org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder" />
 
@@ -94,22 +94,22 @@
 	-->
 
 	<!-- DAOs
-	<bean id="dynaNodeDao" parent="baseTransactionProxy">
+		<bean id="dynaNodeDao" parent="baseTransactionProxy">
 		<property name="target">
-			<bean class="org.otherobjects.cms.dao.DynaNodeDaoJackrabbit">
-				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
-				<property name="typeService" ref="typeService" />
-				<property name="sessionFactory" ref="jcrSessionFactory" />
-			</bean>
+		<bean class="org.otherobjects.cms.dao.DynaNodeDaoJackrabbit">
+		<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
+		<property name="typeService" ref="typeService" />
+		<property name="sessionFactory" ref="jcrSessionFactory" />
+		</bean>
 		</property>
-	</bean>
-	 -->
+		</bean>
+	-->
 	<bean id="universalJcrDao" parent="baseTransactionProxy">
 		<property name="target">
 			<bean class="org.otherobjects.cms.jcr.UniversalJcrDaoJackrabbit">
 				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
 				<property name="sessionFactory" ref="jcrSessionFactory" />
-				 <property name="ruleExecutor" ref="publishRules"></property> 
+				<property name="ruleExecutor" ref="publishRules"></property>
 			</bean>
 		</property>
 	</bean>
@@ -118,6 +118,7 @@
 			<bean class="org.otherobjects.cms.model.CmsImageDaoImpl">
 				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
 				<property name="sessionFactory" ref="jcrSessionFactory" />
+				<property name="ruleExecutor" ref="publishRules"></property>
 			</bean>
 		</property>
 	</bean>

@@ -1,5 +1,5 @@
 ##
-## Velcoity macros used by the OTHERobjects.
+## Velocity macros used by the OTHERobjects.
 ##
 
 #macro(ooLayoutBlock $blockCode)

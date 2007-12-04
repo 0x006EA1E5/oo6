@@ -10,5 +10,4 @@ public interface CmsImageDao extends GenericJcrDao<CmsImage>
      * @return
      */
     //public CmsImage createCmsImage();
-
 }

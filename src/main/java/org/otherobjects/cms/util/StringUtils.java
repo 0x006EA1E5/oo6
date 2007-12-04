@@ -8,9 +8,9 @@ package org.otherobjects.cms.util;
  * 
  * @author rich
  */
-public class StringUtils
+public class StringUtils extends org.apache.commons.lang.StringUtils
 {
-    
+
     public static String generateLabel(String original)
     {
         String converted = new String();
@@ -20,7 +20,7 @@ public class StringUtils
 
             if (i == 0)
             {
-                converted +=  String.valueOf(c).toUpperCase();
+                converted += String.valueOf(c).toUpperCase();
             }
             else if (c >= 'A' && c <= 'Z')
             {
@@ -36,8 +36,9 @@ public class StringUtils
 
     public static String generateUrlCode(String name)
     {
-        if(name==null) return null;
+        if (name == null)
+            return null;
         return name.toLowerCase().replaceAll("\\s+", "-").replaceAll("[^a-z0-9-\\s]", "");
     }
-    
+
 }

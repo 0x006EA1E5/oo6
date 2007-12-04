@@ -3,7 +3,6 @@ package org.otherobjects.cms.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.Url;
 import org.otherobjects.cms.site.SiteItem;
@@ -12,6 +11,7 @@ import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
+import org.otherobjects.cms.util.StringUtils;
 
 import flexjson.JSON;
 
@@ -30,6 +30,14 @@ public class SiteFolder extends BaseNode implements Folder, SiteItem
     {
         return true;
     }
+
+    //    @Override
+    //    public String getCode()
+    //    {
+    //        if (super.getCode() == null)
+    //            super.setCode(StringUtils.generateUrlCode(getLabel()));
+    //        return super.getCode();
+    //    }
 
     @SuppressWarnings("unchecked")
     public List<TypeDef> getAllAllowedTypes()
