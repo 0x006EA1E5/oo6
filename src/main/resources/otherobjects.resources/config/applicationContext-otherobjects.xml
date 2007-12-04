@@ -48,6 +48,7 @@
 	<bean name="actionController" class="org.otherobjects.cms.controllers.ActionController">
 		<property name="daoService" ref="daoService" />
 		<property name="supportedMethods" value="GET,POST" />
+		<property name="actionScriptResolver" ref="actionScriptResolver" />
 	</bean>
 
 	<bean name="pageHandler" class="org.otherobjects.cms.controllers.handlers.PageHandler">
@@ -232,6 +233,9 @@
 		</property>
 	</bean>
 	
+	<bean id="actionScriptResolver" class="org.otherobjects.cms.controllers.GroovyActionScriptResolver">
+		
+	</bean>
 	
 
 </beans>
