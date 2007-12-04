@@ -48,8 +48,6 @@ public abstract class AbstractScriptResourceResolver implements ScriptResourceRe
         String fileScriptPath = "/WEB-INF" + scriptPath;
         Resource scriptResource = applicationContext.getResource(fileScriptPath);
 
-        boolean exists = scriptResource.exists();
-
         if (!includeClasspath || scriptResource.exists())
             return scriptResource;
 
