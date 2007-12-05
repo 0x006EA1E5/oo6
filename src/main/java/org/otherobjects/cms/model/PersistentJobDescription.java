@@ -38,6 +38,7 @@ public class PersistentJobDescription extends BaseNode
     private String jobClassName;
     private String cronExpression;
     private String groovyScript;
+    private String groovyScriptName;
 
     private String second;
     private String minute;
@@ -121,14 +122,18 @@ public class PersistentJobDescription extends BaseNode
         {
             jobDetail.setJobClass(jobClass);
         }
-        else
+        else if (StringUtils.isNotBlank(groovyScript))
         {
-            if (StringUtils.isBlank(groovyScript))
-                return null; //FIXME should really throw an exception but interferes with dwr marshalling
-
             jobDetail.setJobClass(QuartzGroovyJobExecutor.class);
             jobDataMap.put(QuartzGroovyJobExecutor.GROOVY_SCRIPT_KEY, groovyScript);
         }
+        else if (StringUtils.isNotBlank(groovyScriptName)) // QuartzSchedulerConfigurationBean will resolve script resourcce
+        {
+            jobDetail.setJobClass(QuartzGroovyJobExecutor.class);
+        }
+        else
+            return null; //FIXME should really throw an exception but interferes with dwr marshalling
+
         this.jobDetail = jobDetail;
         return jobDetail;
     }
@@ -175,7 +180,7 @@ public class PersistentJobDescription extends BaseNode
     }
 
     @Override
-    @Property(type = PropertyType.STRING, label = "Label", order = 1)
+    @Property(type = PropertyType.STRING, label = "Label", order = 10)
     public String getLabel()
     {
         return label;
@@ -187,7 +192,7 @@ public class PersistentJobDescription extends BaseNode
         this.label = label;
     }
 
-    @Property(type = PropertyType.STRING, label = "Name of job class", order = 2)
+    @Property(type = PropertyType.STRING, label = "Name of job class", order = 20)
     public String getJobClassName()
     {
         return jobClassName;
@@ -198,7 +203,7 @@ public class PersistentJobDescription extends BaseNode
         this.jobClassName = jobClassName;
     }
 
-    @Property(type = PropertyType.STRING, label = "Cron expression", order = 3)
+    @Property(type = PropertyType.STRING, label = "Cron expression", order = 30)
     public String getCronExpression()
     {
         return cronExpression;
@@ -209,7 +214,7 @@ public class PersistentJobDescription extends BaseNode
         this.cronExpression = cronExpression;
     }
 
-    @Property(type = PropertyType.TEXT, label = "Groovy script source", order = 4, size = 500)
+    @Property(type = PropertyType.TEXT, label = "Groovy script source", order = 40, size = 500)
     public String getGroovyScript()
     {
         return groovyScript;
@@ -220,7 +225,18 @@ public class PersistentJobDescription extends BaseNode
         this.groovyScript = groovyScript;
     }
 
-    @Property(type = PropertyType.STRING, label = "Cron seconds", order = 5)
+    @Property(label = "Groovy script name", order = 41)
+    public String getGroovyScriptName()
+    {
+        return groovyScriptName;
+    }
+
+    public void setGroovyScriptName(String groovyScriptName)
+    {
+        this.groovyScriptName = groovyScriptName;
+    }
+
+    @Property(type = PropertyType.STRING, label = "Cron seconds", order = 50)
     public String getSecond()
     {
         return second;
@@ -231,7 +247,7 @@ public class PersistentJobDescription extends BaseNode
         this.second = second;
     }
 
-    @Property(type = PropertyType.STRING, label = "Cron minutes", order = 6)
+    @Property(type = PropertyType.STRING, label = "Cron minutes", order = 60)
     public String getMinute()
     {
         return minute;
@@ -242,7 +258,7 @@ public class PersistentJobDescription extends BaseNode
         this.minute = minute;
     }
 
-    @Property(type = PropertyType.STRING, label = "Cron hours", order = 7)
+    @Property(type = PropertyType.STRING, label = "Cron hours", order = 70)
     public String getHour()
     {
         return hour;
@@ -253,7 +269,7 @@ public class PersistentJobDescription extends BaseNode
         this.hour = hour;
     }
 
-    @Property(type = PropertyType.STRING, label = "Cron day of month", order = 8)
+    @Property(type = PropertyType.STRING, label = "Cron day of month", order = 80)
     public String getDayOfMonth()
     {
         return dayOfMonth;
@@ -264,7 +280,7 @@ public class PersistentJobDescription extends BaseNode
         this.dayOfMonth = dayOfMonth;
     }
 
-    @Property(type = PropertyType.STRING, label = "Cron month", order = 9)
+    @Property(type = PropertyType.STRING, label = "Cron month", order = 90)
     public String getMonth()
     {
         return month;
@@ -275,7 +291,7 @@ public class PersistentJobDescription extends BaseNode
         this.month = month;
     }
 
-    @Property(type = PropertyType.STRING, label = "Cron day of week", order = 10)
+    @Property(type = PropertyType.STRING, label = "Cron day of week", order = 100)
     public String getDayOfWeek()
     {
         return dayOfWeek;
@@ -286,7 +302,7 @@ public class PersistentJobDescription extends BaseNode
         this.dayOfWeek = dayOfWeek;
     }
 
-    @Property(type = PropertyType.STRING, label = "Cron year", order = 11)
+    @Property(type = PropertyType.STRING, label = "Cron year", order = 110)
     public String getYear()
     {
         return year;
