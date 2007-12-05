@@ -233,8 +233,10 @@
 		</property>
 	</bean>
 	
-	<bean id="actionScriptResolver" class="org.otherobjects.cms.controllers.GroovyActionScriptResolver">
-		
+	<bean id="actionScriptResolver" class="org.otherobjects.cms.scripting.GenericScriptResourceResolver">
+		<property name="prefixPath" value="scripts/actions" />
+		<property name="fileSuffix" value=".script" />
+		<property name="includeClasspath" value="true" />
 	</bean>
 	
 
