@@ -18,6 +18,7 @@
 	<bean id="schedulerConfiguration" class="org.otherobjects.cms.scheduler.QuartzSchedulerConfigurationBean" >
 		<property name="scheduler" ref="scheduler" />
 		<property name="universalJcrDao" ref="universalJcrDao" />
+		<property name="scriptResourceResolver" ref="schedulerScriptResolver" />
 	</bean>
 	
 	<bean id="exporter" class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">
@@ -34,5 +35,10 @@
 			</bean>
 		</property>
 	</bean>
-
+	
+	<bean id="schedulerScriptResolver" class="org.otherobjects.cms.scripting.GenericScriptResourceResolver">
+		<property name="prefixPath" value="scripts/scheduler" />
+		<property name="fileSuffix" value=".script" />
+		<property name="includeClasspath" value="true" />
+	</bean>
 </beans>

@@ -7,12 +7,15 @@ import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.model.PersistentJobDescription;
+import org.otherobjects.cms.scripting.ScriptResourceResolver;
+import org.otherobjects.cms.util.StringUtils;
 import org.quartz.Scheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.io.Resource;
 
 /**
  * Simple bean that configures the built-in quartz scheduler by querying for all {@link PersistentJobDescription} objects under a certain
@@ -29,6 +32,7 @@ public class QuartzSchedulerConfigurationBean implements ApplicationListener
 
     private Scheduler scheduler;
     private UniversalJcrDao universalJcrDao;
+    private ScriptResourceResolver scriptResourceResolver;
 
     /**
      * Listens to contextRefreshed and publish events to initialize / refresh jobs. 
@@ -87,12 +91,23 @@ public class QuartzSchedulerConfigurationBean implements ApplicationListener
             {
                 logger.info("Job " + jobDescription.getLabel() + " [" + jobDescription.getId() + "] already existed and was therefore deleted before scheduling it again");
             }
+            setScriptResource(jobDescription);
             scheduler.scheduleJob(jobDescription.getJobDetail(), jobDescription.getTrigger());
         }
         catch (Exception e)
         {
             logger.warn("Couldn't schedule Job: " + jobDescription.getLabel() + " [" + jobDescription.getId() + "]", e);
         }
+    }
+
+    private void setScriptResource(PersistentJobDescription jobDescription) throws Exception
+    {
+        if (StringUtils.isNotBlank(jobDescription.getGroovyScriptName()))
+        {
+            Resource scriptResource = scriptResourceResolver.resolveScriptName(jobDescription.getGroovyScriptName());
+            jobDescription.getJobDetail().getJobDataMap().put(QuartzGroovyJobExecutor.GROOVY_SCRIPT_RESOURCE_KEY, scriptResource);
+        }
+
     }
 
     public void setScheduler(Scheduler scheduler)
@@ -105,4 +120,8 @@ public class QuartzSchedulerConfigurationBean implements ApplicationListener
         this.universalJcrDao = universalJcrDao;
     }
 
+    public void setScriptResourceResolver(ScriptResourceResolver scriptResourceResolver)
+    {
+        this.scriptResourceResolver = scriptResourceResolver;
+    }
 }

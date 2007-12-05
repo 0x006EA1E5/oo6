@@ -2,11 +2,22 @@ package org.otherobjects.cms.scripting;
 
 import org.otherobjects.cms.OtherObjectsException;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
+import org.springframework.util.Assert;
 
-public abstract class AbstractScriptResourceResolver implements ScriptResourceResolver, ApplicationContextAware
+/**
+ * Generic script resource resolver that can be used as is and configured as a spring managed bean or can be subclassed if you want to override the way it goes about 
+ * finding resources in various places in the application.
+ * 
+ * The default behaviour is that it will first look for the resource in the filesystem in the WEB-INF/prefixPath folder and then - if includeClasspath is true - will try to 
+ * find the resource in the prefixPath in the classpath. If it fails to find the resource in the site.resources it will look for it in otherobjects.resources.
+ * @author joerg
+ *
+ */
+public class GenericScriptResourceResolver implements ScriptResourceResolver, ApplicationContextAware, InitializingBean
 {
     public final static String OTHEROBJECTS_MODULE = "otherobjects";
     public final static String SITE_MODULE = "site";
@@ -17,14 +28,19 @@ public abstract class AbstractScriptResourceResolver implements ScriptResourceRe
     private String fileSuffix;
     private boolean includeClasspath;
 
-    protected AbstractScriptResourceResolver(String prefixPath, String fileSuffix, boolean includeClasspath)
+    public GenericScriptResourceResolver()
+    {
+        this.includeClasspath = true;
+    }
+
+    protected GenericScriptResourceResolver(String prefixPath, String fileSuffix, boolean includeClasspath)
     {
         this.prefixPath = prefixPath;
         this.fileSuffix = fileSuffix;
         this.includeClasspath = includeClasspath;
     }
 
-    protected AbstractScriptResourceResolver(String prefixPath, String fileSuffix)
+    protected GenericScriptResourceResolver(String prefixPath, String fileSuffix)
     {
         this(prefixPath, fileSuffix, true);
     }
@@ -59,6 +75,42 @@ public abstract class AbstractScriptResourceResolver implements ScriptResourceRe
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
     {
         this.applicationContext = applicationContext;
+    }
+
+    public String getPrefixPath()
+    {
+        return prefixPath;
+    }
+
+    public void setPrefixPath(String prefixPath)
+    {
+        this.prefixPath = prefixPath;
+    }
+
+    public String getFileSuffix()
+    {
+        return fileSuffix;
+    }
+
+    public void setFileSuffix(String fileSuffix)
+    {
+        this.fileSuffix = fileSuffix;
+    }
+
+    public boolean isIncludeClasspath()
+    {
+        return includeClasspath;
+    }
+
+    public void setIncludeClasspath(boolean includeClasspath)
+    {
+        this.includeClasspath = includeClasspath;
+    }
+
+    public void afterPropertiesSet() throws Exception
+    {
+        Assert.notNull(prefixPath, "The prefixPath property needs to be set");
+        Assert.notNull(fileSuffix, "The fileSuffix property needs to be set");
     }
 
 }
