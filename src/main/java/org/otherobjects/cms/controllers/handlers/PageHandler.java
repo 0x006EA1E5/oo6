@@ -11,6 +11,7 @@ import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.site.SiteItem;
 import org.otherobjects.cms.site.SiteNavigatorService;
 import org.otherobjects.cms.tools.CmsImageTool;
+import org.otherobjects.cms.tools.FormatTool;
 import org.otherobjects.cms.workbench.NavigatorService;
 import org.springframework.util.Assert;
 import org.springframework.web.servlet.ModelAndView;
@@ -48,6 +49,7 @@ public class PageHandler implements ResourceHandler
             view.addObject("trail", siteNavigatorService.getTrail((SiteItem) resourceObject));
 
         view.addObject("cmsImageTool", new CmsImageTool());
+        view.addObject("formatTool", new FormatTool());
         return view;
     }
 
