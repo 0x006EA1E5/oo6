@@ -1,213 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.directwebremoting.org/schema/spring-dwr http://maven.otherobjects.org/spring-dwr.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
-	
-	<import resource="applicationContext-dwr.xml"/>
-	
-	<!-- 
-		Temporary disble AOP
-		-javaagent:/Users/rich/.m2/repository/aspectj/aspectjweaver/1.5.3/aspectjweaver-1.5.3.jar
-		<aop:spring-configured/>
-		RequestContextListener
-	-->
-	<bean id="performanceInfo" class="org.otherobjects.cms.util.PerformanceInfoImpl" scope="request">
-		<aop:scoped-proxy />
-	</bean>
-
-	<bean id="performanceInterceptor" class="org.otherobjects.cms.util.PerformanceInterceptor">
-		<property name="performanceInfo" ref="performanceInfo" />
-	</bean>
-
-	<aop:config>
-		<aop:aspect ref="performanceInterceptor">
-			<!-- 
-				<aop:pointcut id="myCutLogging" expression="execution(* org.otherobjects.cms.controllers.SiteController*.*(..))" />
-				<aop:pointcut id="myCutLogging" expression="execution(* org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImpl*.*(..))" />
-			-->
-			<!-- Intercept all dynaNode queries that happens inside requests -->
-			<aop:pointcut id="myCutLogging" expression="execution(* org.otherobjects.cms.jcr.UniversalJcrDao.*(..))" />
-			<aop:around pointcut-ref="myCutLogging" method="log" />
-		</aop:aspect>
-	</aop:config>
-
 
 	<bean name="siteController" class="org.otherobjects.cms.controllers.SiteController">
-		<property name="daoService" ref="daoService" />
 		<property name="handlers">
 			<map>
 				<entry key="*" value-ref="pageHandler" />
-				<entry key="org.otherobjects.cms.model.ScriptResource" value-ref="scriptHandler" />
-				<entry key="org.otherobjects.cms.model.RedirectResource" value-ref="redirectHandler" />
-				<entry key="org.otherobjects.cms.model.SyndicationFeedResource" value-ref="syndicationFeedHandler" />
 			</map>
 		</property>
 	</bean>
 
-	<bean name="actionController" class="org.otherobjects.cms.controllers.ActionController">
-		<property name="daoService" ref="daoService" />
-		<property name="supportedMethods" value="GET,POST" />
-		<property name="actionScriptResolver" ref="actionScriptResolver" />
-	</bean>
-
-	<bean name="pageHandler" class="org.otherobjects.cms.controllers.handlers.PageHandler">
-		<property name="navigatorService" ref="navigatorService" />
-		<property name="siteNavigatorService" ref="siteNavigatorService" />
-		<property name="daoService" ref="daoService" />
-	</bean>
-
-	<bean name="redirectHandler" class="org.otherobjects.cms.controllers.handlers.RedirectHandler"></bean>
-
-	<bean name="syndicationFeedHandler" class="org.otherobjects.cms.controllers.handlers.SyndicationFeedHandler">
-		<property name="daoService" ref="daoService" />
-	</bean>
-
-	<bean name="scriptHandler" class="org.otherobjects.cms.controllers.handlers.ScriptHandler">
-		<property name="daoService" ref="daoService" />
-	</bean>
-
-	<bean name="siteMapController" class="org.otherobjects.cms.controllers.SiteMapController">
-		<property name="navigatorService" ref="navigatorService" />
-		<property name="daoService" ref="daoService" />
-	</bean>
-
-	<bean name="uploadController" class="org.otherobjects.cms.controllers.UploadController">
-		<property name="daoService" ref="daoService" />
-	</bean>
-
-	<bean name="bookmarkletController" class="org.otherobjects.cms.controllers.BookmarkletController">
-		<property name="daoService" ref="daoService" />
-	</bean>
-
-	<bean name="workbenchController" class="org.otherobjects.cms.controllers.WorkbenchController">
-		<property name="localeResolver" ref="localeResolver" />
-	</bean>
-
-	<bean name="workbenchDataController" class="org.otherobjects.cms.controllers.WorkbenchDataController">
-		<property name="typeService" ref="typeService" />
-		<property name="daoService" ref="daoService" />
-		<property name="universalJcrDao" ref="universalJcrDao" />
-	</bean>
-
-	<bean name="formController" class="org.otherobjects.cms.controllers.FormController">
-		<property name="universalJcrDao" ref="universalJcrDao" />
-		<property name="daoService" ref="daoService" />
-		<!--  FIXME <property name="validator" ref="dynaNodeValidator" />  -->
-		<property name="bindService" ref="bindService" />
-		<property name="typeDefBuilder" ref="annotationBasedTypeDefBuilder" />
-	</bean>
-
-	<bean name="navigatorService" class="org.otherobjects.cms.workbench.NavigatorServiceImpl">
-		<property name="universalJcrDao" ref="universalJcrDao" />
-		<dwr:remote javascript="NavigatorService" />
-	</bean>
-	
-	<bean name="siteNavigatorService" class="org.otherobjects.cms.site.SiteNavigatorServiceImpl">
-		<property name="navigatorService" ref="navigatorService" />
-		<property name="universalJcrDao" ref="universalJcrDao" />
-	</bean>
-
-	<bean name="contentService" class="org.otherobjects.cms.workbench.ContentServiceImpl">
-		<property name="universalJcrDao" ref="universalJcrDao" />
-		<property name="daoService" ref="daoService" />
-		<dwr:remote javascript="ContentService" />
-	</bean>
-
-	<bean id="bindService" class="org.otherobjects.cms.binding.BindServiceImpl">
-		<property name="daoService" ref="daoService" />
-		<property name="dateFormat">
-			<value>dd/MM/yy</value>
-		</property>
-	</bean>
+	<bean name="pageHandler" class="org.otherobjects.cms.controllers.handlers.PageHandler"></bean>
 
 	<bean name="singletonBeanLocator" class="org.otherobjects.cms.SingletonBeanLocator" />
 
 	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
 			<props>
-				<prop key="/go/action/*">actionController</prop>
-				<prop key="/go/upload">uploadController</prop>
-				<prop key="/go/workbench/bookmarklet">bookmarkletController</prop>
-				<prop key="/go/workbench/upload">uploadController</prop>
-				<prop key="/go/workbench/upload/**">uploadController</prop>
-				<prop key="/go/workbench/form/**">formController</prop>
-				<prop key="/go/workbench/data/**">workbenchDataController</prop>
-				<prop key="/go/workbench/**">workbenchController</prop>
 				<prop key="/go/**">siteController</prop>
-				<prop key="/go/*">siteController</prop>
-				<prop key="/go/sitemap.xml">siteMapController</prop>
-				<prop key="/go/workbench/api/**">xmlRpcController</prop>
 			</props>
 		</property>
 		<property name="alwaysUseFullPath" value="true" />
 	</bean>
 
-	<bean name="metaWeblogApiHandler" class="org.otherobjects.cms.api.MetaWeblogApiHandler">
-	</bean>
-
-	<bean id="xmlRpcController" class="org.otherobjects.cms.ws.XmlRpcController">
-		<property name="handlers">
-			<map>
-				<entry key="metaWeblog" value-ref="metaWeblogApiHandler" />
-			</map>
-		</property>
-	</bean>
-
-	<!-- 
-		FIXME Classpath loader means autoreload for macro library can not work
-	-->
-	<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
-		<property name="resourceLoaderPath" value="/" />
-		<property name="velocityProperties">
-			<props>
-				<prop key="velocimacro.permissions.allow.inline.local.scope">true</prop>
-				<prop key="velocimacro.permissions.allow.inline.to.replace.global">true</prop>
-				<prop key="velocimacro.arguments.strict">true</prop>
-				<prop key="velocimacro.library.autoreload">true</prop>
-				<prop key="velocimacro.library">
-					otherobjects.resources/templates/macros/otherobjects.vm,otherobjects.resources/templates/macros/site.vm,site.resources/templates/macros/site.vm
-				</prop>
-				<prop key="file.resource.loader.cache">false</prop>
-				<prop key="encoding.default">UTF-8</prop>
-				<prop key="directive.set.null.allowed">true</prop>
-			</props>
-		</property>
-	</bean>
-
-	<bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
-		<property name="cache" value="false" />
-		<property name="prefix" value="" />
-		<property name="requestContextAttribute" value="requestContext" />
-		<property name="dateToolAttribute" value="dateTool" />
-		<property name="numberToolAttribute" value="numberTool" />
-		<property name="viewClass" value="org.otherobjects.cms.views.VelocityView" />
-	</bean>
-
-	<bean id="viewToolsService" class="org.otherobjects.cms.views.ViewToolsServiceImpl">
-		<property name="toolsMap">
-			<map>
-				<entry>
-					<key>
-						<value>stringTool</value>
-					</key>
-					<value>org.apache.commons.lang.StringUtils</value>
-				</entry>
-			</map>
-		</property>
-		<property name="beansMap">
-			<map>
-				<entry>
-					<key>
-						<value>daoService</value>
-					</key>
-					<ref bean="daoService" />
-				</entry>
-			</map>
-		</property>
-	</bean>
-
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- TODO Extract max-upload size into a property -->
 		<property name="maxUploadSize" value="10000000" />
 	</bean>
 
@@ -232,12 +51,7 @@
 			<value>1000</value>
 		</property>
 	</bean>
-	
-	<bean id="actionScriptResolver" class="org.otherobjects.cms.scripting.GenericScriptResourceResolver">
-		<property name="prefixPath" value="scripts/actions" />
-		<property name="fileSuffix" value=".script" />
-		<property name="includeClasspath" value="true" />
-	</bean>
-	
+
+	<bean name="startupMessage" class="org.otherobjects.cms.util.StartupMessage"></bean>
 
 </beans>

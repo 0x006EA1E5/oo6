@@ -1,0 +1,5 @@
+blocks: section of a page. may be global or specific (folder or page).
+
+template: arrangement of configured blocks within a layout
+
+ 

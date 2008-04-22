@@ -6,13 +6,19 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
+/**
+ * Displays the OTHERobjects startup message if all beans have been initialised successfully.
+ * 
+ * @author rich
+ */
 public class StartupMessage implements ApplicationListener
 {
     private final Logger logger = LoggerFactory.getLogger(StartupMessage.class);
 
     public void onApplicationEvent(ApplicationEvent e)
     {
-    	if (e instanceof ContextRefreshedEvent && ((ContextRefreshedEvent)e).getApplicationContext().getParent() == null) //only do for root context refreshes
+        // Only do for root context refreshes
+    	if (e instanceof ContextRefreshedEvent) // && ((ContextRefreshedEvent)e).getApplicationContext().getParent() == null) 
     	{
     		this.logger.info("**************************************************************");
     		this.logger.info("**************************************************************");
@@ -25,8 +31,8 @@ public class StartupMessage implements ApplicationListener
     		this.logger.info("");
     		this.logger.info("******************* Started up successfully ******************");
     		this.logger.info("");
-    		this.logger.info("Site  : http://localhost:8080/go/");
-    		this.logger.info("Admin : http://localhost:8080/go/workbench/");
+    		this.logger.info("Site  : [unknown]");
+    		this.logger.info("Admin : [unknown]");
     		this.logger.info("");
     		this.logger.info("**************************************************************");
     		this.logger.info("**************************************************************");

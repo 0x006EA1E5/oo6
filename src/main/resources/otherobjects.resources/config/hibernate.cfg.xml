@@ -5,6 +5,5 @@
     <session-factory>
         <mapping class="org.otherobjects.cms.model.User"/>
         <mapping class="org.otherobjects.cms.model.Role"/>
-        <mapping class="com.maureenmichaelson.site.model.Order"/>
     </session-factory>
 </hibernate-configuration>

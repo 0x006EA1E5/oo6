@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.LoginException;
 import javax.jcr.NamespaceRegistry;
 import javax.jcr.Node;
@@ -35,41 +34,21 @@ import org.springmodules.jcr.JcrSessionFactory;
 import ch.qos.logback.classic.Level;
 
 /**
- * Bootstrap utility that runs on site start up. Ensures all initial config data 
- * is correctly initalised.
- * 
- * <p>This curretntly does this by runnig the script in <code>bootstrap-data/setup.groovy</code>.
+ * Sets up an empty Jackrabbit repository. Makes sure the nodes types and live/edit 
+ * workpaces are correct. 
  * 
  * @author rich
  */
-public class SetupUtils
+public class JackrabbitSetupUtils
 {
-    private static final String STRUCTURE_VERSION_PROPERTY_NAME = "structureVersion";
+//    private static final String STRUCTURE_VERSION_PROPERTY_NAME = "structureVersion";
+//    private boolean standalone = false;
 
-    private final Logger logger = LoggerFactory.getLogger(SetupUtils.class);
+    private final Logger logger = LoggerFactory.getLogger(JackrabbitSetupUtils.class);
 
     private AnnotationSessionFactoryBean sessionFactory;
     private JcrSessionFactory jcrSessionFactory;
     private Resource nodeTypesConfig;
-    private Resource systemDataTypes;
-    private Resource siteDataTypes;
-
-    private boolean standalone = false;
-
-    public void setStandalone(boolean standalone)
-    {
-        this.standalone = standalone;
-    }
-
-    public void setSystemDataTypes(Resource systemDataTypes)
-    {
-        this.systemDataTypes = systemDataTypes;
-    }
-
-    public void setSiteDataTypes(Resource siteDataTypes)
-    {
-        this.siteDataTypes = siteDataTypes;
-    }
 
     /**
      * Run the bootstrap script.
@@ -178,30 +157,7 @@ public class SetupUtils
 
         // Create live workspace
         createWorkspace(session, OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
-        // setupDataTypes();
-
         return;
-    }
-
-    protected void setupDataTypes() throws LoginException, RepositoryException, IOException
-    {
-        Session session = getSession(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
-        Session liveSession = getSession(OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
-
-        // System types
-        session.getWorkspace().importXML("/", this.systemDataTypes.getInputStream(), ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
-        session.save();
-        liveSession.getWorkspace().importXML("/", this.systemDataTypes.getInputStream(), ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
-        liveSession.save();
-
-        //Site types
-        if (!standalone)
-        {
-            session.getWorkspace().importXML("/types", this.siteDataTypes.getInputStream(), ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
-            session.save();
-            liveSession.getWorkspace().importXML("/types", this.siteDataTypes.getInputStream(), ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
-            liveSession.save();
-        }
     }
 
     protected Session getSession(String workspaceName) throws LoginException, RepositoryException

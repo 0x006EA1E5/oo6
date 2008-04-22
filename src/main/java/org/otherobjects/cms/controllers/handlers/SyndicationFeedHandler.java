@@ -1,7 +1,5 @@
 package org.otherobjects.cms.controllers.handlers;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -44,13 +42,14 @@ public class SyndicationFeedHandler implements ResourceHandler
     private DaoService daoService;
     private CmsImageTool cmsImageTool = new CmsImageTool();
 
-    private static final DateFormat DATE_PARSER = new SimpleDateFormat("yyyy-MM-dd");
+    //private static final DateFormat DATE_PARSER = new SimpleDateFormat("yyyy-MM-dd");
 
     public void setDaoService(DaoService daoService)
     {
         this.daoService = daoService;
     }
 
+    @SuppressWarnings("unchecked")
     public ModelAndView handleRequest(CmsNode resourceObject, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         Assert.notNull(resourceObject, "resourceObject must not be null");

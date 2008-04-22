@@ -6,7 +6,7 @@
 	<artifactId>otherobjects</artifactId>
 	<name>OTHERobjects CMS</name>
 	<packaging>jar</packaging>
-	<version>0.2-SNAPSHOT</version>
+	<version>0.3-SNAPSHOT</version>
 	<description>OTHERobjects Content Management System.</description>
 	<inceptionYear>2007</inceptionYear>
 	<properties>
@@ -55,9 +55,7 @@
 			<id>postgres</id>
 			<activation></activation>
 			<properties>
-				<dbunit.dataTypeFactoryName>
-					org.dbunit.dataset.datatype.DefaultDataTypeFactory
-				</dbunit.dataTypeFactoryName>
+				<dbunit.dataTypeFactoryName>org.dbunit.dataset.datatype.DefaultDataTypeFactory</dbunit.dataTypeFactoryName>
 				<dbunit.operation.type>CLEAN_INSERT</dbunit.operation.type>
 				<hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
 				<jdbc.groupId>postgresql</jdbc.groupId>
@@ -67,9 +65,7 @@
 				<jdbc.url><![CDATA[jdbc:postgresql://localhost/oong]]></jdbc.url>
 				<jdbc.username>postgres</jdbc.username>
 				<jdbc.password>postgres</jdbc.password>
-				<hibernate.jdbc.properties.file>
-					target/classes/otherobjects.resources/config/jdbc.properties
-				</hibernate.jdbc.properties.file>
+				<hibernate.jdbc.properties.file>target/classes/otherobjects.resources/config/jdbc.properties</hibernate.jdbc.properties.file>
 				<dbunit-load-file>bootstrap-data/jdbc-data-users.xml</dbunit-load-file>
 			</properties>
 		</profile>
@@ -88,58 +84,58 @@
 	</pluginRepositories>
 	<scm>
 		<connection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/trunk</connection>
-		<developerConnection>
-			scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/trunk
-		</developerConnection>
+		<developerConnection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/trunk</developerConnection>
 		<url>http://www.otherobjects.org/</url>
 	</scm>
 	<build>
 		<plugins>
 			<!-- Fix for Cobertura 100% coverage problem. See: http://jira.codehaus.org/browse/MCOBERTURA-61 
-			<plugin>
+				<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<systemProperties>
-						<property>
-							<name>net.sourceforge.cobertura.datafile</name>
-							<value>${project.build.directory}/cobertura/cobertura.ser</value>
-						</property>
-					</systemProperties>
+				<systemProperties>
+				<property>
+				<name>net.sourceforge.cobertura.datafile</name>
+				<value>${project.build.directory}/cobertura/cobertura.ser</value>
+				</property>
+				</systemProperties>
 				</configuration>
-			</plugin>
+				</plugin>
 			-->
 			<!--  Documentation generation -->
-			<plugin>
+			<!-- 
+				<plugin>
 				<groupId>org.jboss.maven.plugins</groupId>
 				<artifactId>maven-jdocbook-plugin</artifactId>
 				<extensions>true</extensions>
 				<configuration>
-					<formats>
-						<format>
-							<formatName>pdf</formatName>
-							<stylesheetResource>
-								file:${basedir}/src/main/docbook/xslt/pdf/main-pdf.xsl
-							</stylesheetResource>
-						</format>
-						<!-- 
-							<format>
-							<formatName>html</formatName>
-							</format>
-						-->
-					</formats>
-					<sourceDocumentName>${docbook.name}.xml</sourceDocumentName>
-					<imageResource>
-						<directory>src/main/docbook/images</directory>
-						<targetPath>images</targetPath>
-						<filtering>false</filtering>
-					</imageResource>
-					<options>
-						<useRelativeImageUris>false</useRelativeImageUris>
-						<xincludeSupported>false</xincludeSupported>
-					</options>
+				<formats>
+				<format>
+				<formatName>pdf</formatName>
+				<stylesheetResource>
+				file:${basedir}/src/main/docbook/xslt/pdf/main-pdf.xsl
+				</stylesheetResource>
+				</format>
+				<!- 
+				<format>
+				<formatName>html</formatName>
+				</format>
+				->
+				</formats>
+				<sourceDocumentName>${docbook.name}.xml</sourceDocumentName>
+				<imageResource>
+				<directory>src/main/docbook/images</directory>
+				<targetPath>images</targetPath>
+				<filtering>false</filtering>
+				</imageResource>
+				<options>
+				<useRelativeImageUris>false</useRelativeImageUris>
+				<xincludeSupported>false</xincludeSupported>
+				</options>
 				</configuration>
-			</plugin>
+				</plugin>
+			-->
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
@@ -283,9 +279,7 @@
 				<version>1.0-SNAPSHOT</version>
 				<configuration>
 					<repositoryLocation>${jcr.repository.location}</repositoryLocation>
-					<configurationFile>
-						src/main/resources/otherobjects.resources/config/jackrabbit-repo.xml
-					</configurationFile>
+					<configurationFile>src/main/resources/otherobjects.resources/config/jackrabbit-repo.xml</configurationFile>
 					<nodeTypesFile>src/main/resources/otherobjects.resources/config/node-types.cnd</nodeTypesFile>
 					<importDirectory>src/test/jcr-data</importDirectory>
 				</configuration>
@@ -779,12 +773,6 @@
 			<artifactId>jackrabbit-core</artifactId>
 			<version>1.3</version>
 			<exclusions>
-				<!-- 
-					<exclusion>
-					<groupId>org.apache.jackrabbit</groupId>
-					<artifactId>jackrabbit-text-extractors</artifactId>
-					</exclusion>
-				-->
 				<exclusion>
 					<groupId>org.apache.derby</groupId>
 					<artifactId>derby</artifactId>
@@ -850,7 +838,6 @@
 			<artifactId>jcl104-over-slf4j</artifactId>
 			<version>1.4.0</version>
 		</dependency>
-
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>log4j-bridge</artifactId>
@@ -861,29 +848,10 @@
 			<artifactId>logback-classic</artifactId>
 			<version>0.9.7</version>
 		</dependency>
-		<!-- 
-			<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.4.0</version>
-			</dependency>
-			<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.14</version>
-			</dependency>
-		-->
-
 		<dependency>
-			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity</artifactId>
-			<version>1.5</version>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.12</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mortbay.jetty</groupId>
@@ -906,70 +874,19 @@
 			<version>1.5</version>
 		</dependency>
 		<dependency>
-			<groupId>org.directwebremoting</groupId>
-			<artifactId>dwr</artifactId>
-			<version>2.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity-tools</artifactId>
-			<version>1.3</version>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>velocity</groupId>
-					<artifactId>velocity</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>struts</groupId>
-					<artifactId>struts</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.0.20070617</version>
-		</dependency>
-		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<version>1.4</version>
 		</dependency>
 		<dependency>
-			<!-- Needed for logback email support -->
-			<groupId>janino</groupId>
-			<artifactId>janino</artifactId>
-			<version>2.5.7</version>
-		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>groovy</groupId>-->
-<!--			<artifactId>groovy-all</artifactId>-->
-<!--			<version>1.0</version>-->
-<!--			<exclusions>-->
-<!--				<exclusion>-->
-<!--					<groupId>openejb</groupId>-->
-<!--					<artifactId>openejb-loader</artifactId>-->
-<!--				</exclusion>-->
-<!--			</exclusions>-->
-<!--		</dependency>-->
-		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy-all-minimal</artifactId>
-			<version>1.1-rc-1</version>
+			<version>1.5.5</version>
 		</dependency>
 		<dependency>
 			<groupId>bsf</groupId>
 			<artifactId>bsf</artifactId>
 			<version>2.4.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.otherobjects</groupId>
-			<artifactId>asm-all-otherobjects</artifactId>
-			<version>3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>joda-time</groupId>
@@ -982,19 +899,9 @@
 			<version>0.9</version>
 		</dependency>
 		<dependency>
-			<groupId>net.sourceforge</groupId>
-			<artifactId>flickrj</artifactId>
-			<version>1.0b4</version>
-		</dependency>
-		<dependency>
 			<groupId>com.drewnoakes</groupId>
 			<artifactId>metadata-extractor</artifactId>
 			<version>2.3.1</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sourceforge</groupId>
-			<artifactId>xmlrpc</artifactId>
-			<version>1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-fileupload</groupId>
@@ -1007,28 +914,10 @@
 			<version>3.1</version>
 		</dependency>
 		<dependency>
-			<groupId>net.sourceforge</groupId>
-			<artifactId>delicious-java</artifactId>
-			<version>1.14</version>
-		</dependency>
-		<dependency>
 			<groupId>jaxen</groupId>
 			<artifactId>jaxen</artifactId>
 			<version>1.1.1</version>
 		</dependency>
-		<!-- 
-			<dependency>
-			<groupId>xmlrpc</groupId>
-			<artifactId>xmlrpc</artifactId>
-			<version>2.0.1</version>
-			</dependency>
-		-->
-		<!--		 lib for generating uuids, used in groovy xml generator, not in official maven rep -->
-		<!--		<dependency>-->
-		<!--			<groupId>com.eaio</groupId>-->
-		<!--			<artifactId>uuid</artifactId>-->
-		<!--			<version>2.1.3</version>-->
-		<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-ldap</artifactId>
@@ -1045,58 +934,11 @@
 			<artifactId>quartz</artifactId>
 			<version>1.6.0</version>
 		</dependency>
-		<dependency>
-			<groupId>jfree</groupId>
-			<artifactId>jfreechart</artifactId>
-			<version>1.0.5</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sourceforge.jexcelapi</groupId>
-			<artifactId>jxl</artifactId>
-			<version>2.6.3</version>
-		</dependency>
-		<dependency>
-			<groupId>com.lowagie</groupId>
-			<artifactId>itext</artifactId>
-			<version>1.4.8</version>
-		</dependency>
+		<!-- Testing only -->
 		<dependency>
 			<groupId>org.subethamail</groupId>
 			<artifactId>subethasmtp-wiser</artifactId>
 			<version>1.2</version>
-		</dependency>
-		<dependency>
-			<artifactId>drools-core</artifactId>
-			<groupId>org.drools</groupId>
-			<version>4.0.3</version>
-			<exclusions>
-				<exclusion>
-					<groupId>jsr94</groupId>
-					<artifactId>jsr94-tck</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<artifactId>drools-compiler</artifactId>
-			<groupId>org.drools</groupId>
-			<version>4.0.3</version>
-			<exclusions>
-				<exclusion>
-					<groupId>jsr94</groupId>
-					<artifactId>jsr94-tck</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<artifactId>plextile</artifactId>
-			<groupId>com.plink-search</groupId>
-			<version>1.0.5</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.lowagie</groupId>
-					<artifactId>itext</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 	</dependencies>
 </project>

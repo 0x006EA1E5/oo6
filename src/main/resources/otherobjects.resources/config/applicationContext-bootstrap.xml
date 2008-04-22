@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd ">
+
+	<!-- Bootstrap -->
+	<bean name="jackrabbitSetupUtils" class="org.otherobjects.cms.util.JackrabbitSetupUtils" init-method="bootstrap">
+		<property name="sessionFactory" ref="&amp;sessionFactory" />
+		<property name="jcrSessionFactory" ref="jcrSessionFactory" />
+		<property name="nodeTypesConfig" value="classpath:otherobjects.resources/config/node-types.cnd" />
+	</bean>
+
+	<bean name="ooBootstrapUtils" class="org.otherobjects.cms.util.BootstrapUtils" init-method="bootstrap">
+		<property name="jcrTypeService" ref="typeService" />
+		<property name="daoService" ref="daoService" />
+		<property name="bootstrapScript" value="classpath:otherobjects.resources/bootstrap-data/setup.script" />
+	</bean>
+</beans>

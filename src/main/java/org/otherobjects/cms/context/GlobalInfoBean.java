@@ -55,7 +55,7 @@ public class GlobalInfoBean implements InitializingBean
 
         initialiseResourceProperties();
         initialiseJndiProperties();
-        this.instance = this;
+        instance = this;
     }
 
     private void initialiseJndiProperties()

@@ -4,7 +4,6 @@ import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.cms.test.BaseJcrTestCase;
-import org.otherobjects.cms.types.TypeService;
 
 @SuppressWarnings("unchecked")
 public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase

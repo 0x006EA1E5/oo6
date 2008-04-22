@@ -1,6 +1,5 @@
 package org.otherobjects.cms.controllers;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +17,6 @@ import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.dao.PagedList;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
-import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.CompositeDatabaseId;
 import org.otherobjects.cms.model.DbFolder;
 import org.otherobjects.cms.model.Folder;
@@ -28,16 +26,11 @@ import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.IdentifierUtils;
 import org.otherobjects.cms.views.JsonView;
-import org.otherobjects.cms.ws.FlickrImageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.xml.sax.SAXException;
-
-import com.aetrion.flickr.FlickrException;
-import com.aetrion.flickr.photos.Photo;
 
 /**
  * Controller providing a REST style interface to site data. Currently supports navigator structure and
@@ -75,43 +68,43 @@ public class WorkbenchDataController implements Controller
             return generateSelectData(request);
         else if (path.endsWith("/navigator"))
             return generateNavigatorData(request);
-        else if (path.contains("/image-services/"))
-            return generateImageServiceData(request);
+//        else if (path.contains("/image-services/"))
+//            return generateImageServiceData(request);
         else
             return null;
     }
 
-    @SuppressWarnings("unchecked")
-    private ModelAndView generateImageServiceData(HttpServletRequest request) throws IOException, SAXException, FlickrException
-    {
-        //String path = request.getPathInfo();
-
-        FlickrImageService flickr = new FlickrImageService();
-        List results = new ArrayList();
-        for (Photo p : flickr.getImages())
-        {
-            results.add(convertToCmsImage(p));
-        }
-
-        ModelAndView view = new ModelAndView("jsonView");
-        view.addObject(JsonView.JSON_DATA_KEY, results);
-        view.addObject(JsonView.JSON_DEEP_SERIALIZE, true);
-        return view;
-    }
-
-    private CmsImage convertToCmsImage(Photo photo)
-    {
-        //        CmsImage image = ((CmsImageDao) this.daoService.getDao(CmsImage.class)).createCmsImage();
-        CmsImage image = new CmsImage();//cmsImageDao.createCmsImage();
-        image.setLabel(photo.getTitle());
-        //image.setKeywords(photo.getTags());
-        image.setOriginalWidth(1L);
-        image.setOriginalHeight(1L);
-        image.setThumbnailPath(photo.getSmallSquareUrl());
-        image.setId(photo.getId());
-        image.setOriginalProvider("FLICKR");
-        return image;
-    }
+//    @SuppressWarnings("unchecked")
+//    private ModelAndView generateImageServiceData(HttpServletRequest request) throws IOException, SAXException, FlickrException
+//    {
+//        //String path = request.getPathInfo();
+//
+//        FlickrImageService flickr = new FlickrImageService();
+//        List results = new ArrayList();
+//        for (Photo p : flickr.getImages())
+//        {
+//            results.add(convertToCmsImage(p));
+//        }
+//
+//        ModelAndView view = new ModelAndView("jsonView");
+//        view.addObject(JsonView.JSON_DATA_KEY, results);
+//        view.addObject(JsonView.JSON_DEEP_SERIALIZE, true);
+//        return view;
+//    }
+//
+//    private CmsImage convertToCmsImage(Photo photo)
+//    {
+//        //        CmsImage image = ((CmsImageDao) this.daoService.getDao(CmsImage.class)).createCmsImage();
+//        CmsImage image = new CmsImage();//cmsImageDao.createCmsImage();
+//        image.setLabel(photo.getTitle());
+//        //image.setKeywords(photo.getTags());
+//        image.setOriginalWidth(1L);
+//        image.setOriginalHeight(1L);
+//        image.setThumbnailPath(photo.getSmallSquareUrl());
+//        image.setId(photo.getId());
+//        image.setOriginalProvider("FLICKR");
+//        return image;
+//    }
 
     @SuppressWarnings("unchecked")
     private ModelAndView generateItemData(HttpServletRequest request)

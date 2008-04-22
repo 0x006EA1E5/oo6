@@ -5,14 +5,9 @@ import org.otherobjects.cms.model.Template;
 import org.otherobjects.cms.model.TemplateLayout;
 import org.otherobjects.cms.test.BaseJcrTestCase;
 import org.springframework.mock.jndi.SimpleNamingContextBuilder;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
 
 public class PageHandlerTest extends BaseJcrTestCase
 {
-
-    private PageHandler pageHandler;
-
     @Override
     protected String[] getConfigLocations()
     {
@@ -47,8 +42,8 @@ public class PageHandlerTest extends BaseJcrTestCase
 
     public void testHandleRequest() throws Exception
     {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        MockHttpServletResponse response = new MockHttpServletResponse();
+//        MockHttpServletRequest request = new MockHttpServletRequest();
+//        MockHttpServletResponse response = new MockHttpServletResponse();
 
         Template template = new Template();
         TemplateLayout templateLayout = new TemplateLayout();
@@ -66,10 +61,5 @@ public class PageHandlerTest extends BaseJcrTestCase
         //
         //        assertEquals(resource, mav.getModelMap().get("resourceObject"));
 
-    }
-
-    public void setPageHandler(PageHandler pageHandler)
-    {
-        this.pageHandler = pageHandler;
     }
 }

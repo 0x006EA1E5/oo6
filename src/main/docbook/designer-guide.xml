@@ -19,7 +19,7 @@
       <title>Who is this guide for?</title>
 
       <para>This guide is for users who wish to build their own website. It
-      covers installing and runnign OTHERobjects, configuring data types and
+      covers installing and running OTHERobjects, configuring data types and
       building templates and adding action logic to events and scheduled
       tasks.</para>
 
@@ -40,6 +40,27 @@
 
     <para>Setting up admin user (for more info see Users and permissions
     chapter).</para>
+
+    <para>Keeping your data safe</para>
+
+    <para></para>
+
+    <para></para>
+  </chapter>
+
+  <chapter>
+    <title>Where does the data go?</title>
+
+    <para>As you build you site you will be adding all sorts of code and data.
+    It is obviously important to keep this safe.</para>
+
+    <para>Templates and type definitions</para>
+
+    <para>Assets: JS, CSS, graphics</para>
+
+    <para>Scripts</para>
+
+    <para>Site data: added data, UGC, uploaded files</para>
   </chapter>
 
   <chapter id="chapter-overview-of-steps">
@@ -55,7 +76,7 @@
         (or objects if you are coming from a programming background) you will
         need in your site. Obvious ones that almost all sites will need are
         articles and news items. But there might also be things like jobs,
-        events, products, press releases to name but a few. </para>
+        events, products, press releases to name but a few.</para>
       </listitem>
 
       <listitem>
@@ -92,21 +113,21 @@
         src/main/resources/site.resources/templates/blocks. A block is a mini
         template that controls with what markup the properties of your types
         are inserted into the site pages. It can also contain simple content
-        logic, like list the 5 latest news items etc. </para>
+        logic, like list the 5 latest news items etc.</para>
       </listitem>
 
       <listitem>
         <para>Now that you have types and layouts and blocks you can create
         templates (Designer &gt; Templates). A template wires together blocks
         and layouts by specifying which blocks go into which designated
-        regions in a layout in what order. </para>
+        regions in a layout in what order.</para>
       </listitem>
 
       <listitem>
         <para>Now when you create any of your types by going to a folder
         listing and choosing 'Add Object' you can choose from the template(s)
         you created and whatever template you choose is then used to view (and
-        preview) that type. </para>
+        preview) that type.</para>
       </listitem>
     </itemizedlist>
   </chapter>

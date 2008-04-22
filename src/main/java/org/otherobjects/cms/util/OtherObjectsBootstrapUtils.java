@@ -17,8 +17,6 @@ import org.apache.commons.io.IOUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.UserDao;
-import org.otherobjects.cms.jcr.UniversalJcrDao;
-import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.Role;
 import org.otherobjects.cms.model.User;
 import org.otherobjects.cms.types.TypeServiceImpl;
@@ -27,17 +25,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
 /**
- * Bootstrap utility that runs on site start up. Ensures all initial config data 
- * is correctly initalised.
+ * Creates standard repository structure and ensures there is at least one admin user.
  * 
- * <p>This curretntly does this by runnig the script in <code>bootstrap-data/setup.groovy</code>.
+ * <p>This currently does this by running the script in <code>bootstrap-data/setup.groovy</code>.
  * 
  * @author rich
  */
 @SuppressWarnings("unchecked")
-public class BootstrapUtils //implements ApplicationListener
+public class OtherObjectsBootstrapUtils //implements ApplicationListener
 {
-    private final Logger logger = LoggerFactory.getLogger(BootstrapUtils.class);
+    private final Logger logger = LoggerFactory.getLogger(OtherObjectsBootstrapUtils.class);
 
     private DaoService daoService;
     private Resource bootstrapScript;
@@ -85,11 +82,6 @@ public class BootstrapUtils //implements ApplicationListener
                 if (!standalone)
                     runScript(new FileInputStream("src/main/resources/site.resources/bootstrap-data/setup.script"));
             }
-            else
-            {
-                // just load types
-                loadTypes();
-            }
         }
         catch (Exception e)
         {
@@ -101,13 +93,6 @@ public class BootstrapUtils //implements ApplicationListener
             // Log out
             SecurityContextHolder.clearContext();
         }
-    }
-
-    public void loadTypes()
-    {
-        // load jcr backed typeDefs
-        // FIXME Should we pass typeDef dao instead?
-        jcrTypeService.loadJcrBackedTypes((UniversalJcrDao) daoService.getDao(BaseNode.class));
     }
 
     protected User createUser()

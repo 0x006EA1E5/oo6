@@ -70,12 +70,11 @@ public class UrlTest extends TestCase
     {
         try
         {
-            Url url = new Url("some/relative/lin/without/leading/slash");
+            new Url("some/relative/lin/without/leading/slash");
             fail();
         }
         catch (Exception e)
         {
-
         }
     }
 

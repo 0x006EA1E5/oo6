@@ -1,20 +1,10 @@
 package org.otherobjects.cms.workbench;
 
-import java.io.File;
-import java.net.URL;
-import java.util.Date;
-
-import org.apache.commons.io.FileUtils;
 import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsImage;
-import org.otherobjects.cms.model.CmsImageDao;
-import org.otherobjects.cms.ws.FlickrImageService;
 import org.springframework.util.Assert;
-
-import com.aetrion.flickr.photos.Photo;
 
 /**
  * Default implementaion of content service.
@@ -26,43 +16,44 @@ import com.aetrion.flickr.photos.Photo;
 @SuppressWarnings("unchecked")
 public class ContentServiceImpl implements ContentService
 {
-    private DaoService daoService;
+//    private DaoService daoService;
     private UniversalJcrDao universalJcrDao;
 
     public CmsImage createImage(String service, String imageId)
     {
-        try
-        {
-            Assert.hasText("provider must be specified.", service);
-            Assert.hasText("imageId must be specified.", imageId);
-
-            FlickrImageService flickr = new FlickrImageService();
-            CmsImageDao cmsImageDao = ((CmsImageDao) this.daoService.getDao(CmsImage.class));
-
-            Photo photo = flickr.getImage(imageId);
-
-            // FIXME Sort out medium/large url problems
-            // FIXME Sort out unique temp path
-            File tmpFile = new File("/tmp/flickr.jpg");
-            System.err.println(photo.getMediumUrl());
-            FileUtils.copyURLToFile(new URL(photo.getMediumUrl()), tmpFile);
-            CmsImage image = new CmsImage();//cmsImageDao.createCmsImage();
-            image.setPath("/libraries/images/");
-            image.setCode("" + new Date().getTime());
-            //        image.setCode(StringUtils.substringAfterLast(photo.getSmallUrl(), "/"));
-            image.setNewFile(tmpFile);
-            image.setLabel(photo.getTitle());
-            //image.setKeywords(photo.getTags());
-            image.setOriginalId(photo.getId());
-            image.setOriginalProvider("FLICKR");
-            image = cmsImageDao.save(image);
-            cmsImageDao.publish(image, null);
-            return image;
-        }
-        catch (Exception e)
-        {
-            throw new OtherObjectsException("Could not create image: " + service + " " + imageId, e);
-        }
+        return null;
+//        try
+//        {
+//            Assert.hasText("provider must be specified.", service);
+//            Assert.hasText("imageId must be specified.", imageId);
+//
+//            FlickrImageService flickr = new FlickrImageService();
+//            CmsImageDao cmsImageDao = ((CmsImageDao) this.daoService.getDao(CmsImage.class));
+//
+//            Photo photo = flickr.getImage(imageId);
+//
+//            // FIXME Sort out medium/large url problems
+//            // FIXME Sort out unique temp path
+//            File tmpFile = new File("/tmp/flickr.jpg");
+//            System.err.println(photo.getMediumUrl());
+//            FileUtils.copyURLToFile(new URL(photo.getMediumUrl()), tmpFile);
+//            CmsImage image = new CmsImage();//cmsImageDao.createCmsImage();
+//            image.setPath("/libraries/images/");
+//            image.setCode("" + new Date().getTime());
+//            //        image.setCode(StringUtils.substringAfterLast(photo.getSmallUrl(), "/"));
+//            image.setNewFile(tmpFile);
+//            image.setLabel(photo.getTitle());
+//            //image.setKeywords(photo.getTags());
+//            image.setOriginalId(photo.getId());
+//            image.setOriginalProvider("FLICKR");
+//            image = cmsImageDao.save(image);
+//            cmsImageDao.publish(image, null);
+//            return image;
+//        }
+//        catch (Exception e)
+//        {
+//            throw new OtherObjectsException("Could not create image: " + service + " " + imageId, e);
+//        }
 
     }
 
@@ -136,10 +127,10 @@ public class ContentServiceImpl implements ContentService
         return item;
     }
 
-    public void setDaoService(DaoService daoService)
-    {
-        this.daoService = daoService;
-    }
+//    public void setDaoService(DaoService daoService)
+//    {
+//        this.daoService = daoService;
+//    }
 
     public void setUniversalJcrDao(UniversalJcrDao universalJcrDao)
     {

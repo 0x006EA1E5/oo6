@@ -12,7 +12,7 @@ public class ContentServiceImplTest extends BaseJcrTestCase
     {
         super.onSetUp();
         this.contentService = new ContentServiceImpl();
-        this.contentService.setDaoService(daoService);
+//        this.contentService.setDaoService(daoService);
         this.contentService.setUniversalJcrDao(universalJcrDao);
         registerType(TestArticle.class);
     }

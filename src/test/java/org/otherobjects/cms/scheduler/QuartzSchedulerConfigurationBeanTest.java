@@ -18,7 +18,7 @@ public class QuartzSchedulerConfigurationBeanTest extends AbstractSingleSpringCo
         System.out.println("Scheduler test running");
         ContextRefreshedEvent contextRefreshedEvent = new ContextRefreshedEvent(getApplicationContext());
         QuartzSchedulerConfigurationBean q = new QuartzSchedulerConfigurationBean();
-//        q.onApplicationEvent(contextRefreshedEvent);
+        q.onApplicationEvent(contextRefreshedEvent);
     }
 
 }

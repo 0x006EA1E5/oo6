@@ -31,7 +31,6 @@ import org.otherobjects.cms.events.PublishEvent;
 import org.otherobjects.cms.model.Audited;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.model.User;
-import org.otherobjects.cms.rules.RuleExecutor;
 import org.otherobjects.cms.security.SecurityTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +63,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     private ApplicationContext applicationContext;
 
     // To get access to rule engine
-    private RuleExecutor ruleExecutor;
+//    private RuleExecutor ruleExecutor;
 
     public GenericJcrDaoJackrabbit()
     {
@@ -376,11 +375,11 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         // run node through rule engine if it is a CmsNode and cancel publish if rule engine doesn't set publish flag
         if (dynaNode instanceof CmsNode)
         {
-            CmsNode nodeToInsertIntoRuleEngine = dynaNode;
-            Object[] result = ruleExecutor.runInStatelessSession(new Object[]{nodeToInsertIntoRuleEngine}, Boolean.class);
-
-            if (!(result.length > 0) || !(result[0] instanceof Boolean) || !((Boolean) result[0]).booleanValue())
-                return;
+//            CmsNode nodeToInsertIntoRuleEngine = dynaNode;
+//            Object[] result = ruleExecutor.runInStatelessSession(new Object[]{nodeToInsertIntoRuleEngine}, Boolean.class);
+//
+//            if (!(result.length > 0) || !(result[0] instanceof Boolean) || !((Boolean) result[0]).booleanValue())
+//                return;
         }
 
         jcrMappingTemplate.execute(new JcrMappingCallback()
@@ -860,8 +859,8 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         return jcrMappingTemplate;
     }
 
-    public void setRuleExecutor(RuleExecutor ruleExecutor)
-    {
-        this.ruleExecutor = ruleExecutor;
-    }
+//    public void setRuleExecutor(RuleExecutor ruleExecutor)
+//    {
+//        this.ruleExecutor = ruleExecutor;
+//    }
 }

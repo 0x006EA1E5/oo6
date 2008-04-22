@@ -13,7 +13,6 @@ import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.Date2LongTypeC
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.LongTypeConverterImpl;
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.StringTypeConverterImpl;
 import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.beans.JcrBeanService;
 import org.otherobjects.cms.jcr.BigDecimalTypeConverterImpl;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
@@ -24,7 +23,6 @@ public class TypeServiceImpl extends AbstractTypeService
     private Map<String, AtomicTypeConverter> jcrAtomicConverters;
     private Map<String, Class<?>> jcrClassMappings;
 
-    private JcrBeanService jcrBeanService;
     private AnnotationBasedTypeDefBuilder annotationBasedTypeDefBuilder;
 
     @SuppressWarnings("unchecked")
@@ -53,7 +51,7 @@ public class TypeServiceImpl extends AbstractTypeService
             throw new OtherObjectsException("Error loading annotated classes.", e);
         }
 
-        generateClasses();
+//        generateClasses();
     }
 
     @Override
@@ -78,28 +76,28 @@ public class TypeServiceImpl extends AbstractTypeService
             t2.setTypeService(this);
             registerType(t2);
         }
-        generateClasses();
+//        generateClasses();
     }
 
     /**
      * Generates classes for types not backed by an existing class.
      */
-    public void generateClasses()
-    {
-        for (TypeDef t : getTypes())
-        {
-            generateClass(t);
-        }
-    }
-
-    public void generateClass(TypeDef t)
-    {
-        if (!t.hasClass())
-        {
-            // Create bean class
-            t.setClassName(this.jcrBeanService.createCustomDynaNodeClass(t));;
-        }
-    }
+//    public void generateClasses()
+//    {
+//        for (TypeDef t : getTypes())
+//        {
+//            generateClass(t);
+//        }
+//    }
+//
+//    public void generateClass(TypeDef t)
+//    {
+//        if (!t.hasClass())
+//        {
+//            // Create bean class
+//            this.lo
+//        }
+//    }
 
     public Object getJcrConverter(String type)
     {
@@ -174,11 +172,6 @@ public class TypeServiceImpl extends AbstractTypeService
         this.jcrClassMappings.put("boolean", Boolean.class);
         this.jcrClassMappings.put("number", Long.class);
         this.jcrClassMappings.put("decimal", BigDecimal.class);
-    }
-
-    public void setJcrBeanService(JcrBeanService jcrBeanService)
-    {
-        this.jcrBeanService = jcrBeanService;
     }
 
     public void setAnnotationBasedTypeDefBuilder(AnnotationBasedTypeDefBuilder annotationBasedTypeDefBuilder)

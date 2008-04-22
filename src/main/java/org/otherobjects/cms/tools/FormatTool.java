@@ -1,6 +1,5 @@
 package org.otherobjects.cms.tools;
 
-import com.plink.plextile.TextParser;
 
 /**
  * Tool to be used from templates to aid in generating formatted text.
@@ -21,7 +20,8 @@ public class FormatTool
 
     public static String formatTextile(String textileSource, boolean alwaysEscapeHtmlSpecialChars)
     {
-        TextParser textileParser = new TextParser();
-        return textileParser.parseTextile(textileSource, !alwaysEscapeHtmlSpecialChars);
+        return textileSource;
+//        TextParser textileParser = new TextParser();
+//        return textileParser.parseTextile(textileSource, !alwaysEscapeHtmlSpecialChars);
     }
 }
