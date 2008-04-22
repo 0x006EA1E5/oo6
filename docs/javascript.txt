@@ -1,8 +1,0 @@
-http://ajaxian.com/archives/douglas-crockford-video-advanced-javascript
-http://yuiblog.com/blog/2007/06/12/module-pattern/
-http://www.dustindiaz.com/
-http://www-128.ibm.com/developerworks/web/library/wa-memleak/
-http://www.thinksharp.org/
-http://www.crockford.com/javascript/private.html
-http://developer.yahoo.com/yui/theater/
-http://javascript.crockford.com/style2.html

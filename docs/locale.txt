@@ -1,8 +1,0 @@
-There are some locale issues that depend on combinations of localised resource bundle property files
-and the locale the jvm is running under.
-To force the locale your jvm runs under you can specify this in the VM arguments in eclipses Run dialog
-
--Duser.language=en -Duser.region=GB
-
-(to force a british english locale)
-

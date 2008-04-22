@@ -1,2 +1,0 @@
-Clustering: http://blogs.sun.com/nazrul/date/20070605
-https://glassfish.dev.java.net/javaee5/build/GlassFish_LB_Cluster.html#config_lb

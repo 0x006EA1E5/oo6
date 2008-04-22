@@ -1,3 +1,0 @@
-Hot backups?
-
-How quick is a full JCR dump? Does it lock?

@@ -1,3 +1,0 @@
-http://www.infoq.com/articles/spring-2-intro
-
-OSGi: http://www.infoq.com/interviews/osgi-adrian-colyer

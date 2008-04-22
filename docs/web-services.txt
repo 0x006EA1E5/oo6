@@ -1,1 +1,0 @@
-REST: https://jersey.dev.java.net/

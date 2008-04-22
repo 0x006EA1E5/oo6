@@ -1,7 +1,0 @@
-Simple
-
-http://www.inlab.de/balance.html
-
-Good
-
-LVS
