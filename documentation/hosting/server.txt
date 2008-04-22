@@ -1,0 +1,55 @@
+Technolgies to investigate
+
+* Glassfish -- what extra does this give us?
+* Rife
+* Drupal
+* Magnolia
+
+Live site requeriments
+
+* Fully clusterable (via terracotta)
+* Persistent Sessions
+* Editable non-Java code (with backup to centrla source repo and logging)
+* Live installation of Jave code via OSGi
+* Configurable logging
+* JMX live config and monitoring
+* Perfromance stats
+* Non-connection hoggning of database connections
+* Remote shutdown, restart and redeploy
+* Clean shutdown
+
+Test environment
+
+* 2 or 3 instances running in sepraate JVMs
+* PostrgeSQL database
+* 10,000 simultaneous connections?
+* Resetable to known state
+* Performance testing tools
+* http://video.google.com/videoplay?docid=-6891978643577501895&hl=en
+* http://www.openqa.org/selenium-ide/
+
+
+Request handling
+
+* External redirects
+* Safe back support support
+* Rewritable history support
+* Don't change model with GET
+
+Web Services
+
+* REST
+* SOAP
+
+Autoring environment
+
+* Can be separate
+
+Publishing features
+
+* Simple workflow (could it be extensible?)
+* Message passing and audit log
+
+OTHERfeatures
+
+* Asynchronous mail queue

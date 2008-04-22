@@ -1,0 +1,10 @@
+What happens when site started for the first time
+-------------------------------------------------
+
+Create JCR folder (done automatically)
+Create JDBC database (done automatically)
+Generate JDBC schema (hbm2ddl plugin)
+Import JCR data (maven plugin)
+Import JDBC data (dbunit plugin)
+Generate PIN for password
+Set structure version numbers in repo and db

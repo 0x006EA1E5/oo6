@@ -1,0 +1,14 @@
+Just thoughts -- not current
+
+README.html
+pom.xml
+conf/jetty.xml
+conf/oo.properties (data paths and db settings)?
+lib/oo.jar
+lib/all other deps
+webapp/
+webapp/static/theme/otherobjects (theme or skin?)
+webapp/static/theme/site1
+webapp/static/theme/site2
+webapp/static/theme/wireframe
+data/for private data eg repos

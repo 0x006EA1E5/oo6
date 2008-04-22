@@ -1,0 +1,13 @@
+! Debug page
+
+- Based on current OO page plus:
+- JCR inc schema version
+- JDBC inc schema version pool status and connections
+- Read/write Filesystem
+- HTTP access to: google/self
+- Mail support
+- Imagemagick
+- JVM Version vendor and memory
+- Encoding and language
+- Running tasks
+

@@ -1,0 +1,139 @@
+OTHERobjects Developer Manual
+-----------------------------
+For developers looking to add custom functionality, develop plugins
+or work on OTHERobjects itself.
+
+* Getting your development setup
+* Advanced hosting
+
+! Coding Standards
+
+Check Style
+IDE format pref files
+http://qalab.sourceforge.net/index.html
+Clover
+
+! Logging (is this still true)
+
+Using slf4j not commons-logging (JCL) to avoid the classloader nightmares people have reported.
+Other libs coded against JCL are supported via bridgse.
+Advice is for loggers not to be static.
+
+
+! Data Interface
+
+The heart of any CMS is the datastore. OTHERobjects has 3 primary data stores:
+
+1. Files (and images)
+2. Database
+3. JCR
+
+There are APIs for accessing and working with the data from server side code, but what about
+external systems or from the browser?
+
+We provide a simple yet powerful REST API for updating, fetching and querying data in any of
+the supported datastores.
+
+Remember that the data stored is often part of a more complex model so different objects may
+have more or less than the standard methods.
+
+FileStore
+
+* get
+* put
+* delete
+* list (type? sort? paging?)
+
+Database
+
+* get: type/id
+* put
+* delete
+* list
+
+JCR
+
+* get: path or uuid
+* put: path
+* delete
+* list
+
+Need to be able to register custom controller login for model objects
+Need onChange events
+
+-------------------------------------------------
+! Using Git
+-------------------------------------------------
+
+Install Git:
+
+* OS X: http://code.google.com/p/git-osx-installer/
+
+Set global git properties:
+
+[code]
+git config --global user.name "Rich Aston"
+git config --global user.email rich@othermedia.com
+git config --global color.diff auto
+git config --global color.status auto
+git config --global color.branch auto
+# OS X Only:
+# git config --global merge.tool opendiff
+[/code]
+
+If your github username is not your system username then add this to  your .ssh/config file:
+
+[code]
+Host github.com
+    User raston
+[/code]
+
+Checkout otherobjects:
+
+cd projects
+git clone git@github.com:raston/otherobjects.git
+
+Common commands:
+
+See: http://www.kernel.org/pub/software/scm/git/docs/everyday.html
+
+Keeping in sync with gitbuh:
+
+git pull
+git push
+
+
+-------------------------------------------------
+! Getting started
+-------------------------------------------------
+
+You will need the requirements for running a site. See the Designer manual for info on
+getting this setup.
+
+!! Dev environment
+
+git clone git@github.com:raston/otherobjects.git
+cd otherobjects
+# Recreate files that are not checked in to VCS
+grails upgrade
+# Install required plugins
+grails intstall-plugin required-plugins/grails-acegi-0.2.zip
+
+-------------------------------------------------
+! IDE setup
+-------------------------------------------------
+
+If you are using IntelliJ and you want to be able to see and navigate the groovy sources while debugging do the
+following:
+
+# Go to Settings > Project Settings > Global Libraries > GRAILS
+# find the groovy-all jar
+#click 'Attach sources'
+#point it to the src/main folder of a groovy distribution you unpacked somewhere (preferably one that has the same
+ version number as the groovy-all jar
+
+-------------------------------------------------
+! Creating the plugin
+-------------------------------------------------
+
+

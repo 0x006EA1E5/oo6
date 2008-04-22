@@ -1,0 +1,27 @@
+Use code.google.com
+Link in with ohloh for metrics
+Offer sign up for interest in free courses
+Easy bug and feature request reporting
+Newsletter
+Forums
+Demo screencasts
+Demo projects
+Live example
+Logos: Java powered, OSI
+
+! Design Ideas
+
+http://litmusapp.com/
+
+! Where to host
+
+1. OTHERmedia
+2. Amazon EC2 (Prebulid AMI/data store help)
+3. Hosting partners:
+
+http://www.slicehost.com/
+http://rimuhosting.com/
+http://www.jsp-servlet.net/
+http://hostsyst.com/
+http://eapps.com/
+

@@ -1,0 +1,9 @@
+Moving an OO5.3 site to OO6
+
+* Database data
+* Objects
+* Actions
+* Tools
+* Services
+* Templates
+

@@ -1,0 +1,5 @@
+Can we integrate with stock-photo library to pull in photography?
+Yes: http://istockphoto.com/webservices/xmlrpc_doc/
+
+Flickr API Key for rich@media70.com: 46e1080c218c61290171fb035d87558e
+Shared secret: 8c9b8266dec4fee8

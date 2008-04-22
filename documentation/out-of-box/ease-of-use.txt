@@ -1,0 +1,8 @@
+TODO Web-based setup for simple sites
+TODO External sytem check page:
+* File store and permissions check
+* Database
+* JCR
+* SVN
+TODO Configuration summary page
+TODO Hot backup and restore

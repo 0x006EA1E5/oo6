@@ -1,0 +1,16 @@
+How to build first site
+-----------------------
+
+Pre-requisites:
+
+* Java 1.5
+
+How to start:
+
+1. Download otherobjects-runtime and unzip
+2. Run start.sh (which fires up jetty)
+3. You are given URL and auto-generated security PIN code (so never left exposed)
+
+http://localhost:8080/ -- sample home page with congrats message and warning to visitors
+http://localhost:8080/go/workbench/ -- admin login URL
+http://localhost:8080/go/debug/ -- current status -- local and auth users only

@@ -1,0 +1,21 @@
+Setup Wizard
+------------
+
+For slightly more advanced users it would be nice to walkthrough
+site setup on first run:
+
+1. Download otherobjects-runtime and unzip
+2. Run start.sh (which fires up jetty)
+3. You are given URL and security PIN code (so never left exposed)
+4. Go to URL and enter PIN
+5. Confirm data paths and database settings
+6. Set admin details
+7. Congrats page with link to home page and admin
+
+Configration options
+
+* Data directory
+* Admin email and telephone (recommended)
+* Mail server (recommended)
+* JDBC settings (optional -- use embedded H2)
+* JCR settings (optional -- not even sure if needed)

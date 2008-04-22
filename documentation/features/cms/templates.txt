@@ -1,0 +1,23 @@
+Templates
+---------
+
+Pages are assembled from templates. 
+
+Layouts define the struture of the page (2-col, 3-col etc.)
+Blocks  define an are of the page (header, advert, main content etc.)
+
+A Template consists of a Layout template and an arrangement of Block Templates.
+
+Using templates
+---------------
+
+Each template is designed for one or more primary site objects.
+
+By default the template with the same name as the object is used. For example,
+when rendering an Article object, the template name Article is used.
+
+Templates can be overridden in the following places:
+
+* Per folder (and descendents)
+* Per object
+* Per link (is this a good idea?)

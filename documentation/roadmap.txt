@@ -1,0 +1,34 @@
+Milestone 4 (otherobjects-0.4)
+==============================
+
+Integrate Grails as the core web application framework.
+
+Remove non-core functionality (and defer all CMS features) to create
+a solid, documentated and stable base for future releases to build upon.
+
+Key features
+
+* JDBC support via GORM
+* JCR support with publishing and auditing
+* Workbench editor for both JCR/JDBC
+* Fully integrated full-text search
+* URL and Domain Security configured via workbench
+* REST API for all workbench features
+* GSP as view technology
+* Ext 2.0 as UI technology
+* Lazy session creation
+* Lazy DB connections
+
+Deferred
+--------
+
+Mail support
+Image support
+DataFile support
+Scripting support
+Performance infomation
+Caching
+SiteMap generator
+Smart Folders
+CMS Bookmarklet
+Data intergity checks -- images on disk, flies on disk, extrenal links OK
