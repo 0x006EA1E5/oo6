@@ -10,9 +10,9 @@
 		<intercept-url pattern="/otherobjects/workbench/api/**" access="ROLE_USER" />
 		<intercept-url pattern="/otherobjects/workbench/login.html" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/otherobjects/workbench/**" access="IS_AUTHENTICATED_REMEMBERED" />
-		<intercept-url pattern="/go/workbench/api/**" access="ROLE_USER" />
-		<intercept-url pattern="/go/workbench/login.html" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<intercept-url pattern="/go/workbench/**" access="IS_AUTHENTICATED_REMEMBERED" />
+<!--		<intercept-url pattern="/go/workbench/api/**" access="ROLE_USER" />-->
+<!--		<intercept-url pattern="/go/workbench/login.html" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
+<!--		<intercept-url pattern="/go/workbench/**" access="IS_AUTHENTICATED_REMEMBERED" />-->
 		<intercept-url pattern="/go/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<form-login login-page="/go/workbench/login.html" />
