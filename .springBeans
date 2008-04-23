@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beansProjectDescription>
 	<version>1</version>
-	<pluginVersion><![CDATA[2.0.2.v200712142013]]></pluginVersion>
+	<pluginVersion><![CDATA[2.0.4.v200803111444]]></pluginVersion>
 	<configSuffixes>
 		<configSuffix><![CDATA[xml]]></configSuffix>
 	</configSuffixes>
+	<enableImports><![CDATA[false]]></enableImports>
 	<configs>
 		<config>src/main/resources/otherobjects.resources/config/applicationContext-bootstrap.xml</config>
 		<config>src/main/resources/otherobjects.resources/config/applicationContext-configuration.xml</config>
@@ -15,7 +16,6 @@
 		<config>src/main/resources/otherobjects.resources/config/applicationContext-messages.xml</config>
 		<config>src/main/resources/otherobjects.resources/config/applicationContext-types.xml</config>
 		<config>src/main/resources/otherobjects.resources/config/otherobjects-servlet.xml</config>
-		<config>src/main/resources/otherobjects.resources/config/applicationContext-security.xml</config>
 	</configs>
 	<configSets>
 		<configSet>
@@ -23,6 +23,15 @@
 			<allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
 			<incomplete>false</incomplete>
 			<configs>
+				<config>src/main/resources/otherobjects.resources/config/applicationContext-bootstrap.xml</config>
+				<config>src/main/resources/otherobjects.resources/config/applicationContext-configuration.xml</config>
+				<config>src/main/resources/otherobjects.resources/config/applicationContext-freemarker.xml</config>
+				<config>src/main/resources/otherobjects.resources/config/applicationContext-hibernate.xml</config>
+				<config>src/main/resources/otherobjects.resources/config/applicationContext-jackrabbit.xml</config>
+				<config>src/main/resources/otherobjects.resources/config/applicationContext-javamail.xml</config>
+				<config>src/main/resources/otherobjects.resources/config/applicationContext-messages.xml</config>
+				<config>src/main/resources/otherobjects.resources/config/applicationContext-types.xml</config>
+				<config>src/main/resources/otherobjects.resources/config/otherobjects-servlet.xml</config>
 			</configs>
 		</configSet>
 	</configSets>

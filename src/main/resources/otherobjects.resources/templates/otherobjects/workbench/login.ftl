@@ -1,13 +1,15 @@
+<#import "/oo.ftl" as oo>
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>OTHERobjects Workbench</title>
-<script type="text/javascript" src="/resources/otherobjects.resources/static/firebug/firebug.js"></script>
-<script type="text/javascript" src="/resources/otherobjects.resources/static/extjs/src/ext-base.js"></script>
-<script type="text/javascript" src="/resources/otherobjects.resources/static/extjs/src/ext-all.js"></script>
-<link rel="stylesheet" type="text/css" href="/resources/otherobjects.resources/static/extjs/src/ext-all.css" />
+<@oo.js "/otherobjects/static/libs/firebug/firebug.js"/>
+<@oo.js "/otherobjects/static/libs/extjs/src/ext-base.js"/>
+<@oo.js "/otherobjects/static/libs/extjs/src/ext-all-debug.js"/>
+<@oo.css "/otherobjects/static/libs/extjs/src/ext-all.css"/>
 </head>
 
 <body>

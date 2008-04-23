@@ -352,6 +352,16 @@ Admin : http://localhost:8080/go/workbench/
     </section>
   </chapter>
 
+  <chapter>
+    <title>Creating custom controllers</title>
+
+    <para>Can use standard freemarker system.</para>
+
+    <para>How to return string/binary directly from the controller.</para>
+
+    <para>How to bind to URLS.</para>
+  </chapter>
+
   <chapter id="performance">
     <title>Performance tuning</title>
 

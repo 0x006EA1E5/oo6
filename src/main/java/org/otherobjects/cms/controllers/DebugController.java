@@ -66,7 +66,7 @@ public class DebugController extends MultiActionController
             imageMagickError = "Could not find ImageMagick binary: " + e.getMessage();
         }
 
-        ModelAndView mav = new ModelAndView("otherobjects/debug/debug");
+        ModelAndView mav = new ModelAndView("/debug/debug.ftl");
         mav.addObject("imageMagickError", imageMagickError);
         mav.addObject("imageMagickVersion", imageMagickVersion);
         return mav;
@@ -117,7 +117,7 @@ public class DebugController extends MultiActionController
             }
         });
 
-        ModelAndView mav = new ModelAndView("otherobjects/debug/database");
+        ModelAndView mav = new ModelAndView("/debug/database.ftl");
         mav.addObject("rowsHtml", rowsHtml);
         mav.addObject("sql", sql);
         return mav;
@@ -155,7 +155,7 @@ public class DebugController extends MultiActionController
             }
         });
 
-        ModelAndView mav = new ModelAndView("otherobjects/debug/jcr");
+        ModelAndView mav = new ModelAndView("/debug/jcr.ftl");
         mav.addObject("nodesHtml", nodesHtml);
         mav.addObject("xpath", xpath);
         return mav;

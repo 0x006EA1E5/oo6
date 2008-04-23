@@ -135,7 +135,61 @@
   <chapter>
     <title>Building templates</title>
 
-    <para></para>
+    <para>Template paths</para>
+
+    <para>Reserved folder names: otherobjects, internal, debug</para>
+  </chapter>
+
+  <chapter>
+    <title>A note about paths</title>
+
+    <para>With resources spread across multiple projects (your site,
+    OTHERobjects and your plugins), potentially across multiple servers (a
+    static server or external data server) and running in different
+    environments (development, staging and production) it can become very
+    difficult to handle paths.</para>
+
+    <para>We aim to simplify this by having a single path naming convention
+    for all resources which is then resolved to the correct locations.</para>
+
+    <para>What you need from a Resource:</para>
+
+    <para>internalPath -- unique path reference that remains constant</para>
+
+    <para>filePath -- path of the file on disk (if appropriate)</para>
+
+    <para>externalUrl -- externally accessible URL (if appropriate)</para>
+
+    <para>inputStream -- for reading data (guaranteed to always work)</para>
+
+    <para>outputSteram -- for writing data (if appropraite)</para>
+
+    <para>In addition, specfic resources may have their own addtional
+    paths.</para>
+
+    <para>Internal path format:</para>
+
+    <para>/module/type/resource.ext</para>
+
+    <para>/site/static/image.png</para>
+
+    <para>/otherobjects/template/header.ftl</para>
+
+    <para>/site/data/uploaded-image-123.jpg</para>
+
+    <para>/plugins/polls/static/graph.png</para>
+
+    <para>Note if the path represents a directory it MUST end with a
+    slash.</para>
+  </chapter>
+
+  <chapter>
+    <title>Defining custom template directives</title>
+
+    <para>Replacement for tools in OO. Can be done in macros or in Java.
+    Groovy too?</para>
+
+    <para>http://freemarker.sourceforge.net/docs/dgui_misc_userdefdir.html</para>
   </chapter>
 
   <chapter>
@@ -151,6 +205,8 @@
     when not)</para>
 
     <para>data -- data files when served locally</para>
+
+    <para>plugins -- reseved for plugins</para>
 
     <para>debug -- diagnostics information </para>
   </chapter>

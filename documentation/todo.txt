@@ -1,6 +1,7 @@
 Current List
 ------------
 
+* Unified resource access (static/templates/scripts/datafiles)
 * Put data (jcr/db/files) in sensible places
 * Test OO working as a plugin
 * Restore documentation pipeline (via docbook or website)

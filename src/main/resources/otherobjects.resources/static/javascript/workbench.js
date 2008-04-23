@@ -40,11 +40,7 @@ OO.Workbench = function()
 		
         init : function()
 		{
-			// Setup DWR error handler
-			dwr.engine.setErrorHandler(errorHandler);
-
-			
-            // Set up workbench layout
+			// Set up workbench layout
 			layout = new Ext.BorderLayout(document.body, {
 	            north: {split:false, initialSize: 25, minSize: 60, maxSize: 60, titlebar: false, collapsible: false, animate: false},	                    
 				west: {split:true, collapsed: false, initialSize: 200, minSize: 200, maxSize: 500, collapsible: true, animate: false, autoScroll:true},

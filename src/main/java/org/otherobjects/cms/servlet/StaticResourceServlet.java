@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
  * <br>TODO Check content types
  * <br>TODO Adapt to mapped path correctly
  * <br>TODO Check this works in non-Jetty containers
+ * <br>TODO Return string error messages to browser on failures
  * 
  * @author rich
  */
@@ -43,18 +44,21 @@ public class StaticResourceServlet extends HttpServlet
         if (path == null)
             return;
 
-        // FIXME Security check: so that configuration data can't be served
-        if ((!path.contains("/static/") && !path.contains("/templates/")) || path.contains(".."))
+        //  Security check: so that non-static data is not served
+        if (!path.contains("/static/") && !path.contains("..")) {
+            this.logger.warn("Prevented access to non-static resource: {}", path);
+            resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;
+        }
 
-        this.logger.info("Requested static resource: {}", path);
-
+        
         // FIXME Is there a faster way of serving these?
         // FIXME Cache?
         InputStream in = getClass().getResourceAsStream(path);
         if (in == null)
         {
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            this.logger.info("Static resource not found: {}", path);
             return;
         }
 
@@ -76,6 +80,7 @@ public class StaticResourceServlet extends HttpServlet
                 out.write(buffer, 0, len);
             }
             out.flush();
+            this.logger.info("Served static resource: {}", path);
         }
         catch (Exception e)
         {
