@@ -21,6 +21,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.StatementCallback;
+import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
@@ -53,7 +54,7 @@ public class DebugController extends MultiActionController
         try
         {
             //TODO Make bin path a config property
-            String binPath = "/usr/bin/";
+            String binPath = "/opt/local/bin/";
 
             String command = binPath + "convert --version";
 
@@ -69,6 +70,7 @@ public class DebugController extends MultiActionController
         ModelAndView mav = new ModelAndView("/debug/debug.ftl");
         mav.addObject("imageMagickError", imageMagickError);
         mav.addObject("imageMagickVersion", imageMagickVersion);
+        mav.addObject("userDetails", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return mav;
     }
 
@@ -93,20 +95,19 @@ public class DebugController extends MultiActionController
                 {
                     html.append("<table>");
                     ResultSet resultSet = stmt.executeQuery(sql);
-                    
+
                     // Add in header rows
                     html.append("\n<tr>");
-                    for(int col = 1; col <= resultSet.getMetaData().getColumnCount(); col++)
+                    for (int col = 1; col <= resultSet.getMetaData().getColumnCount(); col++)
                         html.append("<th>" + resultSet.getMetaData().getColumnName(col) + "</th>");
                     html.append("</tr>");
-                    
-                    
+
                     while (resultSet.next())
                     {
                         html.append("\n<tr>");
-                        for(int col = 1; col <= resultSet.getMetaData().getColumnCount(); col++)
+                        for (int col = 1; col <= resultSet.getMetaData().getColumnCount(); col++)
                             html.append("<td>" + resultSet.getString(col) + "</td>");
-                        
+
                         html.append("</tr>");
                     }
                     html.append("</table>");

@@ -1,3 +1,7 @@
+ <#--<#assign jetest=JspTaglibs["http://www.springframework.org/security/tags"]>
+  <@jetest.authentication operation="username" /> -->
+
+
 <style type="text/css">
 .ok {color:green;}
 .fail {color:red;}
@@ -11,7 +15,7 @@
 <h2>Status</h2>
 
 <table>
-    <tr><td>User</td><td class="info">Guest User? [<a href="">Logout</a>]</td></tr>
+    <tr><td>User</td><td class="info">Guest User? [<a href="/go/logout.html">Logout</a>] JE ${userDetails}  </td></tr>
 </table>
 
 <h2>Pre-requisites</h2>
