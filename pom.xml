@@ -735,10 +735,14 @@
 			<version>3.2</version>
 		</dependency>
 		<dependency>
-			<groupId>org.acegisecurity</groupId>
-			<artifactId>acegi-security-tiger</artifactId>
-			<version>1.0.4</version>
-			<exclusions>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-core-tiger</artifactId>
+		    <version>2.0.0</version>
+		    <exclusions>
+		    	<exclusion>
+					<artifactId>spring-core</artifactId>
+					<groupId>org.springframework</groupId>
+				</exclusion>
 				<exclusion>
 					<artifactId>spring-aop</artifactId>
 					<groupId>org.springframework</groupId>
@@ -759,16 +763,43 @@
 					<artifactId>spring-support</artifactId>
 					<groupId>org.springframework</groupId>
 				</exclusion>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>log4j</groupId>
-					<artifactId>log4j</artifactId>
-				</exclusion>
 			</exclusions>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.acegisecurity</groupId>-->
+<!--			<artifactId>acegi-security-tiger</artifactId>-->
+<!--			<version>1.0.4</version>-->
+<!--			<exclusions>-->
+<!--				<exclusion>-->
+<!--					<artifactId>spring-aop</artifactId>-->
+<!--					<groupId>org.springframework</groupId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--					<artifactId>spring-dao</artifactId>-->
+<!--					<groupId>org.springframework</groupId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--					<artifactId>spring-jdbc</artifactId>-->
+<!--					<groupId>org.springframework</groupId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--					<artifactId>spring-remoting</artifactId>-->
+<!--					<groupId>org.springframework</groupId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--					<artifactId>spring-support</artifactId>-->
+<!--					<groupId>org.springframework</groupId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--					<groupId>commons-logging</groupId>-->
+<!--					<artifactId>commons-logging</artifactId>-->
+<!--				</exclusion>-->
+<!--				<exclusion>-->
+<!--					<groupId>log4j</groupId>-->
+<!--					<artifactId>log4j</artifactId>-->
+<!--				</exclusion>-->
+<!--			</exclusions>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>javax.jcr</groupId>
 			<artifactId>jcr</artifactId>

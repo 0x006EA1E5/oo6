@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.naming.Name;
 
-import org.acegisecurity.userdetails.UserDetails;
-import org.acegisecurity.userdetails.UserDetailsService;
-import org.acegisecurity.userdetails.UsernameNotFoundException;
+import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.userdetails.UserDetailsService;
+import org.springframework.security.userdetails.UsernameNotFoundException;
 import org.otherobjects.cms.model.LdapUser;
 import org.springframework.ldap.ContextMapper;
 import org.springframework.ldap.LdapTemplate;

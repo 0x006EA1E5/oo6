@@ -10,10 +10,10 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.acegisecurity.Authentication;
-import org.acegisecurity.context.SecurityContextHolder;
-import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
-import org.acegisecurity.userdetails.UserDetails;
+import org.springframework.security.Authentication;
+import org.springframework.security.context.SecurityContextHolder;
+import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
+import org.springframework.security.userdetails.UserDetails;
 import org.apache.commons.io.IOUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.RoleDao;

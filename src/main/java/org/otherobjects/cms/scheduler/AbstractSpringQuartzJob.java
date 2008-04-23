@@ -1,6 +1,6 @@
 package org.otherobjects.cms.scheduler;
 
-import org.acegisecurity.context.SecurityContextHolder;
+import org.springframework.security.context.SecurityContextHolder;
 import org.otherobjects.cms.dao.UserDao;
 import org.otherobjects.cms.security.SecurityTool;
 import org.quartz.Job;

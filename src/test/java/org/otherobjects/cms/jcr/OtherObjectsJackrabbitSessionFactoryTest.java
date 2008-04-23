@@ -3,13 +3,13 @@ package org.otherobjects.cms.jcr;
 import javax.jcr.Session;
 import javax.jcr.Workspace;
 
-import org.acegisecurity.GrantedAuthority;
-import org.acegisecurity.GrantedAuthorityImpl;
-import org.acegisecurity.MockAuthenticationManager;
-import org.acegisecurity.context.SecurityContextHolder;
-import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
-import org.acegisecurity.providers.anonymous.AnonymousAuthenticationProvider;
-import org.acegisecurity.providers.anonymous.AnonymousAuthenticationToken;
+import org.springframework.security.GrantedAuthority;
+import org.springframework.security.GrantedAuthorityImpl;
+import org.springframework.security.MockAuthenticationManager;
+import org.springframework.security.context.SecurityContextHolder;
+import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
+import org.springframework.security.providers.anonymous.AnonymousAuthenticationProvider;
+import org.springframework.security.providers.anonymous.AnonymousAuthenticationToken;
 import org.apache.jackrabbit.core.WorkspaceImpl;
 import org.otherobjects.cms.test.BaseJcrTestCase;
 

@@ -2,8 +2,8 @@ package org.otherobjects.cms.dao;
 
 import java.util.List;
 
-import org.acegisecurity.userdetails.UserDetails;
-import org.acegisecurity.userdetails.UsernameNotFoundException;
+import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.userdetails.UsernameNotFoundException;
 import org.otherobjects.cms.model.User;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -3,18 +3,18 @@ package org.otherobjects.cms.security;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import org.acegisecurity.AccessDeniedException;
-import org.acegisecurity.Authentication;
-import org.acegisecurity.ConfigAttribute;
-import org.acegisecurity.ConfigAttributeDefinition;
-import org.acegisecurity.GrantedAuthority;
-import org.acegisecurity.afterinvocation.AfterInvocationProvider;
 import org.otherobjects.cms.model.AccessControlled;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.security.AccessDeniedException;
+import org.springframework.security.Authentication;
+import org.springframework.security.ConfigAttribute;
+import org.springframework.security.ConfigAttributeDefinition;
+import org.springframework.security.GrantedAuthority;
+import org.springframework.security.afterinvocation.AfterInvocationProvider;
 
 /**
  * This AfterInvocationProvider can be used on all domain objects that implement the {@link AccessControlled} interface and 
@@ -45,7 +45,7 @@ public class OwnershipAfterInvocationProvider implements AfterInvocationProvider
 
     public Object decide(Authentication authentication, Object object, ConfigAttributeDefinition config, Object returnedObject) throws AccessDeniedException
     {
-        Iterator iter = config.getConfigAttributes();
+        Iterator iter = config.getConfigAttributes().iterator();
 
         while (iter.hasNext())
         {
@@ -65,9 +65,9 @@ public class OwnershipAfterInvocationProvider implements AfterInvocationProvider
                     return returnedObject;
                 }
 
-                for (Iterator it = Arrays.asList(authentication.getAuthorities()).iterator(); it.hasNext();)
+                for (Object element : Arrays.asList(authentication.getAuthorities()))
                 {
-                    GrantedAuthority grantedAuthority = (GrantedAuthority) it.next();
+                    GrantedAuthority grantedAuthority = (GrantedAuthority) element;
                     if (ADMIN_ROLE.equals(grantedAuthority.getAuthority()))
                     {
                         return returnedObject;

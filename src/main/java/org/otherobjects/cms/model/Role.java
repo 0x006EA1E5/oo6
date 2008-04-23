@@ -10,13 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.acegisecurity.GrantedAuthority;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
+import org.springframework.security.GrantedAuthority;
 
 /**
  * This class is used to represent available roles in the database.
@@ -142,6 +142,12 @@ public class Role implements Serializable, GrantedAuthority, Editable
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(this.name).toString();
+    }
+
+    public int compareTo(Object o)
+    {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }

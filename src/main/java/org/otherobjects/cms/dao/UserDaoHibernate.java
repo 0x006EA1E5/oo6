@@ -2,9 +2,9 @@ package org.otherobjects.cms.dao;
 
 import java.util.List;
 
-import org.acegisecurity.userdetails.UserDetails;
-import org.acegisecurity.userdetails.UserDetailsService;
-import org.acegisecurity.userdetails.UsernameNotFoundException;
+import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.userdetails.UserDetailsService;
+import org.springframework.security.userdetails.UsernameNotFoundException;
 import org.otherobjects.cms.hibernate.GenericDaoHibernate;
 import org.otherobjects.cms.model.User;
 

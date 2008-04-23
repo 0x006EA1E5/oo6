@@ -3,7 +3,7 @@ package org.otherobjects.cms.dao;
 //
 //import java.util.List;
 //
-//import org.acegisecurity.userdetails.UserDetails;
+//import org.springframework.security.userdetails.UserDetails;
 //import org.otherobjects.cms.SingletonBeanLocator;
 //import org.otherobjects.cms.model.LdapUser;
 //import org.springframework.ldap.EntryNotFoundException;
