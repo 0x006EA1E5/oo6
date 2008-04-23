@@ -10,11 +10,11 @@ OO.ListingGrid = function() {
 	
 	function renderState(value, p, record) {
 		if(value.length==0)
-			return '<span style="padding-left:15px; background:url(/resources/otherobjects.resources/static/icons/bullet-black.png) no-repeat -2px -2px">Database</span>';
+			return '<span style="padding-left:15px; background:url(/static/otherobjects.resources/static/icons/bullet-black.png) no-repeat -2px -2px">Database</span>';
 		else if (value == true)
-			return '<span style="padding-left:15px; background:url(/resources/otherobjects.resources/static/icons/bullet-green.png) no-repeat -2px -2px">Live</span>';
+			return '<span style="padding-left:15px; background:url(/static/otherobjects.resources/static/icons/bullet-green.png) no-repeat -2px -2px">Live</span>';
 		else
-			return '<span style="padding-left:15px; background:url(/resources/otherobjects.resources/static/icons/bullet-red.png) no-repeat -2px -2px">Edited</span>';
+			return '<span style="padding-left:15px; background:url(/static/otherobjects.resources/static/icons/bullet-red.png) no-repeat -2px -2px">Edited</span>';
 				
 	}
 	function renderLabel(value, p, record) {
@@ -56,10 +56,8 @@ OO.ListingGrid = function() {
 			
 			// create the Data Store
 			ds = new Ext.data.Store({
-			    // load using script tags for cross domain, if the data in on the same domain as
-			    // this page, an HttpProxy would be better
 			    proxy: new Ext.data.HttpProxy({
-			        url: '/go/workbench/data/listing'
+			        url: '/otherobjects/data/listing'
 			    }),
 			
 			    // create reader that reads the Topic records
@@ -195,9 +193,14 @@ OO.ListingGrid = function() {
 		{
 			var r = grid.getSelectionModel().getSelected();
 			var id = r.data.id;
-			console.log("Publishing record: " + id);
-			ContentService.publishItem(id, message, function(item) { OO.ListingGrid.updateItem(item);});
-		},
+			//ContentService.publishItem(id, message, function(item) { OO.ListingGrid.updateItem(item);});
+            var url = OO.Workbench.getPath("/otherobjects/content/publish/"+id)
+            console.log("Publishing record: " + url);
+            var params = {message:message};
+            Ext.Ajax.request({url:url,method:"POST",params:params, success:function(item) {
+                OO.ListingGrid.updateItem(Ext.decode(item.responseText));
+            }});
+        },
 		
 		updateItem : function(item)
 		{

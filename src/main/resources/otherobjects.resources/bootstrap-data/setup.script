@@ -3,6 +3,10 @@ import org.otherobjects.cms.model.*;
 def dao = universalJcrDao;
 
 def createFolder(dao, path, label, cssClass) {
+   createFolder(dao, path, label, cssClass, null); 
+}
+
+def createFolder(dao, path, label, cssClass, allowedTypes) {
 	def f = dao.getByPath(path)
 	if(f) return f;
 	
@@ -10,6 +14,8 @@ def createFolder(dao, path, label, cssClass) {
 	f.jcrPath=path
 	f.label=label
 	f.cssClass=cssClass
+	if(allowedTypes)
+            f.allowedTypes = allowedTypes
 	f = dao.save(f)
 	dao.publish(f, null)
 	return f
@@ -28,9 +34,25 @@ def createDbFolder(dao, path, label, mainType) {
 	return f
 }
 
+def createArticle(dao, path, title, content) {
+
+    def a = dao.getByPath(path)
+    if (a) return a;
+
+    a = new org.otherobjects.cms.model.Article();
+    a.jcrPath = path
+    a.title = title
+    a.content = content
+
+    a = dao.save(a)
+    if (!a.published)
+        dao.publish(a, null)
+    return a
+}
+
 // Create base structure
 createFolder(dao, "/smart", "\${smartFolders.label}", "smart-folders")
-createFolder(dao, "/site", "\${site.label}", "site")
+createFolder(dao, "/site", "\${site.label}", "site", ["org.otherobjects.cms.model.Article"])
 createFolder(dao, "/libraries", "\${libraries.label}", "libraries")
 createFolder(dao, "/libraries/images", "\${libraries.images.label}", null)
 createFolder(dao, "/libraries/files", "\${libraries.files.label}", null)
@@ -46,3 +68,4 @@ createFolder(dao, "/types", "\${dataTypes.label}", "datatypes")
 createFolder(dao, "/scripts", "\${scripts.label}", "scripts")
 createFolder(dao, "/scheduler", "\${scheduler.label}", "scheduler")
 createFolder(dao, "/trash", "\${trash.label}","trash")
+createArticle(dao, "/site/welcome.html", "Welcome","<p>Welcome to OTHERobects.</p>")

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,9 +29,10 @@ import org.otherobjects.cms.util.IdentifierUtils;
 import org.otherobjects.cms.views.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
 
 /**
  * Controller providing a REST style interface to site data. Currently supports navigator structure and
@@ -44,19 +46,26 @@ import org.springframework.web.servlet.mvc.Controller;
  * 
  * @author rich
  */
-public class WorkbenchDataController implements Controller
+@Controller
+public class DataController
 {
     public static final int ITEMS_PER_PAGE = 25;
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
+    @Resource
     private UniversalJcrDao universalJcrDao;
+
+    @Resource
     private TypeService typeService;
+    
+    //@Resource
     private DaoService daoService;
 
+    @RequestMapping("/data/**")
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         String path = request.getPathInfo();
-        path = path.substring(6);
+        path = path.substring(5);
 
         if (path.contains("/types"))
             return generateTypeData(request);
@@ -68,43 +77,43 @@ public class WorkbenchDataController implements Controller
             return generateSelectData(request);
         else if (path.endsWith("/navigator"))
             return generateNavigatorData(request);
-//        else if (path.contains("/image-services/"))
-//            return generateImageServiceData(request);
+        //        else if (path.contains("/image-services/"))
+        //            return generateImageServiceData(request);
         else
             return null;
     }
 
-//    @SuppressWarnings("unchecked")
-//    private ModelAndView generateImageServiceData(HttpServletRequest request) throws IOException, SAXException, FlickrException
-//    {
-//        //String path = request.getPathInfo();
-//
-//        FlickrImageService flickr = new FlickrImageService();
-//        List results = new ArrayList();
-//        for (Photo p : flickr.getImages())
-//        {
-//            results.add(convertToCmsImage(p));
-//        }
-//
-//        ModelAndView view = new ModelAndView("jsonView");
-//        view.addObject(JsonView.JSON_DATA_KEY, results);
-//        view.addObject(JsonView.JSON_DEEP_SERIALIZE, true);
-//        return view;
-//    }
-//
-//    private CmsImage convertToCmsImage(Photo photo)
-//    {
-//        //        CmsImage image = ((CmsImageDao) this.daoService.getDao(CmsImage.class)).createCmsImage();
-//        CmsImage image = new CmsImage();//cmsImageDao.createCmsImage();
-//        image.setLabel(photo.getTitle());
-//        //image.setKeywords(photo.getTags());
-//        image.setOriginalWidth(1L);
-//        image.setOriginalHeight(1L);
-//        image.setThumbnailPath(photo.getSmallSquareUrl());
-//        image.setId(photo.getId());
-//        image.setOriginalProvider("FLICKR");
-//        return image;
-//    }
+    //    @SuppressWarnings("unchecked")
+    //    private ModelAndView generateImageServiceData(HttpServletRequest request) throws IOException, SAXException, FlickrException
+    //    {
+    //        //String path = request.getPathInfo();
+    //
+    //        FlickrImageService flickr = new FlickrImageService();
+    //        List results = new ArrayList();
+    //        for (Photo p : flickr.getImages())
+    //        {
+    //            results.add(convertToCmsImage(p));
+    //        }
+    //
+    //        ModelAndView view = new ModelAndView("jsonView");
+    //        view.addObject(JsonView.JSON_DATA_KEY, results);
+    //        view.addObject(JsonView.JSON_DEEP_SERIALIZE, true);
+    //        return view;
+    //    }
+    //
+    //    private CmsImage convertToCmsImage(Photo photo)
+    //    {
+    //        //        CmsImage image = ((CmsImageDao) this.daoService.getDao(CmsImage.class)).createCmsImage();
+    //        CmsImage image = new CmsImage();//cmsImageDao.createCmsImage();
+    //        image.setLabel(photo.getTitle());
+    //        //image.setKeywords(photo.getTags());
+    //        image.setOriginalWidth(1L);
+    //        image.setOriginalHeight(1L);
+    //        image.setThumbnailPath(photo.getSmallSquareUrl());
+    //        image.setId(photo.getId());
+    //        image.setOriginalProvider("FLICKR");
+    //        return image;
+    //    }
 
     @SuppressWarnings("unchecked")
     private ModelAndView generateItemData(HttpServletRequest request)
@@ -378,20 +387,5 @@ public class WorkbenchDataController implements Controller
         int start = Integer.parseInt(request.getParameter("start"));
         int limit = Integer.parseInt(request.getParameter("limit"));
         return (start / limit) + 1;
-    }
-
-    public void setUniversalJcrDao(UniversalJcrDao universalJcrDao)
-    {
-        this.universalJcrDao = universalJcrDao;
-    }
-
-    public void setTypeService(TypeService typeService)
-    {
-        this.typeService = typeService;
-    }
-
-    public void setDaoService(DaoService daoService)
-    {
-        this.daoService = daoService;
     }
 }

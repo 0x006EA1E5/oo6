@@ -36,8 +36,7 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
                 dao = (GenericDao) beanFactory.getBean(daoBeanName);
             else
             {
-                // FIXME Remove dynaNode stuff
-                if (type.equals("dynaNode") || type.equalsIgnoreCase("baseNode"))
+                if (type.equalsIgnoreCase("baseNode"))
                     return (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
 
                 try

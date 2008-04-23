@@ -18,8 +18,12 @@
 <@oo.js "/otherobjects/static/javascript/chooser-field.js"/>
 <@oo.css "/otherobjects/static/css/workbench.css"/>
 <@oo.css "/otherobjects/static/libs/extjs/src/ext-all.css"/>
+<script type="text/javascript">
+// Sets the context path
+// TODO Need to insert context path here.
+OO.Workbench.setPath("/");
+</script>
 </head>
-
 <body>
 
 <div id="header" class="x-layout-inactive-content">

@@ -10,7 +10,7 @@ OO.Navigator = function(){
 			// Create lazy-loading navigator
 			tree = new Ext.tree.TreePanel('navigator-tree', {
                 animate:true, 
-                loader: new Ext.tree.TreeLoader({dataUrl:'/go/workbench/data/navigator'}),
+                loader: new Ext.tree.TreeLoader({dataUrl:'/otherobjects/data/navigator'}),
                 enableDD:true,
 				enableDrop:true,
 				ddGroup : 'NavigatorDD',

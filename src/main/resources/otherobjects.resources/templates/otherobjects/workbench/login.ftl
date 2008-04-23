@@ -52,7 +52,7 @@ function(){
             }),         
             new Ext.form.Checkbox({ 
                 fieldLabel: 'Remember', 
-                name: '_acegi_security_remember_me'
+                name: '_spring_security_remember_me'
             }) 
         ); 
         form.addButton('Login', function(){ 

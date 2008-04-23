@@ -209,10 +209,10 @@ OO.EditForm = function(){
 			OO.EditForm.buildFormPart(obj.typeDef, "", hiddenFields);
 				
 		    form.addButton('Save', function() {
-				form.submit({url:'/go/workbench/form', bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });   
+				form.submit({url:'/otherobjects/form', bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });   
 			});
 		    form.addButton('Save and continue editing', function() {
-				form.submit({url:'/go/workbench/form', bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });   
+				form.submit({url:'/otherobjects/form', bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });   
 			});
 			
 			form.on('actioncomplete', function(event,action) {
@@ -264,7 +264,7 @@ OO.EditForm = function(){
     	},
 		
 		renderForm : function()	{
-			OO.EditForm.loadJsonObject("/go/workbench/data/item/" + this.dataId, OO.EditForm.buildForm);
+			OO.EditForm.loadJsonObject("/otherobjects/data/item/" + this.dataId, OO.EditForm.buildForm);
 		}
 	}
 

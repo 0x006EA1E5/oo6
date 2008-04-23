@@ -7,8 +7,8 @@
 // Define OO namespace
 var OO = OO || {};
 
-// Exm blank image
-Ext.BLANK_IMAGE_URL = '/resources/otherobjects.resources/static/extjs/images/default/s.gif';
+// Ext blank image
+Ext.BLANK_IMAGE_URL = '/static/otherobjects.resources/static/libs/extjs/images/default/s.gif';
 
 OO.Workbench = function()
 {
@@ -18,6 +18,8 @@ OO.Workbench = function()
 	var navigator; // OO.Navigator
 	var listing; // OO.Listing
 	var editForm; // OO.EditForm
+	
+	var contextPath = "";
 	
 	var currentContainer = "/site";
 	var currentItem;
@@ -29,6 +31,7 @@ OO.Workbench = function()
 		currentItem : currentItem, 
 		currentNode : null, 
 		navigator : navigator, 
+		contextPath : contextPath, 
 		
 		
 		getCurrentNode : function() {
@@ -53,7 +56,7 @@ OO.Workbench = function()
 			//welcomePanel.setUrl('/go/workbench/welcome.html',null,true); //loadOnce
 
 			// Create preview panel
-			var previewPanel = new OO.PreviewPanel('preview-panel', {autoCreate:true, src:'/go/workbench/preview-help.html', title:'Preview', background:true, closable:false});
+			var previewPanel = new OO.PreviewPanel('preview-panel', {autoCreate:true, src:'/otherobjects/workbench/preview-help.html', title:'Preview', background:true, closable:false});
 			//previewPanel.setUrl('/go/workbench/preview-help.html',null,true); //loadOnce
 			//previewPanel.on("activate", OO.Workbench.showPreview);
 	
@@ -78,22 +81,11 @@ OO.Workbench = function()
 					editForm.renderForm();
 				else if(!editForm.loaded)
 				{
-					editPanel.load('/go/workbench/edit-help.html'); //loadOnce
+					editPanel.load('/otherobjects/workbench/edit-help.html'); //loadOnce
 					editForm.loaded = true;
 				}
 			});
-			
-			// Create upload tab
-			var bulkUploadPanel = new Ext.ContentPanel('bulk-upload-panel', {autoCreate:true, title:'Bulk upload', background:true, closable:true, scripts:true, url:'/go/workbench/uploader.html'});
-			bulkUploadPanel.on("activate", function(t) {	
-				var updater = t.getUpdateManager();
-		        updater.update({
-		        	url: "/go/workbench/uploader.html",
-		        	scripts:true,
-					params:{}
-		        });
-			});
-			
+					
 			// Create version history tab
 			var versionHistoryPanel = new Ext.ContentPanel('version-history-panel', {autoCreate:true, title:'Version history', background:true, closable:true, scripts:true, url:'/go/workbench/version-history.html'});
 			versionHistoryPanel.on("activate", function(t) {	
@@ -117,7 +109,6 @@ OO.Workbench = function()
 	        layout.add('center', listingPanel);
 	        layout.add('center', editPanel);
 	        layout.add('center', previewPanel);
-	        layout.add('center', bulkUploadPanel);
 	        layout.add('center', versionHistoryPanel);
 	        // layout.add('south', new Ext.ContentPanel('status'));
 	        layout.endUpdate();
@@ -193,7 +184,18 @@ OO.Workbench = function()
 		addPanel : function(panel)
 		{
 			// TODO Good extension point?
-		}
+		},
+		
+        setPath : function(path)
+        {
+            console.log("Setting context path: " + path);
+            contextPath = path;
+        },
+
+        getPath : function(path)
+        {
+            return contextPath + path;
+        }
     };
 }();
 

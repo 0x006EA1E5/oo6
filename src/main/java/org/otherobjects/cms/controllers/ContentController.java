@@ -1,10 +1,11 @@
-package org.otherobjects.cms.workbench;
+package org.otherobjects.cms.controllers;
 
-import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsImage;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
+import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 /**
  * Default implementaion of content service.
@@ -14,11 +15,22 @@ import org.springframework.util.Assert;
  * @author rich
  */
 @SuppressWarnings("unchecked")
-public class ContentServiceImpl implements ContentService
+@Controller
+public class ContentController extends MultiActionController
 {
 //    private DaoService daoService;
     private UniversalJcrDao universalJcrDao;
 
+    
+    public BaseNode publishItem(String uuid, String message)
+    {
+        Assert.hasText("item must be specified.", uuid);
+
+        BaseNode item = universalJcrDao.get(uuid);
+        universalJcrDao.publish(item, message);
+        return item;
+    }
+    
     public CmsImage createImage(String service, String imageId)
     {
         return null;
@@ -57,66 +69,59 @@ public class ContentServiceImpl implements ContentService
 
     }
 
-    public BaseNode createItem(String container, String typeName)
-    {
-        Assert.hasText("container must be specified.", container);
-        Assert.hasText("typeName must be specified.", typeName);
+//    public BaseNode createItem(String container, String typeName)
+//    {
+//        Assert.hasText("container must be specified.", container);
+//        Assert.hasText("typeName must be specified.", typeName);
+//
+//        //TODO M2 Merge this code with NavService version
+//        //TODO Make sure this throws exception is not exists
+//        BaseNode parent = universalJcrDao.get(container);
+//
+//        BaseNode newNode = create(typeName);
+//        newNode.setPath(parent.getJcrPath());
+//        
+//        int c = 0;
+//        do
+//        {
+//            newNode.setLabel("Untitled " + (++c));
+//            String newPath = newNode.getJcrPath();
+//            boolean alreadyExists = (this.universalJcrDao.existsAtPath(newPath));
+//            if (!alreadyExists)
+//                break;
+//        }
+//        while (true);
+//
+//        return universalJcrDao.save(newNode);
+//    }
 
-        //TODO M2 Merge this code with NavService version
-        //TODO Make sure this throws exception is not exists
-        BaseNode parent = universalJcrDao.get(container);
+//    /**
+//     * FIXME Put this somewhere more generic.
+//     * 
+//     * Creates an object of the specified type.
+//     * 
+//     * @param typeName
+//     * @return
+//     */
+//    private BaseNode create(String typeName)
+//    {
+//        try
+//        {
+//            // Should this use DynaNode
+//            Object newInstance = Class.forName(typeName).newInstance();
+//            if(newInstance instanceof BaseNode)
+//            {
+//                ((BaseNode)newInstance).setOoType(typeName);
+//            }
+//            return (BaseNode) newInstance;
+//        }
+//        catch (Exception e)
+//        {
+//            throw new OtherObjectsException("Could not create object of type: " + typeName,e);
+//        }
+//    }
 
-        BaseNode newNode = create(typeName);
-        newNode.setPath(parent.getJcrPath());
-        
-        int c = 0;
-        do
-        {
-            newNode.setLabel("Untitled " + (++c));
-            String newPath = newNode.getJcrPath();
-            boolean alreadyExists = (this.universalJcrDao.existsAtPath(newPath));
-            if (!alreadyExists)
-                break;
-        }
-        while (true);
 
-        return universalJcrDao.save(newNode);
-    }
-
-    /**
-     * FIXME Put this somewhere more generic.
-     * 
-     * Creates an object of the specified type.
-     * 
-     * @param typeName
-     * @return
-     */
-    private BaseNode create(String typeName)
-    {
-        try
-        {
-            // Should this use DynaNode
-            Object newInstance = Class.forName(typeName).newInstance();
-            if(newInstance instanceof BaseNode)
-            {
-                ((BaseNode)newInstance).setOoType(typeName);
-            }
-            return (BaseNode) newInstance;
-        }
-        catch (Exception e)
-        {
-            throw new OtherObjectsException("Could not create object of type: " + typeName,e);
-        }
-    }
-
-    public BaseNode publishItem(String uuid, String message)
-    {
-        Assert.hasText("item must be specified.", uuid);
-
-        BaseNode item = universalJcrDao.get(uuid);
-        universalJcrDao.publish(item, message);
-        return item;
-    }
 
     public BaseNode restoreItemVersion(String uuid, int changeNumber, String message)
     {

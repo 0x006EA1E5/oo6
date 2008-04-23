@@ -10,4 +10,14 @@
 	
 	<bean id="annotationBasedTypeDefBuilder" class="org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder" />
 	
+	<!-- Binder -->
+	<bean id="bindService" class="org.otherobjects.cms.binding.BindServiceImpl">
+		<property name="daoService" ref="daoService" />
+		<property name="dateFormat">
+			<value>dd/MM/yy</value>
+		</property>
+	</bean>
+	
+	<bean name="daoService" class="org.otherobjects.cms.dao.DaoServiceImpl" />
+	
 </beans>

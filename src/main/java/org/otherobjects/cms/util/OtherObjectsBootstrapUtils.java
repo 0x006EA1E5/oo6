@@ -81,6 +81,7 @@ public class OtherObjectsBootstrapUtils
 
     protected User createUser()
     {
+        logger.debug("Creating Admin user and roles.");
         Role role = new Role("ROLE_ADMIN", "Adminstrator role");
         role = (Role) roleDao.save(role);
         Role role2 = new Role("ROLE_USER", "User role");
@@ -107,6 +108,7 @@ public class OtherObjectsBootstrapUtils
 
     protected void runScript(InputStream is) throws IOException
     {
+        logger.debug("Running setup scripts.");
         Binding binding = new Binding();
         binding.setProperty("universalJcrDao", universalJcrDao);
         GroovyShell shell = new GroovyShell(binding);
