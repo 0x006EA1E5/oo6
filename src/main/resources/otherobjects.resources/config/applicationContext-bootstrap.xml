@@ -4,15 +4,16 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd ">
 
 	<!-- Bootstrap -->
-	<bean name="jackrabbitSetupUtils" class="org.otherobjects.cms.util.JackrabbitSetupUtils" init-method="bootstrap">
+	<bean name="jackrabbitSetupUtils" class="org.otherobjects.cms.util.DataStoreSetupUtils" init-method="bootstrap">
 		<property name="sessionFactory" ref="&amp;sessionFactory" />
 		<property name="jcrSessionFactory" ref="jcrSessionFactory" />
 		<property name="nodeTypesConfig" value="classpath:otherobjects.resources/config/node-types.cnd" />
 	</bean>
 
-	<bean name="ooBootstrapUtils" class="org.otherobjects.cms.util.BootstrapUtils" init-method="bootstrap">
-		<property name="jcrTypeService" ref="typeService" />
-		<property name="daoService" ref="daoService" />
+	<bean name="ooBootstrapUtils" class="org.otherobjects.cms.util.OtherObjectsBootstrapUtils" init-method="bootstrap">
 		<property name="bootstrapScript" value="classpath:otherobjects.resources/bootstrap-data/setup.script" />
+		<property name="userDao" ref="userDao" />
+		<property name="roleDao" ref="roleDao" />
+		<property name="universalJcrDao" ref="universalJcrDao" />
 	</bean>
 </beans>

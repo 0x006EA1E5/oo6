@@ -3,11 +3,12 @@ package org.otherobjects.cms.util;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.PostConstruct;
 
 import org.acegisecurity.Authentication;
 import org.acegisecurity.context.SecurityContextHolder;
@@ -15,11 +16,11 @@ import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.acegisecurity.userdetails.UserDetails;
 import org.apache.commons.io.IOUtils;
 import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.dao.DaoService;
+import org.otherobjects.cms.dao.RoleDao;
 import org.otherobjects.cms.dao.UserDao;
+import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.Role;
 import org.otherobjects.cms.model.User;
-import org.otherobjects.cms.types.TypeServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -32,55 +33,38 @@ import org.springframework.core.io.Resource;
  * @author rich
  */
 @SuppressWarnings("unchecked")
-public class OtherObjectsBootstrapUtils //implements ApplicationListener
+public class OtherObjectsBootstrapUtils
 {
     private final Logger logger = LoggerFactory.getLogger(OtherObjectsBootstrapUtils.class);
 
-    private DaoService daoService;
+    private UserDao userDao;
+    private RoleDao roleDao;
+    private UniversalJcrDao universalJcrDao;
     private Resource bootstrapScript;
-    private TypeServiceImpl jcrTypeService;
-
-    private boolean standalone = false;
-
-    public void setJcrTypeService(TypeServiceImpl jcrTypeService)
-    {
-        this.jcrTypeService = jcrTypeService;
-    }
-
-    public void setBootstrapScript(Resource bootstrapScript)
-    {
-        this.bootstrapScript = bootstrapScript;
-    }
-
-    public void setDaoService(DaoService daoService)
-    {
-        this.daoService = daoService;
-    }
 
     /**
      * Run the bootstrap script.
      */
+    @PostConstruct
     public void bootstrap()
     {
         // FIXME Run on first startup only
-
         try
         {
-            UserDao userDao = (UserDao) this.daoService.getDao(User.class);
             UserDetails adminUser = userDao.loadUserByUsername("admin");
 
             // Create admin user if one does not exist and then run setup script
             if (adminUser == null)
             {
                 adminUser = createUser();
-
-                // FIXME Can this be done in a cleaner way?
+                
+                // Authenticate as new Admin user
                 Authentication authentication = new UsernamePasswordAuthenticationToken(adminUser, null, adminUser.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
                 runScript(this.bootstrapScript.getInputStream());
-                if (!standalone)
-                    runScript(new FileInputStream("src/main/resources/site.resources/bootstrap-data/setup.script"));
+                //if (!standalone)
+                //    runScript(new FileInputStream("src/main/resources/site.resources/bootstrap-data/setup.script"));
             }
         }
         catch (Exception e)
@@ -98,11 +82,9 @@ public class OtherObjectsBootstrapUtils //implements ApplicationListener
     protected User createUser()
     {
         Role role = new Role("ROLE_ADMIN", "Adminstrator role");
-        role = (Role) this.daoService.getDao(Role.class).save(role);
+        role = (Role) roleDao.save(role);
         Role role2 = new Role("ROLE_USER", "User role");
-        role2 = (Role) this.daoService.getDao(Role.class).save(role2);
-        Role role3 = new Role("ROLE_TEST", "Test role with no function");
-        role3 = (Role) this.daoService.getDao(Role.class).save(role3);
+        role2 = (Role) roleDao.save(role2);
 
         List<Role> roles = new ArrayList<Role>();
         roles.add(role);
@@ -120,25 +102,35 @@ public class OtherObjectsBootstrapUtils //implements ApplicationListener
         adminUser.setAccountLocked(false);
         adminUser.setEnabled(true);
         adminUser.setPasswordHint("See the command line output for the temporary admin password.");
-        return (User) this.daoService.getDao(User.class).save(adminUser);
+        return (User) userDao.save(adminUser);
     }
 
     protected void runScript(InputStream is) throws IOException
     {
-        //        BSFManager manager = new BSFManager();
-        //        manager.declareBean("daoService", daoService, daoService.getClass());
-        //        manager.eval("groovy", "script.groovy", 0, 0, script);
-
         Binding binding = new Binding();
-        binding.setVariable("daoService", this.daoService);
-        binding.setVariable("typeService", this.jcrTypeService);
+        binding.setProperty("universalJcrDao", universalJcrDao);
         GroovyShell shell = new GroovyShell(binding);
         String script = IOUtils.toString(is);
         shell.evaluate(script);
     }
 
-    public void setStandalone(boolean standalone)
+    public void setBootstrapScript(Resource bootstrapScript)
     {
-        this.standalone = standalone;
+        this.bootstrapScript = bootstrapScript;
+    }
+
+    public void setUserDao(UserDao userDao)
+    {
+        this.userDao = userDao;
+    }
+
+    public void setRoleDao(RoleDao roleDao)
+    {
+        this.roleDao = roleDao;
+    }
+
+    public void setUniversalJcrDao(UniversalJcrDao universalJcrDao)
+    {
+        this.universalJcrDao = universalJcrDao;
     }
 }

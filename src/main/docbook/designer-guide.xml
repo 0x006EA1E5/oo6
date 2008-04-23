@@ -139,6 +139,23 @@
   </chapter>
 
   <chapter>
+    <title>Site URL structure</title>
+
+    <para>The site URL structure is crucial to help you users gain a mental
+    model of your site hierarchy. You can generally use any folder name but a
+    few top level folders are reserved.</para>
+
+    <para>otherobjects -- main interface</para>
+
+    <para>static -- static files when served on local server (reserved even
+    when not)</para>
+
+    <para>data -- data files when served locally</para>
+
+    <para>debug -- diagnostics information </para>
+  </chapter>
+
+  <chapter>
     <title>Users and permissions</title>
 
     <para></para>

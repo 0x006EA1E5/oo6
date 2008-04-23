@@ -34,17 +34,18 @@ import org.springmodules.jcr.JcrSessionFactory;
 import ch.qos.logback.classic.Level;
 
 /**
- * Sets up an empty Jackrabbit repository. Makes sure the nodes types and live/edit 
- * workpaces are correct. 
+ * Makes sure that the data stores are correctly setup. This includes creating the Jackrabbit 
+ * repository, configuring nodes types and the live/edit workspaces. It also creates the
+ * database schema.
  * 
  * @author rich
  */
-public class JackrabbitSetupUtils
+public class DataStoreSetupUtils
 {
 //    private static final String STRUCTURE_VERSION_PROPERTY_NAME = "structureVersion";
 //    private boolean standalone = false;
 
-    private final Logger logger = LoggerFactory.getLogger(JackrabbitSetupUtils.class);
+    private final Logger logger = LoggerFactory.getLogger(DataStoreSetupUtils.class);
 
     private AnnotationSessionFactoryBean sessionFactory;
     private JcrSessionFactory jcrSessionFactory;

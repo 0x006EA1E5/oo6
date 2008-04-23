@@ -1,7 +1,6 @@
 import org.otherobjects.cms.model.*;
 
-def dao = daoService.getDao("BaseNode");
-System.err.println(dao)
+def dao = universalJcrDao;
 
 def createFolder(dao, path, label, cssClass) {
 	def f = dao.getByPath(path)
@@ -36,10 +35,10 @@ createFolder(dao, "/libraries", "\${libraries.label}", "libraries")
 createFolder(dao, "/libraries/images", "\${libraries.images.label}", null)
 createFolder(dao, "/libraries/files", "\${libraries.files.label}", null)
 createFolder(dao, "/libraries/links", "\${libraries.links.label}", null)
-def designer = createFolder(dao, "/designer", "\${designer.label}", "designer")
-createFolder(dao, "/designer/blocks", "\${designer.blocks.label}", null)
-createFolder(dao, "/designer/templates", "\${designer.templates.label}", null)
-createFolder(dao, "/designer/layouts", "\${designer.layouts.label}", null)
+//def designer = createFolder(dao, "/designer", "\${designer.label}", "designer")
+//createFolder(dao, "/designer/blocks", "\${designer.blocks.label}", null)
+//createFolder(dao, "/designer/templates", "\${designer.templates.label}", null)
+//createFolder(dao, "/designer/layouts", "\${designer.layouts.label}", null)
 def security = createFolder(dao, "/security", "\${security.label}", "security")
 createDbFolder(dao, "/security/users", "\${security.users.label}", "org.otherobjects.cms.model.User")
 createDbFolder(dao, "/security/roles", "\${security.roles.label}", "org.otherobjects.cms.model.Role")

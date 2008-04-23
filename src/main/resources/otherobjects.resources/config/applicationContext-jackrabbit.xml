@@ -48,39 +48,22 @@
 	<bean id="jcrMappingTemplate" class="org.apache.jackrabbit.ocm.spring.JcrMappingTemplate">
 		<constructor-arg index="0" ref="jcrSessionFactory" />
 		<constructor-arg index="1" ref="jcrMappingDescriptor" />
+		<!-- TODO Is is wise to allow create here? -->
+		<property name="allowCreate" value="true" />
 	</bean>
 
-	<!-- Setup 
-		<bean name="setupUtils" class="org.otherobjects.cms.util.SetupUtils" init-method="bootstrap">
-		<property name="sessionFactory" ref="&amp;sessionFactory" />
-		<property name="jcrSessionFactory" ref="jcrSessionFactory" />
-		<property name="nodeTypesConfig" value="classpath:otherobjects.resources/config/node-types.cnd" />
-		<property name="systemDataTypes" value="classpath:otherobjects.resources/bootstrap-data/jcr-data-types.xml" />
-		<property name="siteDataTypes" value="classpath:site.resources/bootstrap-data/jcr-data-types.xml" />
-		</bean>
-		
-		<bean name="bootstrapUtils" class="org.otherobjects.cms.util.BootstrapUtils" init-method="bootstrap">
-		<property name="jcrTypeService" ref="typeService" />
-		<property name="daoService" ref="daoService" />
-		<property name="bootstrapScript" value="classpath:otherobjects.resources/bootstrap-data/setup.script" />
-		</bean>
-	-->
-
-
-
-
-
-
-	<!-- DAOs
-		<bean id="dynaNodeDao" parent="baseTransactionProxy">
+	<!-- DAOs -->
+	<bean id="universalJcrDao" parent="baseTransactionProxy">
 		<property name="target">
-		<bean class="org.otherobjects.cms.dao.DynaNodeDaoJackrabbit">
-		<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
-		<property name="typeService" ref="typeService" />
-		<property name="sessionFactory" ref="jcrSessionFactory" />
-		</bean>
+			<bean class="org.otherobjects.cms.dao.UniversalJcrDaoJackrabbit">
+				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
+				<property name="typeService" ref="typeService" />
+				<property name="sessionFactory" ref="jcrSessionFactory" />
+			</bean>
 		</property>
-		</bean>
+	</bean>
+
+	<!-- 
 		
 		<bean id="universalJcrDao" parent="baseTransactionProxy">
 		<property name="target">

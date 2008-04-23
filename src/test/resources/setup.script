@@ -1,4 +1,3 @@
-def dao = daoService.getDao("DynaNode");
 
 def createFolder(dao, path, label, cssClass) {
 	def f = dao.getByPath(path)

@@ -215,6 +215,13 @@ brushed:~ rich$
 
                 <entry>http://moreunit.sourceforge.net/org.moreunit.updatesite/</entry>
               </row>
+
+              <row>
+                <entry>FreeMarker plugin</entry>
+
+                <entry>Need to manually update to plugin to latest FreeMarker
+                jar</entry>
+              </row>
             </tbody>
           </tgroup>
         </table>
