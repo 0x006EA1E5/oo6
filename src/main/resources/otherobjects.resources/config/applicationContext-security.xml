@@ -1,0 +1,26 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+ 	 		              http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.xsd">
+
+	<!--	CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON -->
+	<!--				PATTERN_TYPE_APACHE_ANT-->
+	<!--				/go/workbench/api/**=ROLE_USER-->
+	<!--				/go/workbench/login.html=IS_AUTHENTICATED_ANONYMOUSLY-->
+	<!--				/go/workbench/**=IS_AUTHENTICATED_REMEMBERED-->
+	<!--				/go**=IS_AUTHENTICATED_ANONYMOUSLY-->
+	<!--				/**=IS_AUTHENTICATED_ANONYMOUSLY-->
+	<http auto-config='true'>
+		<!-- the order of these matters, the more specific the pattern the earlier it must appear  -->
+		<intercept-url pattern="/go/workbench/api/**" access="ROLE_USER" />
+		<intercept-url pattern="/go/workbench/login.html" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/go/workbench/**" access="IS_AUTHENTICATED_REMEMBERED" />
+		<intercept-url pattern="/go/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	</http>
+	
+	<authentication-provider user-service-ref="userDao">
+		<password-encoder hash="sha" />
+	</authentication-provider>
+</beans:beans>
