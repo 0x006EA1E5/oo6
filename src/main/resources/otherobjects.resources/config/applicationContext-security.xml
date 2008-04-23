@@ -11,7 +11,7 @@
 	<!--				/go/workbench/**=IS_AUTHENTICATED_REMEMBERED-->
 	<!--				/go**=IS_AUTHENTICATED_ANONYMOUSLY-->
 	<!--				/**=IS_AUTHENTICATED_ANONYMOUSLY-->
-	<http auto-config='true'>
+	<http auto-config="true">
 		<!-- the order of these matters, the more specific the pattern the earlier it must appear  -->
 		<intercept-url pattern="/go/workbench/api/**" access="ROLE_USER" />
 		<intercept-url pattern="/go/workbench/login.html" access="IS_AUTHENTICATED_ANONYMOUSLY" />
