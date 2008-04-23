@@ -10,6 +10,7 @@
 		Automatically detect controllers in the specified package(s) annotated with @Controller.
 	-->
 	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" />
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
 	<bean class="org.springframework.web.servlet.mvc.multiaction.InternalPathMethodNameResolver" />
 	<context:component-scan base-package="org.otherobjects.cms.controllers" />
 	<context:component-scan base-package="org.otherobjects.cms.util" />
@@ -17,18 +18,17 @@
 	<!-- 
 		Site controller
 		TODO This should be a separate servlet?
-	-->
-	<bean name="siteController" class="org.otherobjects.cms.controllers.SiteController">
+	
+	<bean name="ssiteController" class="org.otherobjects.cms.controllers.SiteController">
 		<property name="handlers">
 			<map>
 				<entry key="*" value-ref="pageHandler" />
 			</map>
 		</property>
 	</bean>
+	-->
 
 	<bean name="pageHandler" class="org.otherobjects.cms.controllers.handlers.PageHandler"></bean>
-
-	<bean name="singletonBeanLocator" class="org.otherobjects.cms.SingletonBeanLocator" />
 
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<!-- TODO Extract max-upload size into a property -->
