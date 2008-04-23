@@ -56,7 +56,7 @@ function(){
             }) 
         ); 
         form.addButton('Login', function(){ 
-			form.el.dom.action='/go/j_security_check';
+			form.el.dom.action='/go/j_spring_security_check';
         	form.el.dom.submit();
         }, form); 
 		
