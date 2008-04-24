@@ -1,11 +1,19 @@
 package org.otherobjects.cms.controllers;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsImage;
+import org.otherobjects.cms.views.JsonView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
-import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Default implementaion of content service.
@@ -16,19 +24,29 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
  */
 @SuppressWarnings("unchecked")
 @Controller
-public class ContentController extends MultiActionController
+public class ContentController
 {
-//    private DaoService daoService;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Resource
     private UniversalJcrDao universalJcrDao;
 
-    
-    public BaseNode publishItem(String uuid, String message)
+    @RequestMapping("/content/publish/**")
+    public ModelAndView publishItem(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
+        String uuid = request.getPathInfo().substring(17);
+        String message = request.getParameter("message");
+        
         Assert.hasText("item must be specified.", uuid);
 
         BaseNode item = universalJcrDao.get(uuid);
+        logger.debug("Publishing item: {}", item);
         universalJcrDao.publish(item, message);
-        return item;
+        
+        ModelAndView view = new ModelAndView("jsonView");
+        view.addObject(JsonView.JSON_DATA_KEY, item);
+        view.addObject(JsonView.JSON_DEEP_SERIALIZE, true);
+        return view;
     }
     
     public CmsImage createImage(String service, String imageId)

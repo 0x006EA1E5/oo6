@@ -272,6 +272,7 @@ public class DataController
             }
         }
         view.addObject(JsonView.JSON_DATA_KEY, nodes);
+        view.addObject(JsonView.JSON_DEEP_SERIALIZE, true);
         return view;
     }
 

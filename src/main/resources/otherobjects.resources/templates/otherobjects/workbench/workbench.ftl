@@ -21,7 +21,7 @@
 <script type="text/javascript">
 // Sets the context path
 // TODO Need to insert context path here.
-OO.Workbench.setPath("/");
+OO.Workbench.setPath("");
 </script>
 </head>
 <body>

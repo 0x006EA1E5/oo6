@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!DOCTYPE jackrabbit-ocm PUBLIC "-//The Apache Software Foundation//DTD Repository//EN" "http://maven.otherobjects.org/jackrabbit-ocm.dtd">
-
 <jackrabbit-ocm>
 
 	<class-descriptor className="org.otherobjects.cms.types.TypeDef" jcrNodeType="oo:node">

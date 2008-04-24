@@ -42,7 +42,7 @@ Ext.extend(Ext.form.OOChooserField, Ext.form.TriggerField,  {
     
     setValue : function(v){
     	if(!v) {
-    		this.thumbnail.dom.src='/resources/otherobjects.resources/static/graphics/thumbnail-blank.gif';
+    		this.thumbnail.dom.src='/static/otherobjects.resources/static/graphics/thumbnail-blank.gif';
 		}
 		else if(v.id) {
     		this.thumbnail.dom.src=v.thumbnailPath
@@ -54,7 +54,7 @@ Ext.extend(Ext.form.OOChooserField, Ext.form.TriggerField,  {
     
      onRender : function(ct, position){
        	this.el = ct.createChild( {tag:'input', type:'hidden', name: this.name, id: this.name}, position);
-        this.thumbnail = ct.createChild({tag:'img', src:'/resources/otherobjects.resources/static/graphics/thumbnail-blank.gif', style:"border:1px solid #999999;"}, position);
+        this.thumbnail = ct.createChild({tag:'img', src:'/static/otherobjects.resources/static/graphics/thumbnail-blank.gif', style:"border:1px solid #999999;"}, position);
       	var actions = ct.createChild( {tag:'div'}, position);
 		var button = new Ext.Button(actions, {text:'Unselect image'});
 		button.on("click",function(e){

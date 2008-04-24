@@ -7,6 +7,7 @@ public class StringUtilsTest extends TestCase
     public void testGenerateLabel()
     {
         assertEquals("News Story", StringUtils.generateLabel("newsStory"));
+        assertEquals("In Menu", StringUtils.generateLabel("inMenu"));
     }
 
     public void testGenerateUrlCode()

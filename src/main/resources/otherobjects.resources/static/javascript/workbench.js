@@ -76,12 +76,15 @@ OO.Workbench = function()
 			var editPanel = new Ext.ContentPanel('edit-panel', {autoCreate:true, title:'Edit', background:true, closable:false});
 			editPanel.on("activate", function() {
 				
-				console.log("Activating editor", editForm.dataId);
-				if(editForm.dataId)
+				if(editForm.newDataType)
+					console.log("Activating editor", editForm.newDataType);
+				else
+					console.log("Activating editor", editForm.dataId);
+				if(editForm.dataId || editForm.newDataType)
 					editForm.renderForm();
 				else if(!editForm.loaded)
 				{
-					editPanel.load('/otherobjects/workbench/edit-help.html'); //loadOnce
+					editPanel.load('/go/workbench/edit-help.html'); //loadOnce
 					editForm.loaded = true;
 				}
 			});

@@ -1,7 +1,3 @@
- <#--<#assign jetest=JspTaglibs["http://www.springframework.org/security/tags"]>
-  <@jetest.authentication operation="username" /> -->
-
-
 <style type="text/css">
 .ok {color:green;}
 .fail {color:red;}

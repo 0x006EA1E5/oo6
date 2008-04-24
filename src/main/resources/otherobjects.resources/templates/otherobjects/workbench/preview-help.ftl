@@ -4,11 +4,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>OTHERobjects Workbench</title>
-<script type="text/javascript" src="/resources/otherobjects.resources/static/firebug/firebug.js"></script>
-<script type="text/javascript" src="/resources/otherobjects.resources/static/extjs/src/ext-base.js"></script>
-<script type="text/javascript" src="/resources/otherobjects.resources/static/extjs/src/ext-all.js"></script>
-<link rel="stylesheet" type="text/css" href="/resources/otherobjects.resources/static/workbench.css" />
-<link rel="stylesheet" type="text/css" href="/resources/otherobjects.resources/static/extjs/src/ext-all.css" />
+<@oo.js "/otherobjects/static/libs/firebug/firebug.js"/>
+<@oo.js "/otherobjects/static/libs/extjs/src/ext-base.js"/>
+<@oo.js "/otherobjects/static/libs/extjs/src/ext-all-debug.js"/>
+<@oo.css "/otherobjects/static/libs/extjs/src/ext-all.css"/>
 </head>
 
 <body>

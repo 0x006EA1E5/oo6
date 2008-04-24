@@ -10,8 +10,9 @@ OO.EditForm = function(){
 
 	var form;
 	var dataId;
+    var newDataType;
 
- 	return {
+     return {
 		
 		showFailureMessage: function(form, scope)
 		{
@@ -161,7 +162,7 @@ OO.EditForm = function(){
 	
 		buildFormPart : function(td, prefix, hiddenFields, doNotAdd)
 		{
-			console.log(td);
+			console.log(td.name);
 			var fields = [];
 			// Add fields according to typeDef
 			for(var i=0; i<td.properties.length; i++)
@@ -181,7 +182,60 @@ OO.EditForm = function(){
 			
 		},
 
-		buildForm : function(obj)
+        buildNewForm : function(typeDef)
+		{
+			// FIXME Temp dupe of buildForm for testing
+			Ext.QuickTips.init();
+
+			// Show form validation warnings next to each field
+			Ext.form.Field.prototype.msgTarget = 'side';
+
+			// Create map to store hidden fields
+			var hiddenFields = {};
+            hiddenFields["_oo_containerId"] = OO.Workbench.currentContainer;
+            hiddenFields["_oo_type"] = typeDef.name;
+
+
+            // Create form
+		    form = new Ext.form.Form({
+				labelAlign: 'left',
+				buttonAlign: 'left',
+				monitorValid: true,
+				labelWidth: 120
+		    });
+
+			// Add essential form processing support fields
+			form.add(new Ext.form.TextField({fieldLabel:'ID', name:'id', width:'200px', allowBlank:true, disabled:true}));
+
+			// Add form fields
+			OO.EditForm.buildFormPart(typeDef, "", hiddenFields);
+
+		    form.addButton('Save', function() {
+				form.submit({url:OO.Workbench.getPath('/otherobjects/form'), bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });
+			});
+		    form.addButton('Save and continue editing', function() {
+				form.submit({url:OO.Workbench.getPath('/otherobjects/form'), bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });
+			});
+
+			form.on('actioncomplete', function(event,action) {
+				// Update listing panel
+				console.log("Form saved correctly.");
+				//OO.ListingGrid.updateItem(action.result.formObject);
+				OO.Workbench.getPanel("preview-panel").setDirty(true);
+				OO.Workbench.activatePanel("listing-panel");
+			}, this);
+			//form.on('actionfailed', showFailureMessage, this);
+
+			// Remove previous form and render new one
+			Ext.get('edit-panel').dom.innerHTML='';
+		    form.render('edit-panel');
+
+			// Set form values
+			//var v = OO.EditForm.flattenObject(obj, "", []);
+			//  form.setValues(v);
+		},
+
+        buildForm : function(obj)
 		{
 			// TODO Find out about QuickTips
 			Ext.QuickTips.init();
@@ -209,10 +263,10 @@ OO.EditForm = function(){
 			OO.EditForm.buildFormPart(obj.typeDef, "", hiddenFields);
 				
 		    form.addButton('Save', function() {
-				form.submit({url:'/otherobjects/form', bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });   
+				form.submit({url:OO.Workbench.getPath('/otherobjects/form'), bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });
 			});
 		    form.addButton('Save and continue editing', function() {
-				form.submit({url:'/otherobjects/form', bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });   
+				form.submit({url:OO.Workbench.getPath('/otherobjects/form'), bindForm:true, waitMsg:'Saving Data...', params:hiddenFields });   
 			});
 			
 			form.on('actioncomplete', function(event,action) {
@@ -262,10 +316,20 @@ OO.EditForm = function(){
     	createForm : function(id) {
 			this.dataId = id;
     	},
-		
-		renderForm : function()	{
-			OO.EditForm.loadJsonObject("/otherobjects/data/item/" + this.dataId, OO.EditForm.buildForm);
-		}
+
+        createNewForm : function(typeDef) {
+                     this.newDataType = typeDef;
+            this.dataId = null;
+        },
+
+
+        renderForm : function()	{
+            if(this.dataId)
+                OO.EditForm.loadJsonObject(OO.Workbench.getPath("/otherobjects/data/item/") + this.dataId, OO.EditForm.buildForm);
+            else
+                OO.EditForm.buildNewForm(this.newDataType)
+
+        }
 	}
 
 }();
