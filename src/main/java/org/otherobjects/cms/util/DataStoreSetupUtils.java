@@ -22,7 +22,7 @@ import org.apache.jackrabbit.core.nodetype.NodeTypeManagerImpl;
 import org.apache.jackrabbit.core.nodetype.NodeTypeRegistry;
 import org.apache.jackrabbit.core.nodetype.compact.CompactNodeTypeDefReader;
 import org.apache.jackrabbit.core.nodetype.compact.ParseException;
-import org.apache.jackrabbit.util.name.NamespaceMapping;
+import org.apache.jackrabbit.spi.commons.namespace.NamespaceMapping;
 import org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +42,8 @@ import ch.qos.logback.classic.Level;
  */
 public class DataStoreSetupUtils
 {
-//    private static final String STRUCTURE_VERSION_PROPERTY_NAME = "structureVersion";
-//    private boolean standalone = false;
+    //    private static final String STRUCTURE_VERSION_PROPERTY_NAME = "structureVersion";
+    //    private boolean standalone = false;
 
     private final Logger logger = LoggerFactory.getLogger(DataStoreSetupUtils.class);
 
