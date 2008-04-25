@@ -21,11 +21,18 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.StatementCallback;
+import org.springframework.security.Authentication;
+import org.springframework.security.GrantedAuthority;
+import org.springframework.security.GrantedAuthorityImpl;
 import org.springframework.security.context.SecurityContextHolder;
+import org.springframework.security.providers.anonymous.AnonymousAuthenticationProvider;
+import org.springframework.security.providers.anonymous.AnonymousAuthenticationToken;
+import org.springframework.security.util.AuthorityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import org.springmodules.jcr.JcrCallback;
+import org.springmodules.jcr.JcrSessionFactory;
 import org.springmodules.jcr.JcrTemplate;
 
 /**
@@ -42,6 +49,9 @@ public class DebugController extends MultiActionController
 {
     @Resource
     private JcrTemplate jcrTemplate;
+
+    @Resource
+    private JcrSessionFactory jcrSessionFactory;
 
     @Resource
     private JdbcTemplate jdbcTemplate;
@@ -135,7 +145,45 @@ public class DebugController extends MultiActionController
     public ModelAndView jcr(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         final String xpath = request.getParameter("xpath");
-        String nodesHtml = (String) jcrTemplate.execute(new JcrCallback()
+
+        String liveNodesHtml = null;
+        String editNodesHtml = null;
+        if (AuthorityUtils.userHasAuthority("ROLE_ADMIN"))
+        {
+            // we will get the default workspace (edit) so lets temporarily 
+            editNodesHtml = getJcrContents(xpath);
+
+            // store auth
+            Authentication adminAuth = SecurityContextHolder.getContext().getAuthentication();
+
+            AnonymousAuthenticationProvider anonymousAuthenticationProvider = new AnonymousAuthenticationProvider();
+            anonymousAuthenticationProvider.setKey("testkey");
+            AnonymousAuthenticationToken anonymousAuthenticationToken = new AnonymousAuthenticationToken("testkey", "anonymous", new GrantedAuthority[]{new GrantedAuthorityImpl("ROLE_ANONYMOUS")});
+            SecurityContextHolder.getContext().setAuthentication(anonymousAuthenticationProvider.authenticate(anonymousAuthenticationToken));
+
+            liveNodesHtml = getJcrContents(xpath);
+
+            // restore
+            SecurityContextHolder.getContext().setAuthentication(adminAuth);
+        }
+        else
+        {
+            liveNodesHtml = getJcrContents(xpath);
+        }
+
+        String nodesHtml = getJcrContents(xpath);
+
+        ModelAndView mav = new ModelAndView("/debug/jcr.ftl");
+
+        mav.addObject("liveNodesHtml", liveNodesHtml);
+        mav.addObject("editNodesHtml", editNodesHtml);
+        mav.addObject("xpath", xpath);
+        return mav;
+    }
+
+    private String getJcrContents(final String xpath)
+    {
+        return (String) jcrTemplate.execute(new JcrCallback()
         {
             public Object doInJcr(Session session) throws RepositoryException
             {
@@ -155,11 +203,6 @@ public class DebugController extends MultiActionController
                 return html.toString();
             }
         });
-
-        ModelAndView mav = new ModelAndView("/debug/jcr.ftl");
-        mav.addObject("nodesHtml", nodesHtml);
-        mav.addObject("xpath", xpath);
-        return mav;
     }
 
     protected void renderNodeInfo(StringBuffer html, Node node) throws RepositoryException

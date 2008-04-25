@@ -8,8 +8,11 @@
 <input type="submit" value="Go"/>
 <br/><small>eg /jcr:root/element(*)</small>
 </form>
+Live workspace:<br/>
+${liveNodesHtml}
 
-${nodesHtml}
+Edit workspace: <br/>
+${editNodesHtml!}
 
 <script>
 $('.properties-area').setStyle({display:'none'}).insert(' <a class="view" href="javascript:void;">[View]</a>', 'before');
