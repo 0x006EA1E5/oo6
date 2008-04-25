@@ -6,8 +6,7 @@ import javax.jcr.Session;
 
 import org.springframework.security.GrantedAuthority;
 import org.springframework.security.context.SecurityContextHolder;
-import org.apache.jackrabbit.ocm.spring.JackrabbitSessionFactory;
-
+import org.springmodules.jcr.jackrabbit.ocm.JackrabbitSessionFactory;
 
 /**
  * This class overrides {@link JackrabbitSessionFactory} / {@link org.springmodules.jcr.JcrSessionFactory} respectively just to allow for 
@@ -16,58 +15,67 @@ import org.apache.jackrabbit.ocm.spring.JackrabbitSessionFactory;
  * @author joerg
  *
  */
-public class OtherObjectsJackrabbitSessionFactory extends
-		JackrabbitSessionFactory {
-	
-	public static final String LIVE_WORKSPACE_NAME = "live";
-	public static final String EDIT_WORKSPACE_NAME = "default";
-	public static final String EDITOR_ROLE_NAME = "ROLE_ADMIN";
-	
-	private String workspaceName;
+public class OtherObjectsJackrabbitSessionFactory extends JackrabbitSessionFactory
+{
 
-	private Credentials credentials;
-	
-	@Override
-	public Session getSession() throws RepositoryException {
-		return getSession(isEditor() ? EDIT_WORKSPACE_NAME : LIVE_WORKSPACE_NAME);
-	}
-	
-	public Session getSession(String workspaceName) throws RepositoryException {
-		return addListeners(getRepository().login(credentials, workspaceName));
-	}
-	
-	private boolean isEditor()
-	{
-		//FIXME if we don't have any authentication return true so that the default (existing) workspace is returned. Otherwise JackrabbitSessionFactory.registerNamespaces() will fail
-		// when trying to obtain a session
-		if(SecurityContextHolder.getContext().getAuthentication() == null)
-			return true;
-		
-		for(GrantedAuthority ga: SecurityContextHolder.getContext().getAuthentication().getAuthorities())
-		{
-			if(ga.getAuthority().equals(EDITOR_ROLE_NAME))
-				return true;
-		}
-		return false;
-	}
+    public static final String LIVE_WORKSPACE_NAME = "live";
+    public static final String EDIT_WORKSPACE_NAME = "default";
+    public static final String EDITOR_ROLE_NAME = "ROLE_ADMIN";
 
-	public String getWorkspaceName() {
-		return workspaceName;
-	}
+    private String workspaceName;
 
-	public void setWorkspaceName(String workspaceName) {
-		super.setWorkspaceName(workspaceName);
-		this.workspaceName = workspaceName;
-	}
+    private Credentials credentials;
 
-	public Credentials getCredentials() {
-		return credentials;
-	}
+    @Override
+    public Session getSession() throws RepositoryException
+    {
+        return getSession(isEditor() ? EDIT_WORKSPACE_NAME : LIVE_WORKSPACE_NAME);
+    }
 
-	public void setCredentials(Credentials credentials) {
-		super.setWorkspaceName(workspaceName);
-		this.credentials = credentials;
-	}
+    public Session getSession(String workspaceName) throws RepositoryException
+    {
+        return addListeners(getRepository().login(credentials, workspaceName));
+    }
 
-	
+    private boolean isEditor()
+    {
+        //FIXME if we don't have any authentication return true so that the default (existing) workspace is returned. Otherwise JackrabbitSessionFactory.registerNamespaces() will fail
+        // when trying to obtain a session
+        if (SecurityContextHolder.getContext().getAuthentication() == null)
+            return true;
+
+        for (GrantedAuthority ga : SecurityContextHolder.getContext().getAuthentication().getAuthorities())
+        {
+            if (ga.getAuthority().equals(EDITOR_ROLE_NAME))
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String getWorkspaceName()
+    {
+        return workspaceName;
+    }
+
+    @Override
+    public void setWorkspaceName(String workspaceName)
+    {
+        super.setWorkspaceName(workspaceName);
+        this.workspaceName = workspaceName;
+    }
+
+    @Override
+    public Credentials getCredentials()
+    {
+        return credentials;
+    }
+
+    @Override
+    public void setCredentials(Credentials credentials)
+    {
+        super.setWorkspaceName(workspaceName);
+        this.credentials = credentials;
+    }
+
 }

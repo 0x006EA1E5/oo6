@@ -21,8 +21,6 @@ import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
 import org.apache.jackrabbit.ocm.query.Filter;
 import org.apache.jackrabbit.ocm.query.Query;
 import org.apache.jackrabbit.ocm.query.QueryManager;
-import org.apache.jackrabbit.ocm.spring.JcrMappingCallback;
-import org.apache.jackrabbit.ocm.spring.JcrMappingTemplate;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.dao.PagedList;
@@ -42,6 +40,8 @@ import org.springframework.util.Assert;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springmodules.jcr.JcrCallback;
+import org.springmodules.jcr.jackrabbit.ocm.JcrMappingCallback;
+import org.springmodules.jcr.jackrabbit.ocm.JcrMappingTemplate;
 
 /**
  * Base class for all JCR DAOs.
@@ -63,7 +63,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     private ApplicationContext applicationContext;
 
     // To get access to rule engine
-//    private RuleExecutor ruleExecutor;
+    //    private RuleExecutor ruleExecutor;
 
     public GenericJcrDaoJackrabbit()
     {
@@ -213,11 +213,17 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     }
 
     @SuppressWarnings("unchecked")
-    public T get(String id)
+    public T get(final String id)
     {
         try
         {
-            return (T) jcrMappingTemplate.getObjectByUuid(id);
+            return (T) jcrMappingTemplate.execute(new JcrMappingCallback()
+            {
+                public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+                {
+                    return manager.getObjectByUuid(id);
+                }
+            }, true);
         }
         catch (RuntimeException e)
         {
@@ -375,11 +381,11 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         // run node through rule engine if it is a CmsNode and cancel publish if rule engine doesn't set publish flag
         if (dynaNode instanceof CmsNode)
         {
-//            CmsNode nodeToInsertIntoRuleEngine = dynaNode;
-//            Object[] result = ruleExecutor.runInStatelessSession(new Object[]{nodeToInsertIntoRuleEngine}, Boolean.class);
-//
-//            if (!(result.length > 0) || !(result[0] instanceof Boolean) || !((Boolean) result[0]).booleanValue())
-//                return;
+            //            CmsNode nodeToInsertIntoRuleEngine = dynaNode;
+            //            Object[] result = ruleExecutor.runInStatelessSession(new Object[]{nodeToInsertIntoRuleEngine}, Boolean.class);
+            //
+            //            if (!(result.length > 0) || !(result[0] instanceof Boolean) || !((Boolean) result[0]).booleanValue())
+            //                return;
         }
 
         jcrMappingTemplate.execute(new JcrMappingCallback()
@@ -859,8 +865,8 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         return jcrMappingTemplate;
     }
 
-//    public void setRuleExecutor(RuleExecutor ruleExecutor)
-//    {
-//        this.ruleExecutor = ruleExecutor;
-//    }
+    //    public void setRuleExecutor(RuleExecutor ruleExecutor)
+    //    {
+    //        this.ruleExecutor = ruleExecutor;
+    //    }
 }

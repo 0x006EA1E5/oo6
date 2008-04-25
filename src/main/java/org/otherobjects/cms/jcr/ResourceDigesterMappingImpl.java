@@ -2,7 +2,7 @@ package org.otherobjects.cms.jcr;
 
 import java.io.IOException;
 
-import org.apache.jackrabbit.ocm.mapper.impl.DigesterMapperImpl;
+import org.apache.jackrabbit.ocm.mapper.impl.digester.DigesterMapperImpl;
 import org.springframework.core.io.Resource;
 
 public class ResourceDigesterMappingImpl extends DigesterMapperImpl

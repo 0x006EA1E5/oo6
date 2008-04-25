@@ -9,7 +9,7 @@ import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 import org.springframework.security.providers.anonymous.AnonymousAuthenticationProvider;
 import org.springframework.security.providers.anonymous.AnonymousAuthenticationToken;
-import org.apache.jackrabbit.ocm.spring.JcrMappingTemplate;
+import org.springmodules.jcr.jackrabbit.ocm.JcrMappingTemplate;
 import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory;

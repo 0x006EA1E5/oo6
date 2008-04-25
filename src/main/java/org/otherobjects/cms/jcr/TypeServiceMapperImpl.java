@@ -32,10 +32,10 @@ import org.apache.jackrabbit.ocm.mapper.model.ClassDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.CollectionDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.FieldDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.MappingDescriptor;
-import org.otherobjects.cms.types.TypeServiceImpl;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.cms.types.TypeServiceImpl;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
@@ -88,7 +88,7 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
     {
         ClassDescriptor cd = new ClassDescriptor();
         cd.setClassName(typeDef.getClassName());
-        cd.setJcrNodeType("oo:node");
+        cd.setJcrType("oo:node");
 
         // Add standard properties
         FieldDescriptor fd = new FieldDescriptor();
@@ -164,20 +164,23 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
                 if (propertyType.equals(PropertyDef.LIST))
                 {
                     String collectionElementType = propDef.getCollectionElementType();
-                    Assert.isTrue(StringUtils.isNotEmpty(collectionElementType), "If this property is a collection the collectionElementType needs to have been set: " + typeDef.getName() + "." + propertyName);
+                    Assert.isTrue(StringUtils.isNotEmpty(collectionElementType), "If this property is a collection the collectionElementType needs to have been set: " + typeDef.getName() + "."
+                            + propertyName);
                     CollectionDescriptor cld = new CollectionDescriptor();
                     cld.setFieldName(propDef.getName());
                     cld.setJcrName(propDef.getName());
 
                     if (collectionElementType.equals(PropertyDef.COMPONENT))
                     {
-                        Assert.isTrue(StringUtils.isNotEmpty(propDef.getRelatedType()), "If this property is a component the relatedType needs to have been set: " + typeDef.getName() + "." + propertyName);
+                        Assert.isTrue(StringUtils.isNotEmpty(propDef.getRelatedType()), "If this property is a component the relatedType needs to have been set: " + typeDef.getName() + "."
+                                + propertyName);
                         cld.setElementClassName(propDef.getRelatedTypeDef().getClassName());
                         cld.setCollectionConverter(DefaultCollectionConverterImpl.class.getName());
                     }
                     else if (collectionElementType.equals(PropertyDef.REFERENCE))
                     {
-                        Assert.isTrue(StringUtils.isNotEmpty(propDef.getRelatedType()), "If this property is a reference the relatedType needs to have been set: " + typeDef.getName() + "." + propertyName);
+                        Assert.isTrue(StringUtils.isNotEmpty(propDef.getRelatedType()), "If this property is a reference the relatedType needs to have been set: " + typeDef.getName() + "."
+                                + propertyName);
                         cld.setElementClassName(propDef.getRelatedTypeDef().getClassName());
                         cld.setCollectionConverter(BeanReferenceCollectionConverterImpl.class.getName());
                     }
@@ -191,7 +194,9 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
                 }
                 else if (propertyType.equals(PropertyDef.COMPONENT))
                 {
-                    Assert.isTrue(StringUtils.isNotEmpty(propDef.getRelatedType()), "If this property is a component the relatedType needs to have been set: " + typeDef.getName() + "." + propertyName);
+                    Assert
+                            .isTrue(StringUtils.isNotEmpty(propDef.getRelatedType()), "If this property is a component the relatedType needs to have been set: " + typeDef.getName() + "."
+                                    + propertyName);
                     BeanDescriptor bd = new BeanDescriptor();
                     bd.setFieldName(propDef.getName());
                     bd.setJcrName(propDef.getName());
@@ -200,7 +205,9 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
                 }
                 else if (propertyType.equals(PropertyDef.REFERENCE))
                 {
-                    Assert.isTrue(StringUtils.isNotEmpty(propDef.getRelatedType()), "If this property is a reference the relatedType needs to have been set: " + typeDef.getName() + "." + propertyName);
+                    Assert
+                            .isTrue(StringUtils.isNotEmpty(propDef.getRelatedType()), "If this property is a reference the relatedType needs to have been set: " + typeDef.getName() + "."
+                                    + propertyName);
                     BeanDescriptor bd = new BeanDescriptor();
                     bd.setFieldName(propDef.getName());
                     bd.setJcrName(propDef.getName());
