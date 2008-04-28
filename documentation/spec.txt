@@ -1,0 +1,221 @@
+! OTHERobjects 6
+
+!! Introduction
+
+OTHERobjects is a Java based Content Management System. It is built on top of (and integrates tightly with) the Grails web application framework which itself is based on the proven combination of Hibernate and Spring.
+
+There are 2 companion projects:
+
+* OTHERcommerce: an ecommerce framework
+* OTHERclicks: an email marketing plugin
+* OTHERintelligence: data-collection and reporting framework
+
+Almost all modern public facing websites are a delicate balance of CMS managed data and web-app behaviour. Whilst there are dozens of app frameworks and many CMS systems there is no combined solution that strikes the correct balance. Until now.
+Features
+ 
+Installation
+* Simple installer
+* Runs out-of-the-box
+* Web interface for basic sites
+
+Page data
+* Edit any data on page
+* Build up pages from blocks
+* Rearrange pages
+
+Internationalised
+* Built from the ground up to support multiple languages
+* Fully localised Admin interface in EN/DE/ES/FR?
+
+Form handling
+* Editor generated forms
+* Strong validation
+* Common validators (email, url, regexp)
+* Custom validators
+* Live validation (no round trip)
+* Automatic form handling to DB, Email, Export
+* Localised error messages
+* Enhanced forms support for components, references and lists
+* Support for JDBC, JCR, LDAP objects
+* Context sensitive help and dynamic forms
+* JCR based properties and pick-lists
+
+Intelligence
+* Tight integration with Google Analytics
+* Dashboard showing recent activity and logged in users
+
+Integration
+* SOAP/REST workbench interfaces
+* Receive SMS/Email
+
+Communication
+* Send templated HTML emails
+* Send SMS
+
+Security
+* Lock down sections of the site to authorised users
+* Assign roles and permissions to users
+* Model security
+* Assign editors to different site sections and model objects
+* Passwords are stored securely 
+* Login details can be remembered
+* Usernames do not have to be email addresses
+* Multiple authentication mechanisms (DB, LDAP, Web Service)
+* Auto-generated and changeable salts
+* SSL support (with sensible session handling)
+
+Data processing
+* Scheduled tasks
+* CSV/XML import and export tools
+
+Search
+* Full text search of all site data
+* Tagging for easy categorisation
+
+Navigation
+* Automatically generated Menus, breadcrumbs, sitemaps
+
+SEO
+* Human readable page urls
+* Edit metadata on any page
+* Sensible default layouts
+* Dublin-core metadata
+* Auto-generated sitemap.txt and robots.txt
+ 
+Scalable
+* Runs the smallest of sites (embedded)
+* … to the largest (clustered)
+* Dedicated DB servers
+* Dedicated static servers
+* Tested under Terracotta and Glassfish
+
+Tuned for performance
+* Proxy integration
+* Cachable pages and blocks
+* Per page weight information
+* All served content automatically GZipped and cached
+
+Media support
+* Image resizing 
+* Basic image editing
+* Flash/Quicktime embedding
+? Publishable files (needs dual file stores)
+* IPTC data support
+* Rich media FLV: http://www.jeroenwijering.com/?item=Flash_video_Player
+* Rich media MP3: http://www.1pixelout.net/code/audio-player-wordpress-plugin
+
+File library
+* Upload files
+* File contents searchable
+* Bulk upload support
+
+Link assistance
+* Search and create links easily
+* Checks for broken links
+* Link refactoring
+* Redirects
+
+Based on proven enterprise technologies
+* Java
+* Spring
+* Hibernate
+* Jackrabbit
+* Grails
+
+Stable
+* Automated testing, packaging and deployment
+* Comprehensive test coverage — over 60%
+? Easy hot backups
+* Built-in data intergrity tests (external links, files on disk)
+* Validate all user input eg type names, property names. Can't break with bad data.
+
+Intelligence
+* Search info
+* Page views per last day/last week/last month/last year. Updated hourly?
+
+Scripting support
+* Scheduled via Quartz
+* Transaction email support incl. logging and testing with Wiser: http://subethasmtp.tigris.org/wiser.html
+* Non-HTML output support (PDF, XLS, JPG, XML)
+
+Integrated with third party services
+* flickr
+* delicious
+* Custom integration possible
+
+Addition data-entry options
+* Blogger API
+* Bookmarklet
+* iPhone interface
+
+Workbench
+* Overview heads-up page
+* Drag/drop interface
+* Global search
+* Smart folders
+* Live paging,sort,search,filtering in lists
+* Folder overview page
+* Limit types per folder
+* Data specific views eg thumbnails, calendar
+* History and bookmark support
+* User-tested to spot pain points
+
+In-site editing
+* Toolbar
+* Wiki support (via Textile)
+
+Syndication support
+* Syndication support (publish and subscribe to RSS/Atom feeds)
+
+Workflows
+* Folder and page publishing
+* Extra CMS features: duplicate,delete,unpublish,activate/deactivate
+* Publishing workflow support.
+* Versioning diffs and rollbacks
+* Full audit log of changes
+* PublishingOptions: template, emargo until, exipre on, show in menu, do not index or put in sitemap, hotkey
++ History,link and bookmark support: http://www.sproutcore.com/blog
+
+Site design
+* Multiple template support
+* Block properties -- global and inplace
+? Multiple domains per server (with shared user base)
+* Live-editing of data structures
+* Navigation/titles/breadcrumbs generators
+* Redirection support
+* Widget publish/consume
+* Template designer + auto-detect templates from FS
+
+Customisation
+* All prebuilt objects can be extended
+
+Developer features
+* Dev,Test,Live environments
+* East unit,integration,functional,performance testing
+* Setup page
+* Debug page
+* Performance analysis
+* Profiler integration (or documentation)
+* Object inspector (html/string/log)
+* Integrated data generator http://www.generatedata.com/#generator and lipsum
+* Full logging of script/action/long-task/import-export
+* Logging can be tuned at runtime
+* Online DB browser
+* Online JCR browser
+* Schema migration tools
+* Automatic version numbering
+* Scripting the workbench: global search and replace. Bulk actions.
+* Tested staging workflow for site updates
+? Incremental updates (via SVN)
+* Migration tooling
+
+Performance
+* Lazy sessions
+* Cachable blocks
+* Profiled for best performance
+* Tested for memory-leaks
+
+Hosting
+* Allow simple customisation of server specific properties
+* JMX hooks for important runtime information
+? Separate workbench server
