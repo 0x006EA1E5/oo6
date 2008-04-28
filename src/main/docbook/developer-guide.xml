@@ -270,7 +270,7 @@ brushed:~ rich$
       <para>At this stage the projects you will need to checkout are:</para>
 
       <programlisting>otherobjects/trunk
-www.maureenmichaelson.com/trunk</programlisting>
+www.othermedia.com/trunk</programlisting>
 
       <para>After the checkout the Maven plugin will detect that the projects'
       dependencies and download them. Depending on the speed of your Internet
@@ -590,39 +590,55 @@ Admin : http://localhost:8080/go/workbench/
 
               <entry>Generates JavaDoc in target/site/apidocs/</entry>
             </row>
+
+            <row>
+              <entry>mvn deploy</entry>
+
+              <entry>Deploys jars to repository</entry>
+            </row>
+
+            <row>
+              <entry>mvn -Dmaven.test.skip=true deploy</entry>
+
+              <entry>Deploys jars to repository (skipping tests</entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
     </section>
 
     <section>
+      <title>Deploy settings</title>
+
+      <para>You need to add the following to ~/.m2/settings.xml</para>
+
+      <programlisting>&lt;settings xmlns="http://maven.apache.org/POM/4.0.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"&gt;
+  &lt;servers&gt;
+    &lt;server&gt;
+      &lt;id&gt;otherobjects-snapshots&lt;/id&gt;
+      &lt;username&gt;deploy&lt;/username&gt;
+      &lt;password&gt;deploy998&lt;/password&gt;
+    &lt;/server&gt;
+  &lt;/servers&gt;
+&lt;/settings&gt;</programlisting>
+    </section>
+
+    <section>
       <title>Useful resources</title>
 
-      <para>Offictial book: http://www.sonatype.com/book/</para>
+      <para>Official book: http://www.sonatype.com/book/</para>
 
       <para>Repository search: http://www.mvnrepository.com/</para>
 
       <para>Default repository: http://repo1.maven.org/maven2/</para>
 
-      <para>Our repository: http://maven.otherobjects.org/repository/</para>
-
-      <para>Host your own repository server:
+      <para>Host your own repository server (or just mirror ours):
       http://www.jfrog.org/sites/artifactory/latest/</para>
 
       <para>Plugin dev guide:
       http://maven.apache.org/guides/plugin/guide-java-plugin-development.html</para>
-    </section>
-
-    <section>
-      <title></title>
-
-      <para>asdasd</para>
-    </section>
-
-    <section>
-      <title></title>
-
-      <para></para>
     </section>
   </chapter>
 

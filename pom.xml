@@ -70,37 +70,43 @@
 			</properties>
 		</profile>
 	</profiles>
+	<distributionManagement>
+		<repository>
+			<id>otherobjects-snapshots</id>
+			<url>dav:http://maven.richaston.com:8081/artifactory/libs-snapshots</url>
+		</repository>
+	</distributionManagement>
 	<repositories>
-	    <repository>
-	        <id>central</id>
-	        <url>http://maven.richaston.com:8081/artifactory/repo</url>
-	        <snapshots>
-	            <enabled>false</enabled>
-	        </snapshots>
-	    </repository>
-	    <repository>
-	        <id>snapshots</id>
-	        <url>http://maven.richaston.com:8081/artifactory/repo</url>
-	        <releases>
-	            <enabled>false</enabled>
-	        </releases>
-	    </repository>
+		<repository>
+			<id>central</id>
+			<url>http://maven.richaston.com:8081/artifactory/repo</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>snapshots</id>
+			<url>http://maven.richaston.com:8081/artifactory/repo</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
 	</repositories>
 	<pluginRepositories>
-	    <pluginRepository>
-	        <id>central</id>
-	        <url>http://maven.richaston.com:8081/artifactory/plugins-releases</url>
-	        <snapshots>
-	            <enabled>false</enabled>
-	        </snapshots>
-	    </pluginRepository>
-	    <pluginRepository>
-	        <id>snapshots</id>
-	        <url>http://maven.richaston.com:8081/artifactory/plugins-snapshots</url>
-	        <releases>
-	            <enabled>false</enabled>
-	        </releases>
-	    </pluginRepository>
+		<pluginRepository>
+			<id>central</id>
+			<url>http://maven.richaston.com:8081/artifactory/repo</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>snapshots</id>
+			<url>http://maven.richaston.com:8081/artifactory/repo</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository>
 	</pluginRepositories>
 	<scm>
 		<connection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/trunk</connection>
@@ -108,6 +114,13 @@
 		<url>http://www.otherobjects.org/</url>
 	</scm>
 	<build>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-webdav</artifactId>
+				<version>1.0-beta-2</version>
+			</extension>
+		</extensions>
 		<plugins>
 			<!-- Fix for Cobertura 100% coverage problem. See: http://jira.codehaus.org/browse/MCOBERTURA-61 
 				<plugin>
@@ -124,38 +137,34 @@
 				</plugin>
 			-->
 			<!--  Documentation generation -->
-			<!-- 
-				<plugin>
+			<plugin>
 				<groupId>org.jboss.maven.plugins</groupId>
 				<artifactId>maven-jdocbook-plugin</artifactId>
 				<extensions>true</extensions>
 				<configuration>
-				<formats>
-				<format>
-				<formatName>pdf</formatName>
-				<stylesheetResource>
-				file:${basedir}/src/main/docbook/xslt/pdf/main-pdf.xsl
-				</stylesheetResource>
-				</format>
-				<!- 
-				<format>
-				<formatName>html</formatName>
-				</format>
-				->
-				</formats>
-				<sourceDocumentName>${docbook.name}.xml</sourceDocumentName>
-				<imageResource>
-				<directory>src/main/docbook/images</directory>
-				<targetPath>images</targetPath>
-				<filtering>false</filtering>
-				</imageResource>
-				<options>
-				<useRelativeImageUris>false</useRelativeImageUris>
-				<xincludeSupported>false</xincludeSupported>
-				</options>
+					<formats>
+						<format>
+							<formatName>pdf</formatName>
+							<stylesheetResource>file:${basedir}/src/main/docbook/xslt/pdf/main-pdf.xsl</stylesheetResource>
+						</format>
+						<!--
+						<format>
+							<formatName>html</formatName>
+						</format>
+						-->
+					</formats>
+					<sourceDocumentName>${docbook.name}.xml</sourceDocumentName>
+					<imageResource>
+						<directory>src/main/docbook/images</directory>
+						<targetPath>images</targetPath>
+						<filtering>false</filtering>
+					</imageResource>
+					<options>
+						<useRelativeImageUris>false</useRelativeImageUris>
+						<xincludeSupported>false</xincludeSupported>
+					</options>
 				</configuration>
-				</plugin>
-			-->
+			</plugin>
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
@@ -450,9 +459,9 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-		    <groupId>org.hibernate</groupId>
-		    <artifactId>hibernate-commons-annotations</artifactId>
-		    <version>3.3.0.ga</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-commons-annotations</artifactId>
+			<version>3.3.0.ga</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -761,11 +770,11 @@
 			<version>3.2.1</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.springframework.security</groupId>
-		    <artifactId>spring-security-core-tiger</artifactId>
-		    <version>2.0.0</version>
-		    <exclusions>
-		    	<exclusion>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core-tiger</artifactId>
+			<version>2.0.0</version>
+			<exclusions>
+				<exclusion>
 					<artifactId>spring-core</artifactId>
 					<groupId>org.springframework</groupId>
 				</exclusion>
@@ -819,7 +828,7 @@
 			<artifactId>jcr</artifactId>
 			<version>1.0</version>
 		</dependency>
-		 <dependency>
+		<dependency>
 			<groupId>org.apache.jackrabbit</groupId>
 			<artifactId>jackrabbit-core</artifactId>
 			<version>1.4.2</version>
@@ -839,7 +848,7 @@
 			<groupId>org.apache.jackrabbit</groupId>
 			<artifactId>jackrabbit-jcr-commons</artifactId>
 			<version>1.4.2</version>
-		</dependency>	
+		</dependency>
 		<dependency>
 			<groupId>org.springmodules.jcr</groupId>
 			<artifactId>jcr-jackrabbit-ocm</artifactId>
@@ -1008,20 +1017,20 @@
 			<version>1.1.1</version>
 		</dependency>
 		<!-- 
-		<dependency>
+			<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-ldap</artifactId>
 			<version>1.1.2</version>
-		</dependency>
-		 -->
+			</dependency>
+		-->
 		<!-- required by above spring ldap -->
 		<!-- 
-		<dependency>
+			<dependency>
 			<groupId>com.sun</groupId>
 			<artifactId>ldapbp</artifactId>
 			<version>1.0</version>
-		</dependency>
-		 -->
+			</dependency>
+		-->
 		<dependency>
 			<groupId>opensymphony</groupId>
 			<artifactId>quartz</artifactId>
