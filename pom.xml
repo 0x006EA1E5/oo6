@@ -70,17 +70,37 @@
 			</properties>
 		</profile>
 	</profiles>
-	<distributionManagement>
-		<repository>
-			<id>ssh-repository</id>
-			<url>scpexe://static.media70.com/var/maven</url>
-		</repository>
-	</distributionManagement>
+		<repositories>
+	    <repository>
+	        <id>central</id>
+	        <url>http://maven.richaston.com:8081/artifactory/repo</url>
+	        <snapshots>
+	            <enabled>false</enabled>
+	        </snapshots>
+	    </repository>
+	    <repository>
+	        <id>snapshots</id>
+	        <url>http://maven.richaston.com:8081/artifactory/repo</url>
+	        <releases>
+	            <enabled>false</enabled>
+	        </releases>
+	    </repository>
+	</repositories>
 	<pluginRepositories>
-		<pluginRepository>
-			<id>jboss</id>
-			<url>http://repository.jboss.com/maven2</url>
-		</pluginRepository>
+	    <pluginRepository>
+	        <id>central</id>
+	        <url>http://maven.richaston.com:8081/artifactory/plugins-releases</url>
+	        <snapshots>
+	            <enabled>false</enabled>
+	        </snapshots>
+	    </pluginRepository>
+	    <pluginRepository>
+	        <id>snapshots</id>
+	        <url>http://maven.richaston.com:8081/artifactory/plugins-snapshots</url>
+	        <releases>
+	            <enabled>false</enabled>
+	        </releases>
+	    </pluginRepository>
 	</pluginRepositories>
 	<scm>
 		<connection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/trunk</connection>
@@ -819,12 +839,7 @@
 			<groupId>org.apache.jackrabbit</groupId>
 			<artifactId>jackrabbit-jcr-commons</artifactId>
 			<version>1.4.2</version>
-		</dependency>
-		<!-- <dependency>
-			<groupId>org.otherobjects</groupId>
-			<artifactId>jackrabbit-ocm-spring</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency> -->
+		</dependency>	
 		<dependency>
 			<groupId>org.springmodules.jcr</groupId>
 			<artifactId>jcr-jackrabbit-ocm</artifactId>
@@ -1008,7 +1023,7 @@
 		</dependency>
 		 -->
 		<dependency>
-			<groupId>quartz</groupId>
+			<groupId>opensymphony</groupId>
 			<artifactId>quartz</artifactId>
 			<version>1.6.0</version>
 		</dependency>
