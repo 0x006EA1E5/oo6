@@ -27,7 +27,12 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
      */
     public GenericDao getDao(String type)
     {
-        GenericDao dao = daoMap.get(type);
+        GenericDao dao = null;
+        
+        // Look in configured map first
+        if(daoMap!=null)
+            daoMap.get(type);
+
         if (dao == null)
         {
 

@@ -58,7 +58,7 @@ public class DataController
     @Resource
     private TypeService typeService;
     
-    //@Resource
+    @Resource
     private DaoService daoService;
 
     @RequestMapping("/data/**")
@@ -358,6 +358,7 @@ public class DataController
 
             GenericDao genericDao = this.daoService.getDao(dbType);
 
+            Assert.notNull(genericDao, "No DAO found for: " + dbType);
             Assert.isTrue(!(genericDao instanceof GenericJcrDao), "Dao must be defined for this database object.");
 
             if (StringUtils.isNotBlank(dbQuery))

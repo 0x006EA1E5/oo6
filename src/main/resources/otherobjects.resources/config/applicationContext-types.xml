@@ -18,6 +18,7 @@
 		</property>
 	</bean>
 	
-	<bean name="daoService" class="org.otherobjects.cms.dao.DaoServiceImpl" />
+	<bean name="daoService" class="org.otherobjects.cms.dao.DaoServiceImpl">
+	</bean>
 	
 </beans>
