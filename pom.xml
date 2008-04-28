@@ -70,7 +70,7 @@
 			</properties>
 		</profile>
 	</profiles>
-		<repositories>
+	<repositories>
 	    <repository>
 	        <id>central</id>
 	        <url>http://maven.richaston.com:8081/artifactory/repo</url>
