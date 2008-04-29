@@ -13,7 +13,6 @@ import org.springframework.util.Assert;
  * It also provides {@link Properties} like access to the processed properties.
  *  
  * @author joerg
- *
  */
 public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
 {
@@ -23,7 +22,7 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
     @Override
     protected void convertProperties(Properties props)
     {
-        String environmentPrefix = getEnvironmentPrefix();
+        String environmentPrefix = getEnvironmentName();
 
         Pattern pattern = Pattern.compile("^" + environmentPrefix + "\\.");
 
@@ -40,7 +39,7 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
         }
 
         if (environmentPrefix.equals("production"))
-            jndiOverride(props);;
+            jndiOverride(props);
 
         this.mergedProperties = props;
         // TODO Auto-generated method stub
@@ -52,7 +51,7 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
         //TODO override properties with jndi settings if tehy exist
     }
 
-    private String getEnvironmentPrefix()
+    public String getEnvironmentName()
     {
         String environment;
         if (StringUtils.isNotBlank(System.getProperty(ENVIRONMENT_SYSPROP_KEY)))

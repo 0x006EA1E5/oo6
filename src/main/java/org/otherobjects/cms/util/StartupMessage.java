@@ -1,5 +1,8 @@
 package org.otherobjects.cms.util;
 
+import javax.annotation.Resource;
+
+import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEvent;
@@ -15,6 +18,9 @@ public class StartupMessage implements ApplicationListener
 {
     private final Logger logger = LoggerFactory.getLogger(StartupMessage.class);
 
+    @Resource
+    private OtherObjectsConfigurator otherObjectsConfigurator;
+    
     public void onApplicationEvent(ApplicationEvent e)
     {
         // Only do for root context refreshes
@@ -31,8 +37,9 @@ public class StartupMessage implements ApplicationListener
     		this.logger.info("");
     		this.logger.info("******************* Started up successfully ******************");
     		this.logger.info("");
-    		this.logger.info("Site  : [unknown]");
-    		this.logger.info("Admin : [unknown]");
+    		this.logger.info("Environment : {}", otherObjectsConfigurator.getEnvironmentName());
+    		this.logger.info("Site        : [unknown]");
+    		this.logger.info("Admin       : [unknown]");
     		this.logger.info("");
     		this.logger.info("**************************************************************");
     		this.logger.info("**************************************************************");
