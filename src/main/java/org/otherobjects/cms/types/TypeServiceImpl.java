@@ -13,36 +13,37 @@ import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.Date2LongTypeC
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.LongTypeConverterImpl;
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.StringTypeConverterImpl;
 import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.jcr.BigDecimalTypeConverterImpl;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.JcrTypeDef;
+import org.otherobjects.cms.util.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
 
-public class TypeServiceImpl extends AbstractTypeService
+public class TypeServiceImpl extends AbstractTypeService implements InitializingBean
 {
     private Map<String, AtomicTypeConverter> jcrAtomicConverters;
     private Map<String, Class<?>> jcrClassMappings;
 
     private AnnotationBasedTypeDefBuilder annotationBasedTypeDefBuilder;
+    private OtherObjectsConfigurator otherObjectsConfigurator;
 
     @SuppressWarnings("unchecked")
-    public void init()
+    public void afterPropertiesSet() throws Exception
     {
         reset();
 
         // FIXME Temp hack to manually load annotated types
         try
         {
-            Set<Class<?>> annotatedClasses = annotationBasedTypeDefBuilder.findAnnotatedClasses("org.otherobjects.cms.model");
-            for (Class c : annotatedClasses)
-                registerType(annotationBasedTypeDefBuilder.getTypeDef(c));
+            String otherObjectsModelPackages = otherObjectsConfigurator.getProperty("otherobjects.model.packages");
+            Assert.notNull(otherObjectsModelPackages, "No model package for otherobjects defined. Check our otherobjects.properties for a otherobjects.model.packages property");
 
-            annotatedClasses = annotationBasedTypeDefBuilder.findAnnotatedClasses("com.maureenmichaelson.site.model");
-            for (Class c : annotatedClasses)
-                registerType(annotationBasedTypeDefBuilder.getTypeDef(c));
-            annotatedClasses = annotationBasedTypeDefBuilder.findAnnotatedClasses("com.example.site.model");
-            for (Class c : annotatedClasses)
-                registerType(annotationBasedTypeDefBuilder.getTypeDef(c));
+            processPackages(otherObjectsModelPackages);
+
+            processPackages(otherObjectsConfigurator.getProperty("site.model.package"));
 
             // FIXME Add TypeDef Validator here: labelProperty, extends BaseNode etc
         }
@@ -51,7 +52,21 @@ public class TypeServiceImpl extends AbstractTypeService
             throw new OtherObjectsException("Error loading annotated classes.", e);
         }
 
-//        generateClasses();
+        //        generateClasses();
+    }
+
+    private void processPackages(String modelPackages) throws Exception
+    {
+        if (StringUtils.isBlank(modelPackages))
+            return;
+
+        for (String modelPackage : StringUtils.split(modelPackages, ','))
+        {
+            Set<Class<?>> annotatedClasses = annotationBasedTypeDefBuilder.findAnnotatedClasses(modelPackage);
+            for (Class c : annotatedClasses)
+                registerType(annotationBasedTypeDefBuilder.getTypeDef(c));
+        }
+
     }
 
     @Override
@@ -76,29 +91,28 @@ public class TypeServiceImpl extends AbstractTypeService
             t2.setTypeService(this);
             registerType(t2);
         }
-//        generateClasses();
+        //        generateClasses();
     }
 
     /**
      * Generates classes for types not backed by an existing class.
      */
-//    public void generateClasses()
-//    {
-//        for (TypeDef t : getTypes())
-//        {
-//            generateClass(t);
-//        }
-//    }
-//
-//    public void generateClass(TypeDef t)
-//    {
-//        if (!t.hasClass())
-//        {
-//            // Create bean class
-//            this.lo
-//        }
-//    }
-
+    //    public void generateClasses()
+    //    {
+    //        for (TypeDef t : getTypes())
+    //        {
+    //            generateClass(t);
+    //        }
+    //    }
+    //
+    //    public void generateClass(TypeDef t)
+    //    {
+    //        if (!t.hasClass())
+    //        {
+    //            // Create bean class
+    //            this.lo
+    //        }
+    //    }
     public Object getJcrConverter(String type)
     {
         AtomicTypeConverter atomicTypeConverter = getJcrAtomicConverters().get(type);
@@ -178,4 +192,10 @@ public class TypeServiceImpl extends AbstractTypeService
     {
         this.annotationBasedTypeDefBuilder = annotationBasedTypeDefBuilder;
     }
+
+    public void setOtherObjectsConfigurator(OtherObjectsConfigurator otherObjectsConfigurator)
+    {
+        this.otherObjectsConfigurator = otherObjectsConfigurator;
+    }
+
 }

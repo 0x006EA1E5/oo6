@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.StatementCallback;
@@ -52,6 +53,9 @@ public class DebugController extends MultiActionController
     @Resource
     private JdbcTemplate jdbcTemplate;
 
+    @Resource
+    private OtherObjectsConfigurator otherObjectsConfigurator;
+
     public ModelAndView debug(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         // Determine imageMagick status
@@ -59,8 +63,8 @@ public class DebugController extends MultiActionController
         String imageMagickVersion = null;
         try
         {
-            //TODO Make bin path a config property
-            String binPath = "/opt/local/bin/";
+            //TODO this need to be properly configured in ImageMagickResizer
+            String binPath = otherObjectsConfigurator.getProperty("otherobjects.imagemagick.bin.path");
 
             String command = binPath + "convert --version";
 
