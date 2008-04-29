@@ -18,14 +18,16 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.userdetails.UserDetails;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
+import org.springframework.security.GrantedAuthority;
+import org.springframework.security.providers.encoding.ShaPasswordEncoder;
+import org.springframework.security.userdetails.UserDetails;
 
 /**
  * This class represents the basic "user" object in AppFuse that allows for authentication
@@ -45,12 +47,15 @@ public class User implements Serializable, UserDetails, Editable
 
     private static final long serialVersionUID = -4036033332338732151L;
 
+    private static final ShaPasswordEncoder shaPasswordEncoder = new ShaPasswordEncoder();
+
     protected Long id;
     protected Integer version;
     protected String email; // required; unique
     protected String username; // required
     protected String password; // required
-    protected String confirmPassword;
+    protected String plainTextPassword; // required
+    protected String plainTextConfirmPassword;
     protected String passwordHint;
     protected String firstName; // required
     protected String lastName; // required
@@ -92,16 +97,42 @@ public class User implements Serializable, UserDetails, Editable
         return this.username;
     }
 
+    /**
+     * Returns the encoded password.
+     */
     @Column(nullable = false)
     public String getPassword()
     {
-        return this.password;
+        // Return the current hashed password unless the a new plain text one 
+        // is available
+        if (StringUtils.isNotEmpty(getPlainTextPassword()))
+        {
+            // TODO Fetch password encoder from Spring. Move this to DAO?
+            return shaPasswordEncoder.encodePassword(getPlainTextPassword(), null);
+        }
+        else
+        {
+            return this.password;
+        }
+    }
+
+    /**
+     * Transient field that sets the password in plain text. 
+     * 
+     * @return
+     */
+    @Transient
+    @Property(required = true, order = 10)
+    public String getPlainTextPassword()
+    {
+        return this.plainTextPassword;
     }
 
     @Transient
-    public String getConfirmPassword()
+    @Property(order = 11)
+    public String getPlainTextConfirmPassword()
     {
-        return this.confirmPassword;
+        return this.plainTextConfirmPassword;
     }
 
     @Column(name = "password_hint")
@@ -242,11 +273,6 @@ public class User implements Serializable, UserDetails, Editable
         this.password = password;
     }
 
-    public void setConfirmPassword(String confirmPassword)
-    {
-        this.confirmPassword = confirmPassword;
-    }
-
     public void setPasswordHint(String passwordHint)
     {
         this.passwordHint = passwordHint;
@@ -359,6 +385,16 @@ public class User implements Serializable, UserDetails, Editable
     public void setTypeDef(TypeDef typeDef)
     {
         this.typeDef = typeDef;
+    }
+
+    public void setPlainTextPassword(String plainTextPassword)
+    {
+        this.plainTextPassword = plainTextPassword;
+    }
+
+    public void setPlainTextConfirmPassword(String plainTextConfirmPassword)
+    {
+        this.plainTextConfirmPassword = plainTextConfirmPassword;
     }
 
     // the following is not needed anymore as it is done with annotations now

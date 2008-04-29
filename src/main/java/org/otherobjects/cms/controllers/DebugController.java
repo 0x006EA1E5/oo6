@@ -32,7 +32,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import org.springmodules.jcr.JcrCallback;
-import org.springmodules.jcr.JcrSessionFactory;
 import org.springmodules.jcr.JcrTemplate;
 
 /**
@@ -49,9 +48,6 @@ public class DebugController extends MultiActionController
 {
     @Resource
     private JcrTemplate jcrTemplate;
-
-    @Resource
-    private JcrSessionFactory jcrSessionFactory;
 
     @Resource
     private JdbcTemplate jdbcTemplate;
@@ -170,8 +166,6 @@ public class DebugController extends MultiActionController
         {
             liveNodesHtml = getJcrContents(xpath);
         }
-
-        String nodesHtml = getJcrContents(xpath);
 
         ModelAndView mav = new ModelAndView("/debug/jcr.ftl");
 

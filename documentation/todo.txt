@@ -1,20 +1,13 @@
 Current List
 ------------
 
+* Restore user/language controls in workbench
+* Validate method in User objects (test error messages on forms)
 * Unified resource access (static/templates/scripts/datafiles)
-* Put data (jcr/db/files) in sensible places
-* Test OO working as a plugin
-* Restore documentation pipeline (via docbook or website)
-* Complete JCR support for Components and References
-* Complete databse support
-* Grails -> Type (DB)
 * JCR Randomizer
 * JCR Pager
 * JCR limiter
 * Migration scripts for simple sites
-
-From pre-grails:
-
 * Properly remove components from listings
 * Decide on standard fields: esp id, code, label
 * Default values on types

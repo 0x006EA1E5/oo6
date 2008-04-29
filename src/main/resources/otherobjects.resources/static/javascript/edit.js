@@ -122,7 +122,7 @@ OO.EditForm = function(){
 				{
 				    var store = new Ext.data.Store({
 				        proxy: new Ext.data.HttpProxy({
-				            url: '/go/workbench/data/select/'+propDef.relatedType
+				            url: '/otherobjects/data/select/'+propDef.relatedType
 				        }),
 				
 				        // create reader that reads the records

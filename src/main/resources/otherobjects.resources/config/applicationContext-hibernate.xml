@@ -9,9 +9,9 @@
     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="configLocation" value="${hibernate.config.path}"/>
-         
+        <!-- 
         <property name="schemaUpdate" value="true" />
-        
+        -->
         <property name="hibernateProperties">
             <value>
                 hibernate.dialect=${hibernate.dialect}
@@ -37,8 +37,5 @@
     <bean id="roleDao" class="org.otherobjects.cms.dao.RoleDaoHibernate">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
-	
-	<bean id="newsItemDao" class="com.example.site.model.NewsItemDao">
-		<property name="sessionFactory" ref="sessionFactory"/>
-	</bean>
+
 </beans>

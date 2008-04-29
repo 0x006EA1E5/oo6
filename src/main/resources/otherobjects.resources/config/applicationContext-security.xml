@@ -15,11 +15,14 @@
 <!--		<intercept-url pattern="/go/workbench/**" access="IS_AUTHENTICATED_REMEMBERED" />-->
 		<intercept-url pattern="/go/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<form-login login-page="/go/workbench/login.html" />
-		<logout logout-url="/go/logout.html" logout-success-url="/otherobjects/debug/debug" />
+		<form-login login-page="/otherobjects/workbench/login.html" />
+		<logout logout-url="/go/logout.html" logout-success-url="/go" />
 	</http>
 	
 	<authentication-provider user-service-ref="userDao">
-		<password-encoder hash="sha" />
+		<password-encoder hash="sha">
+			<!-- TODO Create salt souce on startup 
+			<salt-source system-wide="123456790" /> -->
+		</password-encoder>
 	</authentication-provider>
 </beans:beans>
