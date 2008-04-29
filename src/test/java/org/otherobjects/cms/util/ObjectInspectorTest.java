@@ -1,6 +1,8 @@
-package org.otherobjects.cms.beans;
+package org.otherobjects.cms.util;
 
 import junit.framework.TestCase;
+
+import org.otherobjects.cms.beans.DummyBean;
 
 public class ObjectInspectorTest extends TestCase {
 

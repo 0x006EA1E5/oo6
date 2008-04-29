@@ -2,6 +2,7 @@ Current List
 ------------
 
 * Restore user/language controls in workbench
+* Restore changelogs on homepage
 * Validate method in User objects (test error messages on forms)
 * Unified resource access (static/templates/scripts/datafiles)
 * JCR Randomizer
@@ -14,3 +15,10 @@ Current List
 * Order of nodes after update
 * Lists: component testing, remove, reordering
 * Warning/active messages on nodes
+* Debug: state if session is created. Show total number of sessions.
+
+Later:
+
+* Salt for password encoder
+* Custom workbench pages (eg security home page)
+ 

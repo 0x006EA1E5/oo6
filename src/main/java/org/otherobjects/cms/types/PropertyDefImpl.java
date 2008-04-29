@@ -47,10 +47,6 @@ import flexjson.JSON;
  */
 public class PropertyDefImpl implements PropertyDef, Ordered
 {
-    public static final Object LIST = "list";
-    public static final Object REFERENCE = "reference";
-    public static final Object COMPONENT = "component";
-
     /** Property name. */
     private String name;
 

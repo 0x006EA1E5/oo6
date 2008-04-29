@@ -1,4 +1,4 @@
-package org.otherobjects.cms.beans;
+package org.otherobjects.cms.util;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
