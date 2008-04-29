@@ -58,7 +58,7 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
         if (StringUtils.isNotBlank(System.getProperty(ENVIRONMENT_SYSPROP_KEY)))
             environment = System.getProperty(ENVIRONMENT_SYSPROP_KEY);
         else
-            environment = "production";
+            environment = "dev";
 
         Assert.isTrue(environment.equals("dev") || environment.equals("test") || environment.equals("production"), "environment must be one of 'dev, 'test' or 'production'");
 
