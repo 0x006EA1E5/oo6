@@ -7,6 +7,14 @@ import org.otherobjects.cms.util.StringUtils;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.util.Assert;
 
+/**
+ * Global configuration access class that merges all configured properties files and then reshuffles them to use the correct environment specific 
+ * settings. These are then used to override placeholders in the application context.
+ * It also provides {@link Properties} like access to the processed properties.
+ *  
+ * @author joerg
+ *
+ */
 public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
 {
     public static final String ENVIRONMENT_SYSPROP_KEY = "otherobjects.environment";
@@ -30,9 +38,18 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
                 props.setProperty(newKey, (String) value);
             }
         }
+
+        if (environmentPrefix.equals("production"))
+            jndiOverride(props);;
+
         this.mergedProperties = props;
         // TODO Auto-generated method stub
         super.convertProperties(props);
+    }
+
+    private void jndiOverride(Properties props)
+    {
+        //TODO override properties with jndi settings if tehy exist
     }
 
     private String getEnvironmentPrefix()
@@ -50,13 +67,13 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
 
     public String getProperty(String key)
     {
-        Assert.notNull(mergedProperties, "OtherObjectsCOnfigurator not initialised. Check your setup");
+        Assert.notNull(mergedProperties, "OtherObjectsConfigurator not initialised. Check your setup");
         return mergedProperties.getProperty(key);
     }
 
     public String getProperty(String key, String defaultValue)
     {
-        Assert.notNull(mergedProperties, "OtherObjectsCOnfigurator not initialised. Check your setup");
+        Assert.notNull(mergedProperties, "OtherObjectsConfigurator not initialised. Check your setup");
         return mergedProperties.getProperty(key, defaultValue);
     }
 }
