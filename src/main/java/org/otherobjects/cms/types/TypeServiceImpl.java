@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Resource;
+
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter;
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.BooleanTypeConverterImpl;
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.Date2LongTypeConverterImpl;
@@ -28,6 +30,8 @@ public class TypeServiceImpl extends AbstractTypeService implements Initializing
     private Map<String, Class<?>> jcrClassMappings;
 
     private AnnotationBasedTypeDefBuilder annotationBasedTypeDefBuilder;
+    
+    @Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
 
     @SuppressWarnings("unchecked")
