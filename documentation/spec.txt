@@ -4,7 +4,7 @@
 
 OTHERobjects is a Java based Content Management System. It is built on top of (and integrates tightly with) the Grails web application framework which itself is based on the proven combination of Hibernate and Spring.
 
-There are 2 companion projects:
+There may be some companion projects:
 
 * OTHERcommerce: an ecommerce framework
 * OTHERclicks: an email marketing plugin
@@ -63,6 +63,7 @@ Security
 * Multiple authentication mechanisms (DB, LDAP, Web Service)
 * Auto-generated and changeable salts
 * SSL support (with sensible session handling)
+* OWASP best practice followed
 
 Data processing
 * Scheduled tasks
@@ -89,11 +90,15 @@ Scalable
 * Dedicated static servers
 * Tested under Terracotta and Glassfish
 
-Tuned for performance
+Tuned for performance & memory usage
 * Proxy integration
 * Cachable pages and blocks
-* Per page weight information
+* Per page weight (no of queries etc) information
 * All served content automatically GZipped and cached
+* YSlow guidlines for performance followed where possible
+* Profiled for best performance
+* Lazy sessions
+* Tested for memory-leaks
 
 Media support
 * Image resizing 
@@ -120,7 +125,6 @@ Based on proven enterprise technologies
 * Spring
 * Hibernate
 * Jackrabbit
-* Grails
 
 Stable
 * Automated testing, packaging and deployment
@@ -208,12 +212,6 @@ Developer features
 * Tested staging workflow for site updates
 ? Incremental updates (via SVN)
 * Migration tooling
-
-Performance
-* Lazy sessions
-* Cachable blocks
-* Profiled for best performance
-* Tested for memory-leaks
 
 Hosting
 * Allow simple customisation of server specific properties

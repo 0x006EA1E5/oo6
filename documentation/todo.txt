@@ -1,24 +1,35 @@
 Current List
 ------------
 
+* Servlet sort-out: /otherobjects and /
 * Restore user/language controls in workbench
-* Restore changelogs on homepage
-* Validate method in User objects (test error messages on forms)
-* Unified resource access (static/templates/scripts/datafiles)
-* JCR Randomizer
-* JCR Pager
-* JCR limiter
-* Migration scripts for simple sites
+* Restore validation
+  - validate method in User objects (test error messages on forms)
+* Restore changelogs on Welcome page
+* Fix audit info
+* Debug: state if session is created. Show total number of sessions.
+* Clear up basenode
+* Finish global config
+* Restore CmsImage
+* Directives in freemarker template (auto)
+
+* JCR Randomizer, Pager
+* Clean up basenode: decide on standard fields: esp id, code, label
 * Properly remove components from listings
-* Decide on standard fields: esp id, code, label
-* Default values on types
+
 * Order of nodes after update
 * Lists: component testing, remove, reordering
-* Warning/active messages on nodes
-* Debug: state if session is created. Show total number of sessions.
+* Unified resource access (static/templates/scripts/datafiles)
 
 Later:
 
 * Salt for password encoder
 * Custom workbench pages (eg security home page)
+* Migration scripts for simple sites
+* Add JBDC 
+
+Post launch:
+
+* Site L10N
+
  
