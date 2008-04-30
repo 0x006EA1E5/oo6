@@ -8,6 +8,8 @@
 	<context:annotation-config />
 
 	<bean name="singletonBeanLocator" class="org.otherobjects.cms.SingletonBeanLocator" />
+	
+	<bean id="annotatedClassesScanner" class="org.otherobjects.cms.discovery.AnnotatedClassesScannerImpl" />
 
 	<!-- For properties -->
 	<bean id="otherObjectsConfigurator" class="org.otherobjects.cms.config.OtherObjectsConfigurator">
