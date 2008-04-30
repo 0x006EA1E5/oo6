@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!-- Types -->
-	<bean name="typeService" class="org.otherobjects.cms.types.TypeServiceImpl" init-method="init">
+	<bean name="typeService" class="org.otherobjects.cms.types.TypeServiceImpl">
 		<property name="annotationBasedTypeDefBuilder" ref="annotationBasedTypeDefBuilder"></property>
 	</bean>
 	
