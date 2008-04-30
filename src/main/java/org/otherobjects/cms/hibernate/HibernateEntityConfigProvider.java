@@ -6,15 +6,12 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 
-import org.hibernate.SessionFactory;
-import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.discovery.AnnotatedClassesScanner;
 import org.otherobjects.cms.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean;
 import org.springframework.util.Assert;
 
 public class HibernateEntityConfigProvider implements InitializingBean
@@ -23,7 +20,6 @@ public class HibernateEntityConfigProvider implements InitializingBean
 
     private AnnotatedClassesScanner scanner;
     private OtherObjectsConfigurator otherObjectsConfigurator;
-    private SessionFactory sessionFactory;
 
     private Set<String> annotatedClasses;
     private String[] annotatedPackages;
@@ -38,7 +34,7 @@ public class HibernateEntityConfigProvider implements InitializingBean
         Assert.notNull(scanner, "class path scanner must be set");
         Assert.notNull(otherObjectsConfigurator, "OtherObjectsConfigurator must be set");
         List<String> packages = new ArrayList<String>();
-        packages.add(otherObjectsConfigurator.getProperty("otherobjects.entity.packages"));
+        packages.add(otherObjectsConfigurator.getProperty("otherobjects.model.packages"));
         packages.add(otherObjectsConfigurator.getProperty("site.entity.packages"));
 
         annotatedPackages = StringUtils.join(packages, ',').split(",");
@@ -48,19 +44,6 @@ public class HibernateEntityConfigProvider implements InitializingBean
         annotatedClasses = scanner.findAnnotatedClasses(annotatedPackages, Entity.class);
 
         logger.info("Found the following entities: " + StringUtils.join(annotatedClasses, ','));
-
-        System.out.println(sessionFactory.getClass().getName());
-        if (!(sessionFactory instanceof AnnotationSessionFactoryBean))
-        {
-            logger.error("can only configure a hibernate session factory of type AnnotationSessionFactoryBean");
-            throw new OtherObjectsException("can only configure a hibernate session factory of type AnnotationSessionFactoryBean");
-        }
-        else
-        {
-            ((AnnotationSessionFactoryBean) sessionFactory).setAnnotatedClasses(getAnnotatedClasses());
-            ((AnnotationSessionFactoryBean) sessionFactory).setAnnotatedPackages(annotatedPackages);
-        }
-
     }
 
     public Class[] getAnnotatedClasses() throws Exception
@@ -87,11 +70,6 @@ public class HibernateEntityConfigProvider implements InitializingBean
     public void setOtherObjectsConfigurator(OtherObjectsConfigurator otherObjectsConfigurator)
     {
         this.otherObjectsConfigurator = otherObjectsConfigurator;
-    }
-
-    public void setSessionFactory(SessionFactory sessionFactory)
-    {
-        this.sessionFactory = sessionFactory;
     }
 
 }

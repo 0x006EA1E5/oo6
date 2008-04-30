@@ -6,12 +6,18 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean" depends-on="hibernateEntityConfigProvider">
         <property name="dataSource" ref="dataSource"/>
-        <property name="configLocation" value="${hibernate.config.path}"/>
         <!-- 
+        <property name="configLocation" value="${hibernate.config.path}"/>
         <property name="schemaUpdate" value="true" />
         -->
+        <property name="annotatedClasses">
+        	<bean factory-bean="hibernateEntityConfigProvider" factory-method="getAnnotatedClasses" />
+        </property>
+        <property name="annotatedPackages">
+        	<bean factory-bean="hibernateEntityConfigProvider" factory-method="getAnnotatedPackages" />
+        </property>
         <property name="hibernateProperties">
             <value>
                 hibernate.dialect=${hibernate.dialect}
@@ -25,7 +31,12 @@
             </value>
         </property>
     </bean>
-
+	
+	<bean id="hibernateEntityConfigProvider" class="org.otherobjects.cms.hibernate.HibernateEntityConfigProvider" >
+		<property name="scanner" ref="annotatedClassesScanner" />
+		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
+	</bean>
+	
     <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>

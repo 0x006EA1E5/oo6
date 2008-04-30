@@ -29,7 +29,7 @@ public class AnnotatedClassesScannerImpl implements AnnotatedClassesScanner
             result.addAll(extractClassNames(scanner.findCandidateComponents(pkg)));
         }
 
-        return null;
+        return result;
     }
 
     private Set<String> extractClassNames(Set<BeanDefinition> beanDefinitions)
