@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
+@SuppressWarnings("unchecked")
 public class HibernateEntityConfigProvider implements InitializingBean
 {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
