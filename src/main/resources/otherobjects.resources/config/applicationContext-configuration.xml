@@ -8,7 +8,7 @@
 	<context:annotation-config />
 
 	<bean name="singletonBeanLocator" class="org.otherobjects.cms.SingletonBeanLocator" />
-	
+
 	<bean id="annotatedClassesScanner" class="org.otherobjects.cms.discovery.AnnotatedClassesScannerImpl" />
 
 	<!-- For properties -->
@@ -52,4 +52,10 @@
 		<property name="jndiTemplate" ref="jndiTemplate" />
 	</bean>
 
+	<!-- Groovy telnet shell -->
+	<bean id="groovyShellService" class="org.otherobjects.cms.scripting.groovy.GroovyShellService" init-method="initialize">
+		<property name="socket" value="6789" />
+		<!-- TODO Should not launch at startup. Could be lauched via Debug page instead. -->
+		<property name="launchAtStart" value="true" />
+	</bean>
 </beans>
