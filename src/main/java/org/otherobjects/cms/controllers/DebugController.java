@@ -1,5 +1,8 @@
 package org.otherobjects.cms.controllers;
 
+import groovy.lang.Binding;
+import groovy.lang.GroovyShell;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -52,7 +56,7 @@ public class DebugController extends MultiActionController
 
     @Resource
     private JdbcTemplate jdbcTemplate;
-
+   
     @Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
 
@@ -63,7 +67,7 @@ public class DebugController extends MultiActionController
         String imageMagickVersion = null;
         try
         {
-            //TODO this need to be properly configured in ImageMagickResizer
+              //TODO this need to be properly configured in ImageMagickResizer
             String binPath = otherObjectsConfigurator.getProperty("otherobjects.imagemagick.bin.path");
 
             String command = binPath + "convert --version";
@@ -131,6 +135,42 @@ public class DebugController extends MultiActionController
         ModelAndView mav = new ModelAndView("/debug/database.ftl");
         mav.addObject("rowsHtml", rowsHtml);
         mav.addObject("sql", sql);
+        return mav;
+    }
+
+    /**
+     * Runs Groovy script.
+     * 
+     * <p>TODO Need to restrict this to superusers only
+     * 
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    public ModelAndView script(HttpServletRequest request, HttpServletResponse response) throws Exception
+    {
+        String script = request.getParameter("script");
+
+        ModelAndView mav = new ModelAndView("/debug/script.ftl");
+        Object output = "No script run.";
+        if (StringUtils.isNotEmpty(script))
+        {
+            try
+            {
+                Binding binding = new Binding();
+                binding.setVariable("app", getApplicationContext());
+                GroovyShell shell = new GroovyShell(binding);
+                output = shell.evaluate(script);
+                mav.addObject("output", output);
+            }
+            catch (Exception e)
+            {
+                logger.error("Error running script.", e);
+                mav.addObject("exception", e);
+            }
+        }
+        mav.addObject("script", script);
         return mav;
     }
 

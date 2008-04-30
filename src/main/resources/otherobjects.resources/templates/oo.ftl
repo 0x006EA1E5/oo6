@@ -32,3 +32,13 @@ Convenience macro to insert favicon link tag.
 <#macro favicon internalPath>
 <link rel="shortcut icon" href="<@oo.url internalPath/>" type="image/x-icon">
 </#macro>  
+
+<#-- 
+Renders an exception stack trace. Output is not wrapped in a block element.
+-->
+<#macro renderException exception>
+<strong>${exception.class.name} : ${exception.message}</strong><br/>
+<#list exception.stackTrace as trace>
+${trace}<br/>
+</#list>
+</#macro>  
