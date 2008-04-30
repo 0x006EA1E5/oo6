@@ -722,6 +722,17 @@ Admin : http://localhost:8080/go/workbench/
   </chapter>
 
   <chapter>
+    <title>Debuging</title>
+
+    <para>Some info at otherobjects/debug.</para>
+
+    <para>Can run test scripts at otherobjects/debug/script</para>
+
+    <para>Can also telnet in to an interactive Groovy shell on port
+    6789.</para>
+  </chapter>
+
+  <chapter>
     <title>Using JBoss Drools</title>
 
     <para>OTHERobjects integrates with JBoss Drools by means of a simple Java

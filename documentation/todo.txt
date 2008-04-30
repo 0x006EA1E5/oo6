@@ -12,6 +12,7 @@ Current List
 * Finish global config
 * Restore CmsImage
 * Directives in freemarker template (auto)
+* Show stdout on script debug page
 
 * JCR Randomizer, Pager
 * Clean up basenode: decide on standard fields: esp id, code, label
@@ -20,6 +21,7 @@ Current List
 * Order of nodes after update
 * Lists: component testing, remove, reordering
 * Unified resource access (static/templates/scripts/datafiles)
+* Restore single and bulk image uploads
 
 Later:
 

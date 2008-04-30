@@ -55,7 +55,8 @@
 	<!-- Groovy telnet shell -->
 	<bean id="groovyShellService" class="org.otherobjects.cms.scripting.groovy.GroovyShellService" init-method="initialize">
 		<property name="socket" value="6789" />
-		<!-- TODO Should not launch at startup. Could be lauched via Debug page instead. -->
+		<!-- TODO Should not launch at startup. Could be lauched via Debug page instead. Also 
+		should have port as a setting and if null should we should disable this service. -->
 		<property name="launchAtStart" value="true" />
 	</bean>
 </beans>
