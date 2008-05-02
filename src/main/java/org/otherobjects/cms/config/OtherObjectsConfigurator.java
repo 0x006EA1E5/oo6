@@ -4,6 +4,8 @@ import java.util.Properties;
 import java.util.regex.Pattern;
 
 import org.otherobjects.cms.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.util.Assert;
 
@@ -16,7 +18,16 @@ import org.springframework.util.Assert;
  */
 public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
 {
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
     public static final String ENVIRONMENT_SYSPROP_KEY = "otherobjects.environment";
+
+    public static final String SERVER_NAME_KEY = "site.server.name";
+    public static final String CONTEXT_PATH_KEY = "site.server.context.path";
+    public static final String DEFAULT_PORT_KEY = "site.server.default.port";
+    public static final String DEFAULT_SECURE_PORT_KEY = "site.server.default.secureport";
+
+    public static final String JNDI_BASE = "java:comp/env/";
+
     private Properties mergedProperties;
 
     @Override
@@ -42,13 +53,12 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
             jndiOverride(props);
 
         this.mergedProperties = props;
-        // TODO Auto-generated method stub
         super.convertProperties(props);
     }
 
     private void jndiOverride(Properties props)
     {
-        //TODO override properties with jndi settings if tehy exist
+        //TODO override properties with jndi settings if they exist
     }
 
     public String getEnvironmentName()

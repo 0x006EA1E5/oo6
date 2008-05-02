@@ -39,19 +39,6 @@
 		<property name="removeAbandonedTimeout" value="60" />
 	</bean>
 
-	<!-- Global info  -->
-	<bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate" />
-
-	<bean id="globalInfo" class="org.otherobjects.cms.context.GlobalInfoBean">
-		<property name="propertyResources">
-			<list>
-				<value>classpath:otherobjects.resources/config/server.properties</value>
-				<value>classpath:site.resources/config/pom.properties</value>
-			</list>
-		</property>
-		<property name="jndiTemplate" ref="jndiTemplate" />
-	</bean>
-
 	<!-- Groovy telnet shell -->
 	<bean id="groovyShellService" class="org.otherobjects.cms.scripting.groovy.GroovyShellService" init-method="initialize">
 		<property name="socket" value="6789" />

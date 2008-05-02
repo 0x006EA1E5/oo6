@@ -8,7 +8,7 @@ import java.net.URLEncoder;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.otherobjects.cms.context.GlobalInfoBean;
+import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.context.RequestContextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -166,9 +166,9 @@ public class Url
         }
 
         if (isSsl())
-            return Integer.parseInt(GlobalInfoBean.getInstance().getProperty(GlobalInfoBean.DEFAULT_SECURE_PORT_KEY));
+            return Integer.parseInt(getOtherObjectsConfigurator().getProperty(OtherObjectsConfigurator.DEFAULT_SECURE_PORT_KEY));
         else
-            return Integer.parseInt(GlobalInfoBean.getInstance().getProperty(GlobalInfoBean.DEFAULT_PORT_KEY));
+            return Integer.parseInt(getOtherObjectsConfigurator().getProperty(OtherObjectsConfigurator.DEFAULT_PORT_KEY));
     }
 
     private HttpServletRequest getOngoingRequest()
@@ -307,6 +307,22 @@ public class Url
         if (!modifieable)
             throw new OtherObjectsException(ILLEGAL_MODIFIATION_MESSAGE);
         this.ssl = ssl;
+    }
+
+    public static OtherObjectsConfigurator getOtherObjectsConfigurator()
+    {
+        OtherObjectsConfigurator otherObjectsConfigurator = null;
+        try
+        {
+            otherObjectsConfigurator = (OtherObjectsConfigurator) SingletonBeanLocator.getBean("otherObjectsConfigurator");
+            if (otherObjectsConfigurator == null)
+                throw new OtherObjectsException("No otherObjectConfigurator bean found in current context. Somthing must have gone wrong at startup");
+        }
+        catch (Exception e)
+        {
+            throw new OtherObjectsException("Problems accessing applicationContext to get otherObjectConfigurator", e);
+        }
+        return otherObjectsConfigurator;
     }
 
 }
