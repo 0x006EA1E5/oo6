@@ -1,9 +1,13 @@
 package org.otherobjects.cms.dao;
 
+import java.util.HashMap;
 import java.util.Map;
+
+import javax.persistence.Entity;
 
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.cms.hibernate.GenericDaoHibernate;
 import org.otherobjects.cms.model.BaseNode;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -13,7 +17,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
 public class DaoServiceImpl implements DaoService, BeanFactoryAware
 {
     private static final String UNIVERSAL_JCR_DAO_KEY = "universalJcrDao";
-    private Map<String, GenericDao> daoMap;
+    private Map<String, GenericDao> daoMap = new HashMap<String, GenericDao>();
     private BeanFactory beanFactory;
 
     public GenericDao getDao(Class clazz)
@@ -22,25 +26,28 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
     }
 
     /**
-     * Returns a Dao for provided type. First looks in daoMap and then in the application context. IF nothing found return UnivesalJcrDao (for Jcr objects) 
+     * Returns a Dao for provided type. First looks in daoMap and then in the application context. If nothing found return UniversalJcrDao (for Jcr objects) 
      * or GenericDaoHibernate for database objects.
      */
     public GenericDao getDao(String type)
     {
         GenericDao dao = null;
-        
+
         // Look in configured map first
-        if(daoMap!=null)
+        if (daoMap != null)
             daoMap.get(type);
 
         if (dao == null)
         {
 
             String daoBeanName = determineDaoBeanName(type);
+
+            //then try find named bean in context
             if (beanFactory.containsBean(daoBeanName))
                 dao = (GenericDao) beanFactory.getBean(daoBeanName);
             else
             {
+                // then return universal jcr dao for types extending baseNode
                 if (type.equalsIgnoreCase("baseNode"))
                     return (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
 
@@ -51,6 +58,11 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
                     {
                         dao = (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
 
+                    }
+                    else if (cls.getAnnotation(Entity.class) != null) // then return GenericDaoHibernate for hibernate entities
+                    {
+                        dao = new GenericDaoHibernate(cls);
+                        daoMap.put(daoBeanName, dao);
                     }
                     else
                     {
