@@ -1,6 +1,7 @@
 package org.otherobjects.cms.types;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,23 +17,36 @@ import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.LongTypeConver
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.StringTypeConverterImpl;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.otherobjects.cms.discovery.AnnotatedClassesScanner;
 import org.otherobjects.cms.jcr.BigDecimalTypeConverterImpl;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.JcrTypeDef;
+import org.otherobjects.cms.types.annotation.Type;
 import org.otherobjects.cms.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
 public class TypeServiceImpl extends AbstractTypeService implements InitializingBean
 {
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
+
     private Map<String, AtomicTypeConverter> jcrAtomicConverters;
     private Map<String, Class<?>> jcrClassMappings;
 
     private AnnotationBasedTypeDefBuilder annotationBasedTypeDefBuilder;
-    
+
     @Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
+
+    private AnnotatedClassesScanner scanner;
+
+    public void setScanner(AnnotatedClassesScanner scanner)
+    {
+        this.scanner = scanner;
+    }
 
     @SuppressWarnings("unchecked")
     public void afterPropertiesSet() throws Exception
@@ -45,9 +59,23 @@ public class TypeServiceImpl extends AbstractTypeService implements Initializing
             String otherObjectsModelPackages = otherObjectsConfigurator.getProperty("otherobjects.model.packages");
             Assert.notNull(otherObjectsModelPackages, "No model package for otherobjects defined. Check our otherobjects.properties for a otherobjects.model.packages property");
 
-            processPackages(otherObjectsModelPackages);
+            List<String> packages = new ArrayList<String>();
+            packages.add(otherObjectsModelPackages);
+            packages.add(otherObjectsConfigurator.getProperty("site.model.sdsd.packages"));
+            packages.add(otherObjectsConfigurator.getProperty("site.model.packages"));
 
-            processPackages(otherObjectsConfigurator.getProperty("site.model.package"));
+            String[] annotatedPackages = StringUtils.join(packages, ',').split(",");
+
+            logger.info("Scanning the following packages for OTHERobjects types: " + StringUtils.join(annotatedPackages, ','));
+
+            Set<String> annotatedClasses = scanner.findAnnotatedClasses(annotatedPackages, Type.class);
+
+            Assert.notEmpty(annotatedClasses, "Found no annotated classes. Check your configuration esp. the 'otherobjects.model.packages' and 'site.model.packages'");
+
+            for (String clazz : annotatedClasses)
+            {
+                registerType(annotationBasedTypeDefBuilder.getTypeDef(clazz));
+            }
 
             // FIXME Add TypeDef Validator here: labelProperty, extends BaseNode etc
         }
@@ -57,20 +85,6 @@ public class TypeServiceImpl extends AbstractTypeService implements Initializing
         }
 
         //        generateClasses();
-    }
-
-    private void processPackages(String modelPackages) throws Exception
-    {
-        if (StringUtils.isBlank(modelPackages))
-            return;
-
-        for (String modelPackage : StringUtils.split(modelPackages, ','))
-        {
-            Set<Class<?>> annotatedClasses = annotationBasedTypeDefBuilder.findAnnotatedClasses(modelPackage);
-            for (Class c : annotatedClasses)
-                registerType(annotationBasedTypeDefBuilder.getTypeDef(c));
-        }
-
     }
 
     @Override

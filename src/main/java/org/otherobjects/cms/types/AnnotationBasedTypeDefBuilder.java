@@ -1,36 +1,27 @@
 package org.otherobjects.cms.types;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.objectweb.asm.Attribute;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.CodeVisitor;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
 import org.springframework.core.OrderComparator;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.util.Assert;
 
 /**
- * TODO Update class scanning on uppgade to Spring 2.1
  * TODO Allow method annotations as well an field annotations (see Hibernate)
  * 
  * @author rich
@@ -214,61 +205,6 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder
             return matcher.group(1).toLowerCase() + matcher.group(2);
         else
             throw new OtherObjectsException("The annotated method " + methodName + " doesn't seem to follow bean style conventions");
-    }
-
-    protected Set<Class<?>> findAnnotatedClasses(String packageName) throws IOException, ClassNotFoundException
-    {
-        // Inspired by: org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider
-        Set<Class<?>> matches = new HashSet<Class<?>>();
-        String packageSearchPath = "classpath*:" + packageName.replaceAll("\\.", "/") + "/**/*.class";
-        Resource[] resources = this.resourcePatternResolver.getResources(packageSearchPath);
-        for (Resource resource : resources)
-        {
-            Class<?> c = getClassFromResource(resource);
-            if (c.isAnnotationPresent(Type.class))
-            {
-                matches.add(c);
-            }
-        }
-        return matches;
-    }
-
-    private Class<?> getClassFromResource(Resource resource) throws IOException, ClassNotFoundException
-    {
-        final List<String> names = new ArrayList<String>();;
-        ClassReader cr = new ClassReader(resource.getInputStream());
-
-        cr.accept(new ClassVisitor()
-        {
-            public void visitInnerClass(String name, String outerName, String innerName, int access)
-            {
-            }
-
-            public void visitEnd()
-            {
-            }
-
-            public void visit(int version, int access, String name, String superName, String[] interfaces, String sourceFile)
-            {
-                // name is fully-qualified
-                names.add(name.replace('/', '.'));
-            }
-
-            public void visitAttribute(Attribute arg0)
-            {
-            }
-
-            public void visitField(int arg0, String arg1, String arg2, Object arg3, Attribute arg4)
-            {
-            }
-
-            public CodeVisitor visitMethod(int arg0, String arg1, String arg2, String[] arg3, Attribute arg4)
-            {
-                return null;
-            }
-        }, true);
-
-        return Class.forName(names.get(0));
     }
 
 }

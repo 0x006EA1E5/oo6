@@ -6,6 +6,8 @@
 	<!-- Types -->
 	<bean name="typeService" class="org.otherobjects.cms.types.TypeServiceImpl">
 		<property name="annotationBasedTypeDefBuilder" ref="annotationBasedTypeDefBuilder"></property>
+		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
+		<property name="scanner" ref="annotatedClassesScanner" />
 	</bean>
 	
 	<bean id="annotationBasedTypeDefBuilder" class="org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder" />

@@ -40,7 +40,7 @@ public class HibernateEntityConfigProvider implements InitializingBean
 
         annotatedPackages = StringUtils.join(packages, ',').split(",");
 
-        logger.info("Scanning the following packages: " + annotatedPackages);
+        logger.info("Scanning the following packages: " + StringUtils.join(annotatedPackages, ','));
 
         annotatedClasses = scanner.findAnnotatedClasses(annotatedPackages, Entity.class);
 

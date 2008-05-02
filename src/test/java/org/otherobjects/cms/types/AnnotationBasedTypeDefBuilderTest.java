@@ -1,8 +1,5 @@
 package org.otherobjects.cms.types;
 
-import java.io.IOException;
-import java.util.Set;
-
 import junit.framework.TestCase;
 
 import org.otherobjects.cms.OtherObjectsException;
@@ -15,13 +12,6 @@ import org.otherobjects.cms.types.annotation.Type;
 
 public class AnnotationBasedTypeDefBuilderTest extends TestCase
 {
-    public void testFindAnnotatedClasses() throws IOException, ClassNotFoundException
-    {
-        AnnotationBasedTypeDefBuilder annotationBasedTypeDefBuilder = new AnnotationBasedTypeDefBuilder();
-        Set<Class<?>> found = annotationBasedTypeDefBuilder.findAnnotatedClasses("org.otherobjects.cms.types");
-        assertEquals(2, found.size());
-        assertTrue(found.contains(TestBean.class));
-    }
 
     public void testGetTypeDef() throws Exception
     {
