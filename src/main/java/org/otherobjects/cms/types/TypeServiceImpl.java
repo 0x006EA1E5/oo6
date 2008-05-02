@@ -70,7 +70,7 @@ public class TypeServiceImpl extends AbstractTypeService implements Initializing
 
             Set<String> annotatedClasses = scanner.findAnnotatedClasses(annotatedPackages, Type.class);
 
-            Assert.notEmpty(annotatedClasses, "Found no annotated classes. Check your configuration esp. the 'otherobjects.model.packages' and 'site.model.packages'");
+            Assert.notEmpty(annotatedClasses, "Found no annotated classes. Check your configuration esp. the 'otherobjects.model.packages' and 'site.model.packages' properties");
 
             for (String clazz : annotatedClasses)
             {
