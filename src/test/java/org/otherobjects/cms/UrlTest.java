@@ -1,46 +1,53 @@
 package org.otherobjects.cms;
 
-import org.apache.commons.lang.StringUtils;
-import org.otherobjects.cms.context.GlobalInfoBean;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.jndi.JndiTemplate;
-import org.springframework.mock.jndi.SimpleNamingContextBuilder;
+import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
+import org.springframework.test.AbstractSingleSpringContextTests;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.support.StaticWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import junit.framework.TestCase;
-
-public class UrlTest extends TestCase
+public class UrlTest extends AbstractSingleSpringContextTests
 {
+
     public static final String SERVER_NAME = "some.test.server";
     public static final String CONTEXT_PATH = "/test";
 
-    private void setUpGlobalInfo(String serverName, String contextPath, String defaultPort, String defaultSecurePort) throws Exception
+    @Override
+    protected String[] getConfigLocations()
     {
-        SimpleNamingContextBuilder simpleNamingContextBuilder = SimpleNamingContextBuilder.emptyActivatedContextBuilder();
-        String _serverName = StringUtils.defaultString(serverName, "127.0.0.1");
-        String _contextPath = StringUtils.defaultString(contextPath, "/testglobal");
-        String _defaultPort = StringUtils.defaultString(defaultPort, "8080");
-        String _defaultSecurePort = StringUtils.defaultString(defaultSecurePort, "8443");
-
-        simpleNamingContextBuilder.bind("java:comp/env/" + GlobalInfoBean.JNDI_SERVER_NAME_PATH, _serverName);
-        simpleNamingContextBuilder.bind("java:comp/env/" + GlobalInfoBean.JNDI_CONTEXT_PATH_PATH, _contextPath);
-        simpleNamingContextBuilder.bind("java:comp/env/" + GlobalInfoBean.JNDI_DEFAULT_PORT_PATH, _defaultPort);
-        simpleNamingContextBuilder.bind("java:comp/env/" + GlobalInfoBean.JNDI_DEFAULT_SECURE_PORT_PATH, _defaultSecurePort);
-
-        GlobalInfoBean gi = new GlobalInfoBean();
-        gi.setJndiTemplate(new JndiTemplate());
-        Resource[] resource = new Resource[]{new ClassPathResource("org/otherobjects/cms/context/globalInfo.properties")};
-        gi.setPropertyResources(resource);
-
-        gi.afterPropertiesSet();
+        return new String[]{"classpath:org/otherobjects/cms/UrlTest-context.xml"};
     }
+
+    public void testContext()
+    {
+        assertEquals("localhost", ((OtherObjectsConfigurator) SingletonBeanLocator.getBean("otherObjectsConfigurator")).getProperty("site.server.name"));
+    }
+
+    //    private void setUpOtherObjectsConfigurator(String serverName, String contextPath, String defaultPort, String defaultSecurePort) throws Exception
+    //    {
+    //                SimpleNamingContextBuilder simpleNamingContextBuilder = SimpleNamingContextBuilder.emptyActivatedContextBuilder();
+    //        String _serverName = StringUtils.defaultString(serverName, "127.0.0.1");
+    //        String _contextPath = StringUtils.defaultString(contextPath, "/testglobal");
+    //        String _defaultPort = StringUtils.defaultString(defaultPort, "8080");
+    //        String _defaultSecurePort = StringUtils.defaultString(defaultSecurePort, "8443");
+    //
+    //        simpleNamingContextBuilder.bind("java:comp/env/" + GlobalInfoBean.JNDI_SERVER_NAME_PATH, _serverName);
+    //        simpleNamingContextBuilder.bind("java:comp/env/" + GlobalInfoBean.JNDI_CONTEXT_PATH_PATH, _contextPath);
+    //        simpleNamingContextBuilder.bind("java:comp/env/" + GlobalInfoBean.JNDI_DEFAULT_PORT_PATH, _defaultPort);
+    //        simpleNamingContextBuilder.bind("java:comp/env/" + GlobalInfoBean.JNDI_DEFAULT_SECURE_PORT_PATH, _defaultSecurePort);
+    //
+    //        GlobalInfoBean gi = new GlobalInfoBean();
+    //        gi.setJndiTemplate(new JndiTemplate());
+    //        Resource[] resource = new Resource[]{new ClassPathResource("org/otherobjects/cms/context/globalInfo.properties")};
+    //        gi.setPropertyResources(resource);
+    //
+    //        gi.afterPropertiesSet();
+    //
+    //    }
 
     /**
      * setup context so that RequestContextUtils used in Url have something to work on
@@ -139,15 +146,15 @@ public class UrlTest extends TestCase
         assertEquals("http://" + SERVER_NAME + ":8080" + CONTEXT_PATH + "/some.html", url2.getAbsoluteLink());
 
         setupMockOngoingRequest(false, CONTEXT_PATH, 8080);
-        setUpGlobalInfo(null, null, null, "7531");
+        //        setUpOtherObjectsConfigurator(null, null, null, "7531");
         Url url3 = new Url("/some.html");
         url3.setSsl(true);
         System.out.println(url3.getAbsoluteLink());
-        assertEquals("https://" + SERVER_NAME + ":7531" + CONTEXT_PATH + "/some.html", url3.getAbsoluteLink());
+        assertEquals("https://" + SERVER_NAME + ":4343" + CONTEXT_PATH + "/some.html", url3.getAbsoluteLink());
 
         RequestContextHolder.setRequestAttributes(null);
         System.out.println(url3.getAbsoluteLink());
-        assertEquals("https://127.0.0.1:7531/testglobal/some.html", url3.getAbsoluteLink()); //take info from globalBeanInfo rather than request as there isn't one
+        //assertEquals("https://127.0.0.1:7531/testglobal/some.html", url3.getAbsoluteLink()); //take info from globalBeanInfo rather than request as there isn't one
 
         setupMockOngoingRequest(true, CONTEXT_PATH, 443);
         Url url4 = new Url("/some.html");
@@ -157,6 +164,6 @@ public class UrlTest extends TestCase
 
         setupMockOngoingRequest(false, CONTEXT_PATH, 80);
         System.out.println(url4.toString());
-        assertEquals("https://" + SERVER_NAME + ":7531" + CONTEXT_PATH + "/some.html", url4.toString());
+        assertEquals("https://" + SERVER_NAME + ":4343" + CONTEXT_PATH + "/some.html", url4.toString());
     }
 }

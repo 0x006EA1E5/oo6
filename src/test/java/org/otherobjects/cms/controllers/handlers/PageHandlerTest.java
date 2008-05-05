@@ -1,10 +1,8 @@
 package org.otherobjects.cms.controllers.handlers;
 
-import org.otherobjects.cms.context.GlobalInfoBean;
 import org.otherobjects.cms.model.Template;
 import org.otherobjects.cms.model.TemplateLayout;
 import org.otherobjects.cms.test.BaseJcrTestCase;
-import org.springframework.mock.jndi.SimpleNamingContextBuilder;
 
 public class PageHandlerTest extends BaseJcrTestCase
 {
@@ -24,11 +22,11 @@ public class PageHandlerTest extends BaseJcrTestCase
     protected void onSetUp() throws Exception
     {
         super.onSetUp();
-        SimpleNamingContextBuilder simpleNamingContextBuilder = SimpleNamingContextBuilder.emptyActivatedContextBuilder();
-        String serverName = "127.0.0.1";
-        String contextPath = "test";
-        simpleNamingContextBuilder.bind("java:comp/env/" + GlobalInfoBean.JNDI_SERVER_NAME_PATH, serverName);
-        simpleNamingContextBuilder.bind("java:comp/env/" + GlobalInfoBean.JNDI_CONTEXT_PATH_PATH, contextPath);
+        //        SimpleNamingContextBuilder simpleNamingContextBuilder = SimpleNamingContextBuilder.emptyActivatedContextBuilder();
+        //        String serverName = "127.0.0.1";
+        //        String contextPath = "test";
+        //        simpleNamingContextBuilder.bind("java:comp/env/" + GlobalInfoBean.JNDI_SERVER_NAME_PATH, serverName);
+        //        simpleNamingContextBuilder.bind("java:comp/env/" + GlobalInfoBean.JNDI_CONTEXT_PATH_PATH, contextPath);
         registerType(TestPage.class);
         anoymousLogin();
     }
@@ -42,8 +40,8 @@ public class PageHandlerTest extends BaseJcrTestCase
 
     public void testHandleRequest() throws Exception
     {
-//        MockHttpServletRequest request = new MockHttpServletRequest();
-//        MockHttpServletResponse response = new MockHttpServletResponse();
+        //        MockHttpServletRequest request = new MockHttpServletRequest();
+        //        MockHttpServletResponse response = new MockHttpServletResponse();
 
         Template template = new Template();
         TemplateLayout templateLayout = new TemplateLayout();

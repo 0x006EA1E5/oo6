@@ -112,6 +112,7 @@ public class RequestContextUtils
         return (getHttpServletRequest() != null && getHttpServletRequest().isSecure());
     }
 
+    //TODO this is a duplication of org.otherobjects.cms.Url.getOtherObjectsConfigurator - merge into one utility method somewhere
     public static OtherObjectsConfigurator getOtherObjectsConfigurator()
     {
         OtherObjectsConfigurator otherObjectsConfigurator = null;
