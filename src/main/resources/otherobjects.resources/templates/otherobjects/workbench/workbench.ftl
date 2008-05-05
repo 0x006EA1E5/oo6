@@ -28,15 +28,15 @@ OO.Workbench.setPath("");
 
 <div id="header" class="x-layout-inactive-content">
 <h1><em>OTHERobjects Workbench</em></h1>
-<p style="float:right; color:#FFFFFF;">$requestContext.getMessage("interface.language.label"):
+<p style="float:right; color:#FFFFFF;">
+${requestContext.getMessage("interface.language.label")}:
 
-#set($workbenchLocale = $requestContext.locale)
-#if($workbenchLocale == "en_GB") English #else <a href="/go/workbench/?locale=en_GB">English</a> #end |
-#if($workbenchLocale == "de_DE") Deutsch #else <a href="/go/workbench/?locale=de_DE">Deutsch</a> #end 
+<#if requestContext.locale == "en_GB"> English <#else> <a href="/otherobjects/workbench/?locale=en_GB">English</a> </#if> |
+<#if requestContext.locale == "de_DE"> Deutsch <#else> <a href="/otherobjects/workbench/?locale=de_DE">Deutsch</a> </#if> 
 
 &nbsp;&nbsp;&nbsp;
 
-$requestContext.getMessage("login.status.label"): <strong>$user.username</strong> <a href="/go/j_acegi_logout">$requestContext.getMessage("logout.label")</a>
+${requestContext.getMessage("login.status.label")}: <strong>${user.username}</strong> <a href="/go/logout.html">${requestContext.getMessage("logout.label")}</a>
 
 </p>
 </div>

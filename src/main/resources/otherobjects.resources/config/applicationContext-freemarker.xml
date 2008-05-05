@@ -19,6 +19,7 @@
 		<property name="cache" value="true" />
 		<property name="prefix" value="" />
 		<property name="suffix" value="" />
+		<property name="requestContextAttribute" value="requestContext" />
 	</bean>
 
 </beans>
