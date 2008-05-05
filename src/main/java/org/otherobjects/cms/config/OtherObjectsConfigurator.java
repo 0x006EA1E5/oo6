@@ -1,5 +1,7 @@
 package org.otherobjects.cms.config;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
@@ -39,7 +41,7 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
 
         // find all props starting with environmentPrefix and re-add them to the properties losing the prefix, thereby
         //effectively overriding global defaults
-        for (Object key : props.keySet())
+        for (Object key : props.keySet()) //TODO is this dangerous? iterating the keyset of a collection you are modifying in the loop?
         {
             if (pattern.matcher((String) key).lookingAt())
             {
@@ -84,5 +86,17 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
     {
         Assert.notNull(mergedProperties, "OtherObjectsConfigurator not initialised. Check your setup");
         return mergedProperties.getProperty(key, defaultValue);
+    }
+
+    public String listProperties()
+    {
+        if (mergedProperties != null)
+        {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            mergedProperties.list(new PrintStream(baos));
+            return baos.toString();
+        }
+        else
+            return "";
     }
 }
