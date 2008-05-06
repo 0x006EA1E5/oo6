@@ -9,9 +9,17 @@
 	<!-- 
 		Automatically detect controllers in the specified package(s) annotated with @Controller.
 	-->
-	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" />
-	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+	<bean id="handlerMappingTemplate" abstract="true" >
+		<property name="interceptors"  >
+			<list>
+				<ref bean="localeChangeInterceptor"/>
+			</list>
+		</property>
+	</bean>
+	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" parent="handlerMappingTemplate" />
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" parent="handlerMappingTemplate" />
 	<bean class="org.springframework.web.servlet.mvc.multiaction.InternalPathMethodNameResolver" />
+	<!-- apparently in spring 2.5.3 ControllerClassNameHandlerMapping auto-detects @Controller annotated classes  -->
 	<context:component-scan base-package="org.otherobjects.cms.controllers" />
 	<context:component-scan base-package="org.otherobjects.cms.util" />
 
@@ -27,8 +35,12 @@
 		</property>
 	</bean>
 	-->
+	
+	<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+		<property name="paramName" value="locale" />
+	</bean>
 
-	<bean name="pageHandler" class="org.otherobjects.cms.controllers.handlers.PageHandler"></bean>
+	<bean name="pageHandler" class="org.otherobjects.cms.controllers.handlers.PageHandler" />
 
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<!-- TODO Extract max-upload size into a property -->
