@@ -23,4 +23,12 @@
 	<bean name="daoService" class="org.otherobjects.cms.dao.DaoServiceImpl">
 	</bean>
 	
+	<bean id="baseNodeValidator" class="org.otherobjects.cms.validation.BaseNodeValidator">
+		<property name="typeService" ref="typeService" />
+	</bean>
+	<bean id="typeDefConfiguredValidator" class="org.otherobjects.cms.validation.TypeDefConfiguredValidator"></bean>
+	
+	<bean id="validatorService" class="org.otherobjects.cms.validation.ValidatorServiceImpl">
+	</bean>
+	
 </beans>

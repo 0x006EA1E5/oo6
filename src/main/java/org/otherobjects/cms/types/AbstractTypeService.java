@@ -37,13 +37,36 @@ public abstract class AbstractTypeService implements TypeService
         //        types.remove(typeName);
     }
 
+    /**
+     * @return TypeDef or null if no typeDef found
+     */
     public TypeDef getType(String name)
     {
         TypeDef typeDef = this.types.get(name);
         // FIXME Turn this back on somewhere
         // Assert.notNull(typeDef, "Type not found: " + name);
         return typeDef;
+    }
 
+    /**
+     * @return TypeDef or null if no typeDef found
+     */
+    public TypeDef getType(Class clazz)
+    {
+        return getTypeByClassName(clazz.getName());
+    }
+
+    /**
+     * @return TypeDef or null if no typeDef found
+     */
+    public TypeDef getTypeByClassName(String name)
+    {
+        for (TypeDef t : this.types.values())
+        {
+            if (t.getClassName().equals(name))
+                return t;
+        }
+        return null;
     }
 
     public Collection<TypeDef> getTypes()
@@ -54,16 +77,6 @@ public abstract class AbstractTypeService implements TypeService
     public void setTypes(Map<String, TypeDef> types)
     {
         this.types = types;
-    }
-
-    public TypeDef getTypeByClassName(String name)
-    {
-        for (TypeDef t : this.types.values())
-        {
-            if (t.getClassName().equals(name))
-                return t;
-        }
-        return null;
     }
 
     public Collection<TypeDef> getTypesBySuperClass(Class<?> superClass)

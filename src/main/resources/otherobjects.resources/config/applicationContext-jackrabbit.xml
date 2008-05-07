@@ -59,6 +59,7 @@
 				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
 				<property name="typeService" ref="typeService" />
 				<property name="sessionFactory" ref="jcrSessionFactory" />
+				<property name="validator" ref="baseNodeValidator" />
 			</bean>
 		</property>
 	</bean>

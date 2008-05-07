@@ -39,6 +39,7 @@ import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.util.Assert;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.jackrabbit.ocm.JcrMappingCallback;
 import org.springmodules.jcr.jackrabbit.ocm.JcrMappingTemplate;
@@ -65,6 +66,8 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     // To get access to rule engine
     //    private RuleExecutor ruleExecutor;
 
+    private Validator validator;
+
     public GenericJcrDaoJackrabbit()
     {
     }
@@ -83,24 +86,23 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     public T save(T object, boolean validate)
     {
         if (!canSaveWithRepositoryCheck(object))
-            throw new OtherObjectsException("Can't save DynaNode '" + object + "' because it has either in use by a different user or has been changed in the repository since being loaded");
+            throw new OtherObjectsException("Can't save BaseNode '" + object + "' because it has either in use by a different user or has been changed in the repository since being loaded");
 
         if (validate)
         {
             Errors errors = new BeanPropertyBindingResult(object, "target");
-            // FIXME M2 Re-enable validation after dynaNodes are true beans
-            //dynaNodeValidator.validate(object, errors);
+            validator.validate(object, errors);
             if (errors.getErrorCount() > 0)
-                throw new OtherObjectsException("DynaNode '" + object + "' couldn't be validated and therefore didn't get saved");
+                throw new OtherObjectsException("BaseNode '" + object + "' couldn't be validated and therefore didn't get saved");
         }
         updateAuditInfo(object, null);
         return saveInternal(object, false);
     }
 
-    protected T saveInternal(T dynaNode, boolean publishStatus)
+    protected T saveInternal(T baseNode, boolean publishStatus)
     {
-        dynaNode.setPublished(publishStatus);
-        return saveSimple(dynaNode, false);
+        baseNode.setPublished(publishStatus);
+        return saveSimple(baseNode, false);
     }
 
     protected T saveSimple(T object, boolean validate)
@@ -139,7 +141,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
             return true;
 
         T compareNode = get(object.getId());
-        // if the changeNumber has changed something else has save the dynaNode while we were working on it. So it shouldn't be saved.
+        // if the changeNumber has changed something else has saved the baseNode while we were working on it. So it shouldn't be saved.
         if (compareNode != null && compareNode.getChangeNumber() == object.getChangeNumber())
             return true;
 
@@ -161,14 +163,14 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
             return canSaveNoRepositoryCheck(object);
     }
 
-    private boolean canSaveNoRepositoryCheck(T dynaNode)
+    private boolean canSaveNoRepositoryCheck(T baseNode)
     {
-        // dynaNode is published and we haven't been asked to sync with repository
-        if (dynaNode.isPublished())
+        // baseNode is published and we haven't been asked to sync with repository
+        if (baseNode.isPublished())
             return true;
 
         // if it is not we can save only if the current AuditInfo.getUserId()  is equal to the current users id
-        if (SecurityTool.isCurrentUser(dynaNode.getUserId()))
+        if (SecurityTool.isCurrentUser(baseNode.getUserId()))
             return true;
 
         return false;
@@ -179,7 +181,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     {
         Assert.notNull("path must be specified.", path);
 
-        // Removing trainling slash to make path JCR compatible
+        // Removing trailing slash to make path JCR compatible
         if (path.endsWith("/"))
             path = path.substring(0, path.lastIndexOf("/"));
 
@@ -320,7 +322,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
      * Looks up node by UUID and then gets node path.
      * 
      * <p>
-     * PERF This is required until the OCM presistence manager supports actions
+     * PERF This is required until the OCM persistence manager supports actions
      * by UUID not just paths.
      * 
      * @param uuid
@@ -372,16 +374,16 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         }, true);
     }
 
-    public void publish(final T dynaNode, final String message)
+    public void publish(final T baseNode, final String message)
     {
         //FIXME this should display proper transactional behaviour which it doesn't at the moment as there are multiple jcr sessions involved
-        if (dynaNode.isPublished())
-            throw new OtherObjectsException("DynaNode " + dynaNode.getJcrPath() + "[" + dynaNode.getId() + "] couldn't be published as its published flag is already set ");
+        if (baseNode.isPublished())
+            throw new OtherObjectsException("baseNode " + baseNode.getJcrPath() + "[" + baseNode.getId() + "] couldn't be published as its published flag is already set ");
 
         // run node through rule engine if it is a CmsNode and cancel publish if rule engine doesn't set publish flag
-        if (dynaNode instanceof CmsNode)
+        if (baseNode instanceof CmsNode)
         {
-            //            CmsNode nodeToInsertIntoRuleEngine = dynaNode;
+            //            CmsNode nodeToInsertIntoRuleEngine = baseNode;
             //            Object[] result = ruleExecutor.runInStatelessSession(new Object[]{nodeToInsertIntoRuleEngine}, Boolean.class);
             //
             //            if (!(result.length > 0) || !(result[0] instanceof Boolean) || !((Boolean) result[0]).booleanValue())
@@ -395,7 +397,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                 try
                 {
                     Session liveSession = null;
-                    String jcrPath = dynaNode.getJcrPath();
+                    String jcrPath = baseNode.getJcrPath();
                     try
                     {
                         // get a live workspace session
@@ -406,7 +408,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                         try
                         {
                             //get the corresponding node in the live workspace by UUID in case path has changed
-                            liveNode = liveSession.getNodeByUUID(dynaNode.getId());
+                            liveNode = liveSession.getNodeByUUID(baseNode.getId());
                         }
                         catch (ItemNotFoundException e)
                         {
@@ -423,15 +425,15 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                         }
 
                         // we got here so we successfully published
-                        updateAuditInfo(dynaNode, message);
-                        saveInternal(dynaNode, true); // set the status to published
+                        updateAuditInfo(baseNode, message);
+                        saveInternal(baseNode, true); // set the status to published
 
                         // create version and assign the current changeNumber as the label
-                        dynaNode.setChangeNumber(dynaNode.getChangeNumber() + 1);
-                        manager.checkin(jcrPath, new String[]{(dynaNode.getChangeNumber()) + ""});
+                        baseNode.setChangeNumber(baseNode.getChangeNumber() + 1);
+                        manager.checkin(jcrPath, new String[]{(baseNode.getChangeNumber()) + ""});
                         manager.checkout(jcrPath);
 
-                        applicationContext.publishEvent(new PublishEvent(this, dynaNode));
+                        applicationContext.publishEvent(new PublishEvent(this, baseNode));
                     }
                     finally
                     {
@@ -448,19 +450,19 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         }, true);
     }
 
-    private void updateAuditInfo(T dynaNode, String comment)
+    private void updateAuditInfo(T baseNode, String comment)
     {
         User user = SecurityTool.getCurrentUser();
-        if (user != null) // FIXME Need to reanble and then mock in tests
+        if (user != null) // FIXME Need to reenable and then mock in tests
         {
             Assert.notNull(user, "auditInfo can't be updated if there is no current user");
-            dynaNode.setUserName(user.getFullName());
-            dynaNode.setUserId(user.getId().toString());
+            baseNode.setUserName(user.getFullName());
+            baseNode.setUserId(user.getId().toString());
         }
-        dynaNode.setModificationTimestamp(new Date());
+        baseNode.setModificationTimestamp(new Date());
         if (StringUtils.isNotEmpty(comment))
-            dynaNode.setComment(comment);
-        dynaNode.setChangeNumber(dynaNode.getChangeNumber() + 1);
+            baseNode.setComment(comment);
+        baseNode.setChangeNumber(baseNode.getChangeNumber() + 1);
     }
 
     @SuppressWarnings("unchecked")
@@ -589,7 +591,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         }, true);
 
         //        QueryManager queryManager = jcrMappingTemplate.createQueryManager();
-        //        Filter filter = queryManager.createFilter(DynaNode.class);
+        //        Filter filter = queryManager.createFilter(baseNode.class);
         //        Query query = queryManager.createQuery(filter);
         //        filter.setScope(path + "/");
         //        return (List<T>) jcrMappingTemplate.getObjects(query);
@@ -863,6 +865,11 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     public JcrMappingTemplate getJcrMappingTemplate()
     {
         return jcrMappingTemplate;
+    }
+
+    public void setValidator(Validator validator)
+    {
+        this.validator = validator;
     }
 
     //    public void setRuleExecutor(RuleExecutor ruleExecutor)
