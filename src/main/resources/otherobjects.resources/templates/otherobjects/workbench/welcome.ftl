@@ -17,20 +17,16 @@ class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
 <div class="welcome-block">
 <h1>My items in progress</h1>
 
-<#--
-#set($edits = $daoService.getDao("dynaNode").pageByJcrExpression("/jcr:root/site//(*, oo:node) [@published = 'false' and not(jcr:like(@ooType,'%MetaData'))] order by @modificationTimestamp descending",10,1))
-#if($edits.itemTotal>0)
-<p>These are the items that have been edited by you but not published.</p>
-<ul class="states">
-#foreach($edit in $edits)
-<li class="published-$edit.published"><a href="$edit.linkPath">$edit.label</a>
-<small>at $dateTool.format("HH:mm", $edit.modificationTimestamp) by $edit.userName</small></li>
-#end
+<#-- freemarker automatically wraps results which means our PagedList isn't usable from freemarker -->
+<#-- need to include current user in where criteria -->
+<#assign edits = daoService.getDao("baseNode").pageByJcrExpression("/jcr:root/site//(*, oo:node) [@published = 'false' and not(jcr:like(@ooType,'%MetaData'))] order by @modificationTimestamp descending",10,1) >
+
+<ul>
+<#list edits as edit>
+    <li class="published-false><a href="${edit.linkPath}">${edit.label} </a>
+    <small>at ${edit.modificationTimestamp?date} </small></li>
+</#list>
 </ul>
-#else
-<p>You have no items in progress.</p>
-#end
--->
 
 </div>
 
@@ -49,19 +45,13 @@ class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
 <div class="welcome-block">
 <h1>What happened recently</h1>
 <p>Here are the last few changes to pages across the site:</p>
-
-<#--
-#set($changes = $daoService.getDao("dynaNode").pageByJcrExpression("/jcr:root/site//element(*, oo:node) order by @modificationTimestamp descending",10,1))
-
-<ul class="states">
-#foreach($change in $changes)
-<li class="published-$change.published"><a href="$edit.linkPath">$change.label</a>
-<small> at $dateTool.format("HH:mm", $change.modificationTimestamp) by $change.userName
-#if($change.comment)<br/>$change.comment#end
-</small></li>
-#end
+<#assign latestChanges = daoService.getDao("baseNode").pageByJcrExpression("/jcr:root/site//element(*, oo:node) [not(jcr:like(@ooType,'%MetaData'))] order by @modificationTimestamp descending",10,1) >
+<ul>
+<#list latestChanges as change>
+    <li class="published-true><a href="${change.linkPath}">${change.label} </a> 
+    <small>at ${change.modificationTimestamp?date} by ${change.userName}</small></li>
+</#list>
 </ul>
--->
 
 </div>
 
