@@ -2,7 +2,8 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
+	
+	
 	<!-- Types -->
 	<bean name="typeService" class="org.otherobjects.cms.types.TypeServiceImpl">
 		<property name="annotationBasedTypeDefBuilder" ref="annotationBasedTypeDefBuilder"></property>
@@ -24,11 +25,12 @@
 	</bean>
 	
 	<bean id="baseNodeValidator" class="org.otherobjects.cms.validation.BaseNodeValidator">
-		<property name="typeService" ref="typeService" />
+		<property name="typeService" ref="typeService" /> <!-- this shouldn't be neccessary - but as soon as baseNodeValidator is referenced in universalJcrDao the auto config with @Resource stops working -->
 	</bean>
-	<bean id="typeDefConfiguredValidator" class="org.otherobjects.cms.validation.TypeDefConfiguredValidator"></bean>
+	<bean id="typeDefConfiguredValidator" class="org.otherobjects.cms.validation.TypeDefConfiguredValidator">
+		
+	</bean>
 	
-	<bean id="validatorService" class="org.otherobjects.cms.validation.ValidatorServiceImpl">
-	</bean>
+	<bean id="validatorService" class="org.otherobjects.cms.validation.ValidatorServiceImpl"></bean>
 	
 </beans>
