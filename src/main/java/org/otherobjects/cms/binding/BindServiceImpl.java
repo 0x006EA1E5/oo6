@@ -23,7 +23,6 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 
 /**
  * Very thin wrapper around springs ServletRequestDataBinder with our default CustomEditor(s) configured.
- * Call the bind method after you have beanified your DynaNode using {@link JcrBeanService} (This might change)
  * 
  * @author joerg
  *
