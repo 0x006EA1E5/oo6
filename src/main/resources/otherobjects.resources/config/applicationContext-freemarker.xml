@@ -13,12 +13,22 @@
 				<value>classpath:/otherobjects.resources/templates/</value>
 			</list>
 		</property>
+		<property name="freemarkerVariables">
+			<map>
+				<entry key="daoService" value-ref="daoService" />
+			</map>
+		</property>
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="object_wrapper">beans</prop>
+			</props>
+		</property>
 	</bean>
 
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
 		<property name="cache" value="true" />
 		<property name="prefix" value="" />
-		<property name="suffix" value="" />
+		<property name="suffix" value=".ftl" />
 		<property name="requestContextAttribute" value="requestContext" />
 	</bean>
 

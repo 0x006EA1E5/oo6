@@ -56,7 +56,7 @@ public class DebugController extends MultiActionController
 
     @Resource
     private JdbcTemplate jdbcTemplate;
-   
+
     @Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
 
@@ -67,7 +67,7 @@ public class DebugController extends MultiActionController
         String imageMagickVersion = null;
         try
         {
-              //TODO this need to be properly configured in ImageMagickResizer
+            //TODO this need to be properly configured in ImageMagickResizer
             String binPath = otherObjectsConfigurator.getProperty("otherobjects.imagemagick.bin.path");
 
             String command = binPath + "convert --version";
@@ -81,9 +81,10 @@ public class DebugController extends MultiActionController
             imageMagickError = "Could not find ImageMagick binary: " + e.getMessage();
         }
 
-        ModelAndView mav = new ModelAndView("/debug/debug.ftl");
+        ModelAndView mav = new ModelAndView("/debug/debug");
         mav.addObject("imageMagickError", imageMagickError);
         mav.addObject("imageMagickVersion", imageMagickVersion);
+        mav.addObject("sessionExists", request.getSession(false) != null);
         mav.addObject("userDetails", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return mav;
     }
@@ -132,7 +133,7 @@ public class DebugController extends MultiActionController
             }
         });
 
-        ModelAndView mav = new ModelAndView("/debug/database.ftl");
+        ModelAndView mav = new ModelAndView("/debug/database");
         mav.addObject("rowsHtml", rowsHtml);
         mav.addObject("sql", sql);
         return mav;
@@ -152,7 +153,7 @@ public class DebugController extends MultiActionController
     {
         String script = request.getParameter("script");
 
-        ModelAndView mav = new ModelAndView("/debug/script.ftl");
+        ModelAndView mav = new ModelAndView("/debug/script");
         Object output = "No script run.";
         if (StringUtils.isNotEmpty(script))
         {
@@ -211,7 +212,7 @@ public class DebugController extends MultiActionController
             liveNodesHtml = getJcrContents(xpath);
         }
 
-        ModelAndView mav = new ModelAndView("/debug/jcr.ftl");
+        ModelAndView mav = new ModelAndView("/debug/jcr");
 
         mav.addObject("liveNodesHtml", liveNodesHtml);
         mav.addObject("editNodesHtml", editNodesHtml);
