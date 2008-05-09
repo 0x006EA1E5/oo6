@@ -22,15 +22,17 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             modelAndView.addObject("userId", currentUserId);
 
         // session stuff
-        HttpSession session = request.getSession();
-        Integer counter = (Integer) session.getAttribute("counter");
-        if (counter == null)
-            counter = 0;
-        session.setAttribute("counter", ++counter);
+        HttpSession session = request.getSession(false);
+        if (session != null)
+        {
+            Integer counter = (Integer) session.getAttribute("counter");
+            if (counter == null)
+                counter = 0;
+            session.setAttribute("counter", ++counter);
 
-        modelAndView.addObject("counter", counter);
-        modelAndView.addObject("sessionId", session.getId());
-
+            modelAndView.addObject("counter", counter);
+            modelAndView.addObject("sessionId", session.getId());
+        }
         // tools
         modelAndView.addObject("cmsImageTool", new CmsImageTool());
         modelAndView.addObject("formatTool", new FormatTool());

@@ -32,6 +32,23 @@
     <tr><td>Static resource serving</td><td class="info">Unchecked</td></tr>
 </table>
 
+<h2>Session</h2>
+<#if sessionExists >There is an ongoing HTTP session
+<table border="1">
+    <thead>
+        <tr>
+            <th>SessionId</th>
+            <th>Counter</th>
+        </tr>
+    </thead>
+    <tr>
+     <td>${sessionId!}</td>
+     <td>${counter!}</td>
+    </tr>
+</table>
+</#if>
+
+
 <h2>Information</h2>
 
 <table>
