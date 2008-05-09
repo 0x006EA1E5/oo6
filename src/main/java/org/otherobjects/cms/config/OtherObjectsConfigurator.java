@@ -37,24 +37,31 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
     {
         String environmentPrefix = getEnvironmentName();
 
+        Properties convertedProperties = new Properties();
+
         Pattern pattern = Pattern.compile("^" + environmentPrefix + "\\.");
 
         // find all props starting with environmentPrefix and re-add them to the properties losing the prefix, thereby
         //effectively overriding global defaults
-        for (Object key : props.keySet()) //TODO is this dangerous? iterating the keyset of a collection you are modifying in the loop?
+        for (Object key : props.keySet())
         {
+            Object value = props.getProperty((String) key);
             if (pattern.matcher((String) key).lookingAt())
             {
-                Object value = props.getProperty((String) key);
                 String newKey = pattern.matcher((String) key).replaceFirst("");
-                props.setProperty(newKey, (String) value);
+                convertedProperties.setProperty(newKey, (String) value);
+            }
+            else
+            {
+                convertedProperties.setProperty((String) key, (String) value);
             }
         }
 
         if (environmentPrefix.equals("production"))
-            jndiOverride(props);
+            jndiOverride(convertedProperties);
 
-        this.mergedProperties = props;
+        this.mergedProperties = convertedProperties;
+        props = convertedProperties;
         super.convertProperties(props);
     }
 
