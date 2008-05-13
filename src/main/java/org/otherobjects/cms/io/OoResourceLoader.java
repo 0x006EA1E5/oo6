@@ -8,6 +8,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.util.Assert;
 
 /**
  * 
@@ -27,10 +28,11 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
 
     public OoResource getResource(String path) throws IOException
     {
-        Resource resoure = resourceLoader.getResource(preprocessPath(path));
+        ResourceInfo resourceInfo = preprocessPath(path);
+        Resource resoure = resourceLoader.getResource(resourceInfo.getPath());
 
         //wrap in ooResource
-        OoResource ooResource = new DefaultOoResource(resoure);
+        DefaultOoResource ooResource = new DefaultOoResource(resoure, resourceInfo.isWritable());
         if (resoure.exists())
         {
             postprocessResource(ooResource);
@@ -52,7 +54,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
      * @param path
      * @return
      */
-    protected String preprocessPath(String path)
+    protected ResourceInfo preprocessPath(String path)
     {
         for (OoResourcePathPrefix prefix : OoResourcePathPrefix.values())
         {
@@ -60,31 +62,67 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
             if (matcher.lookingAt())
                 return rewritePathAccordingToPrefix(matcher.replaceFirst(""), prefix);
         }
-        // return unchanged if no prefix matched
-        return path;
+        // return unchanged if no prefix matched, defaults to non writable because with non-prefixed paths you shouldn't use OoResource specific stuff anyway
+        return new ResourceInfo(path, false);
     }
 
-    private String rewritePathAccordingToPrefix(String replaceFirst, OoResourcePathPrefix prefix)
+    private ResourceInfo rewritePathAccordingToPrefix(String path, OoResourcePathPrefix prefix)
     {
         StringBuffer buf = new StringBuffer();
+        boolean writable = false;
         switch (prefix)
         {
             case CORE :
+                buf.append("otherobjects.resources");
+                buf.append(path);
                 break;
             case STATIC :
+                buf.append("site.resources/static"); //FIXME this is probably wrong
+                buf.append(path);
                 break;
             case SITE :
+                buf.append("site.resources");
+                buf.append(path);
                 break;
             case DATA :
+                buf.append("file:");
+                String dataDirPath = otherObjectsConfigurator.getProperty("site.data.dir.path");
+                Assert.notNull(dataDirPath, "Property site.data.dir.path has not been set. Add it to site.properties");
+                buf.append(dataDirPath);
+                buf.append(path);
+                writable = true; //only resources in the data path should be writable
                 break;
 
         }
-        return buf.toString();
+        return new ResourceInfo(buf.toString(), writable);
     }
 
     public void setResourceLoader(ResourceLoader resourceLoader)
     {
         this.resourceLoader = resourceLoader;
+    }
+
+    class ResourceInfo
+    {
+        private String path;
+        private boolean writable;
+
+        public ResourceInfo(String path, boolean writable)
+        {
+            this.path = path;
+            this.writable = writable;
+        }
+
+        public String getPath()
+        {
+            return path;
+        }
+
+        public boolean isWritable()
+        {
+            return writable;
+        }
+
     }
 
 }

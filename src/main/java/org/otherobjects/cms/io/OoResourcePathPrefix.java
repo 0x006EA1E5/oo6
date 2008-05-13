@@ -17,7 +17,7 @@ public enum OoResourcePathPrefix {
     OoResourcePathPrefix(String pathPrefix)
     {
         this.pathPrefix = pathPrefix;
-        this.pattern = Pattern.compile("^/?\\w+/??");
+        this.pattern = Pattern.compile("^/?" + pathPrefix + "/??");
     }
 
     public String pathPrefix()
