@@ -1,2 +1,5 @@
-text/freemarker	ftl
-text/velocity	vm 
+text/freemarker	ftl FTL
+text/velocity	vm VM
+text/javascript js JS
+text/css		css CSS
+

@@ -32,7 +32,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
         Resource resoure = resourceLoader.getResource(resourceInfo.getPath());
 
         //wrap in ooResource
-        DefaultOoResource ooResource = new DefaultOoResource(resoure, resourceInfo.isWritable());
+        DefaultOoResource ooResource = new DefaultOoResource(resoure, path, resourceInfo.isWritable());
         if (resoure.exists())
         {
             postprocessResource(ooResource);

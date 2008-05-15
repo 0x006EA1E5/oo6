@@ -8,4 +8,8 @@ import org.springframework.core.io.Resource;
 public interface OoResource extends Resource
 {
     public OutputStream getOutputStream() throws IOException;
+
+    public String getPath();
+
+    public boolean isWritable();
 }

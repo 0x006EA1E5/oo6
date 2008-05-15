@@ -1,6 +1,7 @@
 package org.otherobjects.cms.io;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
 
@@ -70,14 +71,26 @@ public class OoResourceLoaderTest extends AbstractDependencyInjectionSpringConte
         //System.out.println(test4.getURI());
         assertTrue(test4.toString().contains("src/test/java/org/otherobjects/cms/io/iotest.properties"));
 
+        OutputStream os = null;
         try
         {
-            test4.getOutputStream();
+            os = test4.getOutputStream();
 
         }
         catch (IOException e)
         {
             fail();
+        }
+        finally
+        {
+            if (os != null)
+                try
+                {
+                    os.close();
+                }
+                catch (Exception e)
+                {
+                }
         }
 
     }
