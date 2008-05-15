@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.springframework.beans.SimpleTypeConverter;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
@@ -20,6 +22,8 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
     @javax.annotation.Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
     private ResourceLoader resourceLoader;
+    private OoResourceMetaDataHelper metaDataHelper = new OoResourceMetaDataHelper();
+    private SimpleTypeConverter simpleTypeConverter = new SimpleTypeConverter();
 
     public void afterPropertiesSet() throws Exception
     {
@@ -41,9 +45,21 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
         return ooResource;
     }
 
-    protected void postprocessResource(OoResource ooResource)
+    protected void postprocessResource(DefaultOoResource ooResource)
     {
-        // TODO Auto-generated method stub
+        String metaData = metaDataHelper.readMetaDataString(ooResource);
+        if (metaData != null)
+        {
+            try
+            {
+                OoResourceMetaData ooResourceMetaData = (OoResourceMetaData) simpleTypeConverter.convertIfNecessary(metaData, OoResourceMetaData.class);
+                ooResource.setMetaData(ooResourceMetaData);
+            }
+            catch (TypeMismatchException e)
+            {
+
+            }
+        }
 
     }
 

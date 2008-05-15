@@ -12,4 +12,7 @@ public interface OoResource extends Resource
     public String getPath();
 
     public boolean isWritable();
+
+    public OoResourceMetaData getMetaData();
+
 }

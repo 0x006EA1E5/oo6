@@ -15,6 +15,17 @@ public class DefaultOoResource extends AbstractResource implements OoResource
     private Resource resource;
     private String path;
     private boolean writable;
+    private OoResourceMetaData metaData;
+
+    public OoResourceMetaData getMetaData()
+    {
+        return metaData;
+    }
+
+    public void setMetaData(OoResourceMetaData metaData)
+    {
+        this.metaData = metaData;
+    }
 
     public DefaultOoResource(Resource resource, String path, boolean writable)
     {
