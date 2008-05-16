@@ -8,7 +8,7 @@ import org.springframework.util.Assert;
 
 /**
  * {@link PropertyEditor} which if registered in the application context and injected with an {@link OoResourceLoader} instance 
- * allows to set {@link OoResource}s on beans in the context by just specifying there virtual path as a string.
+ * allows to set {@link OoResource}s on beans in the context by just specifying their virtual path as a string.
  * @author joerg
  *
  */
