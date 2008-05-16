@@ -13,6 +13,8 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.Assert;
 
 /**
+ * OoResource factory that knows about resolving virtual resource paths into real paths. 
+ * Also knows about how to populate a resource's metadata.
  * 
  * @author joerg
  *

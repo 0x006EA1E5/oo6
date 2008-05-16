@@ -4,6 +4,11 @@ import java.util.Date;
 
 import flexjson.JSONSerializer;
 
+/**
+ * Simple bean to hold metaData for {@link OoResource}s. It's toString() method produces a JSON string
+ * @author joerg
+ *
+ */
 public class OoResourceMetaData
 {
     private String title;

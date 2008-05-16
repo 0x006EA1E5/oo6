@@ -1,10 +1,17 @@
 package org.otherobjects.cms.io;
 
+import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 
 import org.springframework.util.Assert;
 
+/**
+ * {@link PropertyEditor} which if registered in the application context and injected with an {@link OoResourceLoader} instance 
+ * allows to set {@link OoResource}s on beans in the context by just specifying there virtual path as a string.
+ * @author joerg
+ *
+ */
 public class OoResourceEditor extends PropertyEditorSupport
 {
     private OoResourceLoader ooResourceLoader;

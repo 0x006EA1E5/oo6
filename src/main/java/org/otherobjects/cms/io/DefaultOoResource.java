@@ -10,6 +10,12 @@ import java.net.URL;
 import org.springframework.core.io.AbstractResource;
 import org.springframework.core.io.Resource;
 
+/**
+ * Custom specialisation of Spring's {@link Resource} abstraction. Should always be obtained via {@link OoResourceLoader} bean.
+ * 
+ * @author joerg
+ *
+ */
 public class DefaultOoResource extends AbstractResource implements OoResource
 {
     private Resource resource;

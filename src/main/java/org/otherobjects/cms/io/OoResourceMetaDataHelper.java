@@ -19,6 +19,17 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.otherobjects.cms.util.StringUtils;
 
+/**
+ * Helper class to read and write a JSON metadata string from and to the first line of an {@link OoResource} file. 
+ * It takes into account comment syntax for the given filetype and neither reads nor writes the metadata string, if it doesn't 
+ * have sufficient knowlege about the given file type.
+ * 
+ * It assumes {@link OoResourceMetaDataHelper#DEFAULT_FILE_ENCODING} and {@link OoResourceMetaDataHelper#DEFAULT_LINE_DELIMITER} when 
+ * reading and writing file contents and
+ * 
+ * @author joerg
+ *
+ */
 public class OoResourceMetaDataHelper
 {
     public final static String DEFAULT_FILE_ENCODING = "UTF-8";
@@ -132,6 +143,8 @@ public class OoResourceMetaDataHelper
         {
             IOUtils.closeQuietly(isr);
             IOUtils.closeQuietly(osw);
+            if (!tempFileCreationSuccessfull)
+                FileUtils.deleteQuietly(tempFile);
         }
 
         // now copy temp file over original file
