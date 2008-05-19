@@ -22,6 +22,13 @@ public class BindServiceImplTest extends BaseJcrTestCase
     private Date testDate;
 
     @Override
+    protected String[] getConfigLocations()
+    {
+        setAutowireMode(AUTOWIRE_BY_TYPE);
+        return new String[]{"classpath:org/otherobjects/cms/binding/testcontext.xml"};
+    }
+
+    @Override
     protected void onSetUp() throws Exception
     {
         super.onSetUp();
@@ -120,7 +127,7 @@ public class BindServiceImplTest extends BaseJcrTestCase
     public void testDeepNestComponent() throws Exception
     {
         TestReferenceObject r1 = createAndSaveReference("R1");
-        
+
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addParameter("testComponent.component.reference", r1.getId());
         request.addParameter("testComponent.component.name", "testSubName");
