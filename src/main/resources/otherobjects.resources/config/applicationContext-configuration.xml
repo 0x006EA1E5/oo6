@@ -49,4 +49,17 @@
 		should have port as a setting and if null should we should disable this service. -->
 		<property name="launchAtStart" value="true" />
 	</bean>
+	
+	<!-- registers OoResourceEditor to enable OoResourcePaths specified in the application context to be automatically resolved to OoResource objects -->
+	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+		<property name="customEditors">
+			<map>
+				<entry key="org.otherobjects.cms.io.OoResource">
+					<bean class="org.otherobjects.cms.io.OoResourceEditor">
+						<property name="ooResourceLoader" ref="ooResourceLoader" />
+					</bean>
+				</entry>
+			</map>
+		</property>
+	</bean>
 </beans>
