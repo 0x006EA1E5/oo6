@@ -10,6 +10,13 @@ public class OoResourceLoaderTest extends AbstractDependencyInjectionSpringConte
 {
     OoResourceLoader ooResourceLoader;
 
+    DummyResourceBean bean;
+
+    public void setBean(DummyResourceBean bean)
+    {
+        this.bean = bean;
+    }
+
     public void setOoResourceLoader(OoResourceLoader ooResourceLoader)
     {
         this.ooResourceLoader = ooResourceLoader;
@@ -19,6 +26,12 @@ public class OoResourceLoaderTest extends AbstractDependencyInjectionSpringConte
     protected String[] getConfigLocations()
     {
         return new String[]{"classpath:org/otherobjects/cms/io/OoResourceLoaderTest-context.xml"};
+    }
+
+    public void testBeanSet()
+    {
+        assertTrue(bean.getTestfile() != null);
+        assertTrue(bean.getTestfile().getMetaData() != null);
     }
 
     public void testResultingResources() throws IOException
