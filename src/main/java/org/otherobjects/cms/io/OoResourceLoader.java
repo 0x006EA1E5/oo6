@@ -1,5 +1,6 @@
 package org.otherobjects.cms.io;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.regex.Matcher;
 
@@ -43,8 +44,25 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
         {
             postprocessResource(ooResource);
         }
+        else
+        {
+            preprocessNewResource(ooResource);
+        }
 
         return ooResource;
+    }
+
+    protected void preprocessNewResource(DefaultOoResource ooResource) throws IOException
+    {
+        if (ooResource.isWritable())
+        {
+            // make all dirs in this path not yet existing
+            File parentDir = ooResource.getFile();
+            if (parentDir != null)
+            {
+                parentDir.mkdirs();
+            }
+        }
     }
 
     protected void postprocessResource(DefaultOoResource ooResource)
@@ -120,7 +138,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
         this.resourceLoader = resourceLoader;
     }
 
-    class ResourceInfo
+    protected class ResourceInfo
     {
         private String path;
         private boolean writable;
@@ -141,6 +159,11 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
             return writable;
         }
 
+    }
+
+    public void setOtherObjectsConfigurator(OtherObjectsConfigurator otherObjectsConfigurator)
+    {
+        this.otherObjectsConfigurator = otherObjectsConfigurator;
     }
 
 }
