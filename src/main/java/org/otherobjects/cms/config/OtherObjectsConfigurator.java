@@ -2,6 +2,7 @@ package org.otherobjects.cms.config;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
@@ -30,38 +31,41 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
 
     public static final String JNDI_BASE = "java:comp/env/";
 
-    private Properties mergedProperties;
+    private Properties mergedProperties = new Properties();
 
     @Override
     protected void convertProperties(Properties props)
     {
         String environmentPrefix = getEnvironmentName();
 
-        Properties convertedProperties = new Properties();
-
         Pattern pattern = Pattern.compile("^" + environmentPrefix + "\\.");
 
         // find all props starting with environmentPrefix and re-add them to the properties losing the prefix, thereby
         //effectively overriding global defaults
-        for (Object key : props.keySet())
+        for (Iterator<Object> it = props.keySet().iterator(); it.hasNext();)
         {
-            Object value = props.getProperty((String) key);
+            Object key = it.next();
+            Object value = props.get(key);
             if (pattern.matcher((String) key).lookingAt())
             {
                 String newKey = pattern.matcher((String) key).replaceFirst("");
-                convertedProperties.setProperty(newKey, (String) value);
+                mergedProperties.setProperty(newKey, (String) value);
+                it.remove(); // remove prefixed keys from handed down props
             }
             else
             {
-                convertedProperties.setProperty((String) key, (String) value);
+                mergedProperties.setProperty((String) key, (String) value);
             }
         }
 
         if (environmentPrefix.equals("production"))
-            jndiOverride(convertedProperties);
+            jndiOverride(mergedProperties);
 
-        this.mergedProperties = convertedProperties;
-        props = convertedProperties;
+        // make sure handed down props contains the same values as mergedProperties
+        for (Object key : mergedProperties.keySet())
+        {
+            props.setProperty((String) key, (String) mergedProperties.get(key));
+        }
         super.convertProperties(props);
     }
 
