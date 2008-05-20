@@ -18,7 +18,7 @@
 			<list>
 				<value>classpath:otherobjects.resources/config/otherobjects.properties</value>
 				<value>classpath:site.resources/config/site.properties</value>
-				<value>classpath:site.resources/config/pom.properties</value>
+<!--				<value>classpath:site.resources/config/pom.properties</value>-->
 			</list>
 		</property>
 	</bean>

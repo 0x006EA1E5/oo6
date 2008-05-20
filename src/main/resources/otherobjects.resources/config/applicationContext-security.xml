@@ -20,9 +20,17 @@
 	</http>
 	
 	<authentication-provider user-service-ref="userDao">
-		<password-encoder hash="sha">
+		<password-encoder ref="passwordEncoder">
 			<!-- TODO Create salt souce on startup 
 			<salt-source system-wide="123456790" /> -->
 		</password-encoder>
 	</authentication-provider>
+	
+	<beans:bean id="passwordEncoder" class="org.springframework.security.providers.encoding.MessageDigestPasswordEncoder">
+    	<beans:constructor-arg value="SHA-256" />
+    </beans:bean>
+	
+	<beans:bean id="saltSource" class="org.springframework.security.providers.dao.salt.SystemWideSaltSource">
+		<beans:property name="systemWideSalt" value="1234567890" />
+	</beans:bean>
 </beans:beans>
