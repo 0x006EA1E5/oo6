@@ -19,11 +19,12 @@
 		<logout logout-url="/go/logout.html" logout-success-url="/go" />
 	</http>
 	
-	<authentication-provider user-service-ref="userDao">
-		<password-encoder ref="passwordEncoder">
+	<authentication-provider user-service-ref="userDao" >
+		<password-encoder hash="sha" >
 			<!-- TODO Create salt souce on startup 
 			<salt-source system-wide="123456790" /> -->
 		</password-encoder>
+		
 	</authentication-provider>
 	
 	<beans:bean id="passwordEncoder" class="org.springframework.security.providers.encoding.MessageDigestPasswordEncoder">
