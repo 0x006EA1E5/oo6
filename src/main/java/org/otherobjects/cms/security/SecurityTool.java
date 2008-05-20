@@ -13,7 +13,6 @@ import org.springframework.security.userdetails.UserDetails;
  * A tool to provide static convenience methods to work with Spring security's {@link SecurityContextHolder}
  * 
  * @author joerg
- *
  */
 public class SecurityTool
 {
@@ -50,15 +49,15 @@ public class SecurityTool
     {
         if (SecurityContextHolder.getContext().getAuthentication() != null)
         {
-            try
-            {
-                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-                return user;
-            }
-            catch (ClassCastException e)
-            {
-                throw new OtherObjectsException("Current principal is not of type org.otherobjects.cms.model.User", e);
-            }
+
+            Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (user instanceof User)
+                return (User) user;
+            else if (user instanceof String && ((String) user).equals("roleAnonymous"))
+                // Anonymous user detected
+                return null;
+            else
+                throw new OtherObjectsException("Current principal is not of type org.otherobjects.cms.model.User: " + user.toString());
         }
         else
             return null;
