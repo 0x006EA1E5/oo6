@@ -17,6 +17,8 @@ public class OtherObjectsAdminUserCreator
 {
     private final Logger logger = LoggerFactory.getLogger(OtherObjectsAdminUserCreator.class);
 
+    public final static String DEFAULT_ADMIN_USER_NAME = "admin";
+
     private UserDao userDao;
     private RoleDao roleDao;
     private PasswordEncoder passwordEncoder;

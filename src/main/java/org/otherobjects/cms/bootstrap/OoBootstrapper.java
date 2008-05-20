@@ -9,7 +9,6 @@ import org.springframework.security.providers.UsernamePasswordAuthenticationToke
 
 public class OoBootstrapper implements InitializingBean
 {
-    public final static String DEFAULT_ADMIN_USER_NAME = "admin";
 
     private DbSchemaInitialiser dbSchemaInitialiser;
     private JackrabbitInitialiser jackrabbitInitialiser;
@@ -66,7 +65,7 @@ public class OoBootstrapper implements InitializingBean
 
     private User getAdminUser()
     {
-        return (User) userDao.loadUserByUsername(DEFAULT_ADMIN_USER_NAME);
+        return (User) userDao.loadUserByUsername(OtherObjectsAdminUserCreator.DEFAULT_ADMIN_USER_NAME);
     }
 
     private boolean schemaUpdateRequired()
