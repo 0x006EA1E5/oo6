@@ -3,6 +3,9 @@ package org.otherobjects.cms.bootstrap;
 import org.otherobjects.cms.dao.UserDao;
 import org.otherobjects.cms.model.User;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.security.Authentication;
+import org.springframework.security.context.SecurityContextHolder;
+import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 
 public class OoBootstrapper implements InitializingBean
 {
@@ -33,14 +36,25 @@ public class OoBootstrapper implements InitializingBean
         if (schemaUpdateRequired())
             dbSchemaInitialiser.initialise(true);
 
-        // create admin user if not yet existing
-        User adminUser = getAdminUser();
-        if (adminUser == null)
-            adminUser = otherObjectsAdminUserCreator.createAdminUser();
+        try
+        {
+            // create admin user if not yet existing
+            User adminUser = getAdminUser();
+            if (adminUser == null)
+                adminUser = otherObjectsAdminUserCreator.createAdminUser();
 
-        // populate repository with default infrastructure (folders, welcome page etc.)
-        if (repositoryPopulationRequired())
-            jackrabbitPopulater.populateRepository();
+            // Authenticate as new Admin user
+            Authentication authentication = new UsernamePasswordAuthenticationToken(adminUser, null, adminUser.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // populate repository with default infrastructure (folders, welcome page etc.)
+            if (repositoryPopulationRequired())
+                jackrabbitPopulater.populateRepository();
+        }
+        finally
+        {
+            SecurityContextHolder.clearContext();
+        }
 
     }
 
