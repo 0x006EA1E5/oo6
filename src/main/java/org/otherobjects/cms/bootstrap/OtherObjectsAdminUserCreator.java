@@ -18,6 +18,8 @@ public class OtherObjectsAdminUserCreator
     private final Logger logger = LoggerFactory.getLogger(OtherObjectsAdminUserCreator.class);
 
     public final static String DEFAULT_ADMIN_USER_NAME = "admin";
+    public final static String DEFAULT_ADMIN_ROLE_NAME = "ROLE_ADMIN";
+    public final static String DEFAULT_USER_ROLE_NAME = "ROLE_USER";
 
     private UserDao userDao;
     private RoleDao roleDao;
@@ -38,9 +40,9 @@ public class OtherObjectsAdminUserCreator
     public User createAdminUser()
     {
         logger.debug("Creating Admin user and roles.");
-        Role role = new Role("ROLE_ADMIN", "Adminstrator role");
+        Role role = new Role(DEFAULT_ADMIN_ROLE_NAME, "Adminstrator role");
         role = roleDao.save(role);
-        Role role2 = new Role("ROLE_USER", "User role");
+        Role role2 = new Role(DEFAULT_USER_ROLE_NAME, "User role");
         role2 = roleDao.save(role2);
 
         List<Role> roles = new ArrayList<Role>();
