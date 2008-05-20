@@ -31,6 +31,8 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
 
     public static final String JNDI_BASE = "java:comp/env/";
 
+    private String defaultEnvironment = "dev";
+
     private Properties mergedProperties = new Properties();
 
     @Override
@@ -80,7 +82,7 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
         if (StringUtils.isNotBlank(System.getProperty(ENVIRONMENT_SYSPROP_KEY)))
             environment = System.getProperty(ENVIRONMENT_SYSPROP_KEY);
         else
-            environment = "dev";
+            environment = defaultEnvironment;
 
         Assert.isTrue(environment.equals("dev") || environment.equals("test") || environment.equals("production"), "environment must be one of 'dev, 'test' or 'production'");
 
@@ -109,5 +111,10 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
         }
         else
             return "";
+    }
+
+    protected void setDefaultEnvironment(String defaultEnvironment)
+    {
+        this.defaultEnvironment = defaultEnvironment;
     }
 }

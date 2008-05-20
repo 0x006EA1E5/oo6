@@ -12,7 +12,7 @@
 	<bean id="annotatedClassesScanner" class="org.otherobjects.cms.discovery.AnnotatedClassesScannerImpl" />
 
 	<!-- For properties -->
-	<bean id="otherObjectsConfigurator" class="org.otherobjects.cms.config.OtherObjectsConfigurator">
+	<bean id="otherObjectsConfigurator" class="org.otherobjects.cms.test.TestOtherObjectsConfigurator">
 		<property name="ignoreResourceNotFound" value="true" />
 		<property name="locations">
 			<list>
