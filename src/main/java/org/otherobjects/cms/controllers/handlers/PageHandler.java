@@ -29,7 +29,7 @@ public class PageHandler implements ResourceHandler
         //Assert.notNull(template, "No template found for type: " + resourceObject.getTypeDef().getName());
 
         // Return page and context
-        ModelAndView view = new ModelAndView("layouts/two-column.ftl");
+        ModelAndView view = new ModelAndView("layouts/two-column");
         //        ModelAndView view = new ModelAndView("/site.resources/templates/layouts/" + template.get("layout.code") + "");
 
         view.addObject("resourceObject", resourceObject);
