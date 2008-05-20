@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<!-- For properties -->
+	<bean id="otherObjectsConfigurator" class="org.otherobjects.cms.test.TestOtherObjectsConfigurator">
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath:otherobjects.resources/config/otherobjects.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Repository -->
+	<bean id="repository" class="org.springmodules.jcr.jackrabbit.RepositoryFactoryBean">
+		<property name="configuration" value="${jcr.config.path}" />
+		<property name="homeDir" value="${jcr.repository.location}" />
+	</bean>
+
+	<bean id="jcrSessionFactory" class="org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory">
+		<property name="repository" ref="repository" />
+		<property name="credentials">
+			<bean class="javax.jcr.SimpleCredentials">
+				<constructor-arg index="0" value="${jcr.username}" />
+				<constructor-arg index="1">
+					<bean factory-bean="password" factory-method="toCharArray" />
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="password" class="java.lang.String">
+		<constructor-arg index="0" value="${jcr.password}" />
+	</bean>
+	
+	<bean  id="jackrabbitInitialiser" class="org.otherobjects.cms.bootstrap.JackrabbitInitialiser">
+		<property name="jcrSessionFactory" ref="jcrSessionFactory" />
+		<property name="nodeTypesConfig" value="classpath:otherobjects.resources/config/node-types.cnd" />
+	</bean>
+</beans>
