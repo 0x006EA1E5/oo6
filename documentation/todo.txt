@@ -1,6 +1,14 @@
 Current List
 ------------
 
+* Test validation
+* Auto Tool/Directive discovery
+* Spring 2.5.3 upgrade
+* URL mapping test
+* Docs on when to use @Resource
+* REST URL planning
+* UnifiedPath suport for tmp and plugins?
+
 * Servlet sort-out: /otherobjects and /
 * Restore user/language controls in workbench
 * Restore validation
@@ -23,8 +31,13 @@ Current List
 * Unified resource access (static/templates/scripts/datafiles)
 * Restore single and bulk image uploads
 
+* Interceptor support:
+ + URL Rerwiting plugin
+ + Defer scripts tags plugin
+
 Later:
 
+* Events on save/pulbish eg reregister typeDef
 * Salt for password encoder
 * Custom workbench pages (eg security home page)
 * Migration scripts for simple sites
