@@ -26,7 +26,7 @@ public abstract class AbstractSpringQuartzJob implements Job {
 	public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException
 	{
 		try{
-			SecurityTool.setupAuthenticationForNamesUser(getUserDao(jobExecutionContext), (String) jobExecutionContext.getJobDetail().getJobDataMap().get(USER_ID_KEY));
+			SecurityTool.setupAuthenticationForNamedUser(getUserDao(jobExecutionContext), (String) jobExecutionContext.getJobDetail().getJobDataMap().get(USER_ID_KEY));
 			executeJob(jobExecutionContext);
 		} catch (Exception e) {
 			throw new JobExecutionException("Couldn't execute Job: ", e);
