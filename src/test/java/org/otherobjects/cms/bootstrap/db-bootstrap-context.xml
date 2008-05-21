@@ -5,5 +5,9 @@
 	
 	<import resource="configurator.xml"/>
 	<import resource="minimum-db-bootstrap-context.xml"/>
-		
+	
+	<bean id="dbSchemaInitialiser" class="org.otherobjects.cms.bootstrap.DbSchemaInitialiser">
+		<property name="sessionFactoryBean" ref="&amp;sessionFactory"></property>
+	</bean>
+	
 </beans>

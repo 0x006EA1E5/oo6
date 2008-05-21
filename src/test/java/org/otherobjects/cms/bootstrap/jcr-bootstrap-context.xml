@@ -5,5 +5,10 @@
 	
 	<import resource="configurator.xml"/>
 	<import resource="minimum-jcr-bootstrap-context.xml"/>
-		
+	
+	<bean  id="jackrabbitInitialiser" class="org.otherobjects.cms.bootstrap.JackrabbitInitialiser">
+		<property name="jcrSessionFactory" ref="jcrSessionFactory" />
+		<property name="nodeTypesConfig" value="classpath:otherobjects.resources/config/node-types.cnd" />
+	</bean>
+	
 </beans>

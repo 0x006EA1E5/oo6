@@ -59,8 +59,4 @@
 		<property name="typeService" ref="typeService" /> <!-- this shouldn't be neccessary - but as soon as baseNodeValidator is referenced in universalJcrDao the auto config with @Resource stops working -->
 	</bean>
 	
-	<bean id="jackrabbitPopulater" class="org.otherobjects.cms.bootstrap.JackrabbitPopulater">
-		<property name="bootstrapScript" value="classpath:otherobjects.resources/bootstrap-data/setup.script" />
-		<property name="universalJcrDao" ref="universalJcrDao" />
-	</bean>
 </beans>

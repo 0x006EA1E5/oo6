@@ -27,8 +27,4 @@
 		<constructor-arg index="0" value="${jcr.password}" />
 	</bean>
 	
-	<bean  id="jackrabbitInitialiser" class="org.otherobjects.cms.bootstrap.JackrabbitInitialiser">
-		<property name="jcrSessionFactory" ref="jcrSessionFactory" />
-		<property name="nodeTypesConfig" value="classpath:otherobjects.resources/config/node-types.cnd" />
-	</bean>
 </beans>
