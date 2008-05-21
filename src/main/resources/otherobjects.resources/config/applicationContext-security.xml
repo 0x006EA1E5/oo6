@@ -20,7 +20,7 @@
 	</http>
 	
 	<authentication-provider user-service-ref="userDao" >
-		<password-encoder hash="sha" >
+		<password-encoder ref="passwordEncoder" >
 			 <salt-source system-wide="${otherobjects.system.wide.salt}" /> 
 		</password-encoder>
 		
