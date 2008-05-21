@@ -21,17 +21,16 @@
 	
 	<authentication-provider user-service-ref="userDao" >
 		<password-encoder hash="sha" >
-			<!-- TODO Create salt souce on startup 
-			<salt-source system-wide="123456790" /> -->
+			 <salt-source system-wide="${otherobjects.system.wide.salt}" /> 
 		</password-encoder>
 		
 	</authentication-provider>
 	
-	<beans:bean id="passwordEncoder" class="org.springframework.security.providers.encoding.MessageDigestPasswordEncoder">
-    	<beans:constructor-arg value="SHA-256" />
+	<beans:bean id="passwordEncoder" class="org.springframework.security.providers.encoding.ShaPasswordEncoder">
+<!--    	<beans:constructor-arg value="256" />-->
     </beans:bean>
 	
 	<beans:bean id="saltSource" class="org.springframework.security.providers.dao.salt.SystemWideSaltSource">
-		<beans:property name="systemWideSalt" value="1234567890" />
+		<beans:property name="systemWideSalt" value="${otherobjects.system.wide.salt}" />
 	</beans:bean>
 </beans:beans>

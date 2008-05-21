@@ -59,8 +59,7 @@ public class OtherObjectsAdminUserCreator
         adminUser.setAccountLocked(false);
         adminUser.setEnabled(true);
         adminUser.setPasswordHint("See the command line output for the temporary admin password.");
-        //adminUser.setPassword(passwordEncoder.encodePassword(defaultAdminPassword.toString(), saltSource.getSalt(adminUser)));
-        adminUser.setPassword("d033e22ae348aeb5660fc2140aec35850c4da997");
+        adminUser.setPassword(passwordEncoder.encodePassword(new String(defaultAdminPassword), saltSource.getSalt(adminUser)));
         adminUser = userDao.save(adminUser);
         // blank password
         Arrays.fill(defaultAdminPassword, ' ');
