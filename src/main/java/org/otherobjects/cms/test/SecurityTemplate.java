@@ -13,12 +13,24 @@ import org.springframework.security.providers.UsernamePasswordAuthenticationToke
 import org.springframework.security.providers.anonymous.AnonymousAuthenticationProvider;
 import org.springframework.security.providers.anonymous.AnonymousAuthenticationToken;
 
+/**
+ * 
+ * @author joerg
+ *
+ */
 public class SecurityTemplate
 {
     public Object executeAsAdmin(SecurityCallback action)
     {
         // try to get the real admin user
-        UserDao userDao = (UserDao) SingletonBeanLocator.getBean("userDao");
+        UserDao userDao = null;
+        try
+        {
+            userDao = (UserDao) SingletonBeanLocator.getBean("userDao");
+        }
+        catch (Exception e)
+        {
+        }
 
         Authentication auth = null;
         User adminUser = null;
@@ -42,10 +54,26 @@ public class SecurityTemplate
         return execute(action, auth);
     }
 
-    public Object executeAsUser(SecurityCallback action)
+    public Object executeAsUser(User user, SecurityCallback action)
     {
-        //  return execute(action, null);
-        throw new OtherObjectsException("Not yet supported operation");
+        return execute(action, new UsernamePasswordAuthenticationToken(user, null, new GrantedAuthority[]{new GrantedAuthorityImpl(OtherObjectsAdminUserCreator.DEFAULT_USER_ROLE_NAME)}));
+
+    }
+
+    public Object executeAsDummyUser(SecurityCallback action)
+    {
+        User dummyUser = new User();
+        dummyUser.setEnabled(true);
+        dummyUser.setAccountExpired(false);
+        dummyUser.setAccountLocked(false);
+        dummyUser.setCredentialsExpired(false);
+        dummyUser.setEmail("dummy@otherobjects.org");
+        dummyUser.setUsername("securityTemplate-dummyuser");
+        dummyUser.setFirstName("dummy");
+        dummyUser.setLastName("user");
+        dummyUser.setId(Long.MAX_VALUE); //FIXME this could potentially clash with a real user in the application
+
+        return executeAsUser(dummyUser, action);
     }
 
     public Object executeAsAnonymous(SecurityCallback action)

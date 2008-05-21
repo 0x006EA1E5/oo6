@@ -4,6 +4,7 @@ import javax.jcr.Credentials;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+import org.otherobjects.cms.bootstrap.OtherObjectsAdminUserCreator;
 import org.springframework.security.GrantedAuthority;
 import org.springframework.security.context.SecurityContextHolder;
 import org.springmodules.jcr.jackrabbit.ocm.JackrabbitSessionFactory;
@@ -20,7 +21,7 @@ public class OtherObjectsJackrabbitSessionFactory extends JackrabbitSessionFacto
 
     public static final String LIVE_WORKSPACE_NAME = "live";
     public static final String EDIT_WORKSPACE_NAME = "default";
-    public static final String EDITOR_ROLE_NAME = "ROLE_ADMIN";
+    public static final String EDITOR_ROLE_NAME = OtherObjectsAdminUserCreator.DEFAULT_ADMIN_ROLE_NAME;
 
     private String workspaceName;
 
