@@ -1,31 +1,26 @@
 package org.otherobjects.cms.jcr;
 
-import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.model.SiteFolder;
+
 
 @SuppressWarnings("unchecked")
 public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCaseNew
 {
-    protected OtherObjectsJackrabbitSessionFactory sessionFactory;
-    protected DaoService daoService;
     protected GenericJcrDao genericJcrDao;
-    private SampleObject welcome;
-    boolean populated = false;
 
     @Override
-    protected void onSetUp() throws Exception
+    protected void setUp() throws Exception
     {
-        super.onSetUp();
+        super.setUp();
         typeService.registerType(typeDefBuilder.getTypeDef(SampleObject.class));
         genericJcrDao = (GenericJcrDao) daoService.getDao(SampleObject.class);
-        //welcome = createSampleObject("/site/", "test.html", "Test Object");
     }
 
     @Override
-    protected void onTearDown() throws Exception
+    protected void tearDown() throws Exception
     {
-        super.onTearDown();
+        super.tearDown();
     }
 
     private SampleObject createSampleObject(String path, String code, String name)
@@ -63,7 +58,7 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCaseNew
 
     public void testGet()
     {
-        welcome = createSampleObject("/site/", "test.html", "Test Object");
+        SampleObject welcome = createSampleObject("/site/", "test.html", "Test Object");
         SampleObject node = (SampleObject) genericJcrDao.get(welcome.getId());
         assertNotNull(node);
         assertEquals(welcome.getJcrPath(), node.getJcrPath());
@@ -71,7 +66,8 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCaseNew
 
     public void testGetByPath()
     {
-        createSampleFolder("/site/", "Test");
+        SampleObject welcome = createSampleObject("/site/", "test.html", "Test Object");
+        SiteFolder sampleFolder = createSampleFolder("/site/", "Test");
 
         // Resources
         SampleObject t1r = (SampleObject) genericJcrDao.getByPath("/site/test.html");
@@ -86,7 +82,7 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCaseNew
 
     public void testRemove()
     {
-        //welcome = createSampleObject("/site/", "test.html", "Test Object");
+        SampleObject welcome = createSampleObject("/site/", "test.html", "Test Object");
         SampleObject node = (SampleObject) genericJcrDao.get(welcome.getId());
         assertNotNull(node);
 
@@ -96,7 +92,7 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCaseNew
 
     public void testExists()
     {
-        welcome = createSampleObject("/site/", "test.html", "Test Object");
+        SampleObject welcome = createSampleObject("/site/", "test.html", "Test Object");
         assertTrue(genericJcrDao.exists(welcome.getId()));
         // Corrupt UUID to create non-existing id
         assertFalse(genericJcrDao.exists(welcome.getId().replaceAll("[0-9a-f]", "0")));
@@ -112,6 +108,7 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCaseNew
 
     public void testExistsAtPath()
     {
+        SampleObject welcome = createSampleObject("/site/", "test.html", "Test Object");
         assertTrue(genericJcrDao.existsAtPath("/site/test.html"));
         assertFalse(genericJcrDao.existsAtPath("/site/non-existent.html"));
         try
@@ -479,15 +476,4 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCaseNew
     //    }
     //
     //   
-
-    public void setJcrSessionFactory(OtherObjectsJackrabbitSessionFactory sessionFactory)
-    {
-        this.sessionFactory = sessionFactory;
-    }
-
-    public void setDaoService(DaoService daoService)
-    {
-        this.daoService = daoService;
-    }
-
 }
