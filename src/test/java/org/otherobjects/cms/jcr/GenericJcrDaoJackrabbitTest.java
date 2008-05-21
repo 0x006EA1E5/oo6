@@ -3,34 +3,38 @@ package org.otherobjects.cms.jcr;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.model.SiteFolder;
-import org.otherobjects.cms.test.BaseJcrTestCase;
 
 @SuppressWarnings("unchecked")
-public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
+public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCaseNew
 {
     protected OtherObjectsJackrabbitSessionFactory sessionFactory;
     protected DaoService daoService;
     protected GenericJcrDao genericJcrDao;
-    private TestObject welcome;
+    private SampleObject welcome;
+    boolean populated = false;
 
     @Override
     protected void onSetUp() throws Exception
     {
         super.onSetUp();
-        registerType(TestObject.class);
-        genericJcrDao = (GenericJcrDao) daoService.getDao(TestObject.class);
-
-        // Create test data
-        welcome = createSampleObject("/site/", "test.html", "Test Object");
+        typeService.registerType(typeDefBuilder.getTypeDef(SampleObject.class));
+        genericJcrDao = (GenericJcrDao) daoService.getDao(SampleObject.class);
+        //welcome = createSampleObject("/site/", "test.html", "Test Object");
     }
 
-    private TestObject createSampleObject(String path, String code, String name)
+    @Override
+    protected void onTearDown() throws Exception
     {
-        TestObject a1 = new TestObject();
+        super.onTearDown();
+    }
+
+    private SampleObject createSampleObject(String path, String code, String name)
+    {
+        SampleObject a1 = new SampleObject();
         a1.setPath(path);
         a1.setCode(code);
         a1.setName(name);
-        return (TestObject) genericJcrDao.save(a1);
+        return (SampleObject) genericJcrDao.save(a1);
     }
 
     private SiteFolder createSampleFolder(String path, String name)
@@ -44,13 +48,13 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
     @SuppressWarnings("unchecked")
     public void testSave() throws Exception
     {
-        TestObject t1 = new TestObject();
-        GenericJcrDao<TestObject> dao = (GenericJcrDao<TestObject>) daoService.getDao(TestObject.class);
+        SampleObject t1 = new SampleObject();
+        GenericJcrDao<SampleObject> dao = (GenericJcrDao<SampleObject>) daoService.getDao(SampleObject.class);
 
         t1.setPath("/");
         t1.setName("Test Object");
 
-        TestObject t1s = dao.save(t1);
+        SampleObject t1s = dao.save(t1);
 
         assertNotNull(t1s.getId());
         assertEquals("/test-object", t1s.getJcrPath());
@@ -59,7 +63,8 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
 
     public void testGet()
     {
-        TestObject node = (TestObject) genericJcrDao.get(welcome.getId());
+        welcome = createSampleObject("/site/", "test.html", "Test Object");
+        SampleObject node = (SampleObject) genericJcrDao.get(welcome.getId());
         assertNotNull(node);
         assertEquals(welcome.getJcrPath(), node.getJcrPath());
     }
@@ -69,7 +74,7 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
         createSampleFolder("/site/", "Test");
 
         // Resources
-        TestObject t1r = (TestObject) genericJcrDao.getByPath("/site/test.html");
+        SampleObject t1r = (SampleObject) genericJcrDao.getByPath("/site/test.html");
         assertNotNull(t1r);
         assertEquals("Test Object", t1r.getName());
 
@@ -81,7 +86,8 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
 
     public void testRemove()
     {
-        TestObject node = (TestObject) genericJcrDao.get(welcome.getId());
+        //welcome = createSampleObject("/site/", "test.html", "Test Object");
+        SampleObject node = (SampleObject) genericJcrDao.get(welcome.getId());
         assertNotNull(node);
 
         genericJcrDao.remove(node.getId());
@@ -90,6 +96,7 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
 
     public void testExists()
     {
+        welcome = createSampleObject("/site/", "test.html", "Test Object");
         assertTrue(genericJcrDao.exists(welcome.getId()));
         // Corrupt UUID to create non-existing id
         assertFalse(genericJcrDao.exists(welcome.getId().replaceAll("[0-9a-f]", "0")));
@@ -119,149 +126,148 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
 
     public void testPublish() throws Exception
     {
-        
+
         /*
          * FIXME Implement pulish() test
          * Note: publish has some problem with nodes not created in the same transaction.
          * This test does not work yet. 
          */
-//        adminLogin();
-//
-//        TestObject welcome = createSampleObject("/", "test2.html", "Test Object");
-//        
-//        assertTrue(genericJcrDao.existsAtPath("/test2.html"));
-//        
-//        assertNotNull(welcome);
-//
-//        // Edit object
-//        String changedName = "New name " + new Date().toString();
-//        welcome.setName(changedName);
-//        welcome = (TestObject) genericJcrDao.save(welcome);
-//
-//        
-//        long countBefore = genericJcrDao.getVersions(welcome).size();
-//        System.out.println("There are " + countBefore + " in the repository before publishing");
-//        
-//        genericJcrDao.publish(welcome, null);
-//        long countAfter = genericJcrDao.getVersions(welcome).size();
-//        System.out.println("There are " + countAfter + " in the repository after publishing");
-//
-//        long countBefore=0;
-//        assertEquals(countBefore, countAfter - 1);
-//
-//        logout();
-//
-//        anoymousLogin();
-//
-//        TestObject node1 = (TestObject) genericJcrDao.getByPath(welcome.getJcrPath());
-//        String changedName="Test Object";
-//        assertEquals(changedName, node1.getName());
-//
-//        logout();
-
+        //        adminLogin();
+        //
+        //        TestObject welcome = createSampleObject("/", "test2.html", "Test Object");
+        //        
+        //        assertTrue(genericJcrDao.existsAtPath("/test2.html"));
+        //        
+        //        assertNotNull(welcome);
+        //
+        //        // Edit object
+        //        String changedName = "New name " + new Date().toString();
+        //        welcome.setName(changedName);
+        //        welcome = (TestObject) genericJcrDao.save(welcome);
+        //
+        //        
+        //        long countBefore = genericJcrDao.getVersions(welcome).size();
+        //        System.out.println("There are " + countBefore + " in the repository before publishing");
+        //        
+        //        genericJcrDao.publish(welcome, null);
+        //        long countAfter = genericJcrDao.getVersions(welcome).size();
+        //        System.out.println("There are " + countAfter + " in the repository after publishing");
+        //
+        //        long countBefore=0;
+        //        assertEquals(countBefore, countAfter - 1);
+        //
+        //        logout();
+        //
+        //        anoymousLogin();
+        //
+        //        TestObject node1 = (TestObject) genericJcrDao.getByPath(welcome.getJcrPath());
+        //        String changedName="Test Object";
+        //        assertEquals(changedName, node1.getName());
+        //
+        //        logout();
     }
 
-//    public void testGetAllVersions() throws Exception
-//    {
-//        DynaNode node = genericJcrDao.getByPath("/site/test.html");
-//        long versionCount = getVersionCount(node);
-//
-//        List<DynaNode> versions = genericJcrDao.getVersions(node);
-//
-//        int objectVersionCount = versions.size();
-//        assertTrue((int) versionCount == ++objectVersionCount); // object version count should be one less as we ignore the root version
-//
-//        for (DynaNode dn : versions)
-//        {
-//            System.out.println(PropertyUtils.getSimpleProperty(dn, "title"));
-//        }
-//    }
-//
-//    public void testGetVersionByChangeNumber() throws Exception
-//    {
-//        adminLogin();
-//        DynaNode node = genericJcrDao.getByPath("/site/test.html");
-//
-//        String firstVersionTitle = "title1";
-//
-//        PropertyUtils.setSimpleProperty(node, "title", firstVersionTitle);
-//        node.setCode(StringUtils.generateUrlCode(node.getLabel()) + ".html");
-//
-//        genericJcrDao.save(node);
-//        genericJcrDao.publish(node, null);
-//
-//        int firstChangeNumber = node.getChangeNumber();
-//
-//        String secondVersionTitle = "title2";
-//
-//        PropertyUtils.setSimpleProperty(node, "title", secondVersionTitle);
-//        node.setCode(StringUtils.generateUrlCode(node.getLabel()) + ".html");
-//
-//        genericJcrDao.save(node);
-//        genericJcrDao.publish(node, null);
-//
-//        int secondChangeNumber = node.getChangeNumber();
-//
-//        assertEquals(firstVersionTitle, PropertyUtils.getSimpleProperty(genericJcrDao.getVersionByChangeNumber(node, firstChangeNumber), "title"));
-//        assertEquals(secondVersionTitle, PropertyUtils.getSimpleProperty(genericJcrDao.getVersionByChangeNumber(node, secondChangeNumber), "title"));
-//
-//        logout();
-//    }
-//
-//    public void testRestoreVersionByChangeNumber() throws Exception
-//    {
-//        adminLogin();
-//        DynaNode node = genericJcrDao.getByPath("/site/about/index.html");
-//
-//        String firstVersionTitle = "title1";
-//
-//        PropertyUtils.setSimpleProperty(node, "title", firstVersionTitle);
-//        node.setCode(StringUtils.generateUrlCode(node.getLabel()) + ".html");
-//
-//        genericJcrDao.save(node);
-//        genericJcrDao.publish(node, null);
-//
-//        int firstChangeNumber = node.getChangeNumber();
-//        System.out.println("cn: " + firstChangeNumber);
-//
-//        String secondVersionTitle = "title2";
-//
-//        PropertyUtils.setSimpleProperty(node, "title", secondVersionTitle);
-//        node.setCode(StringUtils.generateUrlCode(node.getLabel()) + ".html");
-//
-//        genericJcrDao.save(node);
-//        genericJcrDao.publish(node, null);
-//        System.out.println("cn: " + node.getChangeNumber());
-//
-//        assertNotNull(genericJcrDao.getVersionByChangeNumber(node, firstChangeNumber));
-//
-//        DynaNode nodeRestored = genericJcrDao.restoreVersionByChangeNumber(node, firstChangeNumber);
-//
-//        assertEquals(firstVersionTitle, PropertyUtils.getSimpleProperty(nodeRestored, "title"));
-//
-//        logout();
-//    }
+    //    public void testGetAllVersions() throws Exception
+    //    {
+    //        DynaNode node = genericJcrDao.getByPath("/site/test.html");
+    //        long versionCount = getVersionCount(node);
+    //
+    //        List<DynaNode> versions = genericJcrDao.getVersions(node);
+    //
+    //        int objectVersionCount = versions.size();
+    //        assertTrue((int) versionCount == ++objectVersionCount); // object version count should be one less as we ignore the root version
+    //
+    //        for (DynaNode dn : versions)
+    //        {
+    //            System.out.println(PropertyUtils.getSimpleProperty(dn, "title"));
+    //        }
+    //    }
+    //
+    //    public void testGetVersionByChangeNumber() throws Exception
+    //    {
+    //        adminLogin();
+    //        DynaNode node = genericJcrDao.getByPath("/site/test.html");
+    //
+    //        String firstVersionTitle = "title1";
+    //
+    //        PropertyUtils.setSimpleProperty(node, "title", firstVersionTitle);
+    //        node.setCode(StringUtils.generateUrlCode(node.getLabel()) + ".html");
+    //
+    //        genericJcrDao.save(node);
+    //        genericJcrDao.publish(node, null);
+    //
+    //        int firstChangeNumber = node.getChangeNumber();
+    //
+    //        String secondVersionTitle = "title2";
+    //
+    //        PropertyUtils.setSimpleProperty(node, "title", secondVersionTitle);
+    //        node.setCode(StringUtils.generateUrlCode(node.getLabel()) + ".html");
+    //
+    //        genericJcrDao.save(node);
+    //        genericJcrDao.publish(node, null);
+    //
+    //        int secondChangeNumber = node.getChangeNumber();
+    //
+    //        assertEquals(firstVersionTitle, PropertyUtils.getSimpleProperty(genericJcrDao.getVersionByChangeNumber(node, firstChangeNumber), "title"));
+    //        assertEquals(secondVersionTitle, PropertyUtils.getSimpleProperty(genericJcrDao.getVersionByChangeNumber(node, secondChangeNumber), "title"));
+    //
+    //        logout();
+    //    }
+    //
+    //    public void testRestoreVersionByChangeNumber() throws Exception
+    //    {
+    //        adminLogin();
+    //        DynaNode node = genericJcrDao.getByPath("/site/about/index.html");
+    //
+    //        String firstVersionTitle = "title1";
+    //
+    //        PropertyUtils.setSimpleProperty(node, "title", firstVersionTitle);
+    //        node.setCode(StringUtils.generateUrlCode(node.getLabel()) + ".html");
+    //
+    //        genericJcrDao.save(node);
+    //        genericJcrDao.publish(node, null);
+    //
+    //        int firstChangeNumber = node.getChangeNumber();
+    //        System.out.println("cn: " + firstChangeNumber);
+    //
+    //        String secondVersionTitle = "title2";
+    //
+    //        PropertyUtils.setSimpleProperty(node, "title", secondVersionTitle);
+    //        node.setCode(StringUtils.generateUrlCode(node.getLabel()) + ".html");
+    //
+    //        genericJcrDao.save(node);
+    //        genericJcrDao.publish(node, null);
+    //        System.out.println("cn: " + node.getChangeNumber());
+    //
+    //        assertNotNull(genericJcrDao.getVersionByChangeNumber(node, firstChangeNumber));
+    //
+    //        DynaNode nodeRestored = genericJcrDao.restoreVersionByChangeNumber(node, firstChangeNumber);
+    //
+    //        assertEquals(firstVersionTitle, PropertyUtils.getSimpleProperty(nodeRestored, "title"));
+    //
+    //        logout();
+    //    }
 
-//    private long getVersionCount(DynaNode dynaNode)
-//    {
-//        Session editSession = null;
-//        try
-//        {
-//            editSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
-//            Node node = editSession.getNodeByUUID(dynaNode.getId());
-//            return node.getVersionHistory().getAllVersions().getSize();
-//        }
-//        catch (RepositoryException e)
-//        {
-//            //noop
-//        }
-//        finally
-//        {
-//            if (editSession != null)
-//                editSession.logout();
-//        }
-//        return 0;
-//    }
+    //    private long getVersionCount(DynaNode dynaNode)
+    //    {
+    //        Session editSession = null;
+    //        try
+    //        {
+    //            editSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
+    //            Node node = editSession.getNodeByUUID(dynaNode.getId());
+    //            return node.getVersionHistory().getAllVersions().getSize();
+    //        }
+    //        catch (RepositoryException e)
+    //        {
+    //            //noop
+    //        }
+    //        finally
+    //        {
+    //            if (editSession != null)
+    //                editSession.logout();
+    //        }
+    //        return 0;
+    //    }
 
     //    public void testSave() throws RepositoryException
     //    {
@@ -483,4 +489,5 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
     {
         this.daoService = daoService;
     }
+
 }
