@@ -2,7 +2,7 @@ package org.otherobjects.cms.model;
 
 import junit.framework.TestCase;
 
-import org.otherobjects.cms.jcr.TestObject;
+import org.otherobjects.cms.jcr.SampleObject;
 import org.otherobjects.cms.types.TypeDefImpl;
 
 public class BaseNodeTest extends TestCase
@@ -10,7 +10,7 @@ public class BaseNodeTest extends TestCase
 
     public void testSetJcrPath()
     {
-        TestObject node = new TestObject();
+        SampleObject node = new SampleObject();
         node.setJcrPath("/folder/code.html");
         assertEquals("/folder/", node.getPath());
         assertEquals("code.html", node.getCode());
@@ -28,7 +28,7 @@ public class BaseNodeTest extends TestCase
 
     public void testGetCode()
     {
-        TestObject node = new TestObject();
+        SampleObject node = new SampleObject();
         
         // Check for null
         try
@@ -56,7 +56,7 @@ public class BaseNodeTest extends TestCase
 
         
         // Test auto-generation
-        node = new TestObject();
+        node = new SampleObject();
         
         TypeDefImpl td = new TypeDefImpl();
         td.setLabelProperty("name");
@@ -71,7 +71,7 @@ public class BaseNodeTest extends TestCase
 
     public void testGet()
     {
-        TestObject n1 = new TestObject();
+        SampleObject n1 = new SampleObject();
         n1.set("name", "name1");
 
         assertEquals("name1", n1.get("name"));
