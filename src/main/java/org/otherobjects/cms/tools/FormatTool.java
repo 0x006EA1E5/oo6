@@ -1,5 +1,11 @@
 package org.otherobjects.cms.tools;
 
+import java.io.StringWriter;
+
+import net.java.textilej.parser.MarkupParser;
+import net.java.textilej.parser.builder.HtmlDocumentBuilder;
+import net.java.textilej.parser.markup.textile.TextileDialect;
+
 
 /**
  * Tool to be used from templates to aid in generating formatted text.
@@ -15,13 +21,15 @@ public class FormatTool
      */
     public static String formatTextile(String textileSource)
     {
-        return formatTextile(textileSource, true);
-    }
-
-    public static String formatTextile(String textileSource, boolean alwaysEscapeHtmlSpecialChars)
-    {
-        return textileSource;
-//        TextParser textileParser = new TextParser();
-//        return textileParser.parseTextile(textileSource, !alwaysEscapeHtmlSpecialChars);
+        // TODO This needs to be optimesd
+        // TODO Add support for additional markups
+        MarkupParser parser = new MarkupParser(new TextileDialect());
+        StringWriter out = new StringWriter();
+        HtmlDocumentBuilder builder = new HtmlDocumentBuilder(out);
+        builder.setEmitAsDocument(false);
+        parser.setBuilder(builder);
+        parser.parse(textileSource);
+        parser.setBuilder(null);
+        return out.toString();
     }
 }
