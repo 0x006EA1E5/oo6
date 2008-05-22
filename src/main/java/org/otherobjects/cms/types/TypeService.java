@@ -7,6 +7,7 @@ import java.util.Collection;
  * 
  * @author rich
  */
+@SuppressWarnings("unchecked")
 public interface TypeService
 {
     public void unregisterType(String typeName);

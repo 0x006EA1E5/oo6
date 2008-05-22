@@ -9,9 +9,9 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
+@SuppressWarnings("unchecked")
 public class JsonXstreamDateConverter implements Converter
 {
-
     public boolean canConvert(Class clazz)
     {
         return Date.class.isAssignableFrom(clazz);

@@ -11,5 +11,5 @@ public interface ValidatorService
      */
     public Validator getValidator(Object objectToValidate);
 
-    public Validator getValidator(Class classToValidate);
+    public Validator getValidator(Class<?> classToValidate);
 }

@@ -17,8 +17,6 @@ import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
 import org.springframework.core.OrderComparator;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.util.Assert;
 
 /**
@@ -28,8 +26,6 @@ import org.springframework.util.Assert;
  */
 public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder
 {
-    private ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
-
     public TypeDef getTypeDef(String type) throws Exception
     {
         return getTypeDef(Class.forName(type));

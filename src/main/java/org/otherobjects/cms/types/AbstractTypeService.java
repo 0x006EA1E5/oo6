@@ -10,6 +10,7 @@ import org.otherobjects.cms.OtherObjectsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("unchecked")
 public abstract class AbstractTypeService implements TypeService
 {
     private final Logger logger = LoggerFactory.getLogger(AbstractTypeService.class);

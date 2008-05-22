@@ -20,6 +20,7 @@ import org.springmodules.validation.valang.ValangValidator;
  * @author joerg
  *
  */
+@SuppressWarnings("unchecked")
 public class TypeDefConfiguredValidator implements Validator
 {
     @Resource

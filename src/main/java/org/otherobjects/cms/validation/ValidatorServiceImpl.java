@@ -18,7 +18,7 @@ public class ValidatorServiceImpl implements ValidatorService
         return getValidator(objectToValidate.getClass());
     }
 
-    public Validator getValidator(Class classToValidate)
+    public Validator getValidator(Class<?> classToValidate)
     {
         if (BaseNode.class.isAssignableFrom(classToValidate))
             return baseNodeValidator;

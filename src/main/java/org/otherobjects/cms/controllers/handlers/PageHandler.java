@@ -1,11 +1,8 @@
 package org.otherobjects.cms.controllers.handlers;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.otherobjects.cms.dao.DaoService;
-import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.site.SiteNavigatorService;
@@ -17,8 +14,8 @@ public class PageHandler implements ResourceHandler
     private NavigatorService navigatorService;
     private SiteNavigatorService siteNavigatorService;
 
-    @Resource
-    private DaoService daoService;
+//    @Resource
+//    private DaoService daoService;
 
     public ModelAndView handleRequest(CmsNode o, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
@@ -43,17 +40,17 @@ public class PageHandler implements ResourceHandler
         return view;
     }
 
-    /**
-     * FIXME Classes for TemplateDao and Template?
-     * @param resourceObject
-     * @return
-     */
-    private BaseNode determineTemplate(BaseNode resourceObject)
-    {
-        if (resourceObject.hasProperty("template") && resourceObject.get("template") != null)
-            return (BaseNode) resourceObject.get("template");
-        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
-        BaseNode template = universalJcrDao.getByPath("/designer/templates/" + resourceObject.getTypeDef().getName());
-        return template;
-    }
+//    /**
+//     * FIXME Classes for TemplateDao and Template?
+//     * @param resourceObject
+//     * @return
+//     */
+//    private BaseNode determineTemplate(BaseNode resourceObject)
+//    {
+//        if (resourceObject.hasProperty("template") && resourceObject.get("template") != null)
+//            return (BaseNode) resourceObject.get("template");
+//        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
+//        BaseNode template = universalJcrDao.getByPath("/designer/templates/" + resourceObject.getTypeDef().getName());
+//        return template;
+//    }
 }
