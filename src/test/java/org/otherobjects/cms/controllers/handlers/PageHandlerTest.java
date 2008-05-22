@@ -1,27 +1,27 @@
 package org.otherobjects.cms.controllers.handlers;
 
+import org.otherobjects.cms.jcr.BaseJcrTestCaseNew;
 import org.otherobjects.cms.model.Template;
 import org.otherobjects.cms.model.TemplateLayout;
-import org.otherobjects.cms.test.BaseJcrTestCase;
 
-public class PageHandlerTest extends BaseJcrTestCase
+public class PageHandlerTest extends BaseJcrTestCaseNew
 {
-    @Override
-    protected String[] getConfigLocations()
-    {
-        setAutowireMode(AUTOWIRE_BY_TYPE);
-        return new String[]{"file:src/test/resources/applicationContext-resources.xml", "file:src/test/resources/applicationContext-repository.xml",
-                "file:src/main/resources/otherobjects.resources/config/applicationContext-otherobjects.xml", "file:src/test/resources/applicationContext-messages.xml"};
+//    @Override
+//    protected String[] getConfigLocations()
+//    {
+//        setAutowireMode(AUTOWIRE_BY_TYPE);
+//        return new String[]{"file:src/test/resources/applicationContext-resources.xml", "file:src/test/resources/applicationContext-repository.xml",
+//                "file:src/main/resources/otherobjects.resources/config/applicationContext-otherobjects.xml", "file:src/test/resources/applicationContext-messages.xml"};
+//
+//        //        setAutowireMode(AUTOWIRE_BY_TYPE);
+//        //        //setAutowireMode(AUTOWIRE_BY_NAME);
+//        //        return new String[]{"file:src/test/resources/applicationContext-resources.xml", "file:src/test/resources/applicationContext-repository.xml"};//,"file:src/main/resources/otherobjects.resources/config/applicationContext-dao.xml"};
+//    }
 
-        //        setAutowireMode(AUTOWIRE_BY_TYPE);
-        //        //setAutowireMode(AUTOWIRE_BY_NAME);
-        //        return new String[]{"file:src/test/resources/applicationContext-resources.xml", "file:src/test/resources/applicationContext-repository.xml"};//,"file:src/main/resources/otherobjects.resources/config/applicationContext-dao.xml"};
-    }
-
     @Override
-    protected void onSetUp() throws Exception
+    protected void setUp() throws Exception
     {
-        super.onSetUp();
+        super.setUp();
         //        SimpleNamingContextBuilder simpleNamingContextBuilder = SimpleNamingContextBuilder.emptyActivatedContextBuilder();
         //        String serverName = "127.0.0.1";
         //        String contextPath = "test";
@@ -32,9 +32,9 @@ public class PageHandlerTest extends BaseJcrTestCase
     }
 
     @Override
-    protected void onTearDown() throws Exception
+    protected void tearDown() throws Exception
     {
-        super.onTearDown();
+        super.tearDown();
         logout();
     }
 

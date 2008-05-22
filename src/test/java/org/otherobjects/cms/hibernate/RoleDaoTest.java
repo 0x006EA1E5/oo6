@@ -3,14 +3,25 @@ package org.otherobjects.cms.hibernate;
 import org.otherobjects.cms.dao.RoleDao;
 import org.otherobjects.cms.model.Role;
 import org.otherobjects.cms.test.BaseDaoTestCase;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 
+@ContextConfiguration
 public class RoleDaoTest extends BaseDaoTestCase
 {
+    @Autowired
     private RoleDao dao;
 
     public void setRoleDao(RoleDao dao)
     {
         this.dao = dao;
+    }
+    
+    @Override
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+        loadSeedData("org/otherobjects/cms/hibernate/roles-seed.xml");
     }
 
     public void testGetRoleInvalid() throws Exception

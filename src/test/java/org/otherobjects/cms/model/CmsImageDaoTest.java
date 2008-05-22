@@ -2,19 +2,21 @@ package org.otherobjects.cms.model;
 
 import java.io.File;
 
-import org.otherobjects.cms.test.BaseJcrTestCase;
+import org.otherobjects.cms.jcr.BaseJcrTestCaseNew;
+import org.springframework.test.context.ContextConfiguration;
 
-public class CmsImageDaoTest extends BaseJcrTestCase
+@ContextConfiguration
+public class CmsImageDaoTest extends BaseJcrTestCaseNew
 {
 
     private final DataFileDao dataFileDao = new DataFileDaoFileSystem();
     private CmsImageDao cmsImageDao;
 
     @Override
-    protected void onSetUp() throws Exception
+    protected void setUp() throws Exception
     {
-        super.onSetUp();
-        this.cmsImageDao = (CmsImageDao) getApplicationContext().getBean("cmsImageDao");
+        super.setUp();
+        this.cmsImageDao = (CmsImageDao) this.applicationContext.getBean("cmsImageDao");
     }
 
     public void testSave()

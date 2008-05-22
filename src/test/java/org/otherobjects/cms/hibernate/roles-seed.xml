@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+	<table name="role">
+		<column>id</column>
+		<column>name</column>
+		<column>description</column>
+		<row>
+			<value description="id">1</value>
+			<value description="name">ROLE_ADMIN</value>
+			<value description="description"><![CDATA[Administrator role (can edit Users)]]></value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="name">ROLE_USER</value>
+			<value description="description"><![CDATA[Default role for all Users]]></value>
+		</row>
+	</table>
+</dataset>

@@ -4,18 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.otherobjects.cms.controllers.handlers.TestPage;
+import org.otherobjects.cms.jcr.BaseJcrTestCaseNew;
 import org.otherobjects.cms.model.SiteFolder;
-import org.otherobjects.cms.test.BaseJcrTestCase;
 
-public class SiteTrailImplTest extends BaseJcrTestCase
+/**
+ * Make this a proper unit test not depending on Jcr. 
+ * 
+ * @author rich
+ */
+public class SiteTrailImplTest extends BaseJcrTestCaseNew
 {
     private SiteTrail siteTrail;
 
     @Override
-    protected void onSetUp() throws Exception
+    protected void setUp() throws Exception
     {
         // TODO Auto-generated method stub
-        super.onSetUp();
+        super.setUp();
         registerType(TestPage.class);
         registerType(SiteFolder.class);
 

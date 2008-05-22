@@ -3,6 +3,8 @@ package org.otherobjects.cms.jcr;
 import javax.jcr.Session;
 import javax.jcr.Workspace;
 
+import org.apache.jackrabbit.core.WorkspaceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.GrantedAuthority;
 import org.springframework.security.GrantedAuthorityImpl;
 import org.springframework.security.MockAuthenticationManager;
@@ -10,24 +12,17 @@ import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 import org.springframework.security.providers.anonymous.AnonymousAuthenticationProvider;
 import org.springframework.security.providers.anonymous.AnonymousAuthenticationToken;
-import org.apache.jackrabbit.core.WorkspaceImpl;
-import org.otherobjects.cms.test.BaseJcrTestCase;
 
-public class OtherObjectsJackrabbitSessionFactoryTest extends BaseJcrTestCase
+public class OtherObjectsJackrabbitSessionFactoryTest extends BaseJcrTestCaseNew
 {
-
+    @Autowired
     private OtherObjectsJackrabbitSessionFactory jcrSessionFactory;
 
-    public void setJcrSessionFactory(OtherObjectsJackrabbitSessionFactory jcrSessionFactory)
-    {
-        this.jcrSessionFactory = jcrSessionFactory;
-    }
-
     @Override
-    protected void onSetUp() throws Exception
+    protected void setUp() throws Exception
     {
         // TODO Auto-generated method stub
-        super.onSetUp();
+        super.setUp();
         Session session = jcrSessionFactory.getSession(null);
         boolean liveWorkspaceCreated = false;
         for (String wsp : session.getWorkspace().getAccessibleWorkspaceNames())

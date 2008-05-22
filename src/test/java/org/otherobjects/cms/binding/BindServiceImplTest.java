@@ -8,36 +8,42 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.otherobjects.cms.jcr.BaseJcrTestCaseNew;
 import org.otherobjects.cms.model.BaseNode;
-import org.otherobjects.cms.test.BaseJcrTestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-public class BindServiceImplTest extends BaseJcrTestCase
+
+/**
+ * We should really mock the Jcr stuff in this to make it a better unit test...
+ * 
+ * @author rich
+ */
+public class BindServiceImplTest extends BaseJcrTestCaseNew
 {
     private final String dateFormat = "dd/MM/yy";
     private BindServiceImpl bindService;
     protected Date now = new Date();
     private Date testDate;
 
-    @Override
-    protected String[] getConfigLocations()
-    {
-        setAutowireMode(AUTOWIRE_BY_TYPE);
-        return new String[]{"classpath:org/otherobjects/cms/binding/testcontext.xml"};
-    }
+//    @Override
+//    protected String[] getConfigLocations()
+//    {
+//        setAutowireMode(AUTOWIRE_BY_TYPE);
+//        return new String[]{"classpath:org/otherobjects/cms/binding/testcontext.xml"};
+//    }
 
     @Override
-    protected void onSetUp() throws Exception
+    protected void setUp() throws Exception
     {
-        super.onSetUp();
+        super.setUp();
         this.bindService = new BindServiceImpl();
         this.bindService.setDateFormat(this.dateFormat);
         this.bindService.setDaoService(this.daoService);
-        registerType(TestObject.class);
-        registerType(TestReferenceObject.class);
-        registerType(TestComponentObject.class);
+        typeService.registerType(typeDefBuilder.getTypeDef(TestObject.class));
+        typeService.registerType(typeDefBuilder.getTypeDef(TestReferenceObject.class));
+        typeService.registerType(typeDefBuilder.getTypeDef(TestComponentObject.class));
         testDate = new SimpleDateFormat(this.dateFormat).parse("01/01/99");
     }
 
@@ -167,7 +173,7 @@ public class BindServiceImplTest extends BaseJcrTestCase
 
     private MockHttpServletRequest getRequest()
     {
-        adminLogin();
+       // adminLogin();
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addParameter("testString", "testString1");
         request.addParameter("testText", "testText1");
@@ -181,7 +187,7 @@ public class BindServiceImplTest extends BaseJcrTestCase
 
         BaseNode tr1 = createAndSaveReference("TR1");
         request.addParameter("testReference", tr1.getId());
-        logout();
+      //  logout();
         return request;
     }
 

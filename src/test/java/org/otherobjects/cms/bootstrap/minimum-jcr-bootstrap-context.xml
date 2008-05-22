@@ -11,6 +11,8 @@
 		<property name="homeDir" value="${jcr.repository.location}" />
 	</bean>
 
+
+
 	<bean id="jcrSessionFactory" class="org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory">
 		<property name="repository" ref="repository" />
 		<property name="credentials">
@@ -26,5 +28,9 @@
 	<bean id="password" class="java.lang.String">
 		<constructor-arg index="0" value="${jcr.password}" />
 	</bean>
+	
+	
+	<bean name="startupMessage" class="org.otherobjects.cms.util.StartupMessage" init-method="test"></bean>
+	
 	
 </beans>

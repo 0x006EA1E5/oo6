@@ -66,8 +66,8 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCaseNew
 
     public void testGetByPath()
     {
-        SampleObject welcome = createSampleObject("/site/", "test.html", "Test Object");
-        SiteFolder sampleFolder = createSampleFolder("/site/", "Test");
+        createSampleObject("/site/", "test.html", "Test Object");
+        createSampleFolder("/site/", "Test");
 
         // Resources
         SampleObject t1r = (SampleObject) genericJcrDao.getByPath("/site/test.html");
@@ -108,7 +108,7 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCaseNew
 
     public void testExistsAtPath()
     {
-        SampleObject welcome = createSampleObject("/site/", "test.html", "Test Object");
+        createSampleObject("/site/", "test.html", "Test Object");
         assertTrue(genericJcrDao.existsAtPath("/site/test.html"));
         assertFalse(genericJcrDao.existsAtPath("/site/non-existent.html"));
         try

@@ -20,7 +20,7 @@ public class StaticResourceServletTest extends TestCase
         MockHttpServletResponse resp = new MockHttpServletResponse();
         
         // Existing resource
-        req.setPathInfo("/otherobjects.resources/static/workbench.css");
+        req.setPathInfo("/otherobjects.resources/static/css/workbench.css");
         staticResourceServlet.doGet(req, resp);
         assertEquals(HttpServletResponse.SC_OK, resp.getStatus());
      

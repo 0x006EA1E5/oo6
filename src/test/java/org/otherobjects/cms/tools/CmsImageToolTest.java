@@ -2,21 +2,23 @@ package org.otherobjects.cms.tools;
 
 import java.io.File;
 
+import org.otherobjects.cms.jcr.BaseJcrTestCaseNew;
 import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.CmsImageDao;
 import org.otherobjects.cms.model.CmsImageSize;
-import org.otherobjects.cms.test.BaseJcrTestCase;
+import org.springframework.test.context.ContextConfiguration;
 
-public class CmsImageToolTest extends BaseJcrTestCase
+@ContextConfiguration(locations={"classpath:/org/otherobjects/cms/model/CmsImageDaoTest-context.xml"})
+public class CmsImageToolTest extends BaseJcrTestCaseNew
 {
     private CmsImageDao cmsImageDao;
     private CmsImage sampleImage;
 
     @Override
-    protected void onSetUp() throws Exception
+    protected void setUp() throws Exception
     {
-        super.onSetUp();
-        this.cmsImageDao = (CmsImageDao) getApplicationContext().getBean("cmsImageDao");
+        super.setUp();
+        this.cmsImageDao = (CmsImageDao) this.applicationContext.getBean("cmsImageDao");
         File dog = new File("src/test/java/org/otherobjects/cms/util/dog.jpg");
         CmsImage im1 = new CmsImage();
         im1.setPath("/");

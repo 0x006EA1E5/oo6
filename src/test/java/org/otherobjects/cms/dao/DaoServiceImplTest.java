@@ -5,7 +5,9 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
+import org.otherobjects.cms.hibernate.GenericDaoHibernate;
 import org.otherobjects.cms.jcr.UniversalJcrDaoJackrabbit;
+import org.otherobjects.cms.model.Article;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.support.GenericApplicationContext;
 
@@ -34,9 +36,9 @@ public class DaoServiceImplTest extends TestCase
     {
         GenericDao dao = this.daoService.getDao("org.otherobjects.cms.model.User");
         assertNotNull(dao);
-        assertTrue(dao instanceof UserDaoHibernate);
+        assertTrue(dao instanceof GenericDaoHibernate);
 
-        dao = this.daoService.getDao("Article");
+        dao = this.daoService.getDao("org.otherobjects.cms.model.Article");
         assertNotNull(dao);
         assertTrue(dao instanceof UniversalJcrDaoJackrabbit);
     }

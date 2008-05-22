@@ -5,22 +5,25 @@ import org.otherobjects.cms.dao.UserDao;
 import org.otherobjects.cms.model.Role;
 import org.otherobjects.cms.model.User;
 import org.otherobjects.cms.test.BaseDaoTestCase;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.context.ContextConfiguration;
 
+@ContextConfiguration
 public class UserDaoTest extends BaseDaoTestCase
 {
-    private UserDao dao = null;
-    private RoleDao rdao = null;
+    @Autowired
+    private UserDao dao;
+    
+    @Autowired
+    private RoleDao rdao;
 
-    public void setUserDao(UserDao dao)
+    @Override
+    protected void setUp() throws Exception
     {
-        this.dao = dao;
-    }
-
-    public void setRoleDao(RoleDao rdao)
-    {
-        this.rdao = rdao;
+        super.setUp();
+        loadSeedData("org/otherobjects/cms/hibernate/users-seed.xml");
     }
 
     public void testGetUserInvalid() throws Exception
@@ -55,13 +58,12 @@ public class UserDaoTest extends BaseDaoTestCase
         user = this.dao.get(1L);
 
         // verify that violation occurs when adding new user with same username
-        user.setId(null);
-
-        endTransaction();
+        User u = new User();
+        u.setUsername("admin");
 
         try
         {
-            this.dao.saveUser(user);
+            this.dao.saveUser(u);
             flush();
             fail("saveUser didn't throw DataIntegrityViolationException");
         }
