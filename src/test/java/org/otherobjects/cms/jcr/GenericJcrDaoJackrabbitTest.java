@@ -5,7 +5,7 @@ import org.otherobjects.cms.model.SiteFolder;
 
 
 @SuppressWarnings("unchecked")
-public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCaseNew
+public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
 {
     protected GenericJcrDao genericJcrDao;
 

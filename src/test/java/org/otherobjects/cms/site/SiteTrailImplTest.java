@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.otherobjects.cms.controllers.handlers.TestPage;
-import org.otherobjects.cms.jcr.BaseJcrTestCaseNew;
+import org.otherobjects.cms.jcr.BaseJcrTestCase;
 import org.otherobjects.cms.model.SiteFolder;
 
 /**
@@ -12,7 +12,7 @@ import org.otherobjects.cms.model.SiteFolder;
  * 
  * @author rich
  */
-public class SiteTrailImplTest extends BaseJcrTestCaseNew
+public class SiteTrailImplTest extends BaseJcrTestCase
 {
     private SiteTrail siteTrail;
 

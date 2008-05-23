@@ -1,16 +1,10 @@
 package org.otherobjects.cms.scheduler;
 
-import org.springframework.test.AbstractSingleSpringContextTests;
+import org.otherobjects.cms.test.BaseSharedContextTestCase;
 
-public class QuartzSchedulerConfigurationBeanTest extends AbstractSingleSpringContextTests
+//@ContextConfiguration(locations={"classpath:/org/otherobjects/cms/bootstrap/shared-test-context.xml"})
+public class QuartzSchedulerConfigurationBeanTest extends BaseSharedContextTestCase
 {
-
-    @Override
-    protected String[] getConfigLocations()
-    {
-        return new String[]{"classpath:/org/otherobjects/cms/bootstrap/configurator.xml"};
-    }
-
     public void testRefrestEvent() throws InterruptedException
     {
         // FIXME Test scheduler restart on job update/publish

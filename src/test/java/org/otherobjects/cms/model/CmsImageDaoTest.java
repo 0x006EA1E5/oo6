@@ -2,11 +2,10 @@ package org.otherobjects.cms.model;
 
 import java.io.File;
 
-import org.otherobjects.cms.jcr.BaseJcrTestCaseNew;
-import org.springframework.test.context.ContextConfiguration;
+import org.otherobjects.cms.jcr.BaseJcrTestCase;
 
-@ContextConfiguration
-public class CmsImageDaoTest extends BaseJcrTestCaseNew
+
+public class CmsImageDaoTest extends BaseJcrTestCase
 {
 
     private final DataFileDao dataFileDao = new DataFileDaoFileSystem();

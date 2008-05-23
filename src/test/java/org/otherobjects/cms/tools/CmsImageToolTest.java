@@ -2,14 +2,12 @@ package org.otherobjects.cms.tools;
 
 import java.io.File;
 
-import org.otherobjects.cms.jcr.BaseJcrTestCaseNew;
+import org.otherobjects.cms.jcr.BaseJcrTestCase;
 import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.CmsImageDao;
 import org.otherobjects.cms.model.CmsImageSize;
-import org.springframework.test.context.ContextConfiguration;
 
-@ContextConfiguration(locations={"classpath:/org/otherobjects/cms/model/CmsImageDaoTest-context.xml"})
-public class CmsImageToolTest extends BaseJcrTestCaseNew
+public class CmsImageToolTest extends BaseJcrTestCase
 {
     private CmsImageDao cmsImageDao;
     private CmsImage sampleImage;

@@ -13,7 +13,7 @@ import org.springframework.security.providers.UsernamePasswordAuthenticationToke
 import org.springframework.security.providers.anonymous.AnonymousAuthenticationProvider;
 import org.springframework.security.providers.anonymous.AnonymousAuthenticationToken;
 
-public class OtherObjectsJackrabbitSessionFactoryTest extends BaseJcrTestCaseNew
+public class OtherObjectsJackrabbitSessionFactoryTest extends BaseJcrTestCase
 {
     @Autowired
     private OtherObjectsJackrabbitSessionFactory jcrSessionFactory;

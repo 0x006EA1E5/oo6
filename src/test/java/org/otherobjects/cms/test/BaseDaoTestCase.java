@@ -23,7 +23,7 @@ import org.springframework.test.context.junit38.AbstractTransactionalJUnit38Spri
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@ContextConfiguration(locations = {"classpath:org/otherobjects/cms/bootstrap/db-bootstrap-context.xml"})
+@ContextConfiguration(locations = {"file:src/test/java/org/otherobjects/cms/bootstrap/db-bootstrap-context.xml"})
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @Transactional
 public abstract class BaseDaoTestCase extends AbstractTransactionalJUnit38SpringContextTests

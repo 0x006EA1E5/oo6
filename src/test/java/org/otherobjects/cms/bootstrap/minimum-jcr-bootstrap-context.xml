@@ -5,8 +5,14 @@
 		http://www.springframework.org/schema/context 
 		http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
-	<!-- Repository -->
+	<!-- Repository 
 	<bean id="repository" class="org.springmodules.jcr.jackrabbit.RepositoryFactoryBean">
+		<property name="configuration" value="${jcr.config.path}" />
+		<property name="homeDir" value="${jcr.repository.location}" />
+	</bean>
+	-->
+	
+	<bean id="repository" class="org.springmodules.jcr.jackrabbit.TransientRepositoryFactoryBean">
 		<property name="configuration" value="${jcr.config.path}" />
 		<property name="homeDir" value="${jcr.repository.location}" />
 	</bean>
@@ -30,7 +36,7 @@
 	</bean>
 	
 	
-	<bean name="startupMessage" class="org.otherobjects.cms.util.StartupMessage" init-method="test"></bean>
+	<bean name="startupMessage" class="org.otherobjects.cms.util.StartupMessage" init-method="init" destroy-method="destroy"/>
 	
 	
 </beans>

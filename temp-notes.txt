@@ -1,0 +1,58 @@
+Getting started on Fri
+
+* Single test context
+* Tests and coverage in mvn and eclipse
+* Good testing documentation and best practice notes
+* Update roadmaps 
+* Start website
+
+=============
+
+TODO
+
+Make a note of date of pre-M4 cleanup
+
+
+Quality Audit
+
+* Consistest use of Oo vs OtherObjects
+* Consitent style
+* Check warnings and supressions
+* Identical loggers
+* Migrate to new style tests
+* Check paskage names make sense
+* OWASP Check
+* XSS escaping by default
+* Test class packages match classes under test
+
+Testing Docs
+------------
+Tests can be run from mvn or eclipse
+Test coverage
+Single Context
+Base Classes
+Transient Repo eventually?
+DBUnit
+
+
+Rest Interace
+-------------
+Search
+Filter (user, state, date, type)
+Sort
+
+UI
+--
+
+CSS3 Webkit primary browser
+
+Website
+-------
+
+Useful developer links: mvn search, major library docs
+
+Later
+-----
+Support for more image editing
+
+

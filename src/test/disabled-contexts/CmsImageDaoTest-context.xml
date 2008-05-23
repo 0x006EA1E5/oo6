@@ -3,10 +3,5 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
-	<bean id="cmsImageDao" class="org.otherobjects.cms.model.CmsImageDaoImpl">
-		<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
-		<property name="sessionFactory" ref="jcrSessionFactory" />
-		<property name="validator" ref="baseNodeValidator" />
-	</bean>
 
 </beans>

@@ -1,4 +1,4 @@
-package org.otherobjects.cms.util;
+package org.otherobjects.cms.test;
 
 import org.apache.tools.ant.taskdefs.Delete;
 import org.slf4j.Logger;

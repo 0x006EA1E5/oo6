@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.otherobjects.cms.jcr.BaseJcrTestCaseNew;
+import org.otherobjects.cms.jcr.BaseJcrTestCase;
 import org.otherobjects.cms.model.BaseNode;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.validation.BindingResult;
@@ -20,19 +20,12 @@ import org.springframework.validation.FieldError;
  * 
  * @author rich
  */
-public class BindServiceImplTest extends BaseJcrTestCaseNew
+public class BindServiceImplTest extends BaseJcrTestCase
 {
     private final String dateFormat = "dd/MM/yy";
     private BindServiceImpl bindService;
     protected Date now = new Date();
     private Date testDate;
-
-//    @Override
-//    protected String[] getConfigLocations()
-//    {
-//        setAutowireMode(AUTOWIRE_BY_TYPE);
-//        return new String[]{"classpath:org/otherobjects/cms/binding/testcontext.xml"};
-//    }
 
     @Override
     protected void setUp() throws Exception

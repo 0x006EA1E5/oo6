@@ -1,27 +1,23 @@
 package org.otherobjects.cms;
 
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.otherobjects.cms.test.BaseSharedContextTestCase;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletContext;
-import org.springframework.test.AbstractSingleSpringContextTests;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.support.StaticWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-public class UrlTest extends AbstractSingleSpringContextTests
+//@ContextConfiguration(locations={"classpath:/org/otherobjects/cms/bootstrap/shared-test-context.xml"})
+public class UrlTest extends BaseSharedContextTestCase
 {
 
     public static final String SERVER_NAME = "some.test.server";
     public static final String CONTEXT_PATH = "/test";
 
-    @Override
-    protected String[] getConfigLocations()
-    {
-        return new String[]{"classpath:org/otherobjects/cms/UrlTest-context.xml"};
-    }
-
+   
     public void testContext()
     {
         assertEquals("localhost", ((OtherObjectsConfigurator) SingletonBeanLocator.getBean("otherObjectsConfigurator")).getProperty("site.server.name"));

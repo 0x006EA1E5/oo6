@@ -7,7 +7,6 @@ import junit.framework.TestCase;
 
 import org.otherobjects.cms.hibernate.GenericDaoHibernate;
 import org.otherobjects.cms.jcr.UniversalJcrDaoJackrabbit;
-import org.otherobjects.cms.model.Article;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.support.GenericApplicationContext;
 

@@ -22,10 +22,10 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.springmodules.jcr.jackrabbit.ocm.JcrMappingTemplate;
 
-@ContextConfiguration(locations = {"classpath:/org/otherobjects/cms/jcr/basejcrtest-context.xml"})
+@ContextConfiguration(locations = {"file:src/test/java/org/otherobjects/cms/bootstrap/jcr-test-context.xml"})
 @TransactionConfiguration(transactionManager = "jcrTransactionManager", defaultRollback = true)
 @Transactional
-public abstract class BaseJcrTestCaseNew extends AbstractTransactionalJUnit38SpringContextTests
+public abstract class BaseJcrTestCase extends AbstractTransactionalJUnit38SpringContextTests
 {
     @Autowired
     protected JcrMappingTemplate jcrMappingTemplate;

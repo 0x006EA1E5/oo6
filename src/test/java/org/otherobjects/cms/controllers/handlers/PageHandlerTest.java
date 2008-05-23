@@ -1,23 +1,11 @@
 package org.otherobjects.cms.controllers.handlers;
 
-import org.otherobjects.cms.jcr.BaseJcrTestCaseNew;
+import org.otherobjects.cms.jcr.BaseJcrTestCase;
 import org.otherobjects.cms.model.Template;
 import org.otherobjects.cms.model.TemplateLayout;
 
-public class PageHandlerTest extends BaseJcrTestCaseNew
+public class PageHandlerTest extends BaseJcrTestCase
 {
-//    @Override
-//    protected String[] getConfigLocations()
-//    {
-//        setAutowireMode(AUTOWIRE_BY_TYPE);
-//        return new String[]{"file:src/test/resources/applicationContext-resources.xml", "file:src/test/resources/applicationContext-repository.xml",
-//                "file:src/main/resources/otherobjects.resources/config/applicationContext-otherobjects.xml", "file:src/test/resources/applicationContext-messages.xml"};
-//
-//        //        setAutowireMode(AUTOWIRE_BY_TYPE);
-//        //        //setAutowireMode(AUTOWIRE_BY_NAME);
-//        //        return new String[]{"file:src/test/resources/applicationContext-resources.xml", "file:src/test/resources/applicationContext-repository.xml"};//,"file:src/main/resources/otherobjects.resources/config/applicationContext-dao.xml"};
-//    }
-
     @Override
     protected void setUp() throws Exception
     {
