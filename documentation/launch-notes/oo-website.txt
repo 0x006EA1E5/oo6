@@ -7,6 +7,8 @@ Forums
 Demo screencasts
 Demo projects
 Live example
+Dependencies (with thanks and links)
+Documentation
 Logos: Java powered, OSI
 
 ! Design Ideas
@@ -24,4 +26,22 @@ http://rimuhosting.com/
 http://www.jsp-servlet.net/
 http://hostsyst.com/
 http://eapps.com/
+
+! Essential resources
+
+mvnrepository.com
+Docs for major libraries
+
+! Infracture
+
+Project website (oo)
+SVN repo (Google Code)
+Discussion/mailing list (Google Groups)
+Integration testing (hudson)
+Issue tracking with Mylyn integration (trac)
+Maven repo (artifactory)
+Test data and project reports (mvn site)
+
+
+
 

@@ -1,34 +1,32 @@
 Milestone 4 (otherobjects-0.4)
 ==============================
 
-Integrate Grails as the core web application framework.
-
-Remove non-core functionality (and defer all CMS features) to create
-a solid, documentated and stable base for future releases to build upon.
+Final technology release. Legacy ext based interface.
 
 Key features
 
-* JDBC support via GORM
-* JCR support with publishing and auditing
-* Workbench editor for both JCR/JDBC
-* Fully integrated full-text search
-* URL and Domain Security configured via workbench
-* REST API for all workbench features
-* GSP as view technology
-* Ext 2.0 as UI technology
-* Lazy session creation
-* Lazy DB connections
+* Feature complete datastore features
+* Feature complete CMS features
+* Full REST interface
+* Quality and security audit
+? OO5 Migration tooling
 
-Deferred
---------
 
-Mail support
-Image support
-DataFile support
-Scripting support
-Performance infomation
-Caching
-SiteMap generator
-Smart Folders
-CMS Bookmarklet
-Data intergity checks -- images on disk, flies on disk, extrenal links OK
+Milestone 5 (otherobjects-0.5)
+==============================
+
+New interface release.
+
+Key features
+
+* Ext deprecated
+* CSS3 based design
+* Keyboard shortcuts
+* Library of components to ease OO template construction
+
+
+Post 1.0
+========
+
+* Support for more image editing features
+* Restore third party integrations (flickr, delicious) 

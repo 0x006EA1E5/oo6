@@ -35,6 +35,11 @@ Current List
  + URL Rerwiting plugin
  + Defer scripts tags plugin
 
+* REST Interface with:
+  + Search
+  + Filter (user, state, date, type)
+  + Sort
+
 Later:
 
 * Events on save/pulbish eg reregister typeDef

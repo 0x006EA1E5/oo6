@@ -1,0 +1,12 @@
+Quality Audit
+
+* Consistest use of Oo vs OtherObjects
+* Consitent style
+* Check warnings and supressions
+* Identical loggers
+* Migrate to new style tests
+* Check paskage names make sense
+* OWASP Check
+* XSS escaping by default
+* Test class packages match classes under test
+* File formatting and licenses (tabs, line endings)
