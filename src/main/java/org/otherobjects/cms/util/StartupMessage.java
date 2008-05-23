@@ -21,6 +21,20 @@ public class StartupMessage implements ApplicationListener
     @Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
     
+    public void init()
+    {
+        System.err.println("*******************************************************");
+        System.err.println("*************************** INIT **********************");
+        System.err.println("*******************************************************");
+    }
+    
+    public void destroy()
+    {
+        System.err.println("*******************************************************");
+        System.err.println("************************* DESTROY *********************");
+        System.err.println("*******************************************************");
+    }
+    
     public void onApplicationEvent(ApplicationEvent e)
     {
         // Only do for root context refreshes
@@ -37,7 +51,11 @@ public class StartupMessage implements ApplicationListener
     		this.logger.info("");
     		this.logger.info("******************* Started up successfully ******************");
     		this.logger.info("");
-    		this.logger.info("Environment : {}", otherObjectsConfigurator.getEnvironmentName());
+    		if(otherObjectsConfigurator!=null)
+    		    this.logger.info("Environment : {}", otherObjectsConfigurator.getEnvironmentName());
+    		else
+    		    this.logger.info("Environment : WARNING! No configurator found.");
+    		    
     		this.logger.info("Site        : [unknown]");
     		this.logger.info("Admin       : [unknown]");
     		this.logger.info("");
