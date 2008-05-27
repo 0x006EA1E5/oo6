@@ -77,7 +77,9 @@ Slightly modified version of Sun Checks that better matches the default code for
         <module name="ModifierOrder"/>
         <module name="RedundantModifier"/>
         <module name="AvoidNestedBlocks"/>
-        <module name="EmptyBlock"/>
+        <module name="EmptyBlock">
+            <property name="option" value="text"/>
+        </module>
         <module name="LeftCurly">
             <property name="option" value="nl"/>
         </module>
@@ -118,7 +120,9 @@ Slightly modified version of Sun Checks that better matches the default code for
             <property name="severity" value="ignore"/>
         </module>
         <module name="InterfaceIsType"/>
-        <module name="VisibilityModifier"/>
+        <module name="VisibilityModifier">
+            <property name="protectedAllowed" value="true"/>
+        </module>
         <module name="ArrayTypeStyle"/>
         <module name="FinalParameters">
             <property name="severity" value="ignore"/>
