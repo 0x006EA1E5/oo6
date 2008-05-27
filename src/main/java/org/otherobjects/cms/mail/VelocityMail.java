@@ -18,11 +18,11 @@ import org.otherobjects.cms.OtherObjectsException;
  * The simplest possible use looks  like this:
  * 
  * <code>
- * 	VelocityMail mail = new VelocityMail();
- * 	mail.setFromAddress(new EmailAddress("me@mail.com"));
- * 	mail.addToRecipient(new EmailAddress("me@mail.com"));
- * 	mail.setSubject("Hello World!");
- * 	mail.setBody("A test email");
+ *  VelocityMail mail = new VelocityMail();
+ *  mail.setFromAddress(new EmailAddress("me@mail.com"));
+ *  mail.addToRecipient(new EmailAddress("me@mail.com"));
+ *  mail.setSubject("Hello World!");
+ *  mail.setBody("A test email");
  * 
  *  mailService.send(mail);
  * </code>
@@ -35,13 +35,13 @@ public class VelocityMail
 {
 
     /** A TO recipient. */
-    private final static int TO = 0;
+    private static final int TO = 0;
 
     /** A CC recipient. */
-    private final static int CC = 1;
+    private static final int CC = 1;
 
     /** A BCC recipient. */
-    private final static int BCC = 2;
+    private static final int BCC = 2;
 
     /**
      * My thoughts on a valid email address:

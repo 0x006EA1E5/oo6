@@ -10,8 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class to create String representations of bean style objects. The toString and toHtml methods will introspect the object given and find all
@@ -23,11 +23,11 @@ import org.apache.commons.logging.LogFactory;
 @SuppressWarnings("unchecked")
 public class ObjectInspector
 {
-    private final static Log logger = LogFactory.getLog(ObjectInspector.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ObjectInspector.class);
 
     private static final int ABBREVIATION_MAX = 100;
 
-    static Pattern READ_ACCESSOR_PATTERN = Pattern.compile("^(?:(?:get)|(?:is))(\\w{1})(.*)$");
+    public static final Pattern READ_ACCESSOR_PATTERN = Pattern.compile("^(?:(?:get)|(?:is))(\\w{1})(.*)$");
 
     public static String toString(Object object, boolean multiline)
     {
@@ -162,7 +162,7 @@ public class ObjectInspector
                 }
                 catch (Exception e)
                 {
-                    logger.debug("Couldn't inspect accessor method", e);
+                    LOGGER.debug("Couldn't inspect accessor method", e);
                 }
             }
         }

@@ -11,52 +11,63 @@ import net.sf.cglib.beans.BeanGenerator;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.model.BaseNode;
 
-public class CglibClassloadingTest extends TestCase {
-	
+public class CglibClassloadingTest extends TestCase
+{
+
+    private static final int BUFFER_SIZE = 2048;
+
     public void testBeanModification()
     {
         BeanGenerator beanGenerator = new BeanGenerator();
         beanGenerator.setSuperclass(BaseNode.class);
         beanGenerator.addProperty("testString", String.class);
     }
-    
-	public void testTwoBeansSameClassname() 
-	{
-		Object bean1 = getDynaNodeBean();
-		Object bean2 = getDynaNodeBean();
-		
-		
-		String genClassName = bean1.getClass().getName();
-		System.out.println("Name: " + genClassName);
-		assertEquals(bean1.getClass().getName(), bean2.getClass().getName());
-		
-		
-		try {
-			Class<?> clazz = Class.forName(genClassName);
-			Object bean3 = clazz.newInstance();
-			PropertyUtils.setSimpleProperty(bean3, "testString", "This is a test");
-		} catch (ClassNotFoundException e) {
-			fail("We should find this class as we just added it to the classloader");
-		} catch (InstantiationException e) {
-			fail();
-		} catch (IllegalAccessException e) {
-			fail();
-		} catch (InvocationTargetException e) {
-			fail();
-		} catch (NoSuchMethodException e) {
-			fail();
-		}
-		
-		
-		InputStream in = getClass().getClassLoader().getResourceAsStream("/" + genClassName);
-		
-		System.out.println(in);
-		
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		
+
+    public void testTwoBeansSameClassname()
+    {
+        Object bean1 = getDynaNodeBean();
+        Object bean2 = getDynaNodeBean();
+
+        String genClassName = bean1.getClass().getName();
+        System.out.println("Name: " + genClassName);
+        assertEquals(bean1.getClass().getName(), bean2.getClass().getName());
+
         try
         {
-            byte buffer[] = new byte[2048];
+            Class<?> clazz = Class.forName(genClassName);
+            Object bean3 = clazz.newInstance();
+            PropertyUtils.setSimpleProperty(bean3, "testString", "This is a test");
+        }
+        catch (ClassNotFoundException e)
+        {
+            fail("We should find this class as we just added it to the classloader");
+        }
+        catch (InstantiationException e)
+        {
+            fail();
+        }
+        catch (IllegalAccessException e)
+        {
+            fail();
+        }
+        catch (InvocationTargetException e)
+        {
+            fail();
+        }
+        catch (NoSuchMethodException e)
+        {
+            fail();
+        }
+
+        InputStream in = getClass().getClassLoader().getResourceAsStream("/" + genClassName);
+
+        System.out.println(in);
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        try
+        {
+            byte[] buffer = new byte[BUFFER_SIZE];
             int len = buffer.length;
             while (true)
             {
@@ -71,38 +82,38 @@ public class CglibClassloadingTest extends TestCase {
         {
             System.out.println(e.getMessage());
         }
-        finally
-        {
+//        finally
+//        {
 //            if (in != null)
 //                in.close();
-        }
-        
+//        }
+
         System.out.println(out.toByteArray());
-	
-	}
-	
-	private Object getDynaNodeBean()
-	{
-		BeanGenerator beanGenerator = new BeanGenerator();
+
+    }
+
+    private Object getDynaNodeBean()
+    {
+        BeanGenerator beanGenerator = new BeanGenerator();
         beanGenerator.setSuperclass(BaseNode.class);
-        
+
         beanGenerator.addProperty("testString", String.class);
         beanGenerator.addProperty("testLong", Long.class);
         beanGenerator.addProperty("testDate", Date.class);
         return beanGenerator.create();
-	}
-	
-//	private Object getDynaNodeBean2()
-//	{
-//		BeanGenerator beanGenerator = new BeanGenerator();
-//        beanGenerator.setSuperclass(DynaNode.class);
-//        
-//        beanGenerator.addProperty("testString", String.class);
-//        beanGenerator.addProperty("testDate", Date.class);
-//        beanGenerator.addProperty("testLong", Long.class);
-//        beanGenerator.addProperty("testInt", Integer.class);
-//        
-//        return beanGenerator.create();
-//	}
-			
+    }
+
+    //  private Object getDynaNodeBean2()
+    //  {
+    //      BeanGenerator beanGenerator = new BeanGenerator();
+    //        beanGenerator.setSuperclass(DynaNode.class);
+    //        
+    //        beanGenerator.addProperty("testString", String.class);
+    //        beanGenerator.addProperty("testDate", Date.class);
+    //        beanGenerator.addProperty("testLong", Long.class);
+    //        beanGenerator.addProperty("testInt", Integer.class);
+    //        
+    //        return beanGenerator.create();
+    //  }
+
 }

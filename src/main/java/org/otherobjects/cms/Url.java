@@ -25,7 +25,7 @@ import flexjson.JSON;
 public class Url
 {
 
-    protected final static Logger logger = LoggerFactory.getLogger(Url.class);
+    private final Logger logger = LoggerFactory.getLogger(Url.class);
 
     public static final int STANDARD_HTTP_PORT = 80;
     public static final int STANDARD_HTTPS_PORT = 443;

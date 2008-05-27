@@ -195,10 +195,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
 
         // PERF Access node without conversion for faster check
         T entity = get(id);
-        if (entity != null)
-            return true;
-        else
-            return false;
+        return (entity != null);
     }
 
     public boolean existsAtPath(String path)
@@ -208,10 +205,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
 
         // PERF Access node without conversion for faster check
         T entity = getByPath(path);
-        if (entity != null)
-            return true;
-        else
-            return false;
+        return (entity != null);
     }
 
     @SuppressWarnings("unchecked")

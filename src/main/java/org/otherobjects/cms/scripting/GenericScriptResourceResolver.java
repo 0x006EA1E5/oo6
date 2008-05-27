@@ -19,8 +19,8 @@ import org.springframework.util.Assert;
  */
 public class GenericScriptResourceResolver implements ScriptResourceResolver, ApplicationContextAware, InitializingBean
 {
-    public final static String OTHEROBJECTS_MODULE = "otherobjects";
-    public final static String SITE_MODULE = "site";
+    public static final String OTHEROBJECTS_MODULE = "otherobjects";
+    public static final String SITE_MODULE = "site";
 
     private ApplicationContext applicationContext;
 

@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory;
  */
 public class StaticResourceServlet extends HttpServlet
 {
+    private static final int BUFFER_SIZE = 2048;
+
     private final Logger logger = LoggerFactory.getLogger(StaticResourceServlet.class);
 
     // FIXME We should unify this this DataFile mime type support
@@ -45,13 +47,13 @@ public class StaticResourceServlet extends HttpServlet
             return;
 
         //  Security check: so that non-static data is not served
-        if (!path.contains("/static/") && !path.contains("..")) {
+        if (!path.contains("/static/") && !path.contains(".."))
+        {
             this.logger.warn("Prevented access to non-static resource: {}", path);
             resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 
-        
         // FIXME Is there a faster way of serving these?
         // FIXME Cache?
         InputStream in = getClass().getResourceAsStream(path);
@@ -70,7 +72,7 @@ public class StaticResourceServlet extends HttpServlet
         OutputStream out = resp.getOutputStream();
         try
         {
-            byte buffer[] = new byte[2048];
+            byte[] buffer = new byte[BUFFER_SIZE];
             int len = buffer.length;
             while (true)
             {

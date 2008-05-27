@@ -12,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  */
-public interface UserDao extends GenericDao<User, Long> {
+public interface UserDao extends GenericDao<User, Long>
+{
 
     /**
      * Gets users information based on login name.
@@ -21,19 +22,19 @@ public interface UserDao extends GenericDao<User, Long> {
      * @throws org.acegisecurity.userdetails.UsernameNotFoundException thrown when user not found in database
      */
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
-    
+    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+
     /**
      * Gets a list of users ordered by the uppercase version of their username.
      *
      * @return List populated list of users
      */
-    public List<User> getUsers();
+    List<User> getUsers();
 
     /**
      * Saves a user's information.
      * @param user the object to be saved
      */
-    public User saveUser(User user);
-    
+    User saveUser(User user);
+
 }

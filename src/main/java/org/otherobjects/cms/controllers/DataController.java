@@ -185,7 +185,7 @@ public class DataController
         // FIXME Must be a better way of testing for specfic daos
         //        else if (! (daoService.getDao(typeName) instanceof BaseNodeDao))
         //        {
-        //        	allByType = daoService.getDao(typeName).getAll();
+        //          allByType = daoService.getDao(typeName).getAll();
         //        }
         else if (BaseNode.class.isAssignableFrom(typeClass))
         {
@@ -280,12 +280,12 @@ public class DataController
      * Called to populate an ext grid
      * ext will always send the parameters 
      * <ul>
-     * 	<li>start - offset </li>
+     *  <li>start - offset </li>
      *  <li>limit - max items per page</li>
      * </ul>
      * It might also send 
      * <ul>
-     * 	<li>dir - which is either ASC or DESC to indicate sort order</li>
+     *  <li>dir - which is either ASC or DESC to indicate sort order</li>
      *  <li>sort - name of the colum to sort on</li>
      *  <li>q - a query string to do a full text search with</li>
      * </ul>

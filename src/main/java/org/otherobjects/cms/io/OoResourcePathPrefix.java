@@ -7,7 +7,8 @@ import java.util.regex.Pattern;
  * @author joerg
  *
  */
-public enum OoResourcePathPrefix {
+public enum OoResourcePathPrefix 
+{
 
     CORE("core"), STATIC("static"), SITE("site"), DATA("data");
 

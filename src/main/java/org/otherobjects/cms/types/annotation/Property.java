@@ -11,7 +11,8 @@ import org.springframework.core.Ordered;
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
-public @interface Property {
+public @interface Property 
+{
 
     PropertyType type() default PropertyType.UNDEFINED;
 
@@ -30,7 +31,7 @@ public @interface Property {
     PropertyType collectionElementType() default PropertyType.UNDEFINED;
 
     String relatedType() default "";
-    
+
     int order() default Ordered.LOWEST_PRECEDENCE;
 
 }

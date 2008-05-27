@@ -31,44 +31,44 @@ import org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter
  */
 public class BigDecimalTypeConverterImpl implements AtomicTypeConverter
 {
-	/**
-	 * 
-	 * @see org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter#getValue(java.lang.Object)
-	 */
-	public Value getValue(ValueFactory valueFactory, Object propValue)
-	{
-		if (propValue == null)
-		{
-			return null;
-		}
+    /**
+     * 
+     * @see org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter#getValue(java.lang.Object)
+     */
+    public Value getValue(ValueFactory valueFactory, Object propValue)
+    {
+        if (propValue == null)
+        {
+            return null;
+        }
         
-		double value = ((BigDecimal) propValue).doubleValue();
-		return valueFactory.createValue(value);
-	}
+        double value = ((BigDecimal) propValue).doubleValue();
+        return valueFactory.createValue(value);
+    }
 
     /**
      * 
      * @see org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter#getObject(javax.jcr.Value)
      */
-	public Object getObject(Value value)
+    public Object getObject(Value value)
     {
-		try
-		{
-			double beanPropValue = value.getDouble();
-			return new BigDecimal(""+beanPropValue);	
-		}
-		catch (RepositoryException e)
-		{
-			throw new IncorrectAtomicTypeException("Impossible to convert the value : " + value.toString(), e);
-		}
-	}
-	
-	/**
-	 * 
-	 * @see org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter#getStringValue(java.lang.Object)
-	 */
-	public String getXPathQueryValue(ValueFactory valueFactory, Object object)
-	{
-		return object.toString();
-	}
+        try
+        {
+            double beanPropValue = value.getDouble();
+            return new BigDecimal(""+beanPropValue);    
+        }
+        catch (RepositoryException e)
+        {
+            throw new IncorrectAtomicTypeException("Impossible to convert the value : " + value.toString(), e);
+        }
+    }
+    
+    /**
+     * 
+     * @see org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter#getStringValue(java.lang.Object)
+     */
+    public String getXPathQueryValue(ValueFactory valueFactory, Object object)
+    {
+        return object.toString();
+    }
 }

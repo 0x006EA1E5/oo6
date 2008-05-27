@@ -13,14 +13,14 @@ import org.springframework.util.Assert;
 public class NavigatorServiceImpl implements NavigatorService
 {
     private UniversalJcrDao universalJcrDao;
-    
-    public WorkbenchItem getRootItem()
+
+    public final WorkbenchItem getRootItem()
     {
         Object o = universalJcrDao.getByPath("/site");
         return (WorkbenchItem) o;
     }
 
-    public List<WorkbenchItem> getSubContainers(String uuid)
+    public final List<WorkbenchItem> getSubContainers(final String uuid)
     {
         BaseNode parent = universalJcrDao.get(uuid);
         List<BaseNode> all = universalJcrDao.getAllByPath(parent.getJcrPath());
@@ -29,12 +29,14 @@ public class NavigatorServiceImpl implements NavigatorService
         for (BaseNode n : all)
         {
             if (n instanceof Folder)
+            {
                 children.add(n);
+            }
         }
         return children;
     }
 
-    public WorkbenchItem addItem(String uuid, String name)
+    public final WorkbenchItem addItem(final String uuid, final String name)
     {
         BaseNode parent = universalJcrDao.get(uuid);
         Assert.notNull(parent, "Parent node not found: " + uuid);
@@ -44,9 +46,13 @@ public class NavigatorServiceImpl implements NavigatorService
         {
             String newPath = parent.getJcrPath() + "/untitled-" + ++c;
             boolean alreadyExists = (universalJcrDao.existsAtPath(newPath));
-            if(!alreadyExists) break;
-            
-        } while(true);
+            if (!alreadyExists)
+            {
+                break;
+            }
+
+        }
+        while (true);
 
         BaseNode newFolder = new SiteFolder();
         newFolder.setPath(parent.getJcrPath());
@@ -54,27 +60,29 @@ public class NavigatorServiceImpl implements NavigatorService
         return universalJcrDao.save(newFolder);
     }
 
-    public WorkbenchItem getItem(String path)
+    public final WorkbenchItem getItem(final String path)
     {
         return null;
     }
 
-    public List<WorkbenchItem> getItemContents(String uuid)
+    public final List<WorkbenchItem> getItemContents(final String uuid)
     {
         BaseNode node = universalJcrDao.get(uuid);
-        
+
         List<BaseNode> all = universalJcrDao.getAllByPath(node.getPath());
 
         List<WorkbenchItem> children = new ArrayList<WorkbenchItem>();
         for (BaseNode n : all)
         {
             if (!(n instanceof Folder))
+            {
                 children.add(n);
+            }
         }
         return children;
     }
 
-    public WorkbenchItem renameItem(String uuid, String newName)
+    public final WorkbenchItem renameItem(final String uuid, final String newName)
     {
         BaseNode node = universalJcrDao.get(uuid);
         node.setOoLabel(newName);
@@ -82,18 +90,18 @@ public class NavigatorServiceImpl implements NavigatorService
         return renamed;
     }
 
-    public void moveItem(String itemId, String targetId, String point)
+    public final void moveItem(final String itemId, final String targetId, final String point)
     {
         BaseNode item = universalJcrDao.get(itemId);
         BaseNode target = universalJcrDao.get(targetId);
         universalJcrDao.reorder(item, target, point);
     }
 
-    public void removeItem(String path)
+    public void removeItem(final String path)
     {
     }
 
-    public void setUniversalJcrDao(UniversalJcrDao universalJcrDao)
+    public final void setUniversalJcrDao(final UniversalJcrDao universalJcrDao)
     {
         this.universalJcrDao = universalJcrDao;
     }

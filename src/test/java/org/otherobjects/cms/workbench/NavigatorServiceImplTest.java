@@ -105,9 +105,9 @@
 //
 //        this.navigatorService.moveItem(lastItem.getId(), firstItem.getId(), "before");
 //
-//        //    	List<WorkbenchItem> wisReordered = navigatorService.getSubContainers(root.getId());
-//        //    	
-//        //    	assertEquals(item.getLabel(), wisReordered.get(0).getLabel());
+//        //        List<WorkbenchItem> wisReordered = navigatorService.getSubContainers(root.getId());
+//        //        
+//        //        assertEquals(item.getLabel(), wisReordered.get(0).getLabel());
 //        logout();
 //    }
 //}

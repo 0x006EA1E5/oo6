@@ -13,39 +13,39 @@
 // *
 // */
 //public class ViewToolsServiceImpl implements ViewToolsService {
-//	
-//	private Map<String, Class<?>> toolsMap;
-//	private Map<String, Object> beansMap;
-//	
-//	public Map<String, Class<?>> getToolsMap() {
-//		return toolsMap;
-//	}
+//  
+//  private Map<String, Class<?>> toolsMap;
+//  private Map<String, Object> beansMap;
+//  
+//  public Map<String, Class<?>> getToolsMap() {
+//      return toolsMap;
+//  }
 //
-//	public void setToolsMap(Map<String, Class<?>> toolsMap) {
-//		this.toolsMap = toolsMap;
-//	}
+//  public void setToolsMap(Map<String, Class<?>> toolsMap) {
+//      this.toolsMap = toolsMap;
+//  }
 //
-//	public Map<String, Object> getBeansMap() {
-//		return beansMap;
-//	}
+//  public Map<String, Object> getBeansMap() {
+//      return beansMap;
+//  }
 //
-//	public void setBeansMap(Map<String, Object> beansMap) {
-//		this.beansMap = beansMap;
-//	}
+//  public void setBeansMap(Map<String, Object> beansMap) {
+//      this.beansMap = beansMap;
+//  }
 //
-//	public void populateContext(Context context) throws Exception {
-//		for(Entry<String, Class<?>> entry: toolsMap.entrySet())
-//		{
-//			context.put(entry.getKey(), entry.getValue().newInstance());
-//		}
-//		
-//		for(Entry<String, Object> entry: beansMap.entrySet())
-//		{
-//			context.put(entry.getKey(), entry.getValue());
-//		}
-//		
-//	}
-//	
-//	
+//  public void populateContext(Context context) throws Exception {
+//      for(Entry<String, Class<?>> entry: toolsMap.entrySet())
+//      {
+//          context.put(entry.getKey(), entry.getValue().newInstance());
+//      }
+//      
+//      for(Entry<String, Object> entry: beansMap.entrySet())
+//      {
+//          context.put(entry.getKey(), entry.getValue());
+//      }
+//      
+//  }
+//  
+//  
 //
 //}

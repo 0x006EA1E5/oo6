@@ -91,13 +91,13 @@ public class PropertyDefImpl implements PropertyDef, Ordered
 
     /** Reference to parent TypeDef. */
     private TypeDef parentTypeDef;
-    
+
     private int order = Ordered.LOWEST_PRECEDENCE;
 
     public PropertyDefImpl()
     {
     }
-    
+
     /**
      * 
      * @param name
@@ -114,7 +114,7 @@ public class PropertyDefImpl implements PropertyDef, Ordered
         setCollectionElementType(collectionElementType);
         setRequired(required);
     }
-    
+
     /**
      * 
      * @param name
@@ -133,7 +133,7 @@ public class PropertyDefImpl implements PropertyDef, Ordered
     /**
      * Returns the name of the Class required to store this property. This is looked up from the TypeService.
      */
-    @JSON(include=false)
+    @JSON(include = false)
     public String getClassName()
     {
         String className;
@@ -283,22 +283,24 @@ public class PropertyDefImpl implements PropertyDef, Ordered
         this.parentTypeDef = typeDef;
     }
 
-	public String getCollectionElementType() {
-		return collectionElementType;
-	}
+    public String getCollectionElementType()
+    {
+        return collectionElementType;
+    }
 
-	public void setCollectionElementType(String collectionElementType) {
-		this.collectionElementType = collectionElementType;
-	}
+    public void setCollectionElementType(String collectionElementType)
+    {
+        this.collectionElementType = collectionElementType;
+    }
 
-	public int getOrder() {
-		return order;
-	}
+    public int getOrder()
+    {
+        return order;
+    }
 
-	public void setOrder(int order) {
-		this.order = order;
-	}
-    
-    
+    public void setOrder(int order)
+    {
+        this.order = order;
+    }
 
 }

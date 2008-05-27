@@ -7,7 +7,8 @@ import org.otherobjects.cms.model.Role;
  *
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  */
-public interface RoleDao extends GenericDao<Role, Long> {
+public interface RoleDao extends GenericDao<Role, Long>
+{
     /**
      * Gets role information based on rolename
      * @param rolename the rolename

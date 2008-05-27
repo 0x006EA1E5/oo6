@@ -164,7 +164,7 @@ public class DynamicMapConverterImpl extends AbstractCollectionConverterImpl
 
     private void insertSimpleProperty(Node dataNode, ValueFactory valueFactory, PropertyDef property, Object value) throws RepositoryException
     {
-        AtomicTypeConverter atomicTypeConverter = null;// FIXME XXXXXXXXXX (AtomicTypeConverter) typeService.getJcrConverter(property.getType());
+        AtomicTypeConverter atomicTypeConverter = null; // FIXME XXXXXXXXXX (AtomicTypeConverter) typeService.getJcrConverter(property.getType());
         Value v = atomicTypeConverter.getValue(valueFactory, value);
         dataNode.setProperty(property.getName(), v);
     }

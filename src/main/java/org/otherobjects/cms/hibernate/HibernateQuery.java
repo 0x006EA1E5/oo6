@@ -58,230 +58,245 @@ import org.otherobjects.cms.dao.PagedListImpl;
  * @author joerg
  *
  */
-public class HibernateQuery {
+public class HibernateQuery
+{
 
-	public final static String[] CLAUSE_KEYS = {"select", "from", "join", "where", "orderBy"};
+    public static final String[] CLAUSE_KEYS = {"select", "from", "join", "where", "orderBy"};
 
-	/**
-	 * Leave empty for simple object queries like 'from org.otherobjects.cms.model.Article ...' or specify scalars to return
-	 */
-	private String selectClause;
-	
-	/**
-	 * Class to return. Gets aliased to 'o'
-	 */
-	private String fromClause;
-	
-	/**
-	 * Joined classes to query. Overrides fromClause, i.e. if a joinClause is set fromClause gets ignored.
-	 * You need to look after aliasing if using this.
-	 */
-	private String joinClause;
-	
-	/**
-	 * where criteria
-	 */
-	private String whereClause;
-	
-	/**
-	 * order by criteria
-	 */
-	private String orderByClause;
+    /**
+     * Leave empty for simple object queries like 'from org.otherobjects.cms.model.Article ...' or specify scalars to return
+     */
+    private String selectClause;
 
-	private Map<String, Object> namedParameters;
+    /**
+     * Class to return. Gets aliased to 'o'
+     */
+    private String fromClause;
 
-	public HibernateQuery()
-	{
-		this.namedParameters = new HashMap<String, Object>();
-	}
-	
-	public HibernateQuery(Class<?> clazz)
-	{
-		this();
-		setFromClause(clazz.getName());
-	}
-	
-	/**
-	 * Build a HQL query by passing in a groovy style map of hql clauses. For possible clauses see {@link #CLAUSE_KEYS}
-	 * 
-	 * @param clauses
-	 */
-	@SuppressWarnings("unchecked")
+    /**
+     * Joined classes to query. Overrides fromClause, i.e. if a joinClause is set fromClause gets ignored.
+     * You need to look after aliasing if using this.
+     */
+    private String joinClause;
+
+    /**
+     * where criteria
+     */
+    private String whereClause;
+
+    /**
+     * order by criteria
+     */
+    private String orderByClause;
+
+    private Map<String, Object> namedParameters;
+
+    public HibernateQuery()
+    {
+        this.namedParameters = new HashMap<String, Object>();
+    }
+
+    public HibernateQuery(Class<?> clazz)
+    {
+        this();
+        setFromClause(clazz.getName());
+    }
+
+    /**
+     * Build a HQL query by passing in a groovy style map of hql clauses. For possible clauses see {@link #CLAUSE_KEYS}
+     * 
+     * @param clauses
+     */
+    @SuppressWarnings("unchecked")
     public HibernateQuery(String clauses)
-	{
-		this();
-		GroovyShell shell = new GroovyShell();
-		Map<String, String> clausesMap = (Map<String, String>) shell.evaluate("def map = " + clauses + "; return map;");
-		try {
-			for(int i = 0; i < CLAUSE_KEYS.length; i++)  
-			{
-				String clause = CLAUSE_KEYS[i];
+    {
+        this();
+        GroovyShell shell = new GroovyShell();
+        Map<String, String> clausesMap = (Map<String, String>) shell.evaluate("def map = " + clauses + "; return map;");
+        try
+        {
+            for (int i = 0; i < CLAUSE_KEYS.length; i++)
+            {
+                String clause = CLAUSE_KEYS[i];
 
-				if(clausesMap.containsKey(clause))
-					PropertyUtils.setSimpleProperty(this, clause + "Clause", clausesMap.get(clause));
-			}
-		} catch (Exception e) {
-			//noop
-		} 
-	}
+                if (clausesMap.containsKey(clause))
+                    PropertyUtils.setSimpleProperty(this, clause + "Clause", clausesMap.get(clause));
+            }
+        }
+        catch (Exception e)
+        {
+            //noop
+        }
+    }
 
-	public String toHqlString()
-	{
-		StringBuffer buf = new StringBuffer();
-		if(StringUtils.isNotBlank(getSelectClause()))
-		{
-			buf.append("Select ");
-			buf.append(getSelectClause());
-			buf.append(" ");
-		}
-		
-		buf.append(getFromWhereClause());
-		
-		if(StringUtils.isNotBlank(getOrderByClause()))
-		{
-			buf.append("order by ");
-			buf.append(getOrderByClause());
-			buf.append(" ");
-		}
-		
-		return buf.toString();
-	}
-	
-	public String toCountHqlString()
-	{
-		StringBuffer buf = new StringBuffer();
-		buf.append("Select count(*) ");
-		buf.append(getFromWhereClause());
-		
-		return buf.toString();
-	}
-	
-	public String toString()
-	{
-		String query = toHqlString();
-		
-		for(Map.Entry<String, Object> entry : namedParameters.entrySet())
-		{
-			query = query.replace(":" + entry.getKey().trim(), "{" + entry.getValue().toString() + "}");
-		}
-		
-		return query;
-	}
-	
-	private String getFromWhereClause()
-	{
-		StringBuffer buf = new StringBuffer();
-		if(StringUtils.isNotBlank(getJoinClause()))
-		{
-			buf.append("from ");
-			buf.append(getJoinClause());
-			buf.append("  ");
-		} else if(StringUtils.isNotBlank(getFromClause()))
-		{
-			buf.append("from ");
-			buf.append(getFromClause());
-			buf.append(" as o ");
-		} else
-			throw new OtherObjectsException("You must either have a from or a joinClause");
-		
-		if(StringUtils.isNotBlank(getWhereClause()))
-		{
-			buf.append("where ");
-			buf.append(getWhereClause());
-			buf.append(" ");
-		}
-		return buf.toString();
-	}
-	
-	public Query getQuery(Session session)
-	{
-		Query query = session.createQuery(toHqlString());
-		applyParameters(query);
-		return query;
-	}
-	
-	public int getRecordCount(Session session)
-	{
-		Query query = session.createQuery(toCountHqlString());
-		applyParameters(query);
-		return ( (Integer) (query.iterate().next()) ).intValue();
-	}
-	
-	@SuppressWarnings("unchecked")
+    public String toHqlString()
+    {
+        StringBuffer buf = new StringBuffer();
+        if (StringUtils.isNotBlank(getSelectClause()))
+        {
+            buf.append("Select ");
+            buf.append(getSelectClause());
+            buf.append(" ");
+        }
+
+        buf.append(getFromWhereClause());
+
+        if (StringUtils.isNotBlank(getOrderByClause()))
+        {
+            buf.append("order by ");
+            buf.append(getOrderByClause());
+            buf.append(" ");
+        }
+
+        return buf.toString();
+    }
+
+    public String toCountHqlString()
+    {
+        StringBuffer buf = new StringBuffer();
+        buf.append("Select count(*) ");
+        buf.append(getFromWhereClause());
+
+        return buf.toString();
+    }
+
+    public String toString()
+    {
+        String query = toHqlString();
+
+        for (Map.Entry<String, Object> entry : namedParameters.entrySet())
+        {
+            query = query.replace(":" + entry.getKey().trim(), "{" + entry.getValue().toString() + "}");
+        }
+
+        return query;
+    }
+
+    private String getFromWhereClause()
+    {
+        StringBuffer buf = new StringBuffer();
+        if (StringUtils.isNotBlank(getJoinClause()))
+        {
+            buf.append("from ");
+            buf.append(getJoinClause());
+            buf.append("  ");
+        }
+        else if (StringUtils.isNotBlank(getFromClause()))
+        {
+            buf.append("from ");
+            buf.append(getFromClause());
+            buf.append(" as o ");
+        }
+        else
+            throw new OtherObjectsException("You must either have a from or a joinClause");
+
+        if (StringUtils.isNotBlank(getWhereClause()))
+        {
+            buf.append("where ");
+            buf.append(getWhereClause());
+            buf.append(" ");
+        }
+        return buf.toString();
+    }
+
+    public Query getQuery(Session session)
+    {
+        Query query = session.createQuery(toHqlString());
+        applyParameters(query);
+        return query;
+    }
+
+    public int getRecordCount(Session session)
+    {
+        Query query = session.createQuery(toCountHqlString());
+        applyParameters(query);
+        return ((Integer) (query.iterate().next())).intValue();
+    }
+
+    @SuppressWarnings("unchecked")
     public PagedList getPagedResult(int pageSize, int pageNo, Session session)
-	{
-		int recordCount = getRecordCount(session);
-		int offset = PagedListImpl.calcStartIndex(pageSize, pageNo);
-		List items = getQuery(session).setMaxResults(pageSize).setFirstResult(offset).list();
-		
-		return new PagedListImpl(pageSize, recordCount, pageNo, items, false);
-	}
-	
-	private void applyParameters(Query query) {
-		if(namedParameters.size() <= 0)
-			return;
-		
-		for(Map.Entry<String, Object> entry : namedParameters.entrySet())
-		{
-			query.setParameter(entry.getKey(), entry.getValue());
-		}
-	}
+    {
+        int recordCount = getRecordCount(session);
+        int offset = PagedListImpl.calcStartIndex(pageSize, pageNo);
+        List items = getQuery(session).setMaxResults(pageSize).setFirstResult(offset).list();
 
-	public void addParameter(String name, Object value)
-	{
-		namedParameters.put(name, value);
-	}
-	
-	public void setParameters(Map<String,Object> namedParameters)
-	{
-		this.namedParameters = namedParameters;
-	}
-	
-	public void addParameters(Map<String, Object> namedParameters)
-	{
-		this.namedParameters.putAll(namedParameters);
-	}
+        return new PagedListImpl(pageSize, recordCount, pageNo, items, false);
+    }
 
-	public String getSelectClause() {
-		return selectClause;
-	}
+    private void applyParameters(Query query)
+    {
+        if (namedParameters.size() <= 0)
+            return;
 
-	public void setSelectClause(String selectClause) {
-		this.selectClause = selectClause;
-	}
+        for (Map.Entry<String, Object> entry : namedParameters.entrySet())
+        {
+            query.setParameter(entry.getKey(), entry.getValue());
+        }
+    }
 
-	public String getFromClause() {
-		return fromClause;
-	}
+    public void addParameter(String name, Object value)
+    {
+        namedParameters.put(name, value);
+    }
 
-	public void setFromClause(String fromClause) {
-		this.fromClause = fromClause;
-	}
+    public void setParameters(Map<String, Object> namedParameters)
+    {
+        this.namedParameters = namedParameters;
+    }
 
-	public String getWhereClause() {
-		return whereClause;
-	}
+    public void addParameters(Map<String, Object> namedParameters)
+    {
+        this.namedParameters.putAll(namedParameters);
+    }
 
-	public void setWhereClause(String whereClause) {
-		this.whereClause = whereClause;
-	}
+    public String getSelectClause()
+    {
+        return selectClause;
+    }
 
-	public String getOrderByClause() {
-		return orderByClause;
-	}
+    public void setSelectClause(String selectClause)
+    {
+        this.selectClause = selectClause;
+    }
 
-	public void setOrderByClause(String orderByClause) {
-		this.orderByClause = orderByClause;
-	}
+    public String getFromClause()
+    {
+        return fromClause;
+    }
 
-	public String getJoinClause() {
-		return joinClause;
-	}
+    public void setFromClause(String fromClause)
+    {
+        this.fromClause = fromClause;
+    }
 
-	public void setJoinClause(String joinClause) {
-		this.joinClause = joinClause;
-	}
+    public String getWhereClause()
+    {
+        return whereClause;
+    }
 
-	
+    public void setWhereClause(String whereClause)
+    {
+        this.whereClause = whereClause;
+    }
+
+    public String getOrderByClause()
+    {
+        return orderByClause;
+    }
+
+    public void setOrderByClause(String orderByClause)
+    {
+        this.orderByClause = orderByClause;
+    }
+
+    public String getJoinClause()
+    {
+        return joinClause;
+    }
+
+    public void setJoinClause(String joinClause)
+    {
+        this.joinClause = joinClause;
+    }
 
 }

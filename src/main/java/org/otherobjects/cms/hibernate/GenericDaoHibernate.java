@@ -64,14 +64,7 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
     public boolean exists(PK id)
     {
         T entity = (T) super.getHibernateTemplate().get(this.persistentClass, id);
-        if (entity == null)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return (entity != null);
     }
 
     @SuppressWarnings("unchecked")

@@ -20,7 +20,7 @@ import org.springmodules.validation.valang.ValangValidator;
  * Validator is a simple {@link Validator } implementation to validate BaseNodes (usually happens after binding by {@link BindService}).
  * Uses the following three properties specified in {@link PropertyDef} for validation:
  * <ul>
- * 	<li>{@link PropertyDef#isRequired()}</li>
+ *  <li>{@link PropertyDef#isRequired()}</li>
  *  <li>{@link PropertyDef#getSize()}</li>
  *  <li>{@link PropertyDef#getValang()}</li>
  * </ul>

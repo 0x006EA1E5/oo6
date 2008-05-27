@@ -401,22 +401,22 @@ public class User implements Serializable, UserDetails, Editable
     //    @Transient
     //    public TypeDef getTypeDef()
     //    {
-    //    	TypeDef typeDef = new TypeDef();
-    //    	typeDef.setSuperClassName("java.lang.Object");
-    //    	typeDef.setClassName(getClass().getName());
-    //    	typeDef.setDescription("A user");
-    //    	typeDef.setId(getEditableId());
-    //    	typeDef.setJcrPath("/Site/users");
-    //    	typeDef.setLabelProperty("fullName");
-    //    	//typeDef.addProperty(new PropertyDef("id", "number", null, null, true));
-    //    	typeDef.addProperty(new PropertyDef("email", "string", null, null, true));
-    //    	typeDef.addProperty(new PropertyDef("username", "string", null, null));
-    //    	typeDef.addProperty(new PropertyDef("firstName", "string", null, null));
-    //    	typeDef.addProperty(new PropertyDef("lastName", "string", null, null));
-    //    	typeDef.addProperty(new PropertyDef("enabled", "boolean", null, null));
-    //    	typeDef.addProperty(new PropertyDef("passwordHint", "string", null, null));
-    //    	
-    //    	return typeDef;
+    //      TypeDef typeDef = new TypeDef();
+    //      typeDef.setSuperClassName("java.lang.Object");
+    //      typeDef.setClassName(getClass().getName());
+    //      typeDef.setDescription("A user");
+    //      typeDef.setId(getEditableId());
+    //      typeDef.setJcrPath("/Site/users");
+    //      typeDef.setLabelProperty("fullName");
+    //      //typeDef.addProperty(new PropertyDef("id", "number", null, null, true));
+    //      typeDef.addProperty(new PropertyDef("email", "string", null, null, true));
+    //      typeDef.addProperty(new PropertyDef("username", "string", null, null));
+    //      typeDef.addProperty(new PropertyDef("firstName", "string", null, null));
+    //      typeDef.addProperty(new PropertyDef("lastName", "string", null, null));
+    //      typeDef.addProperty(new PropertyDef("enabled", "boolean", null, null));
+    //      typeDef.addProperty(new PropertyDef("passwordHint", "string", null, null));
+    //      
+    //      return typeDef;
     //    }
 
 }

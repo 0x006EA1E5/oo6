@@ -1,10 +1,10 @@
 //package org.otherobjects.cms.hibernate;
 //
 //public class IndexedPersistentObjectDaoHibernate extends GenericDaoHibernate<IndexedPersistentObject, Long>
-//		implements IndexedPersistentObjectDao {
+//      implements IndexedPersistentObjectDao {
 //
-//	public IndexedPersistentObjectDaoHibernate()
-//	{
-//		super(IndexedPersistentObject.class);
-//	}
+//  public IndexedPersistentObjectDaoHibernate()
+//  {
+//      super(IndexedPersistentObject.class);
+//  }
 //}

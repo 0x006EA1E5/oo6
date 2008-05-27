@@ -30,18 +30,19 @@ import org.springframework.security.afterinvocation.AfterInvocationProvider;
 public class OwnershipAfterInvocationProvider implements AfterInvocationProvider, MessageSourceAware
 {
 
-    public final static String ADMIN_ROLE = "ROLE_ADMIN";
-    public final String processConfigAttribute = "AFTER_OWNERSHIP";
+    public static final String ADMIN_ROLE = "ROLE_ADMIN";
+    
+    private final String processConfigAttribute = "AFTER_OWNERSHIP";
 
     private MessageSourceAccessor messages;
     private Class<?> processDomainObjectClass = AccessControlled.class;
 
     public void setMessageSource(MessageSource messageSource)
     {
-        this.messages = new MessageSourceAccessor(messageSource);;
+        this.messages = new MessageSourceAccessor(messageSource);
     }
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public Object decide(Authentication authentication, Object object, ConfigAttributeDefinition config, Object returnedObject) throws AccessDeniedException
     {
@@ -98,14 +99,7 @@ public class OwnershipAfterInvocationProvider implements AfterInvocationProvider
 
     public boolean supports(ConfigAttribute attribute)
     {
-        if ((attribute.getAttribute() != null) && attribute.getAttribute().equals(this.processConfigAttribute))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return ((attribute.getAttribute() != null) && attribute.getAttribute().equals(this.processConfigAttribute));
     }
 
     /**

@@ -35,7 +35,6 @@ public class JsonViewTest extends TestCase
 
         JsonView jsonView = new JsonView();
 
-        
         assertEquals(s1r, jsonView.localiseString(s1, testMessageSource, Locale.UK));
         assertEquals(s2r, jsonView.localiseString(s2, testMessageSource, Locale.UK));
         assertEquals(s3r, jsonView.localiseString(s3, testMessageSource, Locale.UK));
@@ -46,26 +45,26 @@ public class JsonViewTest extends TestCase
     public void testRenderMergedOutputModel() throws Exception
     {
         // FIXME Use StaticApplicationContext for test
-//        StaticApplicationContext ac = new StaticApplicationContext();
-//        ac.registerSingleton("jsonView", JsonView.class);
-//        ac.getBeanFactory().initializeBean(null, "jsonView");
-//        JsonView jsonView = (JsonView) ac.getBean("jsonView");
-        
-        MockHttpServletRequest request= new MockHttpServletRequest();
+        //        StaticApplicationContext ac = new StaticApplicationContext();
+        //        ac.registerSingleton("jsonView", JsonView.class);
+        //        ac.getBeanFactory().initializeBean(null, "jsonView");
+        //        JsonView jsonView = (JsonView) ac.getBean("jsonView");
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
         Map model = new HashMap();
-        
+
         JsonView jsonView = new JsonView();
-        
+
         // Whole map
         model.put("p1", "v1");
         jsonView.render(model, request, response);
         String output = response.getContentAsString();
         assertTrue(output.startsWith("{")); // Should be an object
         assertTrue(output.contains("v1"));
-        
+
         // Partial data
-        List list = Arrays.asList(new String[]{"A1","B1","C1"});
+        List list = Arrays.asList(new String[]{"A1", "B1", "C1"});
         model.put(JsonView.JSON_DATA_KEY, list);
         response = new MockHttpServletResponse();
         jsonView.render(model, request, response);

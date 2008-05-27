@@ -368,12 +368,12 @@
 //
 //    //    public void testRestoreVersionByChangeNumber() throws Exception
 //    //    {
-//    //    	adminLogin();
-//    //    	DynaNode node = universalJcrDao.getByPath("/site/about/index.html");
-//    //    	
-//    //    	String firstVersionTitle = "title1";
-//    //    	
-//    //    	PropertyUtils.setSimpleProperty(node, "title", firstVersionTitle);
+//    //        adminLogin();
+//    //        DynaNode node = universalJcrDao.getByPath("/site/about/index.html");
+//    //        
+//    //        String firstVersionTitle = "title1";
+//    //        
+//    //        PropertyUtils.setSimpleProperty(node, "title", firstVersionTitle);
 //    //        node.setCode(StringUtils.generateUrlCode(node.getLabel()) + ".html");
 //    //        
 //    //        universalJcrDao.save(node);
@@ -383,8 +383,8 @@
 //    //        System.out.println("cn: " + firstChangeNumber);
 //    //        
 //    //        String secondVersionTitle = "title2";
-//    //    	
-//    //    	PropertyUtils.setSimpleProperty(node, "title", secondVersionTitle);
+//    //        
+//    //        PropertyUtils.setSimpleProperty(node, "title", secondVersionTitle);
 //    //        node.setCode(StringUtils.generateUrlCode(node.getLabel()) + ".html");
 //    //        
 //    //        universalJcrDao.save(node);
@@ -397,8 +397,8 @@
 //    //        
 //    //        assertEquals(firstVersionTitle, PropertyUtils.getSimpleProperty(nodeRestored, "title"));
 //    //        
-//    //    	
-//    //    	logout();
+//    //        
+//    //        logout();
 //    //    }
 //
 //    private long getVersionCount(DynaNode dynaNode)

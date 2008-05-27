@@ -9,7 +9,8 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
-public @interface Type {
+public @interface Type
+{
 
     String superClassName() default "org.otherobjects.cms.model.BaseNode";
 

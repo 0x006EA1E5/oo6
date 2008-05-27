@@ -88,20 +88,20 @@ public class ImageMagickResizer implements ImageResizer
             else
             {
                 // 6.3 only method
-//            	command.add("-size");
-//            	command.add(targetWidth * 3 + "x" + targetHeight * 3);
-//            	command.add("-thumbnail");
-//            	command.add(targetWidth + "x" + targetHeight + ">");
-//            	command.add("-bordercolor");
-//            	command.add("rgba(" + backgroundColor.getRed() + "," + backgroundColor.getBlue() + "," + backgroundColor.getGreen() + "," + backgroundColor.getAlpha() + ")");
-//            	command.add("-border");
-//            	command.add("" + targetWidth / 2);
-//            	command.add("-gravity");
-//            	command.add("center");
-//            	command.add("-extent");
-//            	command.add(targetWidth + "x" + targetHeight);
-            	
-            	// 6.2 compatible method
+//              command.add("-size");
+                //              command.add(targetWidth * 3 + "x" + targetHeight * 3);
+                //              command.add("-thumbnail");
+//              command.add(targetWidth + "x" + targetHeight + ">");
+//              command.add("-bordercolor");
+//              command.add("rgba(" + backgroundColor.getRed() + "," + backgroundColor.getBlue() + "," + backgroundColor.getGreen() + "," + backgroundColor.getAlpha() + ")");
+//              command.add("-border");
+//              command.add("" + targetWidth / 2);
+//              command.add("-gravity");
+//              command.add("center");
+//              command.add("-extent");
+//              command.add(targetWidth + "x" + targetHeight);
+                
+                // 6.2 compatible method
                 command.add("-size");
                 command.add(targetWidth * 3 + "x" + targetHeight * 3);
                 command.add("-thumbnail");

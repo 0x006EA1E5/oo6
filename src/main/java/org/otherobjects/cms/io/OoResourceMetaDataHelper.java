@@ -32,8 +32,8 @@ import org.otherobjects.cms.util.StringUtils;
  */
 public class OoResourceMetaDataHelper
 {
-    public final static String DEFAULT_FILE_ENCODING = "UTF-8";
-    public final static Character DEFAULT_LINE_DELIMITER = '\n';
+    public static final String DEFAULT_FILE_ENCODING = "UTF-8";
+    public static final Character DEFAULT_LINE_DELIMITER = '\n';
 
     private static MimetypesFileTypeMap mimetypes = new MimetypesFileTypeMap();
 
