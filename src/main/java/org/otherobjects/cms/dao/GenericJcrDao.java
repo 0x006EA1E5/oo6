@@ -15,9 +15,9 @@ import java.util.List;
  */
 public interface GenericJcrDao<T> extends GenericDao<T, String>
 {
-    public static final String REORDER_BELOW = "below";
-    public static final String REORDER_ABOVE = "above";
-    public static final String REORDER_APPEND = "append";
+    String REORDER_BELOW = "below";
+    String REORDER_ABOVE = "above";
+    String REORDER_APPEND = "append";
 
     /**
      * Tests to see if a object is present in the current workspace at
@@ -26,7 +26,7 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
      * @param path the full path to test
      * @return true if the object exists
      */
-    public boolean existsAtPath(String path);
+    boolean existsAtPath(String path);
 
     /**
      * Returns the object at the specified path. If there is no object at
@@ -36,7 +36,7 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
      * @param path the path of the object
      * @return the object
      */
-    public T getByPath(String path);
+    T getByPath(String path);
 
     /**
      * Renames an object by moving it to new path in the repository.
@@ -44,7 +44,7 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
      * <p>TODO Does this increment the change number? It should.
      * <p>FIXME Can we detect path changes automatically? If so this is redundant.
      */
-    public T rename(T node, String path);
+    T rename(T node, String path);
 
     /**
      * Changes the posisition of a node in the workspace.
@@ -58,7 +58,7 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
      * @param position the position relative to the target to move the object to
      * @return
      */
-    public T reorder(T object, T target, String position);
+    T reorder(T object, T target, String position);
 
     /**
      * Publishes the object to the live workspace.
@@ -72,7 +72,7 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
      * @param object the object to be published
      * @param message an optional message
      */
-    public void publish(T object, String message);
+    void publish(T object, String message);
 
     /**
      * Returns a list of all published versions for the provided object.
@@ -82,7 +82,7 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
      * @param object the object to fetch versions for
      * @return a list of all published versions of this object
      */
-    public List<T> getVersions(T object);
+    List<T> getVersions(T object);
 
     /**
      * Returns a previous version based on its change number. 
@@ -94,7 +94,7 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
      * @param changeNumber the change number
      * @return the requested version
      */
-    public T getVersionByChangeNumber(T object, int changeNumber);
+    T getVersionByChangeNumber(T object, int changeNumber);
 
     /**
      * Rolls back an object to a previous state.
@@ -106,18 +106,18 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
      * @param changeNumber the change number of the version to roll back to
      * @return
      */
-    public T restoreVersionByChangeNumber(T object, int changeNumber);
+    T restoreVersionByChangeNumber(T object, int changeNumber);
 
-    public List<T> getAllByPath(String path);
+    List<T> getAllByPath(String path);
 
-    public PagedList<T> getPagedByPath(String path, int pageSize, int pageNo);
+    PagedList<T> getPagedByPath(String path, int pageSize, int pageNo);
 
-    public PagedList<T> getPagedByPath(String path, int pageSize, int pageNo, String search, String sortField, boolean asc);
+    PagedList<T> getPagedByPath(String path, int pageSize, int pageNo, String search, String sortField, boolean asc);
 
-    public T getByJcrExpression(String expression);
+    T getByJcrExpression(String expression);
 
-    public List<T> getAllByJcrExpression(String expression);
+    List<T> getAllByJcrExpression(String expression);
 
-    public PagedList<T> pageByJcrExpression(String expression, int pageSize, int pageNo);
+    PagedList<T> pageByJcrExpression(String expression, int pageSize, int pageNo);
 
 }

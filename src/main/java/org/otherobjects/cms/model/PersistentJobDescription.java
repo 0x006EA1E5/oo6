@@ -5,7 +5,6 @@ import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.scheduler.AbstractSpringQuartzJob;
 import org.otherobjects.cms.scheduler.QuartzGroovyJobExecutor;
-import org.otherobjects.cms.scheduler.QuartzSchedulerConfigurationBean;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;

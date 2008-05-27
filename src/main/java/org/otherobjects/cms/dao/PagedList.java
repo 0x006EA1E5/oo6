@@ -14,27 +14,27 @@ import java.util.List;
 public interface PagedList<T> extends Iterable<T>, Iterator<T>
 {
     /** Max no. of items to display on a page. */
-    public int getPageSize();
+    int getPageSize();
 
     /** How many pages are needed to show all items provided the given page size. */
-    public int getPageCount();
+    int getPageCount();
 
     /** Page currently shown. Index is 1 based. */
-    public int getCurrentPage();
+    int getCurrentPage();
 
     /** Is  current page last page? */
-    public boolean isLastPage();
+    boolean isLastPage();
 
     /** Is current page first page? */
-    public boolean isFirstPage();
+    boolean isFirstPage();
 
     /** Is there another page after the current one? */
-    public boolean hasNextPage();
+    boolean hasNextPage();
 
     /** Number of total items in the underlying result list. */
-    public int getItemTotal();
+    int getItemTotal();
 
     /** List backing this PagedList. */
-    public List<T> getItems();
+    List<T> getItems();
 
 }

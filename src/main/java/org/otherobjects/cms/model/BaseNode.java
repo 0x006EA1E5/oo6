@@ -9,8 +9,6 @@ import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.StringUtils;
 import org.otherobjects.cms.workbench.WorkbenchItem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 /**
@@ -20,8 +18,6 @@ import org.springframework.util.Assert;
  */
 public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchItem
 {
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
-
     /** GUID */
     private String id;
 

@@ -17,6 +17,6 @@ public interface ScriptResourceResolver
      * @return  Resource that is identified by scriptName if no matching resource exists an error is thrown
      * @throws Exception
      */
-    public abstract Resource resolveScriptName(String scriptName) throws Exception;
+    Resource resolveScriptName(String scriptName) throws Exception;
 
 }

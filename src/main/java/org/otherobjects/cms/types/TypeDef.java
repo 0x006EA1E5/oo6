@@ -9,30 +9,30 @@ import java.util.Collection;
  */
 public interface TypeDef
 {
-    public PropertyDef getProperty(String name);
+    PropertyDef getProperty(String name);
 
-    public String getName();
+    String getName();
 
-    public Collection<PropertyDef> getProperties();
+    Collection<PropertyDef> getProperties();
 
-    public String getLabel();
+    String getLabel();
 
-    public String getDescription();
+    String getDescription();
 
-    public String getHelp();
+    String getHelp();
 
-    public String getClassName();
+    String getClassName();
 
-    public boolean hasClass();
+    boolean hasClass();
 
-    public String getSuperClassName();
+    String getSuperClassName();
     
-    public String getLabelProperty();
+    String getLabelProperty();
 
-    public void setTypeService(TypeService typeService);
+    void setTypeService(TypeService typeService);
 
-    public void setClassName(String createCustomDynaNodeClass);
+    void setClassName(String createCustomDynaNodeClass);
 
-    public TypeService getTypeService();
+    TypeService getTypeService();
 
 }

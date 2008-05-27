@@ -18,24 +18,24 @@ public interface OoResource extends Resource
      * @return outputstream
      * @throws IOException
      */
-    public OutputStream getOutputStream() throws IOException;
+    OutputStream getOutputStream() throws IOException;
 
     /**
      * Get the virtual path that this resource lives on. See {@link OoResourcePathPrefix} for possible path prefixes
      * @return
      */
-    public String getPath();
+    String getPath();
 
     /**
      * Find out whether this resource can be written to or whether it is one of those that live in read-only places
      * @return
      */
-    public boolean isWritable();
+    boolean isWritable();
 
     /**
      * Get the resource's metaData or null if this resource doesn't have any associated metadata
      * @return
      */
-    public OoResourceMetaData getMetaData();
+    OoResourceMetaData getMetaData();
 
 }

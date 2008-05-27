@@ -18,18 +18,18 @@ import java.util.List;
  */
 public interface NavigatorService
 {
-   public WorkbenchItem getRootItem();
+   WorkbenchItem getRootItem();
    
-   public List<WorkbenchItem> getItemContents(String path);
+   List<WorkbenchItem> getItemContents(String path);
    
-   public WorkbenchItem getItem(String path);
+   WorkbenchItem getItem(String path);
    
-   public WorkbenchItem addItem(String path, String name);
+   WorkbenchItem addItem(String path, String name);
    
-   public void removeItem(String path);
+   void removeItem(String path);
    
-   public WorkbenchItem renameItem(String oldPath, String newPath);
+   WorkbenchItem renameItem(String oldPath, String newPath);
    
-   public void moveItem(String itemId, String targetId, String point);
+   void moveItem(String itemId, String targetId, String point);
    
 }

@@ -12,5 +12,5 @@ public interface AnnotatedClassesScanner
      * @param annotation
      * @return
      */
-    public Set<String> findAnnotatedClasses(String[] packages, Class<? extends Annotation> annotation);
+    Set<String> findAnnotatedClasses(String[] packages, Class<? extends Annotation> annotation);
 }

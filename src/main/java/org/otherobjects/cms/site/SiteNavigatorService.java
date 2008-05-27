@@ -4,14 +4,14 @@ import java.util.List;
 
 public interface SiteNavigatorService
 {
-    public static final String JCR_SITE_ROOT_PATH = "/site";
+    String JCR_SITE_ROOT_PATH = "/site";
 
     /**
      * 
      * @param siteItem - a siteItem or null to get items in the root
      * @return - list of siteItems underneath specified siteItem or null if siteItem is a page/leaf-node 
      */
-    public List<SiteItem> getSiteItems(SiteItem siteItem);
+    List<SiteItem> getSiteItems(SiteItem siteItem);
 
     /**
      * Method to let you specify which subtree of the current branch specified by siteItem to return.
@@ -23,7 +23,7 @@ public interface SiteNavigatorService
      * @param parentLevel - level of parent item for items returned
      * @return - list of siteItems in siteItem's branch above minLevel or null if (minLevel - siteItem's level) > 1 or siteItem's level + 1 is minLevel and siteItem is a page/leaf-node
      */
-    public List<SiteItem> getSiteItems(SiteItem siteItem, int parentLevel);
+    List<SiteItem> getSiteItems(SiteItem siteItem, int parentLevel);
 
     /**
      * Get the parent of the specified SiteItem or null if specified SiteItem is the root or its parent can't be determined
@@ -31,8 +31,8 @@ public interface SiteNavigatorService
      * @param siteItem
      * @return
      */
-    public SiteItem getParentSiteItem(SiteItem siteItem);
+    SiteItem getParentSiteItem(SiteItem siteItem);
 
-    public SiteTrail getTrail(SiteItem siteItem);
+    SiteTrail getTrail(SiteItem siteItem);
 
 }

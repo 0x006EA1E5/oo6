@@ -14,7 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
@@ -39,7 +38,7 @@ import org.springframework.security.userdetails.UserDetails;
  *      by David Carter david@carter.net
  */
 @Entity
-@Table(name = "app_user")
+//@Table(name = "app_user")
 @SequenceGenerator(name = "UserSeq", sequenceName = "app_user_seq")
 @Type(label = "User", description = "A User", labelProperty = "email")
 public class User implements Serializable, UserDetails, Editable
@@ -47,7 +46,7 @@ public class User implements Serializable, UserDetails, Editable
 
     private static final long serialVersionUID = -4036033332338732151L;
 
-    private static final ShaPasswordEncoder shaPasswordEncoder = new ShaPasswordEncoder();
+    private static final ShaPasswordEncoder SHA_PASSWORD_ENCODER = new ShaPasswordEncoder();
 
     protected Long id;
     protected Integer version;
@@ -108,7 +107,7 @@ public class User implements Serializable, UserDetails, Editable
         if (StringUtils.isNotEmpty(getPlainTextPassword()))
         {
             // TODO Fetch password encoder from Spring. Move this to DAO?
-            return shaPasswordEncoder.encodePassword(getPlainTextPassword(), null);
+            return SHA_PASSWORD_ENCODER.encodePassword(getPlainTextPassword(), null);
         }
         else
         {

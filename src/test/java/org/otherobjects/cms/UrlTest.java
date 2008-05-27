@@ -17,7 +17,6 @@ public class UrlTest extends BaseSharedContextTestCase
     public static final String SERVER_NAME = "some.test.server";
     public static final String CONTEXT_PATH = "/test";
 
-   
     public void testContext()
     {
         assertEquals("localhost", ((OtherObjectsConfigurator) SingletonBeanLocator.getBean("otherObjectsConfigurator")).getProperty("site.server.name"));
@@ -78,6 +77,7 @@ public class UrlTest extends BaseSharedContextTestCase
         }
         catch (Exception e)
         {
+            // TODO Explain why we ignore exception
         }
     }
 
@@ -115,7 +115,7 @@ public class UrlTest extends BaseSharedContextTestCase
         }
         catch (OtherObjectsException e)
         {
-
+            // TODO Explain why we ignore exception
         }
 
         assertTrue(url.toString().endsWith("/test"));

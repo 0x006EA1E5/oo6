@@ -9,7 +9,6 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.Workspace;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
@@ -792,8 +791,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     }
 
     @SuppressWarnings("unchecked")
-    private Object createPagedResults(ObjectContentManager manager, javax.jcr.query.QueryResult queryResult, int pageSize, int pageNo) throws RepositoryException,
-            UnsupportedRepositoryOperationException
+    private Object createPagedResults(ObjectContentManager manager, javax.jcr.query.QueryResult queryResult, int pageSize, int pageNo) throws RepositoryException
     {
         // first count results
         NodeIterator nodeIterator = queryResult.getNodes();

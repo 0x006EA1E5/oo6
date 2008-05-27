@@ -12,8 +12,8 @@ public interface GenericDao<T, PK extends Serializable>
      * Saves the object. If the object already exists then it
      * is updated, otherwise it is inserted.
      */
-    public T save(T object);
-    public T save(T object, boolean validate);
+    T save(T object);
+    T save(T object, boolean validate);
     
     /**
      * If PK is null an assertion exceprtion is thrown.
@@ -21,13 +21,13 @@ public interface GenericDao<T, PK extends Serializable>
      * @param id
      * @return
      */
-    public boolean exists(PK id);
-    public T get(PK id);
+    boolean exists(PK id);
+    T get(PK id);
     
     // TODO Id or object?
-    public void remove(PK id);
+    void remove(PK id);
     
-    public List<T> getAll();
-    public PagedList<T> getAllPaged(int pageSize, int pageNo, String filterQuery, String sortField, boolean asc);
-    public PagedList<T> getPagedByQuery(String query, int pageSize, int pageNo, String filterQuery, String sortField, boolean asc);
+    List<T> getAll();
+    PagedList<T> getAllPaged(int pageSize, int pageNo, String filterQuery, String sortField, boolean asc);
+    PagedList<T> getPagedByQuery(String query, int pageSize, int pageNo, String filterQuery, String sortField, boolean asc);
 }

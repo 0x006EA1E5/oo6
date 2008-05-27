@@ -54,6 +54,7 @@ public class AnnotationBasedTypeDefBuilderTest extends TestCase
         }
         catch (Exception e)
         {
+            // TODO Explain why we ignore exception
         }
     }
 
@@ -72,7 +73,7 @@ public class AnnotationBasedTypeDefBuilderTest extends TestCase
 
     public class TestBean2
     {
-        Long id;
+        private Long id;
 
         public TestBean2()
         {
@@ -95,8 +96,8 @@ public class AnnotationBasedTypeDefBuilderTest extends TestCase
     @Type(label = "TestBean", description = "An annotated test bean", labelProperty = "name")
     public class TestBean3
     {
-        Long id;
-        String name;
+        private Long id;
+        private String name;
 
         public TestBean3()
         {

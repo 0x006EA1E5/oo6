@@ -23,6 +23,7 @@ public class ImageMagickResizerTest extends TestCase
         }
         catch (Exception e)
         {
+            // TODO Explain why we ignore exception
         }
     }
 

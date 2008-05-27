@@ -8,5 +8,5 @@ import org.springframework.web.servlet.ModelAndView;
 
 public interface ResourceHandler
 {
-    public ModelAndView handleRequest(CmsNode resourceObject, HttpServletRequest request, HttpServletResponse response) throws Exception;
+    ModelAndView handleRequest(CmsNode resourceObject, HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

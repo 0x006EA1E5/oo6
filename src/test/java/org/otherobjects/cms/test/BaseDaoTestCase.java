@@ -34,7 +34,7 @@ public abstract class BaseDaoTestCase extends AbstractTransactionalJUnit38Spring
     protected SessionFactory sessionFactory;
     
     @Autowired
-    DbSchemaInitialiser dbSchemaInitialiser;
+    private DbSchemaInitialiser dbSchemaInitialiser;
     
     /**
      * Create a HibernateTemplate from the SessionFactory and call flush() and clear() on it.

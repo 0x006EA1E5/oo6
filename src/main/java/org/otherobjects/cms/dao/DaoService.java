@@ -3,10 +3,10 @@ package org.otherobjects.cms.dao;
 @SuppressWarnings("unchecked")
 public interface DaoService
 {
-    public GenericDao getDao(Class clazz);
+    GenericDao getDao(Class clazz);
 
-    public GenericDao getDao(String type);
+    GenericDao getDao(String type);
     
-    public boolean hasDao(String type);
+    boolean hasDao(String type);
     
 }

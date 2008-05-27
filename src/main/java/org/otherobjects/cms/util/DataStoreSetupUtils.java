@@ -7,10 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.jcr.LoginException;
 import javax.jcr.NamespaceRegistry;
 import javax.jcr.Node;
-import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Workspace;
@@ -161,7 +159,7 @@ public class DataStoreSetupUtils
         return;
     }
 
-    protected Session getSession(String workspaceName) throws LoginException, RepositoryException
+    protected Session getSession(String workspaceName) throws RepositoryException
     {
         return ((OtherObjectsJackrabbitSessionFactory) this.jcrSessionFactory).getSession(workspaceName);
     }
@@ -210,7 +208,7 @@ public class DataStoreSetupUtils
      * @throws RepositoryException 
      * @throws PathNotFoundException 
      */
-    protected int getRepositoryStructureVersion() throws PathNotFoundException, RepositoryException
+    protected int getRepositoryStructureVersion() throws RepositoryException
     {
         Session session = this.jcrSessionFactory.getSession();
         Node rootNode = session.getRootNode();
@@ -227,7 +225,7 @@ public class DataStoreSetupUtils
         //            return (int) rootNode.getNode("site").getProperty(STRUCTURE_VERSION_PROPERTY_NAME).getLong();
     }
 
-    protected void setRepositoryStructureVersion(int version) throws PathNotFoundException, RepositoryException
+    protected void setRepositoryStructureVersion(int version) throws RepositoryException
     {
         //        Session session = this.jcrSessionFactory.getSession();
         //        session.getRootNode().getNode("site").setProperty(STRUCTURE_VERSION_PROPERTY_NAME, version);

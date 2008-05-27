@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class CacheControlFilter implements Filter
 {
-    FilterConfig fc;
+    //private FilterConfig fc;
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException
     {
@@ -24,11 +24,11 @@ public class CacheControlFilter implements Filter
 
     public void init(FilterConfig filterConfig)
     {
-        this.fc = filterConfig;
+        // this.fc = filterConfig;
     }
 
     public void destroy()
     {
-        this.fc = null;
+        // this.fc = null;
     }
 }

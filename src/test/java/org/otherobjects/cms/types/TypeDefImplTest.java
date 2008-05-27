@@ -30,6 +30,7 @@ public class TypeDefImplTest extends TestCase
         }
         catch (Exception e)
         {
+            // TODO Explain why we ignore exception
         }
     }
 

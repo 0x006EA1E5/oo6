@@ -24,7 +24,8 @@
 ////    {
 ////        IndexedPersistentObject ipo = new IndexedPersistentObject();
 ////        ipo.setTitle("A test Title");
-////        ipo.setSummary("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris adipiscing porttitor neque. Fusce aliquet. Etiam euismod adipiscing sapien. Etiam consequat nisi sit amet velit. Nunc luctus. Nam blandit massa at est. Integer pellentesque. Curabitur ultrices tempus risus.");
+//        ipo.setSummary("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris adipiscing " +
+//            "porttitor neque. Fusce aliquet. Etiam euismod adipiscing sapien. Etiam consequat nisi sit amet velit. Nunc luctus. Nam blandit massa at est. Integer pellentesque. Curabitur ultrices tempus risus.");
 ////        ipo.setDate(new Date());
 ////        IndexedPersistentObject ipoNew = indexedPersistentObjectDao.save(ipo);
 ////        

@@ -9,15 +9,15 @@ package org.otherobjects.cms.model;
 public interface CmsNode
 {
     //TODO Only needed until OCM set's id on insert itself
-    public void setId(String id);
+    void setId(String id);
 
-    public String getId();
+    String getId();
 
-    public String getJcrPath();
+    String getJcrPath();
 
-    public String getOoLabel();
+    String getOoLabel();
 
-    public boolean isPublished();
+    boolean isPublished();
 
-    public void setPublished(boolean published);
+    void setPublished(boolean published);
 }

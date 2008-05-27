@@ -32,7 +32,7 @@ public class BindServiceImpl implements BindService
     private String dateFormat;
     private DaoService daoService;
 
-    static Pattern listPattern = Pattern.compile("^([\\S&&[^\\.]]*)\\[(\\d+)\\]"); // howevermany non-whitespace characters (apart from the dot) followed by at least one digit in square braces
+    private static final Pattern LIST_PATTERN = Pattern.compile("^([\\S&&[^\\.]]*)\\[(\\d+)\\]"); // howevermany non-whitespace characters (apart from the dot) followed by at least one digit in square braces
 
     public void setDaoService(DaoService daoService)
     {
@@ -78,7 +78,7 @@ public class BindServiceImpl implements BindService
         if (propertyPath.equals("id") || propertyPath.startsWith("_") || propertyPath.startsWith("editableId")) // ignore id field and _ fields that are to help the binding process to discover unchecked checkboxes
             return;
 
-        Matcher matcher = listPattern.matcher(propertyPath);
+        Matcher matcher = LIST_PATTERN.matcher(propertyPath);
         String propertyName;
         String leftOverPath;
         String listWithIndex = null;

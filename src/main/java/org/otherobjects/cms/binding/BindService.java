@@ -13,5 +13,5 @@ import org.springframework.validation.BindingResult;
  */
 public interface BindService
 {
-    public BindingResult bind(Object item, TypeDef typeDef, HttpServletRequest request);
+    BindingResult bind(Object item, TypeDef typeDef, HttpServletRequest request);
 }

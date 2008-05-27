@@ -9,14 +9,14 @@ public interface SiteTrail
      *  
      *  @return
      */
-    public Iterator<SiteItem> getCrumbs();
+    Iterator<SiteItem> getCrumbs();
 
     /**
      * An Iterator of all SiteItems in the specified SiteItem's trail starting at the specified siteItem moving up until the topmost parent.
      * 
      * @return
      */
-    public Iterator<SiteItem> getTrailParts();
+    Iterator<SiteItem> getTrailParts();
 
     /**
      * a string containing all the navigationLabels of all SiteItems making up the specified siteItem separated by the specified separator. The order of labels goes from topmost parent -> siteItem
@@ -24,5 +24,5 @@ public interface SiteTrail
      * @param separator
      * @return
      */
-    public String getFullTitle(String separator);
+    String getFullTitle(String separator);
 }

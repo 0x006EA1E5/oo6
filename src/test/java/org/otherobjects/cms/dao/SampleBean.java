@@ -2,7 +2,7 @@ package org.otherobjects.cms.dao;
 
 public class SampleBean
 {
-    String testProp;
+    private String testProp;
 
     public SampleBean(String testProp)
     {

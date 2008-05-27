@@ -10,5 +10,5 @@ import java.io.File;
  */
 public interface ImageResizer
 {
-    public void resize(File original, File destination, Integer targetWidth, Integer targetHeight, Color backgroundColor, Integer quality);
+    void resize(File original, File destination, Integer targetWidth, Integer targetHeight, Color backgroundColor, Integer quality);
 }

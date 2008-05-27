@@ -241,6 +241,7 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         }
         catch (RuntimeException e)
         {
+            // TODO Explain why we ignore exception
         }
 
         // Try already build type mappings

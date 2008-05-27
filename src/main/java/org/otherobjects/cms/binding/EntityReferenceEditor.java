@@ -54,6 +54,7 @@ public class EntityReferenceEditor extends PropertyEditorSupport
         }
         catch (Exception e)
         {
+            // do nothing
         }
 
         if (hasId)
@@ -65,6 +66,7 @@ public class EntityReferenceEditor extends PropertyEditorSupport
             }
             catch (Exception e)
             {
+                // do nothing
             }
 
             return (id != null) ? id.toString() : null;

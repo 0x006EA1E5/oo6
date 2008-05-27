@@ -77,7 +77,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
             }
             catch (TypeMismatchException e)
             {
-
+                // TODO Explain why we ignore exception
             }
         }
 
@@ -128,6 +128,9 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
                 buf.append(path);
                 writable = true; //only resources in the data path should be writable
                 break;
+                
+            default:
+                // TODO Should we have a default case?
 
         }
         return new ResourceInfo(buf.toString(), writable);

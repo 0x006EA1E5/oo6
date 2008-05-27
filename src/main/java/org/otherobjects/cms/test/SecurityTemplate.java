@@ -32,6 +32,7 @@ public class SecurityTemplate
         }
         catch (Exception e)
         {
+            // TODO Explain why we ignore exception
         }
 
         //TODO if we are in a real context, don't we need to setup a dummy user with ROLE_ADMIN to then be able to load the actual admin user iwth the DAO?

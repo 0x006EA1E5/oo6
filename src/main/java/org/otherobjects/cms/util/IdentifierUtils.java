@@ -7,9 +7,9 @@ import org.otherobjects.cms.model.CompositeDatabaseId;
 
 public class IdentifierUtils
 {
-    static Pattern uuidPattern = Pattern.compile("\\p{XDigit}{8}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{12}");
+    private static final Pattern UUID_PATTERN = Pattern.compile("\\p{XDigit}{8}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{12}");
 
-    static Pattern dbCompositeIdPattern = Pattern.compile("^([^-]+)-(\\d+)$");
+    private static final Pattern DB_COMPOSITE_ID_PATTERN = Pattern.compile("^([^-]+)-(\\d+)$");
 
     /**
      *
@@ -18,7 +18,7 @@ public class IdentifierUtils
      */
     public static boolean isUUID(String potentialUuid)
     {
-        return uuidPattern.matcher(potentialUuid).matches();
+        return UUID_PATTERN.matcher(potentialUuid).matches();
     }
 
     /**
@@ -31,12 +31,13 @@ public class IdentifierUtils
         CompositeDatabaseId compositeDatabaseId = null;
         try
         {
-            Matcher matcher = dbCompositeIdPattern.matcher(compositeId);
+            Matcher matcher = DB_COMPOSITE_ID_PATTERN.matcher(compositeId);
             if (matcher.matches())
                 return new CompositeDatabaseId(matcher.group(1), Long.parseLong(matcher.group(2)));
         }
         catch (Exception e)
         {
+            // TODO Explain why we ignore exception
         }
 
         return compositeDatabaseId;

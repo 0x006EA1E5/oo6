@@ -9,7 +9,7 @@ public interface ValidatorService
      * @param objectToValidate
      * @return a {@link Validator} or null if no validator for given object can be found
      */
-    public Validator getValidator(Object objectToValidate);
+    Validator getValidator(Object objectToValidate);
 
-    public Validator getValidator(Class<?> classToValidate);
+    Validator getValidator(Class<?> classToValidate);
 }

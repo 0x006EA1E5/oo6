@@ -40,43 +40,43 @@ package org.otherobjects.cms.types;
  */
 public interface PropertyDef
 {
-    public static final Object LIST = "list";
-    public static final Object REFERENCE = "reference";
-    public static final Object COMPONENT = "component";
+    Object LIST = "list";
+    Object REFERENCE = "reference";
+    Object COMPONENT = "component";
 
     /**
      * Returns the name of the Class required to store this property. This is looked up from the TypeService.
      */
-    public String getClassName();
+    String getClassName();
 
-    public String getName();
+    String getName();
 
-    public String getType();
+    String getType();
 
-    public String getRelatedType();
+    String getRelatedType();
 
-    public String getFormat();
+    String getFormat();
 
-    public String getLabel();
+    String getLabel();
 
-    public String getCollectionElementType();
+    String getCollectionElementType();
 
-    public String getDescription();
+    String getDescription();
 
-    public String getHelp();
+    String getHelp();
 
-    public boolean isRequired();
+    boolean isRequired();
 
-    public int getSize();
+    int getSize();
 
-    public String getValang();
+    String getValang();
 
-    public int getOrder();
+    int getOrder();
 
-    public TypeDef getRelatedTypeDef();
+    TypeDef getRelatedTypeDef();
 
-    public TypeService getTypeService();
+    TypeService getTypeService();
 
-    public TypeDef getParentTypeDef();
+    TypeDef getParentTypeDef();
 
 }

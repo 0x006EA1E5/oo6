@@ -23,13 +23,14 @@ public class BaseNodeTest extends TestCase
         }
         catch (RuntimeException e)
         {
+            // TODO Explain why we ignore exception
         }
     }
 
     public void testGetCode()
     {
         SampleObject node = new SampleObject();
-        
+
         // Check for null
         try
         {
@@ -38,6 +39,7 @@ public class BaseNodeTest extends TestCase
         }
         catch (RuntimeException e)
         {
+            // TODO Explain why we ignore exception
         }
 
         // Check normal values
@@ -52,19 +54,19 @@ public class BaseNodeTest extends TestCase
         }
         catch (RuntimeException e)
         {
+            // TODO Explain why we ignore exception
         }
 
-        
         // Test auto-generation
         node = new SampleObject();
-        
+
         TypeDefImpl td = new TypeDefImpl();
         td.setLabelProperty("name");
         node.setTypeDef(td);
-        
+
         node.setOoLabel("Hey! Here is a (really) bad url.");
         assertEquals("hey-here-is-a-really-bad-url", node.getCode());
-        
+
         node.setCode("my-code");
         assertEquals("my-code", node.getCode());
     }
@@ -75,9 +77,8 @@ public class BaseNodeTest extends TestCase
         n1.set("name", "name1");
 
         assertEquals("name1", n1.get("name"));
-        
+
         // FIXME Test nested properties
     }
 
 }
-

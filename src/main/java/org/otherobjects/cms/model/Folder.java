@@ -7,17 +7,17 @@ import org.otherobjects.cms.types.TypeDef;
 @SuppressWarnings("unchecked")
 public interface Folder
 {
-    public String getLabel();
+    String getLabel();
 
-    public void setLabel(String label);
+    void setLabel(String label);
 
-    public List getAllowedTypes();
+    List getAllowedTypes();
 
-    public void setAllowedTypes(List<String> allowedTypes);
+    void setAllowedTypes(List<String> allowedTypes);
 
-    public List<TypeDef> getAllAllowedTypes();
+    List<TypeDef> getAllAllowedTypes();
 
-    public String getCssClass();
+    String getCssClass();
 
-    public void setCssClass(String cssClass);
+    void setCssClass(String cssClass);
 }

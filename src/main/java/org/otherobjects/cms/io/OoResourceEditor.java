@@ -1,6 +1,5 @@
 package org.otherobjects.cms.io;
 
-import java.beans.PropertyEditor;
 import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 

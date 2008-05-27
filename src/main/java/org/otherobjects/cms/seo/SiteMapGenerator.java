@@ -23,7 +23,7 @@ import org.springframework.util.Assert;
  */
 public class SiteMapGenerator
 {
-    private static final DateTimeFormatter w3cDateFormatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZZ");
+    private static final DateTimeFormatter W3C_DATE_FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZZ");
 
     /**
      * Generates the XML. 
@@ -71,6 +71,6 @@ public class SiteMapGenerator
      */
     public String formatW3CDateTime(Date date)
     {
-        return w3cDateFormatter.withZone(DateTimeZone.forID("UTC")).print(date.getTime());
+        return W3C_DATE_FORMATTER.withZone(DateTimeZone.forID("UTC")).print(date.getTime());
     }
 }

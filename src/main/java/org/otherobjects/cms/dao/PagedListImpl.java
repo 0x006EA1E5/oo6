@@ -17,7 +17,6 @@ import org.springframework.util.Assert;
 @SuppressWarnings("unchecked")
 public class PagedListImpl<T> implements PagedList<T>
 {
-
     protected int pageSize;
     protected int itemTotal;
     protected int currentPage;

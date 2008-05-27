@@ -3,7 +3,6 @@ package org.otherobjects.cms.jcr;
 import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.model.SiteFolder;
 
-
 @SuppressWarnings("unchecked")
 public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
 {
@@ -103,6 +102,7 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
         }
         catch (RuntimeException e)
         {
+            // TODO Explain why we ignore exception
         }
     }
 
@@ -118,6 +118,7 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
         }
         catch (RuntimeException e)
         {
+            // TODO Explain why we ignore exception
         }
     }
 

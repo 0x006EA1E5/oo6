@@ -9,5 +9,5 @@ public interface Linkable
      * 
      * @return - href Url
      */
-    public Url getHref();
+    Url getHref();
 }

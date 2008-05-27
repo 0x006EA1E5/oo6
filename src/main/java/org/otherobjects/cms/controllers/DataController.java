@@ -57,7 +57,7 @@ public class DataController
 
     @Resource
     private TypeService typeService;
-    
+
     @Resource
     private DaoService daoService;
 
@@ -166,6 +166,7 @@ public class DataController
         }
         catch (ClassNotFoundException e)
         {
+            // TODO Explain why we ignore exception
         }
 
         Assert.notNull(typeClass, "Can only generate data for existing classes");

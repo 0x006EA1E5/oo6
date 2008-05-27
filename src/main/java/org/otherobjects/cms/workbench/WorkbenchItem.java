@@ -2,17 +2,17 @@ package org.otherobjects.cms.workbench;
 
 public interface WorkbenchItem
 {
-    public String getId();
+    String getId();
 
-    public String getLinkPath();
+    String getLinkPath();
 
-    public String getOoLabel();
+    String getOoLabel();
 
-    public String getOoDescription();
+    String getOoDescription();
 
-    public String getOoImage();
+    String getOoImage();
 
-    public String getOoIcon();
+    String getOoIcon();
     
     // TODO Add class?
 }

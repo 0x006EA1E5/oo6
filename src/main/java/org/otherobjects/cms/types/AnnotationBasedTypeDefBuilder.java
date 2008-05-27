@@ -191,12 +191,12 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder
         return null;
     }
 
-    static Pattern pattern = Pattern.compile("(?:(?:is|get)|(?:is))(\\w{1})(.*)");
+    private static final Pattern PATTERN = Pattern.compile("(?:(?:is|get)|(?:is))(\\w{1})(.*)");
 
     //FIXME clearly somebody else must have done this - and maybe in a cleverer way
     private String getPropertyNameFromGetterOrSetter(String methodName)
     {
-        Matcher matcher = pattern.matcher(methodName);
+        Matcher matcher = PATTERN.matcher(methodName);
         if (matcher.matches())
             return matcher.group(1).toLowerCase() + matcher.group(2);
         else

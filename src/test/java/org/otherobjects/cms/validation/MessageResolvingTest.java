@@ -18,7 +18,7 @@ public class MessageResolvingTest extends BaseSharedContextTestCase
 
     class DummyBean
     {
-        String name;
+        private String name;
 
         public String getName()
         {

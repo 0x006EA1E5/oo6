@@ -11,7 +11,8 @@ import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 public class OoResourceMetaDataTest extends TestCase
 {
 
-    public static final String TEST_JSON_METADATA = "{\"metaData\":{\"author\":\"author value\",\"creationDate\":1199142000000,\"description\":\"description value\",\"modificationTimestamp\":1199142000000,\"title\":\"title value\",\"userdId\":5}}";
+    public static final String TEST_JSON_METADATA = "{\"metaData\":{\"author\":\"author value\",\"creationDate\":1199142000000,"
+            + "\"description\":\"description value\",\"modificationTimestamp\":1199142000000,\"title\":\"title value\",\"userdId\":5}}";
 
     public void testSerialise() throws ParseException
     {

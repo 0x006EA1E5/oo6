@@ -9,8 +9,8 @@ import org.springframework.mock.web.MockHttpServletRequest;
 public class TransparentRequestContentAccessorTest extends TestCase
 {
 
-    String contentString;
-    byte[] content;
+    private String contentString;
+    private byte[] content;
 
     @Override
     protected void setUp() throws Exception
@@ -44,6 +44,7 @@ public class TransparentRequestContentAccessorTest extends TestCase
         }
         catch (IllegalStateException e)
         {
+            // TODO Explain why we ignore exception
         }
     }
 
@@ -69,6 +70,7 @@ public class TransparentRequestContentAccessorTest extends TestCase
         }
         catch (IllegalStateException e)
         {
+            // TODO Explain why we ignore exception
         }
     }
 
