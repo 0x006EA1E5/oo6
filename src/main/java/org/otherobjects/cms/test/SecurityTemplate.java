@@ -20,6 +20,8 @@ import org.springframework.security.providers.anonymous.AnonymousAuthenticationT
  */
 public class SecurityTemplate
 {
+    //TODO I guess we need a executeAsUser(Long id, SecurityCallback action) method
+
     public Object executeAsAdmin(SecurityCallback action)
     {
         // try to get the real admin user
@@ -31,6 +33,8 @@ public class SecurityTemplate
         catch (Exception e)
         {
         }
+
+        //TODO if we are in a real context, don't we need to setup a dummy user with ROLE_ADMIN to then be able to load the actual admin user iwth the DAO?
 
         Authentication auth = null;
         User adminUser = null;
