@@ -15,6 +15,10 @@
 		</property>
 	</bean>
 	
+	<bean id="resourceCleaner" class="org.otherobjects.cms.test.ResourceCleaner" init-method="cleanup">
+		<property name="resource" value="file:./target/data"></property>
+	</bean>
+	
 	
 	
 

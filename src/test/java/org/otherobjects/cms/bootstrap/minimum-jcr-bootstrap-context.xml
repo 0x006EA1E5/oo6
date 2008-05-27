@@ -12,7 +12,7 @@
 	</bean>
 	-->
 	
-	<bean id="repository" class="org.springmodules.jcr.jackrabbit.TransientRepositoryFactoryBean">
+	<bean id="repository" class="org.springmodules.jcr.jackrabbit.TransientRepositoryFactoryBean" depends-on="resourceCleaner">
 		<property name="configuration" value="${jcr.config.path}" />
 		<property name="homeDir" value="${jcr.repository.location}" />
 	</bean>
