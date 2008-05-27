@@ -10,5 +10,11 @@
 		<property name="host" value="localhost" />
 		<property name="port" value="25"></property>
 	</bean>
-
+	
+	
+	<bean id="mailService" class="org.otherobjects.cms.mail.MailService">
+		<property name="configuration" ref="freemarkerConfiguration" />
+		<property name="ooResourceLoader" ref="ooResourceLoader"></property>
+		<property name="mailSender" ref="mailSender" />
+	</bean>
 </beans>

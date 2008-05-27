@@ -3,8 +3,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd ">
 
-	<!-- Freemarker config -->
-	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+	<!-- General Freemarker config -->
+	<bean id="freemarkerConfiguration" class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">
 		<property name="templateLoaderPaths">
 			<list>
 				<!-- Site tempates. Path in /webapp -->
@@ -18,11 +18,12 @@
 				<entry key="daoService" value-ref="daoService" />
 			</map>
 		</property>
-		<property name="freemarkerSettings">
-			<props>
-				<prop key="object_wrapper">beans</prop>
-			</props>
-		</property>
+	</bean>
+	
+	<!-- freemarker config proxy that proxies a general freemarker config for use by FreemarkerView -->
+	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="configuration" ref="freemarkerConfiguration" />
+		
 	</bean>
 
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
