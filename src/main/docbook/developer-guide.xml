@@ -812,6 +812,110 @@ Admin : http://localhost:8080/go/workbench/
   </chapter>
 
   <chapter>
+    <title>Using Freemarker</title>
+
+    <para>OTHERobjects uses Freemarker as its preferred Template engine for
+    rendering web views as well as templated email bodies.</para>
+
+    <section>
+      <title>Configuration</title>
+
+      <para>OTHERobjects configures Freemarker so that it can be used by
+      generic text processing code as well as in a web specific context. The
+      central configuration happens in
+      /otherobjects.resources/config/applicationContext-freemarker.xml like
+      this</para>
+
+      <programlisting>&lt;!-- General Freemarker config --&gt;
+&lt;bean id="freemarkerConfiguration" class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean"&gt;
+  &lt;property name="templateLoaderPaths"&gt;
+    &lt;list&gt;
+      &lt;!-- Site tempates. Path in /webapp --&gt;
+      &lt;value&gt;/templates/&lt;/value&gt;
+      &lt;!-- OTHERobjects templates loaded from class path --&gt;
+      &lt;value&gt;classpath:/otherobjects.resources/templates/&lt;/value&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+  &lt;property name="freemarkerVariables"&gt;
+    &lt;map&gt;
+      &lt;entry key="daoService" value-ref="daoService" /&gt;
+   &lt;/map&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting>
+
+      <para>Here the Spring helper class is used to mainly setup all paths
+      were templates are expected to live. When you specify freemarker
+      template paths they are always relative to the paths configured
+      above.</para>
+
+      <para>Because we are using the Spring helper class you have always
+      access to Spring's Freemarker macros by putting something like this in
+      your template</para>
+
+      <programlisting>&lt;#import "spring.ftl" as spring/&gt;</programlisting>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Advantages</title>
+
+      <para>Here are some advantages Freemarker has over Velocity (in no
+      particular order)</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Freemarker can preserve whitespace</para>
+        </listitem>
+
+        <listitem>
+          <para>Freemarker macros have namespaces</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Notes to users of velocity</title>
+
+      <para>Freemarker works very similarly to Velocity but there are some
+      differences.</para>
+
+      <orderedlist>
+        <listitem>
+          <para>You always need to use the explicit syntax - i.e not $var but
+          ${var}</para>
+        </listitem>
+
+        <listitem>
+          <para>Freemarker discourages the use of custom tools for formatting
+          strings, numbers and dates. Use the Freemarker builtins
+          instead.</para>
+
+          <programlisting>&lt;#-- to trim a string variable --&gt;
+${var?trim}
+
+&lt;#-- to display the date part of a date variable --&gt;
+${datevar?date}</programlisting>
+
+          <para>See the Freemarker documentation at
+          http://freemarker.org/docs/</para>
+        </listitem>
+
+        <listitem>
+          <para>Everything that gets put into a Freemarker data model is
+          wrapped by freemarker which can lead to unexpected results. For
+          example, if you put an object that implements java.util.Iterator
+          into the data model you can then use Freemarkers &lt;#list&gt; tag
+          but you can't get to other methods that object might expose as
+          Freemarker wraps Iterator objects in a special Freemarker Collection
+          object. There might be other such wrappings that effectively mask
+          some things you might want to do with your object.</para>
+        </listitem>
+      </orderedlist>
+    </section>
+  </chapter>
+
+  <chapter>
     <title>Testing</title>
 
     <para>This extends the testing discussion in the Site Designer
