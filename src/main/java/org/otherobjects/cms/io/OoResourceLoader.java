@@ -57,7 +57,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
         if (ooResource.isWritable())
         {
             // make all dirs in this path not yet existing
-            File parentDir = ooResource.getFile();
+            File parentDir = ooResource.getFile().getParentFile();
             if (parentDir != null)
             {
                 parentDir.mkdirs();
@@ -128,8 +128,8 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
                 buf.append(path);
                 writable = true; //only resources in the data path should be writable
                 break;
-                
-            default:
+
+            default :
                 // TODO Should we have a default case?
 
         }
