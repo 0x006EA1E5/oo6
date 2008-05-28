@@ -25,11 +25,11 @@
 				</bean>
 			</list>
 		</property>
-		<property name="freemarkerSettings">
-			<props>
-				<prop key="localized_lookup">false</prop>
-			</props>
-		</property>
+<!--		<property name="freemarkerSettings">-->
+<!--			<props>-->
+<!--				<prop key="localized_lookup">false</prop>-->
+<!--			</props>-->
+<!--		</property>-->
 	</bean>
 
 
