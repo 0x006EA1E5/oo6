@@ -13,6 +13,13 @@
 				<value>classpath:/otherobjects.resources/templates/</value>
 			</list>
 		</property>
+		<property name="preTemplateLoaders">
+			<list>
+				<bean class="org.otherobjects.cms.io.OoResourceFreemarkerTemplateLoader">
+					<constructor-arg ref="ooResourceLoader" />
+				</bean>
+			</list>
+		</property>
 		<property name="freemarkerVariables">
 			<map>
 				<entry key="daoService" value-ref="daoService" />
