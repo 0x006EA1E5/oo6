@@ -35,14 +35,14 @@ import org.apache.jackrabbit.ocm.mapper.model.CollectionDescriptor;
 import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
-import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.cms.types.TypeServiceImpl;
 
 @SuppressWarnings("unchecked")
-public class DynamicMapConverterImpl extends AbstractCollectionConverterImpl
+public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImpl
 {
 
     private AtomicTypeConverterProvider atomicTypeConverterProvider = new DefaultAtomicTypeConverterProvider();
-    private TypeService typeService;
+    private TypeServiceImpl typeService;
     private ObjectConverter objectConverter = new ObjectConverterImpl(this.mapper, atomicTypeConverterProvider);
 
     /**
@@ -52,10 +52,10 @@ public class DynamicMapConverterImpl extends AbstractCollectionConverterImpl
      * @param objectConverter
      * @param mapper
      */
-    public DynamicMapConverterImpl(Map atomicTypeConverters, ObjectConverter objectConverter, Mapper mapper)
+    public DynaNodeDataMapConverterImpl(Map atomicTypeConverters, ObjectConverter objectConverter, Mapper mapper)
     {
         super(atomicTypeConverters, objectConverter, mapper);
-        typeService = (TypeService) SingletonBeanLocator.getBean("typeService");
+        typeService = (TypeServiceImpl) SingletonBeanLocator.getBean("typeService");
     }
 
     /**
@@ -163,7 +163,7 @@ public class DynamicMapConverterImpl extends AbstractCollectionConverterImpl
 
     private void insertSimpleProperty(Node dataNode, ValueFactory valueFactory, PropertyDef property, Object value) throws RepositoryException
     {
-        AtomicTypeConverter atomicTypeConverter = null; // FIXME XXXXXXXXXX (AtomicTypeConverter) typeService.getJcrConverter(property.getType());
+        AtomicTypeConverter atomicTypeConverter = (AtomicTypeConverter) typeService.getJcrConverter(property.getType());
         Value v = atomicTypeConverter.getValue(valueFactory, value);
         dataNode.setProperty(property.getName(), v);
     }
@@ -262,7 +262,7 @@ public class DynamicMapConverterImpl extends AbstractCollectionConverterImpl
         else
         {
             collectionConverter = new MultiValueCollectionConverterImpl(atomicTypeConverterProvider.getAtomicTypeConverters(), objectConverter, mapper);
-            elementClassName = null;// FIXME typeService.getJcrClassMapping(propertyType).getName();
+            elementClassName = typeService.getJcrClassMapping(propertyType).getName();
         }
         collectionDescriptor.setElementClassName(elementClassName);
         return collectionConverter.getCollection(session, dataNode, collectionDescriptor, ArrayList.class);
@@ -273,7 +273,7 @@ public class DynamicMapConverterImpl extends AbstractCollectionConverterImpl
         if (dataNode.hasProperty(property.getName()))
         {
             Property jcrProperty = dataNode.getProperty(property.getName());
-            AtomicTypeConverter atomicTypeConverter = null;// FIXME(AtomicTypeConverter) typeService.getJcrConverter(property.getType());
+            AtomicTypeConverter atomicTypeConverter = (AtomicTypeConverter) typeService.getJcrConverter(property.getType());
             return atomicTypeConverter.getObject(jcrProperty.getValue());
         }
         else

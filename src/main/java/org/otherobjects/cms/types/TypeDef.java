@@ -3,8 +3,6 @@ package org.otherobjects.cms.types;
 import java.util.Collection;
 
 /**
- * FIXME Split into interface and Jcr impl
- * 
  * @author rich
  */
 public interface TypeDef

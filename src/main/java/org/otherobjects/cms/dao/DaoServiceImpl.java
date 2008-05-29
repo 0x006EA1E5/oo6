@@ -48,9 +48,15 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
             else
             {
                 // then return universal jcr dao for types extending baseNode
+                //FIXME Should we support this? Need a better way of getting DAOs for objects.
                 if (type.equalsIgnoreCase("baseNode"))
                     return (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
 
+                // then return universal jcr dao for types extending baseNode
+                if (type.endsWith("DynaNode"))
+                    return (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
+
+                
                 try
                 {
                     Class cls = Class.forName(type);

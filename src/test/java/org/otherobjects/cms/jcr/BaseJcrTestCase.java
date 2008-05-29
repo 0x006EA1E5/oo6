@@ -54,6 +54,11 @@ public abstract class BaseJcrTestCase extends AbstractTransactionalJUnit38Spring
         TypeDef typeDef = b.getTypeDef(cls);
         typeService.registerType(typeDef);
     }
+    
+    protected void registerType(TypeDef typeDef) 
+    {
+        typeService.registerType(typeDef);
+    }
 
     protected void adminLogin()
     {

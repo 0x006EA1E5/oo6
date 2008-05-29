@@ -32,6 +32,8 @@ import org.apache.jackrabbit.ocm.mapper.model.ClassDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.CollectionDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.FieldDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.MappingDescriptor;
+import org.otherobjects.cms.jcr.dynamic.DynaNode;
+import org.otherobjects.cms.jcr.dynamic.DynaNodeDataMapConverterImpl;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
@@ -81,7 +83,36 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
             throw new InitMapperException("No mappings were provided");
         }
 
+        // Add DynaNode mapping
+        ClassDescriptor classDescriptor = createDynaNodeClassDescriptor();
+        mappingDescriptor.addClassDescriptor(classDescriptor);
+        this.mappingDescriptor.setMapper(this);
+
         return this;
+    }
+
+    /**
+     * DynaNode mapping needs to be individually configured.
+     * 
+     * @return
+     */
+    private ClassDescriptor createDynaNodeClassDescriptor()
+    {
+        ClassDescriptor cd = new ClassDescriptor();
+        cd.setClassName(DynaNode.class.getName());
+        cd.setJcrType("oo:node");
+
+        // Map common fields
+        addStandardFields(cd);
+
+        // Map data map
+        CollectionDescriptor cld = new CollectionDescriptor();
+        cld.setFieldName("data");
+        cld.setJcrName("data");
+        cld.setCollectionConverter(DynaNodeDataMapConverterImpl.class.getName());
+        cd.addCollectionDescriptor(cld);
+
+        return cd;
     }
 
     protected ClassDescriptor createClassDescriptor(TypeDef typeDef)
@@ -90,66 +121,7 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         cd.setClassName(typeDef.getClassName());
         cd.setJcrType("oo:node");
 
-        // Add standard properties
-        FieldDescriptor fd = new FieldDescriptor();
-        fd.setFieldName("id");
-        fd.setJcrName("id");
-        fd.setUuid(true);
-        cd.addFieldDescriptor(fd);
-
-        FieldDescriptor fd2 = new FieldDescriptor();
-        fd2.setFieldName("jcrPath");
-        fd2.setJcrName("jcrPath");
-        fd2.setPath(true);
-        cd.addFieldDescriptor(fd2);
-
-        FieldDescriptor fd3 = new FieldDescriptor();
-        fd3.setFieldName("label");
-        fd3.setJcrName("label");
-        cd.addFieldDescriptor(fd3);
-
-        FieldDescriptor fd4 = new FieldDescriptor();
-        fd4.setFieldName("ooType");
-        fd4.setJcrName("ooType");
-        cd.addFieldDescriptor(fd4);
-
-        // FIXME This is used for collections. Is there a better way?
-        FieldDescriptor fd5 = new FieldDescriptor();
-        fd5.setFieldName("code");
-        fd5.setJcrName("code");
-        fd5.setId(true);
-        cd.addFieldDescriptor(fd5);
-
-        FieldDescriptor fd6 = new FieldDescriptor();
-        fd6.setFieldName("published");
-        fd6.setJcrName("published");
-        cd.addFieldDescriptor(fd6);
-
-        // Audit info
-        FieldDescriptor fd7 = new FieldDescriptor();
-        fd7.setFieldName("userName");
-        fd7.setJcrName("userName");
-        cd.addFieldDescriptor(fd7);
-
-        FieldDescriptor fd8 = new FieldDescriptor();
-        fd8.setFieldName("userId");
-        fd8.setJcrName("userId");
-        cd.addFieldDescriptor(fd8);
-
-        FieldDescriptor fd9 = new FieldDescriptor();
-        fd9.setFieldName("modificationTimestamp");
-        fd9.setJcrName("modificationTimestamp");
-        cd.addFieldDescriptor(fd9);
-
-        FieldDescriptor fd10 = new FieldDescriptor();
-        fd10.setFieldName("comment");
-        fd10.setJcrName("comment");
-        cd.addFieldDescriptor(fd10);
-
-        FieldDescriptor fd11 = new FieldDescriptor();
-        fd11.setFieldName("changeNumber");
-        fd11.setJcrName("changeNumber");
-        cd.addFieldDescriptor(fd11);
+        addStandardFields(cd);
 
         // Add custom properties
         for (PropertyDef propDef : typeDef.getProperties())
@@ -225,6 +197,70 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
             }
         }
         return cd;
+    }
+
+    private void addStandardFields(ClassDescriptor cd)
+    {
+        // Add standard properties
+        FieldDescriptor fd = new FieldDescriptor();
+        fd.setFieldName("id");
+        fd.setJcrName("id");
+        fd.setUuid(true);
+        cd.addFieldDescriptor(fd);
+
+        FieldDescriptor fd2 = new FieldDescriptor();
+        fd2.setFieldName("jcrPath");
+        fd2.setJcrName("jcrPath");
+        fd2.setPath(true);
+        cd.addFieldDescriptor(fd2);
+
+        FieldDescriptor fd3 = new FieldDescriptor();
+        fd3.setFieldName("label");
+        fd3.setJcrName("label");
+        cd.addFieldDescriptor(fd3);
+
+        FieldDescriptor fd4 = new FieldDescriptor();
+        fd4.setFieldName("ooType");
+        fd4.setJcrName("ooType");
+        cd.addFieldDescriptor(fd4);
+
+        // FIXME This is used for collections. Is there a better way?
+        FieldDescriptor fd5 = new FieldDescriptor();
+        fd5.setFieldName("code");
+        fd5.setJcrName("code");
+        fd5.setId(true);
+        cd.addFieldDescriptor(fd5);
+
+        FieldDescriptor fd6 = new FieldDescriptor();
+        fd6.setFieldName("published");
+        fd6.setJcrName("published");
+        cd.addFieldDescriptor(fd6);
+
+        // Audit info
+        FieldDescriptor fd7 = new FieldDescriptor();
+        fd7.setFieldName("userName");
+        fd7.setJcrName("userName");
+        cd.addFieldDescriptor(fd7);
+
+        FieldDescriptor fd8 = new FieldDescriptor();
+        fd8.setFieldName("userId");
+        fd8.setJcrName("userId");
+        cd.addFieldDescriptor(fd8);
+
+        FieldDescriptor fd9 = new FieldDescriptor();
+        fd9.setFieldName("modificationTimestamp");
+        fd9.setJcrName("modificationTimestamp");
+        cd.addFieldDescriptor(fd9);
+
+        FieldDescriptor fd10 = new FieldDescriptor();
+        fd10.setFieldName("comment");
+        fd10.setJcrName("comment");
+        cd.addFieldDescriptor(fd10);
+
+        FieldDescriptor fd11 = new FieldDescriptor();
+        fd11.setFieldName("changeNumber");
+        fd11.setJcrName("changeNumber");
+        cd.addFieldDescriptor(fd11);
     }
 
     /**
