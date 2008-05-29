@@ -64,6 +64,7 @@ Security
 * Auto-generated and changeable salts
 * SSL support (with sensible session handling)
 * OWASP best practice followed
+* Disallow access to bad parts of the file system
 
 Data processing
 * Scheduled tasks
@@ -217,3 +218,4 @@ Hosting
 * Allow simple customisation of server specific properties
 * JMX hooks for important runtime information
 ? Separate workbench server
+* 404: Missing file logs

@@ -30,3 +30,13 @@ Post 1.0
 
 * Support for more image editing features
 * Restore third party integrations (flickr, delicious) 
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,38 @@
+OTHERobjects CMS Roadmap
+========================
+
+Final Milestone (Q2/2008)
+-------------------------
+
+* Base architecture complete. 
+* Tested and validated datastores
+* CMS features complete
+* Web service APIs in place
+* Legacy admin and wiki interface
+
+Release will be made widely available internally for feedback.
+Some internal websites migrated from OO5 to test migration path.
+Performance and scalability testing begins.
+
+Beta phase (Q3/2008)
+--------------------
+
+* Bugs from final milestone fixed
+* New AJAX interface implemented
+* Performance fixed implemented
+* Documentation completed
+* Code quality and security audit
+
+Release will be made avaiable to select clients for feedback
+User testing begins
+Code released as open source for feedback from web community
+Some small public facing websites migrated from OO5 
+
+First Release (Q4/2008)
+---------------------
+
+* Bugs from beta phase fixed
+* UI fixed implemented
+* Documentation and website finalised
+
+First widely publicised release.

@@ -1,6 +1,7 @@
 Current List
 ------------
 
+* Force maven and all fiels to be UTF-8 not MacRoman
 * Test validation
 * Auto Tool/Directive discovery
 * Spring 2.5.3 upgrade
@@ -16,7 +17,7 @@ Current List
 * Restore changelogs on Welcome page
 * Fix audit info
 * Debug: state if session is created. Show total number of sessions.
-* Clear up basenode
+* Clear up basenode (ChangeNumber -> Version)
 * Finish global config
 * Restore CmsImage
 * Directives in freemarker template (auto)
