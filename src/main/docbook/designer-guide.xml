@@ -133,6 +133,14 @@
   </chapter>
 
   <chapter>
+    <title>Defining object types</title>
+
+    <para>TypeDef must have: name</para>
+
+    <para>Properties much have: name, type, size?</para>
+  </chapter>
+
+  <chapter>
     <title>Building templates</title>
 
     <para>Template paths</para>
@@ -208,7 +216,7 @@
 
     <para>plugins -- reseved for plugins</para>
 
-    <para>debug -- diagnostics information </para>
+    <para>debug -- diagnostics information</para>
   </chapter>
 
   <chapter>

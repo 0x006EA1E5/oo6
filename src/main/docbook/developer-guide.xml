@@ -362,6 +362,28 @@ Admin : http://localhost:8080/go/workbench/
     <para>How to bind to URLS.</para>
   </chapter>
 
+  <chapter>
+    <title>Architecture</title>
+
+    <para>There are several key OTHERobjects components that it is important
+    to undestand before building your own plugins and extensions.</para>
+
+    <section>
+      <title>JCR Data Store</title>
+
+      <para>JCR (implemented via Jackrabbit) is a hierarchical tree of nodes
+      and properties.</para>
+
+      <para>We map an object to a node and it's fields to properties.</para>
+
+      <para>Object to node mapping done via Jackrabbit OCM.</para>
+
+      <para>OCM configured via our type service annotations.</para>
+
+      <para>DynaNodes are special cases. Custom OCM mapper.</para>
+    </section>
+  </chapter>
+
   <chapter id="performance">
     <title>Performance tuning</title>
 
