@@ -7,7 +7,7 @@
 	<!-- Mail -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<!-- TODO Need to extract mail host as property -->
-		<property name="host" value="localhost" />
+		<property name="host" value="intra.woerd.de" />
 		<property name="port" value="25"></property>
 	</bean>
 	

@@ -13,6 +13,7 @@
 <!--		<intercept-url pattern="/go/workbench/api/**" access="ROLE_USER" />-->
 <!--		<intercept-url pattern="/go/workbench/login.html" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
 <!--		<intercept-url pattern="/go/workbench/**" access="IS_AUTHENTICATED_REMEMBERED" />-->
+		<intercept-url pattern="/otherobjects/password/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/go/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<form-login login-page="/otherobjects/workbench/login.html" />
@@ -28,9 +29,14 @@
 	
 	<beans:bean id="passwordEncoder" class="org.springframework.security.providers.encoding.ShaPasswordEncoder">
 <!--    	<beans:constructor-arg value="256" />-->
+		<beans:property name="encodeHashAsBase64" value="true" />
     </beans:bean>
 	
 	<beans:bean id="saltSource" class="org.springframework.security.providers.dao.salt.SystemWideSaltSource">
 		<beans:property name="systemWideSalt" value="${otherobjects.system.wide.salt}" />
+	</beans:bean>
+	
+	<beans:bean id="passwordService" class="org.otherobjects.cms.security.PasswordService">
+		<beans:property name="sessionFactory" ref="sessionFactory" />
 	</beans:bean>
 </beans:beans>

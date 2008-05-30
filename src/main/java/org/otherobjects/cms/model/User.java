@@ -17,7 +17,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.otherobjects.cms.types.TypeDef;
@@ -53,8 +52,8 @@ public class User implements Serializable, UserDetails, Editable
     protected String email; // required; unique
     protected String username; // required
     protected String password; // required
-    protected String plainTextPassword; // required
-    protected String plainTextConfirmPassword;
+    //    protected String plainTextPassword; // required
+    //    protected String plainTextConfirmPassword;
     protected String passwordHint;
     protected String firstName; // required
     protected String lastName; // required
@@ -102,37 +101,38 @@ public class User implements Serializable, UserDetails, Editable
     @Column(nullable = false)
     public String getPassword()
     {
+        return this.password;
         // Return the current hashed password unless the a new plain text one 
         // is available
-        if (StringUtils.isNotEmpty(getPlainTextPassword()))
-        {
-            // TODO Fetch password encoder from Spring. Move this to DAO?
-            return SHA_PASSWORD_ENCODER.encodePassword(getPlainTextPassword(), null);
-        }
-        else
-        {
-            return this.password;
-        }
+        //        if (StringUtils.isNotEmpty(getPlainTextPassword()))
+        //        {
+        //            // TODO Fetch password encoder from Spring. Move this to DAO?
+        //            return SHA_PASSWORD_ENCODER.encodePassword(getPlainTextPassword(), null);
+        //        }
+        //        else
+        //        {
+        //            return this.password;
+        //        }
     }
 
-    /**
-     * Transient field that sets the password in plain text. 
-     * 
-     * @return
-     */
-    @Transient
-    @Property(required = true, order = 10)
-    public String getPlainTextPassword()
-    {
-        return this.plainTextPassword;
-    }
-
-    @Transient
-    @Property(order = 11)
-    public String getPlainTextConfirmPassword()
-    {
-        return this.plainTextConfirmPassword;
-    }
+    //    /**
+    //     * Transient field that sets the password in plain text. 
+    //     * 
+    //     * @return
+    //     */
+    //    @Transient
+    //    @Property(required = true, order = 10)
+    //    public String getPlainTextPassword()
+    //    {
+    //        return this.plainTextPassword;
+    //    }
+    //
+    //    @Transient
+    //    @Property(order = 11)
+    //    public String getPlainTextConfirmPassword()
+    //    {
+    //        return this.plainTextConfirmPassword;
+    //    }
 
     @Column(name = "password_hint")
     @Property(type = PropertyType.TEXT, label = "Password hint", order = 4)
@@ -386,15 +386,15 @@ public class User implements Serializable, UserDetails, Editable
         this.typeDef = typeDef;
     }
 
-    public void setPlainTextPassword(String plainTextPassword)
-    {
-        this.plainTextPassword = plainTextPassword;
-    }
-
-    public void setPlainTextConfirmPassword(String plainTextConfirmPassword)
-    {
-        this.plainTextConfirmPassword = plainTextConfirmPassword;
-    }
+    //    public void setPlainTextPassword(String plainTextPassword)
+    //    {
+    //        this.plainTextPassword = plainTextPassword;
+    //    }
+    //
+    //    public void setPlainTextConfirmPassword(String plainTextConfirmPassword)
+    //    {
+    //        this.plainTextConfirmPassword = plainTextConfirmPassword;
+    //    }
 
     // the following is not needed anymore as it is done with annotations now
     //    @Transient
