@@ -5,6 +5,16 @@ import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.types.PropertyDefImpl;
 import org.otherobjects.cms.types.TypeDefImpl;
 
+/**
+ * TODO All simple properties
+ * TODO Components/References
+ * TODO Collections
+ * TODO Definitnon changes
+ * TODO Validation
+ * TODO Binding
+ * 
+ * @author rich
+ */
 public class DynaNodeTest extends BaseJcrTestCase
 {
     public void testWrite()

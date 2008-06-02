@@ -10,3 +10,5 @@ Quality Audit
 * XSS escaping by default
 * Test class packages match classes under test
 * File formatting and licenses (tabs, line endings)
+* Serializable objects
+* Session size and persitence

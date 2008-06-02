@@ -9,10 +9,10 @@
 	<!-- 
 		Automatically detect controllers in the specified package(s) annotated with @Controller.
 	-->
-	<bean id="handlerMappingTemplate" abstract="true" >
-		<property name="interceptors"  >
+	<bean id="handlerMappingTemplate" abstract="true">
+		<property name="interceptors">
 			<list>
-				<ref bean="localeChangeInterceptor"/>
+				<ref bean="localeChangeInterceptor" />
 				<bean class="org.otherobjects.cms.controllers.interceptors.ModelModifierInterceptor" />
 			</list>
 		</property>
@@ -27,21 +27,22 @@
 	<!-- 
 		Site controller
 		TODO This should be a separate servlet?
-	
-	<bean name="ssiteController" class="org.otherobjects.cms.controllers.SiteController">
+	-->
+	<bean name="siteController" class="org.otherobjects.cms.controllers.SiteController">
 		<property name="handlers">
 			<map>
 				<entry key="*" value-ref="pageHandler" />
 			</map>
 		</property>
 	</bean>
-	-->
-	
+
 	<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
 		<property name="paramName" value="locale" />
 	</bean>
 
-	<bean name="pageHandler" class="org.otherobjects.cms.controllers.handlers.PageHandler" />
+	<bean name="pageHandler" class="org.otherobjects.cms.controllers.handlers.PageHandler">
+		<property name="daoService" ref="daoService" />
+	</bean>
 
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<!-- TODO Extract max-upload size into a property -->

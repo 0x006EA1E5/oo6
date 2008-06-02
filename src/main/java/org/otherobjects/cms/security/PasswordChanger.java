@@ -43,5 +43,4 @@ public class PasswordChanger
     {
         this.newPasswordRepeated = newPasswordRepeated;
     }
-
 }

@@ -42,3 +42,20 @@ Renders an exception stack trace. Output is not wrapped in a block element.
 ${trace}<br/>
 </#list>
 </#macro>  
+
+<#-- 
+Macro to insert block
+-->
+<#macro block name>
+<#-- 
+## need data -- /blocks/$blockname
+## need template /blocks/$blockname
+## render template
+## wrap with id data (if editor)
+## render result
+-->
+<#assign data = daoService.getDao("baseNode").getByPath("/blocks/${name}") >
+<div class="oo-block" xid="oo-block-${name}" id="block">
+<#include "/blocks/${name}.ftl">
+</div>
+</#macro>  

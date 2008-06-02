@@ -1,7 +1,7 @@
 Current List
 ------------
 
-* Force maven and all fiels to be UTF-8 not MacRoman
+* Force maven and all files to be UTF-8 not MacRoman
 * Test validation
 * Auto Tool/Directive discovery
 * Spring 2.5.3 upgrade
@@ -40,6 +40,26 @@ Current List
   + Search
   + Filter (user, state, date, type)
   + Sort
+
+* Hibernate naming strategy (eg for tables)
+
+
+* Selector object for performing JCR/DB queries (with manual selection allowed)
+
+Blocks:
+
+* Block libary: YouTube, RSS, Flicker, Photogallery, Promo, Image
+* Block shortcuts to raw data input (eg on latest news should be a shortcut to view/add news stories)
+
+CSS:
+
+* Block placeholders: new (no data), error, loading, editing?
+* Block decorators: ubpublished, main block?, condition block logic attached
+
+Ojay:
+
+* How to remove elements
+* Forms library?
 
 Later:
 

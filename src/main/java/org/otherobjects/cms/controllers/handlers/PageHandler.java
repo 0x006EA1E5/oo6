@@ -3,6 +3,7 @@ package org.otherobjects.cms.controllers.handlers;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.site.SiteNavigatorService;
@@ -13,9 +14,7 @@ public class PageHandler implements ResourceHandler
 {
     private NavigatorService navigatorService;
     private SiteNavigatorService siteNavigatorService;
-
-//    @Resource
-//    private DaoService daoService;
+    private DaoService daoService;
 
     public ModelAndView handleRequest(CmsNode o, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
@@ -34,10 +33,21 @@ public class PageHandler implements ResourceHandler
         //view.addObject("template", template);
         view.addObject("navigatorService", this.navigatorService);
         view.addObject("siteNavigator", this.siteNavigatorService);
+        view.addObject("daoService", this.daoService);
         //if (SiteItem.class.isAssignableFrom(resourceObject.getClass())) //put the trail in the ctx if we are dealing with a SiteItem object
         //    view.addObject("trail", siteNavigatorService.getTrail((SiteItem) resourceObject));
 
         return view;
+    }
+
+    public DaoService getDaoService()
+    {
+        return daoService;
+    }
+
+    public void setDaoService(DaoService daoService)
+    {
+        this.daoService = daoService;
     }
 
 //    /**

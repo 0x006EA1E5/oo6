@@ -17,9 +17,11 @@ import org.otherobjects.cms.binding.BindService;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.GenericDao;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
+import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CompositeDatabaseId;
 import org.otherobjects.cms.model.DbFolder;
+import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeDefBuilder;
 import org.otherobjects.cms.util.IdentifierUtils;
@@ -97,6 +99,7 @@ public class FormController
                 }
                 else
                 {
+                    // TODO Should validate if plausable db id here and throw error if not
                     CompositeDatabaseId compositeDatabaseId = IdentifierUtils.getCompositeDatabaseId(id);
                     if (compositeDatabaseId != null)
                     {
@@ -129,17 +132,29 @@ public class FormController
                 throw new IllegalArgumentException("Not enough information provided to save form data. Either existing id or new type required.");
             }
 
+            Assert.notNull(item, "No object found for id: " + id);
             Assert.notNull(typeDef, "We cannot bind objects that don't have a typeDef");
 
             // Perform validation
-            errors = bindService.bind(item, typeDef, request);
-            Validator validator = validatorService.getValidator(item);
-            if (validator != null)
-                validator.validate(item, errors);
+            if (item instanceof DynaNode)
+            {
+                // FIXME Need integrated DynaNode validation rather than this special case
+                for (PropertyDef pd : typeDef.getProperties())
+                {
+                    ((DynaNode) item).set(pd.getName(), request.getParameter(pd.getName()));
+                }
+            }
             else
-                logger.warn("No validator for item of class " + item.getClass() + " found");
+            {
+                errors = bindService.bind(item, typeDef, request);
+                Validator validator = validatorService.getValidator(item);
+                if (validator != null)
+                    validator.validate(item, errors);
+                else
+                    logger.warn("No validator for item of class " + item.getClass() + " found");
+            }
 
-            if (!errors.hasErrors())
+            if (!(errors != null && errors.hasErrors()))
             {
                 // Save new object
                 genericDao.save(item, false);

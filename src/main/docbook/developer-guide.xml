@@ -220,7 +220,7 @@ brushed:~ rich$
                 <entry>FreeMarker plugin</entry>
 
                 <entry>Need to manually update to plugin to latest FreeMarker
-                jar</entry>
+                jar. Also use 0.9x version of freemrker-ide</entry>
               </row>
             </tbody>
           </tgroup>
