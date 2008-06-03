@@ -10,10 +10,11 @@ import org.springframework.util.Assert;
  * its TypeDef.
  * 
  * TODO Need a way to add custom DAO methods?
+ * FIXME Needs to support Groovy/Freemarker property access eg object.property="new";
  * 
  * @author rich
  */
-public class DynaNode extends BaseNode
+public class DynaNode extends BaseNode //implements Map
 {
     private ManagedHashMap data = new ManagedHashMap();
     private String ooType;
@@ -72,5 +73,70 @@ public class DynaNode extends BaseNode
     {
         this.data = data;
     }
+
+//    /*
+//     * FIXME Map interface methods. If these stay they should include standard node fields.
+//     */
+//    public void clear()
+//    {
+//        data.clear();
+//    }
+//
+//    public boolean containsKey(Object key)
+//    {
+//        return data.containsKey(key);
+//    }
+//
+//    public boolean containsValue(Object value)
+//    {
+//        return data.containsValue(value);
+//    }
+//
+//    public Set entrySet()
+//    {
+//        return data.entrySet();
+//    }
+//
+//    public Object get(Object key)
+//    {
+//        return data.get(key);
+//    }
+//
+//    public boolean isEmpty()
+//    {
+//        return data.isEmpty();
+//    }
+//
+//    public Set keySet()
+//    {
+//        return data.keySet();
+//    }
+//
+//    public Object put(Object key, Object value)
+//    {
+//        if(key.equals("code")) setCode((String) value);
+//        
+//        return data.put(key, value);
+//    }
+//
+//    public void putAll(Map t)
+//    {
+//        data.putAll(t);
+//    }
+//
+//    public Object remove(Object key)
+//    {
+//        return data.remove(key);
+//    }
+//
+//    public int size()
+//    {
+//        return data.size();
+//    }
+//
+//    public Collection values()
+//    {
+//        return data.values();
+//    }
 
 }

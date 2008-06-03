@@ -5,9 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import junit.framework.TestCase;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.otherobjects.cms.jcr.UniversalJcrDao;
-import org.otherobjects.cms.types.PropertyDefImpl;
-import org.otherobjects.cms.types.TypeDefImpl;
 
 /**
  * TODO All simple properties

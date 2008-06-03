@@ -36,6 +36,7 @@ import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeServiceImpl;
+import org.springframework.util.Assert;
 
 @SuppressWarnings("unchecked")
 public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImpl
@@ -85,6 +86,7 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
                 String propertyName = (String) i.next();
                 Object fieldValue = map.get(propertyName);
                 PropertyDef property = type.getProperty(propertyName);
+                Assert.notNull(property, "Unmapped property in node " + ooType + ": " + propertyName);
                 String propertyType = property.getType();
                 //String collectionElementType = property.getCollectionElementType();
 
