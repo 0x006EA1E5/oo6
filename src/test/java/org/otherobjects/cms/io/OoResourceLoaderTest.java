@@ -12,10 +12,10 @@ import org.springframework.test.context.junit38.AbstractJUnit38SpringContextTest
 public class OoResourceLoaderTest extends AbstractJUnit38SpringContextTests
 {
     @Autowired
-    OoResourceLoader ooResourceLoader;
+    private OoResourceLoader ooResourceLoader;
 
     @Autowired
-    DummyResourceBean bean;
+    private DummyResourceBean bean;
 
     public void setBean(DummyResourceBean bean)
     {
@@ -43,7 +43,7 @@ public class OoResourceLoaderTest extends AbstractJUnit38SpringContextTests
         }
         catch (IOException e)
         {
-
+            // Expected exception. Pass.
         }
 
         OoResource test2 = ooResourceLoader.getResource("/site/config/site.properties");
@@ -57,7 +57,7 @@ public class OoResourceLoaderTest extends AbstractJUnit38SpringContextTests
         }
         catch (IOException e)
         {
-
+            // Expected exception. Pass.
         }
 
         OoResource test3 = ooResourceLoader.getResource("/static/test");
@@ -71,7 +71,7 @@ public class OoResourceLoaderTest extends AbstractJUnit38SpringContextTests
         }
         catch (IOException e)
         {
-
+            // Expected exception. Pass.
         }
 
         OoResource test4 = ooResourceLoader.getResource("/data/iotest.properties");
