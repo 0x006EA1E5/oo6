@@ -5,7 +5,12 @@ import java.awt.Dimension;
 import org.otherobjects.cms.jcr.GenericJcrDaoJackrabbit;
 import org.otherobjects.cms.tools.CmsImageTool;
 import org.otherobjects.cms.util.ImageUtils;
-
+/**
+ * FIXME Allow different naming strategies. IE don't always append number.
+ * 
+ * @author rich
+ *
+ */
 public class CmsImageDaoImpl extends GenericJcrDaoJackrabbit<CmsImage> implements CmsImageDao
 {
     public CmsImageDaoImpl()
@@ -16,29 +21,10 @@ public class CmsImageDaoImpl extends GenericJcrDaoJackrabbit<CmsImage> implement
     private final DataFileDao dataFileDao = new DataFileDaoFileSystem();
     private final CmsImageTool cmsImageTool = new CmsImageTool();
 
-    //    public CmsImage createCmsImage()
-    //    {
-    //        /// FIXME This should never be needed -- need better DAOs
-    //        String typeName = CmsImage.class.getName();
-    //        TypeDef type = getTypeService().getType(typeName);
-    //        try
-    //        {
-    //            CmsImage n = new CmsImage();
-    //            n.setTypeDef(type);
-    //            return n;
-    //        }
-    //        catch (Exception e)
-    //        {
-    //            //TODO Better exception?
-    //            throw new OtherObjectsException("Could not create new instance of type: " + typeName, e);
-    //        }
-    //    }
-
-    //    @Override
     @Override
-    public CmsImage save(CmsImage o)
+    public CmsImage save(CmsImage o, boolean validate)
     {
-
+        // FIXME We need to work out which method should be overridden. Should validate, save then create images. And roll all of it back on any failure.
         CmsImage image = o;
         if (image.getNewFile() != null)
         {
@@ -50,13 +36,13 @@ public class CmsImageDaoImpl extends GenericJcrDaoJackrabbit<CmsImage> implement
             original.setCollection(CmsImage.DATA_FILE_COLLECTION_NAME);
             original.setPath(CmsImage.ORIGINALS_PATH);
             original = this.dataFileDao.save(original);
-            image.setOriginalFileId(original.getId());
+            image.setOriginalFileName(original.getId());
             image.setNewFile(null);
 
             // Create thumbnail
             this.cmsImageTool.getThumbnail(image);
         }
-        return super.save(image);
+        return super.save(image, validate);
     }
 
     @Override

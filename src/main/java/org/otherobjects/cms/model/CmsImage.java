@@ -5,12 +5,20 @@ import java.io.File;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
+import org.otherobjects.cms.util.StringUtils;
 
 /**
  * Represents a content managed image object.
  * 
+ * <p>Supported images types are JPEG, GIF, PNG, SVG.
+ * 
  * <p>Does not contain the image data at any size but has a reference
- * <code>originalFileId</code> to the original image in the data store.
+ * <code>originalFileName</code> to the original image in the data store.
+ * 
+ * FIXME Add validation rules
+ * FIXME Integrate this with OoResource
+ * FIXME Sync with IPTC/DublinCore metadata
+ * FIXME How can we extend this for individual sites?
  * 
  * @author rich
  */
@@ -25,13 +33,14 @@ public class CmsImage extends BaseNode
     private String description;
     private String keywords;
     private String copyright;
+    private String mimeType;
 
     // Source information
-    private String originalFileId;
+    private String originalFileName;
     private Long originalWidth;
     private Long originalHeight;
     private String originalProvider;
-    private String originalId;
+    private String providerId;
 
     // Temporary holder for new and relacement files
     private File newFile;
@@ -47,13 +56,20 @@ public class CmsImage extends BaseNode
         if (this.thumbnailPath != null)
             return this.thumbnailPath;
 
-        if (getOriginalFileId() != null)
-            return "/data" + getOriginalFileId().replaceAll("originals", "100x100%23FFFFFF");
+        if (getOriginalFileName() != null)
+            return "/data" + getOriginalFileName().replaceAll("originals", "100x100%23FFFFFF");
         else
             return null;
-
     }
 
+    /**
+     * Generates default code based on image label and file extension.
+     */
+    public String getCode()
+    {
+        return this.code != null ? this.code : StringUtils.generateUrlCode(getLabel()) + "." + getExtension();
+    }
+    
     /**
      * Needed for external image services.
      * 
@@ -70,7 +86,7 @@ public class CmsImage extends BaseNode
     }
 
     @Override
-    @Property(order = 10)
+    @Property(order = 10, required = true)
     public String getLabel()
     {
         return this.label;
@@ -115,7 +131,7 @@ public class CmsImage extends BaseNode
         this.copyright = copyright;
     }
 
-    @Property(order = 70)
+    @Property(order = 70, required = true)
     public Long getOriginalWidth()
     {
         return this.originalWidth;
@@ -126,7 +142,7 @@ public class CmsImage extends BaseNode
         this.originalWidth = originalWidth;
     }
 
-    @Property(order = 80)
+    @Property(order = 80, required = true)
     public Long getOriginalHeight()
     {
         return this.originalHeight;
@@ -148,31 +164,9 @@ public class CmsImage extends BaseNode
         this.originalProvider = originalProvider;
     }
 
-    @Property(order = 110)
-    public String getOriginalId()
-    {
-        return this.originalId;
-    }
-
-    public void setOriginalId(String originalId)
-    {
-        this.originalId = originalId;
-    }
-
     public void setNewFile(File newFile)
     {
         this.newFile = newFile;
-    }
-
-    @Property(order = 90)
-    public String getOriginalFileId()
-    {
-        return this.originalFileId;
-    }
-
-    public void setOriginalFileId(String originalFileId)
-    {
-        this.originalFileId = originalFileId;
     }
 
     public File getNewFile()
@@ -184,6 +178,68 @@ public class CmsImage extends BaseNode
     {
         // FIXME Do this propertly once we have support for codeProperty
         return getCode();
+    }
+
+    @Property(order = 90, required=true)
+    public String getOriginalFileName()
+    {
+        return originalFileName;
+    }
+
+    public void setOriginalFileName(String originalFileName)
+    {
+        this.originalFileName = originalFileName;
+    }
+
+    @Property(order = 110)
+    public String getProviderId()
+    {
+        return providerId;
+    }
+
+    public void setProviderId(String providerId)
+    {
+        this.providerId = providerId;
+    }
+
+    /**
+     * Returns mime type based on orginal file extension.
+     * 
+     * @return
+     */
+    public String getMimeType()
+    {
+        // TODO Should we validate mime types
+        if (mimeType != null)
+            return mimeType;
+
+        String extension = getExtension();
+
+        if (extension.equals("jpg"))
+            return "image/jpeg";
+        else if (extension.equals("png"))
+            return "image/png";
+        else if (extension.equals("svg"))
+            return "image/svg+xml";
+        else if (extension.equals("gif"))
+            return "image/gif";
+        else
+            return "unknown";
+    }
+
+    /**
+     * Returns extension of original file name. 
+     * @return
+     */
+    private String getExtension()
+    {
+        String extension = getOriginalFileName().substring(getOriginalFileName().lastIndexOf(".") + 1);
+        return extension;
+    }
+
+    public void setMimeType(String mimeType)
+    {
+        this.mimeType = mimeType;
     }
 
 }

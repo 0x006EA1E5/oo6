@@ -24,19 +24,20 @@ public class CmsImageDaoTest extends BaseJcrTestCase
 
         CmsImage im1 = new CmsImage();
         im1.setPath("/");
-        im1.setCode(dog.getName());
+        im1.setLabel("Test dog");
         im1.setNewFile(dog);
+        im1.setOriginalFileName(dog.getName());
 
         CmsImage im1saved = (CmsImage) this.cmsImageDao.save(im1);
         
         new CmsImageDaoImpl();
         assertNotNull(im1saved.getId());
-        assertNotNull(im1saved.getOriginalFileId());
+        assertNotNull(im1saved.getOriginalFileName());
         assertNull(im1saved.getNewFile());
         assertEquals(new Long(800), im1saved.getOriginalWidth());
         assertEquals(new Long(600), im1saved.getOriginalHeight());
 
-        assertTrue(this.dataFileDao.exists(im1saved.getOriginalFileId()));
+        assertTrue(this.dataFileDao.exists(im1saved.getOriginalFileName()));
 
     }
 }
