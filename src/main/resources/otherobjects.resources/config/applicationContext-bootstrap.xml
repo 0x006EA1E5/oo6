@@ -27,7 +27,9 @@
 	</bean>
 
 	<bean id="jackrabbitPopulater" class="org.otherobjects.cms.bootstrap.JackrabbitPopulater">
-		<property name="bootstrapScript" value="classpath:otherobjects.resources/bootstrap-data/setup.script" />
+		<!-- TODO Need script array? Populated by site? -->
+		<property name="bootstrapScript" value="classpath:otherobjects.resources/setup.script" />
+		<property name="siteBootstrapScript" value="classpath:site.resources/setup.script" />
 		<property name="universalJcrDao" ref="universalJcrDao" />
 		<property name="typeService" ref="typeService" />
 	</bean>

@@ -10,7 +10,7 @@
 	<import resource="minimum-user-bootstrap-context.xml"/>
 	
 	<bean id="jackrabbitPopulater" class="org.otherobjects.cms.bootstrap.JackrabbitPopulater">
-		<property name="bootstrapScript" value="classpath:otherobjects.resources/bootstrap-data/setup.script" />
+		<property name="bootstrapScript" value="classpath:otherobjects.resources/setup.script" />
 		<property name="universalJcrDao" ref="universalJcrDao" />
 	</bean>
 	
