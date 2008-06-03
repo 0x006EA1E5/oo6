@@ -24,6 +24,7 @@ import org.otherobjects.cms.model.DbFolder;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeDefBuilder;
+import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.IdentifierUtils;
 import org.otherobjects.cms.validation.ValidatorService;
 import org.slf4j.Logger;
@@ -53,7 +54,11 @@ public class FormController
     @Resource
     private DaoService daoService;
 
-    // Used to build typeDefs for Hibernate persisted beans 
+    @Resource
+    private TypeService typeService;
+
+    // Used to build typeDefs for Hibernate persisted beans
+    // FIXME Change to TypeService?
     @Resource
     private TypeDefBuilder typeDefBuilder;
 
@@ -141,7 +146,11 @@ public class FormController
                 // FIXME Need integrated DynaNode validation rather than this special case
                 for (PropertyDef pd : typeDef.getProperties())
                 {
-                    ((DynaNode) item).set(pd.getName(), request.getParameter(pd.getName()));
+                    if (pd.getType().equals("reference"))
+                        ((DynaNode) item).set(pd.getName(), genericDao.get(request.getParameter(pd.getName())));
+                    else
+                        ((DynaNode) item).set(pd.getName(), request.getParameter(pd.getName()));
+                        
                 }
             }
             else
@@ -196,7 +205,6 @@ public class FormController
     {
         try
         {
-            // Should this use DynaNode
             Object newInstance = Class.forName(typeName).newInstance();
             if (newInstance instanceof BaseNode)
             {
@@ -206,8 +214,13 @@ public class FormController
         }
         catch (Exception e)
         {
-            throw new OtherObjectsException("Could not create object of type: " + typeName, e);
+            // TODO This should detect DynaNodes before exception...
+
+            // Couldn't create real class so use DynaNode instead 
+            if (typeService.getType(typeName) != null)
+                return new DynaNode(typeName);
+            else
+                throw new OtherObjectsException("Could not create object of type: " + typeName, e);
         }
     }
-
 }
