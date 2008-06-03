@@ -40,7 +40,7 @@
 		<property name="paramName" value="locale" />
 	</bean>
 
-	<bean name="pageHandler" class="org.otherobjects.cms.controllers.handlers.PageHandler">
+	<bean name="pageHandler" class="org.otherobjects.cms.controllers.renderers.PageRenderer">
 		<property name="daoService" ref="daoService" />
 	</bean>
 

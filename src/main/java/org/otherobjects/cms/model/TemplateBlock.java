@@ -44,7 +44,7 @@ public class TemplateBlock extends BaseNode
     {
         this.description = description;
     }
-
+    
     @Property(order = 40)
     public Boolean getGlobal()
     {
@@ -55,6 +55,4 @@ public class TemplateBlock extends BaseNode
     {
         this.global = global;
     }
- 
-
 }

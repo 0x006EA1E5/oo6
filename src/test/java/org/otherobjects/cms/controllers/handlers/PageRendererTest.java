@@ -4,7 +4,7 @@ import org.otherobjects.cms.jcr.BaseJcrTestCase;
 import org.otherobjects.cms.model.Template;
 import org.otherobjects.cms.model.TemplateLayout;
 
-public class PageHandlerTest extends BaseJcrTestCase
+public class PageRendererTest extends BaseJcrTestCase
 {
     @Override
     protected void setUp() throws Exception

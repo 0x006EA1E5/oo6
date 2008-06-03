@@ -1,4 +1,4 @@
 /**
- * Classes that actually handle requests and choose views for generation of the response.
+ * This package contains the key controllers for both the site and OTHERobjects.
  */
 package org.otherobjects.cms.controllers;

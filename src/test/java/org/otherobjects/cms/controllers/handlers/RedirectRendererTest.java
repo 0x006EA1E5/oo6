@@ -4,12 +4,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import junit.framework.TestCase;
 
+import org.otherobjects.cms.controllers.renderers.RedirectRenderer;
 import org.otherobjects.cms.model.RedirectResource;
 import org.otherobjects.cms.model.ScriptResource;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-public class RedirectHandlerTest extends TestCase
+public class RedirectRendererTest extends TestCase
 {
 
     public void testRedirectPermanently()
@@ -24,7 +25,7 @@ public class RedirectHandlerTest extends TestCase
         redirect.setUrl(redirectUrl);
         redirect.setTemporary(false);
 
-        RedirectHandler redirectHandler = new RedirectHandler();
+        RedirectRenderer redirectHandler = new RedirectRenderer();
         try
         {
             redirectHandler.handleRequest(redirect, request, response);
@@ -51,7 +52,7 @@ public class RedirectHandlerTest extends TestCase
         redirect.setUrl(redirectUrl);
         redirect.setTemporary(true);
 
-        RedirectHandler redirectHandler = new RedirectHandler();
+        RedirectRenderer redirectHandler = new RedirectRenderer();
         try
         {
             redirectHandler.handleRequest(redirect, request, response);
@@ -72,7 +73,7 @@ public class RedirectHandlerTest extends TestCase
         MockHttpServletResponse response = new MockHttpServletResponse();
 
         ScriptResource redirect = new ScriptResource();
-        RedirectHandler redirectHandler = new RedirectHandler();
+        RedirectRenderer redirectHandler = new RedirectRenderer();
         try
         {
             redirectHandler.handleRequest(redirect, request, response);
@@ -92,7 +93,7 @@ public class RedirectHandlerTest extends TestCase
 
         RedirectResource redirect = null;
 
-        RedirectHandler redirectHandler = new RedirectHandler();
+        RedirectRenderer redirectHandler = new RedirectRenderer();
         try
         {
             redirectHandler.handleRequest(redirect, request, response);

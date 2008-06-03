@@ -14,6 +14,16 @@ public class Template extends BaseNode
     private TemplateLayout layout;
     private List<TemplateRegion> regions;
 
+    public TemplateRegion getRegion(String regionCode)
+    {
+        for (TemplateRegion r : getRegions())
+        {
+            if(r.getCode().equals(regionCode))
+                return r;
+        }
+        return null;
+    }
+
     @Property(order = 10)
     public String getCode()
     {
@@ -36,7 +46,6 @@ public class Template extends BaseNode
         this.label = label;
     }
 
-    
     @Property(order = 30)
     public TemplateLayout getLayout()
     {
@@ -48,7 +57,7 @@ public class Template extends BaseNode
         this.layout = layout;
     }
 
-    @Property(order = 40, collectionElementType=PropertyType.COMPONENT)
+    @Property(order = 40, collectionElementType = PropertyType.COMPONENT)
     public List<TemplateRegion> getRegions()
     {
         return regions;
@@ -58,6 +67,4 @@ public class Template extends BaseNode
     {
         this.regions = regions;
     }
-
-
 }

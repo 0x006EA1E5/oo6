@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.otherobjects.cms.controllers.handlers.ResourceHandler;
+import org.otherobjects.cms.controllers.renderers.ResourceRenderer;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
@@ -35,7 +35,7 @@ public class SiteController extends AbstractController
     @Resource
     private DaoService daoService;
 
-    private Map<String, ResourceHandler> handlers = new HashMap<String, ResourceHandler>();
+    private Map<String, ResourceRenderer> handlers = new HashMap<String, ResourceRenderer>();
 
     @Override
     @RequestMapping("/**")
@@ -95,16 +95,16 @@ public class SiteController extends AbstractController
         // Pass control to handler
         //        ResourceHandler handler = handlers.get(resourceObject.getClass().getName());
         //        if (handler == null)
-        ResourceHandler handler = handlers.get("*");
+        ResourceRenderer handler = handlers.get("*");
         return handler.handleRequest(resourceObject, request, response);
     }
 
-    public Map<String, ResourceHandler> getHandlers()
+    public Map<String, ResourceRenderer> getHandlers()
     {
         return handlers;
     }
 
-    public void setHandlers(Map<String, ResourceHandler> handlers)
+    public void setHandlers(Map<String, ResourceRenderer> handlers)
     {
         this.handlers = handlers;
     }

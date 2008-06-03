@@ -5,11 +5,12 @@ import java.io.File;
 import junit.framework.TestCase;
 
 import org.apache.commons.io.FileUtils;
+import org.otherobjects.cms.controllers.renderers.ScriptRenderer;
 import org.otherobjects.cms.model.ScriptResource;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-public class ScriptHandlerTest extends TestCase
+public class ScriptRendererTest extends TestCase
 {
 
     private boolean scriptDirExisted = false;
@@ -51,7 +52,7 @@ public class ScriptHandlerTest extends TestCase
 
             request.addParameter("script", "test");
 
-            ScriptHandler scriptHandler = new ScriptHandler();
+            ScriptRenderer scriptHandler = new ScriptRenderer();
             scriptHandler.setDaoService(null);
 
             ScriptResource scriptResource = new ScriptResource();

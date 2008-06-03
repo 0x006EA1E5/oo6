@@ -47,13 +47,6 @@ ${trace}<br/>
 Macro to insert block
 -->
 <#macro block blockName global=false>
-<#-- 
-## need data -- /blocks/$blockname
-## need template /blocks/$blockname
-## render template
-## wrap with id data (if editor)
-## render result
--->
 
 <#if !global>
 	<div class="oo-block" id="oo-block-${blockName}" uuid="${resourceObject.id}" name="bob">
@@ -71,5 +64,16 @@ Macro to insert block
 	</div>
 	</#if>
 </#if>
+
+</#macro>  
+
+<#-- 
+Macro to insert region
+-->
+<#macro region template regionCode>
+
+<#list template.getRegion(regionCode).blocks as block>
+<@oo.block block.code block.global />
+</#list>
 
 </#macro>  
