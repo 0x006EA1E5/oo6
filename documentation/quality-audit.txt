@@ -12,3 +12,16 @@ Quality Audit
 * File formatting and licenses (tabs, line endings)
 * Serializable objects
 * Session size and persitence
+* Remove all System.out and System.err
+* Unicode and character set issues in content and data files
+
+Performance Audit
+
+* Static resource peformance and caching
+
+Extension points
+
+* Plugin model?
+* CMS model objects
+* JCR/hibernate types
+* Form elements

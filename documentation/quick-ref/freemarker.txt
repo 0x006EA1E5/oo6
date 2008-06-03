@@ -1,0 +1,4 @@
+<#list sequence as item>
+    ${item_index} <#-- Counter (zero based) --> 
+    <#if item_has_next>More to come...</#if>
+</#list>
