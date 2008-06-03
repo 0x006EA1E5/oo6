@@ -3,6 +3,7 @@ package org.otherobjects.cms.jcr;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
@@ -45,6 +46,10 @@ import org.springmodules.jcr.jackrabbit.ocm.JcrMappingTemplate;
 
 /**
  * Base class for all JCR DAOs.
+ * 
+ * <p>FIXME Add rangeselector to all methods
+ * <p>FIXME Better method naming
+ *  
  * 
  * @author rich
  */
@@ -92,7 +97,13 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
             Errors errors = new BeanPropertyBindingResult(object, "target");
             validator.validate(object, errors);
             if (errors.getErrorCount() > 0)
-                throw new OtherObjectsException("BaseNode '" + object + "' couldn't be validated and therefore didn't get saved");
+            {
+                for (Object e : errors.getAllErrors())
+                {
+                    logger.warn("Validation error: " + e);
+                }
+                throw new OtherObjectsException(object + " couldn't be validated and therefore didn't get saved.");
+            }
         }
         updateAuditInfo(object, null);
         return saveInternal(object, false);
@@ -230,6 +241,9 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     {
         String path = convertIdToPath(id);
         jcrMappingTemplate.remove(path);
+        // FIXME Do we need these explicit saves? They break transcations?
+        jcrMappingTemplate.save();
+
     }
 
     public T rename(T object, String newPath)
@@ -606,6 +620,11 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                     //FIXME This is a double lookup. Can we convert node directly?
                     return manager.getObjectByUuid(nodeIterator.nextNode().getUUID());
                 }
+                catch (NoSuchElementException e)
+                {
+                    // No matching node found
+                    return null;
+                }
                 catch (Exception e)
                 {
                     throw new JcrMappingException(e);
@@ -623,8 +642,17 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
             {
                 try
                 {
+                    String selector = null;
+                    String jcr = jcrExpression;
+                    if (jcrExpression.contains("{"))
+                    {
+                        int selectorStart = jcrExpression.lastIndexOf("{");
+                        jcr = jcr.substring(0, selectorStart);
+                        selector = jcrExpression.substring(selectorStart);
+                    }
+
                     javax.jcr.query.QueryManager queryManager = manager.getSession().getWorkspace().getQueryManager();
-                    javax.jcr.query.Query query = queryManager.createQuery(jcrExpression, javax.jcr.query.Query.XPATH);
+                    javax.jcr.query.Query query = queryManager.createQuery(jcr, javax.jcr.query.Query.XPATH);
                     javax.jcr.query.QueryResult queryResult = query.execute();
                     NodeIterator nodeIterator = queryResult.getNodes();
                     List<T> results = new ArrayList<T>();
@@ -633,7 +661,10 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                     while (nodeIterator.hasNext() && count++ < 10)
                         results.add((T) manager.getObjectByUuid(nodeIterator.nextNode().getUUID()));
 
-                    return results;
+                    if (selector != null)
+                        return new RangeSelector<T>(selector, results).getSelected();
+                    else
+                        return results;
                 }
                 catch (Exception e)
                 {
