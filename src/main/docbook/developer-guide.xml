@@ -85,6 +85,9 @@ brushed:~ rich$
 </programlisting>
       </section>
 
+        <para>TODO Note about system properties. Memory, encoding? </para>
+
+
       <section>
         <title>Apache Maven</title>
 
