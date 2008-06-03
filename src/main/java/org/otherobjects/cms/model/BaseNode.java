@@ -25,7 +25,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchI
     private String path;
 
     /** System readable identifier eg filename. Used an the name of the node. Must not contain a slash. */
-    private String code;
+    protected String code;
 
     /** Indication of whether this node is published or not. */
     private boolean published = false;
@@ -213,7 +213,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchI
     public void setCode(String code)
     {
         Assert.notNull(code, "code may not be null.");
-        Assert.doesNotContain(code, "/", "code may not contain a slash.");
+        Assert.doesNotContain(code, "/", "code may not contain a slash: " + code);
         this.code = code;
     }
 
