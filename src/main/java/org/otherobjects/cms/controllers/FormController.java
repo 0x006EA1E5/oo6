@@ -148,6 +148,8 @@ public class FormController
                 {
                     if (pd.getType().equals("reference"))
                         ((DynaNode) item).set(pd.getName(), genericDao.get(request.getParameter(pd.getName())));
+                    else if (pd.getType().equals("number"))
+                        ((DynaNode) item).set(pd.getName(), Long.parseLong(request.getParameter(pd.getName())));
                     else
                         ((DynaNode) item).set(pd.getName(), request.getParameter(pd.getName()));
                         
