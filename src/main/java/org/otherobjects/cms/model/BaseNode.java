@@ -14,6 +14,8 @@ import org.springframework.util.Assert;
 /**
  * Document those property names that can't be used. Better still name space them?
  * 
+ * FIXME Our standard props shoul be namespaced eg ooLabel?
+ * 
  * @author rich
  */
 public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchItem
@@ -117,6 +119,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchI
      */
     public String getJcrPath()
     {
+        // FIXME This means that this may not always be acurate. Make sure this ALWAYS returns true jcr path
         if (getPath() == null || getPath() == null)
             return null;
 
