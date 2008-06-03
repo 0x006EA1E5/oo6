@@ -7,6 +7,11 @@ import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.CmsImageDao;
 import org.otherobjects.cms.model.CmsImageSize;
 
+/**
+ * FIXME Needs through tests for all the major image formats.
+ * @author rich
+ *
+ */
 public class CmsImageToolTest extends BaseJcrTestCase
 {
     private CmsImageDao cmsImageDao;
@@ -19,6 +24,7 @@ public class CmsImageToolTest extends BaseJcrTestCase
         this.cmsImageDao = (CmsImageDao) this.applicationContext.getBean("cmsImageDao");
         File dog = new File("src/test/java/org/otherobjects/cms/util/dog.jpg");
         CmsImage im1 = new CmsImage();
+        im1.setLabel("test.jpg");
         im1.setPath("/");
         im1.setCode(dog.getName());
         im1.setNewFile(dog);
@@ -98,4 +104,24 @@ public class CmsImageToolTest extends BaseJcrTestCase
         assertTrue(file.getAbsolutePath().contains("/133x133#FF0000/"));
     }
 
+    public void testGetSizeGif()
+    {
+        CmsImageTool imageTool = new CmsImageTool();
+
+        File map = new File("src/test/java/org/otherobjects/cms/util/map.gif");
+        CmsImage im1 = new CmsImage();
+        im1.setLabel("test.gif");
+        im1.setPath("/");
+        im1.setCode(map.getName());
+        im1.setNewFile(map);
+        this.sampleImage = (CmsImage) this.cmsImageDao.save(im1);
+        
+        CmsImageSize sizeWHC = imageTool.getSize(this.sampleImage, 100, 100, "#FFFFFF");
+        assertEquals(new Long(100), sizeWHC.getWidth());
+        assertEquals(new Long(100), sizeWHC.getHeight());
+        File file = sizeWHC.getDataFile().getFile();
+        assertNotNull(file);
+        assertTrue(file.getAbsolutePath().contains("/100x100#FFFFFF/"));
+    }
+    
 }
