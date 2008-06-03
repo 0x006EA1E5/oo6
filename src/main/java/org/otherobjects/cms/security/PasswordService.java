@@ -80,6 +80,7 @@ public class PasswordService extends HibernateDaoSupport
 
     }
 
+    @SuppressWarnings("unchecked")
     @Transactional
     public boolean changePassword(PasswordChanger passwordChanger)
     {
@@ -127,7 +128,7 @@ public class PasswordService extends HibernateDaoSupport
     }
 
     //@Transactional
-    private void cleanExpiredPasswordChangeRequests()
+    public void cleanExpiredPasswordChangeRequests()
     {
         try
         {
