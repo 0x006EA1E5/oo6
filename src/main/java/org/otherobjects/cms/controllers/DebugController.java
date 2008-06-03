@@ -6,6 +6,8 @@ import groovy.lang.GroovyShell;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 import javax.jcr.Node;
@@ -23,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.otherobjects.cms.util.Version;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.StatementCallback;
@@ -70,17 +73,32 @@ public class DebugController extends MultiActionController
             //TODO this need to be properly configured in ImageMagickResizer
             String binPath = otherObjectsConfigurator.getProperty("otherobjects.imagemagick.bin.path");
 
-            String command = binPath + "convert --version";
+            String command = binPath + "convert -version";
 
             Process exec = Runtime.getRuntime().exec(command);
             exec.waitFor();
             imageMagickVersion = IOUtils.toString(exec.getInputStream());
+            
+            Pattern p = Pattern.compile(".*((\\d+)\\.(\\d+)\\.(\\d)+).*", Pattern.DOTALL);
+            Matcher m = p.matcher(imageMagickVersion);
+            if(m.matches())
+            {
+                //imageMagickVersion = m.group(1);
+//                Version current = new Version(Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3)), Integer.parseInt(m.group(4)));
+                Version current = Version.getVersion(m.group(1));
+                imageMagickVersion = current.toString();
+                Version required = new Version(6,3,2);
+                if(current.compareTo(required) < 0)
+                    imageMagickError = "Newer version of ImageMagick required. You have " + current + " but " + required + " is required."; 
+            }
         }
         catch (Exception e)
         {
             imageMagickError = "Could not find ImageMagick binary: " + e.getMessage();
         }
 
+        // FIXME Add check for im > 6.3.2
+        
         ModelAndView mav = new ModelAndView("/debug/debug");
         mav.addObject("imageMagickError", imageMagickError);
         mav.addObject("imageMagickVersion", imageMagickVersion);
@@ -238,7 +256,8 @@ public class DebugController extends MultiActionController
                         renderNodeInfo(html, nodeIterator.nextNode());
                 }
                 else
-                    renderNodeInfo(html, session.getRootNode());
+                    return "";
+                    //renderNodeInfo(html, session.getRootNode());
                 return html.toString();
             }
         });

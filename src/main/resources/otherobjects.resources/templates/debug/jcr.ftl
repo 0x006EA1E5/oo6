@@ -7,6 +7,7 @@
 <input style="width:500px;" type="text" name="xpath" value="${xpath!}"/>
 <input type="submit" value="Go"/>
 <br/><small>eg /jcr:root/element(*)</small>
+<br/><small>eg /jcr:root//element(*) [&at;ooType='org.otherobjects.cms.model.CmsImage' and &at;providerId = '1'] </small>
 </form>
 Live workspace:<br/>
 ${liveNodesHtml}

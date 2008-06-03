@@ -1,3 +1,8 @@
+<head>
+<title>Debug information</title>
+</head>
+<body>
+
 <style type="text/css">
 .ok {color:green;}
 .fail {color:red;}
@@ -30,6 +35,7 @@
     <tr><td>Datastore serving</td><td class="info">Unchecked</td></tr>
     <tr><td>Datastore permissions</td><td class="info">Unchecked</td></tr>
     <tr><td>Static resource serving</td><td class="info">Unchecked</td></tr>
+    <tr><td>Freemarker version</td><td class="info">${.version}</td></tr>
 </table>
 
 <h2>Session</h2>
@@ -71,3 +77,5 @@
      <td>{type.className}</td>
     </tr>
 </table>
+
+</head>
