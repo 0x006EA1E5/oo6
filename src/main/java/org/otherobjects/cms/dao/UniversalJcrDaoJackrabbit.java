@@ -67,20 +67,8 @@ public class UniversalJcrDaoJackrabbit extends GenericJcrDaoJackrabbit<BaseNode>
     @SuppressWarnings("unchecked")
     public List<BaseNode> getAllByType(String typeName)
     {
-        try
-        {
-            TypeDef type = this.typeService.getType(typeName);
-            QueryManager queryManager = getJcrMappingTemplate().createQueryManager();
-            Filter filter = queryManager.createFilter(Class.forName(type.getClassName()));
-            Query query = queryManager.createQuery(filter);
-            //filter.setScope(path + "/");
-            filter.addEqualTo("ooType", typeName);
-            return (List<BaseNode>) getJcrMappingTemplate().getObjects(query);
-        }
-        catch (ClassNotFoundException e)
-        {
-            throw new OtherObjectsException("No class found for type: " + typeName);
-        }
+        // TODO Is this the most performant query method?
+        return getAllByJcrExpression("/jcr:root//element(*) [@ooType='" + typeName + "']");
     }
 
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
@@ -95,8 +83,7 @@ public class UniversalJcrDaoJackrabbit extends GenericJcrDaoJackrabbit<BaseNode>
 
     public List<BaseNode> getAllByType(Class<?> type)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getAllByType(type.getName());
     }
 
     public List<BaseNode> getByPathAndType(String path, String type)
