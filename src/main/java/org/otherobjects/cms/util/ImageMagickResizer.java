@@ -44,7 +44,8 @@ public class ImageMagickResizer implements ImageResizer
             }
 
             // Example command structure:
-            // convert -size 300x300 -thumbnail 100x100 -bordercolor white  -border 50 -gravity center -crop 100x100+0+0 +repage  2974588.jpeg thumb.jpg
+            // v6.2: convert -size 300x300 -thumbnail 100x100 -bordercolor white  -border 50 -gravity center -crop 100x100+0+0 +repage  2974588.jpeg thumb.jpg
+            // v6.3: convert -size 200x200 -thumbnail '100x100>' -background skyblue -gravity center -extent 100x100 big.jpg thumb.jpg
             // See http://www.imagemagick.org/Usage/thumbnails/ for info
 
             // Make desintation directory if required
@@ -88,20 +89,6 @@ public class ImageMagickResizer implements ImageResizer
             else
             {
                 // 6.3 only method
-//              command.add("-size");
-                //              command.add(targetWidth * 3 + "x" + targetHeight * 3);
-                //              command.add("-thumbnail");
-//              command.add(targetWidth + "x" + targetHeight + ">");
-//              command.add("-bordercolor");
-//              command.add("rgba(" + backgroundColor.getRed() + "," + backgroundColor.getBlue() + "," + backgroundColor.getGreen() + "," + backgroundColor.getAlpha() + ")");
-//              command.add("-border");
-//              command.add("" + targetWidth / 2);
-//              command.add("-gravity");
-//              command.add("center");
-//              command.add("-extent");
-//              command.add(targetWidth + "x" + targetHeight);
-                
-                // 6.2 compatible method
                 command.add("-size");
                 command.add(targetWidth * 3 + "x" + targetHeight * 3);
                 command.add("-thumbnail");
@@ -112,9 +99,23 @@ public class ImageMagickResizer implements ImageResizer
                 command.add("" + targetWidth / 2);
                 command.add("-gravity");
                 command.add("center");
-                command.add("-crop");
-                command.add(targetWidth + "x" + targetHeight+"+0+0");
-                command.add("+repage");
+                command.add("-extent");
+                command.add(targetWidth + "x" + targetHeight);
+
+                // 6.2 compatible method (fails with sime GIFs)
+//                command.add("-size");
+//                command.add(targetWidth * 3 + "x" + targetHeight * 3);
+//                command.add("-thumbnail");
+//                command.add(targetWidth + "x" + targetHeight + ">");
+//                command.add("-bordercolor");
+//                command.add("rgba(" + backgroundColor.getRed() + "," + backgroundColor.getBlue() + "," + backgroundColor.getGreen() + "," + backgroundColor.getAlpha() + ")");
+//                command.add("-border");
+//                command.add("" + targetWidth / 2);
+//                command.add("-gravity");
+//                command.add("center");
+//                command.add("-crop");
+//                command.add(targetWidth + "x" + targetHeight + "+0+0");
+//                command.add("+repage");
             }
 
             // Set qualtity
@@ -138,7 +139,6 @@ public class ImageMagickResizer implements ImageResizer
 
     protected int execCommand(String[] command)
     {
-        System.err.println("Executing image resize command: " + StringUtils.join(command, " "));
         this.logger.debug("Executing image resize command: {}", StringUtils.join(command, " "));
 
         Process proc;
