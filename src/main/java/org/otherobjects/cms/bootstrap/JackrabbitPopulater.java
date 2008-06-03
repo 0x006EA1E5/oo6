@@ -26,11 +26,14 @@ public class JackrabbitPopulater
 
     private UniversalJcrDao universalJcrDao;
     private Resource bootstrapScript;
+    private Resource siteBootstrapScript;
     private TypeService typeService;
 
     public void populateRepository() throws Exception
     {
         runScript(bootstrapScript.getInputStream());
+        if(siteBootstrapScript != null && siteBootstrapScript.exists())
+            runScript(siteBootstrapScript.getInputStream());
     }
 
     protected void runScript(InputStream is) throws IOException
@@ -62,6 +65,16 @@ public class JackrabbitPopulater
     public void setTypeService(TypeService typeService)
     {
         this.typeService = typeService;
+    }
+
+    public Resource getSiteBootstrapScript()
+    {
+        return siteBootstrapScript;
+    }
+
+    public void setSiteBootstrapScript(Resource siteBootstrapScript)
+    {
+        this.siteBootstrapScript = siteBootstrapScript;
     }
 
 }
