@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  * <br>TODO Adapt to mapped path correctly
  * <br>TODO Check this works in non-Jetty containers
  * <br>TODO Return string error messages to browser on failures
- * 
+ * <br>FIXME Security checks for allowed files
  * @author rich
  */
 public class StaticResourceServlet extends HttpServlet
