@@ -37,6 +37,16 @@ public class DynaNode extends BaseNode //implements Map
         Assert.notNull(getTypeDef(), "No type definition found for: " + ooType);
     }
 
+    /**
+     * Protected constructor. Mainly used in test cases.
+     * @param typeDef
+     */
+    protected DynaNode(TypeDef typeDef)
+    {
+        setTypeDef(typeDef);
+        setOoType(typeDef.getName());
+    }
+    
     public Object get(String propertyName)
     {
         return data.get(propertyName);
