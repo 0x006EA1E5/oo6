@@ -1,3 +1,10 @@
+object?has_content
+
+object?? (ignores null)
+
+object!default
+
+
 <#list sequence as item>
     ${item_index} <#-- Counter (zero based) --> 
     <#if item_has_next>More to come...</#if>
