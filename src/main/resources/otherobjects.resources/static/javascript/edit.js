@@ -99,7 +99,7 @@ OO.EditForm = function(){
 					var f = new Ext.form.Checkbox(config);
 					hiddenFields["_"+propDef.name] = "";
 				}
-				else if(propDef.type=="reference" && propDef.name=="image")
+				else if(propDef.type=="reference" && propDef.relatedType=="org.otherobjects.cms.model.CmsImage")
 				{
 					var f = new Ext.form.OOChooserField({
 						
@@ -290,14 +290,22 @@ OO.EditForm = function(){
 		flattenObject : function(obj,prefix,flat) {
 			// FIXME Produces too many results.
 			for(var id in obj) {
-		    	if(typeof obj[id] != 'function') {
+		    	if(typeof obj[id] != 'function' && id != "typeDef") {
 					if(obj[id] instanceof Object) {
-						//console.log(prefix+id,obj[id]);
-						flat[flat.length]={id:prefix+id, value:obj[id]};
-						OO.EditForm.flattenObject(obj[id],id+".",flat);
+						if(id == "data") {
+							// FIXME Quick hack since Json is encoding DynaNodes wrong
+							console.log(prefix+id,obj[id]);
+							flat[flat.length]={id:prefix, value:obj[id]};
+							OO.EditForm.flattenObject(obj[id],"",flat);
+						}
+						else {
+							console.log(prefix+id,obj[id]);
+							flat[flat.length]={id:prefix+id, value:obj[id]};
+							OO.EditForm.flattenObject(obj[id],id+".",flat);
+						}
 					}
 					else {
-						//console.log(prefix+id +"="+ obj[id]);
+						console.log(prefix+id +"="+ obj[id]);
 						flat[flat.length]={id:prefix+id, value:obj[id]};
 		        	}
 				}

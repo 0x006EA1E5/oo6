@@ -1,8 +1,3 @@
-function test()
-{
-	alert("TEST");
-}
-
 Ext.form.OOChooserField = function(config){
     Ext.form.OOChooserField.superclass.constructor.call(this, config);
 };
@@ -30,7 +25,7 @@ Ext.extend(Ext.form.OOChooserField, Ext.form.TriggerField,  {
     choose : function (){
     	if(!this.chooser){
     		this.chooser = new ImageChooser({
-    			url:'/go/workbench/data/select/org.otherobjects.cms.model.CmsImage',
+    			url:'/otherobjects/data/select/org.otherobjects.cms.model.CmsImage',
     			//url:'/go/workbench/data/image-services/flickr',
     			width:515, 
     			height:400
