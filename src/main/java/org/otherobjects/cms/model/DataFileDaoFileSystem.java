@@ -22,7 +22,7 @@ public class DataFileDaoFileSystem implements DataFileDao
     // TODO Need to customise this
     // TODO Need to allow static data servers
     private final String urlBase = "/data";
-    private final String dataPath = "src/main/webapp/data/";
+    private final String dataPath = "webapp/data/";
 
     public boolean exists(String id)
     {
