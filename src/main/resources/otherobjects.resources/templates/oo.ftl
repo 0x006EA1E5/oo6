@@ -54,7 +54,7 @@ Macro to insert block
 ## wrap with id data (if editor)
 ## render result
 -->
-<#assign data = daoService.getDao("baseNode").getByPath("/blocks/${name}") >
+<#assign data = daoService.getDao("baseNode").getByPath("/blocks/${name}")!! >
 <div class="oo-block" xid="oo-block-${name}" id="block">
 <#include "/blocks/${name}.ftl">
 </div>
