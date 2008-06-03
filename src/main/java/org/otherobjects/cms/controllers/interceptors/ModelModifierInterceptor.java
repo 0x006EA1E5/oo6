@@ -16,26 +16,30 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception
     {
-        //add user id to model if there is a user
-        Long currentUserId = SecurityTool.getUserId();
-        if (currentUserId != null)
-            modelAndView.addObject("userId", currentUserId);
 
-        // session stuff
-        HttpSession session = request.getSession(false);
-        if (session != null)
+        if (modelAndView != null)
         {
-            Integer counter = (Integer) session.getAttribute("counter");
-            if (counter == null)
-                counter = 0;
-            session.setAttribute("counter", ++counter);
+            //add user id to model if there is a user
+            Long currentUserId = SecurityTool.getUserId();
+            if (currentUserId != null)
+                modelAndView.addObject("userId", currentUserId);
 
-            modelAndView.addObject("counter", counter);
-            modelAndView.addObject("sessionId", session.getId());
+            // session stuff
+            HttpSession session = request.getSession(false);
+            if (session != null)
+            {
+                Integer counter = (Integer) session.getAttribute("counter");
+                if (counter == null)
+                    counter = 0;
+                session.setAttribute("counter", ++counter);
+
+                modelAndView.addObject("counter", counter);
+                modelAndView.addObject("sessionId", session.getId());
+            }
+            // tools
+            modelAndView.addObject("cmsImageTool", new CmsImageTool());
+            modelAndView.addObject("formatTool", new FormatTool());
         }
-        // tools
-        modelAndView.addObject("cmsImageTool", new CmsImageTool());
-        modelAndView.addObject("formatTool", new FormatTool());
 
     }
 
