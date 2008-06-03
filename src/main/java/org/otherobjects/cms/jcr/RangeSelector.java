@@ -45,7 +45,7 @@ public class RangeSelector<T>
         this.start = m.group(2).length() > 0 ? Integer.parseInt(m.group(2)) : 1;
         this.end = Integer.parseInt(m.group(4));
 
-        Assert.isTrue(this.end > this.start, "Invalid selector pattern. End index must be greater than start index: " + selector);
+        Assert.isTrue(this.end >= this.start, "Invalid selector pattern. End index must be greater than or equal to start index: " + selector);
         Assert.isTrue(!(this.random && this.start != 1), "Invalid selector pattern. Random sublists not supported: " + selector);
     }
 
