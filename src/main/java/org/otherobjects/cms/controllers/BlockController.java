@@ -8,6 +8,7 @@ import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.cms.util.IdentifierUtils;
 import org.otherobjects.cms.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,16 +40,29 @@ public class BlockController
     {
 
         String blockName = StringUtils.remove(request.getPathInfo(), "/block/get/");
-        logger.info("Rendering block: " + blockName);
+        String blockId = request.getParameter("uuid");
+        logger.info("Rendering block name: " + blockName);
+        logger.info("Rendering block id : " + blockId);
 
         UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
-        BaseNode blockData = dao.getByPath("/blocks/" + blockName);
-        
+
+        ModelAndView view = null;
+        if (IdentifierUtils.isUUID(blockName))
+        {
+            // Page block
+            // FIXME Hardcoded page block name
+            view = new ModelAndView("blocks/content");
+            view.addObject("resourceObject", dao.get(blockName));
+        }
+        else
+        {
+            // Global block
+            view = new ModelAndView("blocks/" + blockName);
+            view.addObject("blockData", dao.getByPath("/blocks/" + blockName));
+        }
         // Return page and context
-        ModelAndView view = new ModelAndView("blocks/"+blockName);
 
         //view.addObject("template", template);
-        view.addObject("blockData", blockData);
         view.addObject("daoService", this.daoService);
 
         return view;
@@ -57,24 +71,36 @@ public class BlockController
     @RequestMapping("/block/form/**")
     public ModelAndView form(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        String blockName = StringUtils.remove(request.getPathInfo(), "/block/form/");
-        logger.info("Generating form for block: " + blockName);
-
-        String typeDefName = StringUtils.codeToClassName(blockName) + "Block";
-
         UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
-
         ModelAndView view = new ModelAndView("blocks/oo-form");
-        BaseNode blockData = dao.getByPath("/blocks/" + blockName);
-        if (blockData != null)
+
+        String blockName = StringUtils.remove(request.getPathInfo(), "/block/form/");
+        String blockId = request.getParameter("uuid");
+        logger.info("Generating form for block: {} {}", blockName, blockId);
+
+        if (blockId != null)
         {
+            // Page block
+            BaseNode blockData = dao.get(blockId);
             view.addObject("blockData", blockData);
+            view.addObject("blockGlobal", false);
         }
         else
         {
-            // New blocks
-            view.addObject("location", dao.getByPath("/blocks/").getId());
-            view.addObject("typeDef", typeService.getType(typeDefName));
+            // Global block
+            String typeDefName = StringUtils.codeToClassName(blockName) + "Block";
+            BaseNode blockData = dao.getByPath("/blocks/" + blockName);
+            view.addObject("blockGlobal", true);
+            if (blockData != null)
+            {
+                view.addObject("blockData", blockData);
+            }
+            else
+            {
+                // New blocks
+                view.addObject("location", dao.getByPath("/blocks/").getId());
+                view.addObject("typeDef", typeService.getType(typeDefName));
+            }
         }
         view.addObject("blockName", blockName);
         view.addObject("daoService", this.daoService);

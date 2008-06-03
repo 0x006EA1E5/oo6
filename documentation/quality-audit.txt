@@ -7,7 +7,7 @@ Quality Audit
 * Migrate to new style tests
 * Check paskage names make sense
 * OWASP Check
-* XSS escaping by default
+* XSS escaping by default (Freemarker builtin?
 * Test class packages match classes under test
 * File formatting and licenses (tabs, line endings)
 * Serializable objects
