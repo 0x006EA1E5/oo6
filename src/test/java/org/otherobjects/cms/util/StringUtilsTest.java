@@ -14,4 +14,11 @@ public class StringUtilsTest extends TestCase
     {
         assertEquals("news-story-new", StringUtils.generateUrlCode("News Story. New."));
     }
+
+    public void testCodeToClassName()
+    {
+        assertEquals("OurWork", StringUtils.codeToClassName("our-work"));
+        assertEquals("Test", StringUtils.codeToClassName("test"));
+        assertEquals("ATemplateOk", StringUtils.codeToClassName("a-template-ok"));
+    }
 }

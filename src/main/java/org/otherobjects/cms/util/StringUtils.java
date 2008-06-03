@@ -3,7 +3,6 @@ package org.otherobjects.cms.util;
 /**
  * Various string manipulation functions. 
  * 
- * <p>TODO Should this extend commons-lang stringutisl
  * <p>TODO Can we replace entirely with commons-lang?
  * 
  * @author rich
@@ -39,6 +38,29 @@ public class StringUtils extends org.apache.commons.lang.StringUtils
         if (name == null)
             return null;
         return name.toLowerCase().replaceAll("\\s+", "-").replaceAll("[^a-z0-9-\\s]", "");
+    }
+
+    public static String codeToClassName(String code)
+    {
+        StringBuffer name = new StringBuffer();
+        boolean uppercase = true;
+        for (int i = 0; i < code.length(); i++)
+        {
+            String nextChar = code.substring(i, i + 1);
+            if (nextChar.equals("-"))
+            {
+                uppercase = true;
+                continue;
+            }
+            if (uppercase)
+            {
+                name.append(nextChar.toUpperCase());
+            }
+            else
+                name.append(nextChar);
+            uppercase = false;
+        }
+        return name.toString();
     }
 
 }
