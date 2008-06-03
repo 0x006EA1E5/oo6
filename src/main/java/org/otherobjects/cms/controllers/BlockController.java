@@ -7,10 +7,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
+import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.cms.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 /**
  * Controller that serves up block content. Used for serving up content for AJAX.
@@ -21,38 +24,59 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
  * @author rich
  */
 @Controller
-public class BlockController extends MultiActionController
+public class BlockController
 {
+    private final Logger logger = LoggerFactory.getLogger(BlockController.class);
+
     @Resource
     private DaoService daoService;
 
-    @RequestMapping("/block/*")
+    @Resource
+    private TypeService typeService;
+
+    @RequestMapping("/block/get/**")
     public ModelAndView get(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
-        BaseNode blockData = dao.getByPath("/blocks/promo");
 
+        String blockName = StringUtils.remove(request.getPathInfo(), "/block/get/");
+        logger.info("Rendering block: " + blockName);
+
+        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
+        BaseNode blockData = dao.getByPath("/blocks/" + blockName);
+        
         // Return page and context
-        ModelAndView view = new ModelAndView("blocks/promo");
+        ModelAndView view = new ModelAndView("blocks/"+blockName);
 
         //view.addObject("template", template);
-        view.addObject("data", blockData);
+        view.addObject("blockData", blockData);
         view.addObject("daoService", this.daoService);
 
         return view;
     }
-    
-    @RequestMapping("/block/*")
+
+    @RequestMapping("/block/form/**")
     public ModelAndView form(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
+        String blockName = StringUtils.remove(request.getPathInfo(), "/block/form/");
+        logger.info("Generating form for block: " + blockName);
+
+        String typeDefName = StringUtils.codeToClassName(blockName) + "Block";
+
         UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
-        BaseNode blockData = dao.getByPath("/blocks/promo");
 
-        // Return page and context
         ModelAndView view = new ModelAndView("blocks/oo-form");
-
-        //view.addObject("template", template);
-        view.addObject("data", blockData);
+        BaseNode blockData = dao.getByPath("/blocks/" + blockName);
+        if (blockData != null)
+        {
+            view.addObject("blockData", blockData);
+        }
+        else
+        {
+            // New blocks
+            view.addObject("location", dao.getByPath("/blocks/").getId());
+            view.addObject("typeDef", typeService.getType(typeDefName));
+        }
+        view.addObject("blockName", blockName);
         view.addObject("daoService", this.daoService);
 
         return view;

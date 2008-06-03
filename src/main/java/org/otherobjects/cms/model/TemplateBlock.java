@@ -10,6 +10,7 @@ public class TemplateBlock extends BaseNode
     private String code;
     private String label;
     private String description;
+    private Boolean global;
 
     @Property(order = 10)
     public String getCode()
@@ -43,5 +44,17 @@ public class TemplateBlock extends BaseNode
     {
         this.description = description;
     }
+
+    @Property(order = 40)
+    public Boolean getGlobal()
+    {
+        return global;
+    }
+
+    public void setGlobal(Boolean global)
+    {
+        this.global = global;
+    }
+ 
 
 }

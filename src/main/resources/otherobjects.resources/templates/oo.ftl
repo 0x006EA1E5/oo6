@@ -46,7 +46,7 @@ ${trace}<br/>
 <#-- 
 Macro to insert block
 -->
-<#macro block name>
+<#macro block blockName>
 <#-- 
 ## need data -- /blocks/$blockname
 ## need template /blocks/$blockname
@@ -54,8 +54,14 @@ Macro to insert block
 ## wrap with id data (if editor)
 ## render result
 -->
-<#assign data = daoService.getDao("baseNode").getByPath("/blocks/${name}")!! >
-<div class="oo-block" xid="oo-block-${name}" id="block">
-<#include "/blocks/${name}.ftl">
+<#assign blockData = daoService.getDao("baseNode").getByPath("/blocks/${blockName}")! >
+<#if blockData?has_content>
+<div class="oo-block" id="oo-block-${blockName}" id="block">
+<#include "/blocks/${blockName}.ftl">
 </div>
+<#else>
+<div class="oo-block" id="oo-block-${blockName}" id="block">
+<#include "/blocks/oo-new.ftl">
+</div>
+</#if>
 </#macro>  
