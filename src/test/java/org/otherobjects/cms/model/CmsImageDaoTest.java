@@ -20,6 +20,9 @@ public class CmsImageDaoTest extends BaseJcrTestCase
 
     public void testSave()
     {
+        // FIXME Need to test for rollback on partial failure eg bad file or bad data
+        // FIXME Test overwriting images/sizes when replaced
+        
         File dog = new File("src/test/java/org/otherobjects/cms/util/dog.jpg");
 
         CmsImage im1 = new CmsImage();

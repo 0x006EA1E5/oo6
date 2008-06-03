@@ -4,6 +4,8 @@ import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.model.SiteFolder;
 
 @SuppressWarnings("unchecked")
+// FIXME Test for no results in all these mehods
+// FIXME Test empty string handling in fields
 public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
 {
     protected GenericJcrDao genericJcrDao;
