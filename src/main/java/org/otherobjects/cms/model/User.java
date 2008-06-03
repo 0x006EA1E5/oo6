@@ -24,7 +24,6 @@ import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
 import org.springframework.security.GrantedAuthority;
-import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 import org.springframework.security.userdetails.UserDetails;
 
 /**
@@ -45,7 +44,7 @@ public class User implements Serializable, UserDetails, Editable
 
     private static final long serialVersionUID = -4036033332338732151L;
 
-    private static final ShaPasswordEncoder SHA_PASSWORD_ENCODER = new ShaPasswordEncoder();
+    //Not used? private static final ShaPasswordEncoder SHA_PASSWORD_ENCODER = new ShaPasswordEncoder();
 
     protected Long id;
     protected Integer version;
