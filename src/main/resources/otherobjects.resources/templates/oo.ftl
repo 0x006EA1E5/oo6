@@ -47,7 +47,7 @@ ${trace}<br/>
 Macro to insert block
 -->
 <#macro block blockName global=false>
-
+<#attempt>
 <#if !global>
 	<div class="oo-block" id="oo-block-${blockName}" uuid="${resourceObject.id}" name="bob">
 	<#include "/blocks/${blockName}.ftl">
@@ -64,6 +64,9 @@ Macro to insert block
 	</div>
 	</#if>
 </#if>
+<#recover>
+<#include "/blocks/oo-block-error.ftl">
+</#attempt>
 
 </#macro>  
 
