@@ -1,4 +1,4 @@
-package org.otherobjects.cms.controllers.handlers;
+package org.otherobjects.cms.controllers.renderers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
  * 
  * @author rich
  */
-public class RedirectHandler implements ResourceHandler
+public class RedirectRenderer implements ResourceRenderer
 {
     public ModelAndView handleRequest(CmsNode resourceObject, HttpServletRequest request, HttpServletResponse response) throws Exception
     {

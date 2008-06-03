@@ -1,4 +1,4 @@
-package org.otherobjects.cms.controllers.handlers;
+package org.otherobjects.cms.controllers.renderers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.feed.synd.SyndFeedImpl;
 import com.sun.syndication.io.SyndFeedOutput;
 
-public class SyndicationFeedHandler implements ResourceHandler
+public class SyndicationFeedRenderer implements ResourceRenderer
 {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 

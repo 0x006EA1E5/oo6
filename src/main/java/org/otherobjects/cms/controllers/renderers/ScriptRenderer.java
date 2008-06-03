@@ -1,4 +1,4 @@
-package org.otherobjects.cms.controllers.handlers;
+package org.otherobjects.cms.controllers.renderers;
 
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
@@ -28,7 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author rich
  *
  */
-public class ScriptHandler implements ResourceHandler, ApplicationContextAware
+public class ScriptRenderer implements ResourceRenderer, ApplicationContextAware
 {
     private DaoService daoService;
     private ApplicationContext applicationContext;
