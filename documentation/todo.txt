@@ -1,8 +1,14 @@
 Current List
 ------------
 
+* Grails type controller. Specify root path. Method names are next folder. Remain url = id.
+
 * Force maven and all files to be UTF-8 not MacRoman
 * Test validation
+* Improved validation messages
+* Binder: all paths as well as UUIDs
+* Validator: to perform type checks esp for DynaNodes
+
 * Auto Tool/Directive discovery
 * Spring 2.5.3 upgrade
 * URL mapping test
@@ -22,8 +28,8 @@ Current List
 * Restore CmsImage
 * Directives in freemarker template (auto)
 * Show stdout on script debug page
-
-* JCR Randomizer, Pager
+* Save eclipse code templates
+* JCR Picklists and properties
 * Clean up basenode: decide on standard fields: esp id, code, label
 * Properly remove components from listings
 
@@ -43,11 +49,20 @@ Current List
 
 * Hibernate naming strategy (eg for tables)
 
-
+* Configurable site data directories (for CmsImage)
+* Fallback JavaImageResizer
 * Selector object for performing JCR/DB queries (with manual selection allowed)
+
+* Investidate save() usage on JCR session
+
+Debug:
+
+* Repo validation tools
+* JCR find by ID / path
 
 Blocks:
 
+* Block cache (with custom invalidation times and force empty per page)
 * Block libary: YouTube, RSS, Flicker, Photogallery, Promo, Image
 * Block shortcuts to raw data input (eg on latest news should be a shortcut to view/add news stories)
 
@@ -68,6 +83,9 @@ Later:
 * Custom workbench pages (eg security home page)
 * Migration scripts for simple sites
 * Add JBDC 
+* Tag system
+* Live/Edit space for image disk files
+* Investigaet portlets
 
 Post launch:
 
