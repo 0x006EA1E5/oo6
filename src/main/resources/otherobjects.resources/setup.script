@@ -72,28 +72,3 @@ createFolder(dao, "/scripts", "\${scripts.label}", "scripts")
 createFolder(dao, "/scheduler", "\${scheduler.label}", "scheduler")
 createFolder(dao, "/trash", "\${trash.label}","trash")
 createArticle(dao, "/site/welcome.html", "Welcome","<p>Welcome to OTHERobects.</p>")
-
-
-// FIXME Move this to project
-// Site specific setup
-
-// Register Promo TypeDef
-
-TypeDefImpl td = new TypeDefImpl();
-td.setName("PromoBlock");
-td.addProperty(new PropertyDefImpl("title", "string", null, null, true));
-td.addProperty(new PropertyDefImpl("content", "text", null, null));
-td.setLabelProperty("title");
-
-// Type must be registered with type service
-typeService.registerType(td);
-
-// Create promo block with sample data
-if(dao.getByPath("/blocks/promo")) return;
-
-DynaNode pb = new DynaNode("PromoBlock");
-pb.title = "Title here";
-pb.content = "Content here";
-pb.jcrPath = "/blocks/promo"
-dao.save(pb, false);
-dao.publish(pb);
