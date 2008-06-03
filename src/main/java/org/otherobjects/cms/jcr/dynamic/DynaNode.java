@@ -3,6 +3,7 @@ package org.otherobjects.cms.jcr.dynamic;
 import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.ManagedHashMap;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.types.TypeDef;
+import org.otherobjects.cms.util.StringUtils;
 import org.springframework.util.Assert;
 
 /**
@@ -74,6 +75,19 @@ public class DynaNode extends BaseNode //implements Map
         this.data = data;
     }
 
+    @Override
+    public String getCode()
+    {
+        // FIXME Merge this with BaseNode code?
+        return (String) (get("code") != null ? get("code") : StringUtils.generateUrlCode(getLabel()));
+    }
+    
+    @Override
+    public void setCode(String code)
+    {
+        set("code", code);
+    }
+    
 //    /*
 //     * FIXME Map interface methods. If these stay they should include standard node fields.
 //     */

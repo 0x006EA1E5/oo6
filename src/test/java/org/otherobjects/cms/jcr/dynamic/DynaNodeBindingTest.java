@@ -38,4 +38,5 @@ public class DynaNodeBindingTest extends TestCase
             
 //        assertEquals("new-title", a1.get("title"));
     }
+    
 }
