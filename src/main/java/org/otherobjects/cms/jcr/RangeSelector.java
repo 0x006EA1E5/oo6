@@ -17,6 +17,8 @@ import org.springframework.util.Assert;
  * <li>{%n} = <i>n</i> random items (random items will not contain duplicates)
  * </ul>
  * 
+ * FIXME Check indexes are within bounds
+ * 
  * <p>Note, the indexes are one-based since they will be used by end users not just developers.
  * 
  * @author rich
@@ -46,6 +48,8 @@ public class RangeSelector<T>
         this.end = Integer.parseInt(m.group(4));
 
         Assert.isTrue(this.end >= this.start, "Invalid selector pattern. End index must be greater than or equal to start index: " + selector);
+        Assert.isTrue(this.start < 1, "Invalid selector pattern. Start index must be greater than or equal to 1: " + selector);
+        Assert.isTrue(this.end < 1, "Invalid selector pattern. End index must be greater than or equal to 1: " + selector);
         Assert.isTrue(!(this.random && this.start != 1), "Invalid selector pattern. Random sublists not supported: " + selector);
     }
 
@@ -62,7 +66,10 @@ public class RangeSelector<T>
             return results;
         }
         else
+        {
+            // Non random
             return this.items.subList(this.start - 1, this.end);
+        }
     }
 
     /**
