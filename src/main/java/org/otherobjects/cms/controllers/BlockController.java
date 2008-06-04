@@ -50,19 +50,24 @@ public class BlockController
         if (IdentifierUtils.isUUID(blockName))
         {
             // Page block
-            // FIXME Hardcoded page block name
-            view = new ModelAndView("blocks/content");
+            view = new ModelAndView("blocks/oo-render-block");
             view.addObject("resourceObject", dao.get(blockName));
+            view.addObject("blockGlobal", false);
+
+            // FIXME Hardcoded page block name
+            blockName = "content";
         }
         else
         {
             // Global block
-            view = new ModelAndView("blocks/" + blockName);
+            view = new ModelAndView("blocks/oo-render-block");
             view.addObject("blockData", dao.getByPath("/blocks/" + blockName));
+            view.addObject("blockGlobal", true);
         }
         // Return page and context
 
         //view.addObject("template", template);
+        view.addObject("blockName", blockName);
         view.addObject("daoService", this.daoService);
 
         return view;

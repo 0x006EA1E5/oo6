@@ -2,6 +2,7 @@ Current List
 ------------
 
 * Grails type controller. Specify root path. Method names are next folder. Remain url = id.
+* Document groovyShellService
 
 * Force maven and all files to be UTF-8 not MacRoman
 * Test validation

@@ -6,11 +6,8 @@ import junit.framework.TestCase;
 
 import org.otherobjects.cms.types.PropertyDefImpl;
 import org.otherobjects.cms.types.TypeDefImpl;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.DynaNodeBeanWrapperImpl;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.PropertyValue;
-import org.springframework.beans.PropertyValues;
 import org.springframework.validation.DataBinder;
 
 /**

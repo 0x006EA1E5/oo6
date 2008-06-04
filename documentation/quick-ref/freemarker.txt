@@ -15,3 +15,10 @@ object!default
     ${item_index} <#-- Counter (zero based) --> 
     <#if item_has_next>More to come...</#if>
 </#list>
+
+boolean?string
+boolean?string("yes", "no")
+
+lastUpdated?datetime?string.short
+short/medium/long/full
+lastUpdated?string("yyyy-MM-dd HH:mm:ss zzzz")

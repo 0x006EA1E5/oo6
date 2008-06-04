@@ -158,6 +158,7 @@ public class PropertyDefImpl implements PropertyDef, Ordered
     /**
      * return a suitable {@link PropertyEditor} for this property or null if one can't be determined
      */
+    @JSON(include = false)
     public PropertyEditor getPropertyEditor()
     {
         PropertyEditor propertyEditor = null;

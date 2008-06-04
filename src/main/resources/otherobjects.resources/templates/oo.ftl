@@ -65,7 +65,9 @@ Macro to insert block
 	</#if>
 </#if>
 <#recover>
-<#include "/blocks/oo-block-error.ftl">
+	<div class="oo-block" id="oo-block-${blockName}" name="bob">
+	<#include "/blocks/oo-block-error.ftl">
+	</div>
 </#attempt>
 
 </#macro>  
