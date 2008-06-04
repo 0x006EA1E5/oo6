@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
+import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.types.PropertyDef;
@@ -32,7 +33,10 @@ public class BindServiceImpl implements BindService
     private String dateFormat;
     private DaoService daoService;
 
+    public final static String DYNA_NODE_MAP_NAME = "data";
     private static final Pattern LIST_PATTERN = Pattern.compile("^([\\S&&[^\\.]]*)\\[(\\d+)\\]"); // howevermany non-whitespace characters (apart from the dot) followed by at least one digit in square braces
+
+    private static final Pattern DYNA_NODE_PATTERN = Pattern.compile("^(?:([\\S&&[^\\.]]*)\\.)?" + DYNA_NODE_MAP_NAME + "\\[\"?(.*?)\"?+\\]"); //
 
     public void setDaoService(DaoService daoService)
     {
@@ -78,18 +82,47 @@ public class BindServiceImpl implements BindService
         if (propertyPath.equals("id") || propertyPath.startsWith("_") || propertyPath.startsWith("editableId")) // ignore id field and _ fields that are to help the binding process to discover unchecked checkboxes
             return;
 
-        Matcher matcher = LIST_PATTERN.matcher(propertyPath);
+        //DynaNode properties
+        Matcher dynaMatcher = DYNA_NODE_PATTERN.matcher(propertyPath);
+        if (dynaMatcher.matches())
+        {
+            // dynaNode is a sub property of parent
+            if (dynaMatcher.group(1) != null)
+            {
+
+            }
+            else
+            // dynaNode is the parent
+            {
+                Assert.isTrue(parent instanceof DynaNode);
+                PropertyDef pd = typeDef.getProperty(dynaMatcher.group(2));
+
+                try
+                {
+                    Assert.isTrue(fullPath.startsWith(propertyPath), "registering dynaNode PropertyEditors currently only works for top level dynanodes");
+                    binder.registerCustomEditor(Class.forName(pd.getClassName()), propertyPath, pd.getPropertyEditor()); //FIXME this is only correct if fullPath.startsWith(propertyPath) 
+                }
+                catch (ClassNotFoundException e)
+                {
+
+                }
+
+            }
+            return;
+        }
+
+        Matcher listMatcher = LIST_PATTERN.matcher(propertyPath);
         String propertyName;
         String leftOverPath;
         String listWithIndex = null;
         int listIndex = -1;
         boolean isList = false;
-        if (matcher.lookingAt()) // we have a list
+        if (listMatcher.lookingAt()) // we have a list
         {
             isList = true;
-            propertyName = matcher.group(1);
-            listWithIndex = matcher.group();
-            listIndex = Integer.parseInt(matcher.group(2));
+            propertyName = listMatcher.group(1);
+            listWithIndex = listMatcher.group();
+            listIndex = Integer.parseInt(listMatcher.group(2));
             int thisPartPathLength = listWithIndex.length();
             if (thisPartPathLength < propertyPath.length())
                 leftOverPath = propertyPath.substring(thisPartPathLength + 1);

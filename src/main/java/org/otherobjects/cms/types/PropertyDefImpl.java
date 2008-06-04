@@ -1,10 +1,18 @@
 package org.otherobjects.cms.types;
 
+import java.beans.PropertyEditor;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.otherobjects.cms.util.StringUtils;
+import org.springframework.beans.propertyeditors.CustomBooleanEditor;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.core.Ordered;
 import org.springframework.util.Assert;
+
+import com.ibm.icu.math.BigDecimal;
 
 import flexjson.JSON;
 
@@ -145,6 +153,33 @@ public class PropertyDefImpl implements PropertyDef, Ordered
             className = ((TypeServiceImpl) getTypeService()).getClassNameForType(this.type);
         Assert.notNull(className, "No class found for property: " + getName() + " of type: " + getType() + ".");
         return className;
+    }
+
+    /**
+     * return a suitable {@link PropertyEditor} for this property or null if one can't be determined
+     */
+    public PropertyEditor getPropertyEditor()
+    {
+        PropertyEditor propertyEditor = null;
+        //ignore string as they never need PropertyEditors to be converted
+        TypeServiceImpl typeService = (TypeServiceImpl) getTypeService();
+        if (!typeService.getClassForType(this.type).equals(String.class))
+        {
+            if (typeService.getClassForType(this.type).equals(Boolean.class))
+                propertyEditor = new CustomBooleanEditor(false);
+            else if (typeService.getClassForType(this.type).equals(Long.class))
+                propertyEditor = new CustomNumberEditor(Long.class, true);
+            else if (typeService.getClassForType(this.type).equals(BigDecimal.class))
+                propertyEditor = new CustomNumberEditor(BigDecimal.class, true);
+            else if (typeService.getClassForType(this.type).equals(Date.class))
+            {
+                if (this.type.equals("date"))
+                    propertyEditor = new CustomDateEditor(new SimpleDateFormat("dd MM yyyy"), true); //FIXME, these need to be set globally somewhere
+                else if (this.type.equals("time"))
+                    propertyEditor = new CustomDateEditor(new SimpleDateFormat("hh:mm:ss"), true);
+            }
+        }
+        return propertyEditor;
     }
 
     @Override

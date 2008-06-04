@@ -1,5 +1,6 @@
 package org.otherobjects.cms.types;
 
+import java.beans.PropertyEditor;
 
 /**
  * Defines a property of a type.
@@ -78,5 +79,7 @@ public interface PropertyDef
     TypeService getTypeService();
 
     TypeDef getParentTypeDef();
+
+    PropertyEditor getPropertyEditor();
 
 }
