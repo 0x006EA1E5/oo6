@@ -1,4 +1,11 @@
 <#-- 
+Renders an image.
+-->
+<#macro image image class>
+<img src="${cmsImageTool.getOriginal(image).dataFile.externalUrl}" class="${class!}"/>
+</#macro>
+
+<#-- 
 Resolves resource and returns the external url.
 
 FIXME Temporary implementation until our resource handling is finalised.
@@ -55,17 +62,17 @@ Macro to insert block
 <#else>
 	<#assign blockData = daoService.getDao("baseNode").getByPath("/blocks/${blockName}")! >
 	<#if blockData?has_content>
-	<div class="oo-block" id="oo-block-${blockName}" id="block">
+	<div class="oo-block" id="oo-block-${blockName}">
 	<#include "/blocks/${blockName}.ftl">
 	</div>
 	<#else>
-	<div class="oo-block" id="oo-block-${blockName}" id="block">
+	<div class="oo-block" id="oo-block-${blockName}">
 	<#include "/blocks/oo-new.ftl">
 	</div>
 	</#if>
 </#if>
 <#recover>
-	<div class="oo-block" id="oo-block-${blockName}" name="bob">
+	<div class="oo-block" id="oo-block-${blockName}">
 	<#include "/blocks/oo-block-error.ftl">
 	</div>
 </#attempt>
@@ -77,8 +84,14 @@ Macro to insert region
 -->
 <#macro region template regionCode>
 
+<div class="oo-region" id="oo-region-${regionCode}">
 <#list template.getRegion(regionCode).blocks as block>
 <@oo.block block.code block.global />
 </#list>
+</div>
 
 </#macro>  
+
+
+<#-- Directives-->
+<#assign format = "org.otherobjects.cms.tools.FormatDirective"?new()>  
