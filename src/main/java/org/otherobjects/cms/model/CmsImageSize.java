@@ -5,9 +5,6 @@ import org.springframework.util.Assert;
 /**
  * Represents an instance of an image at a particular size.
  * 
- * FIXME How might we handle crops?
- * FIXME Would be nice if this was simpler than a DynaNode
- * 
  * @author rich
  */
 public class CmsImageSize

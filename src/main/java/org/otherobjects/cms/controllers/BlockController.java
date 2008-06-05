@@ -1,14 +1,20 @@
 package org.otherobjects.cms.controllers;
 
+import java.util.ArrayList;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONObject;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
+import org.otherobjects.cms.model.Template;
+import org.otherobjects.cms.model.TemplateBlock;
+import org.otherobjects.cms.model.TemplateRegion;
 import org.otherobjects.cms.types.TypeService;
-import org.otherobjects.cms.util.IdentifierUtils;
 import org.otherobjects.cms.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +41,23 @@ public class BlockController
     @Resource
     private TypeService typeService;
 
+    /**
+     * Simply renders the requested block. No special processing is performed.
+     */
+    @RequestMapping("/block/render/**")
+    public ModelAndView render(HttpServletRequest request, HttpServletResponse response) throws Exception
+    {
+
+        String blockName = StringUtils.remove(request.getPathInfo(), "/block/render/");
+        logger.info("Rendering block name: " + blockName);
+
+        ModelAndView view = new ModelAndView("blocks/" + blockName);
+        view.addObject("blockName", blockName);
+        view.addObject("daoService", this.daoService);
+
+        return view;
+    }
+
     @RequestMapping("/block/get/**")
     public ModelAndView get(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
@@ -45,28 +68,24 @@ public class BlockController
         logger.info("Rendering block id : " + blockId);
 
         UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
+        BaseNode resourceObject = dao.get(blockId);
+        TemplateBlock block = (TemplateBlock) dao.getByPath("/designer/blocks/" + blockName);
 
-        ModelAndView view = null;
-        if (IdentifierUtils.isUUID(blockName))
+        ModelAndView view = new ModelAndView("blocks/oo-render-block");
+        if (block.getGlobal() == null || !block.getGlobal().booleanValue())
         {
             // Page block
-            view = new ModelAndView("blocks/oo-render-block");
-            view.addObject("resourceObject", dao.get(blockName));
+            view.addObject("resourceObject", resourceObject);
             view.addObject("blockGlobal", false);
-
-            // FIXME Hardcoded page block name
-            blockName = "content";
         }
         else
         {
             // Global block
-            view = new ModelAndView("blocks/oo-render-block");
             view.addObject("blockData", dao.getByPath("/blocks/" + blockName));
-            view.addObject("blockGlobal", true);
         }
-        // Return page and context
 
-        //view.addObject("template", template);
+        // Return page and context
+        view.addObject("blockGlobal", block.getGlobal());
         view.addObject("blockName", blockName);
         view.addObject("daoService", this.daoService);
 
@@ -112,4 +131,45 @@ public class BlockController
 
         return view;
     }
+
+    //FIXME This does not really belong here
+    @RequestMapping("/block/saveArrangement/**")
+    public ModelAndView saveArrangement(HttpServletRequest request, HttpServletResponse response) throws Exception
+    {
+        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
+        String templateId = request.getParameter("templateId");
+        
+        String arrangement = request.getParameter("arrangement");
+        logger.info("Arrangement: " + arrangement);
+        JSONArray regions = new JSONArray(arrangement);
+
+        // Load existing template
+        Template template = (Template) dao.get(templateId);
+        ArrayList<TemplateRegion> arrayList = new ArrayList<TemplateRegion>();
+
+        for (int i = 0; i < regions.length(); i++)
+        {
+            JSONObject region = (JSONObject) regions.get(i);
+            String regionName = (String) region.get("name");
+            TemplateRegion tr = new TemplateRegion();
+            tr.setBlocks(new ArrayList<TemplateBlock>());
+            tr.setCode(regionName);
+
+            //region.setProperty("type", "TemplateRegion");
+            //region.setProperty("title", regionName);
+
+            JSONArray blockIds = (JSONArray) region.get("blockIds");
+            for (int j = 0; j < blockIds.length(); j++)
+            {
+                String blockId = (String) blockIds.get(j);
+                TemplateBlock b = (TemplateBlock) dao.getByPath("/designer/blocks/" + blockId);
+                tr.getBlocks().add(b);
+            }
+            arrayList.add(tr);
+        }
+        template.setRegions(arrayList);
+        dao.save(template);
+        return null;
+    }
+
 }
