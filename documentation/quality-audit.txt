@@ -14,6 +14,7 @@ Quality Audit
 * Session size and persitence
 * Remove all System.out and System.err
 * Unicode and character set issues in content and data files
+* Type beviour througout whole system (browser -> data -> email -> browser) for dates/decimals etc
 
 Performance Audit
 

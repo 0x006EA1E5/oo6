@@ -1,0 +1,19 @@
+(To be moved to Designer Guide)
+
+Need quick Freemarker tutorial and links to docs
+
+You have the following directives:
+
+<@oo.
+<@format.
+<@data.
+<@debug. inspect object, list directives?
+<@security.
+<@forms.
+
+parameteters
+links
+resources images/files
+ajax/blocks ?
+
+Help tools to insepc
