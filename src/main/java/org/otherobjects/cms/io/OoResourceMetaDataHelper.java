@@ -9,14 +9,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.activation.MimetypesFileTypeMap;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.LineIterator;
 import org.otherobjects.cms.util.StringUtils;
 
 /**
@@ -68,16 +65,13 @@ public class OoResourceMetaDataHelper
                     if (blockCommentSpec != null) // only do something if we know how comments are formatted
                     {
                         is = resource.getInputStream();
-                        LineIterator it = IOUtils.lineIterator(is, DEFAULT_FILE_ENCODING); //FIXME is it save to assume we only ever read UTF-8 files? And what about line separator chars?
-                        // get the first line
-                        String line = it.nextLine();
-
-                        if (line.startsWith(blockCommentSpec.getBlockStart()))
+                        String string = IOUtils.toString(is);
+                        int startPos = string.indexOf(blockCommentSpec.getBlockStart());
+                        if (startPos >= 0)
                         {
-                            Pattern pattern = Pattern.compile("\\s*" + blockCommentSpec.getBlockStartPattern() + "\\s*(.*?)\\s*" + blockCommentSpec.getBlockEndPattern() + "\\s*");
-                            Matcher matcher = pattern.matcher(line);
-                            if (matcher.matches())
-                                result = matcher.group(1);
+                            startPos += blockCommentSpec.getBlockStart().length();
+                            int endPos = string.indexOf(blockCommentSpec.getBlockEnd());
+                            result = string.substring(startPos, endPos);
                         }
                     }
                 }

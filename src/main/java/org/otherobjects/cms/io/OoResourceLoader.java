@@ -2,6 +2,7 @@ package org.otherobjects.cms.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.regex.Matcher;
 
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
@@ -36,11 +37,11 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
     public OoResource getResource(String path) throws IOException
     {
         ResourceInfo resourceInfo = preprocessPath(path);
-        Resource resoure = resourceLoader.getResource(resourceInfo.getPath());
+        Resource resource = resourceLoader.getResource(resourceInfo.getPath());
 
         //wrap in ooResource
-        DefaultOoResource ooResource = new DefaultOoResource(resoure, path, resourceInfo.isWritable());
-        if (resoure.exists())
+        DefaultOoResource ooResource = new DefaultOoResource(resource, path, resourceInfo.isWritable());
+        if (resource.exists())
         {
             postprocessResource(ooResource);
         }
@@ -52,6 +53,25 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
         return ooResource;
     }
 
+    /**
+     * Returns list of all resouces at a path.
+     * 
+     * FIXME This only supports file resources at the moment. Also needs to be broken into
+     * multiple pluggable implementations.
+     * 
+     * @param path
+     * @return
+     * @throws IOException
+     */
+    public List<OoResource> getResources(String path) throws IOException
+    {
+        ResourceInfo resourceInfo = preprocessPath(path);
+        
+        resourceInfo.getPath();
+
+        return null;
+    }
+    
     protected void preprocessNewResource(DefaultOoResource ooResource) throws IOException
     {
         if (ooResource.isWritable())
@@ -65,6 +85,11 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
         }
     }
 
+    /**
+     * FIXME Can we make this lazy?
+     * 
+     * @param ooResource
+     */
     protected void postprocessResource(DefaultOoResource ooResource)
     {
         String metaData = metaDataHelper.readMetaDataString(ooResource);
@@ -117,7 +142,8 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
                 buf.append(path);
                 break;
             case SITE :
-                buf.append("site.resources");
+                //buf.append("site.resources");
+                buf.append("servlet:");
                 buf.append(path);
                 break;
             case DATA :
