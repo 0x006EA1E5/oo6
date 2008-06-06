@@ -178,7 +178,7 @@ public class TypeServiceImpl extends AbstractTypeService implements Initializing
         return this.jcrClassMappings.get(type).getName();
     }
 
-    public Class getClassForType(String type)
+    public Class<?> getClassForType(String type)
     {
         return this.jcrClassMappings.get(type);
     }
