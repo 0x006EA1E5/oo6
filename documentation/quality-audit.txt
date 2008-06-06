@@ -15,6 +15,11 @@ Quality Audit
 * Remove all System.out and System.err
 * Unicode and character set issues in content and data files
 * Type beviour througout whole system (browser -> data -> email -> browser) for dates/decimals etc
+* Site running in a webapp under different paths
+* Dublic Core
+* IPTC meta data
+* Logger cleanup
+* Backup testing
 
 Performance Audit
 
