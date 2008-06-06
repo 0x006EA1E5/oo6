@@ -4,6 +4,7 @@ For developers looking to add custom functionality, develop plugins
 or work on OTHERobjects itself.
 
 * Getting your development setup
+* Testing your site (EasyMock)?
 * Advanced hosting
 
 ! Coding Standards

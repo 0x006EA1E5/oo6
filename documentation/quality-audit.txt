@@ -20,6 +20,7 @@ Quality Audit
 * IPTC meta data
 * Logger cleanup
 * Backup testing
+* Validation rules for all model objects
 
 Performance Audit
 

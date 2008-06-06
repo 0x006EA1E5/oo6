@@ -2,6 +2,13 @@ OTHERobjects Site Designer Manual
 --------------------------------
 For advanced users who build and develop sites within OTHERobjects
 
+- New path structure and conventions
+- Dealing with excepttions
+
+
+
+
+
 1. Installing OTHERobjects
 ----------------------
  - Imagemagick
