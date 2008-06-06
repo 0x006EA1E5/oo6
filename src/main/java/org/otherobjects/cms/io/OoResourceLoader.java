@@ -1,7 +1,9 @@
 package org.otherobjects.cms.io;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 
@@ -59,19 +61,32 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
      * FIXME This only supports file resources at the moment. Also needs to be broken into
      * multiple pluggable implementations.
      * 
+     * FIXME Needs test.
+     * 
      * @param path
      * @return
      * @throws IOException
      */
     public List<OoResource> getResources(String path) throws IOException
     {
-        ResourceInfo resourceInfo = preprocessPath(path);
-        
-        resourceInfo.getPath();
-
-        return null;
+        Assert.isTrue(path.endsWith("/"), "Path must be to a directory (and therefore end with trailing slash): " + path);
+        List<OoResource> matches = new ArrayList<OoResource>();
+        DefaultOoResource resource = (DefaultOoResource) getResource(path);
+        File f = new File(resource.getFilePath());
+        for (String s : f.list(new FilenameFilter()
+        {
+            public boolean accept(File dir, String name)
+            {
+                return name.endsWith(".ftl");
+            }
+        }))
+        {
+            s = path + s;
+            matches.add(getResource(s));
+        }
+        return matches;
     }
-    
+
     protected void preprocessNewResource(DefaultOoResource ooResource) throws IOException
     {
         if (ooResource.isWritable())
@@ -143,7 +158,6 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
                 break;
             case SITE :
                 //buf.append("site.resources");
-                buf.append("servlet:");
                 buf.append(path);
                 break;
             case DATA :
