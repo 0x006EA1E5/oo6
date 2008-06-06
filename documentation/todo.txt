@@ -51,6 +51,7 @@ Documentation:
 * Document groovyShellService
 * Merge txt docs (1-5) into DocBook 
 * Save eclipse code templates
+* Naming conventions and style (where to put/call blocks etc)
 
 Testing:
 
