@@ -1,0 +1,35 @@
+we enhance Spring's build-in data binding by a preprocess step that tries to instantiate the correct property objects so that actual binding then can actually take place, 
+even when the target object has null references somewhere in the object tree or when the target property type (the class) can only be determined by querying the 
+type service.
+
+Things that the preprocess step needs to take care off
+
+- For DynaNodes custom property editors need to be registered for each dyna property of the DynaNode by looking up the target in TypeService
+- when updating lists(/collections?) need to be cleared once per binding process so that deletes are made possible (i.e when a list member is not in the request data it shouldn't stay 
+	in the list just because it was there before)
+- list(/collection?) properties that are null in the target object tree need to be instantiated to a default collection type
+- a property editor needs to be registered for each list(/collection?) looking up the target property type using the relatedType prop of PropertyDef
+- component types need to be instantiated if null
+- property editors need to be registered for reference properties
+  
+  
+so 
+
+if we encounter a dynanode
+	we leave as is if it is already there
+	we register a PropertyEditor
+	we create a new instance if it is null
+	
+if we encounter a component
+	we create a new instance if it is null
+	
+if we encounter a list
+	we ensure the list is big enough so that no IndexOutOfBounds ex are thrown
+	we register a matching PropertyEditor (for components,  lists only?)
+	we clear the list once per binding
+	
+	
+if we encounter a reference
+	we register a matching PropertyEditor
+	
+	

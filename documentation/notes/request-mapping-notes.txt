@@ -1,0 +1,31 @@
+Some notes on Spring MVC request mappings
+
+
+
+1. in a non root web-app the first part of the URL is the context path which is not taken into account when processing web.xml servlet mappings
+
+2. Depending on the servlet mapping in web.xml the next part of the URL might actually be consumed by that mapping, i.e. if you map  /otherobjects/* and you have
+	a URL like /otherobjects/workbench/login.html only workbench/login.html is available for mapping the controller and action
+	- unless you specify alwayUseFullPath=true in your HandlerMapping
+	if you map something like *.do then no part of the URL is already consumed by the servlet mapping
+
+3. The preferred way of then mapping the request within the the servlet mapping (the DispatcherServlet) to a controller is to use a ControllerClassNameHandlerMapping
+	where classes named SomethingController are mapped to a URL path of 'something/...'
+
+4. for this to work all the controllers that should be mapped in such a way need to be configured as beans in the current context which can be automated by using 
+	the <context:component-scan /> tag which finds all classes annotated with the Controller or Component annotation and adds them as beans to the current context
+
+5. When using controllers with multiple actions the preferred way of mapping the actions is to use AnnotationMethodHandlerAdapter by way of using DefaultAnnotationHandlerMapping,
+	which will try to map methods annnotated with the RequestMapping annotation to an incoming URL.
+	It seems that while at the controller class level there is a convention that a controller named 'SomethingController' get mapped to /something/* even if there is 
+	no RequestMapping annotation at the class level the same isn't true for RequestMapped methods, i.e a method 'doSomething' isn't automatically mapped as 'dosomething' and it
+	seems that it should be avoided to have multiple methods sharing the same RequestMapping path
+	
+6. To allow for a default 'index' action/method just have one method in the controller that has a RequestMapping without a path value. This will be used if no other method matching
+	the current request pat his found.
+	
+7. to achieve a rails style mapping of /controller/action[/id] one could then also implement a HandlerInterceptor that turns the last part of the url into a (String) id and tries to 
+	set it on the handler object by inspecting the HandlerObject (generally the controller) for the existence of a specially named setter ? (See 
+	org.otherobjects.cms.controllers.interceptors.IdFromUrlInterceptor)
+	
+
