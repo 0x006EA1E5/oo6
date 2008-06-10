@@ -14,6 +14,7 @@
 			<list>
 				<ref bean="localeChangeInterceptor" />
 				<bean class="org.otherobjects.cms.controllers.interceptors.ModelModifierInterceptor" />
+				<bean class="org.otherobjects.cms.controllers.interceptors.IdFromUrlInterceptor" />
 			</list>
 		</property>
 	</bean>
