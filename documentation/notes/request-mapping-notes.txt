@@ -19,7 +19,7 @@ Some notes on Spring MVC request mappings
 	which will try to map methods annnotated with the RequestMapping annotation to an incoming URL.
 	It seems that while at the controller class level there is a convention that a controller named 'SomethingController' get mapped to /something/* even if there is 
 	no RequestMapping annotation at the class level the same isn't true for RequestMapped methods, i.e a method 'doSomething' isn't automatically mapped as 'dosomething' and it
-	seems that it should be avoided to have multiple methods sharing the same RequestMapping path
+	seems that it should be avoided to have multiple methods sharing the same RequestMapping path. The RequestMapping path should follow the pattern '/**/{name of action}/*'
 	
 6. To allow for a default 'index' action/method just have one method in the controller that has a RequestMapping without a path value. This will be used if no other method matching
 	the current request pat his found.
