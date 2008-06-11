@@ -27,8 +27,7 @@ if we encounter a list
 	we ensure the list is big enough so that no IndexOutOfBounds ex are thrown
 	we register a matching PropertyEditor (for components,  lists only?)
 	we clear the list once per binding
-	
-	
+		
 if we encounter a reference
 	we register a matching PropertyEditor
 	

@@ -7,6 +7,7 @@ Final TODO
 * Validator: to perform type checks esp for DynaNodes and with human error messages
 * Clear up basenode and auditinfo(ChangeNumber -> Version) + Create SitePage interface and abstract class 
 * Auto Tool/Directive discovery and model population
+* Templated error page and log to debug email too
 * Unit tests for controllers and templates
 
 Small tasks:
@@ -76,12 +77,10 @@ Interface:
 * File/image upload (inc bulk)
 
 REST Interface:
-
 * Better URL syntax
 * Search
 * Filter (user, state, date, type)
 * Sort
-* http://www.carbonfive.com/community/archives/2007/06/parameterized_rest_urls_with_spring_mvc.html
 
 Debug:
 

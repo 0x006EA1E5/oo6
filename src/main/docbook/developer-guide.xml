@@ -85,8 +85,7 @@ brushed:~ rich$
 </programlisting>
       </section>
 
-        <para>TODO Note about system properties. Memory, encoding? </para>
-
+      <para>TODO Note about system properties. Memory, encoding?</para>
 
       <section>
         <title>Apache Maven</title>
@@ -97,10 +96,12 @@ brushed:~ rich$
         the <emphasis role="bold">mvn</emphasis> command is included in your
         path:</para>
 
-        <para><programlisting>brushed:~ rich$ mvn -version 
+        <para>
+          <programlisting>brushed:~ rich$ mvn -version 
 Maven version: 2.0.7
 brushed:~ rich$
-</programlisting></para>
+</programlisting>
+        </para>
 
         <para>All of the libraries that OTHERobjects depends on are downloaded
         automatically via Maven. Most of these libraries are in the public
@@ -160,12 +161,14 @@ brushed:~ rich$
         correctly. To test that you have the correct version is installed run
         the following command:</para>
 
-        <para><programlisting>brushed:~ rich$ convert -version
+        <para>
+          <programlisting>brushed:~ rich$ convert -version
 Version: ImageMagick 6.3.4 05/19/07 Q16 http://www.imagemagick.org 
 Copyright: Copyright (C) 1999-2007 ImageMagick Studio LLC
 
 brushed:~ rich$
-</programlisting></para>
+</programlisting>
+        </para>
 
         <para>Note for Mac users: the MacPorts install method is usually the
         easiest and best way to go.</para>
@@ -363,6 +366,26 @@ Admin : http://localhost:8080/go/workbench/
     <para>How to return string/binary directly from the controller.</para>
 
     <para>How to bind to URLS.</para>
+  </chapter>
+
+  <chapter>
+    <title>Creating services</title>
+
+    <para>Intro</para>
+
+    <para></para>
+
+    <section>
+      <title>Handling errors</title>
+
+      <para>Unexpected and unrecoverable errors -- throw uncheched
+      exception</para>
+
+      <para>For user recovery throw ServiceException</para>
+
+      <para>Or for complex service throw subclasses of exception that will be
+      handled differently be the controller.</para>
+    </section>
   </chapter>
 
   <chapter>
