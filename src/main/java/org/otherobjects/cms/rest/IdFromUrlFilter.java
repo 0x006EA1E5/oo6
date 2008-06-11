@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 /**
- * Filter that tries to match URLs o the form /controller/action/id and adds the id as a request parameter.
+ * Filter that tries to match URLs of the form /controller/action/id and adds the id as a request parameter with the name 'resourceId'
  * Inspired by work done by carbonfive.com:
  *  http://www.carbonfive.com/community/archives/2007/06/parameterized_rest_urls_with_spring_mvc.html
  *  
@@ -49,6 +49,9 @@ public class IdFromUrlFilter implements Filter
         //noop
     }
 
+    /**
+     * filters this request trying to match (g)rails style resource urls. Just chains through should any exception happen
+     */
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
     {
         try
