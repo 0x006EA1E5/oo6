@@ -31,8 +31,12 @@
 		<property name="bootstrapScript" value="classpath:otherobjects.resources/setup.script" />
 		<property name="siteBootstrapScript" value="classpath:site.resources/setup.script" />
 		<property name="universalJcrDao" ref="universalJcrDao" />
+		<property name="daoService" ref="daoService" />
+		<property name="resourceScanner" ref="resourceScanner" />
 		<property name="typeService" ref="typeService" />
 	</bean>
+
+	<bean id="resourceScanner" class="org.otherobjects.cms.util.ResourceScanner" />
 
 	<bean id="ooBootstrapper" class="org.otherobjects.cms.bootstrap.OoBootstrapper">
 		<property name="dbSchemaInitialiser" ref="dbSchemaInitialiser" />

@@ -7,8 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.cms.util.ResourceScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -24,10 +26,12 @@ public class JackrabbitPopulater
 {
     private final Logger logger = LoggerFactory.getLogger(JackrabbitPopulater.class);
 
+    private DaoService daoService;
     private UniversalJcrDao universalJcrDao;
     private Resource bootstrapScript;
     private Resource siteBootstrapScript;
     private TypeService typeService;
+    private ResourceScanner resourceScanner;
 
     public void populateRepository() throws Exception
     {
@@ -42,6 +46,9 @@ public class JackrabbitPopulater
         Binding binding = new Binding();
         binding.setProperty("universalJcrDao", universalJcrDao);
         binding.setProperty("typeService", typeService);
+        // FIXME This should happen somewhere else probably
+        binding.setProperty("resourceScanner", resourceScanner);
+        binding.setProperty("daoService", daoService);
         GroovyShell shell = new GroovyShell(binding);
         String script = IOUtils.toString(is);
         shell.evaluate(script);
@@ -75,6 +82,16 @@ public class JackrabbitPopulater
     public void setSiteBootstrapScript(Resource siteBootstrapScript)
     {
         this.siteBootstrapScript = siteBootstrapScript;
+    }
+
+    public void setResourceScanner(ResourceScanner resourceScanner)
+    {
+        this.resourceScanner = resourceScanner;
+    }
+
+    public void setDaoService(DaoService daoService)
+    {
+        this.daoService = daoService;
     }
 
 }
