@@ -2,13 +2,14 @@ package org.otherobjects.cms.binding;
 
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.model.BaseNode;
+import org.otherobjects.cms.util.IdentifierUtils;
 import org.springframework.util.StringUtils;
 
 public class CmsNodeReferenceEditor extends java.beans.PropertyEditorSupport
 {
     private String type;
     private DaoService daoService;
-    
+
     public CmsNodeReferenceEditor(DaoService daoService, String type)
     {
         this.daoService = daoService;
@@ -18,6 +19,7 @@ public class CmsNodeReferenceEditor extends java.beans.PropertyEditorSupport
     /**
      * Lookup a DynaNode from the UUID String.
      */
+    @Override
     @SuppressWarnings("unchecked")
     public void setAsText(String text) throws IllegalArgumentException
     {
@@ -26,9 +28,8 @@ public class CmsNodeReferenceEditor extends java.beans.PropertyEditorSupport
             // Treat empty String as null value.
             setValue(null);
         }
-        else if (text != null && text.length() != 36)
+        else if (text != null && !IdentifierUtils.isUUID(text))
         {
-            //TODO better uuid regexp
             throw new IllegalArgumentException("Not a valid UUID: " + text);
         }
         else
@@ -40,6 +41,7 @@ public class CmsNodeReferenceEditor extends java.beans.PropertyEditorSupport
     /**
      * Format the DynaNode as String, using its UUID.
      */
+    @Override
     public String getAsText()
     {
         BaseNode value = (BaseNode) getValue();
