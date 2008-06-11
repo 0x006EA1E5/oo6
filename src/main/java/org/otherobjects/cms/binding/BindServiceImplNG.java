@@ -69,6 +69,7 @@ public class BindServiceImplNG implements BindService
      * - create not yet existing child objects so that we can bind successfully later
      * - register path specific custom property editors taking into account {@link PropertyDef}s
      * - cache already processed part paths so that we don't do too much work  
+     * - clear collections once per binding so that it becomes possible to delete collection members (when updating) by leaving them out if the request params 
      * 
      * knows how to deal with nested paths separated by dots like
      * 
@@ -93,6 +94,9 @@ public class BindServiceImplNG implements BindService
             return; // this particular path has already been dealt with
 
         // first deal with dynaNodes
+        /*
+         * if this is an update 
+         */
         boolean isDynaNode = false;
         if (typeDef.getProperty(part.getPathPart()).getClassName().equals("DynaNode"))
         {
@@ -113,7 +117,7 @@ public class BindServiceImplNG implements BindService
         }
 
         // ok simple things first
-        if (!part.isList() && !part.isDynaNode() && !isDynaNode) // simple property
+        if (!part.isList() && !part.isDynaNodeProperty() && !isDynaNode) // simple property
         {
             PropertyDef propertyDef = typeDef.getProperty(part.getPathPart());
             PropertyEditor propertyEditor = propertyDef.getPropertyEditor();
@@ -185,7 +189,7 @@ public class BindServiceImplNG implements BindService
 
         }
 
-        if (part.isDynaNode())
+        if (part.isDynaNodeProperty())
         {
             try
             {
@@ -201,10 +205,6 @@ public class BindServiceImplNG implements BindService
                 logger.warn("Problem dealing with dynaNode property" + part.getFullPath(), e);
             }
         }
-
-        // we need to instantiate container objects (list, component, dynaNode) and clear existing ones once per binding process
-
-        // then register custom property editors for the given path 
 
         // once fully processed - cache it
         pathCache.put(part.getFullPath(), part);
@@ -323,7 +323,7 @@ public class BindServiceImplNG implements BindService
             return listProps != null;
         }
 
-        public boolean isDynaNode()
+        public boolean isDynaNodeProperty()
         {
             return dynaNodeProps != null;
         }
