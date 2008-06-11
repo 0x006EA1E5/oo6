@@ -54,19 +54,24 @@ public class IdFromUrlFilter implements Filter
      */
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
     {
+        boolean filterApplied = false;
         try
         {
             Matcher matcher = idPattern.matcher(((HttpServletRequest) request).getPathInfo());
             if (matcher.lookingAt())
             {
                 chain.doFilter(new IdFromUrlRequest((HttpServletRequest) request, matcher.group(3)), response);
+                filterApplied = true;
             }
 
         }
         catch (Exception e)
         {
-            chain.doFilter(request, response);
+            //noop
         }
+
+        if (!filterApplied)
+            chain.doFilter(request, response);
     }
 
     public void init(FilterConfig filterConfig) throws ServletException
@@ -89,7 +94,7 @@ public class IdFromUrlFilter implements Filter
         {
             super(request);
             this.params = new HashMap<String, String[]>();
-            this.params.putAll(getParameterMap()); //FIXME is this really a safe thing to do?
+            this.params.putAll(super.getParameterMap()); //FIXME is this really a safe thing to do?
         }
 
         public IdFromUrlRequest(HttpServletRequest request, String resourceId)
