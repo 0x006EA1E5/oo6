@@ -1,5 +1,7 @@
 package org.otherobjects.cms.binding;
 
+import java.util.List;
+
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
@@ -13,8 +15,8 @@ public class TestComponentObject extends BaseNode
     private TestReferenceObject reference;
     private TestComponentObject component;
 
-    //    private List<String> stringsList;
-    //    private List<TestComponentObject> componentsList;
+    private List<String> stringsList;
+    private List<TestComponentObject> componentsList;
 
     @Property
     public String getName()
@@ -49,27 +51,27 @@ public class TestComponentObject extends BaseNode
         this.component = component;
     }
 
-    //    @Property
-    //    public List<String> getStringsList()
-    //    {
-    //        return stringsList;
-    //    }
-    //
-    //    public void setStringsList(List<String> stringsList)
-    //    {
-    //        this.stringsList = stringsList;
-    //    }
-    //
-    //    @Property(collectionElementType = PropertyType.COMPONENT)
-    //    public List<TestComponentObject> getComponentsList()
-    //    {
-    //        return componentsList;
-    //    }
-    //
-    //    public void setComponentsList(List<TestComponentObject> componentsList)
-    //    {
-    //        this.componentsList = componentsList;
-    //    }
+    @Property
+    public List<String> getStringsList()
+    {
+        return stringsList;
+    }
+
+    public void setStringsList(List<String> stringsList)
+    {
+        this.stringsList = stringsList;
+    }
+
+    @Property(collectionElementType = PropertyType.COMPONENT)
+    public List<TestComponentObject> getComponentsList()
+    {
+        return componentsList;
+    }
+
+    public void setComponentsList(List<TestComponentObject> componentsList)
+    {
+        this.componentsList = componentsList;
+    }
 
     @Property
     public TestReferenceObject getReference()
