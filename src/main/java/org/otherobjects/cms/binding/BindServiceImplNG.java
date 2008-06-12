@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.dao.DaoService;
+import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.types.PropertyDef;
@@ -69,26 +70,56 @@ public class BindServiceImplNG implements BindService
             String path = prefix + propertyDef.getName();
 
             // Check if we have matching parameters
-            Map matchingParams = WebUtils.getParametersStartingWith(request, path);
+            Map<String, String> matchingParams = WebUtils.getParametersStartingWith(request, path);
 
             boolean correspondingParamPresent = matchingParams.size() > 0;
 
             if (correspondingParamPresent)
             {
-                // deal with lists
-                if (propertyDef.getType().equals("list")) //TODO the type should clearly be a constant or enum of sorts
+                // DynaNodes
+                if (item instanceof DynaNode)
                 {
-                    // instantiate list? ensure capacity?
-                    List list = (List) PropertyUtils.getNestedProperty(item, path);
-                    if (list != null)
-                        list.clear();
-                    else
-                        list = new ArrayList();
+                    // no lists as props of DynaNode yet
 
-                    ListProps listProps = calcListProps(path, matchingParams);
-                    sizeList(list, listProps.getRequiredSize());
+                }
+                else
+                {
+                    // deal with lists
+                    if (propertyDef.getType().equals("list")) //TODO the type should clearly be a constant or enum of sorts
+                    {
+                        // instantiate list? ensure capacity?
+                        List list = (List) PropertyUtils.getNestedProperty(item, path);
+                        if (list != null)
+                            list.clear();
+                        else
+                            list = new ArrayList();
 
-                    if (propertyDef.getRelatedType().equals("reference"))
+                        ListProps listProps = calcListProps(path, matchingParams);
+                        sizeList(list, listProps.getRequiredSize());
+
+                        if (propertyDef.getRelatedType().equals("reference"))
+                        {
+                            // register suitable PropertyEditor
+                            String relatedType = propertyDef.getRelatedType();
+                            Class relatedPropertyClass = Class.forName(relatedType);
+
+                            binder.registerCustomEditor(CmsNode.class, path, new CmsNodeReferenceEditor(daoService, relatedType));
+                        }
+                        else if (propertyDef.getRelatedType().equals("component"))
+                        {
+                            // populate each used list index with a component instance if none there
+                            for (Integer ind : listProps.getUsedIndices())
+                            {
+                                String listItemPath = path + "[" + ind + "]";
+                                prepareComponent(item, propertyDef, listItemPath);
+                            }
+                        }
+                        else
+                        {
+                            binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), "", propertyDef.getPropertyEditor());
+                        }
+                    }
+                    else if (propertyDef.getType().equals("reference")) // deal with references
                     {
                         // register suitable PropertyEditor
                         String relatedType = propertyDef.getRelatedType();
@@ -96,62 +127,35 @@ public class BindServiceImplNG implements BindService
 
                         binder.registerCustomEditor(CmsNode.class, path, new CmsNodeReferenceEditor(daoService, relatedType));
                     }
-                    else if (propertyDef.getRelatedType().equals("component"))
+                    else if (propertyDef.getType().equals("component"))// deal with components
                     {
-                        // populate each used list index with a component instance if none there
-                        for (Integer ind : listProps.getUsedIndices())
-                        {
-                            String listItemPath = path + "[" + ind + "]";
-                            BaseNode component = (BaseNode) PropertyUtils.getNestedProperty(item, listItemPath);
-
-                            if (component == null)
-                            {
-                                // Create object if null 
-                                component = createObject(propertyDef);
-                                PropertyUtils.setNestedProperty(item, listItemPath, component);
-                            }
-
-                            // Recurse into the component
-                            prepareObject(item, component.getTypeDef(), listItemPath + ".");
-                        }
+                        prepareComponent(item, propertyDef, path);
                     }
                     else
+                    // simple props
                     {
-                        binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), "", propertyDef.getPropertyEditor());
+                        binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), path, propertyDef.getPropertyEditor());
                     }
-                }
-                else if (propertyDef.getType().equals("reference")) // deal with references
-                {
-                    // register suitable PropertyEditor
-                    String relatedType = propertyDef.getRelatedType();
-                    Class relatedPropertyClass = Class.forName(relatedType);
-
-                    binder.registerCustomEditor(CmsNode.class, path, new CmsNodeReferenceEditor(daoService, relatedType));
-                }
-                else if (propertyDef.getType().equals("component"))// deal with components
-                {
-                    BaseNode component = (BaseNode) PropertyUtils.getNestedProperty(item, path);
-
-                    if (component == null)
-                    {
-                        // Create object if null 
-                        component = createObject(propertyDef);
-                        PropertyUtils.setNestedProperty(item, path, component);
-                    }
-
-                    // Recurse into the component
-                    prepareObject(item, component.getTypeDef(), propertyDef.getName() + ".");
-
-                }
-                else
-                // simple props
-                {
-                    binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), path, propertyDef.getPropertyEditor());
                 }
             }
 
         }
 
+    }
+
+    private void prepareComponent(Object parent, PropertyDef propertyDef, String path) throws Exception
+    {
+        BaseNode component = (BaseNode) PropertyUtils.getNestedProperty(parent, path);
+
+        if (component == null)
+        {
+            // Create object if null 
+            component = createObject(propertyDef);
+            PropertyUtils.setNestedProperty(parent, path, component);
+        }
+
+        // Recurse into the component
+        prepareObject(parent, component.getTypeDef(), path + ".");
     }
 
     public ListProps calcListProps(String path, Map<String, String> listParams)
