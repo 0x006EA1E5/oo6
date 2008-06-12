@@ -178,6 +178,8 @@ public class PropertyDefImpl implements PropertyDef, Ordered
                     propertyEditor = new CustomDateEditor(new SimpleDateFormat("dd MM yyyy"), true); //FIXME, these need to be set globally somewhere
                 else if (this.type.equals("time"))
                     propertyEditor = new CustomDateEditor(new SimpleDateFormat("hh:mm:ss"), true);
+                else if (this.type.equals("timestamp"))
+                    propertyEditor = new CustomDateEditor(new SimpleDateFormat("dd MM yyyy hh:mm:ss"), true);
             }
         }
         return propertyEditor;
