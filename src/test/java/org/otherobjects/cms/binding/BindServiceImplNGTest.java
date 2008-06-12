@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import junit.framework.TestCase;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -33,7 +35,10 @@ import org.springframework.validation.FieldError;
  */
 public class BindServiceImplNGTest extends TestCase
 {
-    private final String dateFormat = "dd/MM/yy";
+    private final String dateFormat = "dd MM yyyy";
+    private final String timeFormat = "hh:mm:ss";
+    private final String timestampFormat = dateFormat + " " + timeFormat;
+
     private BindServiceImplNG bindService;
     protected Date now = new Date();
     private Date testDate;
@@ -53,7 +58,7 @@ public class BindServiceImplNGTest extends TestCase
         typeService.registerType(typeDefBuilder.getTypeDef(TestReferenceObject.class));
         typeService.registerType(typeDefBuilder.getTypeDef(TestComponentObject.class));
         ((TypeServiceImpl) typeService).reset();
-        testDate = new SimpleDateFormat(this.dateFormat).parse("01/01/99");
+        testDate = new SimpleDateFormat(this.dateFormat).parse("01 01 1999");
         this.daoService = new MockDaoService(new MockGenericDao(createTestReferenceObject("TR1")));
         this.bindService.setDaoService(this.daoService);
     }
@@ -61,16 +66,17 @@ public class BindServiceImplNGTest extends TestCase
     public void testBindValues() throws Exception
     {
         TestObject o = new TestObject();
-        BindingResult errors = this.bindService.bind(o, o.getTypeDef(), getRequest());
+        HttpServletRequest request = getRequest();
+        BindingResult errors = this.bindService.bind(o, o.getTypeDef(), request);
 
         assertTrue(errors.getErrorCount() == 0);
 
         // Simple properties
         assertEquals("testString1", PropertyUtils.getNestedProperty(o, "testString"));
         assertEquals("testText1", PropertyUtils.getNestedProperty(o, "testText"));
-        //        assertEquals(this.testDate, PropertyUtils.getNestedProperty(o, "testDate"));
-        //        assertEquals(this.testDate, PropertyUtils.getNestedProperty(o, "testTime"));
-        //        assertEquals(this.testDate, PropertyUtils.getNestedProperty(o, "testTimestamp"));
+        assertEquals(new SimpleDateFormat(dateFormat).parse(request.getParameter("testDate")), PropertyUtils.getNestedProperty(o, "testDate"));
+        assertEquals(new SimpleDateFormat(timeFormat).parse(request.getParameter("testTime")), PropertyUtils.getNestedProperty(o, "testTime"));
+        assertEquals(new SimpleDateFormat(timestampFormat).parse(request.getParameter("testTimestamp")), PropertyUtils.getNestedProperty(o, "testTimestamp"));
         assertEquals(new Long(7), PropertyUtils.getNestedProperty(o, "testNumber"));
         assertEquals(new BigDecimal(2.7, new MathContext(2, RoundingMode.HALF_UP)), PropertyUtils.getNestedProperty(o, "testDecimal"));
         assertEquals(Boolean.FALSE, PropertyUtils.getNestedProperty(o, "testBoolean"));
@@ -199,9 +205,9 @@ public class BindServiceImplNGTest extends TestCase
         request.addParameter("testNumber", "abc"); // the wrong one
         request.addParameter("testString", "testString1");
         request.addParameter("testText", "testText1");
-        request.addParameter("testDate", "01/01/99");
-        request.addParameter("testTime", "01/01/99");
-        request.addParameter("testTimestamp", "01/01/99");
+        request.addParameter("testDate", "01 01 1999");
+        request.addParameter("testTime", "12:00:00");
+        request.addParameter("testTimestamp", "01 01 1999 12:00:00");
         request.addParameter("testDecimal", "2.7");
         request.addParameter("testBoolean", "false");
 
@@ -220,9 +226,9 @@ public class BindServiceImplNGTest extends TestCase
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addParameter("testString", "testString1");
         request.addParameter("testText", "testText1");
-        request.addParameter("testDate", "01/01/99");
-        request.addParameter("testTime", "01/01/99");
-        request.addParameter("testTimestamp", "01/01/99");
+        request.addParameter("testDate", "01 01 1999");
+        request.addParameter("testTime", "12:00:00");
+        request.addParameter("testTimestamp", "01 01 1999 12:00:00");
         request.addParameter("testNumber", "7");
         request.addParameter("testDecimal", "2.7");
         request.addParameter("testBoolean", "false");

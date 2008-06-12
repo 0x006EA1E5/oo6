@@ -146,7 +146,7 @@ public class BindServiceImplNG implements BindService
                 else
                 // simple props
                 {
-                    binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), "", propertyDef.getPropertyEditor());
+                    binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), path, propertyDef.getPropertyEditor());
                 }
             }
 
