@@ -1,8 +1,12 @@
 package org.otherobjects.cms.binding;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +19,7 @@ import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.util.WebUtils;
@@ -23,6 +28,7 @@ import org.springframework.web.util.WebUtils;
  *
  * TODO Improve simple property support: Date
  */
+@Scope("prototype")
 public class BindServiceImplNG implements BindService
 {
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -33,14 +39,16 @@ public class BindServiceImplNG implements BindService
     private DaoService daoService;
 
     private ServletRequestDataBinder binder = null;
+    private HttpServletRequest request;
 
     public BindingResult bind(Object item, TypeDef typeDef, HttpServletRequest request)
     {
         this.binder = new ServletRequestDataBinder(item);
+        this.request = request;
 
         try
         {
-            prepareObject(item, typeDef, "", request);
+            prepareObject(item, typeDef, "");
         }
         catch (Exception e)
         {
@@ -52,52 +60,75 @@ public class BindServiceImplNG implements BindService
         return binder.getBindingResult();
     }
 
-    private void prepareObject(Object item, TypeDef typeDef, String prefix, HttpServletRequest request) throws Exception
+    private void prepareObject(Object item, TypeDef typeDef, String prefix) throws Exception
     {
-        List<String> propertyPath = new LinkedList<String>();
-
         // iterate all props
         for (PropertyDef propertyDef : typeDef.getProperties())
         {
-            // deal with lists
-            if (propertyDef.getType().equals("list")) //TODO the type should clearly be a constant or enum of sorts
+            // Determine path
+            String path = prefix + propertyDef.getName();
+
+            // Check if we have matching parameters
+            Map matchingParams = WebUtils.getParametersStartingWith(request, path);
+
+            boolean correspondingParamPresent = matchingParams.size() > 0;
+
+            if (correspondingParamPresent)
             {
-                // instantiate list? ensure capacity?
-                if (propertyDef.getRelatedType().equals("reference"))
+                // deal with lists
+                if (propertyDef.getType().equals("list")) //TODO the type should clearly be a constant or enum of sorts
                 {
-                    // register ReferencePropertyEditor for this list path
-                    //recurse
+                    // instantiate list? ensure capacity?
+                    List list = (List) PropertyUtils.getNestedProperty(item, path);
+                    if (list != null)
+                        list.clear();
+                    else
+                        list = new ArrayList();
+
+                    ListProps listProps = calcListProps(path, matchingParams);
+                    sizeList(list, listProps.getRequiredSize());
+
+                    if (propertyDef.getRelatedType().equals("reference"))
+                    {
+                        // register suitable PropertyEditor
+                        String relatedType = propertyDef.getRelatedType();
+                        Class relatedPropertyClass = Class.forName(relatedType);
+
+                        binder.registerCustomEditor(CmsNode.class, path, new CmsNodeReferenceEditor(daoService, relatedType));
+                    }
+                    else if (propertyDef.getRelatedType().equals("component"))
+                    {
+                        // populate each used list index with a component instance if none there
+                        for (Integer ind : listProps.getUsedIndices())
+                        {
+                            String listItemPath = path + "[" + ind + "]";
+                            BaseNode component = (BaseNode) PropertyUtils.getNestedProperty(item, listItemPath);
+
+                            if (component == null)
+                            {
+                                // Create object if null 
+                                component = createObject(propertyDef);
+                                PropertyUtils.setNestedProperty(item, listItemPath, component);
+                            }
+
+                            // Recurse into the component
+                            prepareObject(item, component.getTypeDef(), listItemPath + ".");
+                        }
+                    }
+                    else
+                    {
+                        binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), "", propertyDef.getPropertyEditor());
+                    }
                 }
-                else if (propertyDef.getRelatedType().equals("component"))
+                else if (propertyDef.getType().equals("reference")) // deal with references
                 {
                     // register suitable PropertyEditor
-                    // recurse
+                    String relatedType = propertyDef.getRelatedType();
+                    Class relatedPropertyClass = Class.forName(relatedType);
+
+                    binder.registerCustomEditor(CmsNode.class, path, new CmsNodeReferenceEditor(daoService, relatedType));
                 }
-                else
-                {
-                    //noop
-                }
-            }
-            else if (propertyDef.getType().equals("reference")) // deal with references
-            {
-                // Determine path
-                String path = prefix + propertyDef.getName();
-
-                // register suitable PropertyEditor
-                String relatedType = propertyDef.getRelatedType();
-                Class relatedPropertyClass = Class.forName(relatedType);
-
-                binder.registerCustomEditor(CmsNode.class, path, new CmsNodeReferenceEditor(daoService, relatedType));
-            }
-            else if (propertyDef.getType().equals("component"))// deal with components
-            {
-                // Determine path
-                String path = prefix + propertyDef.getName();
-
-                // Check if we have matching parameters
-                Map matchingParams = WebUtils.getParametersStartingWith(request, path);
-
-                if (matchingParams.size() > 0)
+                else if (propertyDef.getType().equals("component"))// deal with components
                 {
                     BaseNode component = (BaseNode) PropertyUtils.getNestedProperty(item, path);
 
@@ -109,18 +140,34 @@ public class BindServiceImplNG implements BindService
                     }
 
                     // Recurse into the component
-                    prepareObject(item, component.getTypeDef(), propertyDef.getName() + ".", request);
+                    prepareObject(item, component.getTypeDef(), propertyDef.getName() + ".");
 
                 }
-            }
-            else
-            // simple props
-            {
-                binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), "", propertyDef.getPropertyEditor());
+                else
+                // simple props
+                {
+                    binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), "", propertyDef.getPropertyEditor());
+                }
             }
 
         }
 
+    }
+
+    public ListProps calcListProps(String path, Map<String, String> listParams)
+    {
+        ListProps listProps = new ListProps();
+        Pattern pattern = Pattern.compile("^" + path.replaceAll("\\.", "\\\\.").replaceAll("\\[", "\\\\[").replaceAll("\\]", "\\\\]") + "\\[(\\d+)\\]"); // replace .[] which have special meaning in a regex with escaped constructs
+
+        for (String paramName : listParams.keySet())
+        {
+            Matcher matcher = pattern.matcher(paramName);
+            if (matcher.lookingAt())
+            {
+                listProps.addIndex(Integer.parseInt(matcher.group(1)));
+            }
+        }
+        return listProps;
     }
 
     /**
@@ -150,7 +197,7 @@ public class BindServiceImplNG implements BindService
         return relatedTypeInstance;
     }
 
-    private void fillList(List<?> list, int size)
+    private void sizeList(List<?> list, int size)
     {
         int initialSize = list.size();
         if (initialSize >= size)
@@ -170,6 +217,31 @@ public class BindServiceImplNG implements BindService
     public void setDaoService(DaoService daoService)
     {
         this.daoService = daoService;
+    }
+
+    class ListProps
+    {
+        private Set<Integer> usedIndices = new HashSet<Integer>();
+
+        private int currentHighestIndex = -1;
+
+        public void addIndex(int index)
+        {
+            usedIndices.add(new Integer(index));
+            if (index > currentHighestIndex)
+                currentHighestIndex = index;
+        }
+
+        public Set<Integer> getUsedIndices()
+        {
+            return usedIndices;
+        }
+
+        public int getRequiredSize()
+        {
+            return currentHighestIndex + 1;
+        }
+
     }
 
 }

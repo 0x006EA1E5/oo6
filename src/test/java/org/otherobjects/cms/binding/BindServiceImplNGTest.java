@@ -5,12 +5,15 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import junit.framework.TestCase;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.SingletonBeanLocator;
+import org.otherobjects.cms.binding.BindServiceImplNG.ListProps;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.MockDaoService;
 import org.otherobjects.cms.dao.MockGenericDao;
@@ -78,6 +81,37 @@ public class BindServiceImplNGTest extends TestCase
 
         // Reference
         assertEquals("TR1 Name", PropertyUtils.getNestedProperty(o, "testReference.name"));
+    }
+
+    public void testCalcListProps()
+    {
+        BindServiceImplNG bs = new BindServiceImplNG();
+
+        Map<String, String> params = new HashMap<String, String>();
+
+        params.put("test.list[1].prop1", "");
+        params.put("test.list[0].prop3", "");
+        params.put("test.list[8].test", "");
+        params.put("test.list[3].list[2].name", "");
+        params.put("test.list[6].prop4", "");
+        params.put("test.list[10].prop2", "");
+        params.put("test.list[2].prop1.address1", "");
+        params.put("test.list[4].prop1.address2", "");
+        params.put("test.list[7].prop1.moreTest", "");
+        params.put("test.list[5].prop1.anotherList[0]", "");
+
+        ListProps props = bs.calcListProps("test.list", params);
+
+        assertEquals(10, props.getUsedIndices().size());
+        assertEquals(11, props.getRequiredSize());
+
+        params.put("test.list[5].prop1.list2[1]", "");
+
+        ListProps props2 = bs.calcListProps("test.list[5].prop1.list2", params);
+
+        assertEquals(1, props2.getUsedIndices().size());
+        assertEquals(2, props2.getRequiredSize());
+
     }
 
     @SuppressWarnings("unchecked")
