@@ -19,9 +19,12 @@ import org.otherobjects.cms.binding.BindServiceImplNG.ListProps;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.MockDaoService;
 import org.otherobjects.cms.dao.MockGenericDao;
+import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder;
+import org.otherobjects.cms.types.PropertyDefImpl;
 import org.otherobjects.cms.types.TypeDefBuilder;
+import org.otherobjects.cms.types.TypeDefImpl;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.types.TypeServiceImpl;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -118,6 +121,86 @@ public class BindServiceImplNGTest extends TestCase
         assertEquals(1, props2.getUsedIndices().size());
         assertEquals(2, props2.getRequiredSize());
 
+    }
+
+    public void testTopLevelDynaNode() throws Exception
+    {
+        MockHttpServletRequest req = new MockHttpServletRequest();
+
+        req.addParameter("data[testDate]", "01 01 1999");
+
+        TypeDefImpl typeDef = new TypeDefImpl();
+        typeDef.addProperty(new PropertyDefImpl("testDate", "date", null, null));
+        typeService.registerType(typeDef);
+        ((TypeServiceImpl) typeService).reset();
+
+        BindServiceImplNG bs = new BindServiceImplNG();
+        DynaNode dn = new DynaNode();
+
+        BindingResult errors = bs.bind(dn, typeDef, req);
+
+        assertTrue(errors.getErrorCount() == 0);
+        assertEquals(new SimpleDateFormat("dd MM yyyy").parse("01 01 1999"), dn.get("testDate"));
+    }
+
+    public void testNestedExistingDynaNode() throws Exception
+    {
+        MockHttpServletRequest req = new MockHttpServletRequest();
+
+        req.addParameter("testNode.data[testDate]", "01 01 1999");
+        req.addParameter("name", "testBeanName");
+
+        TypeDefImpl typeDef = new TypeDefImpl("org.otherobjects.cms.binding.BeanWithDynaNodeProperty");
+        typeDef.addProperty(new PropertyDefImpl("name", "string", null, null));
+        typeDef.addProperty(new PropertyDefImpl("testNode", "component", "testDynaNode", null));
+
+        TypeDefImpl dynaType = new TypeDefImpl("testDynaNode");
+        dynaType.addProperty(new PropertyDefImpl("testDate", "date", null, null));
+
+        typeService.registerType(typeDef);
+        typeService.registerType(dynaType);
+
+        ((TypeServiceImpl) typeService).reset();
+
+        BindServiceImplNG bs = new BindServiceImplNG();
+        BeanWithDynaNodeProperty bean = new BeanWithDynaNodeProperty();
+        //DynaNode testNode = new DynaNode();
+        bean.setTestNode(new DynaNode("testDynaNode"));
+
+        BindingResult errors = bs.bind(bean, typeDef, req);
+
+        assertTrue(errors.getErrorCount() == 0);
+        assertEquals("testBeanName", bean.getName());
+        assertEquals(new SimpleDateFormat("dd MM yyyy").parse("01 01 1999"), bean.getTestNode().get("testDate"));
+    }
+
+    public void testNestedNonExistingDynaNode() throws Exception
+    {
+        MockHttpServletRequest req = new MockHttpServletRequest();
+
+        req.addParameter("testNode.data[testDate]", "01 01 1999");
+        req.addParameter("name", "testBeanName");
+
+        TypeDefImpl typeDef = new TypeDefImpl("org.otherobjects.cms.binding.BeanWithDynaNodeProperty");
+        typeDef.addProperty(new PropertyDefImpl("name", "string", null, null));
+        typeDef.addProperty(new PropertyDefImpl("testNode", "component", "testDynaNode", null));
+
+        TypeDefImpl dynaType = new TypeDefImpl("testDynaNode");
+        dynaType.addProperty(new PropertyDefImpl("testDate", "date", null, null));
+
+        typeService.registerType(typeDef);
+        typeService.registerType(dynaType);
+
+        ((TypeServiceImpl) typeService).reset();
+
+        BindServiceImplNG bs = new BindServiceImplNG();
+        BeanWithDynaNodeProperty bean = new BeanWithDynaNodeProperty();
+
+        BindingResult errors = bs.bind(bean, typeDef, req);
+
+        assertTrue(errors.getErrorCount() == 0);
+        assertEquals("testBeanName", bean.getName());
+        assertEquals(new SimpleDateFormat("dd MM yyyy").parse("01 01 1999"), bean.getTestNode().get("testDate"));
     }
 
     @SuppressWarnings("unchecked")

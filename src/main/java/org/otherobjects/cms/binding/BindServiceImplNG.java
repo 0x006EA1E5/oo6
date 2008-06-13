@@ -34,6 +34,8 @@ public class BindServiceImplNG implements BindService
 {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    private static final String DYNA_NODE_DATAMAP_NAME = "data";
+
     private String dateFormat;
 
     @Resource
@@ -67,7 +69,11 @@ public class BindServiceImplNG implements BindService
         for (PropertyDef propertyDef : typeDef.getProperties())
         {
             // Determine path
-            String path = prefix + propertyDef.getName();
+            String path;
+            if (item instanceof DynaNode)
+                path = prefix + DYNA_NODE_DATAMAP_NAME + "[" + propertyDef.getName() + "]";
+            else
+                path = prefix + propertyDef.getName();
 
             // Check if we have matching parameters
             Map<String, String> matchingParams = WebUtils.getParametersStartingWith(request, path);
@@ -76,50 +82,20 @@ public class BindServiceImplNG implements BindService
 
             if (correspondingParamPresent)
             {
-                // DynaNodes
-                if (item instanceof DynaNode)
+                // deal with lists
+                if (propertyDef.getType().equals("list")) //TODO the type should clearly be a constant or enum of sorts
                 {
-                    // no lists as props of DynaNode yet
+                    // instantiate list? ensure capacity?
+                    List list = (List) PropertyUtils.getNestedProperty(item, path);
+                    if (list != null)
+                        list.clear();
+                    else
+                        list = new ArrayList();
 
-                }
-                else
-                {
-                    // deal with lists
-                    if (propertyDef.getType().equals("list")) //TODO the type should clearly be a constant or enum of sorts
-                    {
-                        // instantiate list? ensure capacity?
-                        List list = (List) PropertyUtils.getNestedProperty(item, path);
-                        if (list != null)
-                            list.clear();
-                        else
-                            list = new ArrayList();
+                    ListProps listProps = calcListProps(path, matchingParams);
+                    sizeList(list, listProps.getRequiredSize());
 
-                        ListProps listProps = calcListProps(path, matchingParams);
-                        sizeList(list, listProps.getRequiredSize());
-
-                        if (propertyDef.getRelatedType().equals("reference"))
-                        {
-                            // register suitable PropertyEditor
-                            String relatedType = propertyDef.getRelatedType();
-                            Class relatedPropertyClass = Class.forName(relatedType);
-
-                            binder.registerCustomEditor(CmsNode.class, path, new CmsNodeReferenceEditor(daoService, relatedType));
-                        }
-                        else if (propertyDef.getRelatedType().equals("component"))
-                        {
-                            // populate each used list index with a component instance if none there
-                            for (Integer ind : listProps.getUsedIndices())
-                            {
-                                String listItemPath = path + "[" + ind + "]";
-                                prepareComponent(item, propertyDef, listItemPath);
-                            }
-                        }
-                        else
-                        {
-                            binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), path, propertyDef.getPropertyEditor());
-                        }
-                    }
-                    else if (propertyDef.getType().equals("reference")) // deal with references
+                    if (propertyDef.getRelatedType().equals("reference"))
                     {
                         // register suitable PropertyEditor
                         String relatedType = propertyDef.getRelatedType();
@@ -127,20 +103,39 @@ public class BindServiceImplNG implements BindService
 
                         binder.registerCustomEditor(CmsNode.class, path, new CmsNodeReferenceEditor(daoService, relatedType));
                     }
-                    else if (propertyDef.getType().equals("component"))// deal with components
+                    else if (propertyDef.getRelatedType().equals("component"))
                     {
-                        prepareComponent(item, propertyDef, path);
+                        // populate each used list index with a component instance if none there
+                        for (Integer ind : listProps.getUsedIndices())
+                        {
+                            String listItemPath = path + "[" + ind + "]";
+                            prepareComponent(item, propertyDef, listItemPath);
+                        }
                     }
                     else
-                    // simple props
                     {
                         binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), path, propertyDef.getPropertyEditor());
                     }
                 }
+                else if (propertyDef.getType().equals("reference")) // deal with references
+                {
+                    // register suitable PropertyEditor
+                    String relatedType = propertyDef.getRelatedType();
+                    Class relatedPropertyClass = Class.forName(relatedType);
+
+                    binder.registerCustomEditor(CmsNode.class, path, new CmsNodeReferenceEditor(daoService, relatedType));
+                }
+                else if (propertyDef.getType().equals("component"))// deal with components
+                {
+                    prepareComponent(item, propertyDef, path);
+                }
+                else
+                // simple props
+                {
+                    binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), path, propertyDef.getPropertyEditor());
+                }
             }
-
         }
-
     }
 
     private void prepareComponent(Object parent, PropertyDef propertyDef, String path) throws Exception
@@ -155,7 +150,7 @@ public class BindServiceImplNG implements BindService
         }
 
         // Recurse into the component
-        prepareObject(parent, component.getTypeDef(), path + ".");
+        prepareObject(component, component.getTypeDef(), path + ".");
     }
 
     public ListProps calcListProps(String path, Map<String, String> listParams)
@@ -176,19 +171,21 @@ public class BindServiceImplNG implements BindService
 
     /**
      * FIXME Merge this with FormController/TypeService
+     * FIXME this is very hacky atm
      */
     private BaseNode createObject(PropertyDef propertyDef)
     {
+        // FIXME Allow DynaNode creation here
+        // TODO Are types arways class names?
+
         try
         {
-            // FIXME Allow DynaNode creation here
-            // TODO Are types arways class names?
-            return (BaseNode) Class.forName(propertyDef.getRelatedType()).newInstance();
+            BaseNode object = (BaseNode) Class.forName(propertyDef.getRelatedType()).newInstance();
+            return object;
         }
         catch (Exception e)
         {
-            // Ignore for now
-            return null;
+            return new DynaNode(propertyDef.getRelatedType());
         }
 
     }
