@@ -127,7 +127,7 @@ public class BindServiceImplNGTest extends TestCase
     {
         MockHttpServletRequest req = new MockHttpServletRequest();
 
-        req.addParameter("data[testDate]", "01 01 1999");
+        req.addParameter("testDate", "01 01 1999");
 
         TypeDefImpl typeDef = new TypeDefImpl();
         typeDef.addProperty(new PropertyDefImpl("testDate", "date", null, null));
@@ -147,7 +147,7 @@ public class BindServiceImplNGTest extends TestCase
     {
         MockHttpServletRequest req = new MockHttpServletRequest();
 
-        req.addParameter("testNode.data[testDate]", "01 01 1999");
+        req.addParameter("testNode.testDate", "01 01 1999");
         req.addParameter("name", "testBeanName");
 
         TypeDefImpl typeDef = new TypeDefImpl("org.otherobjects.cms.binding.BeanWithDynaNodeProperty");
@@ -178,7 +178,7 @@ public class BindServiceImplNGTest extends TestCase
     {
         MockHttpServletRequest req = new MockHttpServletRequest();
 
-        req.addParameter("testNode.data[testDate]", "01 01 1999");
+        req.addParameter("testNode.testDate", "01 01 1999");
         req.addParameter("name", "testBeanName");
 
         TypeDefImpl typeDef = new TypeDefImpl("org.otherobjects.cms.binding.BeanWithDynaNodeProperty");

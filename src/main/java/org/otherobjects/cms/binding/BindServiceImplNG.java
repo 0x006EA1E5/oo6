@@ -1,7 +1,11 @@
 package org.otherobjects.cms.binding;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -10,6 +14,7 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.dao.DaoService;
@@ -42,12 +47,14 @@ public class BindServiceImplNG implements BindService
     private DaoService daoService;
 
     private ServletRequestDataBinder binder = null;
-    private HttpServletRequest request;
+    private BindServiceRequestWrapper wrappedRequest;
+
+    private Map<String, String> rewritePaths = new HashMap<String, String>();
 
     public BindingResult bind(Object item, TypeDef typeDef, HttpServletRequest request)
     {
         this.binder = new ServletRequestDataBinder(item);
-        this.request = request;
+        this.wrappedRequest = new BindServiceRequestWrapper(request);
 
         try
         {
@@ -59,7 +66,7 @@ public class BindServiceImplNG implements BindService
             e.printStackTrace();
         }
 
-        binder.bind(request);
+        binder.bind(wrappedRequest);
         return binder.getBindingResult();
     }
 
@@ -69,14 +76,16 @@ public class BindServiceImplNG implements BindService
         for (PropertyDef propertyDef : typeDef.getProperties())
         {
             // Determine path
-            String path;
+            String path = prefix + propertyDef.getName();;
             if (item instanceof DynaNode)
-                path = prefix + DYNA_NODE_DATAMAP_NAME + "[" + propertyDef.getName() + "]";
-            else
-                path = prefix + propertyDef.getName();
+            {
+                String rewrittenPath = prefix + DYNA_NODE_DATAMAP_NAME + "[" + propertyDef.getName() + "]";
+                wrappedRequest.rewriteParameter(path, rewrittenPath);
+                path = rewrittenPath;
+            }
 
             // Check if we have matching parameters
-            Map<String, String> matchingParams = WebUtils.getParametersStartingWith(request, path);
+            Map<String, String> matchingParams = WebUtils.getParametersStartingWith(wrappedRequest, path);
 
             boolean correspondingParamPresent = matchingParams.size() > 0;
 
@@ -243,6 +252,75 @@ public class BindServiceImplNG implements BindService
             return currentHighestIndex + 1;
         }
 
+    }
+
+    class BindServiceRequestWrapper extends HttpServletRequestWrapper
+    {
+        private Map<String, String[]> mutableParams = new HashMap<String, String[]>();
+
+        public BindServiceRequestWrapper(HttpServletRequest request)
+        {
+            super(request);
+            mutableParams.putAll(request.getParameterMap());
+        }
+
+        public void rewriteParameter(String originalParameterName, String newParameterName)
+        {
+            if (mutableParams.containsKey(originalParameterName) && !mutableParams.containsKey(newParameterName))
+            {
+                mutableParams.put(newParameterName, mutableParams.get(originalParameterName));
+                mutableParams.remove(originalParameterName);
+                rewritePaths.put(newParameterName, originalParameterName);
+            }
+        }
+
+        @Override
+        public String getParameter(String name)
+        {
+            String[] values = getParameterValues(name);
+            if ((values == null) || (values.length < 1))
+                return null;
+            return values[0];
+        }
+
+        @Override
+        public Map getParameterMap()
+        {
+            return Collections.unmodifiableMap(mutableParams);
+        }
+
+        @Override
+        public Enumeration getParameterNames()
+        {
+            return new IteratorEnumeration(mutableParams.keySet().iterator());
+        }
+
+        @Override
+        public String[] getParameterValues(String name)
+        {
+            return mutableParams.get(name);
+        }
+
+    }
+
+    class IteratorEnumeration implements Enumeration
+    {
+        private Iterator it = null;
+
+        public IteratorEnumeration(Iterator it)
+        {
+            this.it = it;
+        }
+
+        public boolean hasMoreElements()
+        {
+            return it.hasNext();
+        }
+
+        public Object nextElement()
+        {
+            return it.next();
+        }
     }
 
 }
