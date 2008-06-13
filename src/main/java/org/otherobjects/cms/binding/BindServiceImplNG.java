@@ -1,5 +1,6 @@
 package org.otherobjects.cms.binding;
 
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -67,7 +68,7 @@ public class BindServiceImplNG implements BindService
         }
 
         binder.bind(wrappedRequest);
-        return binder.getBindingResult();
+        return wrapBindingResult(binder.getBindingResult());
     }
 
     private void prepareObject(Object item, TypeDef typeDef, String prefix) throws Exception
@@ -321,6 +322,11 @@ public class BindServiceImplNG implements BindService
         {
             return it.next();
         }
+    }
+
+    private BindingResult wrapBindingResult(BindingResult bindingResult)
+    {
+        return (BindingResult) Proxy.newProxyInstance(bindingResult.getClass().getClassLoader(), new Class[]{BindingResult.class}, new BindingResultWrapper(bindingResult, rewritePaths));
     }
 
 }
