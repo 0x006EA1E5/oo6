@@ -97,8 +97,10 @@ public class BindServiceImplNG implements BindService
                 {
                     // instantiate list? ensure capacity?
                     List list = (List) PropertyUtils.getNestedProperty(item, path);
+                    int m;
                     if (list != null)
-                        list.clear();
+                        m = 0;
+                    //list.clear();
                     else
                         list = new ArrayList();
 
@@ -170,7 +172,7 @@ public class BindServiceImplNG implements BindService
 
         for (String paramName : listParams.keySet())
         {
-            Matcher matcher = pattern.matcher(paramName);
+            Matcher matcher = pattern.matcher(path + paramName);
             if (matcher.lookingAt())
             {
                 listProps.addIndex(Integer.parseInt(matcher.group(1)));
