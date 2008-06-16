@@ -34,6 +34,8 @@ public class ResourceScanner
     {
         try
         {
+            // TODO Make missing items from disk deleted/inactive/warned`
+            
             // Process blocks
             List<OoResource> resources = ooResourceLoader.getResources("/site/templates/blocks/");
             String path = "/designer/blocks/";
@@ -52,8 +54,8 @@ public class ResourceScanner
                 block.setLabel(code);
                 if (r.getMetaData() != null)
                 {
-                    if (r.getMetaData().getTitle() != null)
-                        block.setLabel(r.getMetaData().getTitle());
+                    if (r.getMetaData().getLabel() != null)
+                        block.setLabel(r.getMetaData().getLabel());
                     else
                         block.setDescription(r.getMetaData().getDescription());
                 }
@@ -79,8 +81,8 @@ public class ResourceScanner
                 layout.setLabel(code);
                 if (r.getMetaData() != null)
                 {
-                    if (r.getMetaData().getTitle() != null)
-                        layout.setLabel(r.getMetaData().getTitle());
+                    if (r.getMetaData().getLabel() != null)
+                        layout.setLabel(r.getMetaData().getLabel());
                     else
                         layout.setDescription(r.getMetaData().getDescription());
                 }

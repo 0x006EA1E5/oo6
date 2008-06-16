@@ -1,22 +1,27 @@
 package org.otherobjects.cms.io;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import flexjson.JSONSerializer;
 
 /**
  * Simple bean to hold metaData for {@link OoResource}s. It's toString() method produces a JSON string
+ * 
+ * FIXME Finalise resource metaData content
+ * 
  * @author joerg
- *
  */
 public class OoResourceMetaData
 {
-    private String title;
+    private String label;
     private String description;
     private String author;
     private Long userdId;
     private Date modificationTimestamp;
     private Date creationDate;
+    private HashMap<String, String> properties = new HashMap<String, String>();
 
     @Override
     public String toString()
@@ -28,14 +33,14 @@ public class OoResourceMetaData
         return buf.toString();
     }
 
-    public String getTitle()
+    public String getLabel()
     {
-        return title;
+        return label;
     }
 
-    public void setTitle(String title)
+    public void setLabel(String label)
     {
-        this.title = title;
+        this.label = label;
     }
 
     public String getDescription()
@@ -88,4 +93,13 @@ public class OoResourceMetaData
         this.creationDate = creationDate;
     }
 
+    public HashMap<String, String> getProperties()
+    {
+        return properties;
+    }
+
+    public void setProperties(HashMap<String, String> properties)
+    {
+        this.properties = properties;
+    }
 }
