@@ -71,22 +71,17 @@ public class BindServiceImplNG implements BindService
         return wrapBindingResult(binder.getBindingResult());
     }
 
-    private void prepareObject(Object item, TypeDef typeDef, String prefix) throws Exception
+    private void prepareObject(Object item, TypeDef typeDef, String rootPathPrefix) throws Exception
     {
         // iterate all props
         for (PropertyDef propertyDef : typeDef.getProperties())
         {
             // Determine path
-            String path = prefix + propertyDef.getName();;
-            if (item instanceof DynaNode)
-            {
-                String rewrittenPath = prefix + DYNA_NODE_DATAMAP_NAME + "[" + propertyDef.getName() + "]";
-                wrappedRequest.rewriteParameter(path, rewrittenPath);
-                path = rewrittenPath;
-            }
+            String path = calcPropertyPath(item, propertyDef, rootPathPrefix);
+            String rootPath = rootPathPrefix + path;
 
             // Check if we have matching parameters
-            Map<String, String> matchingParams = WebUtils.getParametersStartingWith(wrappedRequest, path);
+            Map<String, String> matchingParams = WebUtils.getParametersStartingWith(wrappedRequest, rootPath);
 
             boolean correspondingParamPresent = matchingParams.size() > 0;
 
@@ -97,36 +92,36 @@ public class BindServiceImplNG implements BindService
                 {
                     // instantiate list? ensure capacity?
                     List list = (List) PropertyUtils.getNestedProperty(item, path);
-                    int m;
                     if (list != null)
-                        m = 0;
-                    //list.clear();
+                        list.clear();
                     else
+                    {
                         list = new ArrayList();
+                        PropertyUtils.setNestedProperty(item, path, list);
+                    }
 
-                    ListProps listProps = calcListProps(path, matchingParams);
+                    ListProps listProps = calcListProps(rootPath, matchingParams);
                     sizeList(list, listProps.getRequiredSize());
 
-                    if (propertyDef.getRelatedType().equals("reference"))
+                    if (propertyDef.getCollectionElementType().equals("reference"))
                     {
                         // register suitable PropertyEditor
                         String relatedType = propertyDef.getRelatedType();
                         Class relatedPropertyClass = Class.forName(relatedType);
 
-                        binder.registerCustomEditor(CmsNode.class, path, new CmsNodeReferenceEditor(daoService, relatedType));
+                        binder.registerCustomEditor(CmsNode.class, rootPath, new CmsNodeReferenceEditor(daoService, relatedType));
                     }
-                    else if (propertyDef.getRelatedType().equals("component"))
+                    else if (propertyDef.getCollectionElementType().equals("component"))
                     {
                         // populate each used list index with a component instance if none there
                         for (Integer ind : listProps.getUsedIndices())
                         {
-                            String listItemPath = path + "[" + ind + "]";
-                            prepareComponent(item, propertyDef, listItemPath);
+                            prepareComponent(item, propertyDef, ind, rootPathPrefix);
                         }
                     }
                     else
                     {
-                        binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), path, propertyDef.getPropertyEditor());
+                        binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), rootPath, propertyDef.getPropertyEditor());
                     }
                 }
                 else if (propertyDef.getType().equals("reference")) // deal with references
@@ -135,34 +130,57 @@ public class BindServiceImplNG implements BindService
                     String relatedType = propertyDef.getRelatedType();
                     Class relatedPropertyClass = Class.forName(relatedType);
 
-                    binder.registerCustomEditor(CmsNode.class, path, new CmsNodeReferenceEditor(daoService, relatedType));
+                    binder.registerCustomEditor(CmsNode.class, rootPath, new CmsNodeReferenceEditor(daoService, relatedType));
                 }
                 else if (propertyDef.getType().equals("component"))// deal with components
                 {
-                    prepareComponent(item, propertyDef, path);
+                    prepareComponent(item, propertyDef, rootPathPrefix);
                 }
                 else
                 // simple props
                 {
-                    binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), path, propertyDef.getPropertyEditor());
+                    binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), rootPath, propertyDef.getPropertyEditor());
                 }
             }
         }
     }
 
-    private void prepareComponent(Object parent, PropertyDef propertyDef, String path) throws Exception
+    private String calcPropertyPath(Object item, PropertyDef propertyDef, String rootPathPrefix)
     {
-        BaseNode component = (BaseNode) PropertyUtils.getNestedProperty(parent, path);
+        if (item instanceof DynaNode)
+        {
+            String propertyPath = DYNA_NODE_DATAMAP_NAME + "[" + propertyDef.getName() + "]";
+            wrappedRequest.rewriteParameter(rootPathPrefix + propertyDef.getName(), rootPathPrefix + propertyPath);
+            return propertyPath;
+        }
+        else
+            return propertyDef.getName();
+    }
+
+    private void prepareComponent(Object item, PropertyDef propertyDef, String rootPathPrefix) throws Exception
+    {
+        prepareComponent(item, propertyDef, null, rootPathPrefix);
+
+    }
+
+    private void prepareComponent(Object parent, PropertyDef propertyDef, Integer index, String rootPathPrefix) throws Exception
+    {
+        String propertyPath = calcPropertyPath(parent, propertyDef, rootPathPrefix);
+
+        if (index != null)
+            propertyPath += "[" + index + "]";
+
+        BaseNode component = (BaseNode) PropertyUtils.getNestedProperty(parent, propertyPath);
 
         if (component == null)
         {
             // Create object if null 
             component = createObject(propertyDef);
-            PropertyUtils.setNestedProperty(parent, path, component);
+            PropertyUtils.setNestedProperty(parent, propertyPath, component);
         }
 
         // Recurse into the component
-        prepareObject(component, component.getTypeDef(), path + ".");
+        prepareObject(component, component.getTypeDef(), rootPathPrefix + propertyPath + ".");
     }
 
     public ListProps calcListProps(String path, Map<String, String> listParams)
