@@ -32,8 +32,8 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.util.WebUtils;
 
 /**
- *
- * TODO Improve simple property support: Date
+ * 
+ * 
  */
 @Scope("prototype")
 public class BindServiceImplNG implements BindService
@@ -41,8 +41,6 @@ public class BindServiceImplNG implements BindService
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private static final String DYNA_NODE_DATAMAP_NAME = "data";
-
-    private String dateFormat;
 
     @Resource
     private DaoService daoService;
@@ -238,11 +236,6 @@ public class BindServiceImplNG implements BindService
         {
             list.add(null);
         }
-    }
-
-    public void setDateFormat(String dateFormat)
-    {
-        this.dateFormat = dateFormat;
     }
 
     public void setDaoService(DaoService daoService)

@@ -4,11 +4,13 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MockGenericDao implements GenericDao
 {
     private Object mockObject;
     private List<Object> allObjects;
+    private Map<String, Object> keyedObjects;
 
     public MockGenericDao(Object mockObject)
     {
@@ -22,6 +24,11 @@ public class MockGenericDao implements GenericDao
         this.allObjects = mockObjects;
     }
 
+    public MockGenericDao(Map<String, Object> mockObjects)
+    {
+        this.keyedObjects = mockObjects;
+    }
+
     public boolean exists(Serializable id)
     {
         return this.mockObject != null;
@@ -29,7 +36,10 @@ public class MockGenericDao implements GenericDao
 
     public Object get(Serializable id)
     {
-        return this.mockObject;
+        if (keyedObjects.containsKey(id))
+            return keyedObjects.get(id);
+        else
+            return this.mockObject;
     }
 
     public List getAll()
