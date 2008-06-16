@@ -36,21 +36,33 @@ def createDbFolder(dao, path, label, mainType) {
 	return f
 }
 
+
 def createArticle(dao, path, title, content) {
 
     def a = dao.getByPath(path)
     if (a) return a;
 
-    a = new org.otherobjects.cms.model.Article();
+    a = new DynaNode("com.othermedia.site.model.Article");
     a.jcrPath = path
-    a.title = title
-    a.content = content
+    a.data.title = title
+    a.data.content = content
 
-    a = dao.save(a)
+    a = dao.save(a, false)
     if (!a.published)
         dao.publish(a, null)
     return a
 }
+
+
+
+TypeDefImpl a = new TypeDefImpl();
+a.setName("com.othermedia.site.model.Article");
+a.addProperty(new PropertyDefImpl("code", "string", null, null, true));
+a.addProperty(new PropertyDefImpl("title", "string", null, null, true));
+a.addProperty(new PropertyDefImpl("abstract", "text", null, null));
+a.addProperty(new PropertyDefImpl("content", "text", null, null));
+a.setLabelProperty("title");
+typeService.registerType(a);
 
 // Create base structure
 createFolder(dao, "/smart", "\${smartFolders.label}", "smart-folders")
