@@ -74,18 +74,17 @@ public class BindServiceImplNG2Test extends TestCase
         block2.setId("e90e78b7-fe89-43cf-bf6a-0ce4367206ca");
         block2.setDescription("block2");
 
-        // setup mock dao
+        List<TemplateRegion> regions = new ArrayList<TemplateRegion>();
+        regions.add(null);
+        regions.add(column2);
+        rootItem.setRegions(regions);
 
+        // setup mock dao
         Map<String, Object> objects = new HashMap<String, Object>();
         objects.put(layout.getId(), layout);
         objects.put(block1.getId(), block1);
         objects.put(block2.getId(), block2);
         MockGenericDao dao = new MockGenericDao(objects);
-
-        List<TemplateRegion> regions = new ArrayList<TemplateRegion>();
-        regions.add(null);
-        regions.add(column2);
-        rootItem.setRegions(regions);
 
         BindServiceImplNG bs = new BindServiceImplNG();
         bs.setDaoService(new MockDaoService(dao));
@@ -96,9 +95,14 @@ public class BindServiceImplNG2Test extends TestCase
 
         assertEquals("Client", rootItem.getLabel());
         assertNotNull(PropertyUtils.getNestedProperty(rootItem, "regions[0]"));
+        assertNotNull(PropertyUtils.getNestedProperty(rootItem, "regions[1]"));
         assertNotNull(PropertyUtils.getNestedProperty(rootItem, "regions[0].blocks[0]"));
+        assertEquals("column-1", PropertyUtils.getNestedProperty(rootItem, "regions[0].code"));
+        assertEquals("column-2", PropertyUtils.getNestedProperty(rootItem, "regions[1].code"));
+        assertNotNull(PropertyUtils.getNestedProperty(rootItem, "regions[1].blocks[0]"));
 
         assertEquals("block1", PropertyUtils.getNestedProperty(rootItem, "regions[0].blocks[0].description"));
+        assertEquals("block2", PropertyUtils.getNestedProperty(rootItem, "regions[1].blocks[0].description"));
 
     }
 }
