@@ -54,7 +54,6 @@ public class BindServiceImplNGTest extends TestCase
     {
         super.setUp();
         this.bindService = new BindServiceImplNG();
-        this.bindService.setDateFormat(this.dateFormat);
         //this.bindService.setDaoService(this.daoService);
         SingletonBeanLocator.registerTestBean("typeService", typeService);
         typeService.registerType(typeDefBuilder.getTypeDef(TestObject.class));
