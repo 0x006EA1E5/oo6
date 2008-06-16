@@ -24,7 +24,8 @@ public class SiteFolder extends BaseNode implements Folder, SiteItem
     private List<String> allowedTypes;
     private Url url;
     private boolean inMenu = true;
-
+    private String tags;
+    
     @Override
     public boolean isFolder()
     {
