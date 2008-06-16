@@ -9,6 +9,7 @@ Final TODO
 * Auto Tool/Directive discovery and model population
 * Templated error page and log to debug email too
 * Unit tests for controllers and templates
+* Ajax template editor
 
 Small tasks:
 
