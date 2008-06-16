@@ -2,11 +2,7 @@ package org.otherobjects.cms.binding;
 
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,7 +11,6 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.dao.DaoService;
@@ -29,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.util.WebUtils;
 
 /**
@@ -46,14 +42,12 @@ public class BindServiceImplNG implements BindService
     private DaoService daoService;
 
     private ServletRequestDataBinder binder = null;
-    private BindServiceRequestWrapper wrappedRequest;
-
-    private Map<String, String> rewritePaths = new HashMap<String, String>();
+    private HttpServletRequestModifier wrappedRequest;
 
     public BindingResult bind(Object item, TypeDef typeDef, HttpServletRequest request)
     {
         this.binder = new ServletRequestDataBinder(item);
-        this.wrappedRequest = new BindServiceRequestWrapper(request);
+        this.wrappedRequest = wrapRequest(request);
 
         try
         {
@@ -268,78 +262,19 @@ public class BindServiceImplNG implements BindService
 
     }
 
-    class BindServiceRequestWrapper extends HttpServletRequestWrapper
-    {
-        private Map<String, String[]> mutableParams = new HashMap<String, String[]>();
-
-        public BindServiceRequestWrapper(HttpServletRequest request)
-        {
-            super(request);
-            mutableParams.putAll(request.getParameterMap());
-        }
-
-        public void rewriteParameter(String originalParameterName, String newParameterName)
-        {
-            if (mutableParams.containsKey(originalParameterName) && !mutableParams.containsKey(newParameterName))
-            {
-                mutableParams.put(newParameterName, mutableParams.get(originalParameterName));
-                mutableParams.remove(originalParameterName);
-                rewritePaths.put(newParameterName, originalParameterName);
-            }
-        }
-
-        @Override
-        public String getParameter(String name)
-        {
-            String[] values = getParameterValues(name);
-            if ((values == null) || (values.length < 1))
-                return null;
-            return values[0];
-        }
-
-        @Override
-        public Map getParameterMap()
-        {
-            return Collections.unmodifiableMap(mutableParams);
-        }
-
-        @Override
-        public Enumeration getParameterNames()
-        {
-            return new IteratorEnumeration(mutableParams.keySet().iterator());
-        }
-
-        @Override
-        public String[] getParameterValues(String name)
-        {
-            return mutableParams.get(name);
-        }
-
-    }
-
-    class IteratorEnumeration implements Enumeration
-    {
-        private Iterator it = null;
-
-        public IteratorEnumeration(Iterator it)
-        {
-            this.it = it;
-        }
-
-        public boolean hasMoreElements()
-        {
-            return it.hasNext();
-        }
-
-        public Object nextElement()
-        {
-            return it.next();
-        }
-    }
-
     private BindingResult wrapBindingResult(BindingResult bindingResult)
     {
-        return (BindingResult) Proxy.newProxyInstance(bindingResult.getClass().getClassLoader(), new Class[]{BindingResult.class}, new BindingResultWrapper(bindingResult, rewritePaths));
+        return (BindingResult) Proxy.newProxyInstance(bindingResult.getClass().getClassLoader(), new Class[]{BindingResult.class}, new BindingResultWrapper(bindingResult, wrappedRequest
+                .getRewrittenPaths()));
+    }
+
+    private HttpServletRequestModifier wrapRequest(HttpServletRequest request)
+    {
+        if (request instanceof MultipartHttpServletRequest)
+            return (HttpServletRequestModifier) Proxy.newProxyInstance(request.getClass().getClassLoader(), new Class[]{HttpServletRequestModifier.class, MultipartHttpServletRequest.class},
+                    new BindingRequestWrapper(request));
+        else
+            return (HttpServletRequestModifier) Proxy.newProxyInstance(request.getClass().getClassLoader(), new Class[]{HttpServletRequestModifier.class}, new BindingRequestWrapper(request));
     }
 
 }
