@@ -212,6 +212,7 @@ Developer features
 * Scripting the workbench: global search and replace. Bulk actions.
 * Tested staging workflow for site updates
 ? Incremental updates (via SVN)
+* Line precise error reporting
 * Migration tooling
 
 Hosting

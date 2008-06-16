@@ -16,6 +16,7 @@ Small tasks:
 * Hibernate naming strategy (eg for tables)
 * Range selector out-of-range
 * Fallback JavaImageResizer
+* Show all system props in debug esp file.encoding
 * JCR Picklists and properties
 
 CMS features:
