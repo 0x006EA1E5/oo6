@@ -1,5 +1,6 @@
 package org.otherobjects.cms.binding;
 
+import java.beans.PropertyEditor;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,6 +20,8 @@ import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
+import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.cms.types.annotation.PropertyType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
@@ -28,8 +31,14 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.util.WebUtils;
 
 /**
+ * BindServiceImplNG is a service around Spring's {@link ServletRequestDataBinder} that pre- and postprocesses the data binding input/output.
+ * It uses a target objects metadata available through {@link TypeService} to 
+ * <ul>
+ *  <li>register suitable {@link PropertyEditor PropertyEditors} </li>
+ *  <li>instantiate missing object graph branches on the target object</li>
+ * </ul>
  * 
- * 
+ * It must be used prototype scoped when used as a Spring bean (as is intended).
  */
 @Scope("prototype")
 public class BindServiceImplNG implements BindService
@@ -44,6 +53,9 @@ public class BindServiceImplNG implements BindService
     private ServletRequestDataBinder binder = null;
     private HttpServletRequestModifier wrappedRequest;
 
+    /**
+     * 
+     */
     public BindingResult bind(Object item, TypeDef typeDef, HttpServletRequest request)
     {
         this.binder = new ServletRequestDataBinder(item);
@@ -63,6 +75,23 @@ public class BindServiceImplNG implements BindService
         return wrapBindingResult(binder.getBindingResult());
     }
 
+    /**
+     * Recursive method that walks the object graph does
+     * <ul>
+     *  <li>instantiate {@link PropertyType#LIST list} and {@link PropertyType#COMPONENT component} type child objects if required</li>
+     *  <li>sizes {@link PropertyType#LIST lists} according to the given set of request parameters</li>
+     *  <li>rewrites parameters destined for {@link DynaNode DynaNodes} (as we want to avoid having to create parameters like 
+     *  person.address[street1] instead of person.address.street1)</li>
+     *  <li>registers suitable {@link PropertyEditor PropertyEditors} for {@link PropertyType#REFERENCE references} and simple properties</li>
+     *  <li>maintains the full parameter path from root in order to find the correct params for the given item</li>
+     * </ul>
+     * 
+     * It always uses the passed in typeDef to calculate the property paths to use with {@link PropertyUtils} for getting and setting objects on the graph.
+     * @param item
+     * @param typeDef
+     * @param rootPathPrefix
+     * @throws Exception
+     */
     private void prepareObject(Object item, TypeDef typeDef, String rootPathPrefix) throws Exception
     {
         // iterate all props
@@ -137,6 +166,15 @@ public class BindServiceImplNG implements BindService
         }
     }
 
+    /**
+     * Get the correct parameter path String for the given {@link PropertyDef}, which will just be the name of the property or - if the item is a 
+     * {@link DynaNode} - {@link #DYNA_NODE_DATAMAP_NAME}[propertyName] (to work with Springs data binding map syntax)
+     * 
+     * @param item
+     * @param propertyDef
+     * @param rootPathPrefix
+     * @return
+     */
     private String calcPropertyPath(Object item, PropertyDef propertyDef, String rootPathPrefix)
     {
         if (item instanceof DynaNode)
@@ -175,6 +213,13 @@ public class BindServiceImplNG implements BindService
         prepareObject(component, component.getTypeDef(), rootPathPrefix + propertyPath + ".");
     }
 
+    /**
+     * Finds all request parameters that are relevant to the list property referenced by path
+     *  
+     * @param path - path refering to a list property
+     * @param listParams - params that start with path (not including path itself)
+     * @return
+     */
     public ListProps calcListProps(String path, Map<String, String> listParams)
     {
         ListProps listProps = new ListProps();
@@ -220,6 +265,11 @@ public class BindServiceImplNG implements BindService
         return relatedTypeInstance;
     }
 
+    /**
+     * Adds null values to the given list until list size matches size
+     * @param list
+     * @param size
+     */
     private void sizeList(List<?> list, int size)
     {
         int initialSize = list.size();
@@ -262,12 +312,22 @@ public class BindServiceImplNG implements BindService
 
     }
 
+    /**
+     * 
+     * @param bindingResult
+     * @return
+     */
     private BindingResult wrapBindingResult(BindingResult bindingResult)
     {
         return (BindingResult) Proxy.newProxyInstance(bindingResult.getClass().getClassLoader(), new Class[]{BindingResult.class}, new BindingResultWrapper(bindingResult, wrappedRequest
                 .getRewrittenPaths()));
     }
 
+    /**
+     * wraps the given request in a proxy that effectively allows you to rewrite request parameter names
+     * @param request
+     * @return 
+     */
     private HttpServletRequestModifier wrapRequest(HttpServletRequest request)
     {
         if (request instanceof MultipartHttpServletRequest)
