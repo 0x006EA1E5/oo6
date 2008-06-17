@@ -55,6 +55,10 @@ import flexjson.JSON;
  */
 public class PropertyDefImpl implements PropertyDef, Ordered
 {
+    private static String dateFormat = null;
+    private static String timeFormat = null;
+    private static String timestampFormat = null;
+
     /** Property name. */
     private String name;
 
@@ -99,6 +103,10 @@ public class PropertyDefImpl implements PropertyDef, Ordered
 
     /** Reference to parent TypeDef. */
     private TypeDef parentTypeDef;
+
+    /** A propertyEditor  instance used when binding this property. Can be left null in which case default propertyEditors will be used. 
+     * But if you have specific data binding requirements this is a good way of specifying them */
+    private PropertyEditor propertyEditor;
 
     private int order = Ordered.LOWEST_PRECEDENCE;
 
@@ -161,27 +169,38 @@ public class PropertyDefImpl implements PropertyDef, Ordered
     @JSON(include = false)
     public PropertyEditor getPropertyEditor()
     {
-        PropertyEditor propertyEditor = null;
-        //ignore string as they never need PropertyEditors to be converted
-        TypeServiceImpl typeService = (TypeServiceImpl) getTypeService();
-        Class propertyEditorTargetClass = typeService.getClassForType(this.type);
-        Assert.notNull(propertyEditorTargetClass, "The target class must not be null. Cases in which getClassForType would return null should've been handled upstream");
-        if (!typeService.getClassForType(this.type).equals(String.class))
+        if (this.propertyEditor == null)
         {
-            if (typeService.getClassForType(this.type).equals(Boolean.class))
-                propertyEditor = new CustomBooleanEditor(false);
-            else if (typeService.getClassForType(this.type).equals(Long.class))
-                propertyEditor = new CustomNumberEditor(Long.class, true);
-            else if (typeService.getClassForType(this.type).equals(BigDecimal.class))
-                propertyEditor = new CustomNumberEditor(BigDecimal.class, true);
-            else if (typeService.getClassForType(this.type).equals(Date.class))
+            //ignore string as they never need PropertyEditors to be converted
+            TypeServiceImpl typeService = (TypeServiceImpl) getTypeService();
+            Class propertyEditorTargetClass = typeService.getClassForType(this.type);
+            Assert.notNull(propertyEditorTargetClass, "The target class must not be null. Cases in which getClassForType would return null should've been handled upstream");
+            if (!typeService.getClassForType(this.type).equals(String.class))
             {
-                if (this.type.equals("date"))
-                    propertyEditor = new CustomDateEditor(new SimpleDateFormat("dd MM yyyy"), true); //FIXME, these need to be set globally somewhere
-                else if (this.type.equals("time"))
-                    propertyEditor = new CustomDateEditor(new SimpleDateFormat("hh:mm:ss"), true);
-                else if (this.type.equals("timestamp"))
-                    propertyEditor = new CustomDateEditor(new SimpleDateFormat("dd MM yyyy hh:mm:ss"), true);
+                if (typeService.getClassForType(this.type).equals(Boolean.class))
+                    propertyEditor = new CustomBooleanEditor(false);
+                else if (typeService.getClassForType(this.type).equals(Long.class))
+                    propertyEditor = new CustomNumberEditor(Long.class, true);
+                else if (typeService.getClassForType(this.type).equals(BigDecimal.class))
+                    propertyEditor = new CustomNumberEditor(BigDecimal.class, true);
+                else if (typeService.getClassForType(this.type).equals(Date.class))
+                {
+                    if (this.type.equals("date"))
+                    {
+                        Assert.notNull(dateFormat, "No dateFormat set in PropertyTypeDefImpl");
+                        propertyEditor = new CustomDateEditor(new SimpleDateFormat(dateFormat), true); //FIXME, these need to be set globally somewhere
+                    }
+                    else if (this.type.equals("time"))
+                    {
+                        Assert.notNull(timeFormat, "No timeFormat set in PropertyTypeDefImpl");
+                        propertyEditor = new CustomDateEditor(new SimpleDateFormat(timeFormat), true);
+                    }
+                    else if (this.type.equals("timestamp"))
+                    {
+                        Assert.notNull(timestampFormat, "No timestampFormat set in PropertyTypeDefImpl");
+                        propertyEditor = new CustomDateEditor(new SimpleDateFormat(timestampFormat), true);
+                    }
+                }
             }
         }
         return propertyEditor;
@@ -341,6 +360,21 @@ public class PropertyDefImpl implements PropertyDef, Ordered
     public void setOrder(int order)
     {
         this.order = order;
+    }
+
+    public static void setDateFormat(String dateFormat)
+    {
+        PropertyDefImpl.dateFormat = dateFormat;
+    }
+
+    public static void setTimeFormat(String timeFormat)
+    {
+        PropertyDefImpl.timeFormat = timeFormat;
+    }
+
+    public static void setTimestampFormat(String timestampFormat)
+    {
+        PropertyDefImpl.timestampFormat = timestampFormat;
     }
 
 }

@@ -12,10 +12,12 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.OrderComparator;
 import org.springframework.util.Assert;
 
@@ -24,11 +26,20 @@ import org.springframework.util.Assert;
  * 
  * @author rich
  */
-public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder
+public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder, InitializingBean
 {
+    private OtherObjectsConfigurator otherObjectsConfigurator;
+
     public TypeDef getTypeDef(String type) throws Exception
     {
         return getTypeDef(Class.forName(type));
+    }
+
+    private void initialisePropertyFormats()
+    {
+        PropertyDefImpl.setDateFormat(otherObjectsConfigurator.getProperty("otherobjects.default.date.format"));
+        PropertyDefImpl.setTimeFormat(otherObjectsConfigurator.getProperty("otherobjects.default.time.format"));
+        PropertyDefImpl.setTimestampFormat(otherObjectsConfigurator.getProperty("otherobjects.default.timestamp.format"));
     }
 
     @SuppressWarnings("unchecked")
@@ -201,6 +212,16 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder
             return matcher.group(1).toLowerCase() + matcher.group(2);
         else
             throw new OtherObjectsException("The annotated method " + methodName + " doesn't seem to follow bean style conventions");
+    }
+
+    public void setOtherObjectsConfigurator(OtherObjectsConfigurator otherObjectsConfigurator)
+    {
+        this.otherObjectsConfigurator = otherObjectsConfigurator;
+    }
+
+    public void afterPropertiesSet() throws Exception
+    {
+        initialisePropertyFormats();
     }
 
 }

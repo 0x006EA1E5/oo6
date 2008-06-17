@@ -3,6 +3,7 @@ package org.otherobjects.cms.dao;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +11,7 @@ public class MockGenericDao implements GenericDao
 {
     private Object mockObject;
     private List<Object> allObjects;
-    private Map<String, Object> keyedObjects;
+    private Map<String, Object> keyedObjects = Collections.EMPTY_MAP;
 
     public MockGenericDao(Object mockObject)
     {
