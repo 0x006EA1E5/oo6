@@ -4,7 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-public interface HttpServletRequestModifier extends HttpServletRequest
+public interface MutableHttpServletRequest extends HttpServletRequest
 {
     public void rewriteParameter(String originalParameterName, String newParameterName);
 

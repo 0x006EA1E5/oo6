@@ -51,7 +51,7 @@ public class BindServiceImplNG implements BindService
     private DaoService daoService;
 
     private ServletRequestDataBinder binder = null;
-    private HttpServletRequestModifier wrappedRequest;
+    private MutableHttpServletRequest wrappedRequest;
 
     /**
      * 
@@ -328,13 +328,13 @@ public class BindServiceImplNG implements BindService
      * @param request
      * @return 
      */
-    private HttpServletRequestModifier wrapRequest(HttpServletRequest request)
+    private MutableHttpServletRequest wrapRequest(HttpServletRequest request)
     {
         if (request instanceof MultipartHttpServletRequest)
-            return (HttpServletRequestModifier) Proxy.newProxyInstance(request.getClass().getClassLoader(), new Class[]{HttpServletRequestModifier.class, MultipartHttpServletRequest.class},
+            return (MutableHttpServletRequest) Proxy.newProxyInstance(request.getClass().getClassLoader(), new Class[]{MutableHttpServletRequest.class, MultipartHttpServletRequest.class},
                     new BindingRequestWrapper(request));
         else
-            return (HttpServletRequestModifier) Proxy.newProxyInstance(request.getClass().getClassLoader(), new Class[]{HttpServletRequestModifier.class}, new BindingRequestWrapper(request));
+            return (MutableHttpServletRequest) Proxy.newProxyInstance(request.getClass().getClassLoader(), new Class[]{MutableHttpServletRequest.class}, new BindingRequestWrapper(request));
     }
 
 }

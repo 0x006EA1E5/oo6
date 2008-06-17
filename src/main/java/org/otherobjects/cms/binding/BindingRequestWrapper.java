@@ -26,8 +26,8 @@ public class BindingRequestWrapper implements InvocationHandler
             overiddenMethods.put(HttpServletRequest.class.getMethod("getParameterMap", new Class[]{}), SpecialMethods.GETPARAMETERMAP);
             overiddenMethods.put(HttpServletRequest.class.getMethod("getParameterNames", new Class[]{}), SpecialMethods.GETPARAMETERNAMES);
             overiddenMethods.put(HttpServletRequest.class.getMethod("getParameterValues", new Class[]{String.class}), SpecialMethods.GETPARAMETERVALUES);
-            overiddenMethods.put(HttpServletRequestModifier.class.getMethod("rewriteParameter", new Class[]{String.class, String.class}), SpecialMethods.REWRITEPARAMETER);
-            overiddenMethods.put(HttpServletRequestModifier.class.getMethod("getRewrittenPaths", new Class[]{}), SpecialMethods.GETREWRITTENPATHS);
+            overiddenMethods.put(MutableHttpServletRequest.class.getMethod("rewriteParameter", new Class[]{String.class, String.class}), SpecialMethods.REWRITEPARAMETER);
+            overiddenMethods.put(MutableHttpServletRequest.class.getMethod("getRewrittenPaths", new Class[]{}), SpecialMethods.GETREWRITTENPATHS);
         }
         catch (Exception e)
         {
