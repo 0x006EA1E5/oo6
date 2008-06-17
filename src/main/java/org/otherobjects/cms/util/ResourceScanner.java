@@ -8,9 +8,11 @@ import javax.annotation.Resource;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.io.OoResourceLoader;
+import org.otherobjects.cms.io.OoResourceMetaData;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.TemplateBlock;
 import org.otherobjects.cms.model.TemplateLayout;
+import org.otherobjects.cms.types.TypeService;
 
 /**
  * Scans resources on disk and updates their meta data in the data store.
@@ -30,12 +32,15 @@ public class ResourceScanner
     @Resource
     private OoResourceLoader ooResourceLoader;
 
+    @Resource
+    private TypeService typeService;
+    
     public void updateResources()
     {
         try
         {
             // TODO Make missing items from disk deleted/inactive/warned`
-            
+
             // Process blocks
             List<OoResource> resources = ooResourceLoader.getResources("/site/templates/blocks/");
             String path = "/designer/blocks/";
@@ -52,13 +57,21 @@ public class ResourceScanner
                 }
                 block.setCode(code);
                 block.setLabel(code);
-                if (r.getMetaData() != null)
+                OoResourceMetaData metaData = r.getMetaData();
+                if (metaData != null)
                 {
-                    if (r.getMetaData().getLabel() != null)
-                        block.setLabel(r.getMetaData().getLabel());
+                    if (metaData.getTitle() != null)
+                        block.setLabel(metaData.getTitle());
                     else
-                        block.setDescription(r.getMetaData().getDescription());
+                        block.setDescription(metaData.getDescription());
+                    if (metaData.getKeywords() != null && metaData.getKeywords().contains("global"))
+                        block.setGlobal(true);
+                    
+                    if(metaData.getTypeDef()!=null)
+                        typeService.registerType(metaData.getTypeDef());
+                    
                 }
+
                 dao.save(block);
                 dao.publish(block, null);
             }
@@ -81,8 +94,8 @@ public class ResourceScanner
                 layout.setLabel(code);
                 if (r.getMetaData() != null)
                 {
-                    if (r.getMetaData().getLabel() != null)
-                        layout.setLabel(r.getMetaData().getLabel());
+                    if (r.getMetaData().getTitle() != null)
+                        layout.setLabel(r.getMetaData().getTitle());
                     else
                         layout.setDescription(r.getMetaData().getDescription());
                 }

@@ -122,32 +122,32 @@
 				</plugin>
 			-->
 			<!--  Documentation generation 
-			<plugin>
+				<plugin>
 				<groupId>org.jboss.maven.plugins</groupId>
 				<artifactId>maven-jdocbook-plugin</artifactId>
 				<extensions>true</extensions>
 				<configuration>
-					<formats>
-						<format>
-							<formatName>pdf</formatName>
-							<stylesheetResource>file:${basedir}/src/main/docbook/xslt/pdf/main-pdf.xsl</stylesheetResource>
-						</format>
-						<format>
-							<formatName>html</formatName>
-						</format>
-					</formats>
-					<sourceDocumentName>${docbook.name}.xml</sourceDocumentName>
-					<imageResource>
-						<directory>src/main/docbook/images</directory>
-						<targetPath>images</targetPath>
-						<filtering>false</filtering>
-					</imageResource>
-					<options>
-						<useRelativeImageUris>false</useRelativeImageUris>
-						<xincludeSupported>false</xincludeSupported>
-					</options>
+				<formats>
+				<format>
+				<formatName>pdf</formatName>
+				<stylesheetResource>file:${basedir}/src/main/docbook/xslt/pdf/main-pdf.xsl</stylesheetResource>
+				</format>
+				<format>
+				<formatName>html</formatName>
+				</format>
+				</formats>
+				<sourceDocumentName>${docbook.name}.xml</sourceDocumentName>
+				<imageResource>
+				<directory>src/main/docbook/images</directory>
+				<targetPath>images</targetPath>
+				<filtering>false</filtering>
+				</imageResource>
+				<options>
+				<useRelativeImageUris>false</useRelativeImageUris>
+				<xincludeSupported>false</xincludeSupported>
+				</options>
 				</configuration>
-			</plugin>-->
+				</plugin>-->
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
@@ -945,6 +945,11 @@
 			<groupId>org.codehaus.jettison</groupId>
 			<artifactId>jettison</artifactId>
 			<version>1.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20070829</version>
 		</dependency>
 		<!-- Testing only -->
 		<dependency>

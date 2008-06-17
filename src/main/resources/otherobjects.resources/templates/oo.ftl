@@ -85,7 +85,7 @@ Macro to insert region
 <#macro region template regionCode>
 
 <div class="oo-region" id="oo-region-${regionCode}">
-<#list template.getRegion(regionCode).blocks as block>
+<#list (template.getRegion(regionCode)!).blocks! as block>
 <@oo.block block.code block.global />
 </#list>
 </div>

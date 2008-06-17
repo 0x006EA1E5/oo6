@@ -1,43 +1,48 @@
 package org.otherobjects.cms.io;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import junit.framework.TestCase;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
+import org.json.JSONException;
+import org.otherobjects.cms.types.TypeDefImpl;
 
 public class OoResourceMetaDataTest extends TestCase
 {
 
-    public static final String TEST_JSON_METADATA = "{\n\"metaData\":{\"author\":\"author value\",\"creationDate\":1199142000000,"
-            + "\"description\":\"description value\",\"modificationTimestamp\":1199142000000,\"label\":\"title value\",\"userdId\":5\n}}";
+    public static final String TEST_JSON_METADATA = "{\"author\":\"author value\",\"description\":\"description value\",\"title\":\"title value\",\"keywords\":\"keyword value\"\n, "
+            + "typeDef:{name:\"ProductsBlock\",labelProperty:\"title\",properties:[ {name:\"code\", type:\"string\"}, {name:\"title\", type:\"string\"} ]}}}";
 
     public void testSerialise() throws ParseException
     {
         OoResourceMetaData md = new OoResourceMetaData();
-        md.setLabel("title value");
-        md.setDescription("description value");
-        md.setAuthor("author value");
-        md.setCreationDate(new SimpleDateFormat("dd MM yyyy").parse("01 01 2008"));
-        md.setModificationTimestamp(new SimpleDateFormat("dd MM yyyy").parse("01 01 2008"));
-        md.setUserdId(new Long(5));
 
-        System.out.println(md.toString());
+        md.setTitle("title value");
+        md.setDescription("description value");
+        md.setKeywords("keyword value");
+        md.setAuthor("author value");
+
+        String json = md.toJSON();
+        System.out.println(json);
+
+        assertTrue(json.contains("\"title\":\"title value\""));
+        assertTrue(json.contains("\"description\":\"description value\""));
+        assertTrue(json.contains("\"keywords\":\"keyword value\""));
+        assertTrue(json.contains("\"author\":\"author value\""));
 
     }
 
-    public void testDeserialize()
+    public void testDeserialize() throws JSONException
     {
-        String json = TEST_JSON_METADATA;
-
-        XStream xstream = new XStream(new JettisonMappedXmlDriver());
-        xstream.registerConverter(new JsonXstreamDateConverter());
-        xstream.alias("metaData", OoResourceMetaData.class);
-        OoResourceMetaData ooResourceMetaData = (OoResourceMetaData) xstream.fromXML(json);
-
-        System.out.println(ooResourceMetaData.getDescription());
-        System.out.println(ooResourceMetaData.getCreationDate());
+        OoResourceMetaData o = new OoResourceMetaData(TEST_JSON_METADATA);
+        assertEquals("title value", o.getTitle());
+        assertEquals("description value", o.getDescription());
+        assertEquals("keyword value", o.getKeywords());
+        assertEquals("author value", o.getAuthor());
+        
+        TypeDefImpl typeDef = o.getTypeDef();
+        assertEquals("ProductsBlock",typeDef.getName());
+        assertEquals("title",typeDef.getLabelProperty());
+        assertEquals("title",typeDef.getProperty("title").getName());
     }
 }
