@@ -11,7 +11,9 @@
 		<property name="scanner" ref="annotatedClassesScanner" />
 	</bean>
 	
-	<bean id="annotationBasedTypeDefBuilder" class="org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder" />
+	<bean id="annotationBasedTypeDefBuilder" class="org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder" >
+		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator"></property>
+	</bean>
 	
 	<!-- Binder -->
 	<bean id="bindService" class="org.otherobjects.cms.binding.BindServiceImplNG">
