@@ -10,6 +10,7 @@ Final TODO
 * Templated error page and log to debug email too
 * Unit tests for controllers and templates
 * Ajax template editor
+* Run ResourceScanner at intervals or triggered
 
 Small tasks:
 

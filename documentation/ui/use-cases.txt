@@ -1,0 +1,25 @@
+UI Concepts
+-----------
+
+HUD+HOK
+Help the user --> inline notes, limited options, enforced rules
+
+User
+----
+
+Page contents edit
++ auto-save
++ wiki style content
+Page extras edit
+Page block arrange
+Search for page
+Publish workflow 
++ esp blocks
+Item locking
+Overview
+
+Designer
+--------
+
+Find code
+In browser edit and commit

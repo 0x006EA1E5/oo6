@@ -138,6 +138,13 @@
     <para>TypeDef must have: name</para>
 
     <para>Properties much have: name, type, size?</para>
+
+    <para>Choose a base object ie is it a page or not.</para>
+
+    <para>Conventions: page objects have title, content, summary (for
+    elsewhere), image </para>
+
+    <para> Sholud name always end in Page? EventPage?</para>
   </chapter>
 
   <chapter>

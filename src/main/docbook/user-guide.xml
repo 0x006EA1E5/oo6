@@ -7,7 +7,7 @@
 
     <subtitle>User Guide</subtitle>
 
-    <releaseinfo>0.3</releaseinfo>
+    <releaseinfo>0.5</releaseinfo>
   </bookinfo>
 
   <toc></toc>
@@ -54,5 +54,19 @@
     <para>However, if you're fairly new to Java (or just want a setup that
     will work with the minimum of fuss) then this section will help you get
     your working environment prepared.</para>
+  </chapter>
+
+  <chapter>
+    <title>Using the libraries</title>
+
+    <para>Intro</para>
+
+    <section>
+      <title>Link library</title>
+
+      <para>You can put links in without using the library. This is preferred
+      for links that are not used more than once. Advantages: easyily change +
+      easily select.</para>
+    </section>
   </chapter>
 </book>
