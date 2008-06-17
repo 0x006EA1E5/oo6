@@ -16,9 +16,11 @@ public class Template extends BaseNode
 
     public TemplateRegion getRegion(String regionCode)
     {
+        if (getRegions() == null)
+            return null;
         for (TemplateRegion r : getRegions())
         {
-            if(r.getCode().equals(regionCode))
+            if (r.getCode().equals(regionCode))
                 return r;
         }
         return null;

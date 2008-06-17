@@ -7,9 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 
+import org.json.JSONException;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
-import org.springframework.beans.SimpleTypeConverter;
-import org.springframework.beans.TypeMismatchException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
@@ -25,11 +26,12 @@ import org.springframework.util.Assert;
  */
 public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
 {
+    private final Logger logger = LoggerFactory.getLogger(OoResourceLoader.class);
+    
     @javax.annotation.Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
     private ResourceLoader resourceLoader;
     private OoResourceMetaDataHelper metaDataHelper = new OoResourceMetaDataHelper();
-    private SimpleTypeConverter simpleTypeConverter = new SimpleTypeConverter();
 
     public void afterPropertiesSet() throws Exception
     {
@@ -112,12 +114,12 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
         {
             try
             {
-                OoResourceMetaData ooResourceMetaData = (OoResourceMetaData) simpleTypeConverter.convertIfNecessary(metaData, OoResourceMetaData.class);
+                OoResourceMetaData ooResourceMetaData = new OoResourceMetaData(metaData);
                 ooResource.setMetaData(ooResourceMetaData);
             }
-            catch (TypeMismatchException e)
+            catch (JSONException e)
             {
-                // TODO Explain why we ignore exception
+                logger.warn("Invalid metaData in "+ooResource.getPath() + ": " + e.getMessage() );
             }
         }
 

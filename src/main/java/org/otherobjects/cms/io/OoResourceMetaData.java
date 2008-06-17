@@ -1,8 +1,12 @@
 package org.otherobjects.cms.io;
 
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.otherobjects.cms.types.PropertyDefImpl;
+import org.otherobjects.cms.types.TypeDefImpl;
 
 import flexjson.JSONSerializer;
 
@@ -15,32 +19,61 @@ import flexjson.JSONSerializer;
  */
 public class OoResourceMetaData
 {
-    private String label;
+    private String title;
     private String description;
+    private String keywords;
     private String author;
-    private Long userdId;
-    private Date modificationTimestamp;
-    private Date creationDate;
+
+    // FIXME Impl properties support
     private HashMap<String, String> properties = new HashMap<String, String>();
 
-    @Override
-    public String toString()
+    private TypeDefImpl typeDef;
+
+    public OoResourceMetaData()
     {
-        StringBuffer buf = new StringBuffer();
-        buf.append("{\"metaData\":");
-        buf.append(new JSONSerializer().exclude("class").serialize(this));
-        buf.append("}");
-        return buf.toString();
     }
 
-    public String getLabel()
+    /**
+     * Creates object with given JSON data.
+     * 
+     * TODO This is a hardcoded impl. Should be using a JSON mapper.
+     * 
+     * @param json
+     * @throws JSONException 
+     */
+    public OoResourceMetaData(String json) throws JSONException
     {
-        return label;
+        JSONObject object = new JSONObject(json);
+        setTitle(object.has("title") ? object.getString("title") : null);
+        setDescription(object.has("description") ? object.getString("description") : null);
+        setKeywords(object.has("keywords") ? object.getString("keywords") : null);
+        setAuthor(object.has("author") ? object.getString("author") : null);
+
+        if (object.has("typeDef"))
+        {
+            // FIXME Need to add full typeDef support
+            JSONObject t = object.getJSONObject("typeDef");
+            TypeDefImpl td = new TypeDefImpl();
+            td.setName(t.getString("name"));
+            td.setLabelProperty(t.getString("labelProperty"));
+            JSONArray pArray = t.getJSONArray("properties");
+            for (int i = 0; i < pArray.length(); i++)
+            {
+                JSONObject p = pArray.getJSONObject(i);
+                String name = p.getString("name"); // required
+                String type = p.getString("type"); // required
+                String relatedType = p.has("relatedType") ? p.getString("relatedType") : null;
+                String collectionElementType = p.has("collectionElementType") ? p.getString("collectionElementType") : null;
+                boolean required = p.has("required") ? p.getBoolean("required") : false;
+                td.addProperty(new PropertyDefImpl(name, type, relatedType, collectionElementType, required));
+            }
+            setTypeDef(td);
+        }
     }
 
-    public void setLabel(String label)
+    public String toJSON()
     {
-        this.label = label;
+        return new JSONSerializer().exclude("class").serialize(this);
     }
 
     public String getDescription()
@@ -63,36 +96,6 @@ public class OoResourceMetaData
         this.author = author;
     }
 
-    public Long getUserdId()
-    {
-        return userdId;
-    }
-
-    public void setUserdId(Long userdId)
-    {
-        this.userdId = userdId;
-    }
-
-    public Date getModificationTimestamp()
-    {
-        return modificationTimestamp;
-    }
-
-    public void setModificationTimestamp(Date modificationTimestamp)
-    {
-        this.modificationTimestamp = modificationTimestamp;
-    }
-
-    public Date getCreationDate()
-    {
-        return creationDate;
-    }
-
-    public void setCreationDate(Date creationDate)
-    {
-        this.creationDate = creationDate;
-    }
-
     public HashMap<String, String> getProperties()
     {
         return properties;
@@ -101,5 +104,35 @@ public class OoResourceMetaData
     public void setProperties(HashMap<String, String> properties)
     {
         this.properties = properties;
+    }
+
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
+
+    public String getKeywords()
+    {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords)
+    {
+        this.keywords = keywords;
+    }
+
+    public TypeDefImpl getTypeDef()
+    {
+        return typeDef;
+    }
+
+    public void setTypeDef(TypeDefImpl typeDef)
+    {
+        this.typeDef = typeDef;
     }
 }
