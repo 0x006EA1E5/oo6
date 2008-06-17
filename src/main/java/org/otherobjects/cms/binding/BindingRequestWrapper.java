@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -95,32 +94,12 @@ public class BindingRequestWrapper implements InvocationHandler
 
     public Enumeration getParameterNames()
     {
-        return new IteratorEnumeration(mutableParams.keySet().iterator());
+        return Collections.enumeration(mutableParams.keySet());
     }
 
     public String[] getParameterValues(String name)
     {
         return mutableParams.get(name);
-    }
-
-    class IteratorEnumeration implements Enumeration
-    {
-        private Iterator it = null;
-
-        public IteratorEnumeration(Iterator it)
-        {
-            this.it = it;
-        }
-
-        public boolean hasMoreElements()
-        {
-            return it.hasNext();
-        }
-
-        public Object nextElement()
-        {
-            return it.next();
-        }
     }
 
     enum SpecialMethods {

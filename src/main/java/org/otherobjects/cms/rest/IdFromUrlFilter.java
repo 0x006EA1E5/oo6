@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -121,7 +120,7 @@ public class IdFromUrlFilter implements Filter
         @Override
         public Enumeration getParameterNames()
         {
-            return new IteratorEnumeration(params.keySet().iterator());
+            return Collections.enumeration(params.keySet());
         }
 
         @Override
@@ -132,23 +131,4 @@ public class IdFromUrlFilter implements Filter
 
     }
 
-    private class IteratorEnumeration implements Enumeration
-    {
-        private Iterator it = null;
-
-        public IteratorEnumeration(Iterator it)
-        {
-            this.it = it;
-        }
-
-        public boolean hasMoreElements()
-        {
-            return it.hasNext();
-        }
-
-        public Object nextElement()
-        {
-            return it.next();
-        }
-    }
 }
