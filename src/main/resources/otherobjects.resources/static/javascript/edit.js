@@ -87,6 +87,15 @@ OO.EditForm = function(){
 						));
 					});
 				}
+				else if(propDef.type=="text" && propDef.name=="newFile")
+				{
+					config.width='500px';
+					config.inputType='file';
+					//form.config.fileUpload=true;
+					//config.grow=true;
+					//config.growMax=500;
+					var f = new Ext.form.TextField(config);
+				}
 				else if(propDef.type=="text")
 				{
 					config.width='500px';
@@ -201,7 +210,8 @@ OO.EditForm = function(){
 				labelAlign: 'left',
 				buttonAlign: 'left',
 				monitorValid: true,
-				labelWidth: 120
+				labelWidth: 120,
+				fileUpload:true
 		    });
 
 			// Add essential form processing support fields
@@ -253,7 +263,8 @@ OO.EditForm = function(){
 				labelAlign: 'left',
 				buttonAlign: 'left',
 				monitorValid: true,
-				labelWidth: 120
+				labelWidth: 120,
+				fileUpload:true
 		    });
 	
 			// Add essential form processing support fields	

@@ -1,5 +1,7 @@
 package org.otherobjects.cms.controllers;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -19,6 +21,8 @@ import org.otherobjects.cms.dao.GenericDao;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.model.BaseNode;
+import org.otherobjects.cms.model.CmsImage;
+import org.otherobjects.cms.model.CmsImageDao;
 import org.otherobjects.cms.model.CompositeDatabaseId;
 import org.otherobjects.cms.model.DbFolder;
 import org.otherobjects.cms.types.PropertyDef;
@@ -26,6 +30,7 @@ import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeDefBuilder;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.IdentifierUtils;
+import org.otherobjects.cms.util.ImageUtils;
 import org.otherobjects.cms.validation.ValidatorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,8 +40,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.RequestContext;
+
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.iptc.IptcDirectory;
 
 /**
  * Controller to process form submission. Only data for types registered in the TypeService is supported.
@@ -140,6 +151,18 @@ public class FormController
             Assert.notNull(item, "No object found for id: " + id);
             Assert.notNull(typeDef, "We cannot bind objects that don't have a typeDef");
 
+            //deal with image file uploads
+            if (request instanceof MultipartHttpServletRequest)
+            {
+                MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+                //currently we only know how to deal with image uploads
+                if (item instanceof CmsImage)
+                {
+                    return handleCmsImageRequest(multipartRequest, response, (CmsImage) item);
+                }
+
+            }
+
             // Perform validation
             if (item instanceof DynaNode)
             {
@@ -152,7 +175,7 @@ public class FormController
                         ((DynaNode) item).set(pd.getName(), Long.parseLong(request.getParameter(pd.getName())));
                     else
                         ((DynaNode) item).set(pd.getName(), request.getParameter(pd.getName()));
-                        
+
                 }
             }
             else
@@ -203,6 +226,59 @@ public class FormController
         }
     }
 
+    private ModelAndView handleCmsImageRequest(MultipartHttpServletRequest multipartRequest, HttpServletResponse response, CmsImage cmsImage) throws IOException
+    {
+        MultipartFile imageFile = (MultipartFile) multipartRequest.getFileMap().get("newFile");
+        this.logger.info("Received file " + imageFile.getOriginalFilename());
+
+        CmsImageDao cmsImageDao = (CmsImageDao) this.daoService.getDao(CmsImage.class);
+
+        File newFile = File.createTempFile("upload", "img");
+        newFile.deleteOnExit();
+
+        imageFile.transferTo(newFile);
+
+        cmsImage.setPath("/libraries/images/");
+        cmsImage.setCode(imageFile.getOriginalFilename());
+        cmsImage.setLabel(imageFile.getOriginalFilename());
+        cmsImage.setNewFile(newFile);
+
+        // some manual binding which is pants
+        cmsImage.setDescription(multipartRequest.getParameter("description"));
+        cmsImage.setKeywords(multipartRequest.getParameter("keywords"));
+        cmsImage.setOriginalProvider(multipartRequest.getParameter("originalProvider"));
+        cmsImage.setProviderId(multipartRequest.getParameter("providerId"));
+        cmsImage.setCopyright(multipartRequest.getParameter("copyright"));
+
+        // Look for IPTC tags to read
+        Metadata imageMetadata = ImageUtils.getImageMetadata(newFile);
+        if (imageMetadata.containsDirectory(IptcDirectory.class))
+        {
+            Directory iptc = imageMetadata.getDirectory(IptcDirectory.class);
+            if (iptc.containsTag(IptcDirectory.TAG_OBJECT_NAME))
+                cmsImage.setLabel(iptc.getString(IptcDirectory.TAG_OBJECT_NAME));
+            if (iptc.containsTag(IptcDirectory.TAG_CAPTION))
+                cmsImage.setDescription(iptc.getString(IptcDirectory.TAG_CAPTION));
+            if (iptc.containsTag(IptcDirectory.TAG_COPYRIGHT_NOTICE))
+                cmsImage.setCopyright(iptc.getString(IptcDirectory.TAG_COPYRIGHT_NOTICE));
+            if (iptc.containsTag(IptcDirectory.TAG_KEYWORDS))
+                cmsImage.setKeywords(iptc.getString(IptcDirectory.TAG_KEYWORDS));
+        }
+
+        // Get file proprerties
+        cmsImageDao.save(cmsImage);
+        newFile.delete();
+
+        // We have errors so return error messages
+        ModelAndView view = new ModelAndView("jsonView");
+        view.addObject("mimeOverride", "text/html");
+
+        // All OK...
+        view.getModel().put("success", true);
+        view.getModel().put("formObject", cmsImage);
+        return view;
+    }
+
     private BaseNode create(String typeName)
     {
         try
@@ -225,4 +301,5 @@ public class FormController
                 throw new OtherObjectsException("Could not create object of type: " + typeName, e);
         }
     }
+
 }

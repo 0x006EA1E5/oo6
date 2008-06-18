@@ -120,14 +120,16 @@ Ojay:
 
 Later:
 
-* Events on save/pulbish eg reregister typeDef
+* Events on save/publish eg reregister typeDef
 * Salt for password encoder
 * Custom workbench pages (eg security home page)
 * Migration scripts for simple sites
 * Add JBDC 
 * Tag system
 * Live/Edit space for image disk files
-* Investigaet portlets
+* Investigate portlets
+* Tye in OOResource with images and DataFileDAO
+
 
 Post launch:
 

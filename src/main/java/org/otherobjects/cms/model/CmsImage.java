@@ -65,11 +65,12 @@ public class CmsImage extends BaseNode
     /**
      * Generates default code based on image label and file extension.
      */
+    @Override
     public String getCode()
     {
         return this.code != null ? this.code : StringUtils.generateUrlCode(getLabel()) + "." + getExtension();
     }
-    
+
     /**
      * Needed for external image services.
      * 
@@ -169,6 +170,7 @@ public class CmsImage extends BaseNode
         this.newFile = newFile;
     }
 
+    @Property(type = PropertyType.TEXT)
     public File getNewFile()
     {
         return this.newFile;
@@ -180,7 +182,7 @@ public class CmsImage extends BaseNode
         return getCode();
     }
 
-    @Property(order = 90, required=true)
+    @Property(order = 90, required = true)
     public String getOriginalFileName()
     {
         return originalFileName;
