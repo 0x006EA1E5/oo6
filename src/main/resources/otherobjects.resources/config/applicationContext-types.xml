@@ -16,7 +16,7 @@
 	</bean>
 	
 	<!-- Binder -->
-	<bean id="bindService" class="org.otherobjects.cms.binding.BindServiceImplNG">
+	<bean id="bindService" class="org.otherobjects.cms.binding.BindServiceImplNG" scope="prototype">
 		<property name="daoService" ref="daoService" />
 	</bean>
 	
