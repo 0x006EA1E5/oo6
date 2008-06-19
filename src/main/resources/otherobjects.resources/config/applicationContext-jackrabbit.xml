@@ -72,6 +72,15 @@
 			</bean>
 		</property>
 	</bean>
+	<bean id="cmsFileDao" parent="baseTransactionProxy">
+		<property name="target">
+			<bean class="org.otherobjects.cms.model.CmsFileDaoImpl">
+				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
+				<property name="sessionFactory" ref="jcrSessionFactory" />
+				<property name="validator" ref="baseNodeValidator" />
+			</bean>
+		</property>
+	</bean>
 
 
 	<!-- 

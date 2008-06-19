@@ -21,6 +21,8 @@ import org.otherobjects.cms.dao.GenericDao;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.model.BaseNode;
+import org.otherobjects.cms.model.CmsFile;
+import org.otherobjects.cms.model.CmsFileDao;
 import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.CmsImageDao;
 import org.otherobjects.cms.model.CompositeDatabaseId;
@@ -160,6 +162,10 @@ public class FormController
                 {
                     return handleCmsImageRequest(multipartRequest, response, (CmsImage) item);
                 }
+                else if (item instanceof CmsFile)
+                {
+                    return handleCmsFileRequest(multipartRequest, response, (CmsFile) item);
+                }
 
             }
 
@@ -225,6 +231,39 @@ public class FormController
             logger.error("Error saving form data.", e);
             return view;
         }
+    }
+
+    private ModelAndView handleCmsFileRequest(MultipartHttpServletRequest multipartRequest, HttpServletResponse response, CmsFile cmsFile) throws IOException
+    {
+        MultipartFile uploadFile = (MultipartFile) multipartRequest.getFileMap().get("newFile");
+        this.logger.info("Received file " + uploadFile.getOriginalFilename());
+
+        CmsFileDao cmsFileDao = (CmsFileDao) this.daoService.getDao(CmsFile.class);
+
+        File newFile = File.createTempFile("upload", "file");
+        newFile.deleteOnExit();
+
+        uploadFile.transferTo(newFile);
+
+        cmsFile.setOriginalFileName(uploadFile.getOriginalFilename());
+        cmsFile.setLabel(uploadFile.getOriginalFilename());
+
+        // some manual binding which is pants
+        cmsFile.setDescription(multipartRequest.getParameter("description"));
+        cmsFile.setKeywords(multipartRequest.getParameter("keywords"));
+        cmsFile.setCopyright(multipartRequest.getParameter("copyright"));
+
+        cmsFileDao.save(cmsFile);
+        newFile.delete();
+
+        // We have errors so return error messages
+        ModelAndView view = new ModelAndView("jsonView");
+        view.addObject("mimeOverride", "text/html");
+
+        // All OK...
+        view.getModel().put("success", true);
+        view.getModel().put("formObject", cmsFile);
+        return view;
     }
 
     private ModelAndView handleCmsImageRequest(MultipartHttpServletRequest multipartRequest, HttpServletResponse response, CmsImage cmsImage) throws IOException
