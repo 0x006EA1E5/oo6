@@ -3,6 +3,7 @@ UI Concepts
 
 HUD+HOK
 Help the user --> inline notes, limited options, enforced rules
+When designing options not errors. No template? Make me one! Dev tools: DebugBlock.
 
 User
 ----
