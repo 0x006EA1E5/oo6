@@ -16,6 +16,7 @@ import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.io.OoResourceLoader;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.HtmlLogger;
+import org.otherobjects.cms.util.RequestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -41,7 +42,7 @@ public class ScriptController
     {
         // TODO need regexp to check scriptname is valid java class name
 
-        String scriptName = getId(request) + ".groovy";
+        String scriptName = RequestUtils.getId(request) + ".groovy";
         String scriptPath = "/site/scripts/" + scriptName;
         response.getWriter().print("<html><body>");
         try
@@ -129,18 +130,5 @@ public class ScriptController
             }
         }
         return true;
-    }
-
-    private String getId(HttpServletRequest request)
-    {
-        String pathInfo = request.getPathInfo();
-        return pathInfo.substring(pathInfo.lastIndexOf("/") + 1);
-    }
-
-    private String getId(String method, HttpServletRequest request)
-    {
-        String pathInfo = request.getPathInfo();
-        int startPos = pathInfo.indexOf("/" + method + "/") + method.length() + 2;
-        return pathInfo.substring(startPos);
     }
 }

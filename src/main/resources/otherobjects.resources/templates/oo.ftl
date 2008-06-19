@@ -53,30 +53,27 @@ ${trace}<br/>
 <#-- 
 Macro to insert block
 -->
-<#macro block blockName global=false>
+<#macro block blockReference>
 <#attempt>
-<#if !global>
-	<div class="oo-block" id="oo-block-${blockName}" uuid="${resourceObject.id}" name="bob">
-	<#include "/blocks/${blockName}.ftl">
-	</div>
-<#else>
-	<#assign blockData = daoService.getDao("baseNode").getByPath("/blocks/${blockName}")! >
-	<#if blockData?has_content>
-	<div class="oo-block" id="oo-block-${blockName}">
-	<#include "/blocks/${blockName}.ftl">
-	</div>
+
+	<#assign blockName = blockReference.block.code/>
+	<#assign blockData = blockReference.blockData!/>
+	<#-- If block is global but has no data then render placeholder-->
+	<#if blockReference.block.global?has_content && !blockData?has_content>
+		<div class="oo-block" id="oo-block-${blockReference.id}">
+		<#include "/blocks/oo-block-new.ftl">
+		</div>
 	<#else>
-	<div class="oo-block" id="oo-block-${blockName}">
-	<#include "/blocks/oo-new.ftl">
-	</div>
+		<#assign blockData = blockReference.blockData! >
+		<div class="oo-block" id="oo-block-${blockReference.id}">
+		<#include "/blocks/${blockName}.ftl">
+		</div>
 	</#if>
-</#if>
 <#recover>
-	<div class="oo-block" id="oo-block-${blockName}">
+	<div class="oo-block" id="oo-block-${blockReference.id}">
 	<#include "/blocks/oo-block-error.ftl">
 	</div>
 </#attempt>
-
 </#macro>  
 
 <#-- 
@@ -86,7 +83,7 @@ Macro to insert region
 
 <div class="oo-region" id="oo-region-${regionCode}">
 <#list (template.getRegion(regionCode)!).blocks! as block>
-<@oo.block block.code block.global />
+<@oo.block block />
 </#list>
 </div>
 

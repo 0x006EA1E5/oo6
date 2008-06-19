@@ -31,13 +31,13 @@ public class TestController extends MultiActionController
     public ModelAndView test(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         // Load data file
-        logger.debug("Running setup scripts.");
-        Binding binding = new Binding();
-        binding.setProperty("daoService", daoService);
-        binding.setProperty("typeService", typeService);
-        GroovyShell shell = new GroovyShell(binding);
-        String script = IOUtils.toString(new FileInputStream("data-transfer/import.groovy"));
-        shell.evaluate(script);
+//        logger.debug("Running setup scripts.");
+//        Binding binding = new Binding();
+//        binding.setProperty("daoService", daoService);
+//        binding.setProperty("typeService", typeService);
+//        GroovyShell shell = new GroovyShell(binding);
+//        String script = IOUtils.toString(new FileInputStream("data-transfer/import.groovy"));
+//        shell.evaluate(script);
         return null;
     }
 }

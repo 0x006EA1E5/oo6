@@ -75,7 +75,7 @@ public class JsonView implements View
         json = localiseString(json, messageSource, locale);
 
         // FIXME Is there a more performant way of doing this
-        logger.debug(json);
+        //logger.debug(json);
         response.setCharacterEncoding(ENCODING);
         output.write(json);
     }

@@ -55,4 +55,9 @@ public class TemplateBlock extends BaseNode
     {
         this.global = global;
     }
+    
+    public boolean isGlobalBlock()
+    {
+        return (global != null && global.booleanValue());
+    }
 }

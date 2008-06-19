@@ -11,7 +11,7 @@ public class TemplateRegion extends BaseNode
 {
     private String code;
     private String label;
-    private List<TemplateBlock> blocks;
+    private List<TemplateBlockReference> blocks;
 
     @Override
     @Property(order = 10)
@@ -39,13 +39,13 @@ public class TemplateRegion extends BaseNode
         this.label = label;
     }
 
-    @Property(order = 30, collectionElementType = PropertyType.REFERENCE)
-    public List<TemplateBlock> getBlocks()
+    @Property(order = 30, collectionElementType = PropertyType.COMPONENT)
+    public List<TemplateBlockReference> getBlocks()
     {
         return blocks;
     }
 
-    public void setBlocks(List<TemplateBlock> blocks)
+    public void setBlocks(List<TemplateBlockReference> blocks)
     {
         this.blocks = blocks;
     }

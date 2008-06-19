@@ -1,6 +1,7 @@
 
 YAHOO.util.Event.onDOMReady(function() {
 	//ooEnableBlockSelector();
+	//ooEnableBlockManagement();
 	//ooToggleHud("oo-main-hud");
 	ooEnableKeyboardShortcuts();		
 	
@@ -27,10 +28,14 @@ function ooInsertNewBlock(el) {
 	// Remove previous events 
 	$(".oo-chooser-button").forEach( function(ell) {YAHOO.util.Event.purgeElement(ell.node); });	
 	
+	// Find code of enclosing region
+	var regionCode = el.parents(".oo-region")[0].id.substring(10);
+	console.log(regionCode);
+	
 	// Add event to block choice buttons
 	$(".oo-chooser-button").on('click', function(el2,e) {
 		var blockCode = el2.node.id;
-		Ojay.HTTP.GET('/otherobjects/block/get/'+blockCode+'?uuid='+resourceObjectId, {}, {
+		Ojay.HTTP.GET('/otherobjects/block/create/'+blockCode+'?resourceObjectId='+resourceObjectId+'&templateId='+ooTemplateId+'&regionCode='+regionCode, {}, {
 			onSuccess: function(response) {
 				el.insert(response.responseText,'before');
 				ooSaveTemplateDesign();
@@ -99,9 +104,7 @@ function ooEnableBlockSelector() {
 		// Enforce only one overlay
 		if(document.getElementById("overlay") != null) return;
 		
-		var blockName=element.node.id.substring(9);
-		if(element.node.attributes.uuid)
-			var blockId=element.node.attributes.uuid.value;
+		var blockReferenceId=element.node.id.substring(9);
 		
 		// Add overlay div
 		element.insert('<div id="overlay" class="oo-block-overlay"></div>', 'top');
@@ -114,10 +117,7 @@ function ooEnableBlockSelector() {
 			overlay.parentNode.removeChild(overlay);
 			
 			$('#oo-form-overlay').setStyle({display:"block"});
-			if(blockId)
-				Ojay.HTTP.GET('/otherobjects/block/form/'+blockName+'?uuid='+blockId).insertInto('#oo-form-overlay').evalScriptTags();
-			else if(blockName)
-				Ojay.HTTP.GET('/otherobjects/block/form/'+blockName).insertInto('#oo-form-overlay').evalScriptTags();
+			Ojay.HTTP.GET('/otherobjects/block/form/'+blockReferenceId+'?resourceObjectId='+resourceObjectId).insertInto('#oo-form-overlay').evalScriptTags();
 		});
 	
 		// Restore on mouse out
@@ -129,16 +129,14 @@ function ooEnableBlockSelector() {
 	});
 }
 
-function ooSubmitForm(blockName, blockId, global) 
+function ooSubmitForm(blockId) 
 {
 	var formObject = document.getElementById('form'); 
 	YAHOO.util.Connect.setForm(formObject); 
 	var callback = { customevents:{ 
 		onSuccess:function(eventType, args) { 
 			$('#oo-form-overlay').setStyle({display:"none"});
-			Ojay.HTTP.GET('/otherobjects/block/get/'+blockName+'?uuid='+resourceObjectId).insertInto('#oo-block-'+blockName);
-			
-			
+			Ojay.HTTP.GET('/otherobjects/block/get/'+blockId+'?resourceObjectId='+resourceObjectId).insertInto('#oo-block-'+blockId);
 		}
 	}};
 	var cObj = YAHOO.util.Connect.asyncRequest('POST', '/otherobjects/form/', callback );
