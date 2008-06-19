@@ -89,6 +89,8 @@ OO.EditForm = function(){
 				}
 				else if(propDef.type=="text" && propDef.name=="newFile")
 				{
+					form.fileUpload=true;
+					console.log("Set form to fileUpload:" + form.fileUpload);
 					config.width='500px';
 					config.inputType='file';
 					//form.config.fileUpload=true;
@@ -210,8 +212,7 @@ OO.EditForm = function(){
 				labelAlign: 'left',
 				buttonAlign: 'left',
 				monitorValid: true,
-				labelWidth: 120,
-				fileUpload:true
+				labelWidth: 120
 		    });
 
 			// Add essential form processing support fields
@@ -263,8 +264,7 @@ OO.EditForm = function(){
 				labelAlign: 'left',
 				buttonAlign: 'left',
 				monitorValid: true,
-				labelWidth: 120,
-				fileUpload:true
+				labelWidth: 120
 		    });
 	
 			// Add essential form processing support fields	

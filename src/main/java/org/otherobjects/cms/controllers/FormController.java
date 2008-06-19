@@ -196,7 +196,7 @@ public class FormController
 
             // We have errors so return error messages
             ModelAndView view = new ModelAndView("jsonView");
-            view.addObject("mimeOverride", "text/html"); //FIXME remove when only upload forms are set to upload
+            //view.addObject("mimeOverride", "text/html"); //FIXME remove when only upload forms are set to upload
             if (errors != null && errors.getErrorCount() > 0)
             {
                 List<Object> jsonErrors = new ArrayList<Object>();
