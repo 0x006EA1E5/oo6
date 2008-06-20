@@ -143,11 +143,15 @@ public class BlockController
             // Page block
             BaseNode resourceObject = dao.get(resourceObjectId);
             view.addObject("resourceObject", resourceObject);
+            
         }
         else
         {
             // Global block
             view.addObject("blockData", blockRef.getBlockData());
+            view.addObject("bn", null);
+            view.addObject("bf", false);
+            view.addObject("bt", true);
         }
         return view;
     }
