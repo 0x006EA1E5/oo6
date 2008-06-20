@@ -245,6 +245,7 @@ public class FormController
 
         uploadFile.transferTo(newFile);
 
+        cmsFile.setNewFile(newFile);
         cmsFile.setOriginalFileName(uploadFile.getOriginalFilename());
         cmsFile.setLabel(uploadFile.getOriginalFilename());
 

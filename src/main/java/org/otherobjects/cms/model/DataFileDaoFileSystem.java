@@ -58,6 +58,9 @@ public class DataFileDaoFileSystem implements DataFileDao
         {
             // TODO Check for existing file?
             File destination = new File(this.dataPath + dataFile.getId());
+            if (!destination.getParentFile().exists())
+                destination.getParentFile().mkdirs();
+
             FileUtils.copyFile(dataFile.getFile(), destination, false);
             dataFile.setFile(destination);
             setFileProperties(dataFile);

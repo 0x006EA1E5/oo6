@@ -2,4 +2,6 @@ text/freemarker	ftl FTL
 text/velocity	vm VM
 text/javascript js JS
 text/css		css CSS
+application/pdf pdf PDF
+
 
