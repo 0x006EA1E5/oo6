@@ -27,7 +27,6 @@ import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.CmsImageDao;
 import org.otherobjects.cms.model.CompositeDatabaseId;
 import org.otherobjects.cms.model.DbFolder;
-import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeDefBuilder;
 import org.otherobjects.cms.types.TypeService;
@@ -169,20 +168,10 @@ public class FormController
 
             }
 
-            // Perform validation
+            // Perform binding and validation
             if (item instanceof DynaNode)
             {
-                // FIXME Need integrated DynaNode validation rather than this special case
-                for (PropertyDef pd : typeDef.getProperties())
-                {
-                    if (pd.getType().equals("reference"))
-                        ((DynaNode) item).set(pd.getName(), genericDao.get(request.getParameter(pd.getName())));
-                    else if (pd.getType().equals("number"))
-                        ((DynaNode) item).set(pd.getName(), Long.parseLong(request.getParameter(pd.getName())));
-                    else
-                        ((DynaNode) item).set(pd.getName(), request.getParameter(pd.getName()));
-
-                }
+                errors = bindService.bind(item, typeDef, request);
             }
             else
             {
