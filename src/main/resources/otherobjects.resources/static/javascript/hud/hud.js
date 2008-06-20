@@ -135,7 +135,7 @@ function ooSubmitForm(blockId)
 	YAHOO.util.Connect.setForm(formObject); 
 	var callback = { customevents:{ 
 		onSuccess:function(eventType, args) { 
-			$('#oo-form-overlay').setStyle({display:"none"});
+			//$('#oo-form-overlay').setStyle({display:"none"});
 			Ojay.HTTP.GET('/otherobjects/block/get/'+blockId+'?resourceObjectId='+resourceObjectId).insertInto('#oo-block-'+blockId);
 		}
 	}};
