@@ -1,6 +1,11 @@
 Final TODO
 ----------
 
+* Validation
+* Dual independent servlets
+
+
+* Tagging framework: manage, query, cloud
 * Servlet sort-out: /otherobjects and / and  URL mapping test
 * Grails type controller. Specify root path. Method names are next folder. Remain url = id.
 * Binder: jcrPaths as well as UUIDs
@@ -11,6 +16,8 @@ Final TODO
 * Unit tests for controllers and templates
 * Ajax template editor
 * Run ResourceScanner at intervals or triggered
+* Save TypeDefs into JCR
+* RSS via selectors
 
 Small tasks:
 
@@ -23,6 +30,7 @@ Small tasks:
 
 CMS features:
 
+* Auto template creation option when in Design Mode
 * Link paths
 * Files
 * Rich Media
@@ -49,6 +57,8 @@ JCR issues:
 * Properly remove components from listings
 * Order of nodes after update
 * Lists: component testing, remove, reordering
+* Forbid same name nodes
+
 
 Documentation:
 
@@ -57,6 +67,7 @@ Documentation:
 * Merge txt docs (1-5) into DocBook 
 * Save eclipse code templates
 * Naming conventions and style (where to put/call blocks etc)
+* Finalse naming coventions
 
 Testing:
 
@@ -69,7 +80,9 @@ Performance and hosting:
 
 Interface:
 
-* Add object button
+* Standard block templates
+* Add/delete object button
+* Recently added list (esp in selectors)
 * Recent places list
 * Favourites list
 * Wire up publish button
@@ -78,6 +91,10 @@ Interface:
 * Show version history
 * More keyboard shortcuts and help HUD
 * File/image upload (inc bulk)
+* Text-only/print css
+* Folder listing: default/ key pages / recent edits / everthing else
+* MetaData drop down
+* Live/Edit workspace override
 
 REST Interface:
 * Better URL syntax
@@ -120,6 +137,8 @@ Ojay:
 
 Later:
 
+* Imort/export interface
+* OO5 Migration tooling
 * Events on save/publish eg reregister typeDef
 * Salt for password encoder
 * Custom workbench pages (eg security home page)
@@ -129,7 +148,7 @@ Later:
 * Live/Edit space for image disk files
 * Investigate portlets
 * Tye in OOResource with images and DataFileDAO
-
+* Embargo task
 
 Post launch:
 
