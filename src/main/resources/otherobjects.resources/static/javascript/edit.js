@@ -87,7 +87,7 @@ OO.EditForm = function(){
 						));
 					});
 				}
-				else if(propDef.type=="text" && propDef.name=="newFile")
+				else if((propDef.type=="text" && propDef.name=="newFile") || propDef.type=="ooresource")
 				{
 					form.fileUpload=true;
 					console.log("Set form to fileUpload:" + form.fileUpload);

@@ -3,6 +3,7 @@ package org.otherobjects.cms.io;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.otherobjects.cms.Url;
 import org.springframework.core.io.Resource;
 
 /**
@@ -37,5 +38,17 @@ public interface OoResource extends Resource
      * @return
      */
     OoResourceMetaData getMetaData();
+
+    /**
+     * Get a {@link Url} object if one can be calculated for this resource or null if it can't
+     * @return
+     */
+    Url getUrl();
+
+    /**
+     * get the prefix enum value
+     * @return
+     */
+    OoResourcePathPrefix getPrefix();
 
 }

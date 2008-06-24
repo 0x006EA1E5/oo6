@@ -27,15 +27,29 @@ import org.springframework.util.Assert;
 public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
 {
     private final Logger logger = LoggerFactory.getLogger(OoResourceLoader.class);
-    
+
     @javax.annotation.Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
     private ResourceLoader resourceLoader;
     private OoResourceMetaDataHelper metaDataHelper = new OoResourceMetaDataHelper();
 
+    private String dataDirPath;
+    private String uploadDirPath;
+
     public void afterPropertiesSet() throws Exception
     {
+        // look up required config properties and implement fail fast behaviour
+        dataDirPath = otherObjectsConfigurator.getProperty("site.data.dir.path");
+        Assert.notNull(dataDirPath, "Property site.data.dir.path has not been set. Add it to site.properties");
 
+        uploadDirPath = otherObjectsConfigurator.getProperty("site.upload.dir.path");
+        Assert.notNull(uploadDirPath, "Property site.upload.dir.path has not been set. Add it to site.properties");
+
+        // set some static props on DefautOoResource as a kind of poor DI
+        DefaultOoResource.setDataDirPath(dataDirPath);
+
+        DefaultOoResource.setDataBaseUrl(otherObjectsConfigurator.getProperty("site.data.base.url"));
+        DefaultOoResource.setStaticBaseUrl(otherObjectsConfigurator.getProperty("site.static.base.url"));
     }
 
     public OoResource getResource(String path) throws IOException
@@ -44,7 +58,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
         Resource resource = resourceLoader.getResource(resourceInfo.getPath());
 
         //wrap in ooResource
-        DefaultOoResource ooResource = new DefaultOoResource(resource, path, resourceInfo.isWritable());
+        DefaultOoResource ooResource = new DefaultOoResource(resource, path, resourceInfo.getPrefix(), resourceInfo.isWritable());
         if (resource.exists())
         {
             postprocessResource(ooResource);
@@ -79,7 +93,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
         {
             public boolean accept(File dir, String name)
             {
-                return name.endsWith(".ftl");
+                return name.endsWith(".ftl"); //FIXME this clearly doesn't belong here
             }
         }))
         {
@@ -119,7 +133,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
             }
             catch (JSONException e)
             {
-                logger.warn("Invalid metaData in "+ooResource.getPath() + ": " + e.getMessage() );
+                logger.warn("Invalid metaData in " + ooResource.getPath() + ": " + e.getMessage());
             }
         }
 
@@ -141,9 +155,16 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
                 return rewritePathAccordingToPrefix(matcher.replaceFirst(""), prefix);
         }
         // return unchanged if no prefix matched, defaults to non writable because with non-prefixed paths you shouldn't use OoResource specific stuff anyway
-        return new ResourceInfo(path, false);
+        return new ResourceInfo(path, null, false);
     }
 
+    /**
+     * This method is closely coupled with {@link DefaultOoResource#getUrl()} - PLEASE keep them in sync
+     * 
+     * @param path
+     * @param prefix
+     * @return
+     */
     private ResourceInfo rewritePathAccordingToPrefix(String path, OoResourcePathPrefix prefix)
     {
         StringBuffer buf = new StringBuffer();
@@ -151,22 +172,26 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
         switch (prefix)
         {
             case CORE :
-                buf.append("otherobjects.resources");
+                buf.append(OoResourcePathPrefix.CORE.replacementFilePathPrefix());
                 buf.append(path);
                 break;
             case STATIC :
-                buf.append("site.resources/static"); //FIXME this is probably wrong
+                buf.append(OoResourcePathPrefix.STATIC.replacementFilePathPrefix()); //FIXME this is probably wrong
                 buf.append(path);
                 break;
             case SITE :
-                //buf.append("site.resources");
+                //buf.append(buf.append(OoResourcePathPrefix.SITE.replacementFilePathPrefix()););
                 buf.append(path);
                 break;
             case DATA :
                 buf.append("file:");
-                String dataDirPath = otherObjectsConfigurator.getProperty("site.data.dir.path");
-                Assert.notNull(dataDirPath, "Property site.data.dir.path has not been set. Add it to site.properties");
                 buf.append(dataDirPath);
+                buf.append(path);
+                writable = true; //only resources in the data path should be writable
+                break;
+            case UPLOAD :
+                buf.append("file:");
+                buf.append(uploadDirPath);
                 buf.append(path);
                 writable = true; //only resources in the data path should be writable
                 break;
@@ -175,7 +200,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
                 // TODO Should we have a default case?
 
         }
-        return new ResourceInfo(buf.toString(), writable);
+        return new ResourceInfo(buf.toString(), prefix, writable);
     }
 
     public void setResourceLoader(ResourceLoader resourceLoader)
@@ -187,11 +212,18 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
     {
         private String path;
         private boolean writable;
+        private OoResourcePathPrefix prefix;
 
-        public ResourceInfo(String path, boolean writable)
+        public ResourceInfo(String path, OoResourcePathPrefix prefix, boolean writable)
         {
             this.path = path;
+            this.prefix = prefix;
             this.writable = writable;
+        }
+
+        public OoResourcePathPrefix getPrefix()
+        {
+            return prefix;
         }
 
         public String getPath()

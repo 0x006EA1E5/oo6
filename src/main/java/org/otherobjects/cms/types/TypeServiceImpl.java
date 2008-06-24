@@ -18,7 +18,9 @@ import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.StringTypeConv
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.discovery.AnnotatedClassesScanner;
+import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.jcr.BigDecimalTypeConverterImpl;
+import org.otherobjects.cms.jcr.OoResourceTypeConverterImpl;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.JcrTypeDef;
@@ -195,6 +197,7 @@ public class TypeServiceImpl extends AbstractTypeService implements Initializing
         this.jcrAtomicConverters.put("boolean", new BooleanTypeConverterImpl());
         this.jcrAtomicConverters.put("number", new LongTypeConverterImpl());
         this.jcrAtomicConverters.put("decimal", new BigDecimalTypeConverterImpl());
+        this.jcrAtomicConverters.put("ooresource", new OoResourceTypeConverterImpl());
     }
 
     private void registerClassMappings()
@@ -209,6 +212,7 @@ public class TypeServiceImpl extends AbstractTypeService implements Initializing
         this.jcrClassMappings.put("boolean", Boolean.class);
         this.jcrClassMappings.put("number", Long.class);
         this.jcrClassMappings.put("decimal", BigDecimal.class);
+        this.jcrClassMappings.put("ooresource", OoResource.class);
     }
 
     public void setAnnotationBasedTypeDefBuilder(AnnotationBasedTypeDefBuilder annotationBasedTypeDefBuilder)

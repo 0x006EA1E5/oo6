@@ -35,7 +35,7 @@ public class Url
 
     public static final String STANDARD_URL_CHARACTER_ENCODING = "UTF-8";
 
-    private static final String ILLEGAL_MODIFIATION_MESSAGE = "This URL was created as immuteable. None of its properties can be changed";
+    private static final String ILLEGAL_MODIFIATION_MESSAGE = "This URL was created as immutable. None of its properties can be changed";
 
     //private static Pattern absolutePattern = Pattern.compile("^([a-zA-Z]*)://");
     //private static Pattern urlPattern = Pattern.compile("([a-zA-Z]*)://([^/]*)?(:\\d+)?/(.*)(#(.*))?");

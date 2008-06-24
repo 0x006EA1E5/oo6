@@ -18,6 +18,9 @@ import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.binding.BindService;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.GenericDao;
+import org.otherobjects.cms.io.OoResource;
+import org.otherobjects.cms.io.OoResourceLoader;
+import org.otherobjects.cms.io.OoResourcePathPrefix;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.model.BaseNode;
@@ -79,6 +82,9 @@ public class FormController
 
     @Resource
     private ValidatorService validatorService;
+
+    @Resource
+    private OoResourceLoader ooResourceLoader;
 
     @SuppressWarnings("unchecked")
     @RequestMapping("/form/**")
@@ -224,17 +230,17 @@ public class FormController
 
     private ModelAndView handleCmsFileRequest(MultipartHttpServletRequest multipartRequest, HttpServletResponse response, CmsFile cmsFile) throws IOException
     {
-        MultipartFile uploadFile = (MultipartFile) multipartRequest.getFileMap().get("newFile");
+        MultipartFile uploadFile = (MultipartFile) multipartRequest.getFileMap().get("file");
         this.logger.info("Received file " + uploadFile.getOriginalFilename());
 
         CmsFileDao cmsFileDao = (CmsFileDao) this.daoService.getDao(CmsFile.class);
 
-        File newFile = File.createTempFile("upload", "file");
-        newFile.deleteOnExit();
+        OoResource uploadResource = ooResourceLoader.getResource(OoResourcePathPrefix.UPLOAD.pathPrefix() + uploadFile.getOriginalFilename()); //FIXME needs to be unique ensured
 
-        uploadFile.transferTo(newFile);
+        uploadFile.transferTo(uploadResource.getFile());
+        uploadResource.getFile().deleteOnExit();
 
-        cmsFile.setNewFile(newFile);
+        cmsFile.setFile(uploadResource);
         cmsFile.setOriginalFileName(uploadFile.getOriginalFilename());
         cmsFile.setLabel(uploadFile.getOriginalFilename());
 
@@ -244,7 +250,8 @@ public class FormController
         cmsFile.setCopyright(multipartRequest.getParameter("copyright"));
 
         cmsFileDao.save(cmsFile);
-        newFile.delete();
+
+        System.out.println("##### " + cmsFile.getFile().getUrl().toString());
 
         // We have errors so return error messages
         ModelAndView view = new ModelAndView("jsonView");

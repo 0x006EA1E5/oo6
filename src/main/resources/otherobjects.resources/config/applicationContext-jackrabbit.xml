@@ -78,6 +78,7 @@
 				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
 				<property name="sessionFactory" ref="jcrSessionFactory" />
 				<property name="validator" ref="baseNodeValidator" />
+				<property name="ooResourceLoader" ref="ooResourceLoader" />
 			</bean>
 		</property>
 	</bean>

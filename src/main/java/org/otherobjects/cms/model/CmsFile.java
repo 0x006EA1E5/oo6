@@ -1,12 +1,8 @@
 package org.otherobjects.cms.model;
 
-import java.io.File;
-
+import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.types.annotation.Property;
-import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
-
-import flexjson.JSON;
 
 @Type(labelProperty = "label")
 public class CmsFile extends BaseNode
@@ -22,7 +18,9 @@ public class CmsFile extends BaseNode
 
     // Source information
     private String originalFileName;
-    private File newFile;
+    //    private File newFile;
+
+    private OoResource file;
 
     @Override
     @Property(order = 10, required = true)
@@ -81,7 +79,7 @@ public class CmsFile extends BaseNode
         this.mimeType = mimeType;
     }
 
-    @Property(order = 50)
+    @Property(order = 60)
     public String getOriginalFileName()
     {
         return originalFileName;
@@ -92,16 +90,27 @@ public class CmsFile extends BaseNode
         this.originalFileName = originalFileName;
     }
 
-    @Property(type = PropertyType.TEXT)
-    @JSON(include = false)
-    public File getNewFile()
+    //    @Property(type = PropertyType.TEXT)
+    //    @JSON(include = false)
+    //    public File getNewFile()
+    //    {
+    //        return newFile;
+    //    }
+    //
+    //    public void setNewFile(File newFile)
+    //    {
+    //        this.newFile = newFile;
+    //    }
+
+    @Property(order = 70)
+    public OoResource getFile()
     {
-        return newFile;
+        return file;
     }
 
-    public void setNewFile(File newFile)
+    public void setFile(OoResource file)
     {
-        this.newFile = newFile;
+        this.file = file;
     }
 
 }

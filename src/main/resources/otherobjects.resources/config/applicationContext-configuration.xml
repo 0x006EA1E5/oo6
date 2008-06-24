@@ -24,6 +24,7 @@
 	</bean>
 	
 	<bean id="ooResourceLoader" class="org.otherobjects.cms.io.OoResourceLoader">
+		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
 	</bean>
 
 	<!-- JNDI DataSource for J2EE environments -->
