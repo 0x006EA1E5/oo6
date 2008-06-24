@@ -19,6 +19,8 @@ Final TODO
 * Save TypeDefs into JCR
 * RSS via selectors
 
+* Add comments to web.xml file
+
 Small tasks:
 
 * Fix workbench delete and move
