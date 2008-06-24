@@ -26,7 +26,7 @@ public class PageRenderer implements ResourceRenderer
         Assert.notNull(template, "No template found for type: " + resourceObject.getTypeDef().getName());
 
         // Return page and context
-        ModelAndView view = new ModelAndView("layouts/" + ((String)template.get("layout.code")).replaceAll("\\.html","") + "");
+        ModelAndView view = new ModelAndView("/site/templates/layouts/" + ((String)template.get("layout.code")).replaceAll("\\.html","") + "");
 
         view.addObject("resourceObject", resourceObject);
 
@@ -60,7 +60,13 @@ public class PageRenderer implements ResourceRenderer
         if (resourceObject.hasProperty("template") && resourceObject.get("template") != null)
             return (BaseNode) resourceObject.get("template");
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
-        String templateCode = StringUtils.substringAfterLast(resourceObject.getTypeDef().getName(), ".").toLowerCase();
+        
+        String templateCode = "";
+        if(resourceObject.getTypeDef().getName().contains("."))
+            templateCode = StringUtils.substringAfterLast(resourceObject.getTypeDef().getName(), ".").toLowerCase();
+        else 
+            templateCode = resourceObject.getTypeDef().getName().toLowerCase();
+            
         BaseNode template = universalJcrDao.getByPath("/designer/templates/" + templateCode);
         return template;
     }
