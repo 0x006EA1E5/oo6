@@ -51,6 +51,16 @@
   <chapter>
     <title>Where does the data go?</title>
 
+    <para>OTHERobjects sites use Maven under the hood to manage a variety of
+    build functions. The standard maven directory layout
+    (http://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html)
+    is quite deep and unnecessray for most OO projects. Our standard layout is
+    described below:</para>
+
+    <para></para>
+
+    <para> </para>
+
     <para>As you build you site you will be adding all sorts of code and data.
     It is obviously important to keep this safe.</para>
 
@@ -142,9 +152,9 @@
     <para>Choose a base object ie is it a page or not.</para>
 
     <para>Conventions: page objects have title, content, summary (for
-    elsewhere), image </para>
+    elsewhere), image</para>
 
-    <para> Sholud name always end in Page? EventPage?</para>
+    <para>Sholud name always end in Page? EventPage?</para>
   </chapter>
 
   <chapter>

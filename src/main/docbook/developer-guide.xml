@@ -199,13 +199,19 @@ brushed:~ rich$
 
             <tbody>
               <row>
+                <entry>Run Jetty Run (embedded Jetty webapp runner)</entry>
+
+                <entry>http://run-jetty-run.googlecode.com/svn/trunk/updatesite</entry>
+              </row>
+
+              <row>
                 <entry>Subversive 1.1.7 (Subversion SCM integration)</entry>
 
                 <entry>http://www.polarion.org/projects/subversive/download/1.1/update-site/</entry>
               </row>
 
               <row>
-                <entry>M2Eclipse 0.10 (Maven integration)</entry>
+                <entry>M2Eclipse 0.9.4 (Maven integration)</entry>
 
                 <entry>http://m2eclipse.codehaus.org/update-dev/</entry>
               </row>
@@ -217,7 +223,7 @@ brushed:~ rich$
               </row>
 
               <row>
-                <entry>MoreUnit 0.8.2 (Unit testing utilities)</entry>
+                <entry>MoreUnit 1.0.2 (Unit testing utilities)</entry>
 
                 <entry>http://moreunit.sourceforge.net/org.moreunit.updatesite/</entry>
               </row>
