@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+case $1 in
+     create)
+           mvn archetype:create -DarchetypeGroupId=org.otherobjects.cms -DarchetypeArtifactId=otherobjects-basic-site -DarchetypeVersion=0.5-SNAPSHOT \
+               -DgroupId=org.myorganization.otherobjects -DartifactId=$2
+           ;;
+     help)
+           echo
+           echo Commands are: 
+           echo
+           echo "  help                 show this screen"
+           echo "  create [sitename]    creates a site in this directory"
+           echo "  version              TODO show which version of OTHERobjects in installed"
+           echo
+           ;;
+     *)
+           echo "Unknown command. Type 'oo help' to list commands."
+           exit
+           ;;
+esac              
+
