@@ -66,6 +66,11 @@ public class OoResourceMetaDataHelper
                     {
                         is = resource.getInputStream();
                         String string = IOUtils.toString(is);
+                        
+                        // TODO Don't process non-JSON strings
+                        if(!string.contains("{"))
+                            return null;
+                        
                         int startPos = string.indexOf(blockCommentSpec.getBlockStart());
                         if (startPos >= 0)
                         {

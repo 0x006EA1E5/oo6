@@ -1,19 +1,49 @@
 #!/usr/bin/env bash
 
 case $1 in
-     create)
-           mvn archetype:create -DarchetypeGroupId=org.otherobjects.cms -DarchetypeArtifactId=otherobjects-basic-site -DarchetypeVersion=0.5-SNAPSHOT \
-               -DgroupId=org.myorganization.otherobjects -DartifactId=$2
-           ;;
+
      help)
            echo
            echo Commands are: 
            echo
            echo "  help                 show this screen"
+           echo "  version              show which version of OTHERobjects in installed"
            echo "  create [sitename]    creates a site in this directory"
-           echo "  version              TODO show which version of OTHERobjects in installed"
+           echo "  run                  runs the site"
+           echo "  ooupdate             TODO updates OTHERobjects to the latest build"
            echo
            ;;
+           
+     version)
+           echo
+           cat $OTHEROBJECTS_HOME/VERSION.txt
+           echo
+           mvn -version
+           echo
+           ;;
+
+     create)
+           
+           ##mvn archetype:create -DarchetypeGroupId=org.otherobjects.cms -DarchetypeArtifactId=otherobjects-basic-site -DarchetypeVersion=0.5-SNAPSHOT \
+           ##    -DgroupId=org.myorganization.otherobjects -DartifactId=$2
+           
+           unzip $OTHEROBJECTS_HOME/archetype/otherobjects-basic-site.zip -d $2
+           sed -i -e 's/SITENAME/'$2'/g' $2/pom.xml
+           
+           echo
+           echo Your new site has been created. To start it up type:
+           echo
+           echo "  cd $2"
+           echo "  oo run"
+           echo
+           
+           ;;
+
+     run)
+           mvn jetty:run
+           ;;
+     
+           
      *)
            echo "Unknown command. Type 'oo help' to list commands."
            exit

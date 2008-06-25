@@ -32,18 +32,18 @@ import org.slf4j.LoggerFactory;
  * 
  *      builder = new BeanBuilder(this)
  *      Object o = builder.bean {
- *    		beanInstance {
- *      			mapInstance {
- *      				key1 {
- *      					bean {
- *      					}
- *      				}
- *      				key2 {
- *      					list {
- *      					}
- *      				}
- *      		}
- *      	}
+ *          beanInstance {
+ *                  mapInstance {
+ *                      key1 {
+ *                          bean {
+ *                          }
+ *                      }
+ *                      key2 {
+ *                          list {
+ *                          }
+ *                      }
+ *              }
+ *          }
  * </pre>
  * <p>
  * Each node name (bean, mapInstance, etc.) is handled according to the type of it's containing element.

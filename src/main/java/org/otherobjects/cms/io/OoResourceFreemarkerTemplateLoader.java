@@ -36,9 +36,21 @@ public class OoResourceFreemarkerTemplateLoader implements TemplateLoader
 
     public long getLastModified(Object templateSource)
     {
+        // FIXME Merge this together somehow
         if (templateSource instanceof FileSystemResource)
         {
             return ((FileSystemResource) templateSource).getFile().lastModified();
+        }
+        else if (templateSource instanceof DefaultOoResource)
+        {
+            try
+            {
+                return ((DefaultOoResource) templateSource).getFile().lastModified();
+            }
+            catch (IOException e)
+            {
+                return -1;
+            }
         }
         return -1;
     }

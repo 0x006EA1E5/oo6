@@ -4,12 +4,30 @@ import java.util.regex.Pattern;
 
 /**
  * enum of path prefixes used to specify {@link OoResource}s in a generic kind of way
+ * 
+ *  /public-data/
+ *  /private-data/
+ *  /private-data/uploads/
+ *  
+ *  /site/ = file:webapp/WEB-INF/
+ *  /site/static = file:webapp/static
+ *  
+ *  /otherobjects = classpath:otherobjects.resources/
+ *  /otherobjects/static = classpath:otherobjects.resources/static
+ *  
+ *  /tmp
+ *  
+ *  /widgets...
+ *  /plugins...
+ *  
+ *  /other*
+ * 
  * @author joerg
  *
  */
 public enum OoResourcePathPrefix {
 
-    CORE("core", "otherobjects.resources"), STATIC("static", "site.resources/static"), SITE("site", ""), DATA("data", null), UPLOAD("upload", null);
+    CORE("core", "otherobjects.resources"), STATIC("static", "site.resources/static"), SITE("site", "WEB-INF"), DATA("data", null), UPLOAD("upload", null);
 
     private final String pathPrefix;
     private final String replacementFilePathPrefix;

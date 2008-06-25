@@ -28,24 +28,134 @@
 
       <para>Move advanced users wishing to extend OTHERobjects should read the
       Developer Guide.</para>
+
+      <para>You should be comfortable with the command line, HTML, and simple
+      scripting.</para>
+
+      <para>You don't need any knowledge of Java.</para>
     </section>
   </preface>
 
   <chapter id="chapter-using-the-framework">
     <title>Getting started</title>
 
-    <para>Installing OTHERobjects</para>
-
-    <para>Starting OTHERobjects</para>
-
-    <para>Setting up admin user (for more info see Users and permissions
+    <para>TODO Setting up admin user (for more info see Users and permissions
     chapter).</para>
 
-    <para>Keeping your data safe</para>
+    <section>
+      <title>Installing required software</title>
 
-    <para></para>
+      <para>There is some key software that you will need before you can start
+      developing with OTHERobjects.</para>
 
-    <para></para>
+      <section>
+        <title>Java</title>
+
+        <para>OTHERobjects is Java-powered, so you will need a recent version
+        of the JVM to run it. If your system does not come with a JVM
+        installed we would recommend the latest Sun JDK from
+        java.sun.com/download. Check that your JVM is installed by running:
+        the following command:</para>
+
+        <programlisting>iMac:~ rich$ <emphasis role="bold">java -version</emphasis>
+java version "1.5.0_07" 
+Java(TM) 2 Runtime Environment, Standard Edition (build 1.5.0_07-164)
+Java HotSpot(TM) Client VM (build 1.5.0_07-87, mixed mode, sharing)
+iMac:~ rich$
+</programlisting>
+
+        <para>You will need version 1.5.0 or greater.</para>
+      </section>
+
+      <section>
+        <title>Apache Maven</title>
+
+        <para>We use Maven behing the scenes to download dependecies, run the
+        development server and to backage up your site ready for deployment.
+        You'll need Apache Maven version 2.0.7 or greater. You can download it
+        from: <uri>http://maven.apache.org/download.html</uri> . Once you have
+        downloaded and installed Maven you should make sure that the <emphasis
+        role="bold">mvn</emphasis> command is included in your path:</para>
+
+        <para><programlisting>iMac:~ rich$ <emphasis role="bold">mvn -version</emphasis> 
+Maven version: 2.0.7
+iMac:~ rich$
+</programlisting></para>
+      </section>
+    </section>
+
+    <section>
+      <title>Installing OTHERobjects</title>
+
+      <para>Download from http://www.otherobjects.org/download/</para>
+
+      <para>Unzip the file somewhere on your system.</para>
+
+      <para>Set the OTHEROBJECTS_HOME environment variable.</para>
+
+      <para>Add $OTHEROBJECTS_HOME/bin to your path.</para>
+
+      <section>
+        <title>Creating your first site</title>
+
+        <para>If all your software has been properly installed then you should
+        be ready to create your first site.</para>
+
+        <para>First of all check that OTHERobjects has been installed:</para>
+
+        <programlisting>iMac:mysite rich$ <emphasis role="bold">oo version</emphasis>
+
+OTHERObjects CMS v0.5-SNAPSHOT
+
+Maven version: 2.0.9
+Java version: 1.5.0_13
+OS name: "mac os x" version: "10.5.3" arch: "i386" Family: "unix"
+
+iMac:mysite rich$ 
+</programlisting>
+
+        <para>If you get any errors check the required software has been
+        correctly installed.</para>
+
+        <para>Now go ahead and create your first site:</para>
+
+        <para><programlisting>iMac:mysite rich$ <emphasis role="bold">oo create demo</emphasis>
+
+...
+
+Your new site has been created. To start it up type:
+
+  cd oo2
+  oo run
+</programlisting></para>
+
+        <para>Finally (as told by the create task) change into your new
+        directory and type <emphasis role="bold">oo run</emphasis>. The server
+        will start and you should get this:</para>
+
+        <programlisting>INFO  [o.o.cms.util.StartupMessage] ************************************************************** 
+INFO  [o.o.cms.util.StartupMessage] ************************************************************** 
+INFO  [o.o.cms.util.StartupMessage]   ___ _____ _   _ _____ ____       _     _           _        
+INFO  [o.o.cms.util.StartupMessage]  / _ \_   _| | | | ____|  _ \ ___ | |__ (_) ___  ___| |_ ___  
+INFO  [o.o.cms.util.StartupMessage] | | | || | | |_| |  _| | |_) / _ \| '_ \| |/ _ \/ __| __/ __| 
+INFO  [o.o.cms.util.StartupMessage] | |_| || | |  _  | |___|  _ &lt; (_) | |_) | |  __/ (__| |_\__ \ 
+INFO  [o.o.cms.util.StartupMessage]  \___/ |_| |_| |_|_____|_| \_\___/|_.__// |\___|\___|\__|___/ 
+INFO  [o.o.cms.util.StartupMessage]                                       |__/                 
+INFO  [o.o.cms.util.StartupMessage]  
+INFO  [o.o.cms.util.StartupMessage] ******************* Started up successfully ****************** 
+INFO  [o.o.cms.util.StartupMessage]  
+INFO  [o.o.cms.util.StartupMessage] Environment : dev 
+INFO  [o.o.cms.util.StartupMessage] Site        : [unknown] 
+INFO  [o.o.cms.util.StartupMessage] Admin       : [unknown] 
+INFO  [o.o.cms.util.StartupMessage]  
+INFO  [o.o.cms.util.StartupMessage] ************************************************************** 
+INFO  [o.o.cms.util.StartupMessage] ************************************************************** 
+</programlisting>
+
+        <para>Congratulations! Your site has started up correctly and you can
+        now go to http://localhost:8080/ to see your first page.</para>
+      </section>
+    </section>
   </chapter>
 
   <chapter>
@@ -55,11 +165,11 @@
     build functions. The standard maven directory layout
     (http://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html)
     is quite deep and unnecessray for most OO projects. Our standard layout is
-    described below:</para>
+    described below:.</para>
 
     <para></para>
 
-    <para> </para>
+    <para></para>
 
     <para>As you build you site you will be adding all sorts of code and data.
     It is obviously important to keep this safe.</para>
@@ -71,6 +181,23 @@
     <para>Scripts</para>
 
     <para>Site data: added data, UGC, uploaded files</para>
+
+    <section>
+      <title>What to back up</title>
+
+      <para></para>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Using SCM</title>
+
+      <para>SVN, CVS, Git</para>
+
+      <para>When checking in to SCM ignore the private-data and public-data
+      folders</para>
+    </section>
   </chapter>
 
   <chapter id="chapter-overview-of-steps">

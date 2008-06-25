@@ -8,7 +8,7 @@
 var OO = OO || {};
 
 // Ext blank image
-Ext.BLANK_IMAGE_URL = '/static/otherobjects.resources/static/libs/extjs/images/default/s.gif';
+Ext.BLANK_IMAGE_URL = '/classpath/otherobjects.resources/static/libs/extjs/images/default/s.gif';
 
 OO.Workbench = function()
 {

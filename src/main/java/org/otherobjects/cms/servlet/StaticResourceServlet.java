@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
  * may come from local project files or the classpath (such as those provided
  * by otherobjects and other plugins).
  * 
+ * <p>Used primarily for serving static content from the OTHERobjects classpath.
+ * 
  * <p>TODO Check caching and gzip
  * <br>TODO Local file serving  - check not cached
  * <br>TODO Check content types
@@ -47,7 +49,7 @@ public class StaticResourceServlet extends HttpServlet
             return;
 
         //  Security check: so that non-static data is not served
-        if (!path.contains("/static/") && !path.contains(".."))
+        if (!path.contains("/static/") || path.contains(".."))
         {
             this.logger.warn("Prevented access to non-static resource: {}", path);
             resp.setStatus(HttpServletResponse.SC_FORBIDDEN);

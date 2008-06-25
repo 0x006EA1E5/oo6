@@ -39,17 +39,17 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
     public void afterPropertiesSet() throws Exception
     {
         // look up required config properties and implement fail fast behaviour
-        dataDirPath = otherObjectsConfigurator.getProperty("site.data.dir.path");
-        Assert.notNull(dataDirPath, "Property site.data.dir.path has not been set. Add it to site.properties");
+        dataDirPath = otherObjectsConfigurator.getProperty("site.public.data.path");
+        //TODO Add methods to validate required properties to the configuratsor. Including paths or regexps.
+        Assert.notNull(dataDirPath, "Property site.public.data.path has not been set. Add it to your properties file");
 
-        uploadDirPath = otherObjectsConfigurator.getProperty("site.upload.dir.path");
-        Assert.notNull(uploadDirPath, "Property site.upload.dir.path has not been set. Add it to site.properties");
-
+        uploadDirPath = otherObjectsConfigurator.getProperty("site.private.data.path") + "uploads/";
+        
         // set some static props on DefautOoResource as a kind of poor DI
         DefaultOoResource.setDataDirPath(dataDirPath);
 
-        DefaultOoResource.setDataBaseUrl(otherObjectsConfigurator.getProperty("site.data.base.url"));
-        DefaultOoResource.setStaticBaseUrl(otherObjectsConfigurator.getProperty("site.static.base.url"));
+        DefaultOoResource.setDataBaseUrl(otherObjectsConfigurator.getProperty("site.public.data.url"));
+        DefaultOoResource.setStaticBaseUrl(otherObjectsConfigurator.getProperty("site.static.url"));
     }
 
     public OoResource getResource(String path) throws IOException
@@ -228,7 +228,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
 
         public String getPath()
         {
-            return path;
+            return (prefix!=null ? prefix.replacementFilePathPrefix() : "") + path;
         }
 
         public boolean isWritable()
