@@ -13,7 +13,7 @@
 
 	<!-- For properties -->
 	<bean id="otherObjectsConfigurator" class="org.otherobjects.cms.config.OtherObjectsConfigurator">
-		<property name="ignoreResourceNotFound" value="true" />
+		<property name="ignoreResourceNotFound" value="false" />
 		<property name="locations">
 			<list>
 				<value>classpath:otherobjects.resources/config/otherobjects.properties</value>
@@ -41,15 +41,6 @@
 		<property name="removeAbandoned" value="true" />
 		<property name="removeAbandonedTimeout" value="60" />
 	</bean>
-
-	<!-- Groovy telnet shell
-	<bean id="groovyShellService" class="org.otherobjects.cms.scripting.groovy.GroovyShellService" init-method="initialize">
-		<property name="socket" value="6789" />
-		<!- TODO Should not launch at startup. Could be lauched via Debug page instead. Also 
-		should have port as a setting and if null should we should disable this service. ->
-		<property name="launchAtStart" value="true" />
-	</bean>
-	 -->
 	
 	<!-- registers OoResourceEditor to enable OoResourcePaths specified in the application context to be automatically resolved to OoResource objects -->
 	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
