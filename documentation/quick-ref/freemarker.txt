@@ -22,3 +22,9 @@ boolean?string("yes", "no")
 lastUpdated?datetime?string.short
 short/medium/long/full
 lastUpdated?string("yyyy-MM-dd HH:mm:ss zzzz")
+
+
+BUGS
+----
+
+booleanMayBeNull!false?string does not work

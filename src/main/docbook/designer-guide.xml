@@ -272,6 +272,21 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
   <chapter>
     <title>Defining object types</title>
 
+    <para>All of the data for your site is stored in objects. A number of
+    standard objects are provided for Images, Files, Articles, News Stories
+    and such. You will more than likely want to customise these and add your
+    own object types too. This is easy to do and this section explains how it
+    is done.</para>
+
+    <para>Note for advanced users: This section only covers live editing of
+    dynamic object types. For more advanced use cases you may want to create
+    real Java object to store and process your data. You can also choose to
+    store data in the database rather than the content repository. More
+    informatino about these options can be found in the developer
+    guide.</para>
+
+    <para></para>
+
     <para>TypeDef must have: name</para>
 
     <para>Properties much have: name, type, size?</para>
@@ -282,6 +297,146 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
     elsewhere), image</para>
 
     <para>Sholud name always end in Page? EventPage?</para>
+
+    <section>
+      <title>How to edit and define objects</title>
+
+      <para>Go to Workbench &gt; Data Types &gt; Add or Edit</para>
+
+      <para>Type Def options</para>
+
+      <para></para>
+
+      <table>
+        <title>Options for an Object Type Definition</title>
+
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry>code</entry>
+
+              <entry>a unique code for this type. Use your domain name for
+              namespace. Required</entry>
+            </row>
+
+            <row>
+              <entry>label</entry>
+
+              <entry>human readable label</entry>
+            </row>
+
+            <row>
+              <entry>description</entry>
+
+              <entry>a more complete description of this object type</entry>
+            </row>
+
+            <row>
+              <entry>help</entry>
+
+              <entry>instructions for users using this object type</entry>
+            </row>
+
+            <row>
+              <entry>labelProperty</entry>
+
+              <entry>which property to use to descripe this object</entry>
+            </row>
+
+            <row>
+              <entry>descriptionProperty</entry>
+            </row>
+
+            <row>
+              <entry>iconProperty</entry>
+            </row>
+
+            <row>
+              <entry>imageProperty</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>Property Types</para>
+
+      <para>Simple Properties: string, text, number, decimal, boolean, date,
+      time, timestamp</para>
+
+      <para>Sub objects: reference, component</para>
+
+      <para>Collection types: list</para>
+
+      <para></para>
+
+      <para>Common objects you may want to reference: CmsImage, CmsFile,
+      OoResource?, CmsRichMedia, User, Role</para>
+    </section>
+
+    <section>
+      <title>Forms, fields and validation</title>
+
+      <para>Each property has a standard field type, but alternate
+      implementations may be available</para>
+
+      <para></para>
+
+      <table>
+        <title>Properties and avaiable field types</title>
+
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry>string</entry>
+
+              <entry>text field, password field, picklist</entry>
+            </row>
+
+            <row>
+              <entry>text</entry>
+
+              <entry>textarea, wikieditor, htmleditor</entry>
+            </row>
+
+            <row>
+              <entry>date</entry>
+
+              <entry>calendar</entry>
+            </row>
+
+            <row>
+              <entry>time</entry>
+
+              <entry>time selector</entry>
+            </row>
+
+            <row>
+              <entry>timestamp</entry>
+
+              <entry>calendar and time selector</entry>
+            </row>
+
+            <row>
+              <entry>boolean</entry>
+
+              <entry>checkbox, radiobuttons, slider</entry>
+            </row>
+
+            <row>
+              <entry>number, decimal</entry>
+
+              <entry>textfeld, slider, pick list</entry>
+            </row>
+
+            <row>
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
   </chapter>
 
   <chapter>
