@@ -26,6 +26,8 @@ public class IdFromUrlInterceptor extends HandlerInterceptorAdapter
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
     {
+        if (request.getPathInfo() == null)
+            return true;
 
         Matcher matcher = idPattern.matcher(request.getPathInfo());
 
