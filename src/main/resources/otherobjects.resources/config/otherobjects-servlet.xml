@@ -25,29 +25,13 @@
 	<context:component-scan base-package="org.otherobjects.cms.controllers" />
 	<context:component-scan base-package="org.otherobjects.cms.util" />
 
-	<!-- 
-		Site controller
-		TODO This should be a separate servlet?
-	-->
-	<bean name="siteController" class="org.otherobjects.cms.controllers.SiteController">
-		<property name="handlers">
-			<map>
-				<entry key="*" value-ref="pageHandler" />
-			</map>
-		</property>
-	</bean>
-
 	<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
 		<property name="paramName" value="locale" />
 	</bean>
 
-	<bean name="pageHandler" class="org.otherobjects.cms.controllers.renderers.PageRenderer">
-		<property name="daoService" ref="daoService" />
-	</bean>
-
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<!-- TODO Extract max-upload size into a property -->
-		<property name="maxUploadSize" value="10000000" />
+		<!-- TODO implement ${otherobjects.max.upload.size} -->
+		<property name="maxUploadSize" value="50000000" />
 	</bean>
 
 	<bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
