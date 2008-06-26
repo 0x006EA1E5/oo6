@@ -24,6 +24,7 @@ public class BindingResultWrapper implements InvocationHandler
             proxiedMethods.add(BindingResult.class.getMethod("getFieldType", new Class[]{String.class}));
             proxiedMethods.add(BindingResult.class.getMethod("getFieldValue", new Class[]{String.class}));
             proxiedMethods.add(BindingResult.class.getMethod("hasFieldErrors", new Class[]{String.class}));
+            proxiedMethods.add(BindingResult.class.getMethod("pushNestedPath", new Class[]{String.class}));
         }
         catch (Exception e)
         {

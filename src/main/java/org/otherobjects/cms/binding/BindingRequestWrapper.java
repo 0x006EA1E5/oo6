@@ -75,7 +75,7 @@ public class BindingRequestWrapper implements InvocationHandler
         {
             mutableParams.put(newParameterName, mutableParams.get(originalParameterName));
             mutableParams.remove(originalParameterName);
-            rewritePaths.put(newParameterName, originalParameterName);
+            rewritePaths.put(originalParameterName, newParameterName);
         }
     }
 

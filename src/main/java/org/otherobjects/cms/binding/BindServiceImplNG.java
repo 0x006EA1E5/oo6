@@ -45,8 +45,6 @@ public class BindServiceImplNG implements BindService
 {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private static final String DYNA_NODE_DATAMAP_NAME = "data";
-
     @Resource
     private DaoService daoService;
 
@@ -179,7 +177,7 @@ public class BindServiceImplNG implements BindService
     {
         if (item instanceof DynaNode)
         {
-            String propertyPath = DYNA_NODE_DATAMAP_NAME + "[" + propertyDef.getName() + "]";
+            String propertyPath = DynaNode.DYNA_NODE_DATAMAP_NAME + "[" + propertyDef.getName() + "]";
             wrappedRequest.rewriteParameter(rootPathPrefix + propertyDef.getName(), rootPathPrefix + propertyPath);
             return propertyPath;
         }
