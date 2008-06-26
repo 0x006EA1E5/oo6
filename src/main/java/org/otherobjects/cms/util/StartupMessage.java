@@ -2,6 +2,7 @@ package org.otherobjects.cms.util;
 
 import javax.annotation.Resource;
 
+import org.otherobjects.cms.Url;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,8 +57,8 @@ public class StartupMessage implements ApplicationListener
             else
                 this.logger.info("Environment : WARNING! No configurator found.");
                 
-            this.logger.info("Site        : [unknown]");
-            this.logger.info("Admin       : [unknown]");
+            this.logger.info("Site        : " + new Url("/").getAbsoluteLink());
+            this.logger.info("Admin       : " + new Url("/otherobjects/").getAbsoluteLink());
             this.logger.info("");
             this.logger.info("**************************************************************");
             this.logger.info("**************************************************************");
