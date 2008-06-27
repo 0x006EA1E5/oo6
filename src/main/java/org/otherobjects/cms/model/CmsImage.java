@@ -57,7 +57,7 @@ public class CmsImage extends BaseNode
             return this.thumbnailPath;
 
         if (getOriginalFileName() != null)
-            return "/data" + getOriginalFileName().replaceAll("originals", "100x100%23FFFFFF");
+            return "/public-data" + getOriginalFileName().replaceAll("originals", "100x100%23FFFFFF");
         else
             return null;
     }
