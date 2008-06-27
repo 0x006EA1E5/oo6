@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -32,7 +31,6 @@ public class SiteController extends AbstractController
 {
     private final Logger logger = LoggerFactory.getLogger(SiteController.class);
 
-    @Resource
     private DaoService daoService;
 
     private Map<String, ResourceRenderer> handlers = new HashMap<String, ResourceRenderer>();
@@ -107,5 +105,10 @@ public class SiteController extends AbstractController
     public void setHandlers(Map<String, ResourceRenderer> handlers)
     {
         this.handlers = handlers;
+    }
+
+    public void setDaoService(DaoService daoService)
+    {
+        this.daoService = daoService;
     }
 }
