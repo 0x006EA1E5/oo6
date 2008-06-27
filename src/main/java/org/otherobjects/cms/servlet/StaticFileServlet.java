@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 
@@ -110,6 +112,15 @@ public class StaticFileServlet extends HttpServlet
     {
         // check the file and open it
         String realPath = rootPath + relativePath;
+        try
+        {
+            realPath = URLDecoder.decode(realPath, "UTF-8");
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         File file = new File(realPath);
         if (!file.isFile())
         {
