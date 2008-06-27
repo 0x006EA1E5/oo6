@@ -98,17 +98,15 @@ Macro to insert HUD code
 <#-- HUD Elements -->
 <script type="text/javascript" src="http://cdn.othermedia.com/ojay-yui/2.5.1.js"></script>
 <script type="text/javascript" src="http://cdn.othermedia.com/ojay/0.1.2/all-min.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.5.1/build/dragdrop/dragdrop-min.js" ></script>
 <@oo.js "/otherobjects/static/javascript/keyboard.js"/>
 <@oo.js "/otherobjects/static/javascript/ext-base.js"/>
 <@oo.js "/otherobjects/static/javascript/ext-core.js"/>
-<@oo.js "/otherobjects/static/javascript/hud/drag-drop.js"/>
 <@oo.js "/otherobjects/static/javascript/hud/hud.js"/>
 <@oo.css "/otherobjects/static/css/hud.css"/>
 
 <div id="oo-form-overlay" style="display:none;"></div>
 
-<div  id="oo-main-hud" class="oo-hud" style="display:none;">
+<div  id="oo-main-hud" class="box-oo second-oo" style="display:none;">
 <#include "/blocks/oo-hud.ftl">
 </div>
 
@@ -125,6 +123,3 @@ var ooTemplateId = '${ooTemplate.id}';
 
 <#-- Directives-->
 <#assign format = "org.otherobjects.cms.tools.FormatDirective"?new()>  
-
-
-

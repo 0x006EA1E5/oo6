@@ -19,7 +19,7 @@ function ooEnableBlockManagement() {
 	$(".oo-block-delete").on('click', function(el,e) {
 		ooDeleteBlock(el);
 	});
-	YAHOO.util.Event.onDOMReady(YAHOO.example.DDApp.init, YAHOO.example.DDApp, true);
+	//YAHOO.util.Event.onDOMReady(YAHOO.example.DDApp.init, YAHOO.example.DDApp, true);
 }
 
 function ooInsertNewBlock(el) {
@@ -71,11 +71,11 @@ function ooSaveTemplateDesign()
 function ooToggleHud(id) {
 
 	// Allow HUD to be dragged out of the way
-	dd = new YAHOO.util.DD(id);
+	// dd = new YAHOO.util.DD(id);
 
 	var vp = Ojay.getViewportSize()
-	var l = (vp.width - 600)/2;
-	var t = 100;//(vp.height - 490)/2;
+	var l = (vp.width - 825)/2;
+	var t = (vp.height - 250)/2;
 
 	var hud = $('#'+id);
 	hud.setStyle({left: l+'px'});

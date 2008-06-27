@@ -1,3 +1,23 @@
+
+
+<!--
+<div class="title-oo"><div class="close-oo">X</div>OTHERobjects</div>
+<div class="field-oo"><label>Title:</label><input class="text" type="text" value="Here is some test text"></div>
+<div class="field-oo"><label>Metadata:</label><textarea>Here is a line of test text. Here is a line of test text. Here is a line of test text.</textarea></div>
+-->
+
+<div class="button-oo"><img src="<@oo.url "/otherobjects/static/icons/zoom.png" />" width"100" height="100" /><p>Search</p></div>
+<div class="button-oo"><a onclick="ooEnableBlockSelector()"><img src="<@oo.url "/otherobjects/static/icons/pencil.png" />" width"100" height="100" /><p>Edit</p></a></div>
+<div class="button-oo"><img src="<@oo.url "/otherobjects/static/icons/add.png" />" width"100" height="100" /><p>New</p></div>
+<div class="button-oo"><a onclick="ooEnableBlockManagement()"><img src="<@oo.url "/otherobjects/static/icons/palette.png" />" width"100" height="100" /><p>Design</p></a></div>
+<div class="button-oo"><a href="/otherobjects/workbench/"><img src="<@oo.url "/otherobjects/static/icons/database-gear.png" />" width"100" height="100" /><p>Workbench</p></a></div>
+<div class="button-oo"><a href="/otherobjects/logout.html"><img src="<@oo.url "/otherobjects/static/icons/lock.png" />" width"100" height="100" /><p>Log out</p></a></div>
+
+</div>
+
+
+<#--
+
 <h1>OTHERobjects</h1>
 <form><input type="search" class="search" name="q"/></form>
 
@@ -18,3 +38,6 @@ at <strong>${resourceObject.modificationTimestamp?datetime?string("HH:mm 'on' d 
 <a onclick="ooEnableBlockManagement()" class="oo-hud-button" id="oo-manage-blocks">Manage blocks</a>
 <a class="oo-hud-button" id="oo-logout">Log out</a>
 <a class="oo-hud-button" id="oo-publish">Publish</a>
+
+
+-->
