@@ -14,10 +14,9 @@
 <!--		<intercept-url pattern="/go/workbench/login.html" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
 <!--		<intercept-url pattern="/go/workbench/**" access="IS_AUTHENTICATED_REMEMBERED" />-->
 		<intercept-url pattern="/otherobjects/password/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-		<intercept-url pattern="/go/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<form-login login-page="/otherobjects/workbench/login.html" />
-		<logout logout-url="/go/logout.html" logout-success-url="/go" />
+		<logout logout-url="/otherobjects/logout.html" logout-success-url="/" />
 	</http>
 	
 	<authentication-provider user-service-ref="userDao" >
