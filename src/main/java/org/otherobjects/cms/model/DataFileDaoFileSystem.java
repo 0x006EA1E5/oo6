@@ -19,10 +19,9 @@ import org.otherobjects.cms.dao.PagedList;
  */
 public class DataFileDaoFileSystem implements DataFileDao
 {
-    // TODO Need to customise this
-    // TODO Need to allow static data servers
-    private final String urlBase = "/data";
-    private final String dataPath = "webapp/data/";
+    // FIXME Lookup with OoConfig here
+    private final String urlBase = "/public-data";
+    private final String dataPath = "webapp/public-data/";
 
     public boolean exists(String id)
     {
