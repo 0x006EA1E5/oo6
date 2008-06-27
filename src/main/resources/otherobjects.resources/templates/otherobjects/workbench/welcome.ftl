@@ -2,7 +2,7 @@
 <div class="welcome-col">
 
 <div class="welcome-block">
-<h1>Welcome to OTHERobjects CMS Milestone 4</h1>
+<h1>Welcome to OTHERobjects CMS Milestone 5</h1>
 <p>This is the fourth and final milestone release of the next generation of OTHERobjects.</p>
 <p>Note that this workbench interface in only a prototype. The final version will 
 look different but will contain similar functionality.</p>

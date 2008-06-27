@@ -52,7 +52,7 @@ OO.Workbench = function()
 	        });
 			
 			// Create welcome panel
-			var welcomePanel = new Ext.ContentPanel('welcome-panel', {autoCreate:true, title:'Welcome', background:false, closable:true, url:'/go/workbench/welcome.html'});
+			var welcomePanel = new Ext.ContentPanel('welcome-panel', {autoCreate:true, title:'Welcome', background:false, closable:true, url:'/otherobjects/workbench/welcome.html'});
 			//welcomePanel.setUrl('/go/workbench/welcome.html',null,true); //loadOnce
 
 			// Create preview panel

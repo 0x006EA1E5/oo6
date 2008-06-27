@@ -6,9 +6,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>OTHERobjects Workbench</title>
-<@oo.js "/otherobjects/static/libs/firebug/firebug.js"/>
-<@oo.js "/otherobjects/static/libs/extjs/src/ext-base.js"/>
-<@oo.js "/otherobjects/static/libs/extjs/src/ext-all-debug.js"/>
 <@oo.css "/otherobjects/static/libs/extjs/src/ext-all.css"/>
 </head>
 
