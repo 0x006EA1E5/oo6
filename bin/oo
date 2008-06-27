@@ -14,7 +14,7 @@ case $1 in
         echo "  (developer tasks)"
         echo
         echo "  oo-update            updates OTHERobjects to the latest build"
-        echo "  oo-generate-docs     generates documentation "
+        echo "  oo-generate-docs     generates documentation"
         echo
         ;;
            
@@ -48,7 +48,7 @@ case $1 in
     	svn update
     	mvn -Dmaven.test.skip=true install
     	echo
-        echo "OTHERobjects has been updated to the lastest version."
+        echo "OTHERobjects has been updated to the latest version."
         echo
         ;;
            
@@ -58,6 +58,8 @@ case $1 in
     	mvn -Ddocbook.name=designer-guide jdocbook:generate
     	#mvn -Ddocbook.name=developer-guide jdocbook:generate
     	#mvn -Ddocbook.name=hosting-guide jdocbook:generate
+    	;;
+    	
 
     *)
         echo "Unknown command. Type 'oo help' to list commands."
