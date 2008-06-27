@@ -10,6 +10,9 @@ case $1 in
            echo "  version              show which version of OTHERobjects in installed"
            echo "  create [sitename]    creates a site in this directory"
            echo "  run                  runs the site"
+	   echo 
+           echo "  Developer tools:"
+	   echo
            echo "  ooupdate             TODO updates OTHERobjects to the latest build"
            echo
            ;;
@@ -20,6 +23,16 @@ case $1 in
            echo
            mvn -version
            echo
+           ;;
+
+     ooupdate)
+           echo
+           cd $OTHEROBJECTS_HOME
+	   svn update
+	   mvn -Dmaven.test.skip=true install
+	   echo
+           echo "OTHERobjects has been updated to the lastest version."
+	   echo
            ;;
 
      create)
