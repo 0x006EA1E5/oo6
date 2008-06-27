@@ -1,6 +1,0 @@
-OTHERobjects User Manual
-------------------------
-For users who edit and maintain existing sites
-
-* Object types
-* Publishing workflow

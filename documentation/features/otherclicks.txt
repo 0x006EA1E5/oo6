@@ -1,3 +1,0 @@
-Potential supported providers:
-
-Responsys, SilverPOP, SubscriberMail, Bronto, CoolerEMail

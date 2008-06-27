@@ -1,5 +1,0 @@
-WebDAV based data server
-Fast apache access
-DB but for files
-Security wrappers
-Image Reszing built it?

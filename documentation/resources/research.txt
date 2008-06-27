@@ -1,4 +1,0 @@
-Research Topics
----------------
-serializableId
-hash/equals builders

@@ -1,9 +1,0 @@
-Data stores
-
-* SVN, JCR, JDBC, File system
-* Validation for all stores
-* Transactional support across all supporting stores
-  http://jakarta.apache.org/commons/transaction/file/index.html
-* Calculated Properties (a la FileMaker)
-* Import/Export with events
-* Anonamised export

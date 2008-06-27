@@ -1,7 +1,0 @@
-REST:      https://jersey.dev.java.net/
-DWR:       http://internna.blogspot.com/2007/05/integrating-dwr-spring.html
-DYNABEANS: http://dynclass.sourceforge.net/
-DYNABEANS: http://sixlegs.com/blog/java/death-to-dynabeans.html
-DYNABEANS: http://www.ociweb.com/jnb/jnbNov2005.html
-GLASSFISH: http://blogs.sun.com/nazrul/date/20070605
-GLASSFISH: https://glassfish.dev.java.net/javaee5/build/GlassFish_LB_Cluster.html#config_lb

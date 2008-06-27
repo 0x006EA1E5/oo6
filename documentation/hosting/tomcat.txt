@@ -1,1 +1,0 @@
-http://www.terracotta.org/confluence/display/docs1/Setting+Up+a+Tomcat+Web+Cluster
