@@ -80,18 +80,18 @@
 				<enabled>false</enabled>
 			</releases>
 		</pluginRepository>
-		<!-- Temp plugin repo until Checkstyle plugin 2.2 is released -->
+		<!-- Temp plugin repo until Checkstyle plugin 2.2 is released
 		<pluginRepository>
 			<id>apache.org</id>
 			<name>Maven Plugin Snapshots</name>
 			<url>http://people.apache.org/repo/m2-snapshot-repository</url>
 			<releases>
-				<enabled>false</enabled>
+				<enabled>false</enabled> 
 			</releases>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-		</pluginRepository>
+		</pluginRepository> -->
 	</pluginRepositories>
 	<scm>
 		<connection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/trunk</connection>
@@ -121,33 +121,34 @@
 				</configuration>
 				</plugin>
 			-->
-			<!--  Documentation generation 
-				<plugin>
+			<!--  Documentation generation -->
+			<plugin>
 				<groupId>org.jboss.maven.plugins</groupId>
 				<artifactId>maven-jdocbook-plugin</artifactId>
 				<extensions>true</extensions>
+				<version>2.1.1</version>
 				<configuration>
-				<formats>
-				<format>
-				<formatName>pdf</formatName>
-				<stylesheetResource>file:${basedir}/src/main/docbook/xslt/pdf/main-pdf.xsl</stylesheetResource>
-				</format>
-				<format>
-				<formatName>html</formatName>
-				</format>
-				</formats>
-				<sourceDocumentName>${docbook.name}.xml</sourceDocumentName>
-				<imageResource>
-				<directory>src/main/docbook/images</directory>
-				<targetPath>images</targetPath>
-				<filtering>false</filtering>
-				</imageResource>
-				<options>
-				<useRelativeImageUris>false</useRelativeImageUris>
-				<xincludeSupported>false</xincludeSupported>
-				</options>
+					<formats>
+						<format>
+							<formatName>pdf</formatName>
+							<stylesheetResource>file:${basedir}/src/main/docbook/xslt/pdf/main-pdf.xsl</stylesheetResource>
+						</format>
+						<format>
+							<formatName>html</formatName>
+						</format>
+					</formats>
+					<sourceDocumentName>${docbook.name}.xml</sourceDocumentName>
+					<imageResource>
+						<directory>src/main/docbook/images</directory>
+						<targetPath>images</targetPath>
+						<filtering>false</filtering>
+					</imageResource>
+					<options>
+						<useRelativeImageUris>false</useRelativeImageUris>
+						<xincludeSupported>false</xincludeSupported>
+					</options>
 				</configuration>
-				</plugin>-->
+			</plugin>
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
