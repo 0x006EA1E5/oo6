@@ -60,7 +60,7 @@ public class BindServiceImplNGTest extends TestCase
         PropertyDefImpl.setTimestampFormat("dd MM yyyy hh:mm");
 
         //this.bindService.setDaoService(this.daoService);
-        SingletonBeanLocator.registerTestBean("typeService", typeService);
+        //SingletonBeanLocator.registerTestBean("typeService", typeService);
 
         typeService.registerType(typeDefBuilder.getTypeDef(TestObject.class));
         typeService.registerType(typeDefBuilder.getTypeDef(TestReferenceObject.class));

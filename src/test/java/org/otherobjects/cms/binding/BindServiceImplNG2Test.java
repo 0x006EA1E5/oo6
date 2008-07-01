@@ -24,7 +24,9 @@ import org.otherobjects.cms.types.TypeServiceImpl;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockMultipartHttpServletRequest;
+import org.springframework.test.annotation.DirtiesContext;
 
+@DirtiesContext
 public class BindServiceImplNG2Test extends TestCase
 {
     private TypeService typeService = new TypeServiceImpl();

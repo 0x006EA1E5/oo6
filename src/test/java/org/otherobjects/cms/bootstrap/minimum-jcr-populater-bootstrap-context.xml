@@ -53,7 +53,9 @@
 		<property name="scanner" ref="annotatedClassesScanner" />
 	</bean>
 	
-	<bean id="annotationBasedTypeDefBuilder" class="org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder" />
+	<bean id="annotationBasedTypeDefBuilder" class="org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder">
+		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator"/>
+	</bean>
 	
 	<bean id="baseNodeValidator" class="org.otherobjects.cms.validation.BaseNodeValidator">
 		<property name="typeService" ref="typeService" /> <!-- this shouldn't be neccessary - but as soon as baseNodeValidator is referenced in universalJcrDao the auto config with @Resource stops working -->
