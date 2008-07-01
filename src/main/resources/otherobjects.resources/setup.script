@@ -62,7 +62,8 @@ a.addProperty(new PropertyDefImpl("title", "string", null, null, true));
 a.addProperty(new PropertyDefImpl("abstract", "text", null, null));
 a.addProperty(new PropertyDefImpl("content", "text", null, null));
 a.setLabelProperty("title");
-typeService.registerType(a);
+if(typeService)
+	typeService.registerType(a);
 
 // Create base structure
 createFolder(dao, "/smart", "\${smartFolders.label}", "smart-folders")
