@@ -104,6 +104,7 @@ public class DebugController extends MultiActionController
         mav.addObject("imageMagickVersion", imageMagickVersion);
         mav.addObject("sessionExists", request.getSession(false) != null);
         mav.addObject("userDetails", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        mav.addObject("systemProperties", System.getProperties());
         return mav;
     }
 

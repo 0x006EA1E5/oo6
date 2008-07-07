@@ -63,6 +63,14 @@
     <tr><td>Java version</td><td class="info">Unknown</td></tr>
 </table>
 
+<h2>Information</h2>
+
+<table>
+    <tr><td>Database schema version</td><td class="info">Unknown</td></tr>
+    <tr><td>JCR schema version</td><td class="info">Unknown</td></tr>
+    <tr><td>Java version</td><td class="info">Unknown</td></tr>
+</table>
+
 <h2>Types</h2>
 
 <table border="1">
