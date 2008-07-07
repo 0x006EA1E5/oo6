@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Set maven to use more memory (needed by Tomcat tasks)
+export MAVEN_OPTS="-Xms128M -Xmx256M -Djava.awt.headless=true"
+
 case $1 in
 
 	help)
@@ -10,6 +13,7 @@ case $1 in
         echo "  version              show which version of OTHERobjects in installed"
         echo "  create [sitename]    creates a site in this directory"
         echo "  run                  runs the site"
+        echo "  deploy               deploys the site to the server"
         echo 
         echo "  (developer tasks)"
         echo
@@ -40,6 +44,10 @@ case $1 in
 
     run)
         mvn jetty:run
+        ;;
+    
+    deploy)
+        mvn tomcat:deploy
         ;;
     
     oo-update)
