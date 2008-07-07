@@ -10,7 +10,6 @@
 .info {color:gray;}
 </style>
 
-
 <h1>System Information</h1>
 
 <h2>Status</h2>
@@ -36,10 +35,16 @@
     <tr><td>Datastore permissions</td><td class="info">Unchecked</td></tr>
     <tr><td>Static resource serving</td><td class="info">Unchecked</td></tr>
     <tr><td>Freemarker version</td><td class="info">${.version}</td></tr>
+    <tr><td>File Encoding</td><td class="info">${fileEncoding}</td></tr>
+    <tr><td>Servlet API</td><td class="info">Unchecked</td></tr>
+    <tr><td>Java version</td><td class="info">${javaVersion}</td></tr>
 </table>
 
+
 <h2>Session</h2>
-<#if sessionExists >There is an ongoing HTTP session
+<#if !sessionExists>
+<p>No current session</p>
+</#else>
 <table border="1">
     <thead>
         <tr>

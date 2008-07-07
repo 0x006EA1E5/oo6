@@ -105,6 +105,9 @@ public class DebugController extends MultiActionController
         mav.addObject("sessionExists", request.getSession(false) != null);
         mav.addObject("userDetails", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         mav.addObject("systemProperties", System.getProperties());
+        mav.addObject("fileEncoding", System.getProperties().getProperty("file.encoding"));
+        mav.addObject("javaVersion", System.getProperties().getProperty("java.version"));
+        mav.addObject("servletApiVersion", System.getProperties().getProperty("file.encoding"));
         return mav;
     }
 
