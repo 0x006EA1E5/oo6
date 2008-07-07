@@ -81,6 +81,9 @@ iMac:~ rich$
 Maven version: 2.0.7
 iMac:~ rich$
 </programlisting></para>
+
+        <para>Also set MAVEN_OPTS="-Xms128M -Xmx256M
+        -Djava.awt.headless=true"</para>
       </section>
     </section>
 
