@@ -491,19 +491,6 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
 
     <para>Note if the path represents a directory it MUST end with a
     slash.</para>
-  </chapter>
-
-  <chapter>
-    <title>Defining custom template directives</title>
-
-    <para>Replacement for tools in OO. Can be done in macros or in Java.
-    Groovy too?</para>
-
-    <para>http://freemarker.sourceforge.net/docs/dgui_misc_userdefdir.html</para>
-  </chapter>
-
-  <chapter>
-    <title>Site URL structure</title>
 
     <para>The site URL structure is crucial to help you users gain a mental
     model of your site hierarchy. You can generally use any folder name but a
@@ -519,6 +506,33 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
     <para>plugins -- reseved for plugins</para>
 
     <para>debug -- diagnostics information</para>
+  </chapter>
+
+  <chapter>
+    <title>Handling errors</title>
+
+    <para>There are 3 key error situations that you will need to handle on
+    your site:</para>
+
+    <para>404 Not found (page has moved or URL typed incorrectly)</para>
+
+    <para>- content managed page if this is missing default to 500)</para>
+
+    <para>500 Internal Server Error (something bad in template or code)</para>
+
+    <para>401 Unathorised User is unathorised (doesn't have correct
+    permissions to access resource or execute code)</para>
+
+    <para></para>
+  </chapter>
+
+  <chapter>
+    <title>Defining custom template directives</title>
+
+    <para>Replacement for tools in OO. Can be done in macros or in Java.
+    Groovy too?</para>
+
+    <para>http://freemarker.sourceforge.net/docs/dgui_misc_userdefdir.html</para>
   </chapter>
 
   <chapter>
