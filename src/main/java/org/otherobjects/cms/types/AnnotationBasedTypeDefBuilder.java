@@ -46,7 +46,12 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder, Initializi
     @SuppressWarnings("unchecked")
     public TypeDef getTypeDef(Class<?> clazz) throws Exception
     {
-        Assert.isTrue(clazz.isAnnotationPresent(Type.class), "TypeDef can't be built as there are no Type annotations present: " + clazz.getName());
+        
+        
+        
+        
+        if (!clazz.isAnnotationPresent(Type.class))
+            return null;
 
         Type typeDefAnnotation = clazz.getAnnotation(Type.class);
         TypeDefImpl typeDef = new TypeDefImpl();

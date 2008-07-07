@@ -76,7 +76,9 @@ public class TypeServiceImpl extends AbstractTypeService implements Initializing
 
             for (String clazz : annotatedClasses)
             {
-                registerType(annotationBasedTypeDefBuilder.getTypeDef(clazz));
+                TypeDef typeDef = annotationBasedTypeDefBuilder.getTypeDef(clazz);
+                if(typeDef!=null)
+                    registerType(typeDef);
             }
 
             // FIXME Add TypeDef Validator here: labelProperty, extends BaseNode etc
