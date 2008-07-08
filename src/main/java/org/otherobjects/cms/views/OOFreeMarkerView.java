@@ -1,46 +1,47 @@
 package org.otherobjects.cms.views;
 
 import java.io.IOException;
+import java.io.StringWriter;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.context.ApplicationContextException;
+import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerView;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
+/**
+ * Adds error handling to the standard FreeMarkerView.
+ * 
+ * @author rich
+ */
 public class OOFreeMarkerView extends FreeMarkerView
 {
-    @Override
-    protected void processTemplate(Template template, Map model, HttpServletResponse response) throws IOException, TemplateException
-    {
-        // TODO Auto-generated\ method stub
-        try
-        {
-            super.processTemplate(template, model, response);
-        }
-        catch (RuntimeException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+    private static final String DEFAULT_ERROR_TEMPLATE_PATH = "/site/templates/error-500.ftl";
+    private static final String DEFAULT_EXCEPTION_ATTRIBUTE = "exception";
 
-    @Override
-    protected void checkTemplate() throws ApplicationContextException
+    public OOFreeMarkerView()
     {
-        try
-        {
-            super.checkTemplate();
-        }
-        catch (RuntimeException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        System.err.println("View Created");
+    }
+    
+    @SuppressWarnings("unchecked")
+    //@Override
+    protected void xprocessTemplate(Template template, Map model, HttpServletResponse response) throws IOException, TemplateException
+    {
+        /* Write via StringWriter so that if an exception
+         * is thrown during rendering we have not already
+         * sent a response to the browser. This allows us
+         * to reliably send an error page.
+         */
+        StringWriter writer = new StringWriter();
+        template.process(model, writer);
+        //FIXME Test performance of StringWriter in this example
+        response.getWriter().write(writer.toString());
     }
 
     @SuppressWarnings("unchecked")
@@ -53,10 +54,11 @@ public class OOFreeMarkerView extends FreeMarkerView
         }
         catch (Exception e)
         {
+            // Render error page on exception
             response.reset();
-            setUrl("/site/templates/error-500.ftl");
-            model.put("exception", e);
-            super.doRender(model, request, response);
+            model.put(DEFAULT_EXCEPTION_ATTRIBUTE, e);
+            Locale locale = RequestContextUtils.getLocale(request);
+            processTemplate(getTemplate(DEFAULT_ERROR_TEMPLATE_PATH, locale), model, response);
         }
     }
 }
