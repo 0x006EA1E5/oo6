@@ -1,3 +1,5 @@
+<#import "/oo.ftl" as oo>
+
 <head>
 <title>Debug information</title>
 </head>
@@ -15,7 +17,8 @@
 <h2>Status</h2>
 
 <table>
-    <tr><td>User</td><td class="info">Guest User? [<a href="/go/logout.html">Logout</a>] JE ${userDetails}  </td></tr>
+    <tr><td>User</td><td class="info"> ${security.user.username} [<a href="/logout.html">Logout</a>]  </td></tr>
+    <tr><td>Admin?</td><td class="info">${security.authorize("ROLE_ADMIN",null,"ROLE_GUEST")?string}</td></tr>
 </table>
 
 <h2>Pre-requisites</h2>
@@ -44,7 +47,7 @@
 <h2>Session</h2>
 <#if !sessionExists>
 <p>No current session</p>
-</#else>
+<#else>
 <table border="1">
     <thead>
         <tr>

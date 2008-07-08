@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.otherobjects.cms.tools.SecurityTool;
 import org.otherobjects.cms.util.Version;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -103,11 +104,11 @@ public class DebugController extends MultiActionController
         mav.addObject("imageMagickError", imageMagickError);
         mav.addObject("imageMagickVersion", imageMagickVersion);
         mav.addObject("sessionExists", request.getSession(false) != null);
-        mav.addObject("userDetails", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         mav.addObject("systemProperties", System.getProperties());
         mav.addObject("fileEncoding", System.getProperties().getProperty("file.encoding"));
         mav.addObject("javaVersion", System.getProperties().getProperty("java.version"));
         mav.addObject("servletApiVersion", System.getProperties().getProperty("file.encoding"));
+        mav.addObject("security", new SecurityTool());
         return mav;
     }
 

@@ -121,5 +121,15 @@ var ooTemplateId = '${ooTemplate.id}';
 
 </#macro>
 
+<#-- 
+Renders the contents of the block if the roles match.
+-->
+<#macro authorize ifAllGranted ifAnyGranted="" ifNoneGranted="">
+<#if security.authorize(ifAllGranted,ifAnyGranted,ifNoneGranted) >
+<#nested>
+</#if>
+</#macro>
+
+
 <#-- Directives-->
 <#assign format = "org.otherobjects.cms.tools.FormatDirective"?new()>  
