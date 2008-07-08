@@ -103,28 +103,6 @@ public class DefaultOoResource extends AbstractResource implements OoResource
         return path;
     }
 
-    /**
-     * FIXME Don't like the name of this method. Or even if it works for enought resources to make it worth file.  
-     * FIXME Actually might be better to just return URL instead.
-     * 
-     * @return
-     */
-    public String getFilePath()
-    {
-        try
-        {
-            String file = resource.getURI().toString();
-            if (file.startsWith("file"))
-                return file.substring(5);
-            else
-                return null;
-        }
-        catch (IOException e)
-        {
-            return null;
-        }
-    }
-
     public boolean isWritable()
     {
         return writable;

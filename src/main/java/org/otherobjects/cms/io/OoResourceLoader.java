@@ -88,7 +88,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
         Assert.isTrue(path.endsWith("/"), "Path must be to a directory (and therefore end with trailing slash): " + path);
         List<OoResource> matches = new ArrayList<OoResource>();
         DefaultOoResource resource = (DefaultOoResource) getResource(path);
-        File f = new File(resource.getFilePath());
+        File f = resource.getFile();
         for (String s : f.list(new FilenameFilter()
         {
             public boolean accept(File dir, String name)
