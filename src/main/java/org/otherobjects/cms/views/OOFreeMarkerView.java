@@ -17,6 +17,8 @@ import freemarker.template.TemplateException;
 /**
  * Adds error handling to the standard FreeMarkerView.
  * 
+ * FIXME Support TemplateExceptionHandler.RETHROW_HANDLER
+ * 
  * @author rich
  */
 public class OOFreeMarkerView extends FreeMarkerView

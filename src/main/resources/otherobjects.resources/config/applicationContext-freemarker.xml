@@ -4,9 +4,10 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd ">
 
 	<!-- General Freemarker config -->
-	<bean id="freemarkerConfiguration" class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">
+	<bean id="freemarkerConfiguration" class="org.otherobjects.cms.views.OOFreeMarkerConfigurationFactoryBean">
 		<property name="templateLoaderPaths">
 			<list>
+				<value>classpath:org.springframework.web.servlet.view.freemarker</value>
 				<!-- Site tempates. Path in /webapp -->
 				<value>/templates/</value>
 				<!-- OTHERobjects templates loaded from class path -->
