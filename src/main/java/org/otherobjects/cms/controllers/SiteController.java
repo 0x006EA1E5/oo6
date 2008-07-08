@@ -15,9 +15,7 @@ import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.SiteFolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
@@ -38,15 +36,7 @@ public class SiteController extends AbstractController
     @Override
     protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        //        if (true)
-        //        {
-        //            // Return page and context
-        //            ModelAndView view = new ModelAndView("layouts/three-column.ftl");
-        //            view.addObject("counter", 1);
-        //            return view;
-        //        }
-        //        else
-        //        {
+
         // Make sure folders end with slash
         String path = request.getServletPath();
         this.logger.info("Requested resource: {}", path);
