@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.otherobjects.cms.NotFoundException;
 import org.otherobjects.cms.controllers.renderers.ResourceRenderer;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
@@ -26,7 +27,6 @@ import org.springframework.web.servlet.mvc.AbstractController;
  * 
  * @author rich
  */
-@Controller
 public class SiteController extends AbstractController
 {
     private final Logger logger = LoggerFactory.getLogger(SiteController.class);
@@ -36,7 +36,6 @@ public class SiteController extends AbstractController
     private Map<String, ResourceRenderer> handlers = new HashMap<String, ResourceRenderer>();
 
     @Override
-    @RequestMapping("/**")
     protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         //        if (true)
@@ -49,7 +48,7 @@ public class SiteController extends AbstractController
         //        else
         //        {
         // Make sure folders end with slash
-        String path = request.getPathInfo();
+        String path = request.getServletPath();
         this.logger.info("Requested resource: {}", path);
 
         if (path == null)
@@ -88,7 +87,9 @@ public class SiteController extends AbstractController
             }
         }
 
-        Assert.notNull(resourceObject, "No matching node for path: " + path);
+        // Handle page not found
+        if(resourceObject == null)
+            throw new NotFoundException("No resource at: " + path);
 
         // Pass control to handler
         //        ResourceHandler handler = handlers.get(resourceObject.getClass().getName());
