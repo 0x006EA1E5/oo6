@@ -443,11 +443,49 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
   </chapter>
 
   <chapter>
-    <title>Building templates</title>
+    <title>Writing templates</title>
 
     <para>Template paths</para>
 
-    <para>Reserved folder names: otherobjects, internal, debug</para>
+    <para>Reserved folder names: otherobjects, plugins</para>
+
+    <para></para>
+
+    <section>
+      <title>Getting the data</title>
+
+      <para>resourceObject</para>
+
+      <para>folder</para>
+
+      <para>daoService</para>
+
+      <para>selectors</para>
+    </section>
+
+    <section>
+      <title>Formatting content</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Security checks</title>
+
+      <para>Show current user details</para>
+
+      <para></para>
+
+      <para>Test if user has role</para>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Forms</title>
+
+      <para></para>
+    </section>
   </chapter>
 
   <chapter>
