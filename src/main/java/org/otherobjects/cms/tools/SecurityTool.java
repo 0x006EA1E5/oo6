@@ -17,9 +17,9 @@ public class SecurityTool
      * A simple tag to output or not the body of the tag if the principal
      * has or doesn't have certain authorities.
      *           
-     * @param ifNotGranted A comma separated list of roles which the user must not have for the body to be output
-     * @param ifAllGranted A comma separated list of roles which the user must all possess for the body to be output.
-     * @param ifAnyGranted A comma separated list of roles, one of which the user must possess for the body to be output.
+     * @param ifAllGranted A comma separated list of roles which the user must all possess
+     * @param ifAnyGranted A comma separated list of roles, one of which the user must possess
+     * @param ifNotGranted A comma separated list of roles which the user must not have
      */
     public boolean authorize(String ifAllGranted, String ifAnyGranted, String ifNotGranted)
     {

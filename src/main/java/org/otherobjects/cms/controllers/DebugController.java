@@ -103,7 +103,7 @@ public class DebugController extends MultiActionController
         ModelAndView mav = new ModelAndView("/debug/debug");
         mav.addObject("imageMagickError", imageMagickError);
         mav.addObject("imageMagickVersion", imageMagickVersion);
-        mav.addObject("sessionExists", request.getSession(false) != null);
+        mav.addObject("session", request.getSession(false));
         mav.addObject("systemProperties", System.getProperties());
         mav.addObject("fileEncoding", System.getProperties().getProperty("file.encoding"));
         mav.addObject("javaVersion", System.getProperties().getProperty("java.version"));

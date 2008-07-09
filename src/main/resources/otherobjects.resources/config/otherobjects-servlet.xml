@@ -56,6 +56,4 @@
 		</property>
 	</bean>
 
-	<bean name="startupMessage" class="org.otherobjects.cms.util.StartupMessage"></bean>
-
 </beans>

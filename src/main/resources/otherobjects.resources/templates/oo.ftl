@@ -94,8 +94,8 @@ Macro to insert region
 Macro to insert HUD code
 -->
 <#macro hud>
-
-<#-- HUD Elements -->
+<@oo.authorize ifAllGranted="ROLE_ADMIN">
+<!-- Start HUD Elements -->
 <script type="text/javascript" src="http://cdn.othermedia.com/ojay-yui/2.5.1.js"></script>
 <script type="text/javascript" src="http://cdn.othermedia.com/ojay/0.1.2/all-min.js"></script>
 <@oo.js "/otherobjects/static/javascript/keyboard.js"/>
@@ -114,10 +114,14 @@ Macro to insert HUD code
 <#include "/blocks/oo-block-chooser.ftl">
 </div>
 
+<div id="logo-oo" class="logo-oo" onclick="ooToggleHud('oo-main-hud');"></div>
+
 <script>
 var resourceObjectId = '${resourceObject.id}';
 var ooTemplateId = '${ooTemplate.id}';
 </script>
+</@oo.authorize>
+<!-- End HUD Elements -->
 
 </#macro>
 
@@ -130,6 +134,25 @@ Renders the contents of the block if the roles match.
 </#if>
 </#macro>
 
+<#-- 
+Displays flash messages.
+-->
+<#macro showFlashMessages>
+<#assign msgs = flash.messages! >
+<#if msgs?has_content >
+<div class="oo-flash">
+<#list msgs as msg>
+<p class="oo-flash-${msg.type}">${msg.message}</p>
+</#list>
+</div>
+</#if>
+</#macro>
+
+<#-- Functions-->
+<#function action actionName>
+<#return "/_action/${actionName}">
+</#function>
 
 <#-- Directives-->
 <#assign format = "org.otherobjects.cms.tools.FormatDirective"?new()>  
+

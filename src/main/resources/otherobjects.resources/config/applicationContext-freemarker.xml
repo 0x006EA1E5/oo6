@@ -7,7 +7,6 @@
 	<bean id="freemarkerConfiguration" class="org.otherobjects.cms.views.OOFreeMarkerConfigurationFactoryBean">
 		<property name="templateLoaderPaths">
 			<list>
-				<value>classpath:org.springframework.web.servlet.view.freemarker</value>
 				<!-- Site tempates. Path in /webapp -->
 				<value>/templates/</value>
 				<!-- OTHERobjects templates loaded from class path -->
@@ -19,21 +18,27 @@
 				<bean class="org.otherobjects.cms.io.OoResourceFreemarkerTemplateLoader">
 					<constructor-arg ref="ooResourceLoader" />
 				</bean>
+				<!-- Default TemplateLoader allows loading of spring.ftl macros -->
 				<bean class="org.springframework.ui.freemarker.SpringTemplateLoader">
+					<constructor-arg>
+						<bean class="org.springframework.core.io.DefaultResourceLoader" />
+					</constructor-arg>
+					<constructor-arg value="classpath:/org/springframework/web/servlet/view/freemarker/" />
 				</bean>
 			</list>
 		</property>
 		<property name="freemarkerVariables">
 			<map>
+				<!-- FIXME Merge this with ModelModifierInterceptor -->
 				<entry key="daoService" value-ref="daoService" />
 			</map>
 		</property>
 	</bean>
-	
+
 	<!-- freemarker config proxy that proxies a general freemarker config for use by FreemarkerView -->
 	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
 		<property name="configuration" ref="freemarkerConfiguration" />
-		
+
 	</bean>
 
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">

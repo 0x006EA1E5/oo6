@@ -38,8 +38,8 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
     @Override
     protected void convertProperties(Properties props)
     {
-		// Force file ecnoding to be UTF-8
-		// TODO Make this configurable?
+        // Force file ecnoding to be UTF-8
+        // TODO Make this configurable?
         System.setProperty( "file.encoding", "UTF-8" );
         
         String environmentPrefix = getEnvironmentName();

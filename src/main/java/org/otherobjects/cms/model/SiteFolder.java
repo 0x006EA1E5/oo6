@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.Url;
-import org.otherobjects.cms.site.SiteItem;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.types.annotation.Property;
@@ -16,7 +15,7 @@ import org.otherobjects.cms.util.StringUtils;
 import flexjson.JSON;
 
 @Type(labelProperty = "id")
-public class SiteFolder extends BaseNode implements Folder, SiteItem
+public class SiteFolder extends BaseNode implements Folder //, SiteItem
 {
     private String label;
     private String extraNavigationLabel;

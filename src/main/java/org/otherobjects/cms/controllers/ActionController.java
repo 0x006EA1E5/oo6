@@ -8,7 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.dao.DaoService;
-import org.otherobjects.cms.scripting.ScriptResourceResolver;
+import org.otherobjects.cms.io.OoResourceLoader;
+import org.otherobjects.cms.util.ActionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -19,13 +20,8 @@ public class ActionController extends AbstractController
 {
     private final Logger logger = LoggerFactory.getLogger(ActionController.class);
     private DaoService daoService;
-
-    private ScriptResourceResolver actionScriptResolver;
-
-    public void setActionScriptResolver(ScriptResourceResolver actionScriptResolver)
-    {
-        this.actionScriptResolver = actionScriptResolver;
-    }
+    
+    private OoResourceLoader ooResourceLoader;
 
     @Override
     protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -34,21 +30,20 @@ public class ActionController extends AbstractController
         actionName = StringUtils.substringAfterLast(actionName, "/");
         this.logger.info("Firing action: {}", actionName);
 
-        Binding binding = runScript(actionName, request, response);
+        runScript(actionName, request, response);
 
-        String target = (String) binding.getVariable("target");
-        response.sendRedirect(target);
+        // Return null because actions MUST redirect to a URL
         return null;
     }
 
     protected Binding runScript(String actionName, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        Resource scriptResource = actionScriptResolver.resolveScriptName(actionName);
-
+        Resource scriptResource = ooResourceLoader.getResource("/site/actions/"+actionName+".groovy");
         Binding binding = new Binding();
         binding.setVariable("daoService", this.daoService);
         binding.setVariable("request", request);
         binding.setVariable("response", response);
+        binding.setVariable("action", new ActionUtils(request, response));
         binding.setVariable("applicationContext", getApplicationContext());
         GroovyShell shell = new GroovyShell(binding);
         shell.evaluate(scriptResource.getInputStream(), actionName);
@@ -58,5 +53,10 @@ public class ActionController extends AbstractController
     public void setDaoService(DaoService daoService)
     {
         this.daoService = daoService;
+    }
+
+    public void setOoResourceLoader(OoResourceLoader ooResourceLoader)
+    {
+        this.ooResourceLoader = ooResourceLoader;
     }
 }

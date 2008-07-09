@@ -4,9 +4,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.otherobjects.cms.security.SecurityTool;
 import org.otherobjects.cms.tools.CmsImageTool;
+import org.otherobjects.cms.tools.FlashMessageTool;
 import org.otherobjects.cms.tools.FormatTool;
+import org.otherobjects.cms.tools.SecurityTool;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -20,9 +21,9 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
         if (modelAndView != null)
         {
             //add user id to model if there is a user
-            Long currentUserId = SecurityTool.getUserId();
-            if (currentUserId != null)
-                modelAndView.addObject("userId", currentUserId);
+//            Long currentUserId = SecurityTool.getUserId();
+//            if (currentUserId != null)
+//                modelAndView.addObject("userId", currentUserId);
 
             // session stuff
             HttpSession session = request.getSession(false);
@@ -39,6 +40,8 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             // tools
             modelAndView.addObject("cmsImageTool", new CmsImageTool());
             modelAndView.addObject("formatTool", new FormatTool());
+            modelAndView.addObject("security", new SecurityTool());
+            modelAndView.addObject("flash", new FlashMessageTool(request));
         }
 
     }

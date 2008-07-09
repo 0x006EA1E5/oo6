@@ -17,8 +17,6 @@ import freemarker.template.TemplateException;
 /**
  * Adds error handling to the standard FreeMarkerView.
  * 
- * FIXME Support TemplateExceptionHandler.RETHROW_HANDLER
- * 
  * @author rich
  */
 public class OOFreeMarkerView extends FreeMarkerView
@@ -26,11 +24,6 @@ public class OOFreeMarkerView extends FreeMarkerView
     private static final String DEFAULT_ERROR_TEMPLATE_PATH = "/site/templates/error-500.ftl";
     private static final String DEFAULT_EXCEPTION_ATTRIBUTE = "exception";
 
-    public OOFreeMarkerView()
-    {
-        System.err.println("View Created");
-    }
-    
     @SuppressWarnings("unchecked")
     //@Override
     protected void xprocessTemplate(Template template, Map model, HttpServletResponse response) throws IOException, TemplateException

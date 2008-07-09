@@ -452,11 +452,17 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
     <para></para>
 
     <section>
-      <title>Getting the data</title>
+      <title>Standard data</title>
 
-      <para>resourceObject</para>
+      <para>resourceObject (via SiteController only)</para>
 
-      <para>folder</para>
+      <para>folder (via SiteController only)</para>
+
+      <para>url ?</para>
+    </section>
+
+    <section>
+      <title>Loading additional data</title>
 
       <para>daoService</para>
 
@@ -464,21 +470,55 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
     </section>
 
     <section>
-      <title>Formatting content</title>
+      <title>Linking to pages and assets</title>
 
-      <para></para>
+      <para>PAges</para>
+
+      <para>CSS/JS</para>
+
+      <para>static</para>
+
+      <para>data</para>
+
+      <para>external (think about scheme htty/https)</para>
     </section>
 
     <section>
-      <title>Security checks</title>
+      <title>Acesssing parameters and session data</title>
 
-      <para>Show current user details</para>
+      <para>${RequestParameters.pageNo}</para>
 
-      <para></para>
+      <para>${Request}</para>
 
-      <para>Test if user has role</para>
+      <para>${Application}</para>
 
-      <para></para>
+      <para>${Session}</para>
+    </section>
+
+    <section>
+      <title>Messages</title>
+
+      <para>spring.message</para>
+
+      <para>store in messages.properties</para>
+    </section>
+
+    <section>
+      <title>Formatting and converting content</title>
+
+      <para>date</para>
+
+      <para>boolean</para>
+
+      <para>decimal</para>
+    </section>
+
+    <section>
+      <title>Security </title>
+
+      <para>Show current user details: security.user</para>
+
+      <para>Test if user has role: security.athorize ifAllGranted</para>
     </section>
 
     <section>
@@ -486,10 +526,54 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
 
       <para></para>
     </section>
+
+    <section>
+      <title>XSS</title>
+
+      <para>ALways use ?html on strings from user input.</para>
+
+      <para>Working on a way for this to happen automatically.</para>
+    </section>
+
+    <section>
+      <title>Layouts</title>
+
+      <para>Must include </para>
+
+      <para>oo-hud</para>
+
+      <para>oo-flash</para>
+    </section>
   </chapter>
 
   <chapter>
-    <title>A note about paths</title>
+    <title>Writing actions</title>
+
+    <para>Actions update the model.</para>
+
+    <para>Can be written in Groovy or Java. </para>
+
+    <para>Put in /webapp/WEB-INF/scripts/</para>
+
+    <para>Called via url /_action/ActionName</para>
+
+    <para>Must be posted to.</para>
+
+    <para>Must redirect on completion.</para>
+
+    <para>What is available in the binding?</para>
+
+    <para>Flash message support.</para>
+
+    <para>Redirects</para>
+
+    <para>Form handling</para>
+
+    <para></para>
+  </chapter>
+
+  <chapter>
+    <title>Understanding paths</title>
 
     <para>With resources spread across multiple projects (your site,
     OTHERobjects and your plugins), potentially across multiple servers (a
@@ -565,7 +649,7 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
   </chapter>
 
   <chapter>
-    <title>Defining custom template directives</title>
+    <title>Defining custom template directives / tools</title>
 
     <para>Replacement for tools in OO. Can be done in macros or in Java.
     Groovy too?</para>
@@ -576,7 +660,7 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
   <chapter>
     <title>Users and permissions</title>
 
-    <para></para>
+    <para>How to create a custom user</para>
   </chapter>
 
   <chapter>

@@ -58,3 +58,5 @@
 .button-oo:hover {background:rgba(0,0,0,0.3); cursor:pointer; text-shadow:rgba(0,0,0,1) 0px 1px 1px;}
 
 .button-oo P {padding: 5px 0px 0px 0px; font:bold 14px Arial;}
+
+.logo-oo {width:24px; height:24px; position:fixed; bottom:20px; left:20px; background: #999 4px 4px url(../graphics/oo-logo-small.gif) no-repeat; -moz-border-radius:3px;}
