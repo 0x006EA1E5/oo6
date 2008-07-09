@@ -1,4 +1,5 @@
 <#import "/oo.ftl" as oo>
+<#import "/spring.ftl" as oo>
 
 <head>
 <title>Debug information</title>
@@ -11,6 +12,8 @@
 .warning {color:orange;}
 .info {color:gray;}
 </style>
+
+<@spring.message code="interface.language.label" />
 
 <h1>System Information</h1>
 

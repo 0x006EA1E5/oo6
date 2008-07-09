@@ -19,6 +19,8 @@
 				<bean class="org.otherobjects.cms.io.OoResourceFreemarkerTemplateLoader">
 					<constructor-arg ref="ooResourceLoader" />
 				</bean>
+				<bean class="org.springframework.ui.freemarker.SpringTemplateLoader">
+				</bean>
 			</list>
 		</property>
 		<property name="freemarkerVariables">
