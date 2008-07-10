@@ -27,12 +27,6 @@
 				</bean>
 			</list>
 		</property>
-		<property name="freemarkerVariables">
-			<map>
-				<!-- FIXME Merge this with ModelModifierInterceptor -->
-				<entry key="daoService" value-ref="daoService" />
-			</map>
-		</property>
 	</bean>
 
 	<!-- freemarker config proxy that proxies a general freemarker config for use by FreemarkerView -->

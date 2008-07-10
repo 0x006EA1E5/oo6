@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.tools.CmsImageTool;
 import org.otherobjects.cms.tools.FlashMessageTool;
 import org.otherobjects.cms.tools.FormatTool;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public class ModelModifierInterceptor extends HandlerInterceptorAdapter
 {
+    private DaoService daoService;
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception
@@ -21,9 +23,9 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
         if (modelAndView != null)
         {
             //add user id to model if there is a user
-//            Long currentUserId = SecurityTool.getUserId();
-//            if (currentUserId != null)
-//                modelAndView.addObject("userId", currentUserId);
+            //            Long currentUserId = SecurityTool.getUserId();
+            //            if (currentUserId != null)
+            //                modelAndView.addObject("userId", currentUserId);
 
             // session stuff
             HttpSession session = request.getSession(false);
@@ -42,8 +44,16 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             modelAndView.addObject("formatTool", new FormatTool());
             modelAndView.addObject("security", new SecurityTool());
             modelAndView.addObject("flash", new FlashMessageTool(request));
+            modelAndView.addObject("daoService", daoService);
+            modelAndView.addObject("jcr", daoService.getDao("BaseNode"));
+            modelAndView.addObject("flash", new FlashMessageTool(request));
         }
 
+    }
+
+    public void setDaoService(DaoService daoService)
+    {
+        this.daoService = daoService;
     }
 
 }

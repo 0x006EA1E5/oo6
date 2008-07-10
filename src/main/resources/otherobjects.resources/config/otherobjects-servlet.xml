@@ -13,7 +13,9 @@
 		<property name="interceptors">
 			<list>
 				<ref bean="localeChangeInterceptor" />
-				<bean class="org.otherobjects.cms.controllers.interceptors.ModelModifierInterceptor" />
+				<bean class="org.otherobjects.cms.controllers.interceptors.ModelModifierInterceptor">
+					<property name="daoService" ref="daoService" />
+				</bean>
 				<bean class="org.otherobjects.cms.controllers.interceptors.IdFromUrlInterceptor" />
 			</list>
 		</property>
