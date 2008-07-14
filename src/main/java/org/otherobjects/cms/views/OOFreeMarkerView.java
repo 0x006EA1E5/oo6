@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerView;
 
@@ -21,6 +23,8 @@ import freemarker.template.TemplateException;
  */
 public class OOFreeMarkerView extends FreeMarkerView
 {
+    private final Logger logger = LoggerFactory.getLogger(OOFreeMarkerView.class);
+    
     private static final String DEFAULT_ERROR_TEMPLATE_PATH = "/site/templates/error-500.ftl";
     private static final String DEFAULT_EXCEPTION_ATTRIBUTE = "exception";
 
@@ -50,6 +54,7 @@ public class OOFreeMarkerView extends FreeMarkerView
         catch (Exception e)
         {
             // Render error page on exception
+            logger.error("Error whilst rendering view.", e);
             response.reset();
             model.put(DEFAULT_EXCEPTION_ATTRIBUTE, e);
             Locale locale = RequestContextUtils.getLocale(request);
