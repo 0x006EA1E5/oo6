@@ -7,6 +7,7 @@ import org.otherobjects.cms.types.annotation.Type;
 @Type(labelProperty = "username")
 public class Comment extends BaseNode
 {
+    private String itemId;
     private String comment;
     private String username;
 
@@ -30,5 +31,16 @@ public class Comment extends BaseNode
     public void setComment(String comment)
     {
         this.comment = comment;
+    }
+
+    @Property(order = 30, type=PropertyType.STRING, required=true)
+    public String getItemId()
+    {
+        return itemId;
+    }
+
+    public void setItemId(String itemId)
+    {
+        this.itemId = itemId;
     }
 }

@@ -7,9 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.otherobjects.cms.binding.BindService;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.io.OoResourceLoader;
 import org.otherobjects.cms.util.ActionUtils;
+import org.otherobjects.cms.validation.ValidatorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -38,18 +40,29 @@ public class ActionController extends AbstractController
 
     protected Binding runScript(String actionName, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        Resource scriptResource = ooResourceLoader.getResource("/site/actions/"+actionName+".groovy");
-        Binding binding = new Binding();
-        binding.setVariable("daoService", this.daoService);
-        binding.setVariable("jcr", this.daoService.getDao("BaseNode"));
-        binding.setVariable("request", request);
-        binding.setVariable("response", response);
-        binding.setVariable("bindService", getApplicationContext().getBean("bindService"));
-        binding.setVariable("action", new ActionUtils(request, response));
-        binding.setVariable("applicationContext", getApplicationContext());
-        GroovyShell shell = new GroovyShell(binding);
-        shell.evaluate(scriptResource.getInputStream(), actionName);
-        return binding;
+        try
+        {
+            Resource scriptResource = ooResourceLoader.getResource("/site/actions/"+actionName+".groovy");
+            Binding binding = new Binding();
+            binding.setVariable("daoService", this.daoService);
+            binding.setVariable("jcr", this.daoService.getDao("BaseNode"));
+            binding.setVariable("request", request);
+            binding.setVariable("response", response);
+            BindService bindService = (BindService) getApplicationContext().getBean("bindService");
+            binding.setVariable("bindService", bindService);
+            ValidatorService validatorSevice = (ValidatorService) getApplicationContext().getBean("validatorService");
+            binding.setVariable("validatorService", validatorSevice);
+            binding.setVariable("action", new ActionUtils(request, response, bindService, validatorSevice));
+            binding.setVariable("applicationContext", getApplicationContext());
+            GroovyShell shell = new GroovyShell(binding);
+            shell.evaluate(scriptResource.getInputStream(), actionName);
+            return binding;
+        }
+        catch (Exception e)
+        {
+            logger.error("Error processing acion: " + actionName, e);
+            throw e;
+        }
     }
 
     public void setDaoService(DaoService daoService)

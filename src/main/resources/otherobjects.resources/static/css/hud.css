@@ -59,4 +59,4 @@
 
 .button-oo P {padding: 5px 0px 0px 0px; font:bold 14px Arial;}
 
-.logo-oo {width:24px; height:24px; position:fixed; bottom:20px; left:20px; background: #999 4px 4px url(../graphics/oo-logo-small.gif) no-repeat; -moz-border-radius:3px;}
+.logo-oo {width:24px; height:24px; position:fixed; bottom:20px; left:20px; background: #999 4px 4px url(../graphics/oo-logo-small.gif) no-repeat; -moz-border-radius:3px; -webkit-border-radius:3px;}
