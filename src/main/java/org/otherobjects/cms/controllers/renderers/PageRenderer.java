@@ -7,6 +7,7 @@ import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsNode;
+import org.otherobjects.cms.model.Comment;
 import org.otherobjects.cms.util.StringUtils;
 import org.springframework.util.Assert;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,6 +32,7 @@ public class PageRenderer implements ResourceRenderer
         view.addObject("resourceObject", resourceObject);
 
         view.addObject("ooTemplate", template);
+        view.addObject("formObject", new Comment());
         //        view.addObject("navigatorService", this.navigatorService);
         //        view.addObject("siteNavigator", this.siteNavigatorService);
         view.addObject("daoService", this.daoService);

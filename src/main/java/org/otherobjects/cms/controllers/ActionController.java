@@ -41,8 +41,10 @@ public class ActionController extends AbstractController
         Resource scriptResource = ooResourceLoader.getResource("/site/actions/"+actionName+".groovy");
         Binding binding = new Binding();
         binding.setVariable("daoService", this.daoService);
+        binding.setVariable("jcr", this.daoService.getDao("BaseNode"));
         binding.setVariable("request", request);
         binding.setVariable("response", response);
+        binding.setVariable("bindService", getApplicationContext().getBean("bindService"));
         binding.setVariable("action", new ActionUtils(request, response));
         binding.setVariable("applicationContext", getApplicationContext());
         GroovyShell shell = new GroovyShell(binding);

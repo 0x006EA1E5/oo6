@@ -484,7 +484,7 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
     </section>
 
     <section>
-      <title>Acesssing parameters and session data</title>
+      <title>Acesssing parameters, session and cookie data</title>
 
       <para>${RequestParameters.pageNo}</para>
 

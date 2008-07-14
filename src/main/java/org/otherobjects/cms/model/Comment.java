@@ -1,6 +1,7 @@
 package org.otherobjects.cms.model;
 
 import org.otherobjects.cms.types.annotation.Property;
+import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
 
 @Type(labelProperty = "username")
@@ -20,7 +21,7 @@ public class Comment extends BaseNode
         this.username = username;
     }
 
-    @Property(order = 20)
+    @Property(order = 20, required=true, type=PropertyType.TEXT)
     public String getComment()
     {
         return comment;
