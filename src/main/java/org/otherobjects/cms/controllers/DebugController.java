@@ -208,8 +208,12 @@ public class DebugController extends MultiActionController
      */
     public ModelAndView jcr(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        final String xpath = request.getParameter("xpath");
+        String xpath = request.getParameter("xpath");
+        String folder = request.getParameter("folder");
 
+        if(StringUtils.isNotEmpty(folder))
+            xpath = "/jcr:root/site" + folder + "/element(*)";
+            
         String liveNodesHtml = null;
         String editNodesHtml = null;
         if (AuthorityUtils.userHasAuthority("ROLE_ADMIN"))

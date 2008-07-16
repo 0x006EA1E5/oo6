@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.NotFoundException;
 import org.otherobjects.cms.controllers.renderers.ResourceRenderer;
 import org.otherobjects.cms.dao.DaoService;
@@ -38,13 +39,14 @@ public class SiteController extends AbstractController
     {
 
         // Make sure folders end with slash
-        String path = request.getServletPath();
-        this.logger.info("Requested resource: {}", path);
+        String path = request.getPathInfo();
 
-        if (path == null)
+        if (StringUtils.isEmpty(path))
             path = "/";
         else if (path.length() > 1 && !path.contains(".") && !path.endsWith("/"))
             path = path + "/";
+
+        this.logger.info("Requested resource: {}", path);
 
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
         BaseNode resourceObject = null;
@@ -78,7 +80,7 @@ public class SiteController extends AbstractController
         }
 
         // Handle page not found
-        if(resourceObject == null)
+        if (resourceObject == null)
             throw new NotFoundException("No resource at: " + path);
 
         // Pass control to handler

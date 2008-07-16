@@ -1,6 +1,5 @@
 package org.otherobjects.cms.dao;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -11,7 +10,7 @@ import java.util.List;
  *
  * @param <T>
  */
-public interface PagedList<T> extends Iterable<T>, Iterator<T>
+public interface PagedList<T> extends Iterable<T>
 {
     /** Max no. of items to display on a page. */
     int getPageSize();

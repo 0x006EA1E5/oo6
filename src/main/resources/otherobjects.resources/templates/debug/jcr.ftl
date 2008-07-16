@@ -4,6 +4,7 @@
 <h1>JCR Browser</h1>
 
 <form method="get">
+<p><input style="width:500px;" type="text" name="folder" value="${folder!}"/></p>
 <input style="width:500px;" type="text" name="xpath" value="${xpath!}"/>
 <input type="submit" value="Go"/>
 <br/><small>eg /jcr:root/element(*)</small>
