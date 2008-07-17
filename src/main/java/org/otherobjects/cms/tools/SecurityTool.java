@@ -1,6 +1,7 @@
 package org.otherobjects.cms.tools;
 
 import org.apache.commons.lang.StringUtils;
+import org.otherobjects.cms.security.SecurityUtil;
 import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.taglibs.velocity.Authz;
 import org.springframework.security.taglibs.velocity.AuthzImpl;
@@ -32,7 +33,7 @@ public class SecurityTool
 
     public UserDetails getUser()
     {
-        return (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return SecurityUtil.getCurrentUser();
     }
 
 }

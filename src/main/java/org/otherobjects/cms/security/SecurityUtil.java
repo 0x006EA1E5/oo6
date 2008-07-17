@@ -14,7 +14,7 @@ import org.springframework.security.userdetails.UserDetails;
  * 
  * @author joerg
  */
-public class SecurityTool
+public class SecurityUtil
 {
 
     /**

@@ -13,14 +13,12 @@
 .info {color:gray;}
 </style>
 
-<@spring.message code="interface.language.label" />
-
 <h1>System Information</h1>
 
 <h2>Status</h2>
 
 <table>
-    <tr><td>User</td><td class="info"> ${security.user.username} [<a href="/logout.html">Logout</a>]  </td></tr>
+    <tr><td>User</td><td class="info"> ${(security.user.username)!} [<a href="/logout.html">Logout</a>]  </td></tr>
     <tr><td>Admin?</td><td class="info">${security.authorize("ROLE_ADMIN",null,"ROLE_GUEST")?string("Yes","No")}</td></tr>
 </table>
 

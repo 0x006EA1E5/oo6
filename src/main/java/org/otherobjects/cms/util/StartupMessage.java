@@ -1,7 +1,5 @@
 package org.otherobjects.cms.util;
 
-import javax.annotation.Resource;
-
 import org.otherobjects.cms.Url;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.slf4j.Logger;
@@ -19,7 +17,6 @@ public class StartupMessage implements ApplicationListener
 {
     private final Logger logger = LoggerFactory.getLogger(StartupMessage.class);
 
-    @Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
     
     public void init()
@@ -57,11 +54,17 @@ public class StartupMessage implements ApplicationListener
             else
                 this.logger.info("Environment : WARNING! No configurator found.");
                 
-            this.logger.info("Site        : " + new Url("/").getAbsoluteLink());
-            this.logger.info("Admin       : " + new Url("/otherobjects/").getAbsoluteLink());
+            this.logger.info("Site URL    : " + new Url("/").getAbsoluteLink());
+            this.logger.info("Admin URL   : " + new Url("/otherobjects/").getAbsoluteLink());
+            this.logger.info("Data path   : " + otherObjectsConfigurator.getProperty("site.private.data.path"));
             this.logger.info("");
             this.logger.info("**************************************************************");
             this.logger.info("**************************************************************");
         }
+    }
+
+    public void setOtherObjectsConfigurator(OtherObjectsConfigurator otherObjectsConfigurator)
+    {
+        this.otherObjectsConfigurator = otherObjectsConfigurator;
     }
 }

@@ -29,7 +29,7 @@ import org.otherobjects.cms.events.PublishEvent;
 import org.otherobjects.cms.model.Audited;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.model.User;
-import org.otherobjects.cms.security.SecurityTool;
+import org.otherobjects.cms.security.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -159,7 +159,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         if (object.isPublished())
             return true;
 
-        if (SecurityTool.isCurrentUser(object.getUserId()))
+        if (SecurityUtil.isCurrentUser(object.getUserId()))
             return true;
 
         return false;
@@ -180,7 +180,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
             return true;
 
         // if it is not we can save only if the current AuditInfo.getUserId()  is equal to the current users id
-        if (SecurityTool.isCurrentUser(baseNode.getUserId()))
+        if (SecurityUtil.isCurrentUser(baseNode.getUserId()))
             return true;
 
         return false;
@@ -459,7 +459,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
 
     private void updateAuditInfo(T baseNode, String comment)
     {
-        User user = SecurityTool.getCurrentUser();
+        User user = SecurityUtil.getCurrentUser();
         if (user != null) // FIXME Need to reenable and then mock in tests
         {
             Assert.notNull(user, "auditInfo can't be updated if there is no current user");
