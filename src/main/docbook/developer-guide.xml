@@ -199,15 +199,17 @@ brushed:~ rich$
 
             <tbody>
               <row>
-                <entry>Subversive 0.7.1 (Subversion SCM integration)</entry>
+                <entry>Subversive 0.7.1 (Subversion SCM integration) + SKNKit
+                1.1 Connector</entry>
 
-                <entry>Part of Ganymede (except connectors)</entry>
+                <entry>Part of Ganymede (except connectors)
+                http://www.eclipse.org/subversive/documentation/gettingStarted/aboutSubversive/install.php</entry>
               </row>
 
               <row>
                 <entry>M2Eclipse 0.9.2 (Maven integration)</entry>
 
-                <entry>http://m2eclipse.codehaus.org/update/</entry>
+                <entry>http://m2eclipse.sonatype.org/update/</entry>
               </row>
 
               <row>
@@ -234,6 +236,12 @@ brushed:~ rich$
 
                 <entry>Need to manually update to plugin to latest FreeMarker
                 jar. Also use 0.9x version of freemrker-ide</entry>
+              </row>
+
+              <row>
+                <entry>CheckStyle</entry>
+
+                <entry />
               </row>
             </tbody>
           </tgroup>
