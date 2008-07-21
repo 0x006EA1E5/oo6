@@ -50,7 +50,6 @@ public class TypeServiceImpl extends AbstractTypeService implements Initializing
         this.scanner = scanner;
     }
 
-    @SuppressWarnings("unchecked")
     public void afterPropertiesSet() throws Exception
     {
         reset();

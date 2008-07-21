@@ -24,7 +24,6 @@ import flexjson.JSON;
  */
 public class Url
 {
-
     private final Logger logger = LoggerFactory.getLogger(Url.class);
 
     public static final int STANDARD_HTTP_PORT = 80;
@@ -59,7 +58,7 @@ public class Url
 
     public Url(String link, boolean modifieable)
     {
-        this.link = link;
+        this.link = link.trim();
         parseUrl();
         Assert.isTrue(isAbsolute() || link.startsWith("/"), "Url links can only be absolute http links or site internal links starting with a slash");
         this.modifieable = modifieable;

@@ -6,38 +6,23 @@ Renders an image.
 </#macro>
 
 <#-- 
-Resolves resource and returns the external url.
-
-FIXME Temporary implementation until our resource handling is finalised.
--->
-<#macro url internalPath>
-<#if internalPath?contains("site")>
-http://localhost:8080/${internalPath?replace("/site/","")}<#t>
-</#if>
-<#if internalPath?contains("otherobjects")>
-http://localhost:8080/classpath/otherobjects.resources/static/${internalPath?replace("/otherobjects/static/","")}<#t>
-</#if>
-</#macro>
-
-<#-- 
 Convenience macro to insert CSS link tag.
 -->
-<#macro css internalPath media="screen">
-<link rel="stylesheet" href="<@oo.url internalPath/>" type="text/css" media="${media}">
+<#macro css path media="screen">
+<link rel="stylesheet" href="${resourceUrl(path)}" type="text/css" media="${media}">
 </#macro>    
 
 <#-- 
 Convenience macro to insert CSS link tag.
 -->
-<#macro js internalPath>
-<script type="text/javascript" src="<@oo.url internalPath/>"></script>
+<#macro js path>
+<script type="text/javascript" src="${resourceUrl(path)}"></script>
 </#macro>
 
 <#-- 
 Convenience macro to insert favicon link tag.
 -->
-<#macro favicon internalPath>
-<link rel="shortcut icon" href="<@oo.url internalPath/>" type="image/x-icon">
+<#macro favicon path>
 </#macro>  
 
 <#-- 
@@ -150,8 +135,17 @@ Displays flash messages.
 
 <#-- Functions-->
 <#function action actionName>
-<#return "/_action/${actionName}">
+<#return url("/_action/${actionName}") >
 </#function>
+
+<#function url path>
+<#return "${urlTool.getUrl(path)}">
+</#function>
+
+<#function resourceUrl path>
+<#return "${urlTool.getResourceUrl(path)}">
+</#function>
+
 
 <#-- Directives-->
 <#assign format = "org.otherobjects.cms.tools.FormatDirective"?new()>  

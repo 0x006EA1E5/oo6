@@ -14,8 +14,7 @@
 		</property>
 	</bean>
 	
-	<bean id="ooResourceLoader" class="org.otherobjects.cms.io.OoResourceLoader">
-	</bean>
+	<bean id="ooResourceLoader" class="org.otherobjects.cms.io.OoResourceLoader" />
 	
 	<!-- General Freemarker config -->
 	<bean id="freemarkerConfiguration" class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">

@@ -34,7 +34,7 @@ public class RequestContextUtils
         ServletContext context = getServletContext();
         if (context != null)
         {
-            if (context.getMajorVersion() == 2 && context.getMinorVersion() > 5)
+            if (context.getMajorVersion() == 2 && context.getMinorVersion() >= 5)
                 try
                 {
                     return (String) PropertyUtils.getSimpleProperty(context, "contextPath");
@@ -88,9 +88,12 @@ public class RequestContextUtils
     public static WebApplicationContext getWebApplicationContext()
     {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        System.err.println("Wofo: " + requestAttributes);
         if (requestAttributes != null)
         {
-            return (WebApplicationContext) requestAttributes.getAttribute(DispatcherServlet.WEB_APPLICATION_CONTEXT_ATTRIBUTE, RequestAttributes.SCOPE_GLOBAL_SESSION);
+            Object webApplicationContext =  requestAttributes.getAttribute(DispatcherServlet.WEB_APPLICATION_CONTEXT_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST);
+            System.err.println("Wofo: " + webApplicationContext);
+            return (WebApplicationContext) webApplicationContext;
         }
         return null;
     }

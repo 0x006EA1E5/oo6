@@ -6,12 +6,12 @@
 <div class="field-oo"><label>Metadata:</label><textarea>Here is a line of test text. Here is a line of test text. Here is a line of test text.</textarea></div>
 -->
 
-<div class="button-oo"><img src="<@oo.url "/otherobjects/static/icons/zoom.png" />" width"100" height="100" /><p>Search</p></div>
-<div class="button-oo"><a onclick="ooEnableBlockSelector()"><img src="<@oo.url "/otherobjects/static/icons/pencil.png" />" width"100" height="100" /><p>Edit</p></a></div>
-<div class="button-oo"><img src="<@oo.url "/otherobjects/static/icons/add.png" />" width"100" height="100" /><p>New</p></div>
-<div class="button-oo"><a onclick="ooEnableBlockManagement()"><img src="<@oo.url "/otherobjects/static/icons/palette.png" />" width"100" height="100" /><p>Design</p></a></div>
-<div class="button-oo"><a href="/otherobjects/workbench/"><img src="<@oo.url "/otherobjects/static/icons/database-gear.png" />" width"100" height="100" /><p>Workbench</p></a></div>
-<div class="button-oo"><a href="/otherobjects/logout.html"><img src="<@oo.url "/otherobjects/static/icons/lock.png" />" width"100" height="100" /><p>Log out</p></a></div>
+<div class="button-oo"><img src="${resourceUrl("/otherobjects/static/icons/zoom.png")}" width"100" height="100" /><p>Search</p></div>
+<div class="button-oo"><a onclick="ooEnableBlockSelector()"><img src="${resourceUrl("/otherobjects/static/icons/pencil.png")}" width"100" height="100" /><p>Edit</p></a></div>
+<div class="button-oo"><img src="${resourceUrl("/otherobjects/static/icons/add.png")}" width"100" height="100" /><p>New</p></div>
+<div class="button-oo"><a onclick="ooEnableBlockManagement()"><img src="${resourceUrl("/otherobjects/static/icons/palette.png")}" width"100" height="100" /><p>Design</p></a></div>
+<div class="button-oo"><a href="/otherobjects/workbench/"><img src="${resourceUrl("/otherobjects/static/icons/database-gear.png")}" width"100" height="100" /><p>Workbench</p></a></div>
+<div class="button-oo"><a href="/otherobjects/logout.html"><img src="${resourceUrl("/otherobjects/static/icons/lock.png")}" width"100" height="100" /><p>Log out</p></a></div>
 
 </div>
 

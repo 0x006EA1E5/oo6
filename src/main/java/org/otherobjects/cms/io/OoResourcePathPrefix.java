@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
  */
 public enum OoResourcePathPrefix {
 
-    CORE("core", "otherobjects.resources"), STATIC("static", "site.resources/static"), SITE("site", "WEB-INF"), DATA("data", null), UPLOAD("upload", null);
+    CORE("core", "otherobjects.resources"), STATIC("static", "site.resources/static"), SITE("site", "WEB-INF"), OTHEROBJECTS("otherobjects", "otherobjects.resources"), DATA("data", null), UPLOAD("upload", null);
 
     private final String pathPrefix;
     private final String replacementFilePathPrefix;

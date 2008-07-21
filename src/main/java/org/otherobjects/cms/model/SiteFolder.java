@@ -39,7 +39,6 @@ public class SiteFolder extends BaseNode implements Folder //, SiteItem
     //        return super.getCode();
     //    }
 
-    @SuppressWarnings("unchecked")
     public List<TypeDef> getAllAllowedTypes()
     {
         TypeService typeService = ((TypeService) SingletonBeanLocator.getBean("typeService"));

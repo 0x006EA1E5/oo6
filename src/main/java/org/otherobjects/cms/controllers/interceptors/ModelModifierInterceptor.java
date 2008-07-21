@@ -5,21 +5,23 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.otherobjects.cms.dao.DaoService;
+import org.otherobjects.cms.io.OoResourceLoader;
 import org.otherobjects.cms.tools.CmsImageTool;
 import org.otherobjects.cms.tools.FlashMessageTool;
 import org.otherobjects.cms.tools.FormatTool;
 import org.otherobjects.cms.tools.SecurityTool;
+import org.otherobjects.cms.tools.UrlTool;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public class ModelModifierInterceptor extends HandlerInterceptorAdapter
 {
     private DaoService daoService;
+    private OoResourceLoader ooResourceLoader;
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception
     {
-
         if (modelAndView != null)
         {
             //add user id to model if there is a user
@@ -41,12 +43,13 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             }
             // tools
             modelAndView.addObject("cmsImageTool", new CmsImageTool());
+            modelAndView.addObject("urlTool", new UrlTool(ooResourceLoader));
             modelAndView.addObject("formatTool", new FormatTool());
             modelAndView.addObject("security", new SecurityTool());
-            modelAndView.addObject("flash", new FlashMessageTool(request));
             modelAndView.addObject("daoService", daoService);
-            modelAndView.addObject("jcr", daoService.getDao("BaseNode"));
+
             modelAndView.addObject("flash", new FlashMessageTool(request));
+            modelAndView.addObject("jcr", daoService.getDao("BaseNode"));
         }
 
     }
@@ -54,6 +57,11 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
     public void setDaoService(DaoService daoService)
     {
         this.daoService = daoService;
+    }
+
+    public void setOoResourceLoader(OoResourceLoader ooResourceLoader)
+    {
+        this.ooResourceLoader = ooResourceLoader;
     }
 
 }

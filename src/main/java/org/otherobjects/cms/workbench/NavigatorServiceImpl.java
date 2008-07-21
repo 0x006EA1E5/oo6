@@ -9,7 +9,6 @@ import org.otherobjects.cms.model.Folder;
 import org.otherobjects.cms.model.SiteFolder;
 import org.springframework.util.Assert;
 
-@SuppressWarnings("unchecked")
 public class NavigatorServiceImpl implements NavigatorService
 {
     private UniversalJcrDao universalJcrDao;

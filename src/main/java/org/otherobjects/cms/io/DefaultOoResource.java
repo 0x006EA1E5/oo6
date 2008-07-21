@@ -129,6 +129,9 @@ public class DefaultOoResource extends AbstractResource implements OoResource
                 // 
                 String sitePathWithoutPrefix = OoResourcePathPrefix.SITE.pattern().matcher(path).replaceFirst("");
                 return new Url(sitePathWithoutPrefix.startsWith("/") ? sitePathWithoutPrefix : "/" + sitePathWithoutPrefix);
+            case OTHEROBJECTS :
+                String ooPathWithoutPrefix = path.replaceFirst("otherobjects/","");
+                return new Url("/classpath/otherobjects.resources/" + ooPathWithoutPrefix);
             case DATA :
                 String dataPathWithoutPrefix = OoResourcePathPrefix.DATA.pattern().matcher(path).replaceFirst("");
                 String dataUrlPath = (dataBaseUrl != null) ? dataBaseUrl : dataDirPath;

@@ -2,7 +2,6 @@ package org.otherobjects.cms.tools;
 
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.security.SecurityUtil;
-import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.taglibs.velocity.Authz;
 import org.springframework.security.taglibs.velocity.AuthzImpl;
 import org.springframework.security.userdetails.UserDetails;
@@ -15,8 +14,7 @@ import org.springframework.security.userdetails.UserDetails;
 public class SecurityTool
 {
     /**
-     * A simple tag to output or not the body of the tag if the principal
-     * has or doesn't have certain authorities.
+     * Determines if the user has or doesn't have certain roles.
      *           
      * @param ifAllGranted A comma separated list of roles which the user must all possess
      * @param ifAnyGranted A comma separated list of roles, one of which the user must possess
@@ -31,6 +29,11 @@ public class SecurityTool
         return all && any && none;
     }
 
+    /**
+     * Returns the current user.
+     * 
+     * @return
+     */
     public UserDetails getUser()
     {
         return SecurityUtil.getCurrentUser();

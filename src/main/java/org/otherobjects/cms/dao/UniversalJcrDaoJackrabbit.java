@@ -64,7 +64,6 @@ public class UniversalJcrDaoJackrabbit extends GenericJcrDaoJackrabbit<BaseNode>
         }
     }
 
-    @SuppressWarnings("unchecked")
     public List<BaseNode> getAllByType(String typeName)
     {
         // TODO Is this the most performant query method?
