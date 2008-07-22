@@ -102,7 +102,8 @@ public class BindingRequestWrapper implements InvocationHandler
         return mutableParams.get(name);
     }
 
-    enum SpecialMethods {
+    enum SpecialMethods
+    {
         GETPARAMETER("getParameter"), GETPARAMETERMAP("getParameterMap"), GETPARAMETERNAMES("getParameterNames"), GETPARAMETERVALUES("getParameterValues"), REWRITEPARAMETER("rewriteParameter"), GETREWRITTENPATHS(
                 "getRewrittenPaths");
 

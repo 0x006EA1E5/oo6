@@ -88,11 +88,9 @@ public class RequestContextUtils
     public static WebApplicationContext getWebApplicationContext()
     {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        System.err.println("Wofo: " + requestAttributes);
         if (requestAttributes != null)
         {
             Object webApplicationContext =  requestAttributes.getAttribute(DispatcherServlet.WEB_APPLICATION_CONTEXT_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST);
-            System.err.println("Wofo: " + webApplicationContext);
             return (WebApplicationContext) webApplicationContext;
         }
         return null;
