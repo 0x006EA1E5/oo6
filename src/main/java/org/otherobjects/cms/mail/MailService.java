@@ -213,7 +213,7 @@ public class MailService
         try
         {
             mailSender.send(preparator);
-            logger.info("Mail to " + mail.getToRecipients().get(0).getEmail() + " from " + mail.getFromAddress().getEmail() + " with subject: '" + mail.getSubject() + "' was sent successfully!");
+            logger.info("Mail to " + mail.getToRecipients().get(0).getEmail() + " from " + mail.getFromAddress().getEmail() + " with subject: '" + mail.getSubject() + "' was sent successfully.");
         }
         catch (MailException e)
         {

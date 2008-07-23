@@ -101,37 +101,7 @@ public class User implements Serializable, UserDetails, Editable
     public String getPassword()
     {
         return this.password;
-        // Return the current hashed password unless the a new plain text one 
-        // is available
-        //        if (StringUtils.isNotEmpty(getPlainTextPassword()))
-        //        {
-        //            // TODO Fetch password encoder from Spring. Move this to DAO?
-        //            return SHA_PASSWORD_ENCODER.encodePassword(getPlainTextPassword(), null);
-        //        }
-        //        else
-        //        {
-        //            return this.password;
-        //        }
     }
-
-    //    /**
-    //     * Transient field that sets the password in plain text. 
-    //     * 
-    //     * @return
-    //     */
-    //    @Transient
-    //    @Property(required = true, order = 10)
-    //    public String getPlainTextPassword()
-    //    {
-    //        return this.plainTextPassword;
-    //    }
-    //
-    //    @Transient
-    //    @Property(order = 11)
-    //    public String getPlainTextConfirmPassword()
-    //    {
-    //        return this.plainTextConfirmPassword;
-    //    }
 
     @Column(name = "password_hint")
     @Property(type = PropertyType.TEXT, label = "Password hint", order = 4)
@@ -384,37 +354,4 @@ public class User implements Serializable, UserDetails, Editable
     {
         this.typeDef = typeDef;
     }
-
-    //    public void setPlainTextPassword(String plainTextPassword)
-    //    {
-    //        this.plainTextPassword = plainTextPassword;
-    //    }
-    //
-    //    public void setPlainTextConfirmPassword(String plainTextConfirmPassword)
-    //    {
-    //        this.plainTextConfirmPassword = plainTextConfirmPassword;
-    //    }
-
-    // the following is not needed anymore as it is done with annotations now
-    //    @Transient
-    //    public TypeDef getTypeDef()
-    //    {
-    //      TypeDef typeDef = new TypeDef();
-    //      typeDef.setSuperClassName("java.lang.Object");
-    //      typeDef.setClassName(getClass().getName());
-    //      typeDef.setDescription("A user");
-    //      typeDef.setId(getEditableId());
-    //      typeDef.setJcrPath("/Site/users");
-    //      typeDef.setLabelProperty("fullName");
-    //      //typeDef.addProperty(new PropertyDef("id", "number", null, null, true));
-    //      typeDef.addProperty(new PropertyDef("email", "string", null, null, true));
-    //      typeDef.addProperty(new PropertyDef("username", "string", null, null));
-    //      typeDef.addProperty(new PropertyDef("firstName", "string", null, null));
-    //      typeDef.addProperty(new PropertyDef("lastName", "string", null, null));
-    //      typeDef.addProperty(new PropertyDef("enabled", "boolean", null, null));
-    //      typeDef.addProperty(new PropertyDef("passwordHint", "string", null, null));
-    //      
-    //      return typeDef;
-    //    }
-
 }

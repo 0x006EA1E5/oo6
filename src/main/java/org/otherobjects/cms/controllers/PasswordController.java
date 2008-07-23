@@ -46,26 +46,5 @@ public class PasswordController
         return mav;
     }
 
-    @RequestMapping(value = {"change"}, method = RequestMethod.GET)
-    public ModelAndView showChangePassword(@RequestParam("crc")
-    String changeRequestCode, HttpServletRequest request, HttpServletResponse response)
-    {
-        ModelAndView mav = new ModelAndView("otherobjects/password/change-password");
-        mav.addObject("crc", changeRequestCode);
-        return mav;
-    }
-
-    @RequestMapping(value = {"change"}, method = RequestMethod.POST)
-    public ModelAndView doChangePassword(HttpServletRequest request, HttpServletResponse response)
-    {
-        PasswordChanger pc = new PasswordChanger();
-        ServletRequestDataBinder binder = new ServletRequestDataBinder(pc);
-        binder.bind(request);
-
-        ModelAndView mav = new ModelAndView("otherobjects/password/changed");
-
-        mav.addObject("success", passwordService.changePassword(pc));
-
-        return mav;
-    }
+   
 }
