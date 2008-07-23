@@ -23,7 +23,7 @@ public class PasswordController
     @RequestMapping(value = {"new"}, method = RequestMethod.GET)
     public ModelAndView showRequestNew(HttpServletRequest request, HttpServletResponse response)
     {
-        ModelAndView mav = new ModelAndView("otherobjects/password/requestNew");
+        ModelAndView mav = new ModelAndView("otherobjects/password/request-new");
         return mav;
     }
 
@@ -42,7 +42,7 @@ public class PasswordController
         {
             //noop
         }
-        ModelAndView mav = new ModelAndView("otherobjects/password/requestReceived");
+        ModelAndView mav = new ModelAndView("otherobjects/password/request-received");
         return mav;
     }
 
@@ -50,7 +50,7 @@ public class PasswordController
     public ModelAndView showChangePassword(@RequestParam("crc")
     String changeRequestCode, HttpServletRequest request, HttpServletResponse response)
     {
-        ModelAndView mav = new ModelAndView("otherobjects/password/changePassword");
+        ModelAndView mav = new ModelAndView("otherobjects/password/change-password");
         mav.addObject("crc", changeRequestCode);
         return mav;
     }

@@ -1,5 +1,6 @@
 package org.otherobjects.cms.tools;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -69,5 +70,17 @@ public class FlashMessageTool
             }
         }
         return null;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public void flashMessage(String type, String message)
+    {
+        List<FlashMessage> flashMessages = (List<FlashMessage>) request.getSession(true).getAttribute(FlashMessage.OO_FLASH_MESSAGES_KEY);
+        if (flashMessages == null)
+        {
+            flashMessages = new ArrayList<FlashMessage>();
+            request.getSession(true).setAttribute(FlashMessage.OO_FLASH_MESSAGES_KEY, flashMessages);
+        }
+        flashMessages.add(new FlashMessage(type, message));
     }
 }

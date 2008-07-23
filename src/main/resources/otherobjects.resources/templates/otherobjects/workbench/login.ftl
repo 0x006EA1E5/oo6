@@ -13,6 +13,10 @@
 </head>
 
 <body>
+ 
+ ${(Session.SPRING_SECURITY_LAST_EXCEPTION.message)!}
+
+<@oo.showFlashMessages />
 
 <div style="width:300px; margin:100px 0px 0px 100px;">
     <div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>
@@ -56,7 +60,7 @@ function(){
             }) 
         ); 
         form.addButton('Login', function(){ 
-			form.el.dom.action='/otherobjects/j_spring_security_check';
+			form.el.dom.action='/test/j_spring_security_check';
         	form.el.dom.submit();
         }, form); 
 		

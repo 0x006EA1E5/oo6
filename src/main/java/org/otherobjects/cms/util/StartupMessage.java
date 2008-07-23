@@ -50,13 +50,14 @@ public class StartupMessage implements ApplicationListener
             this.logger.info("******************* Started up successfully ******************");
             this.logger.info("");
             if(otherObjectsConfigurator!=null)
-                this.logger.info("Environment : {}", otherObjectsConfigurator.getEnvironmentName());
+                this.logger.info("Environment  : {}", otherObjectsConfigurator.getEnvironmentName());
             else
-                this.logger.info("Environment : WARNING! No configurator found.");
+                this.logger.info("Environment  : WARNING! No configurator found.");
                 
-            this.logger.info("Site URL    : " + new Url("/").getAbsoluteLink());
-            this.logger.info("Admin URL   : " + new Url("/otherobjects/").getAbsoluteLink());
-            this.logger.info("Data path   : " + otherObjectsConfigurator.getProperty("site.private.data.path"));
+            //this.logger.info("Site URL     : " + new Url("/").getAbsoluteLink());
+            //this.logger.info("Admin URL    : " + new Url("/otherobjects/").getAbsoluteLink());
+            this.logger.info("Private data : " + otherObjectsConfigurator.getProperty("site.private.data.path"));
+            this.logger.info("Public data  : " + otherObjectsConfigurator.getProperty("site.public.data.path"));
             this.logger.info("");
             this.logger.info("**************************************************************");
             this.logger.info("**************************************************************");

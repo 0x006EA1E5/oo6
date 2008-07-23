@@ -54,4 +54,6 @@
 			</map>
 		</property>
 	</bean>
+	
+	<bean id="eventLogger" class="org.otherobjects.cms.events.EventLogger" />
 </beans>

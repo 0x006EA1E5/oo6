@@ -22,7 +22,7 @@ public class WorkbenchController
     //    @Resource
     //    private LocaleResolver localeResolver;
 
-    @RequestMapping("/workbench/*")
+    @RequestMapping({"/", "/workbench/*"})
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         //        String newLocale = ServletRequestUtils.getStringParameter(request, "locale");
@@ -33,11 +33,17 @@ public class WorkbenchController
         //        }
 
         String path = request.getPathInfo();
-        path = path.substring(10);
-        if (path.equals("/"))
+
+        if (path.length() < 10)
             path = "/otherobjects/workbench/workbench";
         else
-            path = "/otherobjects/workbench/" + path;
+        {
+            path = path.substring(10);
+            if (path.equals("/"))
+                path = "/otherobjects/workbench/workbench";
+            else
+                path = "/otherobjects/workbench/" + path;
+        }
         path = path.replaceAll(".html", "");
         this.logger.info("WorkbenchController: " + path);
 
