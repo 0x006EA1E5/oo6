@@ -514,7 +514,7 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
     </section>
 
     <section>
-      <title>Security </title>
+      <title>Security</title>
 
       <para>Show current user details: security.user</para>
 
@@ -538,7 +538,7 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
     <section>
       <title>Layouts</title>
 
-      <para>Must include </para>
+      <para>Must include</para>
 
       <para>oo-hud</para>
 
@@ -551,7 +551,7 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
 
     <para>Actions update the model.</para>
 
-    <para>Can be written in Groovy or Java. </para>
+    <para>Can be written in Groovy or Java.</para>
 
     <para>Put in /webapp/WEB-INF/scripts/</para>
 
@@ -818,5 +818,12 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
 
       <para></para>
     </section>
+  </chapter>
+
+  <chapter>
+    <title>Patterns</title>
+
+    <para>Maintenance page: if on static server must ahve link back to main
+    site page. Provide esssential details. </para>
   </chapter>
 </book>

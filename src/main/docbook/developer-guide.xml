@@ -553,6 +553,32 @@ Admin : http://localhost:8080/go/workbench/
   </chapter>
 
   <chapter>
+    <title>Event handling</title>
+
+    <para>Events that get sent:</para>
+
+    <para>Publsh</para>
+
+    <para>Save</para>
+
+    <para>Can we attach scripts to these events?</para>
+  </chapter>
+
+  <chapter>
+    <title>Writing Controllers</title>
+
+    <para>Can be annoated or declared in xml.</para>
+
+    <para>Conventions:</para>
+
+    <para>keep method names and mapping similar</para>
+
+    <para>Form handling</para>
+
+    <para></para>
+  </chapter>
+
+  <chapter>
     <title>Using Maven</title>
 
     <para>Maven is the software managment tool we use for OTHERobjects. It
