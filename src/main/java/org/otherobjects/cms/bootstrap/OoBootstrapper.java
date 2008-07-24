@@ -32,8 +32,8 @@ public class OoBootstrapper implements InitializingBean
         jackrabbitInitialiser.initialise();
 
         // initialise db schema
-        if (schemaUpdateRequired())
-            dbSchemaInitialiser.initialise(true);
+//        if (schemaUpdateRequired())
+           // dbSchemaInitialiser.initialise(true);
 
         try
         {
@@ -47,8 +47,8 @@ public class OoBootstrapper implements InitializingBean
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             // populate repository with default infrastructure (folders, welcome page etc.)
-            if (repositoryPopulationRequired())
-                jackrabbitPopulater.populateRepository();
+            //if (repositoryPopulationRequired())
+            //    jackrabbitPopulater.populateRepository();
         }
         finally
         {

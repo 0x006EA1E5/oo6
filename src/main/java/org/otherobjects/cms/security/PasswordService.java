@@ -28,6 +28,7 @@ public class PasswordService extends HibernateDaoSupport
 {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
+    // Set max age to 24 hours
     public static final long MAXIMUM_TOKEN_AGE = 24 * 60 * 60 * 1000;
 
     @Resource
@@ -39,14 +40,14 @@ public class PasswordService extends HibernateDaoSupport
     @Resource
     private SaltSource saltSource;
 
-    public String getPasswordChangeRequestCode(String username) throws Exception
+    public String generatePasswordChangeRequestCode(String username) throws Exception
     {
         User user = (User) userDao.loadUserByUsername(username);
-        return getPasswordChangeRequestCode(user);
+        return generatePasswordChangeRequestCode(user);
     }
 
     @Transactional
-    public String getPasswordChangeRequestCode(User user) throws Exception
+    public String generatePasswordChangeRequestCode(User user) throws Exception
     {
         //cleanExpiredPasswordChangeRequests();
         PasswordChangeRequest pcr = new PasswordChangeRequest();
@@ -63,7 +64,7 @@ public class PasswordService extends HibernateDaoSupport
      * @return
      * @throws Exception 
      */
-    String generateToken() throws Exception
+    protected String generateToken() throws Exception
     {
         Random random = new Random();
         Double rdbl = random.nextDouble();
@@ -82,42 +83,71 @@ public class PasswordService extends HibernateDaoSupport
 
     @SuppressWarnings("unchecked")
     @Transactional
+    public PasswordChangeRequest getPasswordChangeRequest(String changeRequestCode)
+    {
+        Assert.notNull(changeRequestCode, "No changeRequestCode provided");
+        
+
+        Object[] identifier = PasswordChangeRequest.splitPasswordChangeRequestIdentifier(changeRequestCode);
+
+        // Get most recent requests
+        List pcrs = getHibernateTemplate().find("FROM PasswordChangeRequest WHERE id=? AND token=? ORDER BY id DESC", identifier);
+
+        PasswordChangeRequest passwordChangeRequest = null;
+
+        if (pcrs.size() == 0)
+            return null;
+        else
+            passwordChangeRequest = (PasswordChangeRequest) pcrs.get(0);
+
+        Date now = new Date();
+
+        //if the token is too old we can't change pwd
+        if ((now.getTime() - passwordChangeRequest.getRequestDate().getTime()) > MAXIMUM_TOKEN_AGE)
+            return null;
+
+        return passwordChangeRequest;
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public boolean validateChangeRequestCode(String changeRequestCode)
+    {
+        try
+        {
+            PasswordChangeRequest changeRequest = getPasswordChangeRequest(changeRequestCode);
+            return (changeRequest != null);
+        }
+        catch (IllegalArgumentException e)
+        {
+            // If any assertions fail then non-valid
+            return false;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Transactional
     public boolean changePassword(PasswordChanger passwordChanger)
     {
-        //cleanExpiredPasswordChangeRequests();
         boolean result = false;
         try
         {
             if (!passwordChanger.newPasswordValid())
                 return false;
 
-            Object[] identifier = PasswordChangeRequest.splitPasswordChangeRequestIdentifier(passwordChanger.getChangeRequestCode());
+            PasswordChangeRequest passwordChangeRequest = getPasswordChangeRequest(passwordChanger.getChangeRequestCode());
 
-            List pcrs = getHibernateTemplate().find("from PasswordChangeRequest where id=? and token=?", identifier);
-
-            Assert.isTrue(pcrs.size() <= 1);
-
-            PasswordChangeRequest pcr = null;
-
-            if (pcrs.size() == 0)
-                return false; // no matching pcr
-            else
-                pcr = (PasswordChangeRequest) pcrs.get(0);
-
-            Date now = new Date();
-
-            //if the token is too old we can't change pwd
-            if ((now.getTime() - pcr.getRequestDate().getTime()) > MAXIMUM_TOKEN_AGE)
+            if (passwordChangeRequest == null)
                 return false;
 
-            User user = pcr.getUser();
+            User user = passwordChangeRequest.getUser();
 
             // encode and store new password
             user.setPassword(passwordEncoder.encodePassword(passwordChanger.getNewPassword(), saltSource.getSalt(user)));
             userDao.save(user);
 
-            // if we've gotten here we can safely delete the pcr
-            getHibernateTemplate().delete(pcr);
+            // if we've gotten here we can safely delete all PCRs for this user
+            getHibernateTemplate().bulkUpdate("DELETE PasswordChangeRequest WHERE user = ?", user);
             result = true;
         }
         catch (Exception e)
@@ -127,30 +157,23 @@ public class PasswordService extends HibernateDaoSupport
         return result;
     }
 
-    //@Transactional
+    /**
+     * TODO Run this nightly via scheduled task.
+     */
+    @Transactional
     public void cleanExpiredPasswordChangeRequests()
     {
-        try
+        final Date maximumValidAge = new Date(new Date().getTime() - MAXIMUM_TOKEN_AGE);
+        getHibernateTemplate().execute(new HibernateCallback()
         {
-            final Date maximumValidAge = new Date(new Date().getTime() - MAXIMUM_TOKEN_AGE);
-
-            getHibernateTemplate().execute(new HibernateCallback()
+            public Object doInHibernate(Session session) throws HibernateException, SQLException
             {
+                Query q = session.createQuery("delete from PasswordChangeRequest where requestDate < :requestDate");
+                q.setDate("requestDate", maximumValidAge);
+                q.executeUpdate();
+                return null;
+            }
+        });
 
-                public Object doInHibernate(Session session) throws HibernateException, SQLException
-                {
-                    Query q = session.createQuery("delete from PasswordChangeRequest where requestDate < :requestDate");
-                    q.setDate("requestDate", maximumValidAge);
-                    q.executeUpdate();
-                    return null;
-                }
-
-            });
-        }
-        catch (Exception e)
-        {
-            //noop
-        }
     }
-
 }

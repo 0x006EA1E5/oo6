@@ -28,8 +28,8 @@
 <p>This section tests that all OO dependencies are available.</p>
 
 <table>
-    <tr><td>Database</td><td class="info">Unchecked [<a href="/otherobjects/debug/database">Explore</a>]</td></tr>
-    <tr><td>JCR</td><td class="info">Unchecked [<a href="/otherobjects/debug/jcr">Explore</a>]</td></tr>
+    <tr><td>Database</td><td class="info">Unchecked [<a href="${oo.url("/otherobjects/debug/database")}">Explore</a>]</td></tr>
+    <tr><td>JCR</td><td class="info">Unchecked [<a href="${oo.url("/otherobjects/debug/jcr")}">Explore</a>]</td></tr>
     <#if imageMagickVersion??>
     <tr><td>Imagemagick</td><td class="ok">OK ${imageMagickVersion}</td></tr>
     </#if>    

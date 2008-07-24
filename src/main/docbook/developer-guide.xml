@@ -732,82 +732,23 @@ Admin : http://localhost:8080/go/workbench/
   </chapter>
 
   <chapter>
-    <title>Using Eclipse</title>
+    <title>Securing your site</title>
 
-    <para>OTHERobjects was developed using the Eclipse IDE. Other IDEs will
-    wokr just fine but Eclipse will be the best supported. This chapter
-    describes how to set up Eclipse</para>
+    <para>Changing the salt</para>
 
-    <section>
-      <title>Launching with WTP</title>
+    <para>Using a custom password validator</para>
+  </chapter>
 
-      <para>WTP allows your webapp to be launched on a variety of servers.
-      OTHERobjects has been tested against the follownig:</para>
+  <chapter>
+    <title>Error handling</title>
 
-      <itemizedlist>
-        <listitem>
-          <para>Jetty</para>
-        </listitem>
+    <para>Errors in controllers are handeled by Sping's exceptionResolver.
+    Directs to /site/templates/error.ftl</para>
 
-        <listitem>
-          <para>Tomcat</para>
-        </listitem>
+    <para>View errors are caught by: OOFreeMarkerView. Which dircects to
+    /site/templates/error.ftl</para>
 
-        <listitem>
-          <para>Glassfish v2 (see
-          https://glassfishplugins.dev.java.net/eclipse33/index.html)</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-
-    <section>
-      <title>Optional plugins</title>
-
-      <para>Here are some other Eclipse plugins that you may find useful
-      during OTHERobjects development.</para>
-
-      <table>
-        <title>Optional Eclipse plugins</title>
-
-        <tgroup cols="1">
-          <thead>
-            <row>
-              <entry align="center">Plugin</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry>JCR Browser:
-              http://sourceforge.net/projects/jcrbrowser</entry>
-            </row>
-
-            <row>
-              <entry>Veloeclipse: Velocity editor</entry>
-            </row>
-
-            <row>
-              <entry>Clover: test coverage tool</entry>
-            </row>
-
-            <row>
-              <entry>Spket / Aptana: advanced JS editors</entry>
-            </row>
-
-            <row>
-              <entry>Logback: logger plugin allows linking back to
-              code</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-    </section>
-
-    <section>
-      <title>Other tips</title>
-
-      <para>http://www.vasanth.in/2004/01/13/EclipseTipKeepingPluginsAndWorkspaceSeparate.aspx</para>
-    </section>
+    <para>If all else fails there is an error-500.jsp file. </para>
   </chapter>
 
   <chapter>

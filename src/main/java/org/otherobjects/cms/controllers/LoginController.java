@@ -25,7 +25,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
 
 @Controller
-@RequestMapping(value = "/login**")
 public class LoginController
 {
     @Resource
@@ -37,7 +36,7 @@ public class LoginController
     /**
      * Shows the login form. If the user is already logged in then redirect them to the home page.
      */
-    @RequestMapping(value = {"", "/", "/auth"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/login", "/login/", "/login/auth"}, method = RequestMethod.GET)
     public ModelAndView showAuth(HttpServletRequest request, HttpServletResponse response)
     {
         // FIXME If already logged in then redirect
@@ -56,7 +55,7 @@ public class LoginController
      * Post-process login request. Actual login is performed by Spring Security's <code>AuthenticationProcessingfilter</code>, this
      * just catches any errors and turns them into flash messages. 
      */
-    @RequestMapping(value = "/auth", method = RequestMethod.POST)
+    @RequestMapping(value = "/login/auth", method = RequestMethod.POST)
     public ModelAndView processAuth(HttpServletRequest request, HttpServletResponse response)
     {
         ModelAndView mav = new ModelAndView("otherobjects/login/login");
@@ -80,13 +79,13 @@ public class LoginController
     public ModelAndView requestPasswordChange(@RequestParam("username") String username, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         // Send password change email
-        String passwordChangeRequestCode = passwordService.getPasswordChangeRequestCode(username);
+        String passwordChangeRequestCode = passwordService.generatePasswordChangeRequestCode(username);
 
         FreemarkerMail mail = new FreemarkerMail();
         mail.setFromAddress(new EmailAddress("rich@othermedia.com"));
         mail.addToRecipient(new EmailAddress("rich@othermedia.com"));
         mail.setSubject("Password change request");
-        mail.setBody("http://localhost:8080/test/otherobjects/login/password-change?crc=" + passwordChangeRequestCode);
+        mail.setBody("http://localhost:8080/test/otherobjects/password-change?crc=" + passwordChangeRequestCode);
         mailService.send(mail);
         
         ModelAndView mav = new ModelAndView("otherobjects/login/login");
@@ -96,7 +95,7 @@ public class LoginController
 
         // REDIRECT!
     }
-
+/*
     @RequestMapping(value = {"/login/password-change"}, method = RequestMethod.GET)
     public ModelAndView showPasswordChange(@RequestParam("crc") String changeRequestCode, HttpServletRequest request, HttpServletResponse response)
     {
@@ -135,5 +134,5 @@ public class LoginController
             response.sendRedirect(new Url("/otherobjects/login/password-change?crc=" + pc.getChangeRequestCode()).toString());
         }
         return null;
-    }
+    }*/
 }

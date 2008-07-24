@@ -21,8 +21,8 @@
 			</list>
 		</property>
 	</bean>
-	
-	<bean id="handlerMapping"  class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping" parent="handlerMappingTemplate">
+
+	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping" parent="handlerMappingTemplate">
 		<property name="mappings">
 			<value>
 				<![CDATA[
@@ -31,8 +31,12 @@
 			</value>
 		</property>
 	</bean>
-	
-	
+
+	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="defaultErrorView" value="/site/templates/error-500" />
+			
+	</bean>
+
 	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" parent="handlerMappingTemplate" />
 	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" parent="handlerMappingTemplate" />
 	<bean class="org.springframework.web.servlet.mvc.multiaction.InternalPathMethodNameResolver" />

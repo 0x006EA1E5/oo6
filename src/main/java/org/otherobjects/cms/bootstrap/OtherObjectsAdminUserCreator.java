@@ -53,7 +53,7 @@ public class OtherObjectsAdminUserCreator
         adminUser.setUsername("admin");
         adminUser.setFirstName("The");
         adminUser.setLastName("Administrator");
-        adminUser.setEmail("admin@mycompany.com");
+        adminUser.setEmail("rich@othermedia.com");
         adminUser.setRoles(roles);
         adminUser.setAccountExpired(false);
         adminUser.setAccountLocked(false);

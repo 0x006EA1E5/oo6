@@ -7,29 +7,36 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Insert title here</title>
+<@oo.css "/site/static/css/screen.css" />
 </head>
 
 <body>
-<h2>Change your password</h2>
+<h1>Change your password</h1>
+
+ 
+<@oo.showFlashMessages />
+
 
 <form method="post">
 
-<input type="text" name="changeRequestCode" value="${crc}" />
-
+<#--
+ -->
+<@spring.bind "passwordChanger.changeRequestCode" /> 
+<@spring.formInput "passwordChanger.changeRequestCode" />
 <fieldset>
 
 <p>
   <label for="test">New password:</label><br/>
-  <@spring.bind "form.newPassword" /> 
-  <@spring.formInput "form.newPassword" />
-  <#list spring.status.errorMessages as error> <b>${error}</b> <br> </#list> 
+  <@spring.bind "passwordChanger.newPassword" /> 
+  <@spring.formInput "passwordChanger.newPassword" /><br/>
+  <#list spring.status.errorMessages as error> <span class="oo-field-error">${error}</span> <br> </#list> 
 </p>
 
 <p>
   <label for="test">New password confirmation:</label><br/>
-  <@spring.bind "form.newPasswordRepeated" /> 
-  <@spring.formInput "form.newPasswordRepeated" />
-  <#list spring.status.errorMessages as error> <b>${error}</b> <br> </#list> 
+  <@spring.bind "passwordChanger.newPasswordRepeated" /> 
+  <@spring.formInput "passwordChanger.newPasswordRepeated" /><br/>
+  <#list spring.status.errorMessages as error> <span class="oo-field-error">${error}</span> <br> </#list> 
 </p>
 
 <p><input type="submit" value="Change password" /></p>

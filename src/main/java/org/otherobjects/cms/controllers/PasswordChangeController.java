@@ -1,38 +1,79 @@
 package org.otherobjects.cms.controllers;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.mortbay.jetty.Server;
+import org.mortbay.jetty.handler.ContextHandler;
+import org.mortbay.jetty.handler.ContextHandler.SContext;
 import org.otherobjects.cms.security.PasswordChanger;
-import org.springframework.validation.BindException;
+import org.otherobjects.cms.security.PasswordService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.SimpleFormController;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
-@RequestMapping("/login/change")
-public class PasswordChangeController extends SimpleFormController
+@Controller
+@RequestMapping("/password-change")
+@SessionAttributes("passwordChanger")
+public class PasswordChangeController
 {
+    @Autowired
+    private PasswordService passwordService;
 
-    public PasswordChangeController()
+    @RequestMapping(method = RequestMethod.GET)
+    public String setupForm(Model model, HttpServletRequest request) throws IOException
     {
-        setSuccessView("redirect:otherobjects/login/auth");
-        setFormView("otherobjects/login/password-change");
-        setCommandClass(PasswordChanger.class);
-        
-        /*
-        <property name="sessionForm"><value>true</value></property>
-        <property name="commandName"><value>credentials</value></property>
-        <property name="commandClass"><value>test.business.Credentials</value></property>
-        <property name="validator"><ref bean="logonValidator"/></property>
-        <property name="formView"><value>logon.jsp</value></property>
-        <property name="successView"><value>sucess.jsp</value></property>
-        */
+        //        System.exit(0);
+        System.in.read();
+        System.exit(0);
+
+        PasswordChanger passwordChanger = new PasswordChanger();
+
+        // Validate change request code
+        String crc = request.getParameter("crc");
+        if (passwordService.validateChangeRequestCode(crc))
+        {
+            // Pre-fill in form since valid
+            model.addAttribute("crcFail", true);
+            passwordChanger.setChangeRequestCode(crc);
+        }
+        else
+        {
+            // Could not detect valid CRC
+            model.addAttribute("crcFail", false);
+        }
+        model.addAttribute("passwordChanger", passwordChanger);
+        return "otherobjects/login/change-password";
     }
- 
-    
-    @Override
-    protected ModelAndView onSubmit(Object command, BindException errors) throws Exception
+
+    @RequestMapping(method = RequestMethod.POST)
+    public String processSubmit(@ModelAttribute("passwordChanger")
+    PasswordChanger passwordChanger, BindingResult result, SessionStatus status)
     {
-        // TODO Auto-generated method stub
-        return super.onSubmit(command, errors);
+
+        new PasswordChangerValidator().validate(passwordChanger, result);
+
+        boolean success = passwordService.changePassword(passwordChanger);
+
+        if (result.hasErrors())
+        {
+            return "otherobjects/login/change-password";
+        }
+        else
+        {
+            //this.clinic.storePet(PasswordChanger);
+            status.setComplete();
+            return "redirect:/otherobjects/login/auth";
+        }
     }
-    
-    
+
 }
