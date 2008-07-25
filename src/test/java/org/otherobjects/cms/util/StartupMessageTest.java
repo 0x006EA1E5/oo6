@@ -7,7 +7,6 @@ import junit.framework.TestCase;
 
 public class StartupMessageTest extends TestCase
 {
-
     public void testOnApplicationEvent()
     {
         StartupMessage sm = new StartupMessage();
@@ -15,5 +14,4 @@ public class StartupMessageTest extends TestCase
         sm.onApplicationEvent(cre);
         // TODO No error so probably ok!
     }
-
 }

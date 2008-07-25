@@ -49,12 +49,13 @@ public class AnnotationBasedTypeDefBuilderTest extends TestCase
     {
         try
         {
-            new AnnotationBasedTypeDefBuilder().getTypeDef(TestBean2.class);
-            fail();
+            TypeDef typeDef = new AnnotationBasedTypeDefBuilder().getTypeDef(TestBean2.class);
+            if (typeDef != null)
+                fail();
         }
         catch (Exception e)
         {
-            // TODO Explain why we ignore exception
+            // Should get and exception if no type def found
         }
     }
 
