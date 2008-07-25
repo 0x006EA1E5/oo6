@@ -18,12 +18,21 @@
 
 
 <form method="post">
+<fieldset>
 
 <#--
- -->
+If we did not pick up a valid CRC from the paramters show a field 
+so that the user can enter it manually. 
+-->
 <@spring.bind "passwordChanger.changeRequestCode" /> 
-<@spring.formInput "passwordChanger.changeRequestCode" />
-<fieldset>
+<#if validCrc?has_content>
+<@spring.formHiddenInput "passwordChanger.changeRequestCode" />
+<#else>
+<p>
+  <label for="test">Change request code:</label><br/>
+  <@spring.formInput "passwordChanger.changeRequestCode" />
+</p>
+</#if>
 
 <p>
   <label for="test">New password:</label><br/>

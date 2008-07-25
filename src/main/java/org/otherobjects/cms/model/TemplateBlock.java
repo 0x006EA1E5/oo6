@@ -1,5 +1,6 @@
 package org.otherobjects.cms.model;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
@@ -60,4 +61,11 @@ public class TemplateBlock extends BaseNode
     {
         return (global != null && global.booleanValue());
     }
+    
+    @Override
+    public boolean equals(Object obj)
+    {
+        return EqualsBuilder.reflectionEquals(this, obj);
+    }
+    
 }

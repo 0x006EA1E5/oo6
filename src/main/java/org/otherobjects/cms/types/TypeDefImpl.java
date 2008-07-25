@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.util.StringUtils;
 import org.springframework.util.Assert;
@@ -190,4 +191,9 @@ public class TypeDefImpl implements TypeDef
         this.labelProperty = labelProperty;
     }
 
+    @Override
+    public boolean equals(Object obj)
+    {
+        return EqualsBuilder.reflectionEquals(this, obj);
+    }
 }

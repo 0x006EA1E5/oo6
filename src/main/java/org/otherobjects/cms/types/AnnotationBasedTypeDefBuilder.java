@@ -46,10 +46,6 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder, Initializi
     @SuppressWarnings("unchecked")
     public TypeDef getTypeDef(Class<?> clazz) throws Exception
     {
-        
-        
-        
-        
         if (!clazz.isAnnotationPresent(Type.class))
             return null;
 

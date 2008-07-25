@@ -1,23 +1,21 @@
 package org.otherobjects.cms.controllers;
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.otherobjects.cms.Url;
 import org.otherobjects.cms.mail.EmailAddress;
 import org.otherobjects.cms.mail.FreemarkerMail;
 import org.otherobjects.cms.mail.MailService;
-import org.otherobjects.cms.security.PasswordChanger;
 import org.otherobjects.cms.security.PasswordService;
 import org.otherobjects.cms.tools.FlashMessageTool;
 import org.otherobjects.cms.util.FlashMessage;
 import org.springframework.security.AuthenticationException;
 import org.springframework.security.ui.AbstractProcessingFilter;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,6 +45,8 @@ public class LoginController
         {
             FlashMessageTool flashMessageTool = new FlashMessageTool(request);
             flashMessageTool.flashMessage(FlashMessage.ERROR, "Login failed. " + authenticationException.getMessage());
+            // Clear message so we do not see it again
+            WebUtils.setSessionAttribute(request, AbstractProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY, null);
         }
         return mav;
     }
@@ -65,6 +65,8 @@ public class LoginController
         {
             FlashMessageTool flashMessageTool = new FlashMessageTool(request);
             flashMessageTool.flashMessage(FlashMessage.ERROR, "Login failed. " + authenticationException.getMessage());
+            // Clear message so we do not see it again
+            WebUtils.setSessionAttribute(request, AbstractProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY, null);
         }
         return mav;
         
@@ -84,8 +86,12 @@ public class LoginController
         FreemarkerMail mail = new FreemarkerMail();
         mail.setFromAddress(new EmailAddress("rich@othermedia.com"));
         mail.addToRecipient(new EmailAddress("rich@othermedia.com"));
+        mail.setBodyTemplateResourcePath("/otherobjects/templates/otherobjects/emails/password-change.ftl");
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("crc", passwordChangeRequestCode);
+        mail.setModel(model);
         mail.setSubject("Password change request");
-        mail.setBody("http://localhost:8080/test/otherobjects/password-change?crc=" + passwordChangeRequestCode);
+        //mail.setBody("http://localhost:8080/test/otherobjects/password-change?crc=" + passwordChangeRequestCode);
         mailService.send(mail);
         
         ModelAndView mav = new ModelAndView("otherobjects/login/login");

@@ -39,10 +39,12 @@
 	<bean id="resourceScanner" class="org.otherobjects.cms.util.ResourceScanner" />
 
 	<bean id="ooBootstrapper" class="org.otherobjects.cms.bootstrap.OoBootstrapper">
+		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
 		<property name="dbSchemaInitialiser" ref="dbSchemaInitialiser" />
 		<property name="jackrabbitInitialiser" ref="jackrabbitInitialiser" />
 		<property name="otherObjectsAdminUserCreator" ref="ooAdminUserCreator" />
 		<property name="jackrabbitPopulater" ref="jackrabbitPopulater" />
 		<property name="userDao" ref="userDao" />
+		<property name="resourceScanner" ref="resourceScanner" />
 	</bean>
 </beans>

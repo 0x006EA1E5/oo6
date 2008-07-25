@@ -34,7 +34,7 @@
 
 	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 		<property name="defaultErrorView" value="/site/templates/error-500" />
-			
+		<property name="defaultStatusCode" value="500" />
 	</bean>
 
 	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" parent="handlerMappingTemplate" />

@@ -18,21 +18,21 @@ public class StartupMessage implements ApplicationListener
     private final Logger logger = LoggerFactory.getLogger(StartupMessage.class);
 
     private OtherObjectsConfigurator otherObjectsConfigurator;
-    
+
     public void init()
     {
         System.err.println("*******************************************************");
         System.err.println("*************************** INIT **********************");
         System.err.println("*******************************************************");
     }
-    
+
     public void destroy()
     {
         System.err.println("*******************************************************");
         System.err.println("************************* DESTROY *********************");
         System.err.println("*******************************************************");
     }
-    
+
     public void onApplicationEvent(ApplicationEvent e)
     {
         // Only do for root context refreshes
@@ -49,16 +49,18 @@ public class StartupMessage implements ApplicationListener
             this.logger.info("");
             this.logger.info("******************* Started up successfully ******************");
             this.logger.info("");
-            if(otherObjectsConfigurator!=null)
+            if (otherObjectsConfigurator != null)
+            {
                 this.logger.info("Environment  : {}", otherObjectsConfigurator.getEnvironmentName());
+                this.logger.info("Private data : " + otherObjectsConfigurator.getProperty("site.private.data.path"));
+                this.logger.info("Public data  : " + otherObjectsConfigurator.getProperty("site.public.data.path"));
+            }
             else
-                this.logger.info("Environment  : WARNING! No configurator found.");
-                
+                this.logger.info("WARNING: No configurator found.");
+
+            this.logger.info("");
             //this.logger.info("Site URL     : " + new Url("/").getAbsoluteLink());
             //this.logger.info("Admin URL    : " + new Url("/otherobjects/").getAbsoluteLink());
-            this.logger.info("Private data : " + otherObjectsConfigurator.getProperty("site.private.data.path"));
-            this.logger.info("Public data  : " + otherObjectsConfigurator.getProperty("site.public.data.path"));
-            this.logger.info("");
             this.logger.info("**************************************************************");
             this.logger.info("**************************************************************");
         }

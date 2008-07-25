@@ -107,7 +107,7 @@ public class FreemarkerMail
     }
 
     /**
-     * Checks, if VelocityEmail is initialised correctly.
+     * Checks, if email is initialised correctly.
      * 
      * Values that have to be set at minimum:
      * - to-recipient

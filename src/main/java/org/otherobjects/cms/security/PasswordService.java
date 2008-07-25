@@ -12,6 +12,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.UserDao;
 import org.otherobjects.cms.model.PasswordChangeRequest;
 import org.otherobjects.cms.model.User;
@@ -110,7 +111,6 @@ public class PasswordService extends HibernateDaoSupport
 
     }
 
-    @SuppressWarnings("unchecked")
     public boolean validateChangeRequestCode(String changeRequestCode)
     {
         try
@@ -125,36 +125,30 @@ public class PasswordService extends HibernateDaoSupport
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Transactional
     public boolean changePassword(PasswordChanger passwordChanger)
     {
-        boolean result = false;
         try
         {
-            if (!passwordChanger.newPasswordValid())
-                return false;
-
+            // TODO Revalidate password here
             PasswordChangeRequest passwordChangeRequest = getPasswordChangeRequest(passwordChanger.getChangeRequestCode());
 
             if (passwordChangeRequest == null)
-                return false;
+                throw new OtherObjectsException("No valid password change request.");
 
+            // Encode and store new password
             User user = passwordChangeRequest.getUser();
-
-            // encode and store new password
             user.setPassword(passwordEncoder.encodePassword(passwordChanger.getNewPassword(), saltSource.getSalt(user)));
             userDao.save(user);
 
-            // if we've gotten here we can safely delete all PCRs for this user
+            // If we've gotten this far then we can safely delete all PCRs for this user
             getHibernateTemplate().bulkUpdate("DELETE PasswordChangeRequest WHERE user = ?", user);
-            result = true;
+            return true;
         }
         catch (Exception e)
         {
-            logger.warn("Couldn't process password change fully", e);
+            throw new OtherObjectsException("Error occured whilst changing password.", e);
         }
-        return result;
     }
 
     /**

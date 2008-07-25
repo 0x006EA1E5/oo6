@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.otherobjects.cms.util.StringUtils;
 import org.springframework.beans.propertyeditors.CustomBooleanEditor;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -377,4 +378,9 @@ public class PropertyDefImpl implements PropertyDef, Ordered
         PropertyDefImpl.timestampFormat = timestampFormat;
     }
 
+    @Override
+    public boolean equals(Object obj)
+    {
+        return EqualsBuilder.reflectionEquals(this, obj);
+    }
 }
