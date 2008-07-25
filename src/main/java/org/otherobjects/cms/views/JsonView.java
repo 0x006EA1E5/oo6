@@ -10,8 +10,6 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.servlet.View;
@@ -20,8 +18,6 @@ import flexjson.JSONSerializer;
 
 public class JsonView implements View
 {
-    private final Logger logger = LoggerFactory.getLogger(JsonView.class);
-
     public static final String JSON_DATA_KEY = "jsonData";
     public static final String JSON_INCLUDES_KEY = "jsonIncludes";
     public static final String JSON_DEEP_SERIALIZE = "jsonDeep";

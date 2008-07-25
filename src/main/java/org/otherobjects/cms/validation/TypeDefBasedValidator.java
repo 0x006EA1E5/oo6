@@ -23,6 +23,7 @@ public class TypeDefBasedValidator implements Validator
         this.typeService = typeService;
     }
 
+    @SuppressWarnings("unchecked")
     public boolean supports(Class clazz)
     {
         return typeService.getType(clazz) != null;
@@ -33,6 +34,7 @@ public class TypeDefBasedValidator implements Validator
         validate(target, errors, typeService.getType(target.getClass()));
     }
 
+    @SuppressWarnings("unchecked")
     public void validate(Object target, Errors errors, TypeDef typeDef)
     {
         StringBuffer valangRules = new StringBuffer();

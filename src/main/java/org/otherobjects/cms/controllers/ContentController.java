@@ -22,7 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
  * 
  * @author rich
  */
-@SuppressWarnings("unchecked")
 @Controller
 public class ContentController
 {

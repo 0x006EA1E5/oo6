@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import junit.framework.TestCase;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.binding.BindServiceImplNG.ListProps;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.MockDaoService;
@@ -44,7 +43,6 @@ public class BindServiceImplNGTest extends TestCase
 
     private BindServiceImplNG bindService;
     protected Date now = new Date();
-    private Date testDate;
     private TypeService typeService = new TypeServiceImpl();
     private TypeDefBuilder typeDefBuilder = new AnnotationBasedTypeDefBuilder();
     private DaoService daoService;
@@ -66,7 +64,6 @@ public class BindServiceImplNGTest extends TestCase
         typeService.registerType(typeDefBuilder.getTypeDef(TestReferenceObject.class));
         typeService.registerType(typeDefBuilder.getTypeDef(TestComponentObject.class));
         ((TypeServiceImpl) typeService).reset();
-        testDate = new SimpleDateFormat(this.dateFormat).parse("01 01 1999");
         this.daoService = new MockDaoService(new MockGenericDao(createTestReferenceObject("TR1")));
         this.bindService.setDaoService(this.daoService);
     }

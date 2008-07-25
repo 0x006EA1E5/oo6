@@ -32,7 +32,6 @@ import org.springframework.core.io.Resource;
  * 
  * @author rich
  */
-@SuppressWarnings("unchecked")
 public class OtherObjectsBootstrapUtils
 {
     private final Logger logger = LoggerFactory.getLogger(OtherObjectsBootstrapUtils.class);

@@ -1,8 +1,8 @@
 package org.otherobjects.cms.dao;
 
+@SuppressWarnings("unchecked")
 public class MockDaoService implements DaoService
 {
-
     private GenericDao dao;
 
     public MockDaoService(GenericDao dao)

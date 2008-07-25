@@ -22,8 +22,6 @@ import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.types.annotation.PropertyType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -43,17 +41,12 @@ import org.springframework.web.util.WebUtils;
 @Scope("prototype")
 public class BindServiceImplNG implements BindService
 {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
     @Resource
     private DaoService daoService;
 
     private ServletRequestDataBinder binder = null;
     private MutableHttpServletRequest wrappedRequest;
 
-    /**
-     * 
-     */
     public BindingResult bind(Object item, TypeDef typeDef, HttpServletRequest request)
     {
         this.binder = new ServletRequestDataBinder(item);
@@ -90,6 +83,7 @@ public class BindServiceImplNG implements BindService
      * @param rootPathPrefix
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     private void prepareObject(Object item, TypeDef typeDef, String rootPathPrefix) throws Exception
     {
         // iterate all props
@@ -110,12 +104,12 @@ public class BindServiceImplNG implements BindService
                 if (propertyDef.getType().equals("list")) //TODO the type should clearly be a constant or enum of sorts
                 {
                     // instantiate list? ensure capacity?
-                    List list = (List) PropertyUtils.getNestedProperty(item, path);
+                    List<Object> list = (List<Object>) PropertyUtils.getNestedProperty(item, path);
                     if (list != null)
                         list.clear();
                     else
                     {
-                        list = new ArrayList();
+                        list = new ArrayList<Object>();
                         PropertyUtils.setNestedProperty(item, path, list);
                     }
 
@@ -126,8 +120,6 @@ public class BindServiceImplNG implements BindService
                     {
                         // register suitable PropertyEditor
                         String relatedType = propertyDef.getRelatedType();
-                        Class relatedPropertyClass = Class.forName(relatedType);
-
                         binder.registerCustomEditor(CmsNode.class, rootPath, new CmsNodeReferenceEditor(daoService, relatedType));
                     }
                     else if (propertyDef.getCollectionElementType().equals("component"))
@@ -147,8 +139,6 @@ public class BindServiceImplNG implements BindService
                 {
                     // register suitable PropertyEditor
                     String relatedType = propertyDef.getRelatedType();
-                    Class relatedPropertyClass = Class.forName(relatedType);
-
                     binder.registerCustomEditor(CmsNode.class, rootPath, new CmsNodeReferenceEditor(daoService, relatedType));
                 }
                 else if (propertyDef.getType().equals("component"))// deal with components
@@ -253,14 +243,6 @@ public class BindServiceImplNG implements BindService
             return new DynaNode(propertyDef.getRelatedType());
         }
 
-    }
-
-    private Object getRelatedTypeInstance(TypeDef typeDef) throws Exception
-    {
-
-        Object relatedTypeInstance = Class.forName(typeDef.getClassName()).newInstance();
-        PropertyUtils.setSimpleProperty(relatedTypeInstance, "ooType", typeDef.getName());
-        return relatedTypeInstance;
     }
 
     /**

@@ -67,7 +67,6 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
         return (entity != null);
     }
 
-    @SuppressWarnings("unchecked")
     public T save(T object)
     {
         return save(object, true);

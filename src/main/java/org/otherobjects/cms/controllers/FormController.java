@@ -258,8 +258,8 @@ public class FormController
         view.addObject("mimeOverride", "text/html");
 
         // All OK...
-        view.getModel().put("success", true);
-        view.getModel().put("formObject", cmsFile);
+        view.addObject("success", true);
+        view.addObject("formObject", cmsFile);
         return view;
     }
 
@@ -311,8 +311,8 @@ public class FormController
         view.addObject("mimeOverride", "text/html");
 
         // All OK...
-        view.getModel().put("success", true);
-        view.getModel().put("formObject", cmsImage);
+        view.addObject("success", true);
+        view.addObject("formObject", cmsImage);
         return view;
     }
 

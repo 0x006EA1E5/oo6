@@ -41,7 +41,6 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
         return (SiteFolder) genericJcrDao.save(folder);
     }
 
-    @SuppressWarnings("unchecked")
     public void testSave() throws Exception
     {
         SampleObject t1 = new SampleObject();

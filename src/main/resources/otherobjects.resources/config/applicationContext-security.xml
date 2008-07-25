@@ -1,9 +1,6 @@
-<beans:beans xmlns="http://www.springframework.org/schema/security"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:beans="http://www.springframework.org/schema/beans"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
- 	 		              http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.xsd">
-
+<beans:beans xmlns="http://www.springframework.org/schema/security" xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.2.xsd">
 	<http auto-config="true">
 		<!-- the order of these matters, the more specific the pattern the earlier it must appear  -->
 		<intercept-url pattern="/otherobjects/debug/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
@@ -20,23 +17,18 @@
 		<form-login login-page="/otherobjects/login/auth" />
 		<logout logout-url="/otherobjects/logout.html" logout-success-url="/" />
 	</http>
-	
-	<authentication-provider user-service-ref="userDao" >
-		<password-encoder ref="passwordEncoder" >
-			 <salt-source system-wide="${otherobjects.system.wide.salt}" /> 
+	<authentication-provider user-service-ref="userDao">
+		<password-encoder ref="passwordEncoder">
+			<salt-source system-wide="${otherobjects.system.wide.salt}" />
 		</password-encoder>
-		
 	</authentication-provider>
-	
 	<beans:bean id="passwordEncoder" class="org.springframework.security.providers.encoding.ShaPasswordEncoder">
 <!--    	<beans:constructor-arg value="256" />-->
 		<beans:property name="encodeHashAsBase64" value="true" />
-    </beans:bean>
-	
+	</beans:bean>
 	<beans:bean id="saltSource" class="org.springframework.security.providers.dao.salt.SystemWideSaltSource">
 		<beans:property name="systemWideSalt" value="${otherobjects.system.wide.salt}" />
 	</beans:bean>
-	
 	<beans:bean id="passwordService" class="org.otherobjects.cms.security.PasswordService">
 		<beans:property name="sessionFactory" ref="sessionFactory" />
 	</beans:bean>

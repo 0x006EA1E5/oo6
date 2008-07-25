@@ -25,6 +25,16 @@ public class SiteFolder extends BaseNode implements Folder //, SiteItem
     private boolean inMenu = true;
     private String tags;
     
+    public String getTags()
+    {
+        return tags;
+    }
+
+    public void setTags(String tags)
+    {
+        this.tags = tags;
+    }
+
     @Override
     public boolean isFolder()
     {

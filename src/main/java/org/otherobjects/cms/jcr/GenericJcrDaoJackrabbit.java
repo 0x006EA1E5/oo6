@@ -81,7 +81,6 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         this.persistentClass = persistentClass;
     }
 
-    @SuppressWarnings("unchecked")
     public T save(T object)
     {
         return save(object, true);

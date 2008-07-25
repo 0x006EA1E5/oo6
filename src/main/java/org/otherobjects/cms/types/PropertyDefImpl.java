@@ -174,7 +174,7 @@ public class PropertyDefImpl implements PropertyDef, Ordered
         {
             //ignore string as they never need PropertyEditors to be converted
             TypeServiceImpl typeService = (TypeServiceImpl) getTypeService();
-            Class propertyEditorTargetClass = typeService.getClassForType(this.type);
+            Class<?> propertyEditorTargetClass = typeService.getClassForType(this.type);
             Assert.notNull(propertyEditorTargetClass, "The target class must not be null. Cases in which getClassForType would return null should've been handled upstream");
             if (!typeService.getClassForType(this.type).equals(String.class))
             {

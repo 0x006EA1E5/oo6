@@ -36,6 +36,7 @@ public class BindingRequestWrapper implements InvocationHandler
 
     }
 
+    @SuppressWarnings("unchecked")
     public BindingRequestWrapper(HttpServletRequest request)
     {
         this.request = request;
@@ -87,11 +88,13 @@ public class BindingRequestWrapper implements InvocationHandler
         return values[0];
     }
 
+    @SuppressWarnings("unchecked")
     public Map getParameterMap()
     {
         return Collections.unmodifiableMap(mutableParams);
     }
 
+    @SuppressWarnings("unchecked")
     public Enumeration getParameterNames()
     {
         return Collections.enumeration(mutableParams.keySet());

@@ -5,7 +5,6 @@ import java.text.ParseException;
 import junit.framework.TestCase;
 
 import org.json.JSONException;
-import org.otherobjects.cms.types.TypeDefImpl;
 
 public class OoResourceMetaDataTest extends TestCase
 {

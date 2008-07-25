@@ -9,14 +9,9 @@ import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.io.OoResourceLoader;
 import org.otherobjects.cms.io.OoResourcePathPrefix;
 import org.otherobjects.cms.jcr.GenericJcrDaoJackrabbit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CmsFileDaoImpl extends GenericJcrDaoJackrabbit<CmsFile> implements CmsFileDao
 {
-    private final Logger logger = LoggerFactory.getLogger(CmsFileDaoImpl.class);
-
-    private final DataFileDao dataFileDao = new DataFileDaoFileSystem();
     private OoResourceLoader ooResourceLoader;
 
     private MimetypesFileTypeMap mimetypesFileTypeMap = new MimetypesFileTypeMap();

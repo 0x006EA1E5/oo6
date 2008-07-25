@@ -78,7 +78,7 @@ public class OoBootstrapper implements InitializingBean
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             // populate repository with default infrastructure (folders, welcome page etc.)
-            if (true)//repositoryPopulationRequired())
+            if (true || repositoryPopulationRequired())
             {
                 jackrabbitPopulater.populateRepository();
                 boostrapProperties.setProperty(JCR_SCHEMA_VERSION_KEY, "1");
