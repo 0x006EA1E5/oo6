@@ -18,42 +18,16 @@
     <section>
       <title>Who is this guide for?</title>
 
-      <para>This guide is for developers who want to extend the capabilities
-      of OTHERobjects beyond what is possible via the web interface and third
-      party plugins. You'll need this guide if you want to:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Create custom site components</para>
-        </listitem>
-
-        <listitem>
-          <para>Develop your own plugins</para>
-        </listitem>
-
-        <listitem>
-          <para>Update and improve OTHERobjects itself</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>If you are just interested in building a standard website then you
-      should read the Site Builder Guide instead. If you're not sure then you
-      should start off with that simpler guide and come back here when you
-      need to.</para>
+      <para>This guide is for users of the OTHERobjects CMS. You wil already
+      have a working site installed and built. This guide will cover the
+      management or the site and it's content.</para>
     </section>
   </preface>
 
   <chapter>
-    <title>Getting ready</title>
+    <title>What is OTHERobects?</title>
 
-    <para>OTHERobjects in a pure-Java project based on the Spring framework
-    and built with Apache Maven. If you are an experienced Java developer you
-    will probably have your own preferences for an IDE, build process and app
-    server. In this case just skip ahead to the next chapter.</para>
-
-    <para>However, if you're fairly new to Java (or just want a setup that
-    will work with the minimum of fuss) then this section will help you get
-    your working environment prepared.</para>
+    <para>[Brief overview of what a CMS is and how it works]</para>
   </chapter>
 
   <chapter>
@@ -68,5 +42,23 @@
       for links that are not used more than once. Advantages: easyily change +
       easily select.</para>
     </section>
+  </chapter>
+
+  <chapter>
+    <title>Publishing and workflow</title>
+
+    <para></para>
+  </chapter>
+
+  <chapter>
+    <title>Creating content</title>
+
+    <para></para>
+  </chapter>
+
+  <chapter>
+    <title>Editing content</title>
+
+    <para></para>
   </chapter>
 </book>

@@ -443,13 +443,45 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
   </chapter>
 
   <chapter>
+    <title>Understanding templates</title>
+
+    <para>blocks: section of a page. may be global or specific (folder or
+    page). </para>
+
+    <para>template: arrangement of configured blocks within a layout </para>
+
+    <para>Templates</para>
+
+    <para>Pages are assembled from templates. Layouts define the struture of
+    the page (2-col, 3-col etc.) </para>
+
+    <para>Blocks define an are of the page (header, advert, main content etc.)
+    </para>
+
+    <para>A Template consists of a Layout template and an arrangement of Block
+    Templates. </para>
+
+    <para>Each template is designed for one or more primary site objects. By
+    default the template with the same name as the object is used. For
+    example, when rendering an Article object, the template name Article is
+    used. Templates can be overridden in the following places: * Per folder
+    (and descendents) * Per object * Per link (is this a good idea?)</para>
+  </chapter>
+
+  <chapter>
     <title>Writing templates</title>
 
     <para>Template paths</para>
 
     <para>Reserved folder names: otherobjects, plugins</para>
 
-    <para></para>
+    <para>(To be moved to Designer Guide) Need quick Freemarker tutorial and
+    links to docs You have the following directives: &lt;@oo. &lt;@format.
+    &lt;@data. &lt;@debug. inspect object, list directives? &lt;@security.
+    &lt;@forms. parameteters links resources images/files ajax/blocks ? Help
+    tools to insepc Methods available from templates L10N message Propreties
+    DAOs - access to all Tools - security checks Tools - link generation
+    Current Resource Object Current User Current Folder </para>
 
     <section>
       <title>Standard data</title>
@@ -814,16 +846,25 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
     <para>Something already runnign on the port?</para>
 
     <section>
-      <title></title>
+      <title>Transactions</title>
 
-      <para></para>
+      <para>JCR queries (not traversals) are non-transactional. commit first
+      for them to work.</para>
     </section>
+  </chapter>
+
+  <chapter>
+    <title>Site checklist</title>
+
+    <para>Setting custom holding/error pages</para>
+
+    <para>Data backup</para>
   </chapter>
 
   <chapter>
     <title>Patterns</title>
 
     <para>Maintenance page: if on static server must ahve link back to main
-    site page. Provide esssential details. </para>
+    site page. Provide esssential details.</para>
   </chapter>
 </book>

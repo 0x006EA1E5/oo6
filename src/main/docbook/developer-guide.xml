@@ -25,10 +25,6 @@
       </listitem>
 
       <listitem>
-        <para>Develop your own plugins</para>
-      </listitem>
-
-      <listitem>
         <para>Update and improve OTHERobjects itself</para>
       </listitem>
     </itemizedlist>
@@ -444,6 +440,22 @@ Admin : http://localhost:8080/go/workbench/
   </chapter>
 
   <chapter>
+    <title>Datastores and API</title>
+
+    <para>! Data Interface The heart of any CMS is the datastore. OTHERobjects
+    has 3 primary data stores: 1. JCR 2. Database 2. Filesystem There are APIs
+    for accessing and working with the data from server side code, but what
+    about external systems or from the browser? We provide a simple yet
+    powerful REST API for updating, fetching and querying data in any of the
+    supported datastores. Remember that the data stored is often part of a
+    more complex model so different objects may have more or less than the
+    standard methods. FileStore * get * put * delete * list (type? sort?
+    paging?) Database * get: type/id * put * delete * list JCR * get: path or
+    uuid * put: path * delete * list Need to be able to register custom
+    controller logic for model objects Need onChange events </para>
+  </chapter>
+
+  <chapter>
     <title>Remote management with JMX</title>
 
     <para>Much of OTHERobjects can be monitored and controlled remotely via
@@ -817,7 +829,7 @@ Admin : http://localhost:8080/go/workbench/
   </chapter>
 
   <chapter>
-    <title>Debuging</title>
+    <title>Debugging</title>
 
     <para>Some info at otherobjects/debug.</para>
 
@@ -825,85 +837,10 @@ Admin : http://localhost:8080/go/workbench/
 
     <para>Can also telnet in to an interactive Groovy shell on port
     6789.</para>
-  </chapter>
 
-  <chapter>
-    <title>Using JBoss Drools</title>
-
-    <para>OTHERobjects integrates with JBoss Drools by means of a simple Java
-    Bean that leverages springs resource handling to make setting up a drools
-    rule base really simple.</para>
-
-    <section>
-      <title>How to setup a rule base for your application aspect</title>
-
-      <para>OTHERobjects provides the RuleBaseFactory class to help with
-      inetgrating drools in the org.otherobjects.cms.rules package. To create
-      a a rule base and get access to drools session follow these
-      steps:</para>
-
-      <para><orderedlist>
-          <listitem>
-            <para>Create a spring singleton bean as an instance of
-            RuleBaseFactory using a configuration snippet like the
-            following:</para>
-
-            <para><programlisting>&lt;bean id="myRuleBase" class="org.otherobjects.cms.rules.RuleBaseFactory"&gt;  
-  &lt;property name="config"&gt;  
-  &lt;value&gt;   
-    poll=30  
-    name=Publish   
-  &lt;/value&gt;   
-  &lt;/property&gt;   
-  &lt;property name="cacheDir" value="WEB-INF/drools-cache" /&gt;   
-  &lt;property name="ruleDir" value="WEB-INF/rules"/&gt;   
-&lt;/bean&gt;</programlisting></para>
-
-            <para><code>The cacheDir and ruleDir properties are handled
-            specially to make use of spring's resource abstraction to </code>
-            make paths portable.</para>
-          </listitem>
-
-          <listitem>
-            <para>Inject a reference to your RuleBaseFactory into a bean where
-            your business logic resides. Make use of the rule engine in code
-            similar to the following:</para>
-
-            <para><code>Object[] result =
-            ruleExecutor.runInStatelessSession(new Object[]{factbean1,
-            factbean2, factbean3},
-            ClassOfResultsYourInterestedIn.class);</code></para>
-
-            <para>where ruleExecutor is the instance variable name that gets
-            injected with the reference to your RuleBaseFactory bean,
-            factbeanX are the objects that your rules work on and
-            ClassOfResultsYourInterestedIn is a class to use as a filter when
-            returning results. You can specify null here to get anything back
-            as a result regardless of the class it is.</para>
-
-            <para>If you need anything other than a statelessSession run call
-            the getRuleBase() method of RuleBaseFactory and consult the drools
-            documentation.</para>
-          </listitem>
-
-          <listitem>
-            <para>Write your rules. You can either write them as .drl files
-            and put these into the ruleDir in which case they get compiled
-            automatically (provided the drools-compiler is on the classpath)
-            or put externally compiled rule packages (.pkg) into the same
-            location.</para>
-          </listitem>
-        </orderedlist></para>
-    </section>
-
-    <section>
-      <title>Caveats</title>
-
-      <para>You need to make sure that your ruleDir is not under SVN or CVS
-      control as the current drools version (4.0.3) can't cope with files or
-      directories in the ruleDir that are not rule source files or compiled
-      packages.</para>
-    </section>
+    <para> Using slf4j not commons-logging (JCL) to avoid the classloader
+    nightmares people have reported. Other libs coded against JCL are
+    supported via bridgse. Advice is for loggers not to be static.</para>
   </chapter>
 
   <chapter>
@@ -1155,6 +1092,9 @@ ${datevar?date}</programlisting>
 
       <para>Templates are provided for common patterns. Use these whenever
       possible.</para>
+
+      <para>[Check Style IDE format pref files
+      http://qalab.sourceforge.net/index.html]</para>
     </section>
 
     <section>
@@ -1209,5 +1149,13 @@ ${datevar?date}</programlisting>
 
       <programlisting>export PATH=$PATH:/opt/app/bin</programlisting>
     </section>
+  </chapter>
+
+  <chapter>
+    <title>Using a VCS</title>
+
+    <para>Don't check in:</para>
+
+    <para> web-app/WEB-INF</para>
   </chapter>
 </book>
