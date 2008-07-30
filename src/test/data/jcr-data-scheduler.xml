@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scheduler xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:rep="internal" xmlns:oo="http://www.otherobjects.org/system/oo" xmlns:ocm="http://jackrabbit.apache.org/ocm"
-	xmlns:sv="http://www.jcp.org/jcr/sv/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" jcr:primaryType="oo:node" ocm:classname="org.otherobjects.cms.model.SiteFolder"
-	ooType="org.otherobjects.cms.model.SiteFolder" label="Scheduler">
-
-		
-</scheduler>
