@@ -79,37 +79,7 @@ Macro to insert region
 Macro to insert HUD code
 -->
 <#macro hud>
-<@oo.authorize ifAllGranted="ROLE_ADMIN">
-<!-- Start HUD Elements -->
-
-<script>
-var resourceObjectId = '${resourceObject.id}';
-var ooTemplateId = '${ooTemplate.id}';
-ooBaselUrl = '${oo.url("/")}';
-</script>
-
-<script type="text/javascript" src="http://cdn.othermedia.com/ojay-yui/2.5.1.js"></script>
-<script type="text/javascript" src="http://cdn.othermedia.com/ojay/0.1.2/all-min.js"></script>
-<@oo.js "/otherobjects/static/javascript/keyboard.js"/>
-<@oo.js "/otherobjects/static/javascript/hud/hud.js"/>
-<@oo.css "/otherobjects/static/css/hud.css"/>
-
-<div id="oo-form-overlay" style="display:none;"></div>
-
-<div  id="oo-main-hud" class="box-oo second-oo" style="display:none;">
-<#include "/blocks/oo-hud.ftl">
-</div>
-
-<div id="oo-chooser-hud" class="oo-hud" style="display:none;">
-<#include "/blocks/oo-block-chooser.ftl">
-</div>
-
-<div id="logo-oo" class="logo-oo" onclick="ooToggleHud('oo-main-hud');"></div>
-
-
-</@oo.authorize>
-<!-- End HUD Elements -->
-
+<#include "/blocks/oo-include.ftl" />
 </#macro>
 
 <#-- 
