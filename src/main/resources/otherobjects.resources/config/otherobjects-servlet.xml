@@ -17,7 +17,6 @@
 					<property name="daoService" ref="daoService" />
 					<property name="ooResourceLoader" ref="ooResourceLoader" />
 				</bean>
-				<bean class="org.otherobjects.cms.controllers.interceptors.IdFromUrlInterceptor" />
 			</list>
 		</property>
 	</bean>

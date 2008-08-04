@@ -446,20 +446,20 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
     <title>Understanding templates</title>
 
     <para>blocks: section of a page. may be global or specific (folder or
-    page). </para>
+    page).</para>
 
-    <para>template: arrangement of configured blocks within a layout </para>
+    <para>template: arrangement of configured blocks within a layout</para>
 
     <para>Templates</para>
 
     <para>Pages are assembled from templates. Layouts define the struture of
-    the page (2-col, 3-col etc.) </para>
+    the page (2-col, 3-col etc.)</para>
 
-    <para>Blocks define an are of the page (header, advert, main content etc.)
-    </para>
+    <para>Blocks define an are of the page (header, advert, main content
+    etc.)</para>
 
     <para>A Template consists of a Layout template and an arrangement of Block
-    Templates. </para>
+    Templates.</para>
 
     <para>Each template is designed for one or more primary site objects. By
     default the template with the same name as the object is used. For
@@ -481,7 +481,7 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
     &lt;@forms. parameteters links resources images/files ajax/blocks ? Help
     tools to insepc Methods available from templates L10N message Propreties
     DAOs - access to all Tools - security checks Tools - link generation
-    Current Resource Object Current User Current Folder </para>
+    Current Resource Object Current User Current Folder</para>
 
     <section>
       <title>Standard data</title>
@@ -504,15 +504,34 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
     <section>
       <title>Linking to pages and assets</title>
 
-      <para>PAges</para>
+      <para>All links to pages should go via the url function. This is needed
+      to ensure that context paths are maintained correctly and that SSL is
+      set correctly.</para>
 
-      <para>CSS/JS</para>
+      <para>Linking to other pages on the site:</para>
 
-      <para>static</para>
+      <para><code>&lt;a href="${oo.url("/contact-us.html")}"&gt;Contact
+      Us&lt;/a&gt;</code></para>
 
-      <para>data</para>
+      <para>You need to pass in the full relative url to the page.</para>
 
-      <para>external (think about scheme htty/https)</para>
+      <para>Linking to assets:</para>
+
+      <para><code>&lt;img
+      src="${oo.resourceUrl("/site/static/graphics/logo.png")}"&gt;</code></para>
+
+      <para>For asset links you should use an internal OO path. See section on
+      <link linkend="understanding-paths">Understanding Paths</link> for more
+      info.</para>
+
+      <para>Linking to data items:</para>
+
+      <para>TBD</para>
+
+      <para>Linking to external pages:</para>
+
+      <para>Just enter the link as normal. No need to wrap with the url
+      function.</para>
     </section>
 
     <section>
@@ -529,6 +548,9 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
 
     <section>
       <title>Messages</title>
+
+      <para>The message service will provide localised versions of text for
+      templates. The strings are defined in </para>
 
       <para>spring.message</para>
 
@@ -604,7 +626,7 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
     <para></para>
   </chapter>
 
-  <chapter>
+  <chapter id="understanding-paths">
     <title>Understanding paths</title>
 
     <para>With resources spread across multiple projects (your site,
@@ -736,6 +758,41 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
 
     <para>How to configuer timings. See:
     http://quartz.sourceforge.net/javadoc/org/quartz/CronTrigger.html</para>
+  </chapter>
+
+  <chapter>
+    <title>Message service</title>
+
+    <para>The message service provides a central localised repository of
+    strings for use throughout your site.</para>
+
+    <section>
+      <title>Why use the message service?</title>
+
+      <para>Avoid duplication. Eg site telephone number can be changed
+      globally.</para>
+
+      <para>Allows localised messages. </para>
+    </section>
+
+    <section>
+      <title>Defining messages</title>
+
+      <para>Put your messages in the message.properties file in
+      src/main/resources</para>
+    </section>
+
+    <section>
+      <title>Using messages</title>
+
+      <para>In templates:</para>
+
+      <para><programlisting>&lt;p&gt;Please call &lt;@spring.message "site.support.telephone" /&gt; for assistance.&lt;/p?</programlisting></para>
+
+      <para>In code:</para>
+
+      <para><programlisting>applcationContext.getMessage("site.support.telephone")</programlisting></para>
+    </section>
   </chapter>
 
   <chapter>

@@ -14,7 +14,7 @@ import org.springframework.util.Assert;
 /**
  * Document those property names that can't be used. Better still name space them?
  * 
- * FIXME Our standard props shoul be namespaced eg ooLabel?
+ * FIXME Our standard props should be namespaced eg ooLabel?
  * 
  * @author rich
  */

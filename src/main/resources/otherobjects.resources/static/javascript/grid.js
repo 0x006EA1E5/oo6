@@ -57,7 +57,7 @@ OO.ListingGrid = function() {
 			// create the Data Store
 			ds = new Ext.data.Store({
 			    proxy: new Ext.data.HttpProxy({
-			        url: '/otherobjects/data/listing'
+			        url: OO.Workbench.getPath('/otherobjects/data/listing')
 			    }),
 			
 			    // create reader that reads the Topic records

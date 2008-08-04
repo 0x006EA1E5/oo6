@@ -9,6 +9,8 @@ import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.model.Comment;
+import org.otherobjects.cms.model.Template;
+import org.otherobjects.cms.model.TemplateLayout;
 import org.otherobjects.cms.util.StringUtils;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
@@ -25,11 +27,14 @@ public class PageRenderer implements ResourceRenderer
         BaseNode resourceObject = (BaseNode) o;
 
         // Determine template to use
-        BaseNode template = determineTemplate(resourceObject);
+        Template template = determineTemplate(resourceObject);
         Assert.notNull(template, "No template found for type: " + resourceObject.getTypeDef().getName());
 
         // Return page and context
-        ModelAndView view = new ModelAndView("/site/templates/layouts/" + ((String) template.get("layout.code")).replaceAll("\\.html", "") + "");
+        TemplateLayout layout = template.getLayout();
+        Assert.notNull(layout, "No layout defined for template: " +template.getLabel());
+
+        ModelAndView view = new ModelAndView("/site/templates/layouts/" + layout.getCode().replaceAll("\\.html", "") + "");
 
         view.addObject("resourceObject", resourceObject);
 
@@ -44,14 +49,9 @@ public class PageRenderer implements ResourceRenderer
                 view.addObject("org.springframework.validation.BindingResult.formObject", fo);
             }
         }
+        // FIXME Let's not add this stuff here
         view.addObject("formObject", new Comment());
-
-        //        view.addObject("navigatorService", this.navigatorService);
-        //        view.addObject("siteNavigator", this.siteNavigatorService);
         view.addObject("daoService", this.daoService);
-        //if (SiteItem.class.isAssignableFrom(resourceObject.getClass())) //put the trail in the ctx if we are dealing with a SiteItem object
-        //    view.addObject("trail", siteNavigatorService.getTrail((SiteItem) resourceObject));
-
         return view;
     }
 
@@ -70,10 +70,10 @@ public class PageRenderer implements ResourceRenderer
      * @param resourceObject
      * @return
      */
-    private BaseNode determineTemplate(BaseNode resourceObject)
+    private Template determineTemplate(BaseNode resourceObject)
     {
         if (resourceObject.hasProperty("template") && resourceObject.get("template") != null)
-            return (BaseNode) resourceObject.get("template");
+            return (Template) resourceObject.get("template");
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
 
         String templateCode = "";
@@ -82,7 +82,7 @@ public class PageRenderer implements ResourceRenderer
         else
             templateCode = resourceObject.getTypeDef().getName().toLowerCase();
 
-        BaseNode template = universalJcrDao.getByPath("/designer/templates/" + templateCode);
+        Template template = (Template) universalJcrDao.getByPath("/designer/templates/" + templateCode);
         return template;
     }
 }

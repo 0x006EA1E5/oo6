@@ -19,10 +19,11 @@ class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
 
 <#-- freemarker automatically wraps results which means our PagedList isn't usable from freemarker -->
 <#-- need to include current user in where criteria -->
+
 <#assign edits = daoService.getDao("baseNode").pageByJcrExpression("/jcr:root/site//(*, oo:node) [@published = 'false' and not(jcr:like(@ooType,'%MetaData'))] order by @modificationTimestamp descending",10,1) >
 
 <ul>
-<#list edits as edit>
+<#list edits.items as edit>
     <li class="published-false><a href="${edit.linkPath}">${edit.label} </a>
     <small>at ${edit.modificationTimestamp?date} </small></li>
 </#list>
@@ -47,7 +48,7 @@ class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
 <p>Here are the last few changes to pages across the site:</p>
 <#assign latestChanges = daoService.getDao("baseNode").pageByJcrExpression("/jcr:root/site//element(*, oo:node) [not(jcr:like(@ooType,'%MetaData'))] order by @modificationTimestamp descending",10,1) >
 <ul>
-<#list latestChanges as change>
+<#list latestChanges.items as change>
     <li class="published-true><a href="${change.linkPath}">${change.label} </a> 
     <small>at ${change.modificationTimestamp?date} by ${change.userName}</small></li>
 </#list>

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd ">
 
@@ -27,14 +26,20 @@
 				</bean>
 			</list>
 		</property>
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="datetime_format">d MMM yyyy</prop>
+				<!-- 
+				<prop key="auto_import">/spring.ftl as spring, /includes/library.ftl as aaa</prop>
+				 -->
+			</props>
+		</property>
 	</bean>
 
 	<!-- freemarker config proxy that proxies a general freemarker config for use by FreemarkerView -->
 	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
 		<property name="configuration" ref="freemarkerConfiguration" />
-
 	</bean>
-
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
 		<property name="cache" value="true" />
 		<property name="prefix" value="" />
@@ -42,5 +47,4 @@
 		<property name="requestContextAttribute" value="requestContext" />
 		<property name="viewClass" value="org.otherobjects.cms.views.OOFreeMarkerView" />
 	</bean>
-
 </beans>

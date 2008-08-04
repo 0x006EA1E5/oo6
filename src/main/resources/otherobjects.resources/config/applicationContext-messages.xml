@@ -6,9 +6,12 @@
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basenames">
 			<list>
-				<value>site</value>
+				<!-- Shared validation messages -->
 				<value>validation</value>
+				<!-- OTHERObjects interface messages -->
 				<value>workbench</value>
+				<!-- Site messages -->
+				<value>messages</value>
 			</list>
 		</property>
 	</bean>

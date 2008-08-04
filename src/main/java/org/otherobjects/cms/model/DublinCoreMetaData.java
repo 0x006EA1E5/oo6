@@ -21,6 +21,13 @@ Language
 Relation
 Coverage
 Rights
+
+* DC Essential: Lang, Title, Subject, Description, Publisher, Rights
+* DC Optional: Identifier, Creator, Contributor, Date Created, Date Modified, References, Replaces
+
+http://dublincore.org/documents/dcmi-terms/
+http://dublincore.org/documents/dcmes-xml/
+
  */
 @Type
 public class DublinCoreMetaData extends BaseNode

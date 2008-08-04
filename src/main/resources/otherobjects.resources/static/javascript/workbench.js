@@ -8,7 +8,6 @@
 var OO = OO || {};
 
 // Ext blank image
-Ext.BLANK_IMAGE_URL = '/classpath/otherobjects.resources/static/libs/extjs/images/default/s.gif';
 
 OO.Workbench = function()
 {
@@ -52,7 +51,7 @@ OO.Workbench = function()
 	        });
 			
 			// Create welcome panel
-			var welcomePanel = new Ext.ContentPanel('welcome-panel', {autoCreate:true, title:'Welcome', background:false, closable:true, url:'/otherobjects/workbench/welcome.html'});
+			var welcomePanel = new Ext.ContentPanel('welcome-panel', {autoCreate:true, title:'Welcome', background:false, closable:true, url:OO.Workbench.getPath('/otherobjects/workbench/welcome.html')});
 			//welcomePanel.setUrl('/go/workbench/welcome.html',null,true); //loadOnce
 
 			// Create preview panel
@@ -197,7 +196,7 @@ OO.Workbench = function()
 
         getPath : function(path)
         {
-            return contextPath + path;
+            return (contextPath + path).replace("//","/");
         }
     };
 }();

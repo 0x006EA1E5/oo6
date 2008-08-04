@@ -20,8 +20,11 @@
 <@oo.css "/otherobjects/static/libs/extjs/src/ext-all.css"/>
 <script type="text/javascript">
 // Sets the context path
-// TODO Need to insert context path here.
-OO.Workbench.setPath("");
+OO.Workbench.setPath('${oo.url("/")}');
+
+// Set Ext Blank image URL
+Ext.BLANK_IMAGE_URL = '${oo.resourceUrl("/otherobjects/static/libs/extjs/images/default/s.gif")}';
+
 </script>
 </head>
 <body>

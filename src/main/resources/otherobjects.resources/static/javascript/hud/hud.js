@@ -117,7 +117,7 @@ function ooEnableBlockSelector() {
 			overlay.parentNode.removeChild(overlay);
 			
 			$('#oo-form-overlay').setStyle({display:"block"});
-			Ojay.HTTP.GET('/otherobjects/block/form/'+blockReferenceId+'?resourceObjectId='+resourceObjectId).insertInto('#oo-form-overlay').evalScriptTags();
+			Ojay.HTTP.GET('' + ooBaseUrl + '/otherobjects/block/form/'+blockReferenceId+'?resourceObjectId='+resourceObjectId).insertInto('#oo-form-overlay').evalScriptTags();
 		});
 	
 		// Restore on mouse out

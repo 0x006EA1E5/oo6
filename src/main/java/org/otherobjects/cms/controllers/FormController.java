@@ -36,6 +36,7 @@ import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.IdentifierUtils;
 import org.otherobjects.cms.util.ImageUtils;
 import org.otherobjects.cms.validation.ValidatorService;
+import org.otherobjects.cms.views.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -197,6 +198,7 @@ public class FormController
 
             // We have errors so return error messages
             ModelAndView view = new ModelAndView("jsonView");
+            Map<String, Object> data = new HashMap<String,Object>();
             //view.addObject("mimeOverride", "text/html"); //FIXME remove when only upload forms are set to upload
             if (errors != null && errors.getErrorCount() > 0)
             {
@@ -208,14 +210,17 @@ public class FormController
                     error.put("msg", requestContext.getMessage(e.getCode(), e.getArguments()));
                     jsonErrors.add(error);
                 }
-                view.getModel().put("success", false);
-                view.getModel().put("errors", jsonErrors);
+                data.put("success", false);
+                data.put("errors", jsonErrors);
                 return view;
             }
-
-            // All OK...
-            view.getModel().put("success", true);
-            view.getModel().put("formObject", item);
+            else
+            {
+                // All OK...
+                data.put("success", true);
+                data.put("formObject", item);
+            }
+            view.addObject(JsonView.JSON_DATA_KEY, data);
             return view;
         }
         catch (Exception e)
