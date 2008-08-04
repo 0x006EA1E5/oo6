@@ -22,7 +22,7 @@ public class WorkbenchController
     //    @Resource
     //    private LocaleResolver localeResolver;
 
-    @RequestMapping({"/", "/workbench/*"})
+    @RequestMapping({"", "/", "/workbench/*"})
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         //        String newLocale = ServletRequestUtils.getStringParameter(request, "locale");

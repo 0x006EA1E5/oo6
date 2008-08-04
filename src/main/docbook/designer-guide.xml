@@ -550,7 +550,7 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
       <title>Messages</title>
 
       <para>The message service will provide localised versions of text for
-      templates. The strings are defined in </para>
+      templates. The strings are defined in</para>
 
       <para>spring.message</para>
 
@@ -712,9 +712,23 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
   </chapter>
 
   <chapter>
-    <title>Users and permissions</title>
+    <title>Security</title>
 
-    <para>How to create a custom user</para>
+    <para>How to create a custom user.</para>
+
+    <para></para>
+
+    <section>
+      <title>Securing folders, pages, data and actions</title>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Customising the User</title>
+
+      <para>Saving user properties/preferences</para>
+    </section>
   </chapter>
 
   <chapter>
@@ -772,14 +786,14 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
       <para>Avoid duplication. Eg site telephone number can be changed
       globally.</para>
 
-      <para>Allows localised messages. </para>
+      <para>Allows localised messages.</para>
     </section>
 
     <section>
       <title>Defining messages</title>
 
       <para>Put your messages in the message.properties file in
-      src/main/resources</para>
+      WEB-INF/messages This in automatically reloaded. </para>
     </section>
 
     <section>

@@ -378,11 +378,17 @@ Admin : http://localhost:8080/go/workbench/
   <chapter>
     <title>Creating custom controllers</title>
 
+    <para>Why? eg Products/Checkout</para>
+
     <para>Can use standard freemarker system.</para>
 
     <para>How to return string/binary directly from the controller.</para>
 
     <para>How to bind to URLS.</para>
+
+    <para>Declare and map in site-servlet.xml</para>
+
+    <para>Annotate with @Controller and @RequestMapping</para>
   </chapter>
 
   <chapter>
@@ -452,7 +458,7 @@ Admin : http://localhost:8080/go/workbench/
     standard methods. FileStore * get * put * delete * list (type? sort?
     paging?) Database * get: type/id * put * delete * list JCR * get: path or
     uuid * put: path * delete * list Need to be able to register custom
-    controller logic for model objects Need onChange events </para>
+    controller logic for model objects Need onChange events</para>
   </chapter>
 
   <chapter>
@@ -838,7 +844,7 @@ Admin : http://localhost:8080/go/workbench/
     <para>Can also telnet in to an interactive Groovy shell on port
     6789.</para>
 
-    <para> Using slf4j not commons-logging (JCL) to avoid the classloader
+    <para>Using slf4j not commons-logging (JCL) to avoid the classloader
     nightmares people have reported. Other libs coded against JCL are
     supported via bridgse. Advice is for loggers not to be static.</para>
   </chapter>
@@ -1156,6 +1162,6 @@ ${datevar?date}</programlisting>
 
     <para>Don't check in:</para>
 
-    <para> web-app/WEB-INF</para>
+    <para>web-app/WEB-INF</para>
   </chapter>
 </book>

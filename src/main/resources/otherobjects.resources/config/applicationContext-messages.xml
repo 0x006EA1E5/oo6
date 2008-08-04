@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<!-- FIXME Make sure the cache is turned on in production -->
+		<property name="cacheSeconds" value="0" />
 		<property name="basenames">
 			<list>
 				<!-- Shared validation messages -->
-				<value>validation</value>
+				<value>classpath:validation</value>
 				<!-- OTHERObjects interface messages -->
-				<value>workbench</value>
+				<value>classpath:workbench</value>
 				<!-- Site messages -->
-				<value>messages</value>
+				<value>WEB-INF/messages</value>
 			</list>
 		</property>
 	</bean>

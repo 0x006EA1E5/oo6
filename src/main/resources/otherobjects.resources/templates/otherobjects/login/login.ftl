@@ -13,8 +13,6 @@
  
 <h1>OTHERobjects Login</h1>
  
- 
- <p><@spring.message "smartFolders.label" /></p>
 <@oo.showFlashMessages />
 
 <form action="${oo.url("/j_spring_security_check")}" method="post">

@@ -40,6 +40,9 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchI
     private Date modificationTimestamp;
     private String comment;
     private int changeNumber = 0;
+    
+    /** Tag list. */
+    private String ooTags;
 
     private TypeDef typeDef;
 
@@ -238,7 +241,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchI
         if (getJcrPath() == null)
             return null;
 
-        String linkPath = getJcrPath().replaceAll("^/site", "/go");
+        String linkPath = getJcrPath().replaceAll("^/site", "");
         if (isFolder())
             linkPath += "/";
         return linkPath;
@@ -344,4 +347,12 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchI
     {
         this.typeDef = typeDef;
     }
+
+	public String getOoTags() {
+		return ooTags;
+	}
+
+	public void setOoTags(String ooTags) {
+		this.ooTags = ooTags;
+	}
 }
