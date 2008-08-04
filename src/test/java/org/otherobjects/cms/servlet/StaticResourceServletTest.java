@@ -6,19 +6,16 @@ import javax.servlet.ServletException;
 
 import junit.framework.TestCase;
 
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
-
 public class StaticResourceServletTest extends TestCase
 {
     public void testDoGet() throws ServletException, IOException
     {
-        StaticClasspathServlet staticResourceServlet = new StaticClasspathServlet();
-
-        MockHttpServletRequest req = new MockHttpServletRequest();
-        MockHttpServletResponse resp = new MockHttpServletResponse();
-        
-        // FIXME Enable this test
+    	// FIXME Enable this test
+//        StaticClasspathServlet staticResourceServlet = new StaticClasspathServlet();
+//
+//        MockHttpServletRequest req = new MockHttpServletRequest();
+//        MockHttpServletResponse resp = new MockHttpServletResponse();
+//        
         
         // Existing resource
         //req.setPathInfo("/otherobjects.resources/static/css/workbench.css");
