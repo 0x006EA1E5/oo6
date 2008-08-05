@@ -110,6 +110,10 @@ public class SyndicationFeedResource extends BaseNode
         return feedFormat;
     }
 
+    /**
+     * Sets the format of the feed. The format of the 'type' property must be [FEEDNAME]_[FEEDVERSION] with the FEEDNAME in lower case, for example: rss_0.9, rss_0.93, atom_1.0.
+     * @param feedFormat
+     */
     public void setFeedFormat(String feedFormat)
     {
         this.feedFormat = feedFormat;

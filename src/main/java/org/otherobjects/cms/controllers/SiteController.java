@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.otherobjects.cms.NotFoundException;
 import org.otherobjects.cms.controllers.renderers.ResourceRenderer;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
@@ -32,7 +31,7 @@ public class SiteController extends AbstractController
 
     private DaoService daoService;
 
-    private Map<String, ResourceRenderer> handlers = new HashMap<String, ResourceRenderer>();
+    private Map<String, ResourceRenderer> renderers = new HashMap<String, ResourceRenderer>();
 
     @Override
     protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -81,23 +80,25 @@ public class SiteController extends AbstractController
 
         // Handle page not found
         if (resourceObject == null)
-            throw new NotFoundException("No resource at: " + path);
+        {
 
-        // Pass control to handler
-        //        ResourceHandler handler = handlers.get(resourceObject.getClass().getName());
-        //        if (handler == null)
-        ResourceRenderer handler = handlers.get("*");
+            //FIXME Add Security check here
+            ModelAndView mv = new ModelAndView("/otherobjects/templates/pages/oo-404-create");
+            mv.addObject("requestedPath", path);
+            return mv;
+            //throw new NotFoundException("No resource at: " + path);
+        }
+
+        // Pass control to renderer
+        ResourceRenderer handler = renderers.get(resourceObject.getClass().getName());
+        if (handler == null)
+            handler = renderers.get("*");
         return handler.handleRequest(resourceObject, request, response);
     }
 
-    public Map<String, ResourceRenderer> getHandlers()
+    public void setRenderers(Map<String, ResourceRenderer> renderers)
     {
-        return handlers;
-    }
-
-    public void setHandlers(Map<String, ResourceRenderer> handlers)
-    {
-        this.handlers = handlers;
+        this.renderers = renderers;
     }
 
     public void setDaoService(DaoService daoService)

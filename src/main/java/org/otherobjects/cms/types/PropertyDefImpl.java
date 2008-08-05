@@ -189,7 +189,7 @@ public class PropertyDefImpl implements PropertyDef, Ordered
                     if (this.type.equals("date"))
                     {
                         Assert.notNull(dateFormat, "No dateFormat set in PropertyTypeDefImpl");
-                        propertyEditor = new CustomDateEditor(new SimpleDateFormat(dateFormat), true); //FIXME, these need to be set globally somewhere
+                        propertyEditor = new CustomDateEditor(new SimpleDateFormat(dateFormat), true); //FIXME These need to be set globally somewhere
                     }
                     else if (this.type.equals("time"))
                     {

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.cms.Url;
 import org.otherobjects.cms.binding.BindService;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.GenericDao;
@@ -29,12 +30,12 @@ import org.otherobjects.cms.model.CmsFileDao;
 import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.CmsImageDao;
 import org.otherobjects.cms.model.CompositeDatabaseId;
-import org.otherobjects.cms.model.DbFolder;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeDefBuilder;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.IdentifierUtils;
 import org.otherobjects.cms.util.ImageUtils;
+import org.otherobjects.cms.util.RequestUtils;
 import org.otherobjects.cms.validation.ValidatorService;
 import org.otherobjects.cms.views.JsonView;
 import org.slf4j.Logger;
@@ -136,20 +137,34 @@ public class FormController
             else if (StringUtils.isNotEmpty(typeName))
             {
                 //TODO This needs to be extracted into an interface. Maybe DAO?
-                BaseNode parent = universalJcrDao.get(containerId);
-                if (parent instanceof DbFolder)
+                item = create(typeName);
+                typeDef = ((BaseNode) item).getTypeDef();
+                genericDao = universalJcrDao;
+                if (IdentifierUtils.isUUID(containerId))
                 {
-                    item = Class.forName(typeName).newInstance();
-                    typeDef = typeDefBuilder.getTypeDef(item.getClass());
-                    genericDao = daoService.getDao(item.getClass());
+
+                    BaseNode parent = universalJcrDao.get(containerId);
+                    ((BaseNode) item).setPath(parent.getJcrPath());
+
                 }
                 else
                 {
-                    item = create(typeName);
-                    ((BaseNode) item).setPath(parent.getJcrPath());
-                    typeDef = ((BaseNode) item).getTypeDef();
-                    genericDao = universalJcrDao;
+                    ((BaseNode) item).setJcrPath("/site" + containerId);
                 }
+
+                //                if (parent instanceof DbFolder)
+                //                {
+                //                    item = Class.forName(typeName).newInstance();
+                //                    typeDef = typeDefBuilder.getTypeDef(item.getClass());
+                //                    genericDao = daoService.getDao(item.getClass());
+                //                }
+                //                else
+                //                {
+                //                    item = create(typeName);
+                //                    ((BaseNode) item).setPath(parent.getJcrPath());
+                //                    typeDef = ((BaseNode) item).getTypeDef();
+                //                    genericDao = universalJcrDao;
+                //                }
             }
             else
             {
@@ -198,7 +213,7 @@ public class FormController
 
             // We have errors so return error messages
             ModelAndView view = new ModelAndView("jsonView");
-            Map<String, Object> data = new HashMap<String,Object>();
+            Map<String, Object> data = new HashMap<String, Object>();
             //view.addObject("mimeOverride", "text/html"); //FIXME remove when only upload forms are set to upload
             if (errors != null && errors.getErrorCount() > 0)
             {
@@ -219,6 +234,14 @@ public class FormController
                 // All OK...
                 data.put("success", true);
                 data.put("formObject", item);
+
+                if (!RequestUtils.isXhr(request))
+                {
+                    // Redirect
+                    Url u = new Url(((BaseNode) item).getLinkPath());
+                    response.sendRedirect(u.toString());
+                }
+
             }
             view.addObject(JsonView.JSON_DATA_KEY, data);
             return view;

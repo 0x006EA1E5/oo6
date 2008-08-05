@@ -249,7 +249,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     {
         jcrMappingTemplate.move(object.getJcrPath(), newPath);
         jcrMappingTemplate.save();
-        return null; //FIXME
+        return null; //FIXME Return correct amount.
     }
 
     @SuppressWarnings("unchecked")

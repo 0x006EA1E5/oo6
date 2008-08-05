@@ -1,4 +1,4 @@
 /**
- * This package contains the key controllers for both the site and OTHERobjects.
+ * This package contains the standard controllers for sites and OTHERobjects.
  */
 package org.otherobjects.cms.controllers;

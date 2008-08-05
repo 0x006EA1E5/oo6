@@ -19,6 +19,7 @@ import org.otherobjects.cms.model.TemplateBlock;
 import org.otherobjects.cms.model.TemplateBlockReference;
 import org.otherobjects.cms.model.TemplateRegion;
 import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.cms.util.IdentifierUtils;
 import org.otherobjects.cms.util.RequestUtils;
 import org.otherobjects.cms.util.StringUtils;
 import org.slf4j.Logger;
@@ -157,8 +158,8 @@ public class BlockController
     }
 
     /**
-     * Renders form for requested block.
-     * 
+     * Renders form for requested block. Path Id should either be a UUID to edit an existing object,
+     * or a type name for creating new objects. 
      */
     @RequestMapping("/block/form/**")
     public ModelAndView form(HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -168,12 +169,26 @@ public class BlockController
 
         String blockRefId = RequestUtils.getId(request);
         String resourceObjectId = request.getParameter("resourceObjectId");
-        TemplateBlockReference blockRef = (TemplateBlockReference) dao.get(blockRefId);
-
-        logger.info("Generating form for block: {}", blockRef.getCode());
-        view.addObject("blockReference", blockRef);
-
-        if (!blockRef.getBlock().isGlobalBlock())
+        
+        TemplateBlockReference blockRef = null;
+        if (IdentifierUtils.isUUID(blockRefId))
+        {
+            blockRef = (TemplateBlockReference) dao.get(blockRefId);
+            logger.info("Generating form for block: {}", blockRef.getCode());
+            view.addObject("blockReference", blockRef);
+        }
+        view.addObject("resourceObjectForm", false);
+        
+        if(blockRef == null)
+        {
+            // New page block
+            //view.addObject("blockData", blockData);
+            view.addObject("resourceObjectForm", true);
+            view.addObject("blockGlobal", false);
+            view.addObject("location", request.getParameter("location"));
+            view.addObject("typeDef", typeService.getType(blockRefId));
+        }
+        else if (!blockRef.getBlock().isGlobalBlock())
         {
             // Page block
             BaseNode blockData = dao.get(resourceObjectId);

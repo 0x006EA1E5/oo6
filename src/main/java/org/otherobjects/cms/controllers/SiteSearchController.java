@@ -4,12 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.otherobjects.cms.dao.DaoService;
-import org.otherobjects.cms.dao.GenericDao;
-import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.io.OoResourceLoader;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
-import org.otherobjects.cms.model.Template;
-import org.otherobjects.cms.model.TemplateRegion;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;

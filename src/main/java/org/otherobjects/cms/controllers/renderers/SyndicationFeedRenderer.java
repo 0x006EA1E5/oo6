@@ -35,6 +35,13 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.feed.synd.SyndFeedImpl;
 import com.sun.syndication.io.SyndFeedOutput;
 
+/**
+ * Renders a SyndicationFeedResource.
+ * 
+ * TODO Need to test that essential mappings are valid.
+ * TODO Warn on unsupported mappings.
+ * 
+ */
 public class SyndicationFeedRenderer implements ResourceRenderer
 {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -99,7 +106,7 @@ public class SyndicationFeedRenderer implements ResourceRenderer
                     {
                         logger.warn("Couldn't get description value from node " + node.getId(), e);
                     }
-                    mappings.remove("description");
+                    //mappings.remove("description");
                 }
 
                 if (mappings.containsKey("image"))
@@ -137,7 +144,7 @@ public class SyndicationFeedRenderer implements ResourceRenderer
                     }
                 }
 
-                entry.setAuthor(node.getUserName());
+                //entry.setAuthor(node.getUserName());
                 entry.setUpdatedDate(node.getModificationTimestamp());
 
                 entries.add(entry);

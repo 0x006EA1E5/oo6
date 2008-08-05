@@ -1,23 +1,24 @@
 package org.otherobjects.cms.model;
 
-import java.util.List;
-
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.Type;
 
 /**
- * FIXME Should this extend BaseNode?
+ * MetaData for site pages. This data augments the publishing and audit information already
+ * stored and is primarily for SEO (internal search and external engines).
  */
+// FIXME This must not extend BaseNode.
 @Type
 public class MetaData extends BaseNode
 {
     private String title;
     private String description;
-    private List<String> keywords;
+    private String keywords;
 
     @Override
     public String getCode()
     {
+        // FIXME This should not be needed -- should be determined by parent typeDef.
         return "metaData";
     }
 
@@ -44,14 +45,13 @@ public class MetaData extends BaseNode
     }
 
     @Property(order = 30)
-    public List<String> getKeywords()
+    public String getKeywords()
     {
         return keywords;
     }
 
-    public void setKeywords(List<String> keywords)
+    public void setKeywords(String keywords)
     {
         this.keywords = keywords;
     }
-
 }

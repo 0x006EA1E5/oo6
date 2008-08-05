@@ -127,7 +127,7 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
     {
 
         /*
-         * FIXME Implement pulish() test
+         * FIXME Test: Implement publish() test
          * Note: publish has some problem with nodes not created in the same transaction.
          * This test does not work yet. 
          */

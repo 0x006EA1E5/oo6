@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * Generates a sitemap.xml file for use by search engines.
+ * Generates a sitemap.xml file for use by search engines using the {@link org.otherobjects.cms.seo.SiteMapGenerator}.
  * 
  * @author rich
  */
@@ -37,7 +37,7 @@ public class SiteMapController
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         this.logger.info("Generating sitemap.");
-        // FIXME This list could be huge -- we need to be careful of memory
+        // TODO This list could be huge -- we need to be careful of memory
         // FIXME Better way of exculding components needed
         List<BaseNode> items = universalJcrDao.getAllByJcrExpression("/jcr:root/site//element(*, oo:node) [@ooType != 'org.otherobjects.cms.model.MetaData']");
         SiteMapGenerator siteMapGenerator = new SiteMapGenerator();

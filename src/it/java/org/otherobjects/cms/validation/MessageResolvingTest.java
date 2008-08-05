@@ -7,7 +7,7 @@ public class MessageResolvingTest extends BaseSharedContextTestCase
 {
     public void testResolveErrorCode()
     {
-        //FIXME: broken test
+        //FIXME Test: Broken test
 //        Errors errors = new BeanPropertyBindingResult(new DummyBean(), "dummy");
 //
 //        errors.rejectValue("name", "field.required");

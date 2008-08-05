@@ -19,7 +19,6 @@ import org.springframework.util.Assert;
  * for protocol details
  * 
  * @author rich
- *
  */
 public class SiteMapGenerator
 {

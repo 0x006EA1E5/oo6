@@ -90,11 +90,14 @@ public class Url
     {
         //TODO wouldn't it be better to create the the link in any case
         //TODO shouldn't this throw an exception if this is not modifieable and not absolute?
-        if (absolute) // link is already absolute
-            return getLink();
-        else
-        // non-absolute link
+        if (absolute)
         {
+            // link is already absolute
+            return getLink();
+        }
+        else
+        {
+            // non-absolute link
             StringBuffer newUrl = new StringBuffer();
             String scheme = calcScheme();
             newUrl.append(scheme);

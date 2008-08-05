@@ -59,6 +59,9 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
 
         //wrap in ooResource
         DefaultOoResource ooResource = new DefaultOoResource(resource, path, resourceInfo.getPrefix(), resourceInfo.isWritable());
+//        if(path.endsWith("create.ftl"))
+//            ooResource = new DefaultOoResource(resource, path, resourceInfo.getPrefix(), resourceInfo.isWritable());
+        
         if (resource.exists())
         {
             postprocessResource(ooResource);
@@ -141,7 +144,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
 
     /**
      * Transform the path into a path understandable by a Spring resource loader by stripping of the path prefix and modifying 
-     * the path according to the stripped off prefix
+     * the path according to the stripped off prefix.
      * 
      * @param path
      * @return
@@ -183,6 +186,10 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
                 //buf.append(buf.append(OoResourcePathPrefix.SITE.replacementFilePathPrefix()););
                 buf.append(path);
                 break;
+            case OTHEROBJECTS :
+            	//buf.append(prefix.replacementFilePathPrefix());
+            	buf.append(path);
+            	break;
             case DATA :
                 buf.append("file:");
                 buf.append(dataDirPath);

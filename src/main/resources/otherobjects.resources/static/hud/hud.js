@@ -48,6 +48,14 @@ function ooSubmitForm(blockId)
 	return ooQuickSaveForm(blockId, true);
 } 
 
+function ooShowCreateForm(type, location) 
+{
+	$('#oo-form-overlay').setStyle({display:"block"});
+	Ojay.HTTP.GET('' + ooBaseUrl + 'otherobjects/block/form/'+type+'?location='+location).insertInto('#oo-form-overlay').evalScripts();
+} 
+
+
+
 function ooQuickSaveForm(blockId, hide) 
 {
 	var formObject = document.getElementById('form'); 

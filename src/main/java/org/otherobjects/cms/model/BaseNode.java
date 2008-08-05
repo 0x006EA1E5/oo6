@@ -5,6 +5,7 @@ import java.util.Date;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.SingletonBeanLocator;
+import org.otherobjects.cms.Url;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.StringUtils;
@@ -18,7 +19,7 @@ import org.springframework.util.Assert;
  * 
  * @author rich
  */
-public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchItem
+public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchItem, Linkable
 {
     /** GUID */
     private String id;
@@ -50,6 +51,12 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchI
     {
     }
 
+    public Url getHref()
+    {
+        // FIXME This should be in SitePage
+        return new Url(getLinkPath());
+    }
+    
     /**
      * FIXME Temp hack to sort out type labels in grid
      */

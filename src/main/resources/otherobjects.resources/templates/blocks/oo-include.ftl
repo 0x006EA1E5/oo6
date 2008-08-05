@@ -2,8 +2,8 @@
 <!-- Start HUD Elements -->
 
 <script>
-var resourceObjectId = '${resourceObject.id}';
-var ooTemplateId = '${ooTemplate.id}';
+var resourceObjectId = '${(resourceObject.id)!}';
+var ooTemplateId = '${(ooTemplate.id)!}';
 var ooBaseUrl = '${oo.url("/")}';
 var ooBlockInEdit = "";
 </script>

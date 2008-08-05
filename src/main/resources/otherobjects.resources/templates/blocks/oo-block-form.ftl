@@ -1,6 +1,11 @@
 <#import "/oo.ftl" as oo>
 <div class="title">Editing</div>
+<#if resourceObjectForm>
+<form id="form" method="post" action="${oo.url("/otherobjects/form")}">
+<#else>
 <form id="form" method="post" onsubmit="return ooSubmitForm('${blockReference.id}')">
+</#if>
+
 <#if blockData??>
 	<#-- Existing block -->
 	<input type="hidden" class="hidden" name="editableId" value="${blockData.id}" />
@@ -24,7 +29,7 @@
 	<#-- New block -->
 	<input type="hidden" class="hidden" name="_oo_containerId" value="${location}" />
 	<input type="hidden" class="hidden" name="_oo_type" value="${typeDef.name}" />
-	<input type="hidden" class="hidden" name="code" value="blockData" />
+	<!-- <input type="text" class="hidden" name="code" value="blockData" /> -->
 	<#list typeDef.properties as prop>
 	<#if prop.name == "code">
 	<#elseif prop.type == "boolean">
