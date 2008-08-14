@@ -3,9 +3,14 @@ package org.otherobjects.cms.controllers;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,14 +24,19 @@ import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.otherobjects.cms.Url;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.tools.SecurityTool;
 import org.otherobjects.cms.util.Version;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.StatementCallback;
@@ -38,8 +48,9 @@ import org.springframework.security.providers.anonymous.AnonymousAuthenticationP
 import org.springframework.security.providers.anonymous.AnonymousAuthenticationToken;
 import org.springframework.security.util.AuthorityUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
@@ -53,17 +64,27 @@ import org.springmodules.jcr.JcrTemplate;
  * @author rich
  */
 @Controller
-public class DebugController extends MultiActionController
+public class DebugController implements ServletContextAware
 {
+    private static final String EXTERNAL_CONNECTIVITY_TEST_URL = "http://www.google.com/";
+
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
+
+    private ServletContext servletContext;
+
     @Resource
     private JcrTemplate jcrTemplate;
 
     @Resource
     private JdbcTemplate jdbcTemplate;
 
+    //@Resource
+    //private MailService mailService;
+
     @Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
 
+    @RequestMapping({"/debug", "/debug/"})
     public ModelAndView debug(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         // Determine imageMagick status
@@ -79,18 +100,16 @@ public class DebugController extends MultiActionController
             Process exec = Runtime.getRuntime().exec(command);
             exec.waitFor();
             imageMagickVersion = IOUtils.toString(exec.getInputStream());
-            
+
             Pattern p = Pattern.compile(".*((\\d+)\\.(\\d+)\\.(\\d)+).*", Pattern.DOTALL);
             Matcher m = p.matcher(imageMagickVersion);
-            if(m.matches())
+            if (m.matches())
             {
-                //imageMagickVersion = m.group(1);
-//                Version current = new Version(Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3)), Integer.parseInt(m.group(4)));
                 Version current = Version.getVersion(m.group(1));
                 imageMagickVersion = current.toString();
-                Version required = new Version(6,3,2);
-                if(current.compareTo(required) < 0)
-                    imageMagickError = "Newer version of ImageMagick required. You have " + current + " but " + required + " is required."; 
+                Version required = new Version(6, 3, 2);
+                if (current.compareTo(required) < 0)
+                    imageMagickError = "Newer version of ImageMagick required. You have " + current + " but " + required + " is required.";
             }
         }
         catch (Exception e)
@@ -98,16 +117,45 @@ public class DebugController extends MultiActionController
             imageMagickError = "Could not find ImageMagick binary: " + e.getMessage();
         }
 
-        // FIXME Add check for im > 6.3.2
-        
+
         ModelAndView mav = new ModelAndView("/debug/debug");
         mav.addObject("imageMagickError", imageMagickError);
         mav.addObject("imageMagickVersion", imageMagickVersion);
         mav.addObject("session", request.getSession(false));
-        mav.addObject("systemProperties", System.getProperties());
-        mav.addObject("fileEncoding", System.getProperties().getProperty("file.encoding"));
-        mav.addObject("javaVersion", System.getProperties().getProperty("java.version"));
-        mav.addObject("servletApiVersion", System.getProperties().getProperty("file.encoding"));
+
+        // System Properties
+        Properties properties = System.getProperties();
+                
+        mav.addObject("defaultEncoding", java.nio.charset.Charset.defaultCharset().name());
+
+        mav.addObject("systemUserName", properties.getProperty("user.name"));
+        mav.addObject("systemUserLanguage", properties.getProperty("user.language"));
+        mav.addObject("systemUserCountry", properties.getProperty("user.country"));
+        mav.addObject("systemUserTimezone", properties.getProperty("user.timezone"));
+
+        mav.addObject("javaVendor", properties.getProperty("java.vendor"));
+        mav.addObject("javaVersion", properties.getProperty("java.version"));
+
+        mav.addObject("systemOsName", properties.getProperty("os.name"));
+        mav.addObject("systemOsVersion", properties.getProperty("os.version"));
+        mav.addObject("systemOsArch", properties.getProperty("os.arch"));
+
+        mav.addObject("servletApiVersion", servletContext.getMajorVersion() + "." + servletContext.getMinorVersion());
+
+        // Connectivity
+        mav.addObject("testExternalUrl", httpPing(EXTERNAL_CONNECTIVITY_TEST_URL));
+        mav.addObject("testInternalUrl", httpPing(new Url("/").getAbsoluteLink()));
+        
+        
+        // Data stores
+        
+        mav.addObject("privateDataPath", otherObjectsConfigurator.getProperty("site.private.data.path"));
+        mav.addObject("publicDataPath", otherObjectsConfigurator.getProperty("site.public.data.path"));
+        mav.addObject("dbUrl", otherObjectsConfigurator.getProperty("jdbc.url"));
+        mav.addObject("dbSchemaVersion", otherObjectsConfigurator.getProperty("db.schema.version"));
+        mav.addObject("jcrLocation", otherObjectsConfigurator.getProperty("jcr.repository.location"));
+        mav.addObject("jcrSchemaVersion", otherObjectsConfigurator.getProperty("jcr.schema.version"));
+        
         mav.addObject("security", new SecurityTool());
         return mav;
     }
@@ -120,6 +168,7 @@ public class DebugController extends MultiActionController
      * @return
      * @throws Exception
      */
+    @RequestMapping({"/debug/database", "/debug/database/"})
     public ModelAndView database(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         final String sql = request.getParameter("sql");
@@ -172,7 +221,8 @@ public class DebugController extends MultiActionController
      * @return
      * @throws Exception
      */
-    public ModelAndView script(HttpServletRequest request, HttpServletResponse response) throws Exception
+    @RequestMapping({"/debug/script", "/debug/script/"})
+    public ModelAndView script(HttpServletRequest request, HttpServletResponse response, ApplicationContext applicationContext) throws Exception
     {
         String script = request.getParameter("script");
 
@@ -183,7 +233,7 @@ public class DebugController extends MultiActionController
             try
             {
                 Binding binding = new Binding();
-                binding.setVariable("app", getApplicationContext());
+                binding.setVariable("app", applicationContext);
                 GroovyShell shell = new GroovyShell(binding);
                 output = shell.evaluate(script);
                 mav.addObject("output", output);
@@ -206,14 +256,15 @@ public class DebugController extends MultiActionController
      * @return
      * @throws Exception
      */
+    @RequestMapping({"/debug/jcr", "/debug/jcr/"})
     public ModelAndView jcr(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         String xpath = request.getParameter("xpath");
         String folder = request.getParameter("folder");
 
-        if(StringUtils.isNotEmpty(folder))
+        if (StringUtils.isNotEmpty(folder))
             xpath = "/jcr:root/site" + folder + "/element(*)";
-            
+
         String liveNodesHtml = null;
         String editNodesHtml = null;
         if (AuthorityUtils.userHasAuthority("ROLE_ADMIN"))
@@ -266,7 +317,7 @@ public class DebugController extends MultiActionController
                 }
                 else
                     return "";
-                    //renderNodeInfo(html, session.getRootNode());
+                //renderNodeInfo(html, session.getRootNode());
                 return html.toString();
             }
         });
@@ -301,5 +352,46 @@ public class DebugController extends MultiActionController
         }
         html.append("</li>");
         html.append("</ul>");
+    }
+
+    /**
+     * Test connection to the requested URL.
+     * 
+     * @param url the URL to connect to
+     * @return a String describing connection status
+     */
+    protected String httpPing(String url)
+    {
+        try
+        {
+            URL u = new URL(url);
+            URLConnection connection = u.openConnection();
+            connection.connect();
+            return "OK Good connection to: " + url;
+        }
+        catch (MalformedURLException e)
+        {
+            return "WARN Bad Url: " + url;
+        }
+        catch (IOException e)
+        {
+            return "FAIL Can not connect to: " + url;
+        }
+    }
+
+    /**
+     * Sends a test email to the specified recipient.
+     * 
+     * @param recipient the email address to send to
+     * @return a String describing send status
+     */
+    protected String sendTestEmail(String recipient)
+    {
+        return "WARN Didn't send test email to: " + recipient;
+    }
+
+    public void setServletContext(ServletContext servletContext)
+    {
+        this.servletContext = servletContext;
     }
 }

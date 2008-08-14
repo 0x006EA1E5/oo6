@@ -32,6 +32,8 @@ public class StaticClasspathServlet extends StaticFileServlet
         String servletPath = request.getServletPath();
         path = path.substring(servletPath.length());
 
+        logger.info("Static resource request: {}", path);
+        
         //  Security check: so that non-static data is not served
         if (!path.contains("/static/") || path.contains(".."))
         {

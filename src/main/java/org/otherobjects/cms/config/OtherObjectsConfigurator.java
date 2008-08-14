@@ -116,6 +116,11 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
         else
             return "";
     }
+    
+    public void setProperty(String key, String value)
+    {
+        this.mergedProperties.setProperty(key, value);
+    }
 
     protected void setDefaultEnvironment(String defaultEnvironment)
     {

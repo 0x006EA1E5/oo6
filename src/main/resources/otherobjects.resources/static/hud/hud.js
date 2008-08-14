@@ -107,12 +107,12 @@ function ooFadeHud() {
 	
 	var hud = $('#oo-hud');
 	
-	if(hud.getStyle('display')!='block') {
+	if(hud.getStyle('opacity')=='0.1') {
 		
-		hud.show().animate({opacity: {to: '1.0'}}, 0.2);
+		hud.animate({opacity: {to: '1.0'}}, 0.5);
 	}
 	else {
-		hud.animate({opacity: {to: '0.0'}}, 0.2).hide();
+		hud.animate({opacity: {to: '0.1'}}, 0.5);//.hide();
 	}
 
 

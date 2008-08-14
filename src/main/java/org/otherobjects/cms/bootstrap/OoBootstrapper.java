@@ -94,6 +94,10 @@ public class OoBootstrapper implements InitializingBean
 
         // Save properties
         storeProperties();
+        
+        // Copy properties to main configurator
+        otherObjectsConfigurator.setProperty(DB_SCHEMA_VERSION_KEY, boostrapProperties.getProperty(DB_SCHEMA_VERSION_KEY));
+        otherObjectsConfigurator.setProperty(JCR_SCHEMA_VERSION_KEY, boostrapProperties.getProperty(JCR_SCHEMA_VERSION_KEY));
     }
 
     private void loadProperties() throws IOException
@@ -120,7 +124,7 @@ public class OoBootstrapper implements InitializingBean
             if (fis != null)
                 fis.close();
         }
-
+        
     }
 
     private void storeProperties() throws IOException

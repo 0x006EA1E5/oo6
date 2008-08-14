@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
@@ -36,7 +37,7 @@ import org.springframework.security.userdetails.UserDetails;
  *      by David Carter david@carter.net
  */
 @Entity
-//@Table(name = "app_user")
+@Table(name = "app_user")
 @SequenceGenerator(name = "UserSeq", sequenceName = "app_user_seq")
 @Type(label = "User", description = "A User", labelProperty = "email")
 public class User implements Serializable, UserDetails, Editable
