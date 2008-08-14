@@ -30,7 +30,11 @@
                 hibernate.search.default.indexBase = ./webapp/WEB-INF/lucene
             </value>
         </property>
+        <property name="namingStrategy" ref="namingStrategy"/>
     </bean>
+	
+	<!-- Use single-case naming strategy -->
+	<bean id="namingStrategy" class="org.hibernate.cfg.ImprovedNamingStrategy"/>
 	
 	<bean id="hibernateEntityConfigProvider" class="org.otherobjects.cms.hibernate.HibernateEntityConfigProvider" >
 		<property name="scanner" ref="annotatedClassesScanner" />
