@@ -355,11 +355,11 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchI
         this.typeDef = typeDef;
     }
 
-	public String getOoTags() {
-		return ooTags;
-	}
+    public String getOoTags() {
+        return ooTags;
+    }
 
-	public void setOoTags(String ooTags) {
-		this.ooTags = ooTags;
-	}
+    public void setOoTags(String ooTags) {
+        this.ooTags = ooTags;
+    }
 }
