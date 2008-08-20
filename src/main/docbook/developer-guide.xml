@@ -228,10 +228,9 @@ brushed:~ rich$
               </row>
 
               <row>
-                <entry>FreeMarker plugin</entry>
+                <entry>FreeMarkerIDE 1.0.1GA</entry>
 
-                <entry>Need to manually update to plugin to latest FreeMarker
-                jar. Also use 0.9x version of freemrker-ide</entry>
+                <entry>http://download.jboss.org/jbosstools/updates/stable</entry>
               </row>
 
               <row>
@@ -847,6 +846,10 @@ Admin : http://localhost:8080/go/workbench/
     <para>Using slf4j not commons-logging (JCL) to avoid the classloader
     nightmares people have reported. Other libs coded against JCL are
     supported via bridgse. Advice is for loggers not to be static.</para>
+
+    <para>Use &lt;@oo.inspect /&gt;</para>
+
+    <para>Performance tools coming.</para>
   </chapter>
 
   <chapter>

@@ -22,9 +22,12 @@ public class Selector extends BaseNode
 {
     private String label;
     private String description;
+    
     private String queryPath;
-    private Boolean recursive = false;
     private String queryTypeName;
+    private String queryTags;
+
+    private Boolean recursive = false;
     private String customQuery;
     private Long start;
     private Long end;
@@ -61,6 +64,19 @@ public class Selector extends BaseNode
     {
         this.queryPath = queryPath;
     }
+    
+
+    @Property(order = 35)
+    public String getQueryTags()
+    {
+        return queryTags;
+    }
+
+    public void setQueryTags(String queryTags)
+    {
+        this.queryTags = queryTags;
+    }
+    
 
     @Property(order = 35)
     public Boolean getRecursive()

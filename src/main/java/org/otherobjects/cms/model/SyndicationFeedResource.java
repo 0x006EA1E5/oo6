@@ -28,7 +28,7 @@ public class SyndicationFeedResource extends BaseNode
 
     private String label;
     private String description;
-    private String query;
+    private Selector selector;
     private String mapping;
     private String feedFormat;
     private long defaultImageWidth = 300;
@@ -82,15 +82,15 @@ public class SyndicationFeedResource extends BaseNode
         this.label = label;
     }
 
-    @Property(type = PropertyType.TEXT, order = 20)
-    public String getQuery()
+    @Property(type=PropertyType.COMPONENT, order = 20)
+    public Selector getSelector()
     {
-        return query;
+        return selector;
     }
 
-    public void setQuery(String query)
+    public void setSelector(Selector selector)
     {
-        this.query = query;
+        this.selector = selector;
     }
 
     @Property(type = PropertyType.TEXT, order = 30)

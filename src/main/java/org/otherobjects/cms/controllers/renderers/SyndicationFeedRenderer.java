@@ -66,7 +66,7 @@ public class SyndicationFeedRenderer implements ResourceRenderer
         Map<String, String> mappings = feedObject.getMappingsMap();
         Assert.notNull(mappings, "The mappings for a SyndicationFeedResource can't be null");
 
-        //        Assert.notNull(redirect.getUrl(), "Redirect does not specify a destination URL.");
+        // Assert.notNull(redirect.getUrl(), "Redirect does not specify a destination URL.");
 
         SyndFeed feed = new SyndFeedImpl();
         feed.setFeedType(feedObject.getFeedFormat());
@@ -80,7 +80,7 @@ public class SyndicationFeedRenderer implements ResourceRenderer
 
         Object daoObject = daoService.getDao(BaseNode.class);
 
-        PagedList<BaseNode> items = ((UniversalJcrDao) daoObject).pageByJcrExpression(feedObject.getQuery(), 15, 1);
+        PagedList<BaseNode> items = ((UniversalJcrDao) daoObject).pageByJcrExpression(feedObject.getSelector().getQuery(), 15, 1);
 
         for (BaseNode node : items)
         {
