@@ -11,6 +11,7 @@ import org.otherobjects.cms.tools.FlashMessageTool;
 import org.otherobjects.cms.tools.FormatTool;
 import org.otherobjects.cms.tools.SecurityTool;
 import org.otherobjects.cms.tools.UrlTool;
+import org.otherobjects.cms.util.ObjectInspector;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -44,6 +45,7 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             // tools
             modelAndView.addObject("cmsImageTool", new CmsImageTool());
             modelAndView.addObject("urlTool", new UrlTool(ooResourceLoader));
+            modelAndView.addObject("objectInspector", new ObjectInspector());
             modelAndView.addObject("formatTool", new FormatTool());
             modelAndView.addObject("security", new SecurityTool());
             modelAndView.addObject("daoService", daoService);
