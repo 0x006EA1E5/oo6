@@ -54,9 +54,12 @@ case $1 in
     	echo
     	cd $OTHEROBJECTS_HOME
     	svn update
-    	mvn -Dmaven.test.skip=true install
+    	mvn install
+    	cd ../test-site/
+    	ant create-archive
     	echo
-        echo "OTHERobjects has been updated to the latest version."
+        echo "OTHERobjects has been updated to the latest version,"
+        echo "and the test site archive has been updated."
         echo
         ;;
            
