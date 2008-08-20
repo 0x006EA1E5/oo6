@@ -127,6 +127,14 @@ ${para}
 </#list>
 </#macro>
 
+<#--
+Displays object contents.
+-->
+<#macro inspect obj>
+${objectInspector.toHtml(obj)}
+</#macro>
+
+
 <#-- Functions-->
 <#function action actionName>
 <#return url("/_action/${actionName}") >
