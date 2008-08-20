@@ -31,7 +31,7 @@ public class ObjectInspectorTest extends TestCase
 
         DummyBean childBean1 = new DummyBean();
         childBean1.setFirstName("Test");
-        childBean1.setLastName("Tester");
+        childBean1.setLastName(null);
         childBean1.setDescription(LIPSUM);
         childBean1.setActive(false);
         childBean1.setId(new Long(1));
@@ -45,18 +45,29 @@ public class ObjectInspectorTest extends TestCase
         childBean2.setId(new Long(1));
         childBean2.setEmailAddresses(new String[]{"child2a@test.com", "child2b@test.com", "child2c@test.com"});
 
+        DummyBean childBean3 = null;
+        
         testBean.addChildDummyBean(childBean1);
         testBean.addChildDummyBean(childBean2);
+        testBean.addChildDummyBean(childBean3);
 
     }
 
     public void testToString()
     {
+        // Test null handling
+        System.out.println(ObjectInspector.toString(null, true));
+        
+        // Test child beans
         System.out.println(ObjectInspector.toString(testBean, true));
     }
 
     public void testToHtml()
     {
+        // Test null handling
+        System.out.println(ObjectInspector.toString(null));
+        
+        // Test child beans
         System.out.println(ObjectInspector.toHtml(testBean));
     }
 }

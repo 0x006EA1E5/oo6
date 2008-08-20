@@ -10,7 +10,7 @@ public class StaticResourceServletTest extends TestCase
 {
     public void testDoGet() throws ServletException, IOException
     {
-    	// FIXME Enable this test
+        // FIXME Enable this test
 //        StaticClasspathServlet staticResourceServlet = new StaticClasspathServlet();
 //
 //        MockHttpServletRequest req = new MockHttpServletRequest();
