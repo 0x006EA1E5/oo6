@@ -31,6 +31,9 @@ public class ObjectInspector
 
     public static String toString(Object object, boolean multiline)
     {
+        if(object == null)
+            return "null";
+        
         StringBuffer buf = new StringBuffer();
         Map<String, Object> contentMap = getContent(object);
         for (Map.Entry<String, Object> entry : contentMap.entrySet())
@@ -38,7 +41,11 @@ public class ObjectInspector
             buf.append(entry.getKey());
             buf.append(": ");
             Object value = preprocessValue(entry.getValue());
-            if (List.class.isAssignableFrom(value.getClass())) // we have a list
+            if(value==null)
+            {
+                buf.append(value);                
+            }
+            else if (List.class.isAssignableFrom(value.getClass())) // we have a list
             {
                 List<String> values = (List<String>) value;
                 buf.append("{");
@@ -73,11 +80,11 @@ public class ObjectInspector
         Map<String, Object> contentMap = getContent(object);
         for (Map.Entry<String, Object> entry : contentMap.entrySet())
         {
-            buf.append("<li><span class=\"fielName\">");
+            buf.append("<li><span class=\"fieldName\">");
             buf.append(entry.getKey());
             buf.append(":</span>");
             Object value = preprocessValue(entry.getValue());
-            if (List.class.isAssignableFrom(value.getClass())) // we have a list
+            if (value !=null && List.class.isAssignableFrom(value.getClass())) // we have a list
             {
                 List<String> values = (List<String>) value;
                 buf.append("<ol>");
@@ -110,6 +117,9 @@ public class ObjectInspector
      */
     private static Object preprocessValue(Object value)
     {
+        if(value == null)
+            return null;
+        
         Class<?> clazz = value.getClass();
         //Class componentClass = clazz.getComponentType();
 
@@ -132,7 +142,7 @@ public class ObjectInspector
             List<String> strings = new ArrayList<String>();
             for (Object entry : (Collection) value)
             {
-                strings.add(entry.toString());
+                strings.add(entry != null ? entry.toString() : "null");
             }
             return strings;
         }
