@@ -1,3 +1,5 @@
+<Ûimport "spring.ftl" as spring/>
+
 <#--
 Supported fields:
 
@@ -10,7 +12,7 @@ Supported fields:
 * default -> text
 
 -->
-xx
+
 <#macro renderField prop value="">
 <div class="field">
 <#if prop.type == ".boolean">
@@ -22,17 +24,17 @@ xx
 <#elseif prop.type == "component">
 	<@renderFormPart prop.relatedTypeDef />
 <#else>
-	<label>${prop.label}</label><input type="text" class="text" name="${prop.name}" value="${value!}" />
+	<label>${prop.label}</label> 
+	<input type="text" class="text" name="${prop.name}" value="${value!}" />
 </#if>
 </div>
 </#macro>
 
-<#macro renderFormPart typeDef value="">
+<#macro renderFormPart typeDef data>
 <#list typeDef.properties as prop>
-<@renderField prop />
+<@renderField prop data.get(prop.name) />
 </#list>
 </#macro>
-
 
 
 <#import "/oo.ftl" as oo>
@@ -46,9 +48,9 @@ xx
 <#if blockData??>
 	<#-- Existing block -->
 	<input type="hidden" class="hidden" name="editableId" value="${blockData.id}" />
-	<@renderFormPart blockData.typeDef />
+	<@renderFormPart blockData.typeDef blockData />
 <#else> 
-	<#-- New block -->
+	<#-- New block --> New
 	<input type="hidden" class="hidden" name="_oo_containerId" value="${location}" />
 	<input type="hidden" class="hidden" name="_oo_type" value="${typeDef.name}" />
 	<!-- <input type="text" class="hidden" name="code" value="blockData" /> -->
