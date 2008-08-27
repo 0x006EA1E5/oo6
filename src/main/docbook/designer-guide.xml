@@ -578,7 +578,7 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
     <section>
       <title>Forms</title>
 
-      <para></para>
+      <para>See separate chapter.</para>
     </section>
 
     <section>
@@ -598,6 +598,30 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
 
       <para>oo-flash</para>
     </section>
+  </chapter>
+
+  <chapter>
+    <title>Creating forms</title>
+
+    <para>Forms in the admin interface are created automatically based on the
+    information in the type definitions. See defining objects for more
+    information.</para>
+
+    <para>Site forms need to be hand coded and the easiest way of doing this
+    is with Spring's form macros.</para>
+
+    <para>For more information see here:
+    http://static.springframework.org/spring/docs/2.5.x/reference/view.html#view-velocity-forms</para>
+
+    <para>General principal: </para>
+
+    <para>Get or create object to be bound to form</para>
+
+    <para>Bind object</para>
+
+    <para>Render out fields and error messages.</para>
+
+    <para>TODO Example</para>
   </chapter>
 
   <chapter>
@@ -793,7 +817,7 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
       <title>Defining messages</title>
 
       <para>Put your messages in the message.properties file in
-      WEB-INF/messages This in automatically reloaded. </para>
+      WEB-INF/messages This in automatically reloaded.</para>
     </section>
 
     <section>
