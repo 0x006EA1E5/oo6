@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.otherobjects.cms.binding.OORequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.support.RequestContextUtils;
@@ -49,6 +50,7 @@ public class OOFreeMarkerView extends FreeMarkerView
     {
         try
         {
+            model.put(SPRING_MACRO_REQUEST_CONTEXT_ATTRIBUTE, new OORequestContext(request, getServletContext(), model));
             super.doRender(model, request, response);
         }
         catch (Exception e)
@@ -61,4 +63,6 @@ public class OOFreeMarkerView extends FreeMarkerView
             processTemplate(getTemplate(DEFAULT_ERROR_TEMPLATE_PATH, locale), model, response);
         }
     }
+    
+   
 }

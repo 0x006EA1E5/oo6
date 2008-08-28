@@ -45,6 +45,7 @@
 		<property name="prefix" value="" />
 		<property name="suffix" value=".ftl" />
 		<property name="requestContextAttribute" value="requestContext" />
+		<property name="exposeSpringMacroHelpers" value="false" /> <!-- We'll expose our own thanks. -->
 		<property name="viewClass" value="org.otherobjects.cms.views.OOFreeMarkerView" />
 	</bean>
 </beans>

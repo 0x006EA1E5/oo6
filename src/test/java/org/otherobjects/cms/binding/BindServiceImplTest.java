@@ -25,7 +25,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockMultipartHttpServletRequest;
 
-public class BindServiceImplNG2Test extends TestCase
+public class BindServiceImplTest extends TestCase
 {
     private TypeService typeService = new TypeServiceImpl();
 
@@ -89,7 +89,7 @@ public class BindServiceImplNG2Test extends TestCase
         objects.put(block2.getId(), block2);
         MockGenericDao dao = new MockGenericDao(objects);
 
-        BindServiceImplNG bs = new BindServiceImplNG();
+        BindServiceImpl bs = new BindServiceImpl();
         bs.setDaoService(new MockDaoService(dao));
 
         TypeDef templateTypeDef = typeService.getType(Template.class);
@@ -155,7 +155,7 @@ public class BindServiceImplNG2Test extends TestCase
         objects.put(block2.getId(), block2);
         MockGenericDao dao = new MockGenericDao(objects);
 
-        BindServiceImplNG bs = new BindServiceImplNG();
+        BindServiceImpl bs = new BindServiceImpl();
         bs.setDaoService(new MockDaoService(dao));
 
         TypeDef templateTypeDef = typeService.getType(Template.class);

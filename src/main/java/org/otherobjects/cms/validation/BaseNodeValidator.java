@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.otherobjects.cms.binding.BindService;
+import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
@@ -31,6 +33,15 @@ public class BaseNodeValidator implements Validator
 
     @Resource
     private TypeService typeService;
+    
+    public BaseNodeValidator()
+    {
+    }
+    
+    public BaseNodeValidator(TypeService typeService)
+    {
+        this.typeService = typeService;
+    }
 
     @SuppressWarnings("unchecked")
     public boolean supports(Class clazz)
@@ -50,7 +61,10 @@ public class BaseNodeValidator implements Validator
         for (PropertyDef propertyDef : typeDef.getProperties())
         {
             String fieldName = propertyDef.getName();
+            if(target instanceof DynaNode)
+                fieldName = "data['"+fieldName+"']";
             Object value = errors.getFieldValue(fieldName);
+            
 
             if (propertyDef.getType().equals(PropertyDef.LIST))
             {

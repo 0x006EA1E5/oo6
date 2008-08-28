@@ -28,4 +28,14 @@ public class ValidatorServiceImpl implements ValidatorService
         return null;
     }
 
+    public void setBaseNodeValidator(BaseNodeValidator baseNodeValidator)
+    {
+        this.baseNodeValidator = baseNodeValidator;
+    }
+
+    public void setTypeDefConfiguredValidator(TypeDefConfiguredValidator typeDefConfiguredValidator)
+    {
+        this.typeDefConfiguredValidator = typeDefConfiguredValidator;
+    }
+
 }

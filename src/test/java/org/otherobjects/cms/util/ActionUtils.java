@@ -8,8 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.otherobjects.cms.binding.BindService;
+import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.validation.ValidatorService;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -41,15 +43,29 @@ public class ActionUtils
      * @return
      * @throws Exception
      */
-    public Object bindAndValidate(String typeName) throws Exception
+    public BindingResult bindAndValidate(String typeName) throws Exception
     {
         request.getSession().removeAttribute("errors");
-        BaseNode target = (BaseNode) Class.forName(typeName).newInstance();
-        Errors errors = bindService.bind(target, target.getTypeDef(), request);
+        BaseNode target = createTarget(typeName);
+        BindingResult errors = bindService.bind(target, target.getTypeDef(), request);
         Validator validator = validatorService.getValidator(target);
         if (validator != null)
             validator.validate(target, errors);
         return errors;
+    }
+
+    private BaseNode createTarget(String typeName) throws InstantiationException, IllegalAccessException, ClassNotFoundException
+    {
+        // FIXME This must be generalised
+        try
+        {
+            return (BaseNode) Class.forName(typeName).newInstance();
+        }
+        catch (Exception e)
+        {
+            // No actual class found so assume DynaNode
+            return new DynaNode(typeName);
+        }
     }
 
     /**
