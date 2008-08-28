@@ -20,7 +20,9 @@ Supported fields:
 	<input type="radio" class="radio" name="${prop.name}" value="true" <#if value!false>checked="checked" </#if>/> Yes
 	<input type="radio" class="radio" name="${prop.name}" value="false" <#if !value!false>checked="checked" </#if>/> No
 <#elseif prop.type == "text">
-	<label>${prop.label}</label><textarea class="textarea" name="${prop.name}">${value!}</textarea>
+	<label>${prop.label}</label>
+	<textarea class="textarea" name="${prop.name}">${value!}
+	</textarea>
 <#elseif prop.type == "component">
 	<@renderFormPart prop.relatedTypeDef />
 <#else>

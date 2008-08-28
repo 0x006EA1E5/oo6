@@ -140,7 +140,7 @@ public class BindingTest extends TestCase
         request.setAttribute("org.springframework.validation.BindingResult.article", bindingResult);
 
         RequestContext rc = new OORequestContext(request, null);
-        BindStatus bindStatus = rc.getBindStatus("article.title");
+        BindStatus bindStatus = rc.getBindStatus("article.data[title]");
         assertNotNull(bindStatus.getErrorMessage());
         System.out.println(bindStatus.getErrorMessage());
 

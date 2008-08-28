@@ -25,8 +25,8 @@ public class OORequestContext extends RequestContext
     @Override
     public BindStatus getBindStatus(String path) throws IllegalStateException
     {
-        path.replaceAll("resourceObject\\.", "");
-        path = "resourceObject.data["+path+"]";
+        //path.replaceAll("resourceObject\\.", "");
+        //path = "resourceObject.data["+path+"]";
         return new BindStatus(this, path, isDefaultHtmlEscape());
     }
 }
