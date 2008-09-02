@@ -1,5 +1,7 @@
 package org.otherobjects.cms.binding;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,8 +28,6 @@ import org.springframework.web.servlet.support.RequestContext;
 
 public class BindingTest extends TestCase
 {
-    private static final String COMMENT = "test";
-
     private TypeService typeService = new TypeServiceImpl();
 
     @Override
@@ -37,7 +37,7 @@ public class BindingTest extends TestCase
         super.setUp();
         SingletonBeanLocator.registerTestBean("typeService", typeService);
         TypeDefBuilder typeDefBuilder = new AnnotationBasedTypeDefBuilder();
-        typeService.registerType(typeDefBuilder.getTypeDef(Comment.class));
+        typeService.registerType(typeDefBuilder.getTypeDef(TestObject.class));
         ((TypeServiceImpl) typeService).reset();
 
         // Add DynaNode type
@@ -79,16 +79,20 @@ public class BindingTest extends TestCase
         HttpServletRequest request = new MockHttpServletRequest();
         request.setAttribute(RequestContext.WEB_APPLICATION_CONTEXT_ATTRIBUTE, ac);
 
-        Comment c = new Comment();
-        c.setComment(COMMENT);
+        TestObject obj = new TestObject();
+        obj.setName("test-name");
+        obj.setTestDate(new Date());
 
         ModelMap model = new ModelMap();
-        model.addAttribute("comment", c);
+        model.addAttribute("object", obj);
 
         RequestContext rc = new RequestContext(request, model);
-        BindStatus bindStatus = rc.getBindStatus("comment.comment");
 
-        assertEquals(COMMENT, bindStatus.getValue());
+        BindStatus bindStatus = rc.getBindStatus("object.name");
+        assertEquals("test-name", bindStatus.getValue());
+
+        bindStatus = rc.getBindStatus("object.testDate");
+        assertEquals(Date.class, bindStatus.getValue().getClass());
 
     }
 
@@ -107,17 +111,16 @@ public class BindingTest extends TestCase
         validatorService.setBaseNodeValidator(new BaseNodeValidator(typeService));
         ActionUtils actionUtils = new ActionUtils(request, response, bindService, validatorService);
 
-        Comment c = new Comment();
-        BindingResult r = (BindingResult) actionUtils.bindAndValidate(Comment.class.getName());
+        TestObject c = new TestObject();
+        BindingResult r = (BindingResult) actionUtils.bindAndValidate(TestObject.class.getName());
 
-        request.setAttribute("org.springframework.validation.BindingResult.comment", r);
+        request.setAttribute("org.springframework.validation.BindingResult.object", r);
 
         RequestContext rc = new RequestContext(request);
 
-        BindStatus bindStatus = rc.getBindStatus("comment.comment");
-
+        // Name is required and is missing so should have an error
+        BindStatus bindStatus = rc.getBindStatus("object.name");
         assertNotNull(bindStatus.getErrorMessage());
-        System.out.println(bindStatus.getErrorMessage());
 
     }
 

@@ -26,7 +26,7 @@ public class TypeDefImpl implements TypeDef
     private String className;
 
     /** 
-     * The name of the class that this type extends. Defaults to DynaNode.
+     * The name of the class that this type extends. Defaults to DEFAULT_SUPER_CLASS_NAME.
      * 
      *  <p>TODO Add support for extending Types themselves
      */

@@ -1,6 +1,7 @@
 package org.otherobjects.cms.types;
 
 import java.beans.PropertyEditor;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,8 +13,6 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.core.Ordered;
 import org.springframework.util.Assert;
-
-import com.ibm.icu.math.BigDecimal;
 
 import flexjson.JSON;
 
@@ -30,7 +29,7 @@ import flexjson.JSON;
  * <li>timestamp (Date.class)
  * <li>boolean (Boolean.class)
  * <li>number (Long.class Integer.class)
- * <li>decimal (BigDecimal.class, Float.class, Double.class) -- specify decimal places in format -- stored as a BigDecimal
+ * <li>decimal (BigDecimal.class, Float.class, Double.class) -- TODO specify decimal places in format -- stored as a BigDecimal
  * </ul>
  * 
  * <p>Currently supported bean property types are:
@@ -86,6 +85,9 @@ public class PropertyDefImpl implements PropertyDef, Ordered
 
     /** To indicate how long this property can be (only makes for string type properties). Defaults to -1 which means no limit */
     private int size = -1;
+
+    /** Indicates that this property is dynamic. */
+    private Boolean dynamic;
 
     /** 
      * Holds valang rules to build a validator for the type that is made of this PropertyDef. Beware: the name of the property is not included in the rule unlike with standard valang rules 
@@ -205,6 +207,44 @@ public class PropertyDefImpl implements PropertyDef, Ordered
             }
         }
         return propertyEditor;
+    }
+
+    /**
+     * Returns true if this is a dynamic property.
+     *
+     * @return
+     */
+    public boolean isDynamic()
+    {
+        if (dynamic != null)
+            return dynamic.booleanValue();
+
+        try
+        {
+            Class.forName(this.getParentTypeDef().getClassName());
+            dynamic = false;
+        }
+        catch (ClassNotFoundException e)
+        {
+            dynamic = true;
+        }
+        return dynamic.booleanValue();
+    }
+
+    /**
+     * Returns the correct field name for this property by using data[name] notation
+     * for dynamic properties.
+     * 
+     * <p>TODO Would this be better as a subclass? Yes.
+     * 
+     * @return
+     */
+    public String getFieldName()
+    {
+        if (isDynamic())
+            return "data['" + name + "']";
+        else
+            return name;
     }
 
     @Override

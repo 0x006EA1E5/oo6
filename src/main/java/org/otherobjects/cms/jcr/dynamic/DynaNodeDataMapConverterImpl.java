@@ -156,11 +156,15 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
 
     private void insertComponentProperty(Session session, Node dataNode, String key, Object fieldValue)
     {
-        BeanConverter beanConverter = new DefaultBeanConverterImpl(this.mapper, objectConverter, atomicTypeConverterProvider);
-        BeanDescriptor beanDescriptor = new BeanDescriptor();
-        beanDescriptor.setFieldName(key);
-        beanDescriptor.setJcrName(key);
-        beanConverter.insert(session, dataNode, beanDescriptor, mapper.getClassDescriptorByClass(DynaNode.class), fieldValue, mapper.getClassDescriptorByClass(DynaNode.class), null);
+        // FIXME Need test for this. How can we then remove a component?
+        if (fieldValue != null)
+        {
+            BeanConverter beanConverter = new DefaultBeanConverterImpl(this.mapper, objectConverter, atomicTypeConverterProvider);
+            BeanDescriptor beanDescriptor = new BeanDescriptor();
+            beanDescriptor.setFieldName(key);
+            beanDescriptor.setJcrName(key);
+            beanConverter.insert(session, dataNode, beanDescriptor, mapper.getClassDescriptorByClass(DynaNode.class), fieldValue, mapper.getClassDescriptorByClass(DynaNode.class), null);
+        }
     }
 
     private void insertSimpleProperty(Node dataNode, ValueFactory valueFactory, PropertyDef property, Object value) throws RepositoryException

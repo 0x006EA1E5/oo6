@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.Url;
 import org.otherobjects.cms.binding.BindService;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.GenericDao;
@@ -30,6 +29,7 @@ import org.otherobjects.cms.model.CmsFileDao;
 import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.CmsImageDao;
 import org.otherobjects.cms.model.CompositeDatabaseId;
+import org.otherobjects.cms.model.Editable;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeDefBuilder;
 import org.otherobjects.cms.types.TypeService;
@@ -113,13 +113,13 @@ public class FormController
 
             GenericDao genericDao = null;
             TypeDef typeDef = null;
-            Object item = null;
+            Editable item = null;
             if (StringUtils.isNotEmpty(id))
             {
                 if (IdentifierUtils.isUUID(id))
                 {
                     genericDao = universalJcrDao;
-                    item = genericDao.get(id);
+                    item = (Editable) genericDao.get(id);
                     typeDef = (TypeDef) PropertyUtils.getSimpleProperty(item, "typeDef"); //FIXME rather than object we should probably have some interface that has getTypeDef
                 }
                 else
@@ -129,7 +129,7 @@ public class FormController
                     if (compositeDatabaseId != null)
                     {
                         genericDao = daoService.getDao(compositeDatabaseId.getClazz());
-                        item = genericDao.get(compositeDatabaseId.getId());
+                        item = (Editable) genericDao.get(compositeDatabaseId.getId());
                         typeDef = typeDefBuilder.getTypeDef(item.getClass());
                     }
                 }
@@ -191,19 +191,12 @@ public class FormController
             }
 
             // Perform binding and validation
-            if (item instanceof DynaNode)
-            {
-                errors = bindService.bind(item, typeDef, request);
-            }
+            errors = bindService.bind(item, typeDef, request);
+            Validator validator = validatorService.getValidator(item);
+            if (validator != null)
+                validator.validate(item, errors);
             else
-            {
-                errors = bindService.bind(item, typeDef, request);
-                Validator validator = validatorService.getValidator(item);
-                if (validator != null)
-                    validator.validate(item, errors);
-                else
-                    logger.warn("No validator for item of class " + item.getClass() + " found");
-            }
+                logger.warn("No validator for item of class " + item.getClass() + " found");
 
             if (!(errors != null && errors.hasErrors()))
             {
@@ -212,7 +205,6 @@ public class FormController
             }
 
             // We have errors so return error messages
-            ModelAndView view = new ModelAndView("jsonView");
             Map<String, Object> data = new HashMap<String, Object>();
             //view.addObject("mimeOverride", "text/html"); //FIXME remove when only upload forms are set to upload
             if (errors != null && errors.getErrorCount() > 0)
@@ -227,7 +219,6 @@ public class FormController
                 }
                 data.put("success", false);
                 data.put("errors", jsonErrors);
-                return view;
             }
             else
             {
@@ -235,16 +226,31 @@ public class FormController
                 data.put("success", true);
                 data.put("formObject", item);
 
-                if (!RequestUtils.isXhr(request))
-                {
-                    // Redirect
-                    Url u = new Url(((BaseNode) item).getLinkPath());
-                    response.sendRedirect(u.toString());
-                }
+            }
+
+            // XHR
+            if (RequestUtils.isXhr(request))
+            {
+                ModelAndView view = new ModelAndView("jsonView");
+                view.addObject(JsonView.JSON_DATA_KEY, data);
+                return view;
+            }
+            else
+            {
+                // Redirect
+                //Url u = new Url(((BaseNode) item).getLinkPath());
+                //response.sendRedirect(u.toString());
+
+                ModelAndView view = new ModelAndView("/otherobjects/templates/pages/edit");
+                view.addObject("success", data.get("success"));
+                //view.addObject("object", item);
+                view.addObject("id", item.getEditableId());
+                view.addObject("typeDef", ((BaseNode) item).getTypeDef());
+                view.addObject("object", item);
+                view.addObject("org.springframework.validation.BindingResult.object", errors);
+                return view;
 
             }
-            view.addObject(JsonView.JSON_DATA_KEY, data);
-            return view;
         }
         catch (Exception e)
         {

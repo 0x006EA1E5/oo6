@@ -133,8 +133,8 @@ public class BaseNodeValidator implements Validator
         {
             if (propertyDef.isRequired())
                 errors.rejectValue(fieldName, "field.required");
-            else
-                return;
+           
+            return;
         }
         Assert.isTrue(BaseNode.class.isAssignableFrom(baseNode.getClass()), "Value of property " + fieldName + " is not a BaseNode. Perhaps there is a conflicting parameter in the request?");
         try

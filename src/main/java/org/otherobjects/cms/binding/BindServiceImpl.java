@@ -47,12 +47,12 @@ public class BindServiceImpl implements BindService
     private DaoService daoService;
 
     private ServletRequestDataBinder binder = null;
-    private MutableHttpServletRequest wrappedRequest;
+    private HttpServletRequest request;
 
     public BindingResult bind(Object item, TypeDef typeDef, HttpServletRequest request)
     {
         this.binder = new ServletRequestDataBinder(item);
-        this.wrappedRequest = wrapRequest(request);
+        this.request = request;
 
         try
         {
@@ -60,11 +60,11 @@ public class BindServiceImpl implements BindService
         }
         catch (Exception e)
         {
-            throw new OtherObjectsException("Could not bind object: " + item);
+            throw new OtherObjectsException("Could not bind object: " + item, e);
         }
 
         binder.bind(request);
-        return (binder.getBindingResult());
+        return binder.getBindingResult();
     }
 
     /**
@@ -95,7 +95,7 @@ public class BindServiceImpl implements BindService
             String rootPath = rootPathPrefix + path;
 
             // Check if we have matching parameters
-            Map<String, String> matchingParams = WebUtils.getParametersStartingWith(wrappedRequest, rootPath);
+            Map<String, String> matchingParams = WebUtils.getParametersStartingWith(request, rootPath);
 
             boolean correspondingParamPresent = matchingParams.size() > 0;
 
@@ -169,7 +169,7 @@ public class BindServiceImpl implements BindService
         if (item instanceof DynaNode)
         {
             String propertyPath = DynaNode.DYNA_NODE_DATAMAP_NAME + "[" + propertyDef.getName() + "]";
-            wrappedRequest.rewriteParameter(rootPathPrefix + propertyDef.getName(), rootPathPrefix + propertyPath);
+            //request.rewriteParameter(rootPathPrefix + propertyDef.getName(), rootPathPrefix + propertyPath);
             return propertyPath;
         }
         else
@@ -293,16 +293,16 @@ public class BindServiceImpl implements BindService
 
     }
 
-    /**
-     * 
-     * @param bindingResult
-     * @return
-     */
-    private BindingResult wrapBindingResult(BindingResult bindingResult)
-    {
-        return (BindingResult) Proxy.newProxyInstance(bindingResult.getClass().getClassLoader(), new Class[]{BindingResult.class}, new BindingResultWrapper(bindingResult, wrappedRequest
-                .getRewrittenPaths()));
-    }
+//    /**
+//     * 
+//     * @param bindingResult
+//     * @return
+//     */
+//    private BindingResult wrapBindingResult(BindingResult bindingResult)
+//    {
+//        return (BindingResult) Proxy
+//                .newProxyInstance(bindingResult.getClass().getClassLoader(), new Class[]{BindingResult.class}, new BindingResultWrapper(bindingResult, request.getRewrittenPaths()));
+//    }
 
     /**
      * wraps the given request in a proxy that effectively allows you to rewrite request parameter names
