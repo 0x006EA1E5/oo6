@@ -439,6 +439,9 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
           </tbody>
         </tgroup>
       </table>
+
+      <para>Note: string based fields are automatically trimmed and turned to
+      nulls if empty via StringTrimmerEditor. </para>
     </section>
   </chapter>
 
@@ -613,7 +616,7 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
     <para>For more information see here:
     http://static.springframework.org/spring/docs/2.5.x/reference/view.html#view-velocity-forms</para>
 
-    <para>General principal: </para>
+    <para>General principal:</para>
 
     <para>Get or create object to be bound to form</para>
 
