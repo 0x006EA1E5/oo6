@@ -38,6 +38,7 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder, Initializi
 
     private void initialisePropertyFormats()
     {
+        Assert.notNull(otherObjectsConfigurator, "No configurator available to set data formats.");
         PropertyDefImpl.setDateFormat(otherObjectsConfigurator.getProperty("otherobjects.default.date.format"));
         PropertyDefImpl.setTimeFormat(otherObjectsConfigurator.getProperty("otherobjects.default.time.format"));
         PropertyDefImpl.setTimestampFormat(otherObjectsConfigurator.getProperty("otherobjects.default.timestamp.format"));

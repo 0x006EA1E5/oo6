@@ -9,7 +9,7 @@ import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 
 /**
- * Custom FreeMarker Configuration
+ * Custom FreeMarker Configuration Bean.
  * @author rich
  *
  */

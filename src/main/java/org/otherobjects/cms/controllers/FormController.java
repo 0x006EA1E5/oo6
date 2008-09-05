@@ -33,6 +33,7 @@ import org.otherobjects.cms.model.Editable;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeDefBuilder;
 import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.cms.util.ActionUtils;
 import org.otherobjects.cms.util.IdentifierUtils;
 import org.otherobjects.cms.util.ImageUtils;
 import org.otherobjects.cms.util.RequestUtils;
@@ -92,6 +93,8 @@ public class FormController
     @RequestMapping("/form/**")
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
+        ActionUtils actionUtils = new ActionUtils(request, response, null, null);
+        
         // Spring convenience construct with access to locale settings and message source etc. as setup by the DispatcherServlet
         RequestContext requestContext = new RequestContext(request);
 
@@ -243,6 +246,15 @@ public class FormController
 
                 ModelAndView view = new ModelAndView("/otherobjects/templates/pages/edit");
                 view.addObject("success", data.get("success"));
+                if((Boolean) data.get("success"))
+                {
+                    actionUtils.flashInfo("Your object was saved.");
+                }
+                else
+                {
+                    actionUtils.flashWarning("Your object could not be saved. See below for errors.");
+                }
+                
                 //view.addObject("object", item);
                 view.addObject("id", item.getEditableId());
                 view.addObject("typeDef", ((BaseNode) item).getTypeDef());
@@ -254,11 +266,18 @@ public class FormController
         }
         catch (Exception e)
         {
-            ModelAndView view = new ModelAndView("jsonView");
-            view.getModel().put("success", false);
-            view.getModel().put("message", e.getMessage());
-            logger.error("Error saving form data.", e);
-            return view;
+            if (!RequestUtils.isXhr(request))
+            {
+                throw new OtherObjectsException("Error saving form.", e);
+            }
+            else
+            {
+                ModelAndView view = new ModelAndView("jsonView");
+                view.getModel().put("success", false);
+                view.getModel().put("message", e.getMessage());
+                logger.error("Error saving form data.", e);
+                return view;
+            }
         }
     }
 

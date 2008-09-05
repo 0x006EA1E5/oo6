@@ -1,11 +1,13 @@
 <#import "/spring.ftl" as spring />
 <#import "/oo.ftl" as oo />
 
+<@oo.css "/otherobjects/static/temporary/temporary.css"/>
+
+${daoService.jcr}
+
 <h1>Edit: {object.label}</h1>
 
-<#if success??>
-Result: ${success?string("win","fail")}!
-</#if>
+<@oo.showFlashMessages />
 
 <#macro renderProperty prop prefix>
 <tr>
@@ -15,7 +17,7 @@ Result: ${success?string("win","fail")}!
   		<@spring.bind "${prefix}${prop.fieldName}"/>
   		<#assign status = springMacroRequestContext.getBindStatus("${prefix}${prop.fieldName}")>
   		<#if status.value?exists && status.value?is_date>
-        	<#assign stringStatusValue=status.value?date?string("dd MM yyyy")>
+        	<#assign stringStatusValue=status.value?date?string("yyyy-MM-dd")>
     	<#else>
       	  	<#assign stringStatusValue=status.value?default("")>
    		</#if>
@@ -72,3 +74,20 @@ Result: ${success?string("win","fail")}!
 <div class="content">
 <p><a href="${oo.url('/otherobjects/workbench/view/${object.id}')}">View</a></p>
 </div>
+
+
+<p>TODO:<br/>
+
+References<br/>
+Component<br/>
+Lists<br/>
+</p>
+
+<p>VALIDATION:<br/>
+
+Data type [DONE]<br/>
+Required [DONE]<br/>
+Maxlength<br/>
+Regexp<br/>
+Pattern<br/>
+</p>

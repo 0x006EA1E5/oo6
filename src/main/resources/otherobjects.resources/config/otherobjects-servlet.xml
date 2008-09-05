@@ -31,14 +31,17 @@
 		</property>
 	</bean>
 
+	<!-- OTHERobjects exception resolver -->
 	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 		<property name="defaultErrorView" value="/site/templates/error-500" />
 		<property name="defaultStatusCode" value="500" />
+		<property name="warnLogCategory" value="org.otherobjects.cms" />		
 	</bean>
 
 	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" parent="handlerMappingTemplate" />
 	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" parent="handlerMappingTemplate" />
 	<bean class="org.springframework.web.servlet.mvc.multiaction.InternalPathMethodNameResolver" />
+	
 	<!-- apparently in spring 2.5.3 ControllerClassNameHandlerMapping auto-detects @Controller annotated classes  -->
 	<context:component-scan base-package="org.otherobjects.cms.controllers" />
 	<context:component-scan base-package="org.otherobjects.cms.util" />

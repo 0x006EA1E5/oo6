@@ -377,7 +377,7 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
     </section>
 
     <section>
-      <title>Forms, fields and validation</title>
+      <title>Forms, fields</title>
 
       <para>Each property has a standard field type, but alternate
       implementations may be available</para>
@@ -442,6 +442,35 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
 
       <para>Note: string based fields are automatically trimmed and turned to
       nulls if empty via StringTrimmerEditor. </para>
+    </section>
+
+    <section>
+      <title>Validation</title>
+
+      <para>Form binding just verifies data types (ie you can't put set "one"
+      into a Number property.</para>
+
+      <para>The Validator validates each object.</para>
+
+      <para>Properties have three preconfigured validation options but you can
+      create your own validators (TODO how? via Valang functions?):</para>
+
+      <para>required (note: does this have special meaning for
+      booleans)</para>
+
+      <para>size (currently this is only relevant for the String value)</para>
+
+      <para>valang (a valand method)</para>
+
+      <para>Example valangs:</para>
+
+      <para>in range {? : 5 &lt; ? 10 : : } Note you can have multiple rules
+      in the string.</para>
+
+      <para>For more info:
+      http://opensource.atlassian.com/confluence/spring/display/MODULES/Using+Valang+validator</para>
+
+      <para>TODO: How to validate emails, dates (relative)</para>
     </section>
   </chapter>
 

@@ -72,8 +72,8 @@ public class PageRenderer implements ResourceRenderer
      */
     private Template determineTemplate(BaseNode resourceObject)
     {
-        if (resourceObject.hasProperty("template") && resourceObject.get("template") != null)
-            return (Template) resourceObject.get("template");
+        if (resourceObject.hasProperty("template") && resourceObject.getPropertyValue("template") != null)
+            return (Template) resourceObject.getPropertyValue("template");
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
 
         String templateCode = "";

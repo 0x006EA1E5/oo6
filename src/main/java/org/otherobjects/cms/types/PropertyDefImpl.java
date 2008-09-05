@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.util.StringUtils;
 import org.springframework.beans.propertyeditors.CustomBooleanEditor;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.CustomNumberEditor;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.core.Ordered;
 import org.springframework.util.Assert;
 
@@ -55,9 +57,10 @@ import flexjson.JSON;
  */
 public class PropertyDefImpl implements PropertyDef, Ordered
 {
-    private static String dateFormat = null;
-    private static String timeFormat = null;
-    private static String timestampFormat = null;
+    // TODO Do we want these default here?
+    private static String dateFormat = "yyyy-MM-dd";
+    private static String timeFormat = "HH:mm";
+    private static String timestampFormat = "yyyy-MM-dd HH:mm";
 
     /** Property name. */
     private String name;
@@ -83,11 +86,11 @@ public class PropertyDefImpl implements PropertyDef, Ordered
     /** To flag whether this property can be left empty or not */
     private boolean required = false;
 
-    /** To indicate how long this property can be (only makes for string type properties). Defaults to -1 which means no limit */
+    /** Defines the max length for this property (only relevant for string type properties). Defaults to -1 which indicates no size limit */
     private int size = -1;
 
     /** Indicates that this property is dynamic. */
-    private Boolean dynamic;
+    private boolean dynamic;
 
     /** 
      * Holds valang rules to build a validator for the type that is made of this PropertyDef. Beware: the name of the property is not included in the rule unlike with standard valang rules 
@@ -133,6 +136,24 @@ public class PropertyDefImpl implements PropertyDef, Ordered
         setCollectionElementType(collectionElementType);
         setRequired(required);
     }
+    
+    /**
+     * 
+     * @param name
+     * @param propertyType - oo type: simple props, component, reference or list
+     * @param relatedType - for components and references or lists thereof, type of component/reference
+     * @param collectionElementType - for lists only: type of elements of the list: simple, component, reference
+     * @param required
+     */
+    public PropertyDefImpl(String name, String propertyType, String relatedType, String collectionElementType, boolean required, boolean dynamic)
+    {
+        setName(name);
+        setType(propertyType);
+        setRelatedType(relatedType);
+        setCollectionElementType(collectionElementType);
+        setRequired(required);
+        setDynamic(dynamic);
+    }
 
     /**
      * 
@@ -172,40 +193,40 @@ public class PropertyDefImpl implements PropertyDef, Ordered
     @JSON(include = false)
     public PropertyEditor getPropertyEditor()
     {
-        if (this.propertyEditor == null)
+        //if (this.propertyEditor == null)
+        //{
+        //ignore string as they never need PropertyEditors to be converted
+        TypeServiceImpl typeService = (TypeServiceImpl) getTypeService();
+        Class<?> propertyEditorTargetClass = typeService.getClassForType(this.type);
+        Assert.notNull(propertyEditorTargetClass, "The target class must not be null. Cases in which getClassForType would return null should've been handled upstream");
+        if (typeService.getClassForType(this.type).equals(String.class))
+            propertyEditor = new StringTrimmerEditor(true);
+        else if (typeService.getClassForType(this.type).equals(Boolean.class))
+            propertyEditor = new CustomBooleanEditor(true);
+        else if (typeService.getClassForType(this.type).equals(Long.class))
+            propertyEditor = new CustomNumberEditor(Long.class, true);
+        else if (typeService.getClassForType(this.type).equals(BigDecimal.class))
+            propertyEditor = new CustomNumberEditor(BigDecimal.class, true);
+        else if (typeService.getClassForType(this.type).equals(Date.class))
         {
-            //ignore string as they never need PropertyEditors to be converted
-            TypeServiceImpl typeService = (TypeServiceImpl) getTypeService();
-            Class<?> propertyEditorTargetClass = typeService.getClassForType(this.type);
-            Assert.notNull(propertyEditorTargetClass, "The target class must not be null. Cases in which getClassForType would return null should've been handled upstream");
-            if (!typeService.getClassForType(this.type).equals(String.class))
+            if (this.type.equals("date"))
             {
-                if (typeService.getClassForType(this.type).equals(Boolean.class))
-                    propertyEditor = new CustomBooleanEditor(false);
-                else if (typeService.getClassForType(this.type).equals(Long.class))
-                    propertyEditor = new CustomNumberEditor(Long.class, true);
-                else if (typeService.getClassForType(this.type).equals(BigDecimal.class))
-                    propertyEditor = new CustomNumberEditor(BigDecimal.class, true);
-                else if (typeService.getClassForType(this.type).equals(Date.class))
-                {
-                    if (this.type.equals("date"))
-                    {
-                        Assert.notNull(dateFormat, "No dateFormat set in PropertyTypeDefImpl");
-                        propertyEditor = new CustomDateEditor(new SimpleDateFormat(dateFormat), true); //FIXME These need to be set globally somewhere
-                    }
-                    else if (this.type.equals("time"))
-                    {
-                        Assert.notNull(timeFormat, "No timeFormat set in PropertyTypeDefImpl");
-                        propertyEditor = new CustomDateEditor(new SimpleDateFormat(timeFormat), true);
-                    }
-                    else if (this.type.equals("timestamp"))
-                    {
-                        Assert.notNull(timestampFormat, "No timestampFormat set in PropertyTypeDefImpl");
-                        propertyEditor = new CustomDateEditor(new SimpleDateFormat(timestampFormat), true);
-                    }
-                }
+                Assert.notNull(dateFormat, "No dateFormat set in PropertyTypeDefImpl");
+                propertyEditor = new CustomDateEditor(new SimpleDateFormat(dateFormat), true); //FIXME These need to be set globally somewhere
             }
+            else if (this.type.equals("time"))
+            {
+                Assert.notNull(timeFormat, "No timeFormat set in PropertyTypeDefImpl");
+                propertyEditor = new CustomDateEditor(new SimpleDateFormat(timeFormat), true);
+            }
+            else if (this.type.equals("timestamp"))
+            {
+                Assert.notNull(timestampFormat, "No timestampFormat set in PropertyTypeDefImpl");
+                propertyEditor = new CustomDateEditor(new SimpleDateFormat(timestampFormat), true);
+            }
+
         }
+        //}
         return propertyEditor;
     }
 
@@ -216,19 +237,17 @@ public class PropertyDefImpl implements PropertyDef, Ordered
      */
     public boolean isDynamic()
     {
-        if (dynamic != null)
-            return dynamic.booleanValue();
+        return dynamic;
+    }
 
-        try
-        {
-            Class.forName(this.getParentTypeDef().getClassName());
-            dynamic = false;
-        }
-        catch (ClassNotFoundException e)
-        {
-            dynamic = true;
-        }
-        return dynamic.booleanValue();
+    /**
+     * Sets this property as dynamic.
+     *
+     * @return
+     */
+    public void setDynamic(boolean dynamic)
+    {
+        this.dynamic = dynamic;
     }
 
     /**
@@ -242,7 +261,23 @@ public class PropertyDefImpl implements PropertyDef, Ordered
     public String getFieldName()
     {
         if (isDynamic())
-            return "data['" + name + "']";
+            return DynaNode.DYNA_NODE_DATAMAP_NAME + "[" + name + "]";
+        else
+            return name;
+    }
+
+    /**
+     * Returns the correct field name for this property by using data[name] notation
+     * for dynamic properties.
+     * 
+     * <p>TODO Would this be better as a subclass? Yes.
+     * 
+     * @return
+     */
+    public String getPropertyPath()
+    {
+        if (isDynamic())
+            return "data." + name + "";
         else
             return name;
     }

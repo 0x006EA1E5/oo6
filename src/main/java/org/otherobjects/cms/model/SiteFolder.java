@@ -95,7 +95,7 @@ public class SiteFolder extends BaseNode implements Folder //, SiteItem
     public String getLabel()
     {
         // FIXME Label should be fetched via dedicated method
-        return (String) (label != null ? label : (get(getLabelProperty()) != null ? get(getLabelProperty()) : getId()));
+        return (String) (label != null ? label : (getPropertyValue(getLabelProperty()) != null ? getPropertyValue(getLabelProperty()) : getId()));
     }
 
     @Override

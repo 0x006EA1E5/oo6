@@ -9,7 +9,6 @@ import org.otherobjects.cms.Url;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.StringUtils;
-import org.otherobjects.cms.workbench.WorkbenchItem;
 import org.springframework.util.Assert;
 
 /**
@@ -19,7 +18,7 @@ import org.springframework.util.Assert;
  * 
  * @author rich
  */
-public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchItem, Linkable
+public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
 {
     /** GUID */
     private String id;
@@ -75,7 +74,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchI
     public String getOoLabel()
     {
         Assert.notNull(getLabelProperty(), "Could not get label since labelProperty is not set for: " + getOoType());
-        return (String) get(getLabelProperty());
+        return (String) getPropertyValue(getLabelProperty());
     }
 
     /**
@@ -88,7 +87,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchI
     public void setOoLabel(String label)
     {
         Assert.notNull(getLabelProperty(), "Could not set label since labelProperty is not set for: " + getOoType());
-        set(getLabelProperty(), label);
+        setPropertyValue(getLabelProperty(), label);
     }
 
     /**
@@ -159,7 +158,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchI
         return getTypeDef().getProperty(name) != null;
     }
 
-    public Object get(String name)
+    public Object getPropertyValue(String name)
     {
         try
         {
@@ -171,7 +170,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, WorkbenchI
         }
     }
 
-    public void set(String name, Object value)
+    public void setPropertyValue(String name, Object value)
     {
         try
         {

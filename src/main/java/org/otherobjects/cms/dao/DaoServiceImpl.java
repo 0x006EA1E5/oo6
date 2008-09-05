@@ -24,6 +24,12 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
     {
         return getDao(clazz.getName());
     }
+    
+    public GenericDao get(String type)
+    {
+        return getDao(type);
+    }
+   
 
     /**
      * Returns a Dao for provided type. First looks in daoMap and then in the application context. If nothing found return UniversalJcrDao (for Jcr objects) 
@@ -53,8 +59,8 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
                     return (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
 
                 // then return universal jcr dao for types extending baseNode
-                if (type.endsWith("DynaNode"))
-                    return (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
+                if (type.equalsIgnoreCase("jcr"))
+                        return (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
 
                 
                 try

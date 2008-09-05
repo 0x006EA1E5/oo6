@@ -61,7 +61,7 @@ a.addProperty(new PropertyDefImpl("code", "string", null, null, true));
 a.addProperty(new PropertyDefImpl("title", "string", null, null, true));
 a.addProperty(new PropertyDefImpl("abstract", "text", null, null));
 a.addProperty(new PropertyDefImpl("content", "text", null, null));
-a.setLabelProperty("title");
+a.setLabelProperty("data.title");
 if(typeService)
 	typeService.registerType(a);
 

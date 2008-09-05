@@ -12,6 +12,7 @@ import org.otherobjects.cms.types.annotation.Type;
 @Type(labelProperty = "name")
 public class TestObject extends BaseNode
 {
+    // Simple properties
     private String name;
     private String testString;
     private String testText;
@@ -22,12 +23,15 @@ public class TestObject extends BaseNode
     private BigDecimal testDecimal;
     private Boolean testBoolean;
 
+    // Reference properties
     private TestReferenceObject testReference;
     private TestReferenceObject testRequiredReference;
     private TestComponentObject testComponent;
 
+    // Component properties
     private TestComponentObject testRequiredComponent;
 
+    // List properties
     private List<String> testStringsList;
     private List<TestReferenceObject> testReferencesList;
     private List<TestComponentObject> testComponentsList;

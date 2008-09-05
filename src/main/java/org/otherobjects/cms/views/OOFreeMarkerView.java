@@ -30,21 +30,6 @@ public class OOFreeMarkerView extends FreeMarkerView
     private static final String DEFAULT_EXCEPTION_ATTRIBUTE = "exception";
 
     @SuppressWarnings("unchecked")
-    //@Override
-    protected void xprocessTemplate(Template template, Map model, HttpServletResponse response) throws IOException, TemplateException
-    {
-        /* Write via StringWriter so that if an exception
-         * is thrown during rendering we have not already
-         * sent a response to the browser. This allows us
-         * to reliably send an error page.
-         */
-        StringWriter writer = new StringWriter();
-        template.process(model, writer);
-        //FIXME Test performance of StringWriter in this example
-        response.getWriter().write(writer.toString());
-    }
-
-    @SuppressWarnings("unchecked")
     @Override
     protected void doRender(Map model, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
@@ -64,5 +49,18 @@ public class OOFreeMarkerView extends FreeMarkerView
         }
     }
     
-   
+//  @SuppressWarnings("unchecked")
+//  //@Override
+//  protected void xprocessTemplate(Template template, Map model, HttpServletResponse response) throws IOException, TemplateException
+//  {
+//      /* Write via StringWriter so that if an exception
+//       * is thrown during rendering we have not already
+//       * sent a response to the browser. This allows us
+//       * to reliably send an error page.
+//       */
+//      StringWriter writer = new StringWriter();
+//      template.process(model, writer);
+//      //FIXME Test performance of StringWriter in this example
+//      response.getWriter().write(writer.toString());
+//  }  
 }

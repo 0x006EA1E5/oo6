@@ -1,33 +1,16 @@
 package org.otherobjects.cms.binding;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import junit.framework.TestCase;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.SingletonBeanLocator;
-import org.otherobjects.cms.config.OtherObjectsConfigurator;
-import org.otherobjects.cms.dao.MockDaoService;
-import org.otherobjects.cms.dao.MockGenericDao;
-import org.otherobjects.cms.model.Template;
-import org.otherobjects.cms.model.TemplateBlock;
-import org.otherobjects.cms.model.TemplateBlockReference;
-import org.otherobjects.cms.model.TemplateLayout;
-import org.otherobjects.cms.model.TemplateRegion;
-import org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder;
+import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.types.PropertyDefImpl;
-import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeDefImpl;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.types.TypeServiceImpl;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.mock.web.MockMultipartHttpServletRequest;
 
-public class BindServiceImplTest extends TestCase
+public class DynaNodeBindServiceImplTest extends TestCase
 {
     private TypeService typeService = new TypeServiceImpl();
 
@@ -37,49 +20,38 @@ public class BindServiceImplTest extends TestCase
         //setup type service for Template, TemplateRegion TemplateBlock
         super.setUp();
         SingletonBeanLocator.registerTestBean("typeService", typeService);
-        AnnotationBasedTypeDefBuilder typeDefBuilder = new AnnotationBasedTypeDefBuilder();
-        OtherObjectsConfigurator otherObjectsConfigurator = new OtherObjectsConfigurator();
-        otherObjectsConfigurator.setProperty("otherobjects.default.date.format", "yyy-MM-dd");
-        otherObjectsConfigurator.setProperty("otherobjects.default.time.format", "yyy-MM-dd");
-        otherObjectsConfigurator.setProperty("otherobjects.default.timestamp.format", "yyy-MM-dd");
-        typeDefBuilder.setOtherObjectsConfigurator(otherObjectsConfigurator);
-        typeDefBuilder.afterPropertiesSet();
 
-        typeService.registerType(typeDefBuilder.getTypeDef(TestObject.class));
-        
-        typeService.registerType(typeDefBuilder.getTypeDef(Template.class));
-        typeService.registerType(typeDefBuilder.getTypeDef(TemplateLayout.class));
-        typeService.registerType(typeDefBuilder.getTypeDef(TemplateRegion.class));
-        typeService.registerType(typeDefBuilder.getTypeDef(TemplateBlock.class));
-        typeService.registerType(typeDefBuilder.getTypeDef(TemplateBlockReference.class));
-        ((TypeServiceImpl) typeService).reset();
-        
         // Add DynaNode type
-        TypeDefImpl td = new TypeDefImpl("ArticlePage");
-        td.setLabelProperty("title");
-        td.addProperty(new PropertyDefImpl("title", "string", null, null, true));
+        TypeDefImpl td = new TypeDefImpl("TestDynaNode");
+        td.addProperty(new PropertyDefImpl("testString", "string", null, null, false, true));
+        td.addProperty(new PropertyDefImpl("testText", "text", null, null, false, true));
+        td.addProperty(new PropertyDefImpl("testDate", "date", null, null, false, true));
         typeService.registerType(td);
+                
+        ((TypeServiceImpl) typeService).reset();
 
     }
 
     public void testEmptyStringBinding() throws Exception
     {
         MockHttpServletRequest req = new MockHttpServletRequest();
-        req.addParameter("name", "");
-        req.addParameter("testString", "  no trailing white space\n");
-        req.addParameter("testDate", "");
         
-        TestObject t = new TestObject();
+        req.addParameter("data[testString]", "");
+        req.addParameter("data[testText]", "  no trailing white space\n");
+        req.addParameter("data[testDate]", "");
+        
+        DynaNode t = new DynaNode("TestDynaNode");
 
         BindServiceImpl binder = new BindServiceImpl();
-        TypeDef typeDef = typeService.getType(TestObject.class);
+        
+        binder.bind(t, t.getTypeDef(), req);
 
-        binder.bind(t, typeDef, req);
-
-        assertEquals(null, t.getName());
-        assertEquals("no trailing white space", t.getTestString());
-        assertEquals(null, t.getTestDate());
+        assertEquals(null, t.getData().get("testString"));
+        assertEquals("no trailing white space",  t.getData().get("testText"));
+        assertEquals(null, t.getData().get("testDate"));
     }
+    
+    /*
     
     public void testFairlyComplexOOTemplateBinding() throws Exception
     {
@@ -209,5 +181,5 @@ public class BindServiceImplTest extends TestCase
         //assertEquals("block1", PropertyUtils.getNestedProperty(rootItem, "regions[0].blocks[0].description"));
         //assertEquals("block2", PropertyUtils.getNestedProperty(rootItem, "regions[1].blocks[0].description"));
 
-    }
+    }*/
 }

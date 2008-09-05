@@ -31,7 +31,7 @@ public class OtherObjectsException extends RuntimeException
     {
         super(message);
     }
-    public OtherObjectsException(String message, Exception e)
+    public OtherObjectsException(String message, Throwable e)
     {
         super(message, e);
     }

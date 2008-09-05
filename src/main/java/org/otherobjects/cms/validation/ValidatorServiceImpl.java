@@ -1,17 +1,16 @@
 package org.otherobjects.cms.validation;
 
-import javax.annotation.Resource;
-
-import org.otherobjects.cms.model.BaseNode;
 import org.springframework.validation.Validator;
 
+/**
+ * FIXME Need to implement settable list of custom validators here.
+ * 
+ * @author rich
+ *
+ */
 public class ValidatorServiceImpl implements ValidatorService
 {
-    @Resource
-    private BaseNodeValidator baseNodeValidator;
-
-    @Resource
-    private TypeDefConfiguredValidator typeDefConfiguredValidator;
+    private Validator defaultValidator;
 
     public Validator getValidator(Object objectToValidate)
     {
@@ -20,22 +19,18 @@ public class ValidatorServiceImpl implements ValidatorService
 
     public Validator getValidator(Class<?> classToValidate)
     {
-        if (BaseNode.class.isAssignableFrom(classToValidate))
-            return baseNodeValidator;
-        else if (typeDefConfiguredValidator.supports(classToValidate))
-            return typeDefConfiguredValidator;
+        // 1. Search custom validators
+        
+        // 2. Use default validator if it supports desired class
+        if (defaultValidator.supports(classToValidate))
+            return defaultValidator;
 
+        // 3. Return null if no suitable validator found.
         return null;
     }
 
-    public void setBaseNodeValidator(BaseNodeValidator baseNodeValidator)
+    public void setDefaultValidator(Validator validator)
     {
-        this.baseNodeValidator = baseNodeValidator;
+        this.defaultValidator = validator;
     }
-
-    public void setTypeDefConfiguredValidator(TypeDefConfiguredValidator typeDefConfiguredValidator)
-    {
-        this.typeDefConfiguredValidator = typeDefConfiguredValidator;
-    }
-
 }

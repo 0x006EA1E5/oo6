@@ -11,11 +11,11 @@ import org.springframework.util.Assert;
  * its TypeDef.
  * 
  * TODO Need a way to add custom DAO methods?
- * FIXME Needs to support Groovy/Freemarker property access eg object.property="new";
+ * FIXME Needs to support Groovy/Freemarker property access eg object.property="value";
  * 
  * @author rich
  */
-public class DynaNode extends BaseNode //implements Map
+public class DynaNode extends BaseNode
 {
     public static final String DYNA_NODE_DATAMAP_NAME = "data";
 
@@ -49,6 +49,7 @@ public class DynaNode extends BaseNode //implements Map
         setOoType(typeDef.getName());
     }
 
+    /*
     @Override
     public Object get(String propertyName)
     {
@@ -61,6 +62,7 @@ public class DynaNode extends BaseNode //implements Map
     {
         data.put(propertyName, value);
     }
+    */
 
     @Override
     public String getOoType()
@@ -95,78 +97,15 @@ public class DynaNode extends BaseNode //implements Map
     public String getCode()
     {
         // FIXME Merge this with BaseNode code?
-        return (String) (get("code") != null ? get("code") : StringUtils.generateUrlCode(getLabel()));
+        return (String) (data.get("code") != null ? data.get("code") : StringUtils.generateUrlCode(getLabel()));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void setCode(String code)
     {
-        set("code", code);
+        data.put("code", code);
     }
-
-    //    /*
-    //     * FIXME Map interface methods. If these stay they should include standard node fields.
-    //     */
-    //    public void clear()
-    //    {
-    //        data.clear();
-    //    }
-    //
-    //    public boolean containsKey(Object key)
-    //    {
-    //        return data.containsKey(key);
-    //    }
-    //
-    //    public boolean containsValue(Object value)
-    //    {
-    //        return data.containsValue(value);
-    //    }
-    //
-    //    public Set entrySet()
-    //    {
-    //        return data.entrySet();
-    //    }
-    //
-    //    public Object get(Object key)
-    //    {
-    //        return data.get(key);
-    //    }
-    //
-    //    public boolean isEmpty()
-    //    {
-    //        return data.isEmpty();
-    //    }
-    //
-    //    public Set keySet()
-    //    {
-    //        return data.keySet();
-    //    }
-    //
-    //    public Object put(Object key, Object value)
-    //    {
-    //        if(key.equals("code")) setCode((String) value);
-    //        
-    //        return data.put(key, value);
-    //    }
-    //
-    //    public void putAll(Map t)
-    //    {
-    //        data.putAll(t);
-    //    }
-    //
-    //    public Object remove(Object key)
-    //    {
-    //        return data.remove(key);
-    //    }
-    //
-    //    public int size()
-    //    {
-    //        return data.size();
-    //    }
-    //
-    //    public Collection values()
-    //    {
-    //        return data.values();
-    //    }
-
+    
+    
 }

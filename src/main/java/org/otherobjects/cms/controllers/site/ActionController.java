@@ -1,4 +1,4 @@
-package org.otherobjects.cms.controllers;
+package org.otherobjects.cms.controllers.site;
 
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;

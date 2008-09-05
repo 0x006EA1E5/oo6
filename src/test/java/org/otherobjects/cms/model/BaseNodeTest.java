@@ -74,9 +74,9 @@ public class BaseNodeTest extends TestCase
     public void testGet()
     {
         SampleObject n1 = new SampleObject();
-        n1.set("name", "name1");
+        n1.setPropertyValue("name", "name1");
 
-        assertEquals("name1", n1.get("name"));
+        assertEquals("name1", n1.getPropertyValue("name"));
 
         // FIXME Test nested properties
     }

@@ -81,5 +81,7 @@ public interface PropertyDef
     TypeDef getParentTypeDef();
 
     PropertyEditor getPropertyEditor();
+    
+    String getFieldName();
 
 }

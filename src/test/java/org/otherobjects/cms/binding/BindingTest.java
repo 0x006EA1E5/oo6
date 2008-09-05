@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import junit.framework.TestCase;
 
 import org.otherobjects.cms.SingletonBeanLocator;
-import org.otherobjects.cms.model.Comment;
 import org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder;
 import org.otherobjects.cms.types.PropertyDefImpl;
 import org.otherobjects.cms.types.TypeDefBuilder;
@@ -16,7 +15,7 @@ import org.otherobjects.cms.types.TypeDefImpl;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.types.TypeServiceImpl;
 import org.otherobjects.cms.util.ActionUtils;
-import org.otherobjects.cms.validation.BaseNodeValidator;
+import org.otherobjects.cms.validation.TypeDefConfiguredValidator;
 import org.otherobjects.cms.validation.ValidatorServiceImpl;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -26,10 +25,18 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.support.BindStatus;
 import org.springframework.web.servlet.support.RequestContext;
 
+/**
+ * Test binding of objects to forms.
+ * 
+ * 3 key types: new object, existing object, binding result (form previous submission)
+ * 
+ * @author rich
+ */
 public class BindingTest extends TestCase
 {
     private TypeService typeService = new TypeServiceImpl();
-
+    private ValidatorServiceImpl validatorService;
+    
     @Override
     protected void setUp() throws Exception
     {
@@ -43,9 +50,14 @@ public class BindingTest extends TestCase
         // Add DynaNode type
         TypeDefImpl td = new TypeDefImpl("ArticlePage");
         td.setLabelProperty("title");
-        td.addProperty(new PropertyDefImpl("title", "string", null, null, true));
+        td.addProperty(new PropertyDefImpl("title", "string", null, null, true, true));
         typeService.registerType(td);
-
+        
+        // Setup validator
+        validatorService = new ValidatorServiceImpl();
+        TypeDefConfiguredValidator validator = new TypeDefConfiguredValidator();
+        validator.setTypeService(typeService);
+        validatorService.setDefaultValidator(validator);
     }
 
     // Test new form
@@ -56,11 +68,11 @@ public class BindingTest extends TestCase
         request.setAttribute(RequestContext.WEB_APPLICATION_CONTEXT_ATTRIBUTE, ac);
 
         // Bean
-        Comment c = new Comment();
+        TestObject t = new TestObject();
         ModelMap model = new ModelMap();
-        model.addAttribute("comment", c);
+        model.addAttribute("testObject", t);
         RequestContext rc = new RequestContext(request, model);
-        BindStatus bindStatus = rc.getBindStatus("comment.comment");
+        BindStatus bindStatus = rc.getBindStatus("testObject.testString");
         assertEquals(null, bindStatus.getValue());
 
         //        // DynaNode
@@ -107,11 +119,9 @@ public class BindingTest extends TestCase
         BindServiceImpl bindService = new BindServiceImpl();
         //bs.setDaoService(new MockDaoService(dao));
 
-        ValidatorServiceImpl validatorService = new ValidatorServiceImpl();
-        validatorService.setBaseNodeValidator(new BaseNodeValidator(typeService));
         ActionUtils actionUtils = new ActionUtils(request, response, bindService, validatorService);
 
-        TestObject c = new TestObject();
+       // TestObject t = new TestObject();
         BindingResult r = (BindingResult) actionUtils.bindAndValidate(TestObject.class.getName());
 
         request.setAttribute("org.springframework.validation.BindingResult.object", r);
@@ -135,8 +145,6 @@ public class BindingTest extends TestCase
         BindServiceImpl bindService = new BindServiceImpl();
         //bs.setDaoService(new MockDaoService(dao));
 
-        ValidatorServiceImpl validatorService = new ValidatorServiceImpl();
-        validatorService.setBaseNodeValidator(new BaseNodeValidator(typeService));
         ActionUtils actionUtils = new ActionUtils(request, response, bindService, validatorService);
 
         BindingResult bindingResult = actionUtils.bindAndValidate("ArticlePage");
@@ -148,5 +156,4 @@ public class BindingTest extends TestCase
         System.out.println(bindStatus.getErrorMessage());
 
     }
-
 }

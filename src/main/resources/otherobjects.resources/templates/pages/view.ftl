@@ -9,15 +9,20 @@
 <tr>
 <td>${prop.name}</td>
 <td>
-	<#if prop.type == "component" >
-		${object.get(prop.name)!}
-	<#elseif prop.type == "date" >
-		${object.get(prop.name)?string("d MMM yyyy")}
-	<#elseif prop.type == "boolean" >
-		${object.get(prop.name)?string("Yes", "No")}	
+	<#if object.getPropertyValue(prop.propertyPath)?? >
+		<#if prop.type == "component" >
+			${object.getPropertyValue(prop.propertyPath)!}
+		<#elseif prop.type == "date" >
+			
+			${object.getPropertyValue(prop.propertyPath)?string("d MMM yyyy")}
+		<#elseif prop.type == "boolean" >
+			${object.getPropertyValue(prop.propertyPath)?string("Yes", "No")}	
+	  	<#else>
+			${object.getPropertyValue(prop.propertyPath)!}
+	  	</#if>
   	<#else>
-		${object.get(prop.name)!}
-  	</#if>
+  		No value
+  	</#if>  	
 </td>
 </tr>
 </#macro>

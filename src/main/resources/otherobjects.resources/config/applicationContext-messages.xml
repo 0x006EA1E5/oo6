@@ -8,7 +8,7 @@
 		<property name="cacheSeconds" value="0" />
 		<property name="basenames">
 			<list>
-				<!-- Shared validation messages -->
+				<!-- Standard validation messages -->
 				<value>classpath:validation</value>
 				<!-- OTHERObjects interface messages -->
 				<value>classpath:workbench</value>

@@ -1,7 +1,6 @@
 package org.otherobjects.cms.binding;
 
 import java.beans.PropertyEditor;
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -20,13 +19,13 @@ import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.types.PropertyDef;
+import org.otherobjects.cms.types.PropertyDefImpl;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.springframework.context.annotation.Scope;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.util.WebUtils;
 
 /**
@@ -91,7 +90,7 @@ public class BindServiceImpl implements BindService
         for (PropertyDef propertyDef : typeDef.getProperties())
         {
             // Determine path
-            String path = calcPropertyPath(item, propertyDef, rootPathPrefix);
+            String path = ((PropertyDefImpl) propertyDef).getFieldName();
             String rootPath = rootPathPrefix + path;
 
             // Check if we have matching parameters
@@ -155,27 +154,6 @@ public class BindServiceImpl implements BindService
         }
     }
 
-    /**
-     * Get the correct parameter path String for the given {@link PropertyDef}, which will just be the name of the property or - if the item is a 
-     * {@link DynaNode} - {@link #DYNA_NODE_DATAMAP_NAME}[propertyName] (to work with Springs data binding map syntax)
-     * 
-     * @param item
-     * @param propertyDef
-     * @param rootPathPrefix
-     * @return
-     */
-    private String calcPropertyPath(Object item, PropertyDef propertyDef, String rootPathPrefix)
-    {
-        if (item instanceof DynaNode)
-        {
-            String propertyPath = DynaNode.DYNA_NODE_DATAMAP_NAME + "[" + propertyDef.getName() + "]";
-            //request.rewriteParameter(rootPathPrefix + propertyDef.getName(), rootPathPrefix + propertyPath);
-            return propertyPath;
-        }
-        else
-            return propertyDef.getName();
-    }
-
     private void prepareComponent(Object item, PropertyDef propertyDef, String rootPathPrefix) throws Exception
     {
         prepareComponent(item, propertyDef, null, rootPathPrefix);
@@ -184,7 +162,7 @@ public class BindServiceImpl implements BindService
 
     private void prepareComponent(Object parent, PropertyDef propertyDef, Integer index, String rootPathPrefix) throws Exception
     {
-        String propertyPath = calcPropertyPath(parent, propertyDef, rootPathPrefix);
+        String propertyPath = ((PropertyDefImpl)propertyDef).getFieldName();
 
         if (index != null)
             propertyPath += "[" + index + "]";
@@ -293,29 +271,51 @@ public class BindServiceImpl implements BindService
 
     }
 
-//    /**
-//     * 
-//     * @param bindingResult
-//     * @return
-//     */
-//    private BindingResult wrapBindingResult(BindingResult bindingResult)
-//    {
-//        return (BindingResult) Proxy
-//                .newProxyInstance(bindingResult.getClass().getClassLoader(), new Class[]{BindingResult.class}, new BindingResultWrapper(bindingResult, request.getRewrittenPaths()));
-//    }
+    //    /**
+    //     * 
+    //     * @param bindingResult
+    //     * @return
+    //     */
+    //    private BindingResult wrapBindingResult(BindingResult bindingResult)
+    //    {
+    //        return (BindingResult) Proxy
+    //                .newProxyInstance(bindingResult.getClass().getClassLoader(), new Class[]{BindingResult.class}, new BindingResultWrapper(bindingResult, request.getRewrittenPaths()));
+    //    }
 
-    /**
-     * wraps the given request in a proxy that effectively allows you to rewrite request parameter names
-     * @param request
-     * @return 
-     */
-    private MutableHttpServletRequest wrapRequest(HttpServletRequest request)
+    //    /**
+    //     * wraps the given request in a proxy that effectively allows you to rewrite request parameter names
+    //     * @param request
+    //     * @return 
+    //     */
+    //    private MutableHttpServletRequest wrapRequest(HttpServletRequest request)
+    //    {
+    //        if (request instanceof MultipartHttpServletRequest)
+    //            return (MutableHttpServletRequest) Proxy.newProxyInstance(request.getClass().getClassLoader(), new Class[]{MutableHttpServletRequest.class, MultipartHttpServletRequest.class},
+    //                    new BindingRequestWrapper(request));
+    //        else
+    //            return (MutableHttpServletRequest) Proxy.newProxyInstance(request.getClass().getClassLoader(), new Class[]{MutableHttpServletRequest.class}, new BindingRequestWrapper(request));
+    //    }
+    
+    /*
+     * Get the correct parameter path String for the given {@link PropertyDef}, which will just be the name of the property or - if the item is a 
+     * {@link DynaNode} - {@link #DYNA_NODE_DATAMAP_NAME}[propertyName] (to work with Springs data binding map syntax)
+     * 
+     * @param item
+     * @param propertyDef
+     * @param rootPathPrefix
+     * @return
+    private String calcPropertyPath(Object item, PropertyDef propertyDef, String rootPathPrefix)
     {
-        if (request instanceof MultipartHttpServletRequest)
-            return (MutableHttpServletRequest) Proxy.newProxyInstance(request.getClass().getClassLoader(), new Class[]{MutableHttpServletRequest.class, MultipartHttpServletRequest.class},
-                    new BindingRequestWrapper(request));
+        // FIXME Merge this with propertyDef.propertyPath
+        if (item instanceof DynaNode)
+        {
+            String propertyPath = DynaNode.DYNA_NODE_DATAMAP_NAME + "[" + propertyDef.getName() + "]";
+            String propertyPath2 = ((PropertyDefImpl) propertyDef).getFieldName();
+            //request.rewriteParameter(rootPathPrefix + propertyDef.getName(), rootPathPrefix + propertyPath);
+            return propertyPath2;
+        }
         else
-            return (MutableHttpServletRequest) Proxy.newProxyInstance(request.getClass().getClassLoader(), new Class[]{MutableHttpServletRequest.class}, new BindingRequestWrapper(request));
-    }
+            return propertyDef.getName();
+    }*/
 
 }

@@ -24,19 +24,19 @@ public class RequestUtils
         return pathInfo.substring(pathInfo.lastIndexOf("/") + 1);
     }
 
-    /**
-     * Returns the last part of the path info after the method string.
-     * 
-     * @param method
-     * @param request
-     * @return
-     */
-    public static String getId(String method, HttpServletRequest request)
-    {
-        String pathInfo = request.getPathInfo();
-        int startPos = pathInfo.indexOf("/" + method + "/") + method.length() + 2;
-        return pathInfo.substring(startPos);
-    }
+//    /**
+//     * Returns the last part of the path info after the method string.
+//     * 
+//     * @param method
+//     * @param request
+//     * @return
+//     */
+//    public static String getId(String method, HttpServletRequest request)
+//    {
+//        String pathInfo = request.getPathInfo();
+//        int startPos = pathInfo.indexOf("/" + method + "/") + method.length() + 2;
+//        return pathInfo.substring(startPos);
+//    }
 
     /**
      * Returns true if this request is generated from XHR.
