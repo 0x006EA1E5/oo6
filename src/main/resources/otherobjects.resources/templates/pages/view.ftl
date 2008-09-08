@@ -3,6 +3,24 @@
 
 <#assign object = daoService.getDao("baseNode").get(id) />
 
+
+<style>
+.navigation {float:left; border:1px solid red;}
+</style>
+
+<div class="navigation"> 
+<ul>
+  <li>One</li>
+  <li>Two</li>
+  <li>Three</li>
+  <ul>
+  <li>One</li>
+  <li>Two</li>
+  <li>Three</li>
+</ul>
+</ul>
+</div>
+
 <h1>View: ${object.label}</h1>
 
 <#macro renderProperty prop object>

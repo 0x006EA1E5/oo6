@@ -994,4 +994,15 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
     <para>Maintenance page: if on static server must ahve link back to main
     site page. Provide esssential details.</para>
   </chapter>
+
+  <chapter>
+    <title>Terminology</title>
+
+    <para>Resource: object sent over the wire via HTTP. Could be a
+    Page/Image/RSS etc</para>
+
+    <para>Item: Any object managed by the CMS.</para>
+
+    <para>Folder: Contains Items</para>
+  </chapter>
 </book>
