@@ -67,8 +67,8 @@
   	</#if>
 </p>
 </td>
-<td style="color:red;">
-  <@spring.showErrors "<br>"/>
+<td style="color:red; font-weight:normal!important;">
+<p><@spring.showErrors "<br>"/></p>
 </td>
 </tr>
 </#macro>
