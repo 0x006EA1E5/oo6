@@ -1,18 +1,38 @@
 <#import "/spring.ftl" as spring />
 <#import "/oo.ftl" as oo />
 
-<@oo.css "/otherobjects/static/temporary/temporary.css"/>
-
-${daoService.jcr}
-
-<h1>Edit: {object.label}</h1>
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>OTHERobjects: $!config.getProperty("site.label")</title>
+<@oo.css "/otherobjects/static/legacy/workbench.css" />
+</head>
+<body>
+<div class="oo-header">
+<h1>Workbench</h1>
+<ul>
+<li><strong><a href="$link.setPath("/workbench/welcome.html")">Overview</a></strong></li>
+</ul>
+</div>
+<div class="oo-main-outer"><div class="oo-main-inner">
 <@oo.showFlashMessages />
+
+<div class="oo-navigation">
+<h2>Help pages</h2>
+<ul>
+<li><strong><a href="$link.setPath("/workbench/otherobjects/help/")">Introduction</a></strong></li>
+<li><a href="$link.setPath("/workbench/otherobjects/help/markup.html")">Markup help</a></li>
+<li><a href="$link.setPath("/workbench/otherobjects/help/markup-quick-reference.html")">Markup quick reference</a></li>
+</ul>
+</div>
+
+
 
 <#macro renderProperty prop prefix>
 <tr>
-<td>${prop.label}</td>
+<td class="oo-label">${prop.label} <#if prop.required><span class="oo-required">*</span></#if></td>
 <td>
+<p>
 	<#if prop.type == "date" >
   		<@spring.bind "${prefix}${prop.fieldName}"/>
   		<#assign status = springMacroRequestContext.getBindStatus("${prefix}${prop.fieldName}")>
@@ -22,7 +42,7 @@ ${daoService.jcr}
       	  	<#assign stringStatusValue=status.value?default("")>
    		</#if>
   		
-  		<input type="text" id="${status.expression}" name="${status.expression}" value="${stringStatusValue}" value="">
+  		<input type="text" class="text" id="${status.expression}" name="${status.expression}" value="${stringStatusValue}" value="">
 	<#elseif prop.type == "component" >
   		
   		<table border="1">
@@ -41,10 +61,11 @@ ${daoService.jcr}
 		</table>
   		
 	<#elseif prop.type == "text" >
-  		<@spring.formTextarea "${prefix}${prop.fieldName}"/>
+  		<@spring.formTextarea "${prefix}${prop.fieldName}"  "class=\"textarea\""/>
   	<#else>
-  		<@spring.formInput "${prefix}${prop.fieldName}"/>  	
+  		<@spring.formInput "${prefix}${prop.fieldName}" "class=\"text\"" />  	
   	</#if>
+</p>
 </td>
 <td style="color:red;">
   <@spring.showErrors "<br>"/>
@@ -53,41 +74,51 @@ ${daoService.jcr}
 </#macro>
 
 
+
+
+
+
+<div class="oo-content">
+
+<h2>
+Edit: {object.label}
+</h2>
+
+<div class="oo-tip">
+<p><strong>Tip: </strong> Move your mouse over the <span class="oo-help-symbol">&nbsp;?&nbsp;</span> icons in the Help column for advice on filling in this form. Fields marked with <span class="oo-required">*</span> are required.</p>
+</div>
+
 <form action="${oo.url("/otherobjects/form")}" method="post">
-<table border="1">
+<input type="hidden" name="editableId" value="${id}">
+<table class="oo-edit">
+<thead>
 <tr>
-<td>ID</td>
-<td>
-  <input type="text" name="editableId" value="${id}">
-</td>
+<th>Field</th>
+<th>Value</th>
+<th>Help</th>
 </tr>
+</thead>
+<tbody>
 <#list typeDef.properties as prop>
 <@renderProperty prop "object." />
 </#list>
-<tr>
-<td></td>
-<td><input type="submit" value="submit"/></td>
-</tr>
+</tbody>
 </table>
 </form>
-
-<div class="content">
-<p><a href="${oo.url('/otherobjects/workbench/view/${object.id}')}">View</a></p>
 </div>
 
 
-<p>TODO:<br/>
 
-References<br/>
-Component<br/>
-Lists<br/>
-</p>
+<div class="oo-actions">
+<h2>Actions</h2>
+<ul>
+<li><a href="javascript:document.forms[0].submit();">Save</a></li>
+</ul>
+</div>
 
-<p>VALIDATION:<br/>
 
-Data type [DONE]<br/>
-Required [DONE]<br/>
-Maxlength<br/>
-Regexp<br/>
-Pattern<br/>
-</p>
+<hr class="oo-clear" />
+</div></div>
+</body>
+</html>
+

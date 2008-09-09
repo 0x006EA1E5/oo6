@@ -1,5 +1,0 @@
-
-/* Flash messages */
-.oo-flash-info {padding:8px 8px 8px 30px; color:#000; border:1px dotted #00F; background:#DDF 5px 8px url(../shared/flash-info.png) no-repeat; margin-bottom:10px; _height:1%;} /* Fix for IE6 Peekaboo Bug */
-.oo-flash-warning {padding:8px 8px 8px 30px; color:#000; border:1px dotted #990; background:#FFD 5px 8px url(../shared/flash-warning.png) no-repeat; margin-bottom:10px; _height:1%;} /* Fix for IE6 Peekaboo Bug */
-.oo-flash-error {padding:8px 8px 8px 30px; color:#000; border:1px dotted #F00; background:#FDD 5px 8px url(../shared/flash-error.png) no-repeat; margin-bottom:10px; _height:1%;} /* Fix for IE6 Peekaboo Bug */

@@ -1,0 +1,308 @@
+HTML, BODY, FORM, FIELDSET, DIV, P, H1, H2, H3, H4, H5, H6, DL, DD, DT, UL, OL, LI, TABLE, TH, TD,IMG  {margin:0px; padding:0px; border:0px;}
+HTML {width:100%; background:#eeeeee; overflow:overflow-y;}
+BODY {width:100%; background:#ffffff; margin:0px 0px 20px 0px;}
+
+.clear {clear:both; display:block; visibility:hidden; height:1px; width:1px; margin-bottom:-1px; overflow:hidden;}
+
+BODY.oo-singleselection {margin:0px;}
+BODY.oo-multiselection {margin:0px;}
+
+.col4pc {float:left; width:2%;}
+.col30pc {float:left; width:32%;}
+.col50pc {float:left; width:52%;}
+
+/* Header */
+.oo-header {background:#006CA7 url(graphics/header.jpg) repeat-x; height:65px; overflow:hidden; border-bottom:10px solid #EEEEEE; padding:0px 0px 0px 20px;}
+.oo-header H1 {width:140px; height:45px; overflow:hidden; text-indent:200px; /*background:url(graphics/logo.png) no-repeat;*/ }
+.oo-header UL {float:left; list-style:none; border-collapse:collapse; font:70% Arial, sans-serif;}
+.oo-header LI {float:left;}
+.oo-header LI A {float:left; height:14px; padding:3px 10px 3px 10px; color:#393C86; text-decoration:none; background:#99D0E6; margin:0px 1px 0px 0px;}
+.oo-header LI A:hover, .header LI A:active {background:#C8E8F5;}
+.oo-header LI STRONG A {color:#393C86; background:#EEEEEE;}
+.oo-header LI STRONG A:hover {background:#C8E8F5;}
+
+.oo-main-inner { min-height:650px; min-width:450px; border-left:170px solid #EEEEEE; padding:0px 145px 0px 10px; background:url(graphics/actions-bg.gif) repeat-y top right;}
+.oo-singleselection {border-top:10px solid #EEEEEE;}
+.oo-clear {clear:both; display:block; visibility:hidden; height:1px; width:1px; overflow:hidden;}
+
+
+.oo-navigation {font:70% Arial; width:160px; position:absolute; top:75px; left:0px; padding:5px 0px 40px 10px;}
+.oo-navigation H2 {font:bold 110% Arial; padding:5px 0px 5px 1px; color:#253D56;}
+.oo-navigation P {padding:5px 0px 5px 5px;}
+.oo-navigation UL {list-style:none; float:left; margin:0px 0px 0px 0px;}
+.oo-navigation LI {float:left; background:#eeeeee;}
+.oo-navigation LI A {display:block; width:155px; cursor:pointer; padding:5px 0px 5px 5px; text-decoration:none; color:#000000;}
+.oo-navigation LI A:hover, .navigation LI A:active {background:#C8E8F5;}
+.oo-navigation LI STRONG A {background:#ffffff; font-weight:normal;}
+.oo-navigation LI EM A {background:#FFC485; font-style:normal;}
+.oo-navigation .selection .checkbox {float:left; margin:6px 5px 0px 5px; padding:0px;}
+.oo-navigation .selection A {float:left; width:125px;}
+.oo-navigation .submit {padding:0px 10px 0px 10px; background:#dddddd; height:20px; font:100%/180% Arial; border:0px solid #000000; cursor:pointer; color:#000000;}
+.oo-singleselection .oo-navigation, .oo-multiselection .oo-navigation {top:20px;}
+
+.oo-folders {margin:0px!important;}
+.oo-folders LI {list-style:none; clear:both; padding:0px;}
+.oo-folders LI SPAN {cursor:pointer; width:22px; display:block; height:20px; float:left;}
+.oo-folders .oo-folder-full-open {background:url($static.setPath("/otherobjects/static/graphics/dots-vertical.gif")) repeat-y 8px 0px; margin:0px; padding:0px;}
+.oo-folders .oo-folder-full-open SPAN {background:url($static.setPath("/otherobjects/static/graphics/folder-full-open.gif")) no-repeat;}
+.oo-folders .oo-folder-empty-open {background:url($static.setPath("/otherobjects/static/graphics/dots-vertical.gif")) repeat-y 8px 0px; margin:0px; padding:0px;}
+.oo-folders .oo-folder-empty-open SPAN {background:url($static.setPath("/otherobjects/static/graphics/folder-empty-open.gif")) no-repeat;}
+.oo-folders .oo-folder-full SPAN {background:url($static.setPath("/otherobjects/static/graphics/folder-full.gif")) no-repeat;}
+.oo-folders .oo-folder-empty SPAN {background:url($static.setPath("/otherobjects/static/graphics/folder-empty.gif")) no-repeat;}
+.oo-folders .oo-trashcan {color:red; margin:0px; padding:0px;}
+.oo-folders .oo-trashcan SPAN {background:url($static.setPath("/otherobjects/static/graphics/trashcan.gif")) no-repeat;}
+.oo-folders .oo-selected, .oo-navigation .oo-folders .oo-selected:hover {background:#FFFFFF;}
+
+.oo-folders UL {padding:0px 0px 5px 10px; background:url($static.setPath("/otherobjects/static/graphics/folder-open-footer.gif")) no-repeat bottom left;}
+.oo-folders LI A {width:135px; padding:3px 2px 3px 23px;}
+.oo-folders LI LI A {width:125px;}
+.oo-folders LI LI LI A {width:115px;}
+.oo-folders LI LI LI LI A {width:105px;}
+
+.oo-folder-full UL {display:none;}
+
+.oo-content {padding:0px 10px 0px 0px; font:70% Arial;}
+.oo-content H2 {font:bold 140% Arial; color:#253D56; padding:10px 0px 10px 0px;}
+.oo-content H2 A {text-decoration:none; color:#253D56;}
+.oo-content H3 {font:bold 120% Arial; color:#253D56; padding:10px 0px 10px 0px;}
+.oo-content UL {margin:0px 0px 0px 20px; list-style:square;}
+.oo-content LI {padding:0px 0px 5px 0px;}
+.oo-content P {padding:0px 0px 15px 0px;}
+.oo-content P.divider {padding:5px 0px 15px 0px; margin:0px 100px 0px 0px; border-top:1px solid #eeeeee;}
+.oo-content EM {font-style:normal; color:#999999;}
+.oo-content .oo-required {font:bold 110% Verdana; color:#990000;}
+.oo-content .text {border:1px solid #CCCCCC; padding:2px; font:100% Arial; width:250px; margin:0px 5px 0px 0px;}
+.oo-content .password {border:1px solid #CCCCCC; padding:2px; font:100% Arial; width:250px; margin:0px 5px 0px 0px;}
+.oo-content .textarea {width:100%; height:75px; border:1px solid #cccccc; padding:2px; font:100% Arial;  margin:0px 5px 5px 0px;}
+.oo-content .wikitextarea {width:100%; height:75px; border:1px solid #cccccc; padding:2px; font:115% Courier, Monanco, Arial;  margin:0px 5px 5px 0px;}
+.oo-content .textareasmall {width:100%; height:60px; border:1px solid #cccccc; padding:2px; font:100% Arial;  margin:0px 5px 5px 0px;}
+.oo-content .oo-format-large .textarea {height:300px;}
+.oo-content .oo-format-large .wikitextarea {height:300px;}
+.oo-content .select {font:100% Arial; margin:0px 5px 0px 0px;}
+.oo-content FORM LABEL {display:block; width:55px; line-height:25px; float:left;}
+.oo-content .submit {padding:0px 10px 0px 10px; background:#dddddd; height:20px; font:100%/180% Arial; border:0px solid #000000; cursor:pointer; color:#000000;}
+.oo-content .submit-hover {padding:0px 10px 0px 10px; background:#C8E8F5; height:20px; font:100%/180% Arial; border:0px solid #000000; cursor:pointer; color:#000000;}
+.oo-content A.oo-action  {color:#000000; text-decoration:none; float:left; padding:5px 10px 5px 20px; background:url($static.setPath("/otherobjects/static/graphics/arrow_right.gif")) no-repeat 10px 9px;}
+.oo-content A.oo-action:hover, .oo-content A.oo-action:active {background-color:#C8E8F5;}
+.oo-content A.oo-action  IMG {float:left;margin-top:-3px;padding-right:3px;}
+.oo-content TH, .oo-content TD {vertical-align:top;}
+
+.oo-preformatted {height:50px; overflow:auto; border:1px solid #eeeeee; padding:5px;}
+
+.oo-content UL.oo-sortable-list  {margin:0px 0px 20px 0px; list-style:none;}
+.oo-content .oo-sortable-list LI {padding:5px; margin:10px; border:1px solid #999999; cursor:move; background:#eeeeee;}
+.oo-content .oo-sortable-hover {border:1px solid #ff0000;}
+
+.oo-drag {display:block; padding:4px 25px 4px 4px; width:125px;}
+.oo-drag-select {cursor:move; background:#CCCCCC;}
+
+.oo-tabs {height:24px; margin:0px 0px 25px 0px!important; width:99%; background:url($static.setPath("/otherobjects/static/graphics/line-horizontal.gif")) repeat-x bottom left;}
+.oo-tabs LI {float:left; list-style:none; padding:0px;}
+.oo-tabs LI.oo-indent {padding:0px 0px 0px 15px;}
+.oo-tabs LI A {display:block; background:#eeeeee; border-right:1px solid #FFFFFF;  border-left:1px solid #FFFFFF; text-align:center; cursor:pointer; padding:5px 11px 4px 11px; text-decoration:none; color:#000000;}
+.oo-tabs LI A:hover, .content LI A:active {background:#C8E8F5;}
+.oo-tabs LI STRONG A {background:#FFFFFF; border-top:1px solid #CCCCCC; border-right:1px solid #CCCCCC; border-bottom:1px solid #FFFFFF; border-left:1px solid #CCCCCC; padding:4px 10px 4px 10px;}
+.oo-tabs LI STRONG A:hover, .content LI STRONG A:active {border-bottom:1px solid #C8E8F5;}
+.oo-tabs LI STRONG {float:left;}
+
+.oo-search {width:99%; height:40px;}
+.oo-searchfield {float:left; width:380px;}
+.oo-searchaction {float:left; color:#000000; text-decoration:none; display:block; margin:1px 0px 0px 0px; padding:3px 10px 3px 20px; background:url($static.setPath("/otherobjects/static/graphics/arrow_right.gif")) no-repeat 10px 7px;}
+.oo-searchaction:hover, .oo-content .oo-searchaction:active {background-color:#C8E8F5;}
+
+.oo-paging {height:25px; margin:0px 0px 15px 0px!important; width:99%;  }
+.oo-paging LI {float:left;list-style:none; }
+.oo-paging LI.title {display:none;}
+.oo-paging LI.oo-paging-status {display:block; background:#ffffff; cursor:pointer; padding:5px 5px 5px 5px; text-decoration:none; color:#000000; border-right:1px solid #ffffff;}
+.oo-paging LI A {display:block; background:#eeeeee url($static.setPath("/otherobjects/static/graphics/tab-corner.gif")) no-repeat top right; text-align:center; width:40px; cursor:pointer; padding:5px 5px 5px 5px; text-decoration:none; color:#000000; border-right:1px solid #ffffff;}
+.oo-paging LI A:hover, .content LI A:active {background-color:#C8E8F5;}
+.oo-paging LI STRONG A {background-color:#dddddd;}
+.oo-paging LI STRONG {float:left; background:#dddddd;}
+
+
+.oo-listing {border-collapse:collapse; width:100%; margin:0px 0px 20px 0px; }
+.oo-listing CAPTION { font:bold 120% Arial; padding: 0px 0px 4px 0px; }
+.oo-listing TH {background:#eeeeee; font:normal 100% Arial; text-align:left; padding:4px 10px 4px 10px; border-right:1px solid #ffffff;}
+.oo-listing TH.oo-filter {padding:0px;}
+.oo-listing TH.oo-filter A {display:block; height:14px; padding:4px 10px 4px 10px; text-decoration:none; color:#000000;}
+.oo-listing TH.oo-filter A:hover, .oo-content .oo-listing TH.filter A:active {background-color:#eeeeee;}
+.oo-listing TH.oo-filter STRONG A {background:#eeeeee url($static.setPath("/otherobjects/static/graphics/arrow_down.gif")) no-repeat right center;}
+.oo-listing TR {border-bottom:1px solid #eeeeee;}
+.oo-listing TD {padding:3px 1px 3px 0px; border-bottom:1px solid #eeeeee;}
+.oo-listing TD P {padding:5px 10px 5px 10px;}
+.oo-listing TD .oo-edited, .oo-content .oo-listing TD .oo-new {display:block; background:url($static.setPath("/otherobjects/static/graphics/icon_inprogress.gif")) no-repeat 8px 9px; padding:5px 10px 5px 20px; background-color:#ffffff;}
+.oo-listing TD .oo-pending {display:block; background:url($static.setPath("/otherobjects/static/graphics/icon_submitted.gif")) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
+.oo-listing TD .oo-live {display:block; background:url($static.setPath("/otherobjects/static/graphics/icon_live.gif")) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
+.oo-listing TD .oo-deleted {display:block; background:url($static.setPath("/otherobjects/static/graphics/icon_deleted.gif")) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
+.oo-listing TD .oo-locked {display:block; background:url($static.setPath("/otherobjects/static/graphics/icon_locked.gif")) no-repeat 8px 7px; padding:5px 10px 5px 20px;}
+.oo-listing TD A {display:block; color:#000000; text-decoration:none; padding:5px 10px 5px 10px;}
+.oo-listing TD A:hover, .oo-content .oo-listing TD A:active {background-color:#C8E8F5;}
+.oo-listing TD .oo-neutral {background:url($static.setPath("/otherobjects/static/graphics/icon_neutral.gif")) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
+.oo-listing .oo-icon {width:40px;}
+.oo-listing TD.oo-image {width:20%; vertical-align:bottom;}
+.oo-listing .oo-image IMG {margin:3px 0px 0px 0px;}
+.oo-listing .oo-image IMG {border-top:4px solid #CCCCCC;} /* Neutral etc. here*/
+.oo-listing .oo-image A {color:#000000; text-decoration:none; display:block; padding:5px 10px 5px 10px;}
+.oo-listing .oo-image A:hover, .oo-content .oo-listing .oo-image A:active {background-color:#C8E8F5;}
+.oo-listing .oo-image A.oo-action {width:100px;}
+.oo-listing .oo-button A {color:#000000; text-decoration:none; float:left; padding:5px 10px 5px 10px;}
+.oo-listing .oo-button A:hover, .oo-content .oo-listing .oo-button A:active {background-color:#C8E8F5;}
+.oo-listing TD.oo-action {width:40px;}
+.oo-listing .oo-action A {color:#000000; height:11px; text-decoration:none; display:block; padding:5px 10px 5px 20px; background:url($static.setPath("/otherobjects/static/graphics/arrow_right.gif")) no-repeat 10px 9px;}
+.oo-listing .oo-action A:hover, .oo-content .oo-listing .oo-action A:active {background-color:#C8E8F5;}
+.oo-listing .oo-action A.up {background:url($static.setPath("/otherobjects/static/graphics/arrow_up.gif")) no-repeat 10px 10px;}
+.oo-listing .oo-action A.up:hover, .oo-content .oo-listing .oo-action A.up:active {background-color:#C8E8F5;}
+.oo-listing .oo-action A.down {background:url($static.setPath("/otherobjects/static/graphics/arrow_down.gif")) no-repeat 10px 10px;}
+.oo-listing .oo-action A.down:hover, .oo-content .oo-listing .oo-action A.down:active {background-color:#C8E8F5;}
+.oo-listing .oo-help {width:20px; padding:5px 10px 5px 10px; text-align:center;}
+.oo-listing .oo-label {width:100px; padding:5px 10px 5px 10px;}
+.oo-listing .oo-field {padding:5px 10px 5px 10px;}
+.oo-listing .oo-field-none {padding:5px 10px 5px 10px;}
+.oo-listing .oo-field A {float:left; padding:5px 10px 5px 20px; background:url($static.setPath("/otherobjects/static/graphics/arrow_right.gif")) no-repeat 10px 10px;}
+.oo-listing .oo-field P {padding:5px 5px 5px 10px; clear:both;} 
+.oo-listing .oo-field P.oo-neutral {padding:5px 5px 5px 25px; clear:both;} 
+.oo-listing .oo-field A:hover, .oo-content .oo-listing .oo-field A:active {background-color:#C8E8F5;}
+.oo-listing .oo-section { border-top:3px solid #eeeeee;}
+.oo-listing .oo-disabled {color:#999999;}
+
+.oo-edit {border-collapse:collapse; width:100%; margin:0px 0px 20px 0px; }
+.oo-edit CAPTION { font:bold 120% Arial; padding: 0px 0px 4px 0px; }
+.oo-edit TH {background:#eeeeee; font:normal 100% Arial; text-align:left; padding:4px 10px 4px 10px; border-right:1px solid #ffffff;}
+.oo-edit TR {border-bottom:1px solid #eeeeee;}
+.oo-edit TD {padding:3px 1px 3px 0px; border-bottom:1px solid #eeeeee;}
+.oo-edit TD P {padding:5px 10px 5px 10px;}
+.oo-edit TD .oo-neutral {background:url($static.setPath("/otherobjects/static/graphics/icon_neutral.gif")) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
+.oo-edit .oo-icon {width:40px;}
+.oo-edit .oo-button A {color:#000000; text-decoration:none; float:left; padding:5px 10px 5px 10px;}
+.oo-edit .oo-button A:hover, .oo-content .oo-edit .oo-button A:active {background-color:#C8E8F5;}
+.oo-edit TD.oo-action {width:40px;}
+.oo-edit .oo-help {width:20px; padding:5px 10px 5px 10px; text-align:center;}
+.oo-edit .oo-label {width:100px; padding:5px 10px 5px 10px;}
+.oo-edit .oo-field {padding:5px 10px 5px 10px;}
+.oo-edit .oo-field-none {padding:5px 10px 5px 10px;}
+.oo-edit .oo-field A {display:block; color:#000000; text-decoration:none; float:left; padding:5px 10px 5px 20px; background:url($static.setPath("/otherobjects/static/graphics/arrow_right.gif")) no-repeat 10px 10px;}
+.oo-edit .oo-field P {padding:5px 5px 5px 10px; clear:both;} 
+.oo-edit .oo-field P.oo-neutral {padding:5px 5px 5px 25px; clear:both;} 
+.oo-edit .oo-field A:hover, .oo-content .oo-edit .oo-field A:active {background-color:#C8E8F5;}
+.oo-edit .oo-field LI IMG {display:block;}
+.oo-edit .oo-section { border-top:3px solid #eeeeee;}
+.oo-edit .oo-disabled {color:#999999;}
+
+
+.oo-content .oo-format {padding:5px 10px 5px 10px!important;}
+.oo-content .oo-format-large {padding:5px 10px 5px 10px!important;}
+
+.oo-format .oo-edit-tools {display:none;}
+.oo-edit-tools {background:#eeeeee; float:left; width:100%; margin:0px 0px 5px 0px;}
+.oo-edit-tools .oo-toolstitle {float:left; padding:0px 3px 0px 0px!important; margin:0px 0px 0px 0px; line-height:26px;}
+.oo-edit-tools A {float:left; margin:0px 3px 0px 0px; padding:3px!important; width:20px; text-indent:-1000px; line-height:40px; height:20px; overflow:hidden; background-repeat:no-repeat; background-position:3px 3px;}
+.oo-edit-tools P {float:left; padding:3px 0px 1px 10px!important;}
+.oo-format-heading4 {background-image:url($static.setPath("/otherobjects/static/graphics/formatting_headinglarge.gif"))!important;}
+.oo-format-heading5 {background-image:url($static.setPath("/otherobjects/static/graphics/formatting_headingmedium.gif"))!important;}
+.oo-format-heading6 {background-image:url($static.setPath("/otherobjects/static/graphics/formatting_headingsmall.gif"))!important;}
+.oo-format-bold {background-image:url($static.setPath("/otherobjects/static/graphics/formatting_bold.gif"))!important;}
+.oo-format-superscript {background-image:url($static.setPath("/otherobjects/static/graphics/formatting_sup.gif"))!important;}
+.oo-format-subscript {background-image:url($static.setPath("/otherobjects/static/graphics/formatting_sub.gif"))!important;}
+.oo-format-italic {background-image:url($static.setPath("/otherobjects/static/graphics/formatting_italic.gif"))!important;}
+.oo-format-hr {background-image:url($static.setPath("/otherobjects/static/graphics/formatting_hr.gif"))!important;}
+.oo-format-image {background-image:url($static.setPath("/otherobjects/static/graphics/formatting_image.gif"))!important;}
+.oo-format-file {background-image:url($static.setPath("/otherobjects/static/graphics/formatting_file.gif"))!important;}
+.oo-format-rich-media {background:url($static.setPath("/otherobjects/static/graphics/formatting_richmedia.gif")) no-repeat 3px 5px!important;}
+.oo-format-form {background:url($static.setPath("/otherobjects/static/graphics/formatting_form.gif")) no-repeat 3px 5px!important;}
+.oo-format-linkinternal {background-image:url($static.setPath("/otherobjects/static/graphics/formatting_linkinternal.gif"))!important;}
+.oo-format-linkexternal {background-image:url($static.setPath("/otherobjects/static/graphics/formatting_linkexternal.gif"))!important;}
+.oo-format-linkcustom {background-image:url($static.setPath("/otherobjects/static/graphics/formatting_linkcustom.gif"))!important;}
+.oo-format-table {background-image:url($static.setPath("/otherobjects/static/graphics/formatting_table.gif"))!important;}
+.oo-format-convert {background-image:url($static.setPath("/otherobjects/static/graphics/formatting_convert.gif"))!important;}
+.oo-format-text {background-image:url($static.setPath("/otherobjects/static/graphics/formatting_text.gif"))!important;}
+
+.oo-create-table {position:absolute; margin:25px 0px 0px -29px; width:180px; padding:5px 10px 5px 10px; background:#FFFFFF; border:1px solid #999999; display:none;}
+.oo-create-table IMG {background:url($static.setPath("/otherobjects/static/graphics/create-table-grid.gif")) no-repeat -150px -120px; margin:5px 0px 5px 0px;}
+.oo-create-table INPUT {float:left; margin:0px 5px 2px 0px; padding:0px; clear:left;}
+
+.oo-content LI.oo-object { margin:0px 0px 0px -20px; padding:0px 0px 10px 25px; line-height:21px; background:url($static.setPath("/otherobjects/static/graphics/object.gif")) no-repeat 0px 0px; list-style:none;}
+.oo-content LI.oo-stylesheet { margin:0px 0px 0px -20px; padding:0px 0px 10px 25px; line-height:21px; background:url($static.setPath("/otherobjects/static/graphics/stylesheet.gif")) no-repeat 0px 0px; list-style:none;}
+
+
+.oo-tip {font:70% Arial, sans-serif; padding:0px 0px 5px 20px; background:#FFFFFF;}
+.oo-content .oo-tip {font:100% Arial, sans-serif; padding:0px 0px 5px 0px;}
+.oo-tip P {padding:5px 0px 5px 25px; margin:0px 0px 5px 0px; background:#F6F2B9 url(graphics/tip.gif) no-repeat 5px 4px; }
+.oo-tip A {padding:3px 10px 3px 15px; color:#000000; background:url(graphics/arrow_right.gif) no-repeat 7px 8px; text-decoration:none;}
+.oo-tip A:hover {background-color:#EEEEEE;}
+
+.oo-content .oo-help-symbol {cursor:help; color:#990000; font:bold 100% Verdana, Arial, sans-serif;}
+.oo-help-tip {position:absolute; z-index:10; width:200px; color:#000000; background:#F6F2B9; border:1px solid #000000; margin:30px 0px 0px -100px; padding:10px; font:normal 100% Arial, sans-serif; text-align:left;}
+.oc-details {position:absolute; z-index:10; width:250px; color:#000000; background:#C8E8F5; border:1px solid #000000; margin:30px 0px 0px -100px; padding:10px; font:normal 100% Arial, sans-serif; text-align:left;}
+
+
+/* FIXME This separator does not work on Moz */
+.oo-content .oo-separator {clear:both; border:0px solid #ffffff;  height:1px; width:1px;}
+
+.oo-admin .oo-content {padding:0px 155px 0px 100px;}
+.oo-admin .oo-content H1 {padding:50px 0px 15px 2px;}
+.oo-admin .oo-content H2 {padding:10px 0px 10px 60px;}
+.oo-admin .oo-content P {padding:0px 0px 15px 60px;}
+.oo-admin .oo-content FIELDSET P {padding:0px 0px 15px 0px;}
+.oo-admin .oo-content .submit {margin:0px 0px 15px 60px;}
+.oo-admin .oo-content .submit-hover {margin:0px 0px 15px 60px;}
+
+.oo-actions {font:70% Arial; background:#FAFAFA; padding:5px 9px 20px 0px; right:0px; width:135px; position:fixed; top:85px; }
+
+.oo-actions H2 {font:bold 110% Arial; padding:5px 0px 5px 5px; color:#253D56;}
+.oo-actions UL {list-style:none;}
+.oo-actions LI.divider {margin:5px 0px 0px 0px;}
+.oo-actions LI A {display:block; width:130px; background:#dddddd; cursor:pointer; padding:5px 0px 5px 5px; text-decoration:none; color:#000000; border-bottom:1px solid #f2f2f2;}
+.oo-actions LI A:hover, .oo-actions LI A:active {background:#C8E8F5;}
+.oo-actions LI.warning A {display:block; width:120px; background:#ff6666; cursor:pointer; padding:5px 0px 5px 5px; text-decoration:none; color:#000000; border-bottom:1px solid #f2f2f2;}
+.oo-actions LI.warning A:hover, .oo-actions LI A:active {background:#C8E8F5;}
+.oo-actions P {padding:5px;}
+#OoHidden {display:none; clear:both; padding:10px 0px 10px 0px;}
+
+.oo-login {position:absolute; right:10px; top:10px; padding:5px 5px 5px 25px; font:70% Arial; color:#FFFFFF; text-align:right; }
+.oo-login .select {font:100% Arial; margin:0px 0px 0px 0px;}
+.oo-login A {text-decoration:none; color:#FFFFFF;}
+.oo-login A:hover {color:#99D0E6;}
+.oo-login .submit {border:0px solid #ffffff; font:100% Arial; padding:1px 5px 2px 5px; background:#eeeeee;}
+
+/* Status Colours */
+.oo-type-live {color:#006633;}
+.oo-type-embargoed {color:#003366;}
+.oo-type-pending {color:#CC6600;}
+.oo-type-new {color:#990000;}
+.oo-type-edited {color:#990000;}
+.oo-type-deleted {color:#000000;}
+.oo-type-neutral {color:#666666;}
+
+/* Inline markup (for help pages mainly) */.oo-content .oo-inline H4 {font:bold 120% Arial; color:#253D56; padding:10px 0px 5px 0px;}
+.oo-content .oo-inline H5 {font:bold 100% Arial; color:#253D56; padding:10px 0px 5px 0px;}
+.oo-content .oo-inline H6 {font:bold 100% Arial; color:#253D56; padding:10px 0px 5px 0px;}
+.oo-content .oo-inline P {padding:0px 0px 5px 0px;}
+.oo-content .oo-inline UL {margin:0px 0px 0px 20px; padding:0px 0px 10px 0px; list-style:square;}
+.oo-content .oo-inline OL {margin:0px 0px 0px 20px; padding:0px 0px 10px 0px;}
+.oo-content .oo-inline LI {padding:0px 0px 5px 0px;}
+
+/* Warning: rich css... */
+.oo-overview-block {padding:5px; margin:0px 10px 10px 0px; background:#eeeeee;}
+.oo-overview-block H4 {padding-bottom:5px; font:bold 120% Arial;} 
+.oo-overview-block P {padding:3px; background:#ffffff;}
+
+.oo-compare-inserted {background-color:#33ff33;}
+.oo-compare-deleted {background-color:#ff3333;}
+.oo-compare-changed {background-color:#ff9900;}
+.oo-compare-changedline {background-color:#ffccee;}
+
+/* Warning: martin css */
+.oo-order TABLE {width:100%; border-collapse:collapse; margin:0px 0px 25px 0px;}
+.oo-order TABLE CAPTION {border-bottom:1px solid #cccccc; color:#253D56; font:bold 120% Arial; text-align:left; padding:5px 5px 5px 0px;}
+.oo-order TABLE TH {text-align:left; border-bottom:1px solid #cccccc; color:#000000; vertical-align:top;}
+.oo-order TABLE TD {padding:3px 1px 3px 0px; border-bottom:1px solid #eeeeee; vertical-align:top;}
+
+.oo-display-navigation {left:0px!important;}
+.oo-main-inner .oo-actions .close-button {display:none;}
+.oo-main-inner .oo-navigation .close-button {display:none;}
+
+
+/* Flash messages */
+.oo-flash-info {font:70% Arial, sans-serif; margin:0px 10px 10px 0px; color:#FFF; padding:5px 0px 5px 30px; background:#6699CC url(graphics/message.gif) no-repeat 5px 4px;}
+.oo-flash-warning {font:70% Arial, sans-serif; margin:0px 10px 10px 0px; color:#000; padding:5px 0px 5px 30px; background:#FFC485 url(graphics/warning.gif) no-repeat 5px 4px;}
+.oo-flash-error {font:70% Arial, sans-serif; margin:0px 10px 10px 0px; color:#000; padding:5px 0px 5px 30px; background:#FF0000 url(graphics/warning.gif) no-repeat 5px 4px;}
