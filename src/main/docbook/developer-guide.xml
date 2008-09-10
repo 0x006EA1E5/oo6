@@ -102,56 +102,16 @@ brushed:~ rich$
         <para>All of the libraries that OTHERobjects depends on are downloaded
         automatically via Maven. Most of these libraries are in the public
         Maven repository but are few are only available from the OTHERobjects
-        repository. You will need to add this repository to the Maven
-        setting.xml file at <emphasis
-        role="bold">~/.m2/settings.xml</emphasis>. If the folder or the file
-        does not exist then you should create them manually.</para>
-
-        <note>
-          <para>TODO Can we move this information into the pom instead?</para>
-        </note>
-
-        <para>Now add the contents below:</para>
-
-        <programlisting>&lt;settings&gt;
-  &lt;profiles&gt;
-    &lt;profile&gt;
-      &lt;id&gt;otherobjects-repository&lt;/id&gt;
-      &lt;activation&gt;
-        &lt;activeByDefault&gt;true&lt;/activeByDefault&gt;
-      &lt;/activation&gt;
-      &lt;repositories&gt;
-        &lt;repository&gt;
-          &lt;id&gt;otherobjects&lt;/id&gt;
-          &lt;name&gt;OTHERobjects repository&lt;/name&gt;
-          &lt;url&gt;http://maven.otherobjects.org/repository/&lt;/url&gt;
-          &lt;layout&gt;default&lt;/layout&gt;
-        &lt;/repository&gt;
-      &lt;/repositories&gt;
-      &lt;pluginRepositories&gt;
-        &lt;pluginRepository&gt;
-          &lt;id&gt;otherobjects&lt;/id&gt;
-          &lt;name&gt;OTHERobjects repository&lt;/name&gt;
-          &lt;url&gt;http://maven.otherobjects.org/repository/&lt;/url&gt;
-          &lt;layout&gt;default&lt;/layout&gt;
-        &lt;/pluginRepository&gt;
-        &lt;pluginRepository&gt;
-          &lt;id&gt;otherobjects&lt;/id&gt;
-          &lt;name&gt;JBoss repository&lt;/name&gt;
-          &lt;url&gt;http://repository.jboss.org/maven2/&lt;/url&gt;
-          &lt;layout&gt;default&lt;/layout&gt;
-        &lt;/pluginRepository&gt;
-      &lt;/pluginRepositories&gt;
-    &lt;/profile&gt;
-  &lt;/profiles&gt;
-&lt;/settings&gt;</programlisting>
+        repository. By default OTHERobjects projects will download from the
+        OTHERobjects repository but you are free to turn this off or mirror
+        the repo yourselves.</para>
       </section>
 
       <section>
         <title>ImageMagick</title>
 
         <para>We use ImageMagick for high quality image resizing. You need
-        version 6.2 or later. Download a binary package from <uri>
+        version 6.3 or later. Download a binary package from <uri>
         http://www.imagemagick.org/script/binary-releases.php </uri> and
         install it. You will need to set your paths and environment variables
         correctly. To test that you have the correct version is installed run
@@ -179,7 +139,8 @@ brushed:~ rich$
         http://www.eclipse.org/downloads/.</para>
 
         <para>Once this is installed you should add the following plugins via
-        the Update Manager:</para>
+        the Update Manager (items marked with a * are required, all others are
+        recommended):</para>
 
         <table>
           <title>Recommended Eclipse plugins</title>
@@ -195,21 +156,21 @@ brushed:~ rich$
 
             <tbody>
               <row>
-                <entry>Subversive 0.7.1 (Subversion SCM integration) + SKNKit
-                1.1 Connector</entry>
+                <entry>* Subversive 0.7.1 (Subversion SCM integration) +
+                SKNKit 1.1 Connector</entry>
 
                 <entry>Part of Ganymede (except connectors)
                 http://www.eclipse.org/subversive/documentation/gettingStarted/aboutSubversive/install.php</entry>
               </row>
 
               <row>
-                <entry>M2Eclipse 0.9.2 (Maven integration)</entry>
+                <entry>* M2Eclipse 0.9.2 (Maven integration)</entry>
 
                 <entry>http://m2eclipse.sonatype.org/update/</entry>
               </row>
 
               <row>
-                <entry>run-jetty-run 1.0.1 (Embedded servlet
+                <entry>* run-jetty-run 1.0.1 (Embedded servlet
                 container)</entry>
 
                 <entry>http://run-jetty-run.googlecode.com/svn/trunk/updatesite</entry>
@@ -292,7 +253,7 @@ brushed:~ rich$
       <para>At this stage the projects you will need to checkout are:</para>
 
       <programlisting>otherobjects/trunk
-www.othermedia.com/trunk</programlisting>
+test-site/trunk</programlisting>
 
       <para>After the checkout the Maven plugin will detect that the projects'
       dependencies and download them. Depending on the speed of your Internet
@@ -335,21 +296,20 @@ www.othermedia.com/trunk</programlisting>
     <section>
       <title>Launching the site</title>
 
-      <para>So we are now ready to launch the site. Select the JettyLauncher
-      class in src/main/java/org/otherobjects/jetty which is in the sample
-      project. To launch in debug mode which in recommended right-click and
-      choose Debug As... Java Application.</para>
+      <para>So we are now ready to launch the site. We use the run-jetty-run
+      plugin to run the site inside the Jetty container directly in Eclipse.
+      This allows us to debug and use hot code replace easily -- no need for
+      build and deploy on each code iteration.</para>
 
-      <note>
-        <para>TODO Information on launching via WTP or custom Jetty plugin
-        needed here. How to use -Djava.awt.headless=true. Using -server,
-        -Xms256m -Xmx256m. See <link linkend="performance">performance
-        tuning</link></para>
-      </note>
+      <para>Open the Run Configurations window and create a new Jetty Webapp
+      configuration. Choose the test-site project, and set the WebApp dir to
+      webapp. Optionally you can set these VM arguments (in the second tab) to
+      increase the memory available to the site and to make sure it runs
+      headless (so no annoying windows pop up during image processing):</para>
 
-      <para>The console should show the application starting up (they may be
-      some SQL error stack <uri>traces</uri> as the database structure is
-      created for the first time but these can be safely ignored). If all has
+      <para>-Djava.awt.headless=true. Using -server, -Xms256m -Xmx256m.</para>
+
+      <para>The console should show the application starting up. If all has
       gone well you should see a message stating that OTHERobjects is running
       and you will be given the URL to both the site homepage and the
       administration workbench. <emphasis></emphasis><programlisting>**************************************************************
@@ -369,7 +329,7 @@ Admin : http://localhost:8080/go/workbench/
 
       <para>Browse around the site and check that it works correctly. To log
       in to the workbench use <emphasis role="bold">admin</emphasis> as the
-      username and <emphasis role="bold">admin</emphasis> as the
+      username and <emphasis role="bold">mustchangethis</emphasis> as the
       password.</para>
     </section>
   </chapter>

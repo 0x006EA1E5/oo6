@@ -1,7 +1,5 @@
 package org.otherobjects.cms.views;
 
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.Locale;
 import java.util.Map;
 
@@ -13,9 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerView;
-
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 
 /**
  * Adds error handling to the standard FreeMarkerView.
