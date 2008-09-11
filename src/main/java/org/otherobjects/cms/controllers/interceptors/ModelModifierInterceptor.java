@@ -49,6 +49,7 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             modelAndView.addObject("formatTool", new FormatTool());
             modelAndView.addObject("security", new SecurityTool());
             modelAndView.addObject("daoService", daoService);
+            modelAndView.addObject("dao", daoService);
 
             modelAndView.addObject("flash", new FlashMessageTool(request));
             modelAndView.addObject("jcr", daoService.getDao("BaseNode"));

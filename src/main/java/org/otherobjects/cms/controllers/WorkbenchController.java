@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
+import org.otherobjects.cms.model.Folder;
+import org.otherobjects.cms.model.FolderDao;
+import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.cms.tools.CmsImageTool;
 import org.otherobjects.cms.util.RequestUtils;
 import org.slf4j.Logger;
@@ -86,4 +89,21 @@ public class WorkbenchController
         return mav;
     }
 
+
+    @RequestMapping({"/workbench/list/*"})
+    public ModelAndView list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        String id = RequestUtils.getId(request);
+        FolderDao folderDao = (FolderDao) this.daoService.getDao(Folder.class);
+        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/pages/list");
+        mav.addObject("id", id);
+        SiteFolder folder = folderDao.get(id);
+        mav.addObject("folder", folder);
+        mav.addObject("items", universalJcrDao.getAllByPath(folder.getJcrPath()));
+        //mav.addObject("object", item);
+        //mav.addObject("typeDef", item.getTypeDef());
+        return mav;
+    }
+    
 }

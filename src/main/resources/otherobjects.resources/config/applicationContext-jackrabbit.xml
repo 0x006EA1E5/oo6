@@ -72,13 +72,12 @@
 			</bean>
 		</property>
 	</bean>
-	<bean id="cmsFileDao" parent="baseTransactionProxy">
+	<bean id="folderDao" parent="baseTransactionProxy">
 		<property name="target">
-			<bean class="org.otherobjects.cms.model.CmsFileDaoImpl">
+			<bean class="org.otherobjects.cms.model.FolderDaoImpl">
 				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
 				<property name="sessionFactory" ref="jcrSessionFactory" />
 				<property name="validator" ref="typeDefConfiguredValidator" />
-				<property name="ooResourceLoader" ref="ooResourceLoader" />
 			</bean>
 		</property>
 	</bean>

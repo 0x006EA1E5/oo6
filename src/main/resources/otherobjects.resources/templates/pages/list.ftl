@@ -40,31 +40,45 @@
 <div class="oo-main-outer"><div class="oo-main-inner">
 <@oo.showFlashMessages />
 
+
 <#include "/otherobjects/templates/legacy/blocks/nav-folders.ftl" />
 
 <div class="oo-content">
 <h2>
-Viewing: ${object.label}
+Listing: ${folder.label}
 </h2>
+
+
 <table class="oo-listing">
 <thead>
 <tr>
-<th>Field</th>
-<th>Value</th>
+<th>Name</th>
+<th>Options</th>
+<th>Action</th>
+<th>Action</th>
 </tr>
 </thead>
 <tbody>
-<#list object.typeDef.properties as prop>
-<@renderProperty prop object />
+<#list items as item>
+<tr>
+	<td><a class="$cssClass" href="$lnk0">${item.label}</a></td>
+	<td><p></p></td>
+	<td class="oo-action"><a href="${oo.url('/otherobjects/workbench/view/${item.id}')}">View</a></td>
+	<td class="oo-action"><a href="${oo.url('/otherobjects/workbench/edit/${item.id}')}">Edit</a></td>
+</tr>
 </#list>
 </tbody>
 </table>
+
 </div>
+
+
+
 
 <div class="oo-actions">
 <h2>Actions</h2>
 <ul>
-<li><a href="${oo.url('/otherobjects/workbench/edit/${object.id}')}">Edit</a></li>
+<li><a href="${oo.url('/otherobjects/workbench/edit/{object.id}')}">Edit</a></li>
 </ul>
 </div>
 

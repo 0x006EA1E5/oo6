@@ -562,6 +562,20 @@ Admin : http://localhost:8080/go/workbench/
   </chapter>
 
   <chapter>
+    <title>Transaction and data integrity</title>
+
+    <para>How to use transactions.</para>
+
+    <para>JCR vs Hibernate issues.</para>
+
+    <para>Version flag.</para>
+
+    <para>Publishing here?</para>
+
+    <para>Validation </para>
+  </chapter>
+
+  <chapter>
     <title>Using Maven</title>
 
     <para>Maven is the software managment tool we use for OTHERobjects. It

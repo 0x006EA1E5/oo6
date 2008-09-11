@@ -43,14 +43,14 @@ BODY.oo-multiselection {margin:0px;}
 .oo-folders {margin:0px!important;}
 .oo-folders LI {list-style:none; clear:both; padding:0px;}
 .oo-folders LI SPAN {cursor:pointer; width:22px; display:block; height:20px; float:left;}
-.oo-folders .oo-folder-full-open {background:url($static.setPath("/otherobjects/static/graphics/dots-vertical.gif")) repeat-y 8px 0px; margin:0px; padding:0px;}
-.oo-folders .oo-folder-full-open SPAN {background:url($static.setPath("/otherobjects/static/graphics/folder-full-open.gif")) no-repeat;}
-.oo-folders .oo-folder-empty-open {background:url($static.setPath("/otherobjects/static/graphics/dots-vertical.gif")) repeat-y 8px 0px; margin:0px; padding:0px;}
-.oo-folders .oo-folder-empty-open SPAN {background:url($static.setPath("/otherobjects/static/graphics/folder-empty-open.gif")) no-repeat;}
-.oo-folders .oo-folder-full SPAN {background:url($static.setPath("/otherobjects/static/graphics/folder-full.gif")) no-repeat;}
-.oo-folders .oo-folder-empty SPAN {background:url($static.setPath("/otherobjects/static/graphics/folder-empty.gif")) no-repeat;}
+.oo-folders .oo-folder-full-open {background:url(graphics/dots-vertical.gif) repeat-y 8px 0px; margin:0px; padding:0px;}
+.oo-folders .oo-folder-full-open SPAN {background:url(graphics/folder-full-open.gif) no-repeat;}
+.oo-folders .oo-folder-empty-open {background:url(graphics/dots-vertical.gif) repeat-y 8px 0px; margin:0px; padding:0px;}
+.oo-folders .oo-folder-empty-open SPAN {background:url(graphics/folder-empty-open.gif) no-repeat;}
+.oo-folders .oo-folder-full SPAN {background:url(graphics/folder-full.gif) no-repeat;}
+.oo-folders .oo-folder-empty SPAN {background:url(graphics/folder-empty.gif) no-repeat;}
 .oo-folders .oo-trashcan {color:red; margin:0px; padding:0px;}
-.oo-folders .oo-trashcan SPAN {background:url($static.setPath("/otherobjects/static/graphics/trashcan.gif")) no-repeat;}
+.oo-folders .oo-trashcan SPAN {background:url(graphics/trashcan.gif) no-repeat;}
 .oo-folders .oo-selected, .oo-navigation .oo-folders .oo-selected:hover {background:#FFFFFF;}
 
 .oo-folders UL {padding:0px 0px 5px 10px; background:url($static.setPath("/otherobjects/static/graphics/folder-open-footer.gif")) no-repeat bottom left;}
