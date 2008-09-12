@@ -16,6 +16,7 @@
 				<bean class="org.otherobjects.cms.controllers.interceptors.ModelModifierInterceptor">
 					<property name="daoService" ref="daoService" />
 					<property name="ooResourceLoader" ref="ooResourceLoader" />
+					<property name="messageSource" ref="messageSource" />
 				</bean>
 			</list>
 		</property>

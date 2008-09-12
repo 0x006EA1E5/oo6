@@ -71,7 +71,7 @@ public class WorkbenchController
     public ModelAndView view(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         String id = RequestUtils.getId(request);
-        ModelAndView mav = new ModelAndView("/otherobjects/templates/pages/view");
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/view");
         mav.addObject("id", id);
         return mav;
     }
@@ -81,7 +81,7 @@ public class WorkbenchController
     {
         String id = RequestUtils.getId(request);
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
-        ModelAndView mav = new ModelAndView("/otherobjects/templates/pages/edit");
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/edit");
         BaseNode item = universalJcrDao.get(id);
         mav.addObject("id", id);
         mav.addObject("object", item);
@@ -96,7 +96,7 @@ public class WorkbenchController
         String id = RequestUtils.getId(request);
         FolderDao folderDao = (FolderDao) this.daoService.getDao(Folder.class);
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
-        ModelAndView mav = new ModelAndView("/otherobjects/templates/pages/list");
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/list");
         mav.addObject("id", id);
         SiteFolder folder = folderDao.get(id);
         mav.addObject("folder", folder);

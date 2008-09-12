@@ -1,6 +1,5 @@
 <#import "/spring.ftl" as spring />
 <#import "/oo.ftl" as oo />
-<#assign object = daoService.getDao("baseNode").get(id) />
 
 <#macro renderProperty prop object>
 <tr>
@@ -24,36 +23,21 @@
 </tr>
 </#macro>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-<title>OTHERobjects: $!config.getProperty("site.label")</title>
-<@oo.css "/otherobjects/static/legacy/workbench.css" />
-</head>
-<body>
-<div class="oo-header">
-<h1>Workbench</h1>
-<ul>
-<li><strong><a href="">Site Editor</a></strong></li>
-</ul>
-</div>
-<div class="oo-main-outer"><div class="oo-main-inner">
-<@oo.showFlashMessages />
+<#assign object = daoService.getDao("baseNode").get(id) />
 
+<#include "/otherobjects/templates/legacy/blocks/header.ftl" />
 
 <#include "/otherobjects/templates/legacy/blocks/nav-folders.ftl" />
 
 <div class="oo-content">
 <h2>
-Listing: ${folder.label}
+Listing: ${oo.msg(folder.label)}
 </h2>
-
 
 <table class="oo-listing">
 <thead>
 <tr>
 <th>Name</th>
-<th>Options</th>
 <th>Action</th>
 <th>Action</th>
 </tr>
@@ -61,30 +45,26 @@ Listing: ${folder.label}
 <tbody>
 <#list items as item>
 <tr>
-	<td><a class="$cssClass" href="$lnk0">${item.label}</a></td>
-	<td><p></p></td>
-	<td class="oo-action"><a href="${oo.url('/otherobjects/workbench/view/${item.id}')}">View</a></td>
+	<td><a class="$cssClass" href="${oo.url('/otherobjects/workbench/view/${item.id}')}">${item.label}</a></td>
+	<td class="oo-action"><a href="${oo.url(item.linkPath)}">Preview</a></td>
 	<td class="oo-action"><a href="${oo.url('/otherobjects/workbench/edit/${item.id}')}">Edit</a></td>
 </tr>
 </#list>
 </tbody>
 </table>
-
 </div>
-
 
 
 
 <div class="oo-actions">
 <h2>Actions</h2>
+
 <ul>
-<li><a href="${oo.url('/otherobjects/workbench/edit/{object.id}')}">Edit</a></li>
+<#list folder.allAllowedTypes as type>
+<li><a href="${oo.url('/otherobjects/workbench/edit/{object.id}')}">New ${(type.label)!} ...</a></li>
+</#list>
 </ul>
 </div>
 
-
-<hr class="oo-clear" />
-</div></div>
-</body>
-</html>
+<#include "/otherobjects/templates/legacy/blocks/header.ftl" />
 

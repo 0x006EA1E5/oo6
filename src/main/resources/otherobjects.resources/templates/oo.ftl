@@ -134,8 +134,16 @@ Displays object contents.
 ${objectInspector.toHtml(obj)}
 </#macro>
 
+<#--
+Format as Textile.
+-->
+<#macro format text>
+${formatTool.formatTextile(text)}
+</#macro>
 
-<#-- Functions-->
+<#--
+Functions
+-->
 <#function action actionName>
 <#return url("/_action/${actionName}") >
 </#function>
@@ -148,5 +156,8 @@ ${objectInspector.toHtml(obj)}
 <#return "${urlTool.getResourceUrl(path)}">
 </#function>
 
-<#-- Directives-->
-<#assign format = "org.otherobjects.cms.tools.FormatDirective"?new()>  
+<#function msg message>
+<#return "${formatTool.getMessage(message)}">
+</#function>
+
+ 

@@ -12,6 +12,7 @@ import org.otherobjects.cms.tools.FormatTool;
 import org.otherobjects.cms.tools.SecurityTool;
 import org.otherobjects.cms.tools.UrlTool;
 import org.otherobjects.cms.util.ObjectInspector;
+import org.springframework.context.MessageSource;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -19,6 +20,7 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
 {
     private DaoService daoService;
     private OoResourceLoader ooResourceLoader;
+    private MessageSource messageSource;
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception
@@ -46,7 +48,7 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             modelAndView.addObject("cmsImageTool", new CmsImageTool());
             modelAndView.addObject("urlTool", new UrlTool(ooResourceLoader));
             modelAndView.addObject("objectInspector", new ObjectInspector());
-            modelAndView.addObject("formatTool", new FormatTool());
+            modelAndView.addObject("formatTool", new FormatTool(messageSource));
             modelAndView.addObject("security", new SecurityTool());
             modelAndView.addObject("daoService", daoService);
             modelAndView.addObject("dao", daoService);
@@ -65,6 +67,11 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
     public void setOoResourceLoader(OoResourceLoader ooResourceLoader)
     {
         this.ooResourceLoader = ooResourceLoader;
+    }
+
+    public void setMessageSource(MessageSource messageSource)
+    {
+        this.messageSource = messageSource;
     }
 
 }

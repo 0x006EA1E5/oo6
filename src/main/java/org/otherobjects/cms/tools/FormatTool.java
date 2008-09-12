@@ -1,10 +1,13 @@
 package org.otherobjects.cms.tools;
 
 import java.io.StringWriter;
+import java.util.Locale;
 
 import net.java.textilej.parser.MarkupParser;
 import net.java.textilej.parser.builder.HtmlDocumentBuilder;
 import net.java.textilej.parser.markup.textile.TextileDialect;
+
+import org.springframework.context.MessageSource;
 
 /**
  * Tool to be used from templates to aid in generating formatted text.
@@ -13,6 +16,13 @@ import net.java.textilej.parser.markup.textile.TextileDialect;
  */
 public class FormatTool
 {
+    private MessageSource messageSource;
+    
+    public FormatTool(MessageSource messageSource)
+    {
+        this.messageSource = messageSource;
+    }
+
     /**
      * Formats textile string into HTML. HTML special chars in the textileSource will get escaped (notably the less than and greater than signs)
      * @param textileSource
@@ -47,5 +57,38 @@ public class FormatTool
         parser.parse(text);
         parser.setBuilder(null);
         return out.toString();
+    }
+    
+    /**
+     * Parses a string and looks up messages if appropriate. Useful for form labels that may or may note use
+     * message codes. If the string appears to be a message code then this is looked up otherwise the string
+     * is returned unaltered.
+     * 
+     * TODO Change format.
+     * 
+     * @param textileSource
+     * @return
+     */
+    public String getMessage(String message)
+    {
+        if(message.startsWith("$"))
+        {
+            // Message
+            // FIXME Get locale from somewhere better
+            return messageSource.getMessage(message.substring(2, message.length()-1), null, Locale.ENGLISH);
+        }
+        if(message.contains("."))
+        {
+            // Message
+            // FIXME proper regexp here
+            return messageSource.getMessage(message, null, Locale.ENGLISH);
+        }
+        else
+            return message;
+    }
+
+    protected void setMessageSource(MessageSource messageSource)
+    {
+        this.messageSource = messageSource;
     }
 }

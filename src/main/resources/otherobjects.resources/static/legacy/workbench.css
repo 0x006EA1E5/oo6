@@ -82,7 +82,7 @@ BODY.oo-multiselection {margin:0px;}
 .oo-content FORM LABEL {display:block; width:55px; line-height:25px; float:left;}
 .oo-content .submit {padding:0px 10px 0px 10px; background:#dddddd; height:20px; font:100%/180% Arial; border:0px solid #000000; cursor:pointer; color:#000000;}
 .oo-content .submit-hover {padding:0px 10px 0px 10px; background:#C8E8F5; height:20px; font:100%/180% Arial; border:0px solid #000000; cursor:pointer; color:#000000;}
-.oo-content A.oo-action  {color:#000000; text-decoration:none; float:left; padding:5px 10px 5px 20px; background:url($static.setPath("/otherobjects/static/graphics/arrow_right.gif")) no-repeat 10px 9px;}
+.oo-content A.oo-action  {color:#000000; text-decoration:none; float:left; padding:5px 10px 5px 20px; background:url(graphics/arrow-right.gif) no-repeat 10px 9px;}
 .oo-content A.oo-action:hover, .oo-content A.oo-action:active {background-color:#C8E8F5;}
 .oo-content A.oo-action  IMG {float:left;margin-top:-3px;padding-right:3px;}
 .oo-content TH, .oo-content TD {vertical-align:top;}

@@ -1,6 +1,11 @@
 package org.otherobjects.cms.tools;
 
+import java.util.Locale;
+
 import junit.framework.TestCase;
+
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.StaticMessageSource;
 
 public class FormatToolTest extends TestCase
 {
@@ -33,5 +38,17 @@ public class FormatToolTest extends TestCase
                 + "The time is not yesterday\n* We must act\n";
         String html = FormatTool.formatTextile(testInput);
         System.out.print(html);
+    }
+
+    public void testParseMessage()
+    {
+        StaticMessageSource messageSource = new StaticMessageSource();
+        messageSource.addMessage("message.code", Locale.ENGLISH, "My message");
+        FormatTool formatTool = new FormatTool(messageSource);
+        
+        assertEquals("not a message",formatTool.getMessage("not a message"));
+        assertEquals("My message",formatTool.getMessage("message.code"));
+        assertEquals("My message",formatTool.getMessage("${message.code}"));
+        
     }
 }
