@@ -22,6 +22,14 @@ public interface GenericDao<T, PK extends Serializable>
      * @return
      */
     boolean exists(PK id);
+    
+    /** 
+     * Creates a new object of type T.
+     * 
+     * @return
+     */
+    T create();
+    
     T get(PK id);
     
     // TODO Id or object?

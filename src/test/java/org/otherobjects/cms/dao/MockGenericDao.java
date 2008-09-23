@@ -87,4 +87,10 @@ public class MockGenericDao implements GenericDao
         return save(object);
     }
 
+    public Object create()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

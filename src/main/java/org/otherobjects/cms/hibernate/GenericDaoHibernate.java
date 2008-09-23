@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.GenericDao;
 import org.otherobjects.cms.dao.PagedList;
 import org.otherobjects.cms.dao.PagedListImpl;
@@ -118,6 +119,18 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
                 }
             }
         });
+    }
+
+    public T create()
+    {
+        try
+        {
+            return persistentClass.newInstance();
+        }
+        catch (Exception e)
+        {
+            throw new OtherObjectsException("Unable to create new class of type: " + persistentClass, e);
+        }
     }
 
 }

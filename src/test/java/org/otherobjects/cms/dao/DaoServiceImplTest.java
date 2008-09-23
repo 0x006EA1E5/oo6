@@ -5,7 +5,13 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
+import org.otherobjects.cms.binding.TestObject;
 import org.otherobjects.cms.hibernate.GenericDaoHibernate;
+import org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder;
+import org.otherobjects.cms.types.PropertyDefImpl;
+import org.otherobjects.cms.types.TypeDefImpl;
+import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.cms.types.TypeServiceImpl;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.support.GenericApplicationContext;
 
@@ -13,6 +19,7 @@ import org.springframework.context.support.GenericApplicationContext;
 public class DaoServiceImplTest extends TestCase
 {
     private DaoServiceImpl daoService;
+    private TypeService typeService = new TypeServiceImpl();
 
     @Override
     protected void setUp() throws Exception
@@ -27,6 +34,14 @@ public class DaoServiceImplTest extends TestCase
         ac.registerBeanDefinition("universalJcrDao", new RootBeanDefinition(UniversalJcrDaoJackrabbit.class));
         this.daoService.setBeanFactory(ac);
 
+        // Add DynaNode type
+        TypeDefImpl td = new TypeDefImpl("ArticlePage");
+        td.setLabelProperty("title");
+        td.addProperty(new PropertyDefImpl("title", "string", null, null, true));
+        typeService.registerType(td);
+        
+        daoService.setTypeService(typeService);
+        
         super.setUp();
     }
 
@@ -36,10 +51,9 @@ public class DaoServiceImplTest extends TestCase
         assertNotNull(dao);
         assertTrue(dao instanceof GenericDaoHibernate);
 
-        // FIXME Add in test object
-//        dao = this.daoService.getDao("org.otherobjects.cms.model.Article");
-//        assertNotNull(dao);
-//        assertTrue(dao instanceof UniversalJcrDaoJackrabbit);
+        dao = this.daoService.getDao("ArticlePage");
+        assertNotNull(dao);
+        assertTrue(dao instanceof UniversalJcrDaoJackrabbit);
     }
 
     public void testDetermineDaoBeanName()

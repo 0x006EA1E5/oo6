@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.hibernate.GenericDaoHibernate;
 import org.otherobjects.cms.model.BaseNode;
+import org.otherobjects.cms.types.TypeService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -19,17 +20,17 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
     private static final String UNIVERSAL_JCR_DAO_KEY = "universalJcrDao";
     private Map<String, GenericDao> daoMap = new HashMap<String, GenericDao>();
     private BeanFactory beanFactory;
+    private TypeService typeService;
 
     public GenericDao getDao(Class clazz)
     {
         return getDao(clazz.getName());
     }
-    
+
     public GenericDao get(String type)
     {
         return getDao(type);
     }
-   
 
     /**
      * Returns a Dao for provided type. First looks in daoMap and then in the application context. If nothing found return UniversalJcrDao (for Jcr objects) 
@@ -60,9 +61,8 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
 
                 // then return universal jcr dao for types extending baseNode
                 if (type.equalsIgnoreCase("jcr"))
-                        return (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
+                    return (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
 
-                
                 try
                 {
                     Class cls = Class.forName(type);
@@ -83,6 +83,9 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
                 }
                 catch (Exception e)
                 {
+                    // Check to see if this a DynaNode -- no class but should be registered in typeService.
+                    if (typeService.getType(type) != null)
+                        return (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
                     throw new OtherObjectsException("Could not fetch DAO for non-instantiatable type: " + type, e);
                 }
             }
@@ -134,5 +137,10 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
     public boolean hasDao(String type)
     {
         return (getDao(type) != null);
+    }
+
+    public void setTypeService(TypeService typeService)
+    {
+        this.typeService = typeService;
     }
 }

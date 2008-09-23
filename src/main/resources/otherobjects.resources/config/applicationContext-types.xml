@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 	
 	<!-- Types -->
@@ -10,8 +8,7 @@
 		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
 		<property name="scanner" ref="annotatedClassesScanner" />
 	</bean>
-	
-	<bean id="annotationBasedTypeDefBuilder" class="org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder" >
+	<bean id="annotationBasedTypeDefBuilder" class="org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder">
 		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator"></property>
 	</bean>
 	
@@ -19,16 +16,13 @@
 	<bean id="bindService" class="org.otherobjects.cms.binding.BindServiceImpl" scope="prototype">
 		<property name="daoService" ref="daoService" />
 	</bean>
-	
 	<bean name="daoService" class="org.otherobjects.cms.dao.DaoServiceImpl">
+		<property name="typeService" ref="typeService" />
 	</bean>
-	
 	<bean id="typeDefConfiguredValidator" class="org.otherobjects.cms.validation.TypeDefConfiguredValidator">
 		<property name="typeService" ref="typeService" />
 	</bean>
-	
 	<bean id="validatorService" class="org.otherobjects.cms.validation.ValidatorServiceImpl">
 		<property name="defaultValidator" ref="typeDefConfiguredValidator" />
 	</bean>
-	
 </beans>

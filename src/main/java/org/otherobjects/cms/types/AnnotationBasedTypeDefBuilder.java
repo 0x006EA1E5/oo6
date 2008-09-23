@@ -98,12 +98,7 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder, Initializi
                     propertyDef.setType(propertyDefAnnotation.type().value());
                 }
 
-                // Infer label if not set
                 if (StringUtils.isEmpty(propertyDefAnnotation.label()))
-                {
-                    propertyDef.setLabel(org.otherobjects.cms.util.StringUtils.generateLabel(method.getName().substring(3)));
-                }
-                else
                 {
                     propertyDef.setLabel(propertyDefAnnotation.label());
                 }

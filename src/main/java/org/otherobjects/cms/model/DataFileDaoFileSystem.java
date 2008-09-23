@@ -90,4 +90,10 @@ public class DataFileDaoFileSystem implements DataFileDao
     {
         return null;
     }
+
+    public DataFile create()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

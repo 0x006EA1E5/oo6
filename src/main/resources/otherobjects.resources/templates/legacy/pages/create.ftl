@@ -35,6 +35,7 @@
   		
 	<#elseif prop.type == "text" >
   		<@spring.formTextarea "${prefix}${prop.fieldName}"  "class=\"textarea\""/>
+  	<#elseif prop.type == "list" >
   	<#else>
   		<@spring.formInput "${prefix}${prop.fieldName}" "class=\"text\"" />  	
   	</#if>
@@ -46,7 +47,6 @@
 </tr>
 </#macro>
 
-<#assign pageTitle = "Editing: ${oo.msg(object.label)}" />
 <#include "/otherobjects/templates/legacy/blocks/header.ftl" />
 
 <#include "/otherobjects/templates/legacy/blocks/nav-folders.ftl" />
@@ -54,11 +54,16 @@
 <div class="oo-content">
 
 <h2>
-${pageTitle}
+Create a new ${typeDef.label}
 </h2>
 
+<div class="oo-tip">
+<p><strong>Tip: </strong> Move your mouse over the <span class="oo-help-symbol">&nbsp;?&nbsp;</span> icons in the Help column for advice on filling in this form. Fields marked with <span class="oo-required">*</span> are required.</p>
+</div>
+
 <form action="${oo.url("/otherobjects/form")}" method="post">
-<input type="hidden" name="editableId" value="${id}">
+<input type="hidden" name="_oo_type" value="${typeDef.name}">
+<input type="hidden" name="_oo_containerId" value="${RequestParameters.container}">
 <table class="oo-edit">
 <thead>
 <tr>

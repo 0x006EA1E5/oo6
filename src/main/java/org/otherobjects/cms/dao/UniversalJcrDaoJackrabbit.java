@@ -8,6 +8,7 @@ import org.apache.jackrabbit.ocm.query.QueryManager;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.jcr.GenericJcrDaoJackrabbit;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
+import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
@@ -39,8 +40,11 @@ public class UniversalJcrDaoJackrabbit extends GenericJcrDaoJackrabbit<BaseNode>
         }
         catch (Exception e)
         {
+            // FIXME Type check needed here
+            return new DynaNode(typeName);
+            
             //TODO Better exception?
-            throw new OtherObjectsException("Could not create new instance of type: " + typeName, e);
+            //throw new OtherObjectsException("Could not create new instance of type: " + typeName, e);
         }
     }
 

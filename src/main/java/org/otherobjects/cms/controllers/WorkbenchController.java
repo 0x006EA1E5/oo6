@@ -1,6 +1,7 @@
 package org.otherobjects.cms.controllers;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -13,11 +14,12 @@ import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.Folder;
 import org.otherobjects.cms.model.FolderDao;
 import org.otherobjects.cms.model.SiteFolder;
-import org.otherobjects.cms.tools.CmsImageTool;
+import org.otherobjects.cms.types.TypeDef;
+import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.RequestUtils;
+import org.otherobjects.cms.util.TreeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,6 +28,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class WorkbenchController
 {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Resource
+    private TypeService typeService;
 
     @Resource
     private DaoService daoService;
@@ -43,6 +48,10 @@ public class WorkbenchController
         //            this.logger.info("Locale set to: " + this.localeResolver.resolveLocale(request));
         //        }
 
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/overview");
+        return mav;
+
+        /*
         String path = request.getPathInfo();
 
         if (path.length() < 10)
@@ -65,6 +74,7 @@ public class WorkbenchController
         view.addObject("request", request);
         view.addObject("cmsImageTool", new CmsImageTool());
         return view;
+        */
     }
 
     @RequestMapping({"/workbench/view/*"})
@@ -89,6 +99,18 @@ public class WorkbenchController
         return mav;
     }
 
+    @RequestMapping({"/workbench/create/*"})
+    public ModelAndView create(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        String type = RequestUtils.getId(request);
+        TypeDef typeDef = typeService.getType(type);
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/create");
+
+        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
+        mav.addObject("object", universalJcrDao.create(type));
+        mav.addObject("typeDef", typeDef);
+        return mav;
+    }
 
     @RequestMapping({"/workbench/list/*"})
     public ModelAndView list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -105,5 +127,43 @@ public class WorkbenchController
         //mav.addObject("typeDef", item.getTypeDef());
         return mav;
     }
+
+    @RequestMapping({"/workbench/history/*"})
+    public ModelAndView history(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        return null;
+    }
     
+    /* Actions */
+
+    @RequestMapping({"/workbench/publish/*"})
+    public ModelAndView publish(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        return null;
+    }
+
+    @RequestMapping({"/workbench/unpublish/*"})
+    public ModelAndView unpublish(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        return null;
+    }
+
+    @RequestMapping({"/workbench/delete/*"})
+    public ModelAndView delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        return null;
+    }
+
+    @RequestMapping({"/workbench/revert/*"})
+    public ModelAndView revert(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        return null;
+    }
+
+    @RequestMapping({"/workbench/reorder/*"})
+    public ModelAndView reorder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        return null;
+    }
+
 }

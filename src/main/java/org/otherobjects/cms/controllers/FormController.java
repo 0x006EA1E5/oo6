@@ -89,6 +89,9 @@ public class FormController
     @Resource
     private OoResourceLoader ooResourceLoader;
 
+    /**
+     * 
+     */
     @SuppressWarnings("unchecked")
     @RequestMapping("/form/**")
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -244,7 +247,7 @@ public class FormController
                 //Url u = new Url(((BaseNode) item).getLinkPath());
                 //response.sendRedirect(u.toString());
 
-                ModelAndView view = new ModelAndView("/otherobjects/templates/pages/edit");
+                ModelAndView view = new ModelAndView("/otherobjects/templates/legacy/pages/edit");
                 view.addObject("success", data.get("success"));
                 if((Boolean) data.get("success"))
                 {

@@ -25,19 +25,23 @@
 
 <#assign object = daoService.getDao("baseNode").get(id) />
 
+<#assign pageTitle = "Listing: ${oo.msg(folder.label)}" />
+
 <#include "/otherobjects/templates/legacy/blocks/header.ftl" />
 
 <#include "/otherobjects/templates/legacy/blocks/nav-folders.ftl" />
 
 <div class="oo-content">
 <h2>
-Listing: ${oo.msg(folder.label)}
+${pageTitle}
 </h2>
+
 
 <table class="oo-listing">
 <thead>
 <tr>
 <th>Name</th>
+<th>Type</th>
 <th>Action</th>
 <th>Action</th>
 </tr>
@@ -45,7 +49,8 @@ Listing: ${oo.msg(folder.label)}
 <tbody>
 <#list items as item>
 <tr>
-	<td><a class="$cssClass" href="${oo.url('/otherobjects/workbench/view/${item.id}')}">${item.label}</a></td>
+	<td><a class="oo-<#if item.published>live<#else>edited</#if>" href="${oo.url('/otherobjects/workbench/view/${item.id}')}">${item.label}</a></td>
+	<td title="${item.typeDef.name}"><p>${item.typeDef.label}</p></td>
 	<td class="oo-action"><a href="${oo.url(item.linkPath)}">Preview</a></td>
 	<td class="oo-action"><a href="${oo.url('/otherobjects/workbench/edit/${item.id}')}">Edit</a></td>
 </tr>
@@ -60,11 +65,14 @@ Listing: ${oo.msg(folder.label)}
 <h2>Actions</h2>
 
 <ul>
+<li class="oo-divider"><a href="${oo.url('/otherobjects/workbench/create/org.otherobjects.cms.model.SiteFolder?container='+folder.id)}">New Folder ...</a></li>
 <#list folder.allAllowedTypes as type>
-<li><a href="${oo.url('/otherobjects/workbench/edit/{object.id}')}">New ${(type.label)!} ...</a></li>
+<#if type?exists>
+<li><a href="${oo.url('/otherobjects/workbench/create/${type.name}?container=${folder.id}')}">New ${type.label} ...</a></li>
+</#if>
 </#list>
 </ul>
 </div>
 
-<#include "/otherobjects/templates/legacy/blocks/header.ftl" />
+<#include "/otherobjects/templates/legacy/blocks/footer.ftl" />
 

@@ -107,7 +107,12 @@ public class TypeDefImpl implements TypeDef
     public String getLabel()
     {
         if (org.apache.commons.lang.StringUtils.isEmpty(label))
-            return StringUtils.generateLabel(org.apache.commons.lang.StringUtils.substringAfterLast(getName(), "."));
+        {   
+            if(getName().contains("."))
+                return StringUtils.generateLabel(org.apache.commons.lang.StringUtils.substringAfterLast(getName(), "."));
+            else
+                return StringUtils.generateLabel(getName());
+        }
         else
             return label;
     }

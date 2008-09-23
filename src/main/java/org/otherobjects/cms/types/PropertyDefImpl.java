@@ -330,7 +330,7 @@ public class PropertyDefImpl implements PropertyDef, Ordered
 
     public String getLabel()
     {
-        if (label == null)
+        if (StringUtils.isEmpty(label))
             return StringUtils.generateLabel(getName());
         else
             return label;

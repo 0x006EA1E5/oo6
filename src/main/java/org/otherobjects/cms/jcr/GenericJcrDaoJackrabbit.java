@@ -656,9 +656,10 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                     NodeIterator nodeIterator = queryResult.getNodes();
                     List<T> results = new ArrayList<T>();
                     //FIXME This is a double lookup. Can we convert node directly?
-                    while (nodeIterator.hasNext()) {
-                    	Node nextNode = nodeIterator.nextNode();
-						results.add((T) manager.getObjectByUuid(nextNode.getUUID()));
+                    while (nodeIterator.hasNext())
+                    {
+                        Node nextNode = nodeIterator.nextNode();
+                        results.add((T) manager.getObjectByUuid(nextNode.getUUID()));
                     }
 
                     if (selector != null)
@@ -893,6 +894,18 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     public void setValidator(Validator validator)
     {
         this.validator = validator;
+    }
+
+    public T create()
+    {
+        try
+        {
+            return persistentClass.newInstance();
+        }
+        catch (Exception e)
+        {
+            throw new OtherObjectsException("Unable to create new class of type: " + persistentClass, e);
+        }
     }
 
     //    public void setRuleExecutor(RuleExecutor ruleExecutor)

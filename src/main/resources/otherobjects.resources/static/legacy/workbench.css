@@ -53,7 +53,7 @@ BODY.oo-multiselection {margin:0px;}
 .oo-folders .oo-trashcan SPAN {background:url(graphics/trashcan.gif) no-repeat;}
 .oo-folders .oo-selected, .oo-navigation .oo-folders .oo-selected:hover {background:#FFFFFF;}
 
-.oo-folders UL {padding:0px 0px 5px 10px; background:url($static.setPath("/otherobjects/static/graphics/folder-open-footer.gif")) no-repeat bottom left;}
+.oo-folders UL {padding:0px 0px 5px 10px; background:url(graphics/folder-open-footer.gif) no-repeat bottom left;}
 .oo-folders LI A {width:135px; padding:3px 2px 3px 23px;}
 .oo-folders LI LI A {width:125px;}
 .oo-folders LI LI LI A {width:115px;}
@@ -130,11 +130,11 @@ BODY.oo-multiselection {margin:0px;}
 .oo-listing TR {border-bottom:1px solid #eeeeee;}
 .oo-listing TD {padding:3px 1px 3px 0px; border-bottom:1px solid #eeeeee;}
 .oo-listing TD P {padding:5px 10px 5px 10px;}
-.oo-listing TD .oo-edited, .oo-content .oo-listing TD .oo-new {display:block; background:url($static.setPath("/otherobjects/static/graphics/icon_inprogress.gif")) no-repeat 8px 9px; padding:5px 10px 5px 20px; background-color:#ffffff;}
-.oo-listing TD .oo-pending {display:block; background:url($static.setPath("/otherobjects/static/graphics/icon_submitted.gif")) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
-.oo-listing TD .oo-live {display:block; background:url($static.setPath("/otherobjects/static/graphics/icon_live.gif")) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
-.oo-listing TD .oo-deleted {display:block; background:url($static.setPath("/otherobjects/static/graphics/icon_deleted.gif")) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
-.oo-listing TD .oo-locked {display:block; background:url($static.setPath("/otherobjects/static/graphics/icon_locked.gif")) no-repeat 8px 7px; padding:5px 10px 5px 20px;}
+.oo-listing TD .oo-edited, .oo-content .oo-listing TD .oo-new {display:block; background:url(graphics/icon-in-progress.gif) no-repeat 8px 9px; padding:5px 10px 5px 20px; background-color:#ffffff;}
+.oo-listing TD .oo-pending {display:block; background:url(graphics/icon-submitted.gif) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
+.oo-listing TD .oo-live {display:block; background:url(graphics/icon-live.gif) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
+.oo-listing TD .oo-deleted {display:block; background:url(graphics/icon-deleted.gif) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
+.oo-listing TD .oo-locked {display:block; background:url(graphics/icon-locked.gif) no-repeat 8px 7px; padding:5px 10px 5px 20px;}
 .oo-listing TD A {display:block; color:#000000; text-decoration:none; padding:5px 10px 5px 10px;}
 .oo-listing TD A:hover, .oo-content .oo-listing TD A:active {background-color:#C8E8F5;}
 .oo-listing TD .oo-neutral {background:url($static.setPath("/otherobjects/static/graphics/icon_neutral.gif")) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
@@ -148,7 +148,7 @@ BODY.oo-multiselection {margin:0px;}
 .oo-listing .oo-button A {color:#000000; text-decoration:none; float:left; padding:5px 10px 5px 10px;}
 .oo-listing .oo-button A:hover, .oo-content .oo-listing .oo-button A:active {background-color:#C8E8F5;}
 .oo-listing TD.oo-action {width:40px;}
-.oo-listing .oo-action A {color:#000000; height:11px; text-decoration:none; display:block; padding:5px 10px 5px 20px; background:url($static.setPath("/otherobjects/static/graphics/arrow_right.gif")) no-repeat 10px 9px;}
+.oo-listing .oo-action A {color:#000000; height:11px; text-decoration:none; display:block; padding:5px 10px 5px 20px; background:url(graphics/arrow-right.gif) no-repeat 10px 9px;}
 .oo-listing .oo-action A:hover, .oo-content .oo-listing .oo-action A:active {background-color:#C8E8F5;}
 .oo-listing .oo-action A.up {background:url($static.setPath("/otherobjects/static/graphics/arrow_up.gif")) no-repeat 10px 10px;}
 .oo-listing .oo-action A.up:hover, .oo-content .oo-listing .oo-action A.up:active {background-color:#C8E8F5;}

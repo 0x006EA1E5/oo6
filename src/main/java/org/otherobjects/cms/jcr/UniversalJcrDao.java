@@ -10,4 +10,6 @@ public interface UniversalJcrDao extends GenericJcrDao<BaseNode>
     List<BaseNode> getAllByType(Class<?> type);
 
     List<BaseNode> getByPathAndType(String path, String type);
+    
+    BaseNode create(String type);
 }

@@ -43,5 +43,8 @@ public class TypeDefImplTest extends TestCase
         // Test infered labels
         td.setLabel("");
         assertEquals("Test Type", td.getLabel());
+        
+        td.setName("TestType"); //  No package
+        assertEquals("Test Type", td.getLabel());
     }
 }

@@ -57,18 +57,18 @@ def createArticle(dao, path, title, content) {
 
 TypeDefImpl a = new TypeDefImpl();
 a.setName("org.otherobjects.cms.model.SamplePage");
-a.addProperty(new PropertyDefImpl("code", "string", null, null, true));
-a.addProperty(new PropertyDefImpl("title", "string", null, null, true));
-a.addProperty(new PropertyDefImpl("abstract", "text", null, null));
-a.addProperty(new PropertyDefImpl("content", "text", null, null));
+a.addProperty(new PropertyDefImpl("code", "string", null, null, true, true));
+a.addProperty(new PropertyDefImpl("title", "string", null, null, true, true));
+a.addProperty(new PropertyDefImpl("abstract", "text", null, null, false, true));
+a.addProperty(new PropertyDefImpl("content", "text", null, null, false, true));
 a.setLabelProperty("data.title");
 if(typeService)
 	typeService.registerType(a);
 
 // Create base structure
-createFolder(dao, "/smart", "\${smartFolders.label}", "smart-folders")
+createFolder(dao, "/smart", "\${smartFolders.label}", "smart-folders", ["org.otherobjects.cms.model.SmartFolder"])
 createFolder(dao, "/site", "\${site.label}", "site", ["org.otherobjects.cms.model.SamplePage","com.othermedia.site.model.CompositePage"])
-createFolder(dao, "/libraries", "\${libraries.label}", "libraries")
+createFolder(dao, "/libraries", "\${libraries.label}", "libraries", [])
 createFolder(dao, "/libraries/images", "\${libraries.images.label}", null)
 createFolder(dao, "/libraries/files", "\${libraries.files.label}", null)
 createFolder(dao, "/libraries/links", "\${libraries.links.label}", null)

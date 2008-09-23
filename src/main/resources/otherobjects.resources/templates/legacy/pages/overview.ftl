@@ -1,21 +1,17 @@
-<div class="welcome">
-<div class="welcome-col">
+<#include "/otherobjects/templates/legacy/blocks/header.ftl" />
 
-<div class="welcome-block">
-<h1>Welcome to OTHERobjects CMS Milestone 5</h1>
-<p>This is the fourth and final milestone release of the next generation of OTHERobjects.</p>
-<p>Note that this workbench interface in only a prototype. The final version will 
-look different but will contain similar functionality.</p>
+<#include "/otherobjects/templates/legacy/blocks/nav-folders.ftl" />
+
+<div class="oo-content">
+
 <#--
 <p>Drag this link: 
 <a href="javascript:location.href='http://del.icio.us/post?v=4;url='+encodeURIComponent(location.href)+';title='+encodeURIComponent(document.title.replace(/^\s*|\s*$/g,''))" 
 title="post to del.icio.us" onclick="window.alert('Drag this link to your bookmarks bar, or right-click it and choose Add Link to Bookmarks...');return false;"
 class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
 -->
-</div>
 
-<div class="welcome-block">
-<h1>My items in progress</h1>
+<h2>My items in progress</h2>
 
 <#-- freemarker automatically wraps results which means our PagedList isn't usable from freemarker -->
 <#-- need to include current user in where criteria -->
@@ -29,7 +25,6 @@ class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
 </#list>
 </ul>
 
-</div>
 
 <#--
 <div class="welcome-block">
@@ -41,10 +36,7 @@ class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
 </div>
 -->
 
-</div>
-<div class="welcome-col">
-<div class="welcome-block">
-<h1>What happened recently</h1>
+<h2>What happened recently</h2>
 <p>Here are the last few changes to pages across the site:</p>
 <#assign latestChanges = daoService.getDao("baseNode").pageByJcrExpression("/jcr:root/site//element(*, oo:node) [not(jcr:like(@ooType,'%MetaData'))] order by @modificationTimestamp descending",10,1) >
 <ul>
@@ -56,6 +48,5 @@ class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
 
 </div>
 
-</div>
-</div>
+<#include "/otherobjects/templates/legacy/blocks/footer.ftl" />
 
