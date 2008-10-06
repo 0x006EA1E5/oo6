@@ -5,9 +5,7 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
-import org.otherobjects.cms.binding.TestObject;
 import org.otherobjects.cms.hibernate.GenericDaoHibernate;
-import org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder;
 import org.otherobjects.cms.types.PropertyDefImpl;
 import org.otherobjects.cms.types.TypeDefImpl;
 import org.otherobjects.cms.types.TypeService;

@@ -2,7 +2,6 @@ package org.otherobjects.cms.servlet;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
@@ -42,7 +41,6 @@ public class StaticClasspathServlet extends StaticFileServlet
             //resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
             throw new FileNotFoundException();
         }
-        URL resource = getClass().getResource(path);
         InputStream in = getClass().getResourceAsStream(path);
         return Channels.newChannel(in);
     }

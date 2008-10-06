@@ -1,7 +1,6 @@
 package org.otherobjects.cms.controllers;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -17,7 +16,6 @@ import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.RequestUtils;
-import org.otherobjects.cms.util.TreeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;

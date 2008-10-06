@@ -4,7 +4,6 @@ import java.util.Locale;
 
 import junit.framework.TestCase;
 
-import org.springframework.context.MessageSource;
 import org.springframework.context.support.StaticMessageSource;
 
 public class FormatToolTest extends TestCase
