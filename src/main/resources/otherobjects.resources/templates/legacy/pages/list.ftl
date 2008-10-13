@@ -65,7 +65,8 @@ ${pageTitle}
 <h2>Actions</h2>
 
 <ul>
-<li class="oo-divider"><a href="${oo.url('/otherobjects/workbench/create/org.otherobjects.cms.model.SiteFolder?container='+folder.id)}">New Folder ...</a></li>
+<li><a href="${oo.url('/otherobjects/workbench/create/org.otherobjects.cms.model.SiteFolder?container='+folder.id)}">New sub folder ...</a></li>
+<li class="oo-divider"><a href="${oo.url('/otherobjects/workbench/edit/'+folder.id)}">Edit this folder ...</a></li>
 <#list folder.allAllowedTypes as type>
 <#if type?exists>
 <li><a href="${oo.url('/otherobjects/workbench/create/${type.name}?container=${folder.id}')}">New ${type.label} ...</a></li>

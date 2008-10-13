@@ -79,7 +79,7 @@ Macro to insert region
 Macro to insert HUD code
 -->
 <#macro hud>
-<#include "/blocks/oo-include.ftl" />
+<#include "/otherobjects/templates/legacy/blocks/toolbar.ftl" />
 </#macro>
 
 <#-- 

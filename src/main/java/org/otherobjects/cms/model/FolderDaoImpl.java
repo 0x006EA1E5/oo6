@@ -18,7 +18,7 @@ public class FolderDaoImpl extends GenericJcrDaoJackrabbit<SiteFolder> implement
     }
     
     @SuppressWarnings("unchecked")
-    public TreeBuilder.TreeItem getFolderTree()
+    public TreeBuilder.Tree getFolderTree()
     {
         TreeBuilder tb = new TreeBuilder();
         List all = getFolders();

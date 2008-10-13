@@ -8,5 +8,5 @@ import org.otherobjects.cms.util.TreeBuilder;
 public interface FolderDao extends GenericJcrDao<SiteFolder>
 {
     List<SiteFolder> getFolders();
-    TreeBuilder.TreeItem getFolderTree();
+    TreeBuilder.Tree getFolderTree();
 }

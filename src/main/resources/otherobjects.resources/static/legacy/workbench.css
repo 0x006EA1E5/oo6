@@ -291,18 +291,7 @@ BODY.oo-multiselection {margin:0px;}
 .oo-compare-changed {background-color:#ff9900;}
 .oo-compare-changedline {background-color:#ffccee;}
 
-/* Warning: martin css */
-.oo-order TABLE {width:100%; border-collapse:collapse; margin:0px 0px 25px 0px;}
-.oo-order TABLE CAPTION {border-bottom:1px solid #cccccc; color:#253D56; font:bold 120% Arial; text-align:left; padding:5px 5px 5px 0px;}
-.oo-order TABLE TH {text-align:left; border-bottom:1px solid #cccccc; color:#000000; vertical-align:top;}
-.oo-order TABLE TD {padding:3px 1px 3px 0px; border-bottom:1px solid #eeeeee; vertical-align:top;}
-
-.oo-display-navigation {left:0px!important;}
-.oo-main-inner .oo-actions .close-button {display:none;}
-.oo-main-inner .oo-navigation .close-button {display:none;}
-
-
 /* Flash messages */
 .oo-flash-info {font:70% Arial, sans-serif; margin:0px 10px 10px 0px; color:#FFF; padding:5px 0px 5px 30px; background:#6699CC url(graphics/message.gif) no-repeat 5px 4px;}
 .oo-flash-warning {font:70% Arial, sans-serif; margin:0px 10px 10px 0px; color:#000; padding:5px 0px 5px 30px; background:#FFC485 url(graphics/warning.gif) no-repeat 5px 4px;}
-.oo-flash-error {font:70% Arial, sans-serif; margin:0px 10px 10px 0px; color:#000; padding:5px 0px 5px 30px; background:#FF0000 url(graphics/warning.gif) no-repeat 5px 4px;}
+.oo-flash-error {font:70% Arial, sans-serif; margin:0px 10px 10px 0px; color:#000; padding:5px 0px 5px 30px; background:#FFC485 url(graphics/warning.gif) no-repeat 5px 4px;}

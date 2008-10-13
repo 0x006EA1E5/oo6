@@ -36,11 +36,10 @@ public class TreeBuilderTest extends TestCase
         flat.add(node2);
 
         TreeBuilder treeBuilder = new TreeBuilder();
-        TreeBuilder.TreeItem tree = treeBuilder.buildTree(flat);
+        TreeBuilder.Tree tree = treeBuilder.buildTree(flat);
+        tree.print();
 
-        assertEquals(2, tree.getChildren().size());
-        assertEquals(2, tree.getChild("/1").getChildren().size());
-        //assertEquals(1, tree.getChild("/1").getChildren().size());
+        assertEquals(2, tree.getNode("/").getChildren().size());
+        assertEquals(2, tree.getNode("/1/").getChildren().size());
     }
-
 }

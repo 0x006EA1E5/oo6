@@ -1,0 +1,77 @@
+<style>
+#OoMenu {display:none;}
+#OoMenu H2 {font:70%/600% Arial, sans-serif; width:195px; height:120px; left:0px; position:fixed; bottom:25px; z-index:11; color:#FFFFFF; background:url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/menu.png")});}
+.oo-menu {position:fixed; font:70% Arial, sans-serif; width:180px; height:100px; left:0px; bottom:25px; z-index:12;}
+.oo-menu A {display:block; color:#000000; height:14px;  width:155px; padding:5px 0px 5px 25px; text-decoration:none;}
+.oo-menu A:hover {background-color:#dddddd;}
+.oo-menu LI {display:block; width:180px; background:#FFFFFF;}
+.oo-menu LI.oo-menudivider {background:#FFFFFF url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/dots.gif")}) repeat-x bottom left; padding:0px 0px 1px 0px;}
+.oo-menu LI LI {padding:0px;}
+.oo-menu LI LI A {padding:5px 0px 6px 25px;}
+
+/* Toolbar */
+.oo-toolbar {height:25px; width:100%; left:0px; position:fixed; z-index:10; font:70% Arial, sans-serif; overflow:hidden; bottom:0px; background:url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/toolbar.png")}); padding:15px 0px 0px 0px;}
+
+/* Menu Button */
+#OoLogoButton {display:block; overflow:hidden; text-indent:50px; width:27px; height:25px; text-decoration:none;}
+.oo-button-up {background:url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/icon-oo-logo.gif")}) no-repeat 5px 5px;}
+.oo-button-up:hover {background:#CCCCCC url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/icon-oo-logo.gif")}) no-repeat 5px 5px;}
+.oo-button-down, .oo-button-hold {background:#FFFFFF url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/icon-oo-logo.gif")}) no-repeat 5px 5px;}
+
+/* Icons */
+.oo-icon-overview {background:#FFFFFF url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/icon_overview.gif")}) no-repeat 3px 4px;}
+.oo-icon-user {background:#FFFFFF url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/icon_user.gif")}) no-repeat 3px 4px;}
+.oo-icon-favourites {background:#FFFFFF url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/icon_favourites.gif")}) no-repeat 3px 4px;}
+.oo-icon-logout {background:#FFFFFF url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/icon_logout.gif")}) no-repeat 3px 4px;}
+
+.oo-toolbar H3 {float:left;}
+.oo-toolbar P {float:left;}
+.oo-toolbar .oo-divider {background:url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/divider.gif")}) no-repeat; padding:0px 0px 0px 1px;}
+.oo-toolbar P A {color:#000000!important; text-decoration:none; height:12px; float:left; padding:6px 10px 7px 10px;}
+.oo-toolbar P A:hover {background-color:#cccccc;}
+.oo-toolbar P .oo-edited, .oo-toolbar P .oo-new {background:url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/icon-in-progress.gif")}) no-repeat 10px 9px; padding:6px 10px 7px 24px;}
+.oo-toolbar P .oo-live {background:url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/icon-live.gif")}) no-repeat 10px 9px; padding:6px 10px 7px 24px;}
+.oo-toolbar P .oo-neutral {background:url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/icon-neutral.gif")}) no-repeat 10px 9px; padding:6px 10px 7px 24px;}
+.oo-toolbar P .oo-locked {background:url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/icon-locked.gif")}) no-repeat 10px 9px; padding:6px 10px 7px 24px;}.oo-toolbar .oo-version {float:right; background:url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/divider.gif")}) no-repeat; padding:0px 0px 0px 1px;}
+.oo-toolbar P EM {display:none;}
+.oo-toolbar UL {float:left; display:table;}
+.oo-toolbar LI {float:left; display:table-cell;}
+.oo-toolbar LI A {color:#000000!important; background:url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/arrow-right.gif")}) no-repeat 10px 9px; text-decoration:none; height:12px; float:left; padding:6px 10px 7px 20px;}
+.oo-toolbar LI A:hover {background-color:#cccccc;}
+.oo-toolbar LI STRONG A {background-color:#ffffff;}
+.oo-toolbar LI STRONG A:hover {background-color:#ffffff;}
+</style>
+
+<div id="OoMenu">
+<h2>OTHER Objects</h2>
+<ul class="oo-menu">
+<li class="oo-menudivider"><a class="oo-icon-user" onmousedown="ooHoldMenu()" href="$link.setPath("/workbench")"><strong>$user.fullName</strong></a></li>
+<li><a class="oo-icon-overview" onmousedown="ooHoldMenu()" href="$link.setPath("/")">Site Home Page</a></li>
+<li class="oo-menudivider"><a class="oo-icon-overview" onmousedown="ooHoldMenu()" href="$link.setPath("/workbench")">OTHERobjects Workbench</a></li>
+<li><a class="oo-icon-logout" onmousedown="ooHoldMenu()" href="$link.setPath("/").setAction("com.otherobjects.cms.actions.AuthenticationActions.doLogout")">Log out</a></li>
+</ul>
+</div>
+
+<div id="OoToolbar" class="oo-toolbar">
+
+<h3><a id="OoLogoButton" class="oo-button-up" href="${oo.url("/otherobjects/workbench/")}"></a></h3>
+
+<#if resourceObject?exists>
+<p class="oo-divider">
+    <a href="${oo.url("/otherobjects/workbench/")}">Back to workbench</a>
+</p>
+
+<p class="oo-divider">
+	<a class="oo-<#if resourceObject.published>live<#else>edited</#if>" href="${oo.url('/otherobjects/workbench/view/${resourceObject.id}')}">${resourceObject.typeDef.label}: ${resourceObject.ooLabel}</a>
+</p>
+
+<ul>
+	<li><a href="${oo.url('/otherobjects/workbench/view/${resourceObject.id}')}">Edit</a></li>	
+</ul>
+<#else>
+<p class="oo-divider">
+    <a href="${oo.url("/")}">Back to site</a>
+</p>
+</#if>
+
+</div>

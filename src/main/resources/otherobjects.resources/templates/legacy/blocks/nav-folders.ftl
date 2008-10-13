@@ -29,7 +29,7 @@
 <div class="oo-navigation">
 <ul class="oo-folders">
 <li class="oo-folder-full-open"><span onclick="ooExpandContract(this)"></span><a href="$path.addParameter("folder", $root)">Home</a>
-<@ooFolderNavList daoService.getDao("folder").folderTree />
+<@ooFolderNavList daoService.getDao("folder").folderTree.rootItem />
 </li>
 </ul>
 </div>
