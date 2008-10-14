@@ -167,7 +167,9 @@ public class BindServiceImpl implements BindService
         if (index != null)
             propertyPath += "[" + index + "]";
 
-        BaseNode component = (BaseNode) PropertyUtils.getNestedProperty(parent, propertyPath);
+        // FIXME Use BeanWrapper here instead
+        String beanUtilsPath = propertyPath.replaceAll("\\[", "\\(").replaceAll("\\]", "\\)");
+        BaseNode component = (BaseNode) PropertyUtils.getNestedProperty(parent, beanUtilsPath);
 
         if (component == null)
         {

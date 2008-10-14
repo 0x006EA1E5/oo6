@@ -63,7 +63,7 @@ public class SiteFolder extends BaseNode implements Folder //, SiteItem
         }
         else
         {
-            return (List<TypeDef>) typeService.getTypesBySuperClass(BaseNode.class);
+            return new ArrayList<TypeDef>();//(List<TypeDef>) typeService.getTypesBySuperClass(BaseNode.class);
         }
     }
 

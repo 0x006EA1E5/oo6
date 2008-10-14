@@ -441,7 +441,7 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
       </table>
 
       <para>Note: string based fields are automatically trimmed and turned to
-      nulls if empty via StringTrimmerEditor. </para>
+      nulls if empty via StringTrimmerEditor.</para>
     </section>
 
     <section>
@@ -640,7 +640,9 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
     information.</para>
 
     <para>Site forms need to be hand coded and the easiest way of doing this
-    is with Spring's form macros.</para>
+    is with Spring's form macros. Standard form macros are ok for simple
+    forms. But for more advanced datamodels (with lists and components) you
+    will need to use OO macros.</para>
 
     <para>For more information see here:
     http://static.springframework.org/spring/docs/2.5.x/reference/view.html#view-velocity-forms</para>
@@ -654,6 +656,11 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
     <para>Render out fields and error messages.</para>
 
     <para>TODO Example</para>
+
+    <para>Notes about special fields</para>
+
+    <para>Booleans: need placeholder for false values. This is done with a
+    hidden field prefixed with "_" and an empty value.</para>
   </chapter>
 
   <chapter>

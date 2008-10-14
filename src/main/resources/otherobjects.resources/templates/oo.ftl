@@ -2,14 +2,14 @@
 Renders an image.
 -->
 <#macro image image class>
-<img src="${cmsImageTool.getOriginal(image).dataFile.externalUrl}" class="${class!}"/>
+<img src="${cmsImageTool.getOriginal(image).dataFile.externalUrl}" class="${class!}" />
 </#macro>
 
 <#-- 
 Convenience macro to insert CSS link tag.
 -->
 <#macro css path media="screen">
-<link rel="stylesheet" href="${resourceUrl(path)}" type="text/css" media="${media}">
+<link rel="stylesheet" href="${resourceUrl(path)}" type="text/css" media="${media}" />
 </#macro>    
 
 <#-- 
@@ -79,7 +79,9 @@ Macro to insert region
 Macro to insert HUD code
 -->
 <#macro hud>
+<@authorize "ROLE_ADMIN"> 
 <#include "/otherobjects/templates/legacy/blocks/toolbar.ftl" />
+</@authorize>
 </#macro>
 
 <#-- 
@@ -160,4 +162,144 @@ Functions
 <#return "${formatTool.getMessage(message)}">
 </#function>
 
+
+
+
+
+<#--
+Form Macros
+-->
+
+
+<#macro renderForm typeDef>
+<script>
+function addToList()
+{
+	// Get field
+	var f = $('.oo-list-empty-field').at(0);
+	
+	// Insert copy
+	n = $(f.node.cloneNode(true));
+	var a = n.children("INPUT").toArray();
+	for(var i=0; i<a.length; i++)
+		a[i].disabled=false;
+	n.setStyle({border:"1px solid red!important", display:"block"});
+	console.log(n);
+	f.insert(n.node, 'after');
+}
+function removeFromList()
+{
+	// Get field
+	var all = $('.oo-list-last-field');
+	var f = all.at(all.length-1);
+	// Insert copy
+	f.parents().at(0).node.removeChild(f.node);
+}
+</script>
+<@renderType typeDef "object." />
+</#macro>
+
+<#--
+Renders the form parts for a typeDef. Used for main form and also for components.
+-->
+<#macro renderType typeDef prefix empty=false>
+<table class="oo-edit">
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+<th>Help</th>
+</tr>
+</thead>
+<tbody>
+<#list typeDef.properties as prop>
+<@renderProperty prop prefix empty />
+</#list>
+</tbody>
+</table>
+</#macro>
+
+<#--
+Renders a property for the form.
+-->
+<#macro renderProperty prop prefix empty>
+<tr>
+<td class="oo-label">${prop.label} <#if prop.required><span class="oo-required">*</span></#if></td>
+<td>
+<p>
+	<@renderField prop prop.type "${prefix}${prop.fieldName}" empty /> 
+</p>
+</td>
+<td style="color:red; font-weight:normal!important;">
+<#if status??>
+<p><@spring.showErrors "<br>"/></p>
+</#if>
+</td>
+</tr>
+</#macro>
+
+<#--
+Renders a field inputter by choosing the correct inputter renderer. Also handles lists and components.
+-->
+<#macro renderField prop type path empty=false>
+	<#if type == "list" >
+  		<#assign status = springMacroRequestContext.getBindStatus("${path}")>
+  		<p><a href="javascript:addToList();">add</a> | <a href="javascript:removeFromList();">remove</a></p>
+		<#if status.actualValue?is_enumerable>
+			<#list status.actualValue as item>
+	  			<p class="oo-list-last-field"><@renderField prop prop.collectionElementType "${path}[${item_index}]" /></p>
+	  		</#list>
+	  		<p style="display:none;" class="oo-list-empty-field"><@renderField prop prop.collectionElementType "${path?substring(7)}[${status.actualValue?size}]" true/></p>
+	  	<#else>
+  			${status.value}
+  		</#if>
+  	<#elseif type == "component" >
+  		<#assign status = springMacroRequestContext.getBindStatus("${path}")>
+		<#if status.value??>
+		<@renderType prop.relatedTypeDef "${path}." false/>
+		<#else>
+		<@renderType prop.relatedTypeDef "${path}." true/>
+		</#if>  		
+	<#elseif type == "date" >
+  		<@formDate "${path}" />
+  	<#elseif type == "text" >
+  		<@spring.formTextarea "${path}"  "class=\"textarea\""/>
+	<#elseif type == "boolean" >
+  		<@formCheckbox "${path}"  "class=\"checkbox\""/>
+	<#else>
+  		<#if empty>
+  		<input type="text" name="${path}" class="text" xdisabled="true" />
+  		<#else>
+  		<@spring.formInput "${path}" "class=\"text\"" />
+  		</#if>  	
+  	</#if>
+</#macro>
+
+<#--
+Renders a checkbox for a boolean property.
+
+Note: when values come back they may be strings (and not typed)
+-->
+<#macro formCheckbox path attributes="">
+    <#assign status = springMacroRequestContext.getBindStatus("${path}")>
+    <input type="checkbox" id="${status.expression}" name="${status.expression}" value="true"
+       <#if status.value?? && ((status.value?is_boolean && status.value) || (!status.value?is_boolean && status.value == "true"))> checked="checked" </#if> ${attributes}
+    <@spring.closeTag/>
+    <#-- Hidden field to set value to false when checkbox not checked -->
+    <input type="hidden" name="_${status.expression}" value="false" <@spring.closeTag/>
+</#macro>
+
+<#--
+Renders a textbox for a date property.
+-->
+<#macro formDate path attributes="">
+	<@spring.bind "${path}"/>
+	<#assign status = springMacroRequestContext.getBindStatus("${path}")>
+	<#if status.value?? && status.value?is_date>
+    	<#assign stringStatusValue=status.value?date?string("yyyy-MM-dd")>
+	<#else>
+  	  	<#assign stringStatusValue=status.value?default("")>
+	</#if>
+	<input type="text" class="text" id="${status.expression}" name="${status.expression}" value="${stringStatusValue}" value="">
+</#macro>	
  

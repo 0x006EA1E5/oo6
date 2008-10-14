@@ -28,11 +28,11 @@ import org.springframework.web.servlet.support.RequestContext;
 /**
  * Test binding of objects to forms.
  * 
- * 3 key types: new object, existing object, binding result (form previous submission)
+ * 3 key types: new object, existing object, binding result (from previous submission)
  * 
  * @author rich
  */
-public class BindingTest extends TestCase
+public class FormBindingTest extends TestCase
 {
     private TypeService typeService = new TypeServiceImpl();
     private ValidatorServiceImpl validatorService;

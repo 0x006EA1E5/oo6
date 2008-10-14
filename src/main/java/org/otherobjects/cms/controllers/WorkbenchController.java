@@ -132,6 +132,12 @@ public class WorkbenchController
         return null;
     }
     
+    @RequestMapping({"/workbench/search/*"})
+    public ModelAndView search(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        return null;
+    }
+    
     /* Actions */
 
     @RequestMapping({"/workbench/publish/*"})

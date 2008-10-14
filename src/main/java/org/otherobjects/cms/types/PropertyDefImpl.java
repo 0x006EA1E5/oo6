@@ -136,7 +136,7 @@ public class PropertyDefImpl implements PropertyDef, Ordered
         setCollectionElementType(collectionElementType);
         setRequired(required);
     }
-    
+
     /**
      * 
      * @param name
@@ -193,40 +193,40 @@ public class PropertyDefImpl implements PropertyDef, Ordered
     @JSON(include = false)
     public PropertyEditor getPropertyEditor()
     {
-        //if (this.propertyEditor == null)
-        //{
-        //ignore string as they never need PropertyEditors to be converted
-        TypeServiceImpl typeService = (TypeServiceImpl) getTypeService();
-        Class<?> propertyEditorTargetClass = typeService.getClassForType(this.type);
-        Assert.notNull(propertyEditorTargetClass, "The target class must not be null. Cases in which getClassForType would return null should've been handled upstream");
-        if (typeService.getClassForType(this.type).equals(String.class))
-            propertyEditor = new StringTrimmerEditor(true);
-        else if (typeService.getClassForType(this.type).equals(Boolean.class))
-            propertyEditor = new CustomBooleanEditor(true);
-        else if (typeService.getClassForType(this.type).equals(Long.class))
-            propertyEditor = new CustomNumberEditor(Long.class, true);
-        else if (typeService.getClassForType(this.type).equals(BigDecimal.class))
-            propertyEditor = new CustomNumberEditor(BigDecimal.class, true);
-        else if (typeService.getClassForType(this.type).equals(Date.class))
+        if (this.propertyEditor == null)
         {
-            if (this.type.equals("date"))
+            TypeServiceImpl typeService = (TypeServiceImpl) getTypeService();
+            String type2 = (this.type == PropertyDefImpl.LIST) ? this.collectionElementType : this.type;
+            Class<?> propertyEditorTargetClass = typeService.getClassForType(type2);
+            Assert.notNull(propertyEditorTargetClass, "The target class must not be null. Cases in which getClassForType would return null should've been handled upstream");
+            if (typeService.getClassForType(type2).equals(String.class))
+                propertyEditor = new StringTrimmerEditor(true);
+            else if (typeService.getClassForType(type2).equals(Boolean.class))
+                propertyEditor = new CustomBooleanEditor(true);
+            else if (typeService.getClassForType(type2).equals(Long.class))
+                propertyEditor = new CustomNumberEditor(Long.class, true);
+            else if (typeService.getClassForType(type2).equals(BigDecimal.class))
+                propertyEditor = new CustomNumberEditor(BigDecimal.class, true);
+            else if (typeService.getClassForType(type2).equals(Date.class))
             {
-                Assert.notNull(dateFormat, "No dateFormat set in PropertyTypeDefImpl");
-                propertyEditor = new CustomDateEditor(new SimpleDateFormat(dateFormat), true); //FIXME These need to be set globally somewhere
-            }
-            else if (this.type.equals("time"))
-            {
-                Assert.notNull(timeFormat, "No timeFormat set in PropertyTypeDefImpl");
-                propertyEditor = new CustomDateEditor(new SimpleDateFormat(timeFormat), true);
-            }
-            else if (this.type.equals("timestamp"))
-            {
-                Assert.notNull(timestampFormat, "No timestampFormat set in PropertyTypeDefImpl");
-                propertyEditor = new CustomDateEditor(new SimpleDateFormat(timestampFormat), true);
-            }
+                if (type2.equals("date"))
+                {
+                    Assert.notNull(dateFormat, "No dateFormat set in PropertyTypeDefImpl");
+                    propertyEditor = new CustomDateEditor(new SimpleDateFormat(dateFormat), true); //FIXME These need to be set globally somewhere
+                }
+                else if (type2.equals("time"))
+                {
+                    Assert.notNull(timeFormat, "No timeFormat set in PropertyTypeDefImpl");
+                    propertyEditor = new CustomDateEditor(new SimpleDateFormat(timeFormat), true);
+                }
+                else if (type2.equals("timestamp"))
+                {
+                    Assert.notNull(timestampFormat, "No timestampFormat set in PropertyTypeDefImpl");
+                    propertyEditor = new CustomDateEditor(new SimpleDateFormat(timestampFormat), true);
+                }
 
+            }
         }
-        //}
         return propertyEditor;
     }
 

@@ -28,7 +28,7 @@
 
 <div class="oo-navigation">
 <ul class="oo-folders">
-<li class="oo-folder-full-open"><span onclick="ooExpandContract(this)"></span><a href="$path.addParameter("folder", $root)">Home</a>
+<li class="oo-folder-full-open"><span onclick="ooExpandContract(this)"></span><a href="">OTHERobjects</a>
 <@ooFolderNavList daoService.getDao("folder").folderTree.rootItem />
 </li>
 </ul>

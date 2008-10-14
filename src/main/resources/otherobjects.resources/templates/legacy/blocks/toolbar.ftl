@@ -1,4 +1,4 @@
-<style>
+<style type="text/css">
 #OoMenu {display:none;}
 #OoMenu H2 {font:70%/600% Arial, sans-serif; width:195px; height:120px; left:0px; position:fixed; bottom:25px; z-index:11; color:#FFFFFF; background:url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/menu.png")});}
 .oo-menu {position:fixed; font:70% Arial, sans-serif; width:180px; height:100px; left:0px; bottom:25px; z-index:12;}
@@ -44,12 +44,6 @@
 
 <div id="OoMenu">
 <h2>OTHER Objects</h2>
-<ul class="oo-menu">
-<li class="oo-menudivider"><a class="oo-icon-user" onmousedown="ooHoldMenu()" href="$link.setPath("/workbench")"><strong>$user.fullName</strong></a></li>
-<li><a class="oo-icon-overview" onmousedown="ooHoldMenu()" href="$link.setPath("/")">Site Home Page</a></li>
-<li class="oo-menudivider"><a class="oo-icon-overview" onmousedown="ooHoldMenu()" href="$link.setPath("/workbench")">OTHERobjects Workbench</a></li>
-<li><a class="oo-icon-logout" onmousedown="ooHoldMenu()" href="$link.setPath("/").setAction("com.otherobjects.cms.actions.AuthenticationActions.doLogout")">Log out</a></li>
-</ul>
 </div>
 
 <div id="OoToolbar" class="oo-toolbar">
@@ -66,7 +60,7 @@
 </p>
 
 <ul>
-	<li><a href="${oo.url('/otherobjects/workbench/view/${resourceObject.id}')}">Edit</a></li>	
+	<li><a href="${oo.url('/otherobjects/workbench/edit/${resourceObject.id}')}">Edit</a></li>	
 </ul>
 <#else>
 <p class="oo-divider">
