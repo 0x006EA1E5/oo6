@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.dynamic.DynaNode;
@@ -23,6 +22,8 @@ import org.otherobjects.cms.types.PropertyDefImpl;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.types.annotation.PropertyType;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -65,6 +66,18 @@ public class BindServiceImpl implements BindService
         binder.bind(request);
         return binder.getBindingResult();
     }
+    
+    public void setValue(Object target, String propertyName, Object value)
+    {
+        BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(target);
+        bw.setPropertyValue(propertyName, value);
+    }
+    
+    public Object getValue(Object target, String propertyName)
+    {
+        BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(target);
+        return bw.getPropertyValue(propertyName);
+    }
 
     /**
      * Recursive method that walks the object graph and does:
@@ -104,13 +117,13 @@ public class BindServiceImpl implements BindService
                 if (propertyDef.getType().equals("list")) //TODO the type should clearly be a constant or enum of sorts
                 {
                     // instantiate list? ensure capacity?
-                    List<Object> list = (List<Object>) PropertyUtils.getNestedProperty(item, path);
+                    List<Object> list = (List<Object>) getValue(item, path);
                     if (list != null)
                         list.clear();
                     else
                     {
                         list = new ArrayList<Object>();
-                        PropertyUtils.setNestedProperty(item, path, list);
+                        setValue(item, path, list);
                     }
 
                     ListProps listProps = calcListProps(rootPath, matchingParams);
@@ -167,15 +180,13 @@ public class BindServiceImpl implements BindService
         if (index != null)
             propertyPath += "[" + index + "]";
 
-        // FIXME Use BeanWrapper here instead
-        String beanUtilsPath = propertyPath.replaceAll("\\[", "\\(").replaceAll("\\]", "\\)");
-        BaseNode component = (BaseNode) PropertyUtils.getNestedProperty(parent, beanUtilsPath);
+        BaseNode component = (BaseNode) getValue(parent, propertyPath);
 
         if (component == null)
         {
             // Create object if null 
             component = createObject(propertyDef);
-            PropertyUtils.setNestedProperty(parent, propertyPath, component);
+            setValue(parent, propertyPath, component);
         }
 
         // Recurse into the component

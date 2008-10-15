@@ -247,18 +247,19 @@ Renders a field inputter by choosing the correct inputter renderer. Also handles
   		<p><a href="javascript:addToList();">add</a> | <a href="javascript:removeFromList();">remove</a></p>
 		<#if status.actualValue?is_enumerable>
 			<#list status.actualValue as item>
-	  			<p class="oo-list-last-field"><@renderField prop prop.collectionElementType "${path}[${item_index}]" /></p>
+	  			<p class="oo-list-last-field">@renderField prop prop.collectionElementType "${path}[${item_index}]" /></p>
 	  		</#list>
-	  		<p style="display:none;" class="oo-list-empty-field"><@renderField prop prop.collectionElementType "${path?substring(7)}[${status.actualValue?size}]" true/></p>
+	  		<p style="display:none;" class="oo-list-empty-field">@renderField prop prop.collectionElementType "${path}[${status.actualValue?size}]" true/></p>
 	  	<#else>
   			${status.value}
   		</#if>
   	<#elseif type == "component" >
   		<#assign status = springMacroRequestContext.getBindStatus("${path}")>
+  		${status.value!}
 		<#if status.value??>
-		<@renderType prop.relatedTypeDef "${path}." false/>
+		@renderType prop.relatedTypeDef "${path}." false/>
 		<#else>
-		<@renderType prop.relatedTypeDef "${path}." true/>
+		@renderType prop.relatedTypeDef "${path}." true/>
 		</#if>  		
 	<#elseif type == "date" >
   		<@formDate "${path}" />
@@ -268,7 +269,7 @@ Renders a field inputter by choosing the correct inputter renderer. Also handles
   		<@formCheckbox "${path}"  "class=\"checkbox\""/>
 	<#else>
   		<#if empty>
-  		<input type="text" name="${path}" class="text" xdisabled="true" />
+  		<input type="text" name="${path?substring(7)}" class="text" xdisabled="true" />
   		<#else>
   		<@spring.formInput "${path}" "class=\"text\"" />
   		</#if>  	

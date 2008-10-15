@@ -210,4 +210,11 @@ public class BindServiceImplTest extends TestCase
         //assertEquals("block2", PropertyUtils.getNestedProperty(rootItem, "regions[1].blocks[0].description"));
 
     }
+
+    public void testSetValue() 
+    {
+        TestObject to = new TestObject();
+        BindServiceImpl bs = new BindServiceImpl();
+        bs.setValue(to, "name", "Test");
+    }
 }

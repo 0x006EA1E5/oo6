@@ -15,7 +15,7 @@ ${pageTitle}
 <input type="hidden" name="_oo_type" value="${typeDef.name}">
 <input type="hidden" name="_oo_containerId" value="${RequestParameters.container}">
 
-<@oo.renderForm typeDef "object." />
+<@oo.renderForm typeDef />
 
 </form>
 </div>

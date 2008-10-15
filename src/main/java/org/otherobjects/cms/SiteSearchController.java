@@ -1,4 +1,4 @@
-package org.otherobjects.cms.controllers.site;
+package org.otherobjects.cms;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -136,7 +136,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
             }
             catch (JSONException e)
             {
-                logger.warn("Invalid metaData in " + ooResource.getPath() + ": " + e.getMessage());
+                logger.debug("Invalid metaData in " + ooResource.getPath() + ": " + e.getMessage());
             }
         }
 
