@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.jcr.Node;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -304,7 +305,19 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
         BeanDescriptor beanDescriptor = new BeanDescriptor();
         beanDescriptor.setFieldName(property.getName());
         beanDescriptor.setJcrName(property.getName());
-        value = beanConverter.getObject(session, dataNode, beanDescriptor, mapper.getClassDescriptorByClass(DynaNode.class), DynaNode.class, null);
+        Class clazz = DynaNode.class;
+        try
+        {
+            Property classNameProperty = dataNode.getProperty("metaData/ocm:classname");
+            String className = classNameProperty.getString();
+            clazz = Class.forName(className);
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        value = beanConverter.getObject(session, dataNode, beanDescriptor, mapper.getClassDescriptorByClass(clazz), clazz, null);
         return value;
     }
 

@@ -18,13 +18,13 @@
 			${object.getPropertyValue(prop.propertyPath)!}
 	  	</#if>
   	<#else>
-  		No value
+  		<span style="color:#888">No value</span>
   	</#if>  	
 </td>
 </tr>
 </#macro>
 
-<#assign pageTitle = "Viewing: ${oo.msg(object.label)}" />
+<#assign pageTitle = "Viewing: ${oo.msg(object.label!)}" />
 <#include "/otherobjects/templates/legacy/blocks/header.ftl" />
 
 <#include "/otherobjects/templates/legacy/blocks/nav-folders.ftl" />
@@ -52,6 +52,7 @@ ${pageTitle}
 <h2>Actions</h2>
 <ul>
 <li><a href="${oo.url('/otherobjects/workbench/edit/${object.id}')}">Edit</a></li>
+<li class="divider"><a href="${oo.url('/otherobjects/workbench/delete/${object.id}')}">Delete</a></li>
 </ul>
 </div>
 

@@ -49,7 +49,7 @@ ${pageTitle}
 <tbody>
 <#list items as item>
 <tr>
-	<td><a class="oo-<#if item.published>live<#else>edited</#if>" href="${oo.url('/otherobjects/workbench/view/${item.id}')}">${item.label}</a></td>
+	<td><a class="oo-<#if item.published>live<#else>edited</#if>" href="${oo.url('/otherobjects/workbench/view/${item.id}')}">${item.label!}</a></td>
 	<td title="${item.typeDef.name}"><p>${item.typeDef.label}</p></td>
 	<td class="oo-action"><a href="${oo.url(item.linkPath)}">Preview</a></td>
 	<td class="oo-action"><a href="${oo.url('/otherobjects/workbench/edit/${item.id}')}">Edit</a></td>

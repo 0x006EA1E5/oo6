@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.otherobjects.cms.Url;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
@@ -15,6 +16,7 @@ import org.otherobjects.cms.model.FolderDao;
 import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.cms.util.ActionUtils;
 import org.otherobjects.cms.util.RequestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,8 +123,6 @@ public class WorkbenchController
         SiteFolder folder = folderDao.get(id);
         mav.addObject("folder", folder);
         mav.addObject("items", universalJcrDao.getAllByPath(folder.getJcrPath()));
-        //mav.addObject("object", item);
-        //mav.addObject("typeDef", item.getTypeDef());
         return mav;
     }
 
@@ -155,6 +155,20 @@ public class WorkbenchController
     @RequestMapping({"/workbench/delete/*"})
     public ModelAndView delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+        // FIXME Need to publish this delete too.
+        String id = RequestUtils.getId(request);
+        FolderDao folderDao = (FolderDao) this.daoService.getDao(Folder.class);
+        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
+        
+        BaseNode item = universalJcrDao.get(id);
+        universalJcrDao.remove(id);
+        
+        ActionUtils actionUtils = new ActionUtils(request, response, null, null);
+        actionUtils.flashInfo("Your object was deleted.");
+        
+        SiteFolder folder = folderDao.getByPath(item.getPath());
+        Url u = new Url("/otherobjects/workbench/list/" + folder.getId());
+        response.sendRedirect(u.toString());
         return null;
     }
 

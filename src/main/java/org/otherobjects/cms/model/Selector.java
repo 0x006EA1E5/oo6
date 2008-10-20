@@ -22,7 +22,7 @@ public class Selector extends BaseNode
 {
     private String label;
     private String description;
-    
+
     private String queryPath;
     private String queryTypeName;
     private String queryTags;
@@ -31,6 +31,12 @@ public class Selector extends BaseNode
     private String customQuery;
     private Long start;
     private Long end;
+
+    @Override
+    public String getCode()
+    {
+        return "SELECTOR";
+    }
 
     @Property(order = 10)
     public String getLabel()
@@ -64,7 +70,6 @@ public class Selector extends BaseNode
     {
         this.queryPath = queryPath;
     }
-    
 
     @Property(order = 35)
     public String getQueryTags()
@@ -76,9 +81,8 @@ public class Selector extends BaseNode
     {
         this.queryTags = queryTags;
     }
-    
 
-    @Property(order = 35)
+    @Property(order = 35, label = "Sub folders?")
     public Boolean getRecursive()
     {
         return recursive;

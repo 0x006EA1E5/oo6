@@ -16,6 +16,12 @@ public class MetaData extends BaseNode
     private String keywords;
 
     @Override
+    public String getOoLabel()
+    {
+        return "MD";
+    }
+    
+    @Override
     public String getCode()
     {
         // FIXME This should not be needed -- should be determined by parent typeDef.
