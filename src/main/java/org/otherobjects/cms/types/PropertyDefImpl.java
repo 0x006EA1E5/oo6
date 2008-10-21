@@ -68,6 +68,9 @@ public class PropertyDefImpl implements PropertyDef, Ordered
     /** Defines type of this property. */
     private String type;
 
+    /** Optional field type. */
+    private String fieldType;
+
     /** Type of items in collection if this property is a collection. */
     private String collectionElementType;
 
@@ -265,6 +268,18 @@ public class PropertyDefImpl implements PropertyDef, Ordered
         else
             return name;
     }
+    
+    
+    /**
+     * Returns the correct field type for this property. If fieldType is set then this
+     * is returned, otherwise the default type is used.
+     * 
+     * @return
+     */
+    public String getDefaultFieldType()
+    {
+        return getFieldType() != null ? getFieldType() : getType();
+    }
 
     /**
      * Returns the correct field name for this property by using data[name] notation
@@ -453,6 +468,16 @@ public class PropertyDefImpl implements PropertyDef, Ordered
         PropertyDefImpl.timestampFormat = timestampFormat;
     }
 
+    public String getFieldType()
+    {
+        return fieldType;
+    }
+
+    public void setFieldType(String fieldType)
+    {
+        this.fieldType = fieldType;
+    }
+    
     @Override
     public boolean equals(Object obj)
     {

@@ -54,6 +54,8 @@ public interface PropertyDef
 
     String getType();
 
+    String getFieldType();
+
     String getRelatedType();
 
     String getFormat();

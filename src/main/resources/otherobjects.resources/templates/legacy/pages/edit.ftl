@@ -32,14 +32,24 @@ ${pageTitle}
 
 <script type="text/javascript">
 $('#oo-form').on('submit', function(element, e) {
-	// Disable add the elements that are in the list element template
-	$('.oo-list-template').descendants("INPUT").set({disabled:true});
+	disableFormTemplates();
 });
 
 function formSubmit()
 {
-	$('.oo-list-template').descendants("INPUT").set({disabled:true});
+	disableFormTemplates();
 	$('#oo-form').node.submit();
+}
+
+function disableFormTemplates()
+{
+	// Disable add the elements that are in the list element template
+	$('.oo-list-template').descendants("input").set({disabled:true});
+	$('.oo-list-template').descendants("textarea").set({disabled:true});
+	$('.oo-list-template').descendants("select").set({disabled:true});
+	$('.oo-list-template').descendants("checkbox").set({disabled:true});
+	$('.oo-list-template').descendants("radio").set({disabled:true});
+	$('.oo-list-template').descendants("button").set({disabled:true});
 }
 </script>
 

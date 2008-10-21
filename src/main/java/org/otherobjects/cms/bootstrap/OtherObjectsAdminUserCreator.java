@@ -53,7 +53,7 @@ public class OtherObjectsAdminUserCreator
         adminUser.setUsername("admin");
         adminUser.setFirstName("The");
         adminUser.setLastName("Administrator");
-        adminUser.setEmail("rich@othermedia.com");
+        adminUser.setEmail("admin@mysite.com");
         adminUser.setRoles(roles);
         adminUser.setAccountExpired(false);
         adminUser.setAccountLocked(false);
@@ -81,4 +81,35 @@ public class OtherObjectsAdminUserCreator
         this.saltSource = saltSource;
     }
 
+    /**
+     * A simple random password generator, user can specify the length.
+     * 
+     * Copyright © 1999 - 2003 Roseanne Zhang, All Rights Reserved
+     * http://bobcat.webappcabaret.net/javachina/jc/share/PwGen.htm
+     */
+    public static String getPassword(int n)
+    {
+        char[] pw = new char[n];
+        int c = 'A';
+        int r1 = 0;
+        for (int i = 0; i < n; i++)
+        {
+            r1 = (int) (Math.random() * 3);
+            switch (r1)
+            {
+                case 0 :
+                    c = '0' + (int) (Math.random() * 10);
+                    break;
+                case 1 :
+                    c = 'a' + (int) (Math.random() * 26);
+                    break;
+                case 2 :
+                    c = 'a' + (int) (Math.random() * 26);
+                    break;
+            }
+            pw[i] = (char) c;
+        }
+        return new String(pw);
+    }
+    
 }

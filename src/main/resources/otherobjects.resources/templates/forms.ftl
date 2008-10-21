@@ -56,7 +56,7 @@ Renders a property for the form.
 <td class="oo-label">${prop.label} <#if prop.required><span class="oo-required">*</span></#if></td>
 <td>
 <p>
-	<@renderField prop prop.type "${prefix}${prop.fieldName}" empty /> 
+	<@renderField prop prop.defaultFieldType "${prefix}${prop.fieldName}" empty /> 
 </p>
 </td>
 <td style="color:red; font-weight:normal!important;">
@@ -102,6 +102,8 @@ Renders a field inputter by choosing the correct inputter renderer. Also handles
   		<@formCheckbox "${path}" "" empty/>
 	<#elseif type == "string" >
   		<@formInput "${path}" "" "text" empty />  		
+	<#elseif type == "none" >
+  		-  		
 	<#else>
   		<@formInput "${path}" "" "text" empty />
   	</#if>

@@ -108,6 +108,7 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder, Initializi
                 propertyDef.setSize(propertyDefAnnotation.size());
                 propertyDef.setValang(propertyDefAnnotation.valang());
                 propertyDef.setOrder(propertyDefAnnotation.order());
+                propertyDef.setFieldType(StringUtils.isEmpty(propertyDefAnnotation.fieldType()) ? null : propertyDefAnnotation.fieldType());
                 if (propertyDef.getType().equals(PropertyType.COMPONENT.value()) || propertyDef.getType().equals(PropertyType.REFERENCE.value()))
                 {
                     // If not specified infer related type for components and references

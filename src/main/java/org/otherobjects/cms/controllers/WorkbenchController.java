@@ -1,6 +1,7 @@
 package org.otherobjects.cms.controllers;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -126,15 +127,23 @@ public class WorkbenchController
         mav.addObject("items", universalJcrDao.getAllByPath(folder.getJcrPath()));
         return mav;
     }
+    
+    @RequestMapping({"/workbench/search*"})
+    public ModelAndView search(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        // Search JCR
+        String q = request.getParameter("q");
+        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
+        List<BaseNode> results = universalJcrDao.getAllByJcrExpression("/jcr:root/site//(*) [jcr:contains(data/., '" + q + "')]");        
+
+        // Search DB
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/search");
+        mav.addObject("results", results);
+        return mav;
+    }
 
     @RequestMapping({"/workbench/history/*"})
     public ModelAndView history(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
-        return null;
-    }
-    
-    @RequestMapping({"/workbench/search/*"})
-    public ModelAndView search(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         return null;
     }
@@ -144,6 +153,19 @@ public class WorkbenchController
     @RequestMapping({"/workbench/publish/*"})
     public ModelAndView publish(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+        // Publish
+        String id = RequestUtils.getId(request);
+        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
+        BaseNode item = universalJcrDao.get(id);
+        universalJcrDao.publish(item, null);
+
+        // FIXME - Catch errors
+        
+        // Response
+        ActionUtils actionUtils = new ActionUtils(request, response, null, null);
+        actionUtils.flashInfo("Your object was published.");
+        Url u = new Url("/otherobjects/workbench/view/" + item.getId());
+        response.sendRedirect(u.toString());
         return null;
     }
 

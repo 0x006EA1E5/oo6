@@ -52,6 +52,7 @@ ${pageTitle}
 <h2>Actions</h2>
 <ul>
 <li><a href="${oo.url('/otherobjects/workbench/edit/${object.id}')}">Edit</a></li>
+<li class="divider"><a href="${oo.url('/otherobjects/workbench/publish/${object.id}')}">Publish</a></li>
 <li class="divider"><a href="${oo.url('/otherobjects/workbench/delete/${object.id}')}">Delete</a></li>
 </ul>
 </div>

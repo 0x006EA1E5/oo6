@@ -16,6 +16,8 @@ public @interface Property
 
     PropertyType type() default PropertyType.UNDEFINED;
 
+    String fieldType() default "";
+
     String label() default "";
 
     String description() default "";

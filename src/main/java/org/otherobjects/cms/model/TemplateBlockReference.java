@@ -20,7 +20,7 @@ public class TemplateBlockReference extends BaseNode
 
     public String getCode()
     {
-        if(this.code==null)
+        if (this.code == null)
             // FIXME Better to use a UUID
             this.code = String.valueOf(new Date().getTime());
         return this.code;
@@ -37,7 +37,7 @@ public class TemplateBlockReference extends BaseNode
         this.block = block;
     }
 
-    @Property(order = 20, type = PropertyType.COMPONENT)
+    @Property(order = 20, type = PropertyType.COMPONENT, fieldType = "none")
     public DynaNode getBlockData()
     {
         return blockData;

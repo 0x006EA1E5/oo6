@@ -17,7 +17,7 @@
 <ul>
 <li><strong><a href="">${oo.msg("site.editor")}</a></strong></li>
 </ul>
-<form action="${oo.url("/otherobjects/workbench/search")}"><input id="OoGlobalSearch" type="search" name="q" results="4" placeholder="Global Search" value="${RequestParameters.q!?html}"/></form>
+<form action="${oo.url("/otherobjects/workbench/search/")}"><input id="OoGlobalSearch" type="search" name="q" results="4" placeholder="Global Search" value="${RequestParameters.q!?html}"/></form>
 </div>
 <div class="oo-main-outer"><div class="oo-main-inner">
 <@oo.showFlashMessages />
