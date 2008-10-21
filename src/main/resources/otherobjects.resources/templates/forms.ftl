@@ -11,11 +11,9 @@ function addToList()
 	
 	// Insert copy
 	n = $(f.node.cloneNode(true));
-	var a = n.children("INPUT").toArray();
-	for(var i=0; i<a.length; i++)
-		a[i].disabled=false;
-	n.setStyle({border:"1px solid red!important", display:"block"});
 	console.log(n);
+	n.setStyle({display:'block'});
+	n.removeClass("oo-list-template");
 	f.insert(n.node, 'after');
 }
 function removeFromList()
@@ -76,20 +74,22 @@ Renders a field inputter by choosing the correct inputter renderer. Also handles
 	<#if type == "list" >
   		<@bind path />
   		<#assign listOoStatus = ooStatus />
+  		<#assign nextIndex = 0 />
   		<p><a href="javascript:addToList();">add</a> | <a href="javascript:removeFromList();">remove</a></p>
 		<#if listOoStatus.actualValue?? && listOoStatus.actualValue?is_enumerable>
 			<#list listOoStatus.actualValue as item>
 	  			<p class="oo-list-last-field"><@renderField prop prop.collectionElementType "${path}[${item_index}]" /></p>
 	  		</#list>
-	  	<#else>
-  			${(listOoStatus.value)!}
+	  		<#assign nextIndex = listOoStatus.actualValue?size />
   		</#if>
-  		<p style="display:nne;" class="oo-list-empty-field"><@renderField prop prop.collectionElementType "${path}[0]" true/></p>
+  		<div style="display:none;" class="oo-list-empty-field oo-list-template">
+  		<@renderField prop prop.collectionElementType "${path}[${nextIndex}]" true/>
+  		</div>
   	<#elseif type == "component" >	
   		<#if !empty>
 	  		<@bind path />
 		</#if>
-  		<#if ooStatus.value??>
+  		<#if !empty && ooStatus.value??>
 			<@renderType prop.relatedTypeDef "${path}." false/>
 		<#else>
 			<@renderType prop.relatedTypeDef "${path}." true/>

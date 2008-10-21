@@ -185,7 +185,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
     @Override
     public String toString()
     {
-        return "[" + getOoType() + "] " + getLabel();
+        return "[" + getOoType() + "] " + getOoLabel();
     }
 
     public String getId()

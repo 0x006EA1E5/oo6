@@ -18,6 +18,6 @@ public class OOFreeMarkerConfigurationFactoryBean extends FreeMarkerConfiguratio
     @Override
     protected void postProcessConfiguration(Configuration config) throws IOException, TemplateException
     {
-        config.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+        config.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
     }
 }
