@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerView;
 
+import freemarker.template.TemplateException;
+
 /**
  * Adds error handling to the standard FreeMarkerView.
  * 
@@ -37,6 +39,11 @@ public class OOFreeMarkerView extends FreeMarkerView
         {
             // Render error page on exception
             logger.error("Error whilst rendering view.", e);
+            if(e instanceof TemplateException)
+            {
+                TemplateException te = (TemplateException)e;
+                System.out.println(te.getFTLInstructionStack());
+            }
             response.reset();
             model.put(DEFAULT_EXCEPTION_ATTRIBUTE, e);
             Locale locale = RequestContextUtils.getLocale(request);

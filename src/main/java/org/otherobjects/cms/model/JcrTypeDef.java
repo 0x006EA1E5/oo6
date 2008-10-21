@@ -13,7 +13,7 @@ import org.otherobjects.cms.types.annotation.Type;
  * 
  * @author rich
  */
-@Type(label = "Type Def")
+@Type(label = "Type Def", labelProperty="name")
 public class JcrTypeDef extends BaseNode
 {
     private String name;
@@ -45,6 +45,12 @@ public class JcrTypeDef extends BaseNode
             }
         }
         return td;
+    }
+    
+    @Override
+    public String getOoLabel()
+    {
+        return getName();
     }
 
     @Property(order = 10)

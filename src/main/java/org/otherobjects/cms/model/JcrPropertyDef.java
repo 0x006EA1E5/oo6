@@ -14,7 +14,7 @@ import org.otherobjects.cms.types.annotation.Type;
  * 
  * @author rich
  */
-@Type(label = "Property Def")
+@Type(label = "Property Def", labelProperty="name")
 public class JcrPropertyDef extends BaseNode
 {
     private String name;
@@ -50,6 +50,12 @@ public class JcrPropertyDef extends BaseNode
         pd.setValang(getValang());
         pd.setHelp(getHelp());
         return pd;
+    }
+    
+    @Override
+    public String getOoLabel()
+    {
+        return getName();
     }
 
     @Property(order = 10)

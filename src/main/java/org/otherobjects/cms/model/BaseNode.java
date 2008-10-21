@@ -219,7 +219,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
 
     public String getCode()
     {
-        return this.code != null ? this.code : StringUtils.generateUrlCode(getLabel());
+        return this.code != null ? this.code : StringUtils.generateUrlCode(getOoLabel());
     }
 
     public void setCode(String code)

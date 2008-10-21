@@ -62,8 +62,8 @@ Renders a property for the form.
 </p>
 </td>
 <td style="color:red; font-weight:normal!important;">
-<#if status??>
-<p><@spring.showErrors "<br>"/></p>
+<#if ooStatus??>
+<p><@showErrors ooStatus "<br>"/></p>
 </#if>
 </td>
 </tr>
@@ -77,16 +77,18 @@ Renders a field inputter by choosing the correct inputter renderer. Also handles
   		<@bind path />
   		<#assign listOoStatus = ooStatus />
   		<p><a href="javascript:addToList();">add</a> | <a href="javascript:removeFromList();">remove</a></p>
-		<#if listOoStatus.actualValue?is_enumerable>
+		<#if listOoStatus.actualValue?? && listOoStatus.actualValue?is_enumerable>
 			<#list listOoStatus.actualValue as item>
 	  			<p class="oo-list-last-field"><@renderField prop prop.collectionElementType "${path}[${item_index}]" /></p>
 	  		</#list>
-	  		<p style="display:none;" class="oo-list-empty-field"><@renderField prop prop.collectionElementType "${path?substring(7)}[${listOoStatus.actualValue?size}]" true/></p>
 	  	<#else>
-  			${listOoStatus.value}
+  			${(listOoStatus.value)!}
   		</#if>
-  	<#elseif type == "component" >
-  		<@bind path />
+  		<p style="display:nne;" class="oo-list-empty-field"><@renderField prop prop.collectionElementType "${path}[0]" true/></p>
+  	<#elseif type == "component" >	
+  		<#if !empty>
+	  		<@bind path />
+		</#if>
   		<#if ooStatus.value??>
 			<@renderType prop.relatedTypeDef "${path}." false/>
 		<#else>
@@ -94,7 +96,7 @@ Renders a field inputter by choosing the correct inputter renderer. Also handles
 		</#if>
 	<#elseif type == "date" >
   		<@formDate "${path}" />
-  	<#elseif type == "text" >
+  	<#elseif type == "xtext" >
   		<@spring.formTextarea "${path}"  "class=\"textarea\""/>
 	<#elseif type == "boolean" >
   		<@formCheckbox "${path}" "" empty/>
@@ -113,7 +115,7 @@ since it is in the same namespace.
 TODO Can we make an empty-compatible version of this?
 -->
 <#macro bind path>
-    <#assign ooStatus = springMacroRequestContext.getBindStatus("${path}")>
+    <#assign ooStatus = springMacroRequestContext.getBindStatus(path)>
     <#if ooStatus.value?exists && ooStatus.value?is_boolean>
 	    <#assign stringStatusValue=ooStatus.value?string>
 	<#else>
@@ -131,7 +133,7 @@ Note: when values come back they may be strings (and not typed)
 	<#if empty>
 		<#assign expression = path?substring(7) />
   		<input type="text" name="${expression}" id="${expression}" type="${fieldType}" class="${fieldType}" ${attributes}
-	    <@spring.closeTag/> (E)
+	    <@spring.closeTag/>
 	<#else>
 		<@bind path />
 		<input type="${fieldType}" class="${fieldType}" id="${ooStatus.expression}" name="${ooStatus.expression}" value="<#if fieldType!="password">${stringStatusValue}</#if>" ${attributes}
@@ -174,7 +176,22 @@ Renders a textbox for a date property.
 		<#else>
 	  	  	<#assign stringStatusValue=ooStatus.value?default("")>
 		</#if>
-		<input type="text" class="text" id="${ooStatus.expression}" name="${ooStatus.expression}" value="${stringStatusValue}" value="">
+		<input type="text" class="text" id="${ooStatus.expression}" name="${ooStatus.expression}" value="${stringStatusValue}">
 		</#if>
 </#macro>	
+
+<#--
+Renders form validation error messages.
+-->
+<#macro showErrors status separator classOrStyle="">
+    <#list status.errorMessages as error>
+    <#if classOrStyle == "">
+        <b>${error}</b>
+    <#else>
+        <#if classOrStyle?index_of(":") == -1><#assign attr="class"><#else><#assign attr="style"></#if>
+        <span ${attr}="${classOrStyle}">${error}</span>
+    </#if>
+    <#if error_has_next>${separator}</#if>
+    </#list>
+</#macro>
  

@@ -1,5 +1,6 @@
 <#import "/spring.ftl" as spring />
 <#import "/oo.ftl" as oo />
+<#import "/forms.ftl" as forms />
 
 <#assign pageTitle = "Creating new ${oo.msg(typeDef.label)}" />
 <#include "/otherobjects/templates/legacy/blocks/header.ftl" />
@@ -15,7 +16,7 @@ ${pageTitle}
 <input type="hidden" name="_oo_type" value="${typeDef.name}">
 <input type="hidden" name="_oo_containerId" value="${RequestParameters.container}">
 
-<@oo.renderForm typeDef />
+<@forms.renderForm typeDef />
 
 </form>
 </div>

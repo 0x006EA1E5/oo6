@@ -2,7 +2,7 @@
 <#import "/oo.ftl" as oo />
 <#import "/forms.ftl" as forms />
 
-<#assign pageTitle = "Editing: ${oo.msg(object.label)}" />
+<#assign pageTitle = "Editing: ${oo.msg(object.label!)}" />
 <#include "/otherobjects/templates/legacy/blocks/header.ftl" />
 <#include "/otherobjects/templates/legacy/blocks/nav-folders.ftl" />
 
