@@ -2,7 +2,11 @@
 <#import "/oo.ftl" as oo />
 <#import "/forms.ftl" as forms />
 
-<#assign pageTitle = "Editing: ${oo.msg(object.label!)}" />
+<#if object.id??>
+  <#assign pageTitle = "Editing: ${oo.msg(object.label!)}" />
+<#else>
+  <#assign pageTitle = "Creating new ${oo.msg(typeDef.label)}" />
+</#if>
 <#include "/otherobjects/templates/legacy/blocks/header.ftl" />
 <#include "/otherobjects/templates/legacy/blocks/nav-folders.ftl" />
 
@@ -13,7 +17,13 @@ ${pageTitle}
 </h2>
 
 <form id="oo-form" action="${oo.url("/otherobjects/form")}" method="post">
-<input type="hidden" name="editableId" value="${id}">
+
+<#if object.id??>
+  <input type="hidden" name="_oo_id" value="${id}">
+<#else>
+  <input type="hidden" name="_oo_type" value="${typeDef.name}">
+  <input type="hidden" name="_oo_containerId" value="${containerId}">
+</#if>
 
 <@forms.renderForm typeDef />
 

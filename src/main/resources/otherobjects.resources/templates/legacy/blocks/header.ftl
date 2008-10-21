@@ -6,10 +6,8 @@
 <title>${pageTitle!} | ${oo.msg("site.name")} | OTHERobjects</title>
 <@oo.css "/otherobjects/static/legacy/workbench.css" />
 
-<script type="text/javascript" src="http://cdn.othermedia.com/ojay-yui/2.6.0.js"></script>
-<script type="text/javascript" src="http://clive.otherworks.com/data/static/site/js/lib/ojay/rev.307/all-min.js"></script>
-<script type="text/javascript" src="http://clive.otherworks.com/data/static/site/js/site/global-min.js"></script>
-<script type="text/javascript" src="http://clive.otherworks.com/data/static/site/js/site/forms-min.js"></script>
+<@oo.js "/otherobjects/static/legacy/yui-2.6.0-all-min.js" />
+<@oo.js "/otherobjects/static/legacy/ojay-r307-all-min.js" />
 
 
 </head>

@@ -113,7 +113,7 @@ public class FormController
         {
             BindingResult errors = null;
             // Get form info
-            String id = request.getParameter("editableId");
+            String id = request.getParameter("_oo_id");
             String typeName = request.getParameter("_oo_type");
             String containerId = request.getParameter("_oo_containerId");
 
@@ -262,6 +262,7 @@ public class FormController
                 view.addObject("id", item.getEditableId());
                 view.addObject("typeDef", ((BaseNode) item).getTypeDef());
                 view.addObject("object", item);
+                view.addObject("containerId", containerId);
                 view.addObject("org.springframework.validation.BindingResult.object", errors);
                 return view;
 

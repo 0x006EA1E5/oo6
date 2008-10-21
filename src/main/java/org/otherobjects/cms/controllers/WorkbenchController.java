@@ -104,10 +104,11 @@ public class WorkbenchController
     {
         String type = RequestUtils.getId(request);
         TypeDef typeDef = typeService.getType(type);
-        ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/create");
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/edit");
 
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
         mav.addObject("object", universalJcrDao.create(type));
+        mav.addObject("containerId", request.getParameter("container"));
         mav.addObject("typeDef", typeDef);
         return mav;
     }

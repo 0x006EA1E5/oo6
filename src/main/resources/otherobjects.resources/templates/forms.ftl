@@ -96,8 +96,8 @@ Renders a field inputter by choosing the correct inputter renderer. Also handles
 		</#if>
 	<#elseif type == "date" >
   		<@formDate "${path}" />
-  	<#elseif type == "xtext" >
-  		<@spring.formTextarea "${path}"  "class=\"textarea\""/>
+  	<#elseif type == "text" >
+  		<@formTextarea "${path}" "" empty/>
 	<#elseif type == "boolean" >
   		<@formCheckbox "${path}" "" empty/>
 	<#elseif type == "string" >
@@ -132,12 +132,25 @@ Note: when values come back they may be strings (and not typed)
 <#macro formInput path attributes="" fieldType="text" empty=false>
 	<#if empty>
 		<#assign expression = path?substring(7) />
-  		<input type="text" name="${expression}" id="${expression}" type="${fieldType}" class="${fieldType}" ${attributes}
+  		<input type="${fieldType}" name="${expression}" id="${expression}" class="${fieldType}" ${attributes}
 	    <@spring.closeTag/>
 	<#else>
 		<@bind path />
-		<input type="${fieldType}" class="${fieldType}" id="${ooStatus.expression}" name="${ooStatus.expression}" value="<#if fieldType!="password">${stringStatusValue}</#if>" ${attributes}
+		<input type="${fieldType}" name="${ooStatus.expression}" id="${ooStatus.expression}" class="${fieldType}" value="<#if fieldType!="password">${stringStatusValue}</#if>" ${attributes}
     	<@spring.closeTag/>
+	</#if>  	
+</#macro>
+
+<#--
+Renders a textarea field.
+-->
+<#macro formTextarea path attributes="" empty=false>
+	<#if empty>
+		<#assign expression = path?substring(7) />
+  		<textarea name="${expression}" id="${expression}" class="textarea" ${attributes}></textarea>
+	<#else>
+		<@bind path />
+  		<textarea name="${ooStatus.expression}" id="${ooStatus.expression}" class="textarea" ${attributes}>${stringStatusValue}</textarea>
 	</#if>  	
 </#macro>
 

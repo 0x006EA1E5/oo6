@@ -13,7 +13,7 @@ ${pageTitle}
 </h2>
 
 
-<form id="oo-form" action="${oo.url("/otherobjects/form")}" method="post">
+<form id="oo-form" action="${oo.url("/otherobjects/form")}" method="post"> 
 <input type="hidden" name="_oo_type" value="${typeDef.name}">
 <input type="hidden" name="_oo_containerId" value="${RequestParameters.container}">
 
