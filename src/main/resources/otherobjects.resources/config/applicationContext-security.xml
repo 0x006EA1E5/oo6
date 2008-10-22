@@ -5,14 +5,12 @@
 		<!-- the order of these matters, the more specific the pattern the earlier it must appear  -->
 		<intercept-url pattern="/otherobjects/debug/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/otherobjects/workbench/api/**" access="ROLE_USER" />
-		<intercept-url pattern="/otherobjects/login**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<intercept-url pattern="/otherobjects/password/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/otherobjects/workbench/**" access="IS_AUTHENTICATED_REMEMBERED" />
+		<intercept-url pattern="/otherobjects/setup" access="IS_AUTHENTICATED_REMEMBERED" />
+		<intercept-url pattern="/otherobjects/login**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/otherobjects/" access="IS_AUTHENTICATED_REMEMBERED" />
 		<intercept-url pattern="/otherobjects" access="IS_AUTHENTICATED_REMEMBERED" />
-<!--		<intercept-url pattern="/go/workbench/api/**" access="ROLE_USER" />-->
-<!--		<intercept-url pattern="/go/workbench/login.html" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
-<!--		<intercept-url pattern="/go/workbench/**" access="IS_AUTHENTICATED_REMEMBERED" />-->
-		<intercept-url pattern="/otherobjects/password/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<form-login login-page="/otherobjects/login/auth" />
 		<logout logout-url="/otherobjects/logout.html" logout-success-url="/" />

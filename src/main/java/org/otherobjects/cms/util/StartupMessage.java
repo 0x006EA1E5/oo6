@@ -1,5 +1,6 @@
 package org.otherobjects.cms.util;
 
+import org.otherobjects.cms.bootstrap.OtherObjectsAdminUserCreator;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,20 +18,7 @@ public class StartupMessage implements ApplicationListener
     private final Logger logger = LoggerFactory.getLogger(StartupMessage.class);
 
     private OtherObjectsConfigurator otherObjectsConfigurator;
-
-    public void init()
-    {
-        System.err.println("*******************************************************");
-        System.err.println("*************************** INIT **********************");
-        System.err.println("*******************************************************");
-    }
-
-    public void destroy()
-    {
-        System.err.println("*******************************************************");
-        System.err.println("************************* DESTROY *********************");
-        System.err.println("*******************************************************");
-    }
+    private OtherObjectsAdminUserCreator ooAdminUserCreator;
 
     public void onApplicationEvent(ApplicationEvent e)
     {
@@ -46,7 +34,7 @@ public class StartupMessage implements ApplicationListener
             this.logger.info(" \\___/ |_| |_| |_|_____|_| \\_\\___/|_.__// |\\___|\\___|\\__|___/");
             this.logger.info("                                      |__/                ");
             this.logger.info("");
-            this.logger.info("******************* Started up successfully ******************");
+            this.logger.info("**************************************************************");
             this.logger.info("");
             if (otherObjectsConfigurator != null)
             {
@@ -55,9 +43,16 @@ public class StartupMessage implements ApplicationListener
                 this.logger.info("Public data  : " + otherObjectsConfigurator.getProperty("site.public.data.path"));
             }
             else
-                this.logger.info("WARNING: No configurator found.");
-
+                this.logger.warn("OtherObjectsConfigurator not correctly configurd.");
             this.logger.info("");
+                
+            if(ooAdminUserCreator.getGeneratedAdminPassword()!=null)
+            {
+                this.logger.info("Please visit /otherobjects/setup to configure admin user");
+                this.logger.info("Temporary admin password: " + ooAdminUserCreator.getGeneratedAdminPassword());
+                this.logger.info("");
+            }
+            
             //this.logger.info("Site URL     : " + new Url("/").getAbsoluteLink());
             //this.logger.info("Admin URL    : " + new Url("/otherobjects/").getAbsoluteLink());
             this.logger.info("**************************************************************");
@@ -68,5 +63,10 @@ public class StartupMessage implements ApplicationListener
     public void setOtherObjectsConfigurator(OtherObjectsConfigurator otherObjectsConfigurator)
     {
         this.otherObjectsConfigurator = otherObjectsConfigurator;
+    }
+
+    public void setOoAdminUserCreator(OtherObjectsAdminUserCreator ooAdminUserCreator)
+    {
+        this.ooAdminUserCreator = ooAdminUserCreator;
     }
 }

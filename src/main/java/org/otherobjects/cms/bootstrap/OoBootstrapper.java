@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.UserDao;
@@ -72,7 +73,12 @@ public class OoBootstrapper implements InitializingBean
             User adminUser = getAdminUser();
             if (adminUser == null)
                 adminUser = otherObjectsAdminUserCreator.createAdminUser();
-
+            else if (StringUtils.isEmpty(adminUser.getEmail()))
+            {
+                // If email is empty then the admin user has not been configured,
+                // so we reset the password for safety.
+                otherObjectsAdminUserCreator.resetPassword(adminUser);
+            }
             // Authenticate as new Admin user
             Authentication authentication = new UsernamePasswordAuthenticationToken(adminUser, null, adminUser.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -83,7 +89,7 @@ public class OoBootstrapper implements InitializingBean
                 jackrabbitPopulater.populateRepository();
                 boostrapProperties.setProperty(JCR_SCHEMA_VERSION_KEY, "1");
             }
-            
+
             // Scan for resources in file system
             resourceScanner.updateResources();
         }
@@ -94,7 +100,7 @@ public class OoBootstrapper implements InitializingBean
 
         // Save properties
         storeProperties();
-        
+
         // Copy properties to main configurator
         otherObjectsConfigurator.setProperty(DB_SCHEMA_VERSION_KEY, boostrapProperties.getProperty(DB_SCHEMA_VERSION_KEY));
         otherObjectsConfigurator.setProperty(JCR_SCHEMA_VERSION_KEY, boostrapProperties.getProperty(JCR_SCHEMA_VERSION_KEY));
@@ -124,7 +130,7 @@ public class OoBootstrapper implements InitializingBean
             if (fis != null)
                 fis.close();
         }
-        
+
     }
 
     private void storeProperties() throws IOException

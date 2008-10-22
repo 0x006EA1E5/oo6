@@ -198,8 +198,8 @@ Renders a textbox for a date property.
 <#--
 Renders form validation error messages.
 -->
-<#macro showErrors status separator classOrStyle="">
-    <#list status.errorMessages as error>
+<#macro showErrors separator classOrStyle="">
+    <#list ooStatus.errorMessages as error>
     <#if classOrStyle == "">
         <b>${error}</b>
     <#else>

@@ -347,7 +347,8 @@ Admin : http://localhost:8080/go/workbench/
 
     <para>Declare and map in site-servlet.xml</para>
 
-    <para>Annotate with @Controller and @RequestMapping</para>
+    <para>Annotate with @Controller and @RequestMapping:
+    http://static.springframework.org/spring/docs/2.5.x/reference/mvc.html#mvc-annotation</para>
   </chapter>
 
   <chapter>
@@ -572,7 +573,7 @@ Admin : http://localhost:8080/go/workbench/
 
     <para>Publishing here?</para>
 
-    <para>Validation </para>
+    <para>Validation</para>
   </chapter>
 
   <chapter>

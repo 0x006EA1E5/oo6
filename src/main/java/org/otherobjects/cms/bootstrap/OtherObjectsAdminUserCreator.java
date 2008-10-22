@@ -16,21 +16,16 @@ import org.springframework.security.providers.encoding.PasswordEncoder;
 public class OtherObjectsAdminUserCreator
 {
     private final Logger logger = LoggerFactory.getLogger(OtherObjectsAdminUserCreator.class);
-
     public static final String DEFAULT_ADMIN_USER_NAME = "admin";
     public static final String DEFAULT_ADMIN_ROLE_NAME = "ROLE_ADMIN";
     public static final String DEFAULT_USER_ROLE_NAME = "ROLE_USER";
+    private static final int GENERATED_PASSWORD_LENGTH = 6;
 
     private UserDao userDao;
     private RoleDao roleDao;
     private PasswordEncoder passwordEncoder;
     private SaltSource saltSource;
-    private char[] defaultAdminPassword;
-
-    public void setDefaultAdminPassword(char[] defaultAdminPassword)
-    {
-        this.defaultAdminPassword = defaultAdminPassword;
-    }
+    private String generatedAdminPassword;
 
     public void setPasswordEncoder(PasswordEncoder passwordEncoder)
     {
@@ -53,17 +48,24 @@ public class OtherObjectsAdminUserCreator
         adminUser.setUsername("admin");
         adminUser.setFirstName("The");
         adminUser.setLastName("Administrator");
-        adminUser.setEmail("admin@mysite.com");
+        adminUser.setEmail("");
         adminUser.setRoles(roles);
         adminUser.setAccountExpired(false);
         adminUser.setAccountLocked(false);
         adminUser.setEnabled(true);
         adminUser.setPasswordHint("See the command line output for the temporary admin password.");
-        adminUser.setPassword(passwordEncoder.encodePassword(new String(defaultAdminPassword), saltSource.getSalt(adminUser)));
+        
+        resetPassword(adminUser);
         adminUser = userDao.save(adminUser);
-        // blank password
-        Arrays.fill(defaultAdminPassword, ' ');
         return adminUser;
+    }
+    
+    public void resetPassword(User user)
+    {
+        // Generate password 
+        generatedAdminPassword = generatePassword(GENERATED_PASSWORD_LENGTH);
+        user.setPassword(passwordEncoder.encodePassword(generatedAdminPassword, saltSource.getSalt(user)));
+        user = userDao.save(user);
     }
 
     public void setUserDao(UserDao userDao)
@@ -81,18 +83,23 @@ public class OtherObjectsAdminUserCreator
         this.saltSource = saltSource;
     }
 
+    public String getGeneratedAdminPassword()
+    {
+        return generatedAdminPassword;
+    }
+
     /**
      * A simple random password generator, user can specify the length.
      * 
      * Copyright © 1999 - 2003 Roseanne Zhang, All Rights Reserved
      * http://bobcat.webappcabaret.net/javachina/jc/share/PwGen.htm
      */
-    public static String getPassword(int n)
+    public static String generatePassword(int length)
     {
-        char[] pw = new char[n];
+        char[] pw = new char[length];
         int c = 'A';
         int r1 = 0;
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < length; i++)
         {
             r1 = (int) (Math.random() * 3);
             switch (r1)
@@ -111,5 +118,4 @@ public class OtherObjectsAdminUserCreator
         }
         return new String(pw);
     }
-    
 }

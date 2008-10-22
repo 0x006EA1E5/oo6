@@ -1,8 +1,11 @@
+<#assign pageTitle = "Welcome" />
+
 <#include "/otherobjects/templates/legacy/blocks/header.ftl" />
 
 <#include "/otherobjects/templates/legacy/blocks/nav-folders.ftl" />
 
 <div class="oo-content">
+
 
 <#--
 <p>Drag this link: 

@@ -12,18 +12,11 @@
 		<property name="nodeTypesConfig" value="classpath:otherobjects.resources/config/node-types.cnd" />
 	</bean>
 
-	<bean id="ooAdminPassword" class="java.lang.String">
-		<constructor-arg index="0" value="${otherobjects.default.admin.password}" />
-	</bean>
-
 	<bean id="ooAdminUserCreator" class="org.otherobjects.cms.bootstrap.OtherObjectsAdminUserCreator">
 		<property name="userDao" ref="userDao"></property>
 		<property name="roleDao" ref="roleDao"></property>
 		<property name="passwordEncoder" ref="passwordEncoder"></property>
 		<property name="saltSource" ref="saltSource"></property>
-		<property name="defaultAdminPassword">
-			<bean factory-bean="ooAdminPassword" factory-method="toCharArray" />
-		</property>
 	</bean>
 
 	<bean id="jackrabbitPopulater" class="org.otherobjects.cms.bootstrap.JackrabbitPopulater">
