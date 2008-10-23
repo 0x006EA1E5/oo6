@@ -5,7 +5,7 @@
 	<artifactId>otherobjects</artifactId>
 	<name>OTHERobjects CMS</name>
 	<packaging>jar</packaging>
-	<version>0.5.1</version>
+	<version>0.5.2</version>
 	<description>OTHERobjects Content Management System.</description>
 	<inceptionYear>2007</inceptionYear>
 	<properties>
