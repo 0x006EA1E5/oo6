@@ -164,6 +164,21 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
   <chapter>
     <title>Where does the data go?</title>
 
+    <para>Before starting to build your site it important to understand the
+    different data stores. You will want to back up your data and move it
+    between servers so it's essential to know how and where it is
+    stored.</para>
+
+    <para>Database:</para>
+
+    <para>JCR:</para>
+
+    <para>Uploaded images etc:</para>
+
+    <para>Templates/assets:</para>
+
+    <para></para>
+
     <para>OTHERobjects sites use Maven under the hood to manage a variety of
     build functions. The standard maven directory layout
     (http://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html)
@@ -1000,6 +1015,12 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
 
     <para>Maintenance page: if on static server must ahve link back to main
     site page. Provide esssential details.</para>
+  </chapter>
+
+  <chapter>
+    <title>Release and deploy</title>
+
+    <para>mvn release:prepare</para>
   </chapter>
 
   <chapter>

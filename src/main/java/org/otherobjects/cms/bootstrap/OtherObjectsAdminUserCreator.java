@@ -1,7 +1,6 @@
 package org.otherobjects.cms.bootstrap;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.otherobjects.cms.dao.RoleDao;
@@ -91,7 +90,7 @@ public class OtherObjectsAdminUserCreator
     /**
      * A simple random password generator, user can specify the length.
      * 
-     * Copyright � 1999 - 2003 Roseanne Zhang, All Rights Reserved
+     * Copyright 1999 - 2003 Roseanne Zhang, All Rights Reserved
      * http://bobcat.webappcabaret.net/javachina/jc/share/PwGen.htm
      */
     public static String generatePassword(int length)

@@ -47,88 +47,10 @@
     will work with the minimum of fuss) then this section will help you get
     your working environment prepared.</para>
 
-    <section>
-      <title>Supported platforms</title>
-
-      <para>OTHERobjects should run well on any platform that supports Java
-      5.0. This includes Apple Mac OS X 10.4+, Microsoft Windows 2000/XP/Vista
-      and most distributions of Linux.</para>
-
-      <para>Although, OTHERobjects runs on Windows it is happiest on UNIX-like
-      systems such an Mac OS X and Linux. Windows users may need to install
-      Cygwin.</para>
-    </section>
-
     <section id="section-configuring-your-documentation">
-      <title>Installing required software</title>
+      <title>Setting up the environment</title>
 
-      <para>There is some key software that you will need before you can start
-      developing with OTHERobjects.</para>
-
-      <section>
-        <title>Java</title>
-
-        <para>You will need a JVM installed and version 5.0 is required. If
-        your system does not come with a JVM installed we would recommend the
-        latest Sun JDK from java.sun.com/download. Check that your JVM is
-        installed:</para>
-
-        <programlisting>brushed:~ rich$ java -version
-java version "1.5.0_07" 
-Java(TM) 2 Runtime Environment, Standard Edition (build 1.5.0_07-164)
-Java HotSpot(TM) Client VM (build 1.5.0_07-87, mixed mode, sharing)
-brushed:~ rich$
-</programlisting>
-      </section>
-
-      <para>TODO Note about system properties. Memory, encoding?</para>
-
-      <section>
-        <title>Apache Maven</title>
-
-        <para>Next you'll need Apache Maven version 2.0.7 or greater. You can
-        download it from: <uri>http://maven.apache.org/download.html</uri> .
-        Once you have downloaded and installed Maven you should make sure that
-        the <emphasis role="bold">mvn</emphasis> command is included in your
-        path:</para>
-
-        <para>
-          <programlisting>brushed:~ rich$ mvn -version 
-Maven version: 2.0.7
-brushed:~ rich$
-</programlisting>
-        </para>
-
-        <para>All of the libraries that OTHERobjects depends on are downloaded
-        automatically via Maven. Most of these libraries are in the public
-        Maven repository but are few are only available from the OTHERobjects
-        repository. By default OTHERobjects projects will download from the
-        OTHERobjects repository but you are free to turn this off or mirror
-        the repo yourselves.</para>
-      </section>
-
-      <section>
-        <title>ImageMagick</title>
-
-        <para>We use ImageMagick for high quality image resizing. You need
-        version 6.3 or later. Download a binary package from <uri>
-        http://www.imagemagick.org/script/binary-releases.php </uri> and
-        install it. You will need to set your paths and environment variables
-        correctly. To test that you have the correct version is installed run
-        the following command:</para>
-
-        <para>
-          <programlisting>brushed:~ rich$ convert -version
-Version: ImageMagick 6.3.4 05/19/07 Q16 http://www.imagemagick.org 
-Copyright: Copyright (C) 1999-2007 ImageMagick Studio LLC
-
-brushed:~ rich$
-</programlisting>
-        </para>
-
-        <para>Note for Mac users: the MacPorts install method is usually the
-        easiest and best way to go.</para>
-      </section>
+      <para>Here's what we recommend.</para>
 
       <section>
         <title>Eclipse</title>
@@ -197,7 +119,7 @@ brushed:~ rich$
               <row>
                 <entry>CheckStyle</entry>
 
-                <entry />
+                <entry></entry>
               </row>
 
               <row>
@@ -291,6 +213,14 @@ test-site/trunk</programlisting>
       Select this folder in the Package Explorer and then select Run As...
       JUnit Test. You should also do this for any tests in the sample
       project.</para>
+    </section>
+
+    <section>
+      <title>Getting your project into Eclipse</title>
+
+      <para>Import</para>
+
+      <para>Add maven nature. How?</para>
     </section>
 
     <section>

@@ -104,6 +104,8 @@ public class SetupController
         {
             passwordService.changePassword(currentUser, setupAdminUserCommand.getOldPassword(), setupAdminUserCommand.getPasswordChanger().getNewPassword());
             UserDao userDao = (UserDao) daoService.getDao(User.class);
+            currentUser.setEmail(setupAdminUserCommand.getEmail());
+            currentUser.setPasswordHint(setupAdminUserCommand.getPasswordHint());
             userDao.save(currentUser);
             actionUtils.flashInfo("Admin user sucessfully configured.");
             status.setComplete();

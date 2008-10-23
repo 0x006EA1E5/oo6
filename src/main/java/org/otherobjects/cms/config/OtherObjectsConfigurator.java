@@ -6,10 +6,15 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+import org.apache.jackrabbit.ocm.mapper.impl.annotation.Implement;
+import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.context.ResourceLoaderAware;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.Assert;
 
 /**
@@ -19,7 +24,7 @@ import org.springframework.util.Assert;
  *  
  * @author joerg
  */
-public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
+public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer implements ResourceLoaderAware
 {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     public static final String ENVIRONMENT_SYSPROP_KEY = "otherobjects.environment";
@@ -40,8 +45,8 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
     {
         // Force file ecnoding to be UTF-8
         // TODO Make this configurable?
-        System.setProperty( "file.encoding", "UTF-8" );
-        
+        System.setProperty("file.encoding", "UTF-8");
+
         String environmentPrefix = getEnvironmentName();
 
         Pattern pattern = Pattern.compile("^" + environmentPrefix + "\\.");
@@ -116,7 +121,28 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer
         else
             return "";
     }
-    
+
+    public void setResourceLoader(ResourceLoader resourceLoader)
+    {
+        try
+        {
+            Properties mavenProps = new Properties();
+            Resource pomProps = resourceLoader.getResource("META-INF/maven/org.otherobjects/cms/pom.properties");
+            if (pomProps.exists())
+                mavenProps.load(pomProps.getInputStream());
+            else
+                throw new OtherObjectsException("Maven meta data can't be read.");
+            if (mavenProps.containsKey("version"))
+            {
+//                this.appVersion = mavenProps.getProperty("version");
+            }
+        }
+        catch (Exception e)
+        {
+            logger.info("Couldn't set appVersion. Probably in local development mode");
+        }
+    }
+
     public void setProperty(String key, String value)
     {
         this.mergedProperties.setProperty(key, value);
