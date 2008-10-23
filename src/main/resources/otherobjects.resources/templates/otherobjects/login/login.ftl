@@ -63,12 +63,11 @@ BODY {height:1000px; background:#006DA8 url(${oo.resourceUrl("/otherobjects/stat
 </fieldset>
 </form>
 
-
 </div>
 </div>
 
 <div class="oo-build">
-<p>Version TODO</p> 
+<p>Version ${format.getProperty("otherobjects.version")}</p> 
 </div>
 
 <div class="oo-footer">

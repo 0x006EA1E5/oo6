@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.io.OoResourceLoader;
 import org.otherobjects.cms.tools.CmsImageTool;
@@ -20,6 +21,7 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
 {
     private DaoService daoService;
     private OoResourceLoader ooResourceLoader;
+    private OtherObjectsConfigurator otherObjectsConfigurator;
     private MessageSource messageSource;
 
     @Override
@@ -48,7 +50,7 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             modelAndView.addObject("cmsImageTool", new CmsImageTool());
             modelAndView.addObject("urlTool", new UrlTool(ooResourceLoader));
             modelAndView.addObject("objectInspector", new ObjectInspector());
-            modelAndView.addObject("formatTool", new FormatTool(messageSource));
+            modelAndView.addObject("formatTool", new FormatTool(messageSource, otherObjectsConfigurator));
             modelAndView.addObject("security", new SecurityTool());
             modelAndView.addObject("daoService", daoService);
             modelAndView.addObject("dao", daoService);
@@ -72,6 +74,11 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
     public void setMessageSource(MessageSource messageSource)
     {
         this.messageSource = messageSource;
+    }
+
+    public void setOtherObjectsConfigurator(OtherObjectsConfigurator otherObjectsConfigurator)
+    {
+        this.otherObjectsConfigurator = otherObjectsConfigurator;
     }
 
 }

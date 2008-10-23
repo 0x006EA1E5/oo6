@@ -7,6 +7,7 @@ import net.java.textilej.parser.MarkupParser;
 import net.java.textilej.parser.builder.HtmlDocumentBuilder;
 import net.java.textilej.parser.markup.textile.TextileDialect;
 
+import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.springframework.context.MessageSource;
 
 /**
@@ -18,11 +19,19 @@ public class FormatTool
 {
     private MessageSource messageSource;
     
-    public FormatTool(MessageSource messageSource)
+    private OtherObjectsConfigurator otherObjectsConfigurator;
+    
+    public FormatTool(MessageSource messageSource, OtherObjectsConfigurator otherObjectsConfigurator)
     {
         this.messageSource = messageSource;
+        this.otherObjectsConfigurator = otherObjectsConfigurator;
     }
 
+    public String getProperty(String name)
+    {
+        return otherObjectsConfigurator.getProperty(name);
+    }
+    
     /**
      * Formats textile string into HTML. HTML special chars in the textileSource will get escaped (notably the less than and greater than signs)
      * @param textileSource
@@ -90,5 +99,11 @@ public class FormatTool
     protected void setMessageSource(MessageSource messageSource)
     {
         this.messageSource = messageSource;
+    }
+
+
+    protected void setOtherObjectsConfigurator(OtherObjectsConfigurator otherObjectsConfigurator)
+    {
+        this.otherObjectsConfigurator = otherObjectsConfigurator;
     }
 }

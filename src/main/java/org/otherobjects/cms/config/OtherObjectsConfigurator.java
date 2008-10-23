@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-import org.apache.jackrabbit.ocm.mapper.impl.annotation.Implement;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.util.StringUtils;
 import org.slf4j.Logger;
@@ -127,7 +126,7 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer impl
         try
         {
             Properties mavenProps = new Properties();
-            Resource pomProps = resourceLoader.getResource("META-INF/maven/org.otherobjects/cms/pom.properties");
+            Resource pomProps = resourceLoader.getResource("classpath:META-INF/maven/org.otherobjects.cms/otherobjects/pom.properties");
             if (pomProps.exists())
                 mavenProps.load(pomProps.getInputStream());
             else
@@ -135,13 +134,13 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer impl
             if (mavenProps.containsKey("version"))
             {
                 String appVersion = mavenProps.getProperty("version");
-                logger.error("OOV:"+appVersion);
                 mergedProperties.setProperty("otherobjects.version", appVersion);
             }
         }
         catch (Exception e)
         {
             logger.info("Couldn't set appVersion. Probably in local development mode");
+            mergedProperties.setProperty("otherobjects.version", "Local");
         }
     }
 
