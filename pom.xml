@@ -5,7 +5,7 @@
 	<artifactId>otherobjects</artifactId>
 	<name>OTHERobjects CMS</name>
 	<packaging>jar</packaging>
-	<version>0.5.4-SNAPSHOT</version>
+	<version>0.5.4</version>
 	<description>OTHERobjects Content Management System.</description>
 	<inceptionYear>2007</inceptionYear>
 	<properties>
@@ -93,9 +93,9 @@
 		</pluginRepository> -->
 	</pluginRepositories>
 	<scm>
-		<connection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/tags/otherobjects-0.5.1</connection>
-		<developerConnection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/tags/otherobjects-0.5.1</developerConnection>
-		<url>http://www.otherobjects.org/tags/otherobjects-0.5.1</url>
+		<connection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/tags/otherobjects-0.5.4</connection>
+		<developerConnection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/tags/otherobjects-0.5.4</developerConnection>
+		<url>http://www.otherobjects.org/tags/otherobjects-0.5.4</url>
 	</scm>
 	<build>
 		<extensions>
