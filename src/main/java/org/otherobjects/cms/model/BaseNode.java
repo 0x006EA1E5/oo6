@@ -166,7 +166,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
         }
         catch (Exception e)
         {
-            throw new OtherObjectsException("Could not get property value for '" + name + "' in: " + toString(), e);
+            throw new OtherObjectsException("Could not get property value for '" + name + "' in: " + getTypeDef().getName(), e);
         }
     }
 

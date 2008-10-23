@@ -87,7 +87,6 @@ public class PasswordService extends HibernateDaoSupport
     public PasswordChangeRequest getPasswordChangeRequest(String changeRequestCode)
     {
         Assert.notNull(changeRequestCode, "No changeRequestCode provided");
-        
 
         Object[] identifier = PasswordChangeRequest.splitPasswordChangeRequestIdentifier(changeRequestCode);
 
@@ -103,7 +102,7 @@ public class PasswordService extends HibernateDaoSupport
 
         Date now = new Date();
 
-        //if the token is too old we can't change pwd
+        // If the token is too old we can't change pwd
         if ((now.getTime() - passwordChangeRequest.getRequestDate().getTime()) > MAXIMUM_TOKEN_AGE)
             return null;
 
@@ -124,6 +123,21 @@ public class PasswordService extends HibernateDaoSupport
             return false;
         }
     }
+    
+    @Transactional
+    public boolean changePassword(User user, String oldPassword, String newPassword)
+    {
+        try
+        {
+            user.setPassword(passwordEncoder.encodePassword(newPassword, saltSource.getSalt(user)));
+            userDao.save(user);
+            return true;
+        }
+        catch (Exception e)
+        {
+            throw new OtherObjectsException("Error occured whilst changing password.", e);
+        }
+    }
 
     @Transactional
     public boolean changePassword(PasswordChanger passwordChanger)
@@ -138,7 +152,7 @@ public class PasswordService extends HibernateDaoSupport
 
             // Encode and store new password
             User user = passwordChangeRequest.getUser();
-            user.setPassword(passwordEncoder.encodePassword(passwordChanger.getNewPassword(), saltSource.getSalt(user)));
+            user.setPassword(hashPassword(passwordChanger.getNewPassword(), user));
             userDao.save(user);
 
             // If we've gotten this far then we can safely delete all PCRs for this user
@@ -149,6 +163,11 @@ public class PasswordService extends HibernateDaoSupport
         {
             throw new OtherObjectsException("Error occured whilst changing password.", e);
         }
+    }
+
+    private String hashPassword(String password, User user)
+    {
+        return passwordEncoder.encodePassword(password, saltSource.getSalt(user));
     }
 
     /**
@@ -169,5 +188,11 @@ public class PasswordService extends HibernateDaoSupport
             }
         });
 
+    }
+
+    public boolean isPasswordMatch(User user, String password)
+    {
+        String hash = hashPassword(password, user);
+        return user.getPassword().equals(hash);
     }
 }

@@ -36,6 +36,7 @@ public class StartupMessage implements ApplicationListener
             this.logger.info("");
             this.logger.info("**************************************************************");
             this.logger.info("");
+            
             if (otherObjectsConfigurator != null)
             {
                 this.logger.info("Environment  : {}", otherObjectsConfigurator.getEnvironmentName());
@@ -43,16 +44,16 @@ public class StartupMessage implements ApplicationListener
                 this.logger.info("Public data  : " + otherObjectsConfigurator.getProperty("site.public.data.path"));
             }
             else
-                this.logger.warn("OtherObjectsConfigurator not correctly configurd.");
+                this.logger.warn("OtherObjectsConfigurator not correctly created.");
             this.logger.info("");
-                
-            if(ooAdminUserCreator.getGeneratedAdminPassword()!=null)
+
+            if (ooAdminUserCreator != null && ooAdminUserCreator.getGeneratedAdminPassword() != null)
             {
                 this.logger.info("Please visit /otherobjects/setup to configure admin user");
                 this.logger.info("Temporary admin password: " + ooAdminUserCreator.getGeneratedAdminPassword());
                 this.logger.info("");
             }
-            
+
             //this.logger.info("Site URL     : " + new Url("/").getAbsoluteLink());
             //this.logger.info("Admin URL    : " + new Url("/otherobjects/").getAbsoluteLink());
             this.logger.info("**************************************************************");

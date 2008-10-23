@@ -91,7 +91,7 @@ public class OtherObjectsAdminUserCreator
     /**
      * A simple random password generator, user can specify the length.
      * 
-     * Copyright © 1999 - 2003 Roseanne Zhang, All Rights Reserved
+     * Copyright ï¿½ 1999 - 2003 Roseanne Zhang, All Rights Reserved
      * http://bobcat.webappcabaret.net/javachina/jc/share/PwGen.htm
      */
     public static String generatePassword(int length)

@@ -187,9 +187,9 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
                 buf.append(path);
                 break;
             case OTHEROBJECTS :
-            	//buf.append(prefix.replacementFilePathPrefix());
-            	buf.append(path);
-            	break;
+                //buf.append(prefix.replacementFilePathPrefix());
+                buf.append(path);
+                break;
             case DATA :
                 buf.append("file:");
                 buf.append(dataDirPath);

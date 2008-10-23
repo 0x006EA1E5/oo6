@@ -20,32 +20,32 @@ public class SiteSearchController {
     @RequestMapping
     public ModelAndView search(HttpServletRequest request, HttpServletResponse response)
     {
-    	UniversalJcrDao jcr = (UniversalJcrDao) daoService.getDao("BaseNode");
-    	Object ooTemplate = jcr.getByPath("/designer/templates/searchresults");
-    	
-    	// Choose layout
-    	ModelAndView mv  = new ModelAndView("/site/templates/layouts/two-column");
-    	mv.addObject("ooTemplate", ooTemplate);
-    	mv.addObject("test", "Hello Rich");
-    	return mv;
+        UniversalJcrDao jcr = (UniversalJcrDao) daoService.getDao("BaseNode");
+        Object ooTemplate = jcr.getByPath("/designer/templates/searchresults");
+        
+        // Choose layout
+        ModelAndView mv  = new ModelAndView("/site/templates/layouts/two-column");
+        mv.addObject("ooTemplate", ooTemplate);
+        mv.addObject("test", "Hello Rich");
+        return mv;
     }
-	
-	public DaoService getDaoService() {
-		return daoService;
-	}
+    
+    public DaoService getDaoService() {
+        return daoService;
+    }
 
 
-	public void setDaoService(DaoService daoService) {
-		this.daoService = daoService;
-	}
+    public void setDaoService(DaoService daoService) {
+        this.daoService = daoService;
+    }
 
 
-	public OoResourceLoader getOoResourceLoader() {
-		return ooResourceLoader;
-	}
+    public OoResourceLoader getOoResourceLoader() {
+        return ooResourceLoader;
+    }
 
 
-	public void setOoResourceLoader(OoResourceLoader ooResourceLoader) {
-		this.ooResourceLoader = ooResourceLoader;
-	}
+    public void setOoResourceLoader(OoResourceLoader ooResourceLoader) {
+        this.ooResourceLoader = ooResourceLoader;
+    }
 }
