@@ -128,8 +128,6 @@ TODO Can we make an empty-compatible version of this?
 
 <#--
 Renders a checkbox for a boolean property.
-
-Note: when values come back they may be strings (and not typed)
 -->
 <#macro formInput path attributes="" fieldType="text" empty=false>
 	<#if empty>
@@ -141,6 +139,13 @@ Note: when values come back they may be strings (and not typed)
 		<input type="${fieldType}" name="${ooStatus.expression}" id="${ooStatus.expression}" class="${fieldType}" value="<#if fieldType!="password">${stringStatusValue}</#if>" ${attributes}
     	<@spring.closeTag/>
 	</#if>  	
+</#macro>
+
+<#--
+Renders a password field.
+-->
+<#macro formPassword path attributes="" fieldType="text" empty=false>
+	<@formInput path attributes "password" empty/>
 </#macro>
 
 <#--

@@ -25,32 +25,32 @@ user password will be reset on each startup.</p>
 </thead>
 <tbody>
 <tr>
-<td class="oo-label">Email address<span class="oo-required">*</span></td>
-<td><p><@forms.formInput "command.user.email" /></p></td>
+<td class="oo-label">Email address <span class="oo-required">*</span></td>
+<td><p><@forms.formInput "command.email" /></p></td>
 <td style="color:red; font-weight:normal!important;"><p><@forms.showErrors "<br>"/></p></td>
 </tr>
 <tr>
 <tr>
-<td class="oo-label">Email address<span class="oo-required">*</span></td>
-<td><p><@forms.formInput "command.oldPassword" /></p></td>
+<td class="oo-label">Old password <span class="oo-required">*</span></td>
+<td><p><@forms.formPassword "command.oldPassword" /></p></td>
 <td style="color:red; font-weight:normal!important;"><p><@forms.showErrors "<br>"/></p></td>
 </tr>
 <tr>
 <tr>
-<td class="oo-label">Email address<span class="oo-required">*</span></td>
-<td><p><@forms.formInput "command.newPassword" /></p></td>
+<td class="oo-label">New password <span class="oo-required">*</span></td>
+<td><p><@forms.formPassword "command.passwordChanger.newPassword" /></p></td>
 <td style="color:red; font-weight:normal!important;"><p><@forms.showErrors "<br>"/></p></td>
 </tr>
 <tr>
 <tr>
-<td class="oo-label">Email address<span class="oo-required">*</span></td>
-<td><p><@forms.formInput "command.user.email" /></p></td>
+<td class="oo-label">Confirm new password <span class="oo-required">*</span></td>
+<td><p><@forms.formPassword "command.passwordChanger.newPasswordRepeated" /></p></td>
 <td style="color:red; font-weight:normal!important;"><p><@forms.showErrors "<br>"/></p></td>
 </tr>
 <tr>
 <tr>
-<td class="oo-label">Email address<span class="oo-required">*</span></td>
-<td><p><@forms.formTextarea "command.user.email" /></p></td>
+<td class="oo-label">Password hint</td>
+<td><p><@forms.formTextarea "command.passwordHint" /></p></td>
 <td style="color:red; font-weight:normal!important;"><p><@forms.showErrors "<br>"/></p></td>
 </tr>
 <tr>

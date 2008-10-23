@@ -67,7 +67,7 @@ if(typeService)
 
 // FIXME Create base structure
 //createFolder(dao, "/smart", "\${smartFolders.label}", "smart-folders", ["org.otherobjects.cms.model.SmartFolder"])
-createFolder(dao, "/site", "\${site.label}", "site", ["org.otherobjects.cms.model.SamplePage","com.othermedia.site.model.CompositePage"])
+createFolder(dao, "/site", "\${site.label}", "site", ["ArticlePage","CompositePage"])
 //createFolder(dao, "/libraries", "\${libraries.label}", "libraries", [])
 //createFolder(dao, "/libraries/images", "\${libraries.images.label}", null)
 //createFolder(dao, "/libraries/files", "\${libraries.files.label}", null)

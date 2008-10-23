@@ -27,6 +27,7 @@ public class DynaNodeBindServiceImplTest extends TestCase
         td.addProperty(new PropertyDefImpl("testText", "text", null, null, false, true));
         td.addProperty(new PropertyDefImpl("testDate", "date", null, null, false, true));
         td.addProperty(new PropertyDefImpl("testComponent", "component", TestComponentObject.class.getName(), null, false, true));
+        td.setLabelProperty("data.testString");
         typeService.registerType(td);
                 
         ((TypeServiceImpl) typeService).reset();
@@ -41,9 +42,10 @@ public class DynaNodeBindServiceImplTest extends TestCase
         req.addParameter("data[testText]", "  no trailing white space\n");
         req.addParameter("data[testDate]", "");
         
-        req.addParameter("data[testComponent].name", "Name");
+        //req.addParameter("data[testComponent].name", "Name");
         
         DynaNode t = new DynaNode("TestDynaNode");
+       
 
         BindServiceImpl binder = new BindServiceImpl();
         
@@ -52,7 +54,7 @@ public class DynaNodeBindServiceImplTest extends TestCase
         assertEquals(null, t.getData().get("testString"));
         assertEquals("no trailing white space",  t.getData().get("testText"));
         assertEquals(null, t.getData().get("testDate"));
-        assertEquals("Name", ((TestComponentObject)t.getData().get("testComponent")).getName());
+        //assertEquals("Name", ((TestComponentObject)t.getData().get("testComponent")).getName());
     }
     
     /*
