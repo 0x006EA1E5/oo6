@@ -5,7 +5,7 @@
 	<artifactId>otherobjects</artifactId>
 	<name>OTHERobjects CMS</name>
 	<packaging>jar</packaging>
-	<version>0.5.2</version>
+	<version>0.5.2-SNAPSHOT</version>
 	<description>OTHERobjects Content Management System.</description>
 	<inceptionYear>2007</inceptionYear>
 	<properties>
@@ -44,8 +44,8 @@
 	</developers>
 	<distributionManagement>
 		<repository>
-			<id>otherobjects-snapshots</id>
-			<url>dav:http://maven.richaston.com:8081/artifactory/libs-snapshots</url>
+			<id>otherobjects-releases</id>
+			<url>dav:http://maven.richaston.com:8081/artifactory/libs-releases</url>
 		</repository>
 	</distributionManagement>
 	<repositories>

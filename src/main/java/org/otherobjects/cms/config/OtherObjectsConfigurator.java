@@ -134,7 +134,9 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer impl
                 throw new OtherObjectsException("Maven meta data can't be read.");
             if (mavenProps.containsKey("version"))
             {
-//                this.appVersion = mavenProps.getProperty("version");
+                String appVersion = mavenProps.getProperty("version");
+                logger.error("OOV:"+appVersion);
+                mergedProperties.setProperty("otherobjects.version", appVersion);
             }
         }
         catch (Exception e)
