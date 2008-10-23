@@ -18,9 +18,14 @@ import org.springframework.context.MessageSource;
 public class FormatTool
 {
     private MessageSource messageSource;
-    
+
     private OtherObjectsConfigurator otherObjectsConfigurator;
-    
+
+    public FormatTool(MessageSource messageSource)
+    {
+        this.messageSource = messageSource;
+    }
+
     public FormatTool(MessageSource messageSource, OtherObjectsConfigurator otherObjectsConfigurator)
     {
         this.messageSource = messageSource;
@@ -31,7 +36,7 @@ public class FormatTool
     {
         return otherObjectsConfigurator.getProperty(name);
     }
-    
+
     /**
      * Formats textile string into HTML. HTML special chars in the textileSource will get escaped (notably the less than and greater than signs)
      * @param textileSource
@@ -67,7 +72,7 @@ public class FormatTool
         parser.setBuilder(null);
         return out.toString();
     }
-    
+
     /**
      * Parses a string and looks up messages if appropriate. Useful for form labels that may or may note use
      * message codes. If the string appears to be a message code then this is looked up otherwise the string
@@ -80,13 +85,13 @@ public class FormatTool
      */
     public String getMessage(String message)
     {
-        if(message.startsWith("$"))
+        if (message.startsWith("$"))
         {
             // Message
             // FIXME Get locale from somewhere better
-            return messageSource.getMessage(message.substring(2, message.length()-1), null, Locale.ENGLISH);
+            return messageSource.getMessage(message.substring(2, message.length() - 1), null, Locale.ENGLISH);
         }
-        if(message.contains("."))
+        if (message.contains("."))
         {
             // Message
             // FIXME proper regexp here
@@ -100,7 +105,6 @@ public class FormatTool
     {
         this.messageSource = messageSource;
     }
-
 
     protected void setOtherObjectsConfigurator(OtherObjectsConfigurator otherObjectsConfigurator)
     {
