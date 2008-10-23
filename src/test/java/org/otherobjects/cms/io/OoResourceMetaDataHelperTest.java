@@ -2,7 +2,9 @@ package org.otherobjects.cms.io;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.net.URL;
 
 import junit.framework.TestCase;
 
@@ -17,6 +19,7 @@ public class OoResourceMetaDataHelperTest extends TestCase
     public void testReadMetaData() throws Exception
     {
         Resource testResource = new ClassPathResource("org/otherobjects/cms/io/test.ftl");
+        InputStream resourceAsStream = getClass().getResourceAsStream("org/otherobjects/cms/io/test.ftl");
 
         OoResource resource = new DefaultOoResource(testResource, "classpath:org/otherobjects/cms/io/test.ftl", null, false);
 
