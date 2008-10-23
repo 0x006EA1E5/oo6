@@ -5,7 +5,7 @@
 	<artifactId>otherobjects</artifactId>
 	<name>OTHERobjects CMS</name>
 	<packaging>jar</packaging>
-	<version>0.5.5-SNAPSHOT</version>
+	<version>0.5.4-SNAPSHOT</version>
 	<description>OTHERobjects Content Management System.</description>
 	<inceptionYear>2007</inceptionYear>
 	<properties>
@@ -120,7 +120,7 @@
 				</configuration>
 				</plugin>
 			-->
-			<!--  Documentation generation -->
+			<!--  Documentation generation 
 			<plugin>
 				<groupId>org.jboss.maven.plugins</groupId>
 				<artifactId>maven-jdocbook-plugin</artifactId>
@@ -148,6 +148,7 @@
 					</options>
 				</configuration>
 			</plugin>
+			-->
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
