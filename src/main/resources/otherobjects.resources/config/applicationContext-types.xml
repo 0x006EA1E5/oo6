@@ -18,6 +18,7 @@
 	</bean>
 	<bean name="daoService" class="org.otherobjects.cms.dao.DaoServiceImpl">
 		<property name="typeService" ref="typeService" />
+		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	<bean id="typeDefConfiguredValidator" class="org.otherobjects.cms.validation.TypeDefConfiguredValidator">
 		<property name="typeService" ref="typeService" />

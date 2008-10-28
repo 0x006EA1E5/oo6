@@ -23,6 +23,7 @@ Convenience macro to insert CSS link tag.
 Convenience macro to insert favicon link tag.
 -->
 <#macro favicon path>
+<link rel="shortcut icon" href="${resourceUrl(path)}" type="image/x-icon" />
 </#macro>  
 
 <#-- 

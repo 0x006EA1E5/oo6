@@ -1,14 +1,6 @@
 package org.otherobjects.cms.io;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-
 import junit.framework.TestCase;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.springframework.core.io.FileSystemResource;
 
 public class OoResourceMetaDataHelperTest extends TestCase
 {

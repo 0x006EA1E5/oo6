@@ -36,7 +36,7 @@ public class HibernateEntityConfigProvider implements InitializingBean
         Assert.notNull(otherObjectsConfigurator, "OtherObjectsConfigurator must be set");
         List<String> packages = new ArrayList<String>();
         packages.add(otherObjectsConfigurator.getProperty("otherobjects.model.packages"));
-        packages.add(otherObjectsConfigurator.getProperty("site.entity.packages"));
+        packages.add(otherObjectsConfigurator.getProperty("site.model.packages"));
 
         annotatedPackages = StringUtils.join(packages, ',').split(",");
 

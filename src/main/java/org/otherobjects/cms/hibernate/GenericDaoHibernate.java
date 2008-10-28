@@ -2,6 +2,7 @@ package org.otherobjects.cms.hibernate;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -87,6 +88,23 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
     public PagedList<T> getAllPaged(int pageSize, int pageNo, String filterQuery, String sortField, boolean asc)
     {
         return getPagedByQuery("from " + persistentClass.getName(), pageSize, pageNo, filterQuery, sortField, asc);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<T> findByQuery(final String query, final Map<String, Object> queryParams)
+    {
+        return getHibernateTemplate().executeFind(new HibernateCallback()
+        {
+            public Object doInHibernate(Session session)
+            {
+                Query q = session.createQuery(query);
+                for (String key : queryParams.keySet())
+                {
+                    q.setParameter(key, queryParams.get(key));
+                }
+                return q.list();
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")

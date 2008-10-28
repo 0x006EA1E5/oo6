@@ -67,7 +67,7 @@ BODY {height:1000px; background:#006DA8 url(${oo.resourceUrl("/otherobjects/stat
 </div>
 
 <div class="oo-build">
-<p>Version ${format.getProperty("otherobjects.version")}</p> 
+<p>Version ${formatTool.getProperty("otherobjects.version")}</p> 
 </div>
 
 <div class="oo-footer">

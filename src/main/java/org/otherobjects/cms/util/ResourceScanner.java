@@ -40,6 +40,9 @@ public class ResourceScanner
 
     public void updateResources()
     {
+        if (true)
+            return;
+
         try
         {
             // TODO Make missing items from disk deleted/inactive/warned
@@ -55,11 +58,11 @@ public class ResourceScanner
                 TemplateBlock block = (TemplateBlock) dao.getByPath(jcrPath + code);
 
                 OoResourceMetaData metaData = r.getMetaData();
-                
+
                 // Don't include private blocks
                 if (metaData != null && metaData.getKeywords() != null && metaData.getKeywords().contains("private"))
                     continue;
-                
+
                 if (block == null)
                 {
                     block = new TemplateBlock();
@@ -151,7 +154,7 @@ public class ResourceScanner
         template = new Template();
         template.setJcrPath(path);
         template.setLabel(label);
-        template.setLayout((TemplateLayout) dao.getByPath("/designer/layouts/"+layout));
+        template.setLayout((TemplateLayout) dao.getByPath("/designer/layouts/" + layout));
         template.setRegions(regionObjects);
         template = (Template) dao.save(template);
         dao.publish(template, null);

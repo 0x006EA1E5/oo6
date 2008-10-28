@@ -17,6 +17,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This servlet returns a static file.
  * 
@@ -29,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class StaticFileServlet extends HttpServlet
 {
+    private final Logger logger = LoggerFactory.getLogger(StaticFileServlet.class);
 
     private static final long serialVersionUID = -1850176862525216468L;
     private int bufferSize = 4096; // Increase buffer size from 1024
@@ -57,6 +61,7 @@ public class StaticFileServlet extends HttpServlet
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+        
         ReadableByteChannel in = null;
         try
         {
@@ -64,6 +69,7 @@ public class StaticFileServlet extends HttpServlet
             // find the location of the file
             String contextPath = request.getContextPath();
             String relativePath = request.getRequestURI().substring(contextPath.length());
+            logger.info("Static resource request: {}", relativePath);
 
             in = getInputChannel(relativePath, request);
 
@@ -129,12 +135,12 @@ public class StaticFileServlet extends HttpServlet
         }
 
         // check for modifications
-        long ifModifiedSince = request.getDateHeader("If-Modified-Since");
-        long lastModified = file.lastModified();
-        if (ifModifiedSince != -1 && lastModified < ifModifiedSince)
-        {
-            throw new NotModifiedException();
-        }
+//        long ifModifiedSince = request.getDateHeader("If-Modified-Since");
+//        long lastModified = file.lastModified();
+//        if (ifModifiedSince != -1 && lastModified < ifModifiedSince)
+//        {
+//            throw new NotModifiedException();
+//        }
 
         // setup IO streams
         return new FileInputStream(file).getChannel();
@@ -159,6 +165,10 @@ public class StaticFileServlet extends HttpServlet
         if (lowerName.endsWith(".css"))
         {
             return "text/css";
+        }
+        else if (lowerName.endsWith(".xml"))
+        {
+            return "text/xml";
         }
         else if (lowerName.endsWith(".js"))
         {
