@@ -479,7 +479,17 @@ Admin : http://localhost:8080/go/workbench/
   </chapter>
 
   <chapter>
-    <title>Writing Controllers</title>
+    <title>Creating model objects</title>
+
+    <para>For non dynanodes</para>
+
+    <para>DAOs</para>
+
+    <para>Annotations</para>
+  </chapter>
+
+  <chapter>
+    <title>Writing controllers</title>
 
     <para>Can be annoated or declared in xml.</para>
 
@@ -487,7 +497,43 @@ Admin : http://localhost:8080/go/workbench/
 
     <para>keep method names and mapping similar</para>
 
+    <para><programlisting>
+@Controller
+public class MyController
+
+  @RequestMapping(method = RequestMethod.GET)
+  public String showForm(Model model)
+  {
+    return "view";
+  }
+}
+
+
+</programlisting></para>
+
+    <para>+ register in mappings in site-servlet.xml</para>
+
+    <para></para>
+
+    <para>Data access</para>
+
+    <para>JCR, Hibernate, Raw SQL</para>
+
+    <para></para>
+
     <para>Form handling</para>
+
+    <para>Returning views -- jsut the path to the view (no extension)</para>
+
+    <para>Returning partial content</para>
+
+    <para>Returning XML</para>
+
+    <para></para>
+
+    <para>Returning JSON</para>
+
+    <para>Returning binary content</para>
 
     <para></para>
   </chapter>
