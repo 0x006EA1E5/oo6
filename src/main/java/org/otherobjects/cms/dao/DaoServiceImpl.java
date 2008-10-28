@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.persistence.Entity;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.SessionFactory;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.hibernate.GenericDaoHibernate;
 import org.otherobjects.cms.model.BaseNode;
@@ -21,6 +22,7 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
     private Map<String, GenericDao> daoMap = new HashMap<String, GenericDao>();
     private BeanFactory beanFactory;
     private TypeService typeService;
+    private SessionFactory sessionFactory;
 
     public GenericDao getDao(Class clazz)
     {
@@ -73,7 +75,9 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
                     }
                     else if (cls.getAnnotation(Entity.class) != null) // then return GenericDaoHibernate for hibernate entities
                     {
-                        dao = new GenericDaoHibernate(cls);
+                        GenericDaoHibernate hibernateDao = new GenericDaoHibernate(cls);
+                        hibernateDao.setSessionFactory(sessionFactory);
+                        dao = hibernateDao;
                         daoMap.put(daoBeanName, dao);
                     }
                     else
@@ -142,5 +146,10 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
     public void setTypeService(TypeService typeService)
     {
         this.typeService = typeService;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory)
+    {
+        this.sessionFactory = sessionFactory;
     }
 }
