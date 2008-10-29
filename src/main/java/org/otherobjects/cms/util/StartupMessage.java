@@ -39,7 +39,7 @@ public class StartupMessage implements ApplicationListener
             
             if (otherObjectsConfigurator != null)
             {
-                this.logger.info("Version  : {}", otherObjectsConfigurator.getProperty("otherobjects.version"));
+                this.logger.info("Version      : {}", otherObjectsConfigurator.getProperty("otherobjects.version"));
                 this.logger.info("Environment  : {}", otherObjectsConfigurator.getEnvironmentName());
                 this.logger.info("Private data : " + otherObjectsConfigurator.getProperty("site.private.data.path"));
                 this.logger.info("Public data  : " + otherObjectsConfigurator.getProperty("site.public.data.path"));
