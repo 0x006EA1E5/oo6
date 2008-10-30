@@ -76,7 +76,10 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
                     else if (cls.getAnnotation(Entity.class) != null) // then return GenericDaoHibernate for hibernate entities
                     {
                         GenericDaoHibernate hibernateDao = new GenericDaoHibernate(cls);
-                        hibernateDao.setSessionFactory(sessionFactory);
+                        
+                        // If sesion factory is null (ie during tests) then this will fail
+                        if(sessionFactory!=null)
+                            hibernateDao.setSessionFactory(sessionFactory);
                         dao = hibernateDao;
                         daoMap.put(daoBeanName, dao);
                     }
