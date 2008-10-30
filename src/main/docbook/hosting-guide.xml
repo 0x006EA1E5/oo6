@@ -29,7 +29,14 @@
 
     <para>TODO Support maven prepeare and release</para>
 
-    <para></para>
+    <para>mvn compile</para>
+
+    <para>mvn war:war</para>
+
+    <para>Set the following Java System Property on live server:
+    otherobjects.environment=production</para>
+
+    <para><programlisting>export CATALINA_OPTS="-Dotherobjects.environment=production -Djava.awt.headless=true"</programlisting></para>
   </chapter>
 
   <chapter>

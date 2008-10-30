@@ -40,9 +40,6 @@ public class ResourceScanner
 
     public void updateResources()
     {
-        if (true)
-            return;
-
         try
         {
             // TODO Make missing items from disk deleted/inactive/warned
