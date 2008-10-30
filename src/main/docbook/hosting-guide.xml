@@ -25,6 +25,14 @@
   </preface>
 
   <chapter>
+    <title>Deploying</title>
+
+    <para>TODO Support maven prepeare and release</para>
+
+    <para></para>
+  </chapter>
+
+  <chapter>
     <title>Scaling</title>
 
     <para>What needs to scale JCR JDBC Lucene Filestore Sessions Scheduler
@@ -39,8 +47,7 @@
     network drive * Optional Apache frontend forextra config Model 2: Medium
     size sites, critical data (eg Medium sized e-commerce) * Critical
     transactional data in dedicated DB with hot backup Model 3: HA sites *
-    Clustered JVM, Clustered JCR, Clusetered Static, Clustered Database
-    </para>
+    Clustered JVM, Clustered JCR, Clusetered Static, Clustered Database</para>
   </chapter>
 
   <chapter>
@@ -62,7 +69,7 @@
 
       <para>Setting up a clustered OTHERobjects site with Terracotta</para>
 
-      <para>#) Download terracotta 2.4 </para>
+      <para>#) Download terracotta 2.4</para>
 
       <para>#) Start terracotta server (which coordinates the distribution of
       shared objects) with default config (to change the log and data paths
@@ -70,24 +77,23 @@
       customise). ./bin/start-tc-server.sh</para>
 
       <para>#) Modify OO sample tc-config.xml file making sure to get
-      jee-application name right. </para>
+      jee-application name right.</para>
 
-      <para>#) Build site war file and copy to tomcat/webapps </para>
+      <para>#) Build site war file and copy to tomcat/webapps</para>
 
       <para>#) Start a Tomcat instance using Terracotta using our
-      start-tc-tomcat script. </para>
+      start-tc-tomcat script.</para>
 
       <para>HA Terracotta Servers</para>
 
       <para>http://www.terracotta.org/confluence/display/docs1/Terracotta+Server+Cluster
-      With Jetty </para>
+      With Jetty</para>
 
       <para>http://docs.codehaus.org/display/JETTY/Session+Clustering+with+Terracotta</para>
 
       <para>http://www.nabble.com/Load-Balancing%5CClustering-in-6.14-tf3945950.html#a11312269</para>
 
-      <para>http://www.terracotta.org/confluence/display/docs1/Setting+Up+a+Tomcat+Web+Cluster
-      </para>
+      <para>http://www.terracotta.org/confluence/display/docs1/Setting+Up+a+Tomcat+Web+Cluster</para>
     </section>
   </chapter>
 
@@ -118,7 +124,7 @@
   <chapter>
     <title>Load balancers</title>
 
-    <para>http://www.inlab.de/balance.html LVS </para>
+    <para>http://www.inlab.de/balance.html LVS</para>
   </chapter>
 
   <chapter>

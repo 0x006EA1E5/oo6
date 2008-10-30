@@ -1020,7 +1020,15 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
   <chapter>
     <title>Release and deploy</title>
 
+    <para>Run tests from maven</para>
+
+    <para>Make sure no snapshots as dependencies</para>
+
+    <para>Check everything in to a VCS.</para>
+
     <para>mvn release:prepare</para>
+
+    <para>mvn release:perform</para>
   </chapter>
 
   <chapter>
