@@ -72,8 +72,16 @@ public class PageRenderer implements ResourceRenderer
      */
     private Template determineTemplate(BaseNode resourceObject)
     {
-        if (resourceObject.hasProperty("template") && resourceObject.getPropertyValue("template") != null)
-            return (Template) resourceObject.getPropertyValue("template");
+        Template template = null;
+        
+        // FIXME This needs to be more generic -- or at least tied to SitePage
+        if(resourceObject.getPropertyValue("data.publishingOptions") != null)
+        {
+            template = (Template) resourceObject.getPropertyValue("data.publishingOptions.template");
+            if (template != null)
+                return template;
+        }
+
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
 
         String templateCode = "";
@@ -82,7 +90,7 @@ public class PageRenderer implements ResourceRenderer
         else
             templateCode = resourceObject.getTypeDef().getName().toLowerCase();
 
-        Template template = (Template) universalJcrDao.getByPath("/designer/templates/" + templateCode);
+        template = (Template) universalJcrDao.getByPath("/designer/templates/" + templateCode);
         return template;
     }
 }

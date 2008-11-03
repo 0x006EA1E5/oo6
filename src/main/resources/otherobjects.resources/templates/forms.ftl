@@ -2,7 +2,7 @@
 Form Macros
 -->
 
-<#macro renderForm typeDef>
+<#macro renderForm typeDef empty=false>
 <script>
 function addToList()
 {
@@ -25,7 +25,7 @@ function removeFromList()
 	f.parents().at(0).node.removeChild(f.node);
 }
 </script>
-<@renderType typeDef "object." />
+<@renderType typeDef "object." empty/>
 </#macro>
 
 <#--
@@ -53,7 +53,7 @@ Renders a property for the form.
 -->
 <#macro renderProperty prop prefix empty>
 <tr>
-<td class="oo-label">${prop.label} <#if prop.required><span class="oo-required">*</span></#if></td>
+<td class="oo-label"><p>${prop.label} <#if prop.required><span class="oo-required">*</span></#if></p></td>
 <td>
 <p>
 	<@renderField prop prop.defaultFieldType "${prefix}${prop.fieldName}" empty /> 
@@ -94,8 +94,10 @@ Renders a field inputter by choosing the correct inputter renderer. Also handles
 		<#else>
 			<@renderType prop.relatedTypeDef "${path}." true/>
 		</#if>
+	<#elseif type == "reference" >
+  		<@formSingleSelect "${path}" dao.get(prop.relatedType).getAllByType("${prop.relatedType}") "" empty/>
 	<#elseif type == "date" >
-  		<@formDate "${path}" />
+  		<@formDate "${path}" "" empty/>
   	<#elseif type == "text" >
   		<@formTextarea "${path}" "" empty/>
 	<#elseif type == "boolean" >
@@ -187,7 +189,7 @@ Renders a textbox for a date property.
 -->
 <#macro formDate path attributes="" empty=false>
 	<#if empty>
-		xx
+		<@formInput path attributes "text" empty/>
 	<#else>
 		<@bind path />
 		<#assign ooStatus = springMacroRequestContext.getBindStatus("${path}")>
@@ -197,8 +199,31 @@ Renders a textbox for a date property.
 	  	  	<#assign stringStatusValue=ooStatus.value?default("")>
 		</#if>
 		<input type="text" class="text" id="${ooStatus.expression}" name="${ooStatus.expression}" value="${stringStatusValue}">
-		</#if>
+	</#if>
 </#macro>	
+
+<#macro formSingleSelect path options attributes="" empty=false>
+    <#if empty>
+	<#else>
+	<@bind path/>
+    <select id="${ooStatus.expression}" name="${ooStatus.expression}" ${attributes}>
+        <option>-</option>
+    	<#list options as option>
+    	
+        <option value="${option.id?html}"<@checkSelected option.id/>>${option.ooLabel?html}</option>
+        </#list>
+    </select>
+    </#if>
+</#macro>
+
+<#--
+Ê* checkSelected
+ *
+ * FIXME Need to support non-nodes.
+ -->
+<#macro checkSelected value>
+    <#if (ooStatus.actualValue.id)! == value>selected="selected"</#if>
+</#macro>
 
 <#--
 Renders form validation error messages.

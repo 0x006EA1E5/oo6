@@ -81,7 +81,7 @@ A.button {background: #cccccc; padding:3px; color:#000000;}
 
 <div class="navbar">
 <p>
-<a href="${oo.url("/")}">Back to site</a> | <a href="${oo.url("/otherobjects/workbench/")}">Back to workbench</a>
+<a href="${oo.url("/")}">Back to site</a> | <a href="${oo.url("/otherobjects/workbench/")}">Back to OTHERobjects</a>
 </p>
 </div>
 
@@ -143,6 +143,16 @@ A.button {background: #cccccc; padding:3px; color:#000000;}
     <tr><td class="label">JCR</td><td class="info">${jcrLocation} [<a href="${oo.url("/otherobjects/debug/jcr")}">Explore</a>]</td></tr>
     <tr><td class="label">JCR schema version</td><td class="info">${jcrSchemaVersion}</td></tr>
     <tr><td class="label">Datastore permissions</td><td class="info">TODO</td></tr>
+</table>
+
+<h2>Types</h2>
+
+<table>
+ 	<tr><td class="label">All types</td><td class="info">
+ 	<#list types as type>
+ 	${type.name}<br/>
+ 	</#list>
+ 	</td></tr>
 </table>
 
 

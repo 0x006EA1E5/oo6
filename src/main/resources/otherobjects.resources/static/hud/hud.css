@@ -1,25 +1,12 @@
-.oo-panel {z-index:100; -moz-border-radius:9px; -webkit-border-radius:9px; color:#FFF; background:rgba(0,0,0,0.8); -webkit-box-shadow:0px 5px 13px rgba(0,0,0,0.5); border:2px solid #000000;}
-.title {font:14px Helvetica, Arial; text-align:center; -moz-border-radius:9px; -webkit-border-radius:9px; -webkit-border-bottom-right-radius:0; text-shadow:rgba(0,0,0,0.5) 0px 1px 1px; -webkit-border-bottom-left-radius:0; padding:3px 3px 4px; background:-webkit-gradient(linear, left top, left bottom, from(#555), to(#444), color-stop(0.5, #555), color-stop(0.5, #444)); cursor:default; border-bottom:1px solid rgba(0,0,0,0.5); -webkit-transition:background-color 0.5s linear;}
-.title:hover {background:-webkit-gradient(linear, left top, left bottom, from(#606060), to(#505050), color-stop(0.5, #606060), color-stop(0.5, #505050));}
 
-.item {font:13px Arial, Helvetica; text-shadow:rgba(0,0,0,0.5) 0px 1px 1px; padding:7px 10px; background:rgba(0,0,0,0); border-bottom:1px solid rgba(0,0,0,0.1);  -webkit-transition:background-color 0.2s linear; }
-.item:hover {background:rgba(0,0,0,0.3); cursor:pointer; text-shadow:rgba(0,0,0,1) 0px 1px 1px;}
 
-.field {font:13px Arial, Helvetica; text-shadow:rgba(0,0,0,0.5) 0px 1px 1px; padding:10px 10px; background:rgba(0,0,0,0); border-bottom:1px solid rgba(0,0,0,0.1);  -webkit-transition:background-color 0.2s linear; }
-.field:hover {background:rgba(0,0,0,0.3); cursor:pointer; text-shadow:rgba(0,0,0,1) 0px 1px 1px;}
-.close {float:right; background:#777; text-shadow:rgba(0,0,0,0.5) 0px 1px 1px; -moz-border-radius:8px;  -webkit-border-radius:8px; width:16px; height:14px; margin-right:1px; font:bold 11px Helvetica, Arial; padding:2px 0 0 1px; -webkit-box-shadow:0px 0px 2px rgba(0,0,0,0.5);  -webkit-transition:background-color 0.2s linear;}
+#oo-chooser-hud {position:fixed; top:50px; width:700px; height:500px; left:80px; background:#FFF; border:1px solid #000; padding:10px; text-align:left;}
+#oo-chooser-hud H1 {font-size:150%;padding:0px 0px 20px 0px;}
+#oo-chooser-hud A {float:left;width:180px; font-size:110%; font-family:Helvetica, Arial, sans-serif; padding:15px; background:#CCCCCC; margin:0px 10px 10px 0px; color:#000;}
+#oo-chooser-hud A:hover {background:#FFF; text-decoration:none;}
 
-INPUT.text {outline:none; -webkit-border-radius:2px; font-size:15px; width:550px; height:26px; border:0; -webkit-box-shadow:0px 0px 4px rgba(0,0,0,0.5); color:#333; background:-webkit-gradient(linear, left top, left bottom, from(#999), to(#FFF), color-stop(0.1, #CCC), color-stop(0.8, #FFF)); padding:3px 13px;background:#222; border:2px solid #555; color:#FFF;}
-TEXTAREA {outline:none; -webkit-border-radius:2px; font-size:15px; width:550px; height:100px; border:0; -webkit-box-shadow:0px 0px 4px rgba(0,0,0,0.5); color:#FFF; background:-webkit-gradient(linear, left top, left bottom, from(#999), to(#FFF), color-stop(0.1, #CCC), color-stop(0.8, #FFF)); background:#222; border:2px solid #555; padding:7px 11px;}
-LABEL {width:175px; float:left; padding:0 15px 0 0; text-align:right; height:26px; line-height:28px;}
 
-.edit-outer {position:fixed; bottom:10px; left:0px; width:100%; height:270px;}
-.edit-inner {display:block; width:auto; margin:0 10px; height:100%;}
 
-#oo-dock {position:fixed; top:50px; width:75px; height:275px; left:-2px; -webkit-border-top-left-radius:0; -webkit-border-bottom-left-radius:0; -moz-border-radius:0px; -moz-border-radius-topright:9px; -moz-border-radius-bottomright:9px;}
-#oo-dock .item {text-align:center; font-size:12px;}
-
-#oo-form-overlay {position:fixed; top:50px; width:800px; height:600px; left:80px;}
 
 .oo-region {min-height:50px;}
 
@@ -27,3 +14,54 @@ LABEL {width:175px; float:left; padding:0 15px 0 0; text-align:right; height:26p
 .oo-block-new {text-align:center; border:6px dashed black; background:#666; color:#FFF; padding:10px; font:bold 14px Arial; min-height:100px; margin:0px 10px 10px 0px;}
 .oo-block-error {text-align:center; border:6px dashed #F80; background:#FF0; color:#000; padding:10px; font:bold 14px Arial; min-height:100px; margin:0px 10px 10px 0px;}
 
+.oo-block-add {padding:2px 2px 2px 20px;background:#ACA url(icons/add.png) no-repeat 2px 2px; color:#090;}
+.oo-block-delete {padding:2px 2px 2px 20px;background:#CAA url(icons/delete.png) no-repeat 2px 2px; color:#900;}
+
+
+#oo-form-overlay {position:fixed; top:50px; width:700px; height:500px; left:80px; background:#FFF; border:1px solid #000; padding:10px; overflow:scroll; text-align:left;}
+
+#oo-form-overlay CAPTION { font:bold 120% Arial; padding: 0px 0px 4px 0px; }
+#oo-form-overlay TH {background:#eeeeee; font:normal 100% Arial; text-align:left; padding:4px 10px 4px 10px; border-right:1px solid #ffffff;}
+#oo-form-overlay TR {border-bottom:1px solid #eeeeee;}
+#oo-form-overlay TD {padding:3px 1px 3px 0px; border-bottom:1px solid #eeeeee;}
+#oo-form-overlay TD P {padding:5px 10px 5px 10px;}
+#oo-form-overlay TD .oo-neutral {background:url($static.setPath("/otherobjects/static/graphics/icon_neutral.gif")) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
+#oo-form-overlay .oo-icon {width:40px;}
+#oo-form-overlay .oo-button A {color:#000000; text-decoration:none; float:left; padding:5px 10px 5px 10px;}
+#oo-form-overlay .oo-button A:hover, .oo-content #oo-form-overlay .oo-button A:active {background-color:#C8E8F5;}
+#oo-form-overlay TD.oo-action {width:40px;}
+#oo-form-overlay .oo-help {width:20px; padding:5px 10px 5px 10px; text-align:center;}
+#oo-form-overlay .oo-label {width:100px; padding:5px 10px 5px 10px;}
+#oo-form-overlay .oo-field {padding:5px 10px 5px 10px;}
+#oo-form-overlay .oo-field-none {padding:5px 10px 5px 10px;}
+#oo-form-overlay .oo-field A {display:block; color:#000000; text-decoration:none; float:left; padding:5px 10px 5px 20px; background:url($static.setPath("/otherobjects/static/graphics/arrow_right.gif")) no-repeat 10px 10px;}
+#oo-form-overlay .oo-field P {padding:5px 5px 5px 10px; clear:both;} 
+#oo-form-overlay .oo-field P.oo-neutral {padding:5px 5px 5px 25px; clear:both;} 
+#oo-form-overlay .oo-field A:hover, .oo-content #oo-form-overlay .oo-field A:active {background-color:#C8E8F5;}
+#oo-form-overlay .oo-field LI IMG {display:block;}
+#oo-form-overlay .oo-section { border-top:3px solid #eeeeee;}
+#oo-form-overlay .oo-disabled {color:#999999;}
+
+
+#oo-form-overlay H2 {font:bold 140% Arial; color:#253D56; padding:10px 0px 10px 0px;}
+#oo-form-overlay H2 A {text-decoration:none; color:#253D56;}
+#oo-form-overlay H3 {font:bold 120% Arial; color:#253D56; padding:10px 0px 10px 0px;}
+#oo-form-overlay UL {margin:0px 0px 0px 20px; list-style:square;}
+#oo-form-overlay LI {padding:0px 0px 5px 0px;}
+#oo-form-overlay P {padding:0px 0px 15px 0px;}
+#oo-form-overlay P.divider {padding:5px 0px 15px 0px; margin:0px 100px 0px 0px; border-top:1px solid #eeeeee;}
+#oo-form-overlay EM {font-style:normal; color:#999999;}
+#oo-form-overlay .oo-required {font:bold 110% Verdana; color:#990000;}
+#oo-form-overlay .text {border:1px solid #CCCCCC; padding:2px; font:100% Arial; width:250px; margin:0px 5px 0px 0px;}
+#oo-form-overlay .password {border:1px solid #CCCCCC; padding:2px; font:100% Arial; width:250px; margin:0px 5px 0px 0px;}
+#oo-form-overlay .textarea {width:100%; height:75px; border:1px solid #cccccc; padding:2px; font:100% Arial;  margin:0px 5px 5px 0px;}
+#oo-form-overlay .wikitextarea {width:100%; height:75px; border:1px solid #cccccc; padding:2px; font:115% Courier, Monanco, Arial;  margin:0px 5px 5px 0px;}
+#oo-form-overlay .textareasmall {width:100%; height:60px; border:1px solid #cccccc; padding:2px; font:100% Arial;  margin:0px 5px 5px 0px;}
+#oo-form-overlay .oo-format-large .textarea {height:300px;}
+#oo-form-overlay .oo-format-large .wikitextarea {height:300px;}
+#oo-form-overlay .select {font:100% Arial; margin:0px 5px 0px 0px;}
+#oo-form-overlay FORM LABEL {display:block; width:55px; line-height:25px; float:left;}
+#oo-form-overlay A.oo-action  {color:#000000; text-decoration:none; float:left; padding:5px 10px 5px 20px; background:url(graphics/arrow-right.gif) no-repeat 10px 9px;}
+#oo-form-overlay A.oo-action:hover, #oo-form-overlay A.oo-action:active {background-color:#C8E8F5;}
+#oo-form-overlay A.oo-action  IMG {float:left;margin-top:-3px;padding-right:3px;}
+#oo-form-overlay TH, #oo-form-overlay TD {vertical-align:top;}

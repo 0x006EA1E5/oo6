@@ -73,6 +73,7 @@ public class OoBootstrapper implements InitializingBean
             User adminUser = getAdminUser();
             if (adminUser == null)
                 adminUser = otherObjectsAdminUserCreator.createAdminUser();
+            
             else if (StringUtils.isEmpty(adminUser.getEmail()))
             {
                 // If email is empty then the admin user has not been configured,
@@ -84,13 +85,17 @@ public class OoBootstrapper implements InitializingBean
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             // populate repository with default infrastructure (folders, welcome page etc.)
-            if (repositoryPopulationRequired())
+            // FIXME Always run so that Types are created
+            if (true || repositoryPopulationRequired())
             {
                 jackrabbitPopulater.populateRepository();
                 boostrapProperties.setProperty(JCR_SCHEMA_VERSION_KEY, "1");
 
+                if (repositoryPopulationRequired())
+                {
                 // Scan for resources in file system
                 resourceScanner.updateResources();
+                }
             }
         }
         finally

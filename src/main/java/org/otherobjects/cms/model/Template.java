@@ -59,7 +59,7 @@ public class Template extends BaseNode
         this.layout = layout;
     }
 
-    @Property(order = 40, collectionElementType = PropertyType.COMPONENT)
+    @Property(order = 40, collectionElementType = PropertyType.COMPONENT, fieldType="none")
     public List<TemplateRegion> getRegions()
     {
         return regions;

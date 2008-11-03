@@ -33,6 +33,7 @@ import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.Url;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.tools.SecurityTool;
+import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,6 +79,9 @@ public class DebugController implements ServletContextAware
     @Resource
     private JdbcTemplate jdbcTemplate;
 
+    @Resource
+    private TypeService typeService;
+    
     //@Resource
     //private MailService mailService;
 
@@ -141,6 +145,9 @@ public class DebugController implements ServletContextAware
         mav.addObject("systemOsArch", properties.getProperty("os.arch"));
 
         mav.addObject("servletApiVersion", servletContext.getMajorVersion() + "." + servletContext.getMinorVersion());
+
+        // Types
+        mav.addObject("types", typeService.getTypes());
 
         // Connectivity
         mav.addObject("testExternalUrl", httpPing(EXTERNAL_CONNECTIVITY_TEST_URL));

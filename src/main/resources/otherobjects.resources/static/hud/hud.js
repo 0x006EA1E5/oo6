@@ -3,10 +3,17 @@ YAHOO.util.Event.onDOMReady(function() {
 	//ooEnableBlockSelector();
 	//ooEnableBlockManagement();
 	//ooToggleHud("oo-main-hud");
-	ooEnableKeyboardShortcuts();		
+	//ooEnableKeyboardShortcuts();		
+	//ooSaveTemplateDesign();
 	
 });
 
+/**
+ * ooEnableBlockSelector
+ * 
+ * Attaches rollover events to blocks which cause them to highlight
+ * and edit when clicked.
+ */
 function ooEnableBlockSelector() {
 	
 	//ooToggleHud("oo-main-hud");
@@ -43,6 +50,115 @@ function ooEnableBlockSelector() {
 	});
 }
 
+/**
+ * ooEnableBlockManagement
+ * 
+ * Attaches add/delete block controls and events.
+ */
+function ooEnableBlockManagement() {
+
+	ooToggleHud("oo-main-hud");
+	
+	$(".oo-region").insert('<div class="oo-block-add">Add block here</div>','bottom');
+	$(".oo-block-add").on('click', function(el,e) {
+		ooInsertNewBlock(el);
+	});
+	$(".oo-block").insert('<div class="oo-block-delete">Delete block above</div>','bottom');
+	$(".oo-block-delete").on('click', function(el,e) {
+		ooDeleteBlock(el);
+	});
+	//YAHOO.util.Event.onDOMReady(YAHOO.example.DDApp.init, YAHOO.example.DDApp, true);
+}
+
+/**
+ * ooDeleteBlock
+ * 
+ * Deletes selected block.
+ */
+function ooDeleteBlock(el) {
+	el.node.parentNode.parentNode.removeChild(el.node.parentNode);
+	ooSaveTemplateDesign();
+}
+
+/**
+ * ooInsertNewBlock
+ * 
+ * Overlays list of allowed blocks and inserts the chosen one.
+ */
+function ooInsertNewBlock(el) {
+	ooToggleHud("oo-chooser-hud");
+	
+	// Remove previous events 
+	$(".oo-chooser-button").forEach( function(ell) {YAHOO.util.Event.purgeElement(ell.node); });	
+	
+	// Find code of enclosing region
+	var regionCode = el.parents(".oo-region")[0].id.substring(10);
+	//console.log(regionCode);
+	
+	// Add event to block choice buttons
+	$(".oo-chooser-button").on('click', function(el2,e) {
+		var blockCode = el2.node.id;
+		Ojay.HTTP.GET('/otherobjects/block/create/'+blockCode+'?resourceObjectId='+resourceObjectId+'&templateId='+ooTemplateId+'&regionCode='+regionCode, {}, {
+			onSuccess: function(response) {
+				el.insert(response.responseText,'before');
+				ooSaveTemplateDesign();
+        	}
+        });
+		ooToggleHud("oo-chooser-hud");
+		e.stopEvent();	
+	});
+}
+
+/**
+ * ooSaveTemplateDesign
+ * 
+ * Encodes arrangement of regions and blocks as JSON string and posts to backend
+ * to save against template.
+ */
+function ooSaveTemplateDesign()
+{
+	// Detects region/blcok arrangement and serialises it to a JSON string 
+	// with is then posted to the BlockController to save.
+	var regions = new Array();
+	$(".oo-region").forEach(function(e) {
+		var blocks = new Array();
+		e.descendants(".oo-block").forEach(function(e) {
+			blocks[blocks.length]=e.node.id.slice(9);
+		});
+		regions[regions.length]={name:e.node.id.slice(10), blockIds:blocks};
+	});
+	var json = YAHOO.lang.JSON.stringify(regions);
+	console.log(regions);
+	Ojay.HTTP.POST('/otherobjects/block/saveArrangement?templateId='+ooTemplateId, {arrangement: json}, {});
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function ooSubmitForm(blockId) 
 {
 	return ooQuickSaveForm(blockId, true);
@@ -53,8 +169,6 @@ function ooShowCreateForm(type, location)
 	$('#oo-form-overlay').setStyle({display:"block"});
 	Ojay.HTTP.GET('' + ooBaseUrl + 'otherobjects/block/form/'+type+'?location='+location).insertInto('#oo-form-overlay').evalScripts();
 } 
-
-
 
 function ooQuickSaveForm(blockId, hide) 
 {
@@ -119,66 +233,10 @@ function ooFadeHud() {
 }
 
 
-function ooEnableBlockManagement() {
-
-	ooToggleHud("oo-main-hud");
-	
-	$(".oo-region").insert('<div class="oo-block-add">Add block here</div>','bottom');
-	$(".oo-block-add").on('click', function(el,e) {
-		ooInsertNewBlock(el);
-	});
-	$(".oo-block").insert('<div class="oo-block-delete">Delete block above</div>','bottom');
-	$(".oo-block-delete").on('click', function(el,e) {
-		ooDeleteBlock(el);
-	});
-	//YAHOO.util.Event.onDOMReady(YAHOO.example.DDApp.init, YAHOO.example.DDApp, true);
-}
-
-function ooInsertNewBlock(el) {
-	ooToggleHud("oo-chooser-hud");
-	
-	// Remove previous events 
-	$(".oo-chooser-button").forEach( function(ell) {YAHOO.util.Event.purgeElement(ell.node); });	
-	
-	// Find code of enclosing region
-	var regionCode = el.parents(".oo-region")[0].id.substring(10);
-	console.log(regionCode);
-	
-	// Add event to block choice buttons
-	$(".oo-chooser-button").on('click', function(el2,e) {
-		var blockCode = el2.node.id;
-		Ojay.HTTP.GET('/otherobjects/block/create/'+blockCode+'?resourceObjectId='+resourceObjectId+'&templateId='+ooTemplateId+'&regionCode='+regionCode, {}, {
-			onSuccess: function(response) {
-				el.insert(response.responseText,'before');
-				ooSaveTemplateDesign();
-        	}
-        });
-		ooToggleHud("oo-chooser-hud");
-		e.stopEvent();	
-	});
-}
 
 
-function ooDeleteBlock(el) {
-	el.node.parentNode.parentNode.removeChild(el.node.parentNode);
-	ooSaveTemplateDesign();
-}
 
-function ooSaveTemplateDesign()
-{
-	// Detects region/blcok arrangement and serialises it to a JSON string 
-	// with is then posted to the BlockController to save.
-	var regions = new Array();
-	Ext.select(".oo-region", true).each(function(e) {
-		var blocks = new Array();
-		e.select(".oo-block", true).each(function(e) {
-			blocks[blocks.length]=e.id.slice(9);
-		});
-		regions[regions.length]={name:e.id.slice(10), blockIds:blocks};
-	});
-	var json = YAHOO.lang.JSON.stringify(regions);	
-	Ojay.HTTP.POST('/otherobjects/block/saveArrangement?templateId='+ooTemplateId, {arrangement: json}, {});
-}
+
 
 function ooToggleHud(id) {
 

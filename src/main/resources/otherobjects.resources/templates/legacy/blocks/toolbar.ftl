@@ -61,6 +61,8 @@
 
 <ul>
 	<li><a href="${oo.url('/otherobjects/workbench/edit/${resourceObject.id}')}">Edit</a></li>	
+	<li><a href="javascript:ooEnableBlockSelector()">Edit blocks</a></li>	
+	<li><a href="javascript:ooEnableBlockManagement()">Arrange blocks</a></li>	
 </ul>
 <#else>
 <p class="oo-divider">
@@ -68,4 +70,20 @@
 </p>
 </#if>
 
+</div>
+
+
+<script>
+var resourceObjectId = '${(resourceObject.id)!}';
+var ooTemplateId = '${(ooTemplate.id)!}';
+var ooBaseUrl = '${oo.url("/")}';
+var ooBlockInEdit = "";
+</script>
+
+<div id="oo-form-overlay" style="display:none;"></div>
+<div id="oo-chooser-hud" style="display:none;">
+<h1>Choose a block to insert:</h1>
+<#list daoService.getDao("baseNode").getAllByType("org.otherobjects.cms.model.TemplateBlock") as block>
+<a class="oo-chooser-button" id="${block.code}">${block.label} &rarr;</a>
+</#list>
 </div>

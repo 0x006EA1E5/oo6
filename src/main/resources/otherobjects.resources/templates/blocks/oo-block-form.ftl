@@ -1,46 +1,7 @@
-<Ûimport "spring.ftl" as spring/>
+<#import "/spring.ftl" as spring />
+<#import "/oo.ftl" as oo />
+<#import "/forms.ftl" as forms />
 
-<#--
-Supported fields:
-
-* TODO component
-* TODO reference
-* TODO list
-
-* boolean -> checkbox
-* text -> textarea
-* default -> text
-
--->
-
-<#macro renderField prop value="">
-<div class="field">
-<#if prop.type == ".boolean">
-	<label>${prop.label}<label>
-	<input type="radio" class="radio" name="${prop.name}" value="true" <#if value!false>checked="checked" </#if>/> Yes
-	<input type="radio" class="radio" name="${prop.name}" value="false" <#if !value!false>checked="checked" </#if>/> No
-<#elseif prop.type == "text">
-	<label>${prop.label}</label>
-	<textarea class="textarea" name="${prop.name}">${value!}
-	</textarea>
-<#elseif prop.type == "component">
-	<@renderFormPart prop.relatedTypeDef />
-<#else>
-	<label>${prop.label}</label> 
-	<input type="text" class="text" name="${prop.name}" value="${value!}" />
-</#if>
-</div>
-</#macro>
-
-<#macro renderFormPart typeDef data>
-<#list typeDef.properties as prop>
-<@renderField prop data.get(prop.name) />
-</#list>
-</#macro>
-
-
-<#import "/oo.ftl" as oo>
-<div class="title">Editing</div>
 <#if resourceObjectForm>
 <form id="form" method="post" action="${oo.url("/otherobjects/form")}">
 <#else>
@@ -49,19 +10,43 @@ Supported fields:
 
 <#if blockData??>
 	<#-- Existing block -->
-	<input type="hidden" class="hidden" name="editableId" value="${blockData.id}" />
-	<@renderFormPart blockData.typeDef blockData />
+	<input type="hidden" class="hidden" name="_oo_id" value="${blockData.id}" />
+	<@forms.renderForm blockData.typeDef/>
 <#else> 
-	<#-- New block --> New
+	<#-- New block --> 
 	<input type="hidden" class="hidden" name="_oo_containerId" value="${location}" />
 	<input type="hidden" class="hidden" name="_oo_type" value="${typeDef.name}" />
 	<!-- <input type="text" class="hidden" name="code" value="blockData" /> -->
-	<@renderFormPart typeDef />
+	<@forms.renderForm typeDef true/>
 </#if> 
 <p><input type="submit" class="submit" value="Save" /> </p>
 </form>
 
-<script>
+
+
+<script type="text/javascript">
+
 ooSetFormFocus();
+
+$('#oo-form').on('submit', function(element, e) {
+	disableFormTemplates();
+});
+
+function formSubmit()
+{
+	disableFormTemplates();
+	$('#oo-form').node.submit();
+}
+
+function disableFormTemplates()
+{
+	// Disable add the elements that are in the list element template
+	$('.oo-list-template').descendants("input").set({disabled:true});
+	$('.oo-list-template').descendants("textarea").set({disabled:true});
+	$('.oo-list-template').descendants("select").set({disabled:true});
+	$('.oo-list-template').descendants("checkbox").set({disabled:true});
+	$('.oo-list-template').descendants("radio").set({disabled:true});
+	$('.oo-list-template').descendants("button").set({disabled:true});
+}
 </script>
 

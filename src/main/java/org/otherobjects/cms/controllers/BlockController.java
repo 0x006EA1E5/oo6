@@ -193,6 +193,7 @@ public class BlockController
             // Page block
             BaseNode blockData = dao.get(resourceObjectId);
             view.addObject("blockData", blockData);
+            view.addObject("object", blockData);
             view.addObject("blockGlobal", false);
         }
         else
@@ -204,12 +205,14 @@ public class BlockController
             BaseNode blockData = blockRef.getBlockData();
             if (blockData  != null)
             {
+                view.addObject("object", blockData);
                 view.addObject("blockData", blockData);
             }
             else
             {
                 // New blocks
                 view.addObject("location", blockRef.getId());
+                view.addObject("object", null);
                 view.addObject("typeDef", typeService.getType(typeDefName));
             }
         }
@@ -251,7 +254,7 @@ public class BlockController
         for (int i = 0; i < regions.length(); i++)
         {
             JSONObject region = (JSONObject) regions.get(i);
-            TemplateRegion tr = template.getRegions().get(i);
+            TemplateRegion tr = template.getRegion((String)region.get("name"));
 
             JSONArray blockIds = (JSONArray) region.get("blockIds");
             for (int j = 0; j < blockIds.length(); j++)

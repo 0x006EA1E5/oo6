@@ -65,7 +65,8 @@ public class OoResourceMetaData
                 String relatedType = p.has("relatedType") ? p.getString("relatedType") : null;
                 String collectionElementType = p.has("collectionElementType") ? p.getString("collectionElementType") : null;
                 boolean required = p.has("required") ? p.getBoolean("required") : false;
-                td.addProperty(new PropertyDefImpl(name, type, relatedType, collectionElementType, required));
+                boolean dynamic = p.has("dynamic") ? p.getBoolean("dynamic") : false;
+                td.addProperty(new PropertyDefImpl(name, type, relatedType, collectionElementType, required, dynamic));
             }
             setTypeDef(td);
         }

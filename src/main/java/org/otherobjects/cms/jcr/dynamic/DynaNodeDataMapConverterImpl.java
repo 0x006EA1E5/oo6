@@ -32,6 +32,7 @@ import org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImp
 import org.apache.jackrabbit.ocm.mapper.Mapper;
 import org.apache.jackrabbit.ocm.mapper.model.BeanDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.CollectionDescriptor;
+import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
@@ -307,14 +308,17 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
         Class clazz = DynaNode.class;
         try
         {
-            Property classNameProperty = dataNode.getProperty("metaData/ocm:classname");
+            // FIXME Clean up this method
+            String propertyName = property.getFieldName().replaceAll("data\\[","").replaceAll("\\]","");
+            if(!dataNode.hasProperty(propertyName + "/ocm:classname"))
+                return null;    
+            Property classNameProperty = dataNode.getProperty(propertyName + "/ocm:classname");
             String className = classNameProperty.getString();
             clazz = Class.forName(className);
         }
         catch (Exception e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new OtherObjectsException("Could not determine class for component.", e);
         }
         value = beanConverter.getObject(session, dataNode, beanDescriptor, mapper.getClassDescriptorByClass(clazz), clazz, null);
         return value;

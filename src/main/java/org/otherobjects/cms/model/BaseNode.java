@@ -160,6 +160,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
 
     public Object getPropertyValue(String name)
     {
+        // FIXME Need consistent method for accessing properties Spring vs BeanWrapper
         try
         {
             return PropertyUtils.getProperty(this, name);
