@@ -13,14 +13,22 @@ cou can get any bean via getBean()</p>
 <p><input type="submit" value="Run"/></p>
 </form>
 
-<h2>Output</h2>
+<#if log??>
+<h2>Log</h2>
+<p>
+  ${log}
+</p>
+</#if>
 
 <#if output??>
+<h2>Output</h2>
 <p>
   ${output}
 </p>
 </#if>
+
 <#if exception??>
+<h2>Error</h2>
 <p style="color:red;">
 	<@oo.renderException exception />
 </p>

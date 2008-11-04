@@ -74,7 +74,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
     public String getOoLabel()
     {
         Assert.notNull(getLabelProperty(), "Could not get label since labelProperty is not set for: " + getOoType());
-        return (String) getPropertyValue(getLabelProperty());
+        return String.valueOf(getPropertyValue(getLabelProperty()));
     }
 
     /**

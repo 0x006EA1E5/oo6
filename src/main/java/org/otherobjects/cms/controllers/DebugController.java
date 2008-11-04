@@ -4,12 +4,15 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,14 +33,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.Url;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.otherobjects.cms.dao.DaoService;
+import org.otherobjects.cms.dao.GenericDao;
 import org.otherobjects.cms.tools.SecurityTool;
 import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.cms.util.HtmlLogger;
+import org.otherobjects.cms.util.ResourceScanner;
 import org.otherobjects.cms.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.StatementCallback;
@@ -65,13 +75,14 @@ import org.springmodules.jcr.JcrTemplate;
  * @author rich
  */
 @Controller
-public class DebugController implements ServletContextAware
+public class DebugController implements ServletContextAware, ApplicationContextAware
 {
     private static final String EXTERNAL_CONNECTIVITY_TEST_URL = "http://www.google.com/";
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ServletContext servletContext;
+    private ApplicationContext applicationContext;
 
     @Resource
     private JcrTemplate jcrTemplate;
@@ -87,6 +98,9 @@ public class DebugController implements ServletContextAware
 
     @Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
+
+    @Resource
+    private ResourceScanner resourceScanner;
 
     @RequestMapping({"/debug", "/debug/"})
     public ModelAndView debug(HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -229,7 +243,7 @@ public class DebugController implements ServletContextAware
      * @throws Exception
      */
     @RequestMapping({"/debug/script", "/debug/script/"})
-    public ModelAndView script(HttpServletRequest request, HttpServletResponse response, ApplicationContext applicationContext) throws Exception
+    public ModelAndView script(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         String script = request.getParameter("script");
 
@@ -241,18 +255,46 @@ public class DebugController implements ServletContextAware
             {
                 Binding binding = new Binding();
                 binding.setVariable("app", applicationContext);
+                GenericDao dao = ((DaoService)applicationContext.getBean("daoService")).getDao("baseNode");
+                binding.setVariable("dao", dao);
+                StringWriter writer = new StringWriter();
+                binding.setProperty("logger", new HtmlLogger(writer));
                 GroovyShell shell = new GroovyShell(binding);
-                output = shell.evaluate(script);
+                output = shell.evaluate(script, "DebugScript");
                 mav.addObject("output", output);
+                mav.addObject("log", writer.toString());
             }
             catch (Exception e)
             {
-                logger.error("Error running script.", e);
+                e = (Exception) sanitize(e);
+                int line = findLineNumber(e, "DebugScript");
+                String message = e.getMessage() != null ? e.getMessage() : e.getClass().getName();
+                OtherObjectsException otherObjectsException = new OtherObjectsException("Error on line " + line + ": " + message);
+                otherObjectsException.setStackTrace(e.getStackTrace());
                 mav.addObject("exception", e);
+                logger.error("Error running script.", e);
             }
         }
+        
         mav.addObject("script", script);
         return mav;
+    }
+    /**
+     * Runs Resource Scanner.
+     * 
+     * <p>TODO Need to restrict this to superusers only
+     * 
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/debug/scan")
+    public ModelAndView scan(HttpServletRequest request, HttpServletResponse response) throws Exception
+    {
+        resourceScanner.updateResources();
+        response.getWriter().print("<p>Resource scanning... complete.</p>");
+        return null;
     }
 
     /**
@@ -397,8 +439,80 @@ public class DebugController implements ServletContextAware
         return "WARN Didn't send test email to: " + recipient;
     }
 
+    
+    /**
+     * TODO From GrailsUtil.
+     * 
+     * @param t
+     * @return
+     */
+    public static Throwable sanitize(Throwable t)
+    {
+        StackTraceElement[] trace = t.getStackTrace();
+        List<StackTraceElement> newTrace = new ArrayList<StackTraceElement>();
+        for (StackTraceElement stackTraceElement : trace)
+        {
+            if (isApplicationClass(stackTraceElement.getClassName()))
+            {
+                newTrace.add(stackTraceElement);
+            }
+        }
+
+        // Only trim the trace if there was some application trace on the stack
+        // if not we will just skip sanitizing and leave it as is
+        if (newTrace.size() > 0)
+        {
+            // We don't want to lose anything, so log it
+            //STACK_LOG.error("Sanitizing stacktrace:", t);
+            StackTraceElement[] clean = new StackTraceElement[newTrace.size()];
+            newTrace.toArray(clean);
+            t.setStackTrace(clean);
+        }
+        return t;
+    }
+
+    public static int findLineNumber(Throwable t, String fileName)
+    {
+        StackTraceElement[] trace = t.getStackTrace();
+        for (StackTraceElement stackTraceElement : trace)
+        {
+            if (stackTraceElement.getFileName() != null && stackTraceElement.getFileName().equals(fileName))
+                return stackTraceElement.getLineNumber();
+        }
+        return -1;
+    }
+
+    private static final String[] OO_PACKAGES = new String[]{"org.codehaus.groovy.", "groovy.", "org.mortbay.", "sun.", "java.lang.reflect.", "org.springframework.", "com.opensymphony.",
+            "org.hibernate.", "javax.servlet."};
+
+    public static boolean isApplicationClass(String className)
+    {
+        for (int i = 0; i < OO_PACKAGES.length; i++)
+        {
+            String grailsPackage = OO_PACKAGES[i];
+            if (className.startsWith(grailsPackage))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public void setServletContext(ServletContext servletContext)
     {
         this.servletContext = servletContext;
+    }
+
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
+    {
+        this.applicationContext = applicationContext;
     }
 }

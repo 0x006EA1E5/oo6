@@ -17,12 +17,14 @@ P {padding:10px 0px 0px 10px;}
 <p>No page here.</p>
 <p><a href="${oo.url("/")}">Back to home page</a></p>
 </div>
+<@oo.authorize "ROLE_ADMIN">
 <div class="message">
 <h1>Since you are an editor...</h1>
 <p>... maybe you would like to create one?</p>
 <p>+ <a href="javascript:ooShowCreateForm('ArticlePage', '${requestedPath}')">Create article here</a></p>
 <p>+ <a href="javascript:ooShowCreateForm('org.otherobjects.cms.model.SyndicationFeedResource','${requestedPath}')">Create syndication feed here</a></p>
 </div>
+</@oo.authorize>
 <@oo.hud />
 
 </body>
