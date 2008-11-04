@@ -2,11 +2,13 @@ package org.otherobjects.cms.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.io.OoResourceLoader;
@@ -18,6 +20,8 @@ import org.otherobjects.cms.model.TemplateBlockReference;
 import org.otherobjects.cms.model.TemplateLayout;
 import org.otherobjects.cms.model.TemplateRegion;
 import org.otherobjects.cms.types.TypeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Scans resources on disk and updates their meta data in the data store.
@@ -29,6 +33,8 @@ import org.otherobjects.cms.types.TypeService;
  */
 public class ResourceScanner
 {
+    private Logger logger = LoggerFactory.getLogger(ResourceScanner.class);
+
     @Resource
     private DaoService daoService;
 
@@ -51,38 +57,50 @@ public class ResourceScanner
 
             for (OoResource r : resources)
             {
+                Date fileDate = new Date(r.getFile().lastModified());
                 String code = StringUtils.substringBefore(r.getFilename(), ".");
-                TemplateBlock block = (TemplateBlock) dao.getByPath(jcrPath + code);
 
                 OoResourceMetaData metaData = r.getMetaData();
+                if (metaData != null && metaData.getTypeDef() != null)
+                    typeService.registerType(metaData.getTypeDef());
 
-                // Don't include private blocks
-                if (metaData != null && metaData.getKeywords() != null && metaData.getKeywords().contains("private"))
-                    continue;
-
-                if (block == null)
+                TemplateBlock block = (TemplateBlock) dao.getByPath(jcrPath + code);
+                if (block == null || block.getModificationTimestamp().before(fileDate))
                 {
-                    block = new TemplateBlock();
-                    block.setPath(jcrPath);
+
+                    // Don't include private blocks
+                    if (metaData != null && metaData.getKeywords() != null && metaData.getKeywords().contains("private"))
+                    {
+                        logger.info("Ignoring private block: " + jcrPath + code);
+                        continue;
+                    }
+
+                    logger.info("Updating metaData for block: " + jcrPath + code);
+
+                    if (block == null)
+                    {
+                        block = new TemplateBlock();
+                        block.setPath(jcrPath);
+                    }
+                    block.setCode(code);
+                    block.setLabel(code);
+                    if (metaData != null)
+                    {
+                        if (metaData.getTitle() != null)
+                            block.setLabel(metaData.getTitle());
+                        else
+                            block.setDescription(metaData.getDescription());
+                        if (metaData.getKeywords() != null && metaData.getKeywords().contains("global"))
+                            block.setGlobal(true);
+                    }
+
+                    dao.save(block);
+                    dao.publish(block, null);
                 }
-                block.setCode(code);
-                block.setLabel(code);
-                if (metaData != null)
+                else
                 {
-                    if (metaData.getTitle() != null)
-                        block.setLabel(metaData.getTitle());
-                    else
-                        block.setDescription(metaData.getDescription());
-                    if (metaData.getKeywords() != null && metaData.getKeywords().contains("global"))
-                        block.setGlobal(true);
-
-                    if (metaData.getTypeDef() != null)
-                        typeService.registerType(metaData.getTypeDef());
-
+                    logger.info("Found current block: " + jcrPath + code);
                 }
-
-                dao.save(block);
-                dao.publish(block, null);
             }
 
             // Process layouts
@@ -90,31 +108,40 @@ public class ResourceScanner
             jcrPath = "/designer/layouts/";
             for (OoResource r : resources)
             {
+                Date fileDate = new Date(r.getFile().lastModified());
+
                 String code = StringUtils.substringBefore(r.getFilename(), ".");
                 TemplateLayout layout = (TemplateLayout) dao.getByPath(jcrPath + code);
+                if (layout == null || layout.getModificationTimestamp().before(fileDate))
+                {
+                    logger.info("Updating metaData for layout: " + jcrPath + code);
 
-                if (layout == null)
-                {
-                    layout = new TemplateLayout();
-                    layout.setPath(jcrPath);
+                    if (layout == null)
+                    {
+                        layout = new TemplateLayout();
+                        layout.setPath(jcrPath);
+                    }
+                    layout.setCode(code);
+                    layout.setLabel(code);
+                    if (r.getMetaData() != null)
+                    {
+                        if (r.getMetaData().getTitle() != null)
+                            layout.setLabel(r.getMetaData().getTitle());
+                        else
+                            layout.setDescription(r.getMetaData().getDescription());
+                    }
+                    dao.save(layout);
+                    dao.publish(layout, null);
                 }
-                layout.setCode(code);
-                layout.setLabel(code);
-                if (r.getMetaData() != null)
+                else
                 {
-                    if (r.getMetaData().getTitle() != null)
-                        layout.setLabel(r.getMetaData().getTitle());
-                    else
-                        layout.setDescription(r.getMetaData().getDescription());
+                    logger.info("Found current layout: " + jcrPath + code);
                 }
-                dao.save(layout);
-                dao.publish(layout, null);
             }
         }
         catch (IOException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new OtherObjectsException("Error scanning resources.", e);
         }
     }
 
