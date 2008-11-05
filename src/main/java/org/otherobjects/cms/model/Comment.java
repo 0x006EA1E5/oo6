@@ -10,6 +10,12 @@ public class Comment extends BaseNode
     private String itemId;
     private String comment;
     private String username;
+    
+    @Override
+    public String getOoLabel()
+    {
+        return getComment();
+    }
 
     @Property(order = 10)
     public String getUsername()

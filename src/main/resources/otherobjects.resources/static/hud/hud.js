@@ -28,7 +28,7 @@ function ooEnableBlockSelector() {
 		
 		// Add overlay div
 		element.insert('<div id="overlay" class="oo-block-overlay"></div>', 'top');
-		//$('#overlay').setStyle({width:element.getWidth()-12+'px', height:element.getHeight()-12+'px'});
+		$('#overlay').setStyle({width:element.getWidth()-22+'px', height:element.getHeight()-12+'px'});
 	
 		// Set click handler
 		$('#overlay').on('click', function(el, e) {

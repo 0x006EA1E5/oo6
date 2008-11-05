@@ -2,6 +2,7 @@
 
 # Set maven to use more memory (needed by Tomcat tasks)
 export MAVEN_OPTS="-Xms128M -Xmx256M -Djava.awt.headless=true"
+export CATALINA_OPTS="-Dotherobjects.environment=production -Djava.awt.headless=true"
 
 case $1 in
 

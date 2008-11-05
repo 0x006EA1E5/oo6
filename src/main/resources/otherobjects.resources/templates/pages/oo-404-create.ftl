@@ -34,6 +34,5 @@ LI A {padding-left:20px; background:url(${oo.resourceUrl('/otherobjects/static/h
 </div>
 </@oo.authorize>
 <@oo.hud />
-<img src="${oo.resourceUrl('/otherobjects/static/hud/icons/add.png')}"/>
 </body>
 </html>
