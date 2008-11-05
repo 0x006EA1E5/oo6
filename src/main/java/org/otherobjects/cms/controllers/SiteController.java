@@ -81,11 +81,19 @@ public class SiteController extends AbstractController
         // Handle page not found
         if (resourceObject == null)
         {
+            // Determine folder
+            String newCode = StringUtils.substringAfterLast(path, "/");
+            path = StringUtils.substringBeforeLast(path, "/");
+            Object folder = universalJcrDao.getByPath("/site" + path);
 
             //FIXME Add Security check here
             ModelAndView mv = new ModelAndView("/otherobjects/templates/pages/oo-404-create");
             mv.addObject("requestedPath", path);
+            mv.addObject("folder", folder);
+            mv.addObject("newCode", newCode);
             return mv;
+            
+            
             //throw new NotFoundException("No resource at: " + path);
         }
 

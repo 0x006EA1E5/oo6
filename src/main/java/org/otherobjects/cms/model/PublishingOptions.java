@@ -89,7 +89,7 @@ public class PublishingOptions extends BaseNode
         this.accessbilityHotKey = accessbilityHotKey;
     }
 
-    @Property(order = 60)
+    @Property(order = 6)
     public Template getTemplate()
     {
         return template;

@@ -62,7 +62,7 @@
 <ul>
 	<li><a href="${oo.url('/otherobjects/workbench/edit/${resourceObject.id}')}">Edit</a></li>	
 	<li><a href="javascript:ooEnableBlockSelector()">Edit blocks</a></li>	
-	<li><a href="javascript:ooEnableBlockManagement()">Arrange blocks (${ooTemplate.ooLabel} : ${ooTemplate.layout.ooLabel})</a></li>	
+	<li><a href="javascript:ooEnableBlockManagement()">Arrange blocks<#-- (${ooTemplate.ooLabel} : ${ooTemplate.layout.ooLabel})--></a></li>	
 </ul>
 <#else>
 <p class="oo-divider">

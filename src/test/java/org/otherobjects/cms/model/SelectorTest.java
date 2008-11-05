@@ -9,7 +9,10 @@ public class SelectorTest extends TestCase
         Selector s = new Selector();
         s.setQueryPath("/site/news/");
         assertEquals("/jcr:root/site/news/*", s.getQuery());
-        s.setRecursive(true);
+        s.setSubFolders(true);
         assertEquals("/jcr:root/site/news//*", s.getQuery());
+        s.setEnd(5L);
+        assertEquals("/jcr:root/site/news//* {5}", s.getQuery());
+        
     }
 }

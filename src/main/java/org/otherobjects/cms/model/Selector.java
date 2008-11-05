@@ -8,7 +8,7 @@ import org.otherobjects.cms.types.annotation.Type;
  * Selects a list of items via a query. This is mapped as a Type to allow saving in the repository
  * but this can be used on its own to generate queries easily.
  * 
- * FIXME Validation rule on this needed. Eg path must start and end in slash
+ * FIXME !!! Validation rule on this needed. Eg path must start and end in slash
  * FIXME Support notion of current folder/object.
  * 
  * TODO Add support for manual selection/override
@@ -27,7 +27,10 @@ public class Selector extends BaseNode
     private String queryTypeName;
     private String queryTags;
 
-    private Boolean recursive = false;
+    private String orderBy;
+
+    private Boolean random = false;
+    private Boolean subFolders = false;
     private String customQuery;
     private Long start;
     private Long end;
@@ -82,15 +85,26 @@ public class Selector extends BaseNode
         this.queryTags = queryTags;
     }
 
-    @Property(order = 35, label = "Sub folders?")
-    public Boolean getRecursive()
+    @Property(order = 34, label = "Random?")
+    public Boolean getRandom()
     {
-        return recursive;
+        return random;
     }
 
-    public void setRecursive(Boolean recursive)
+    public void setRandom(Boolean random)
     {
-        this.recursive = recursive;
+        this.random = random;
+    }
+
+    @Property(order = 35, label = "Sub folders?")
+    public Boolean getSubFolders()
+    {
+        return subFolders;
+    }
+
+    public void setSubFolders(Boolean subFolders)
+    {
+        this.subFolders = subFolders;
     }
 
     @Property(order = 40)
@@ -103,6 +117,18 @@ public class Selector extends BaseNode
     {
         this.queryTypeName = queryTypeName;
     }
+    
+    @Property(order = 41)
+    public String getOrderBy()
+    {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy)
+    {
+        this.orderBy = orderBy;
+    }
+    
 
     @Property(order = 50)
     public String getCustomQuery()
@@ -154,7 +180,7 @@ public class Selector extends BaseNode
         if (StringUtils.isNotBlank(getQueryPath()))
         {
             query.append(getQueryPath());
-            if (getRecursive())
+            if (getSubFolders() != null && getSubFolders())
                 query.append("/"); // Add extra slast to query to allow recursion
             query.append("*");
         }
@@ -167,6 +193,24 @@ public class Selector extends BaseNode
             // TODO Validate that typeName is a real type
             query.append(" [@ooType='" + getQueryTypeName() + "']");
         }
+
+        if(StringUtils.isNotBlank(getOrderBy()))
+            query.append(" order by " + getOrderBy());
+
+        // Add custom OO selector
+        String range = "";
+        if (getEnd() != null)
+        {
+            if (getStart() != null)
+                range = " {" + getStart() + ".." + getEnd() + "}";
+            else if (getRandom())
+                range = " {%" + getEnd() + "}";
+            else
+                range = " {" + getEnd() + "}";
+        }
+        query.append(range);
+
         return query.toString();
     }
+
 }

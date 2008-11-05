@@ -28,7 +28,7 @@ function ooEnableBlockSelector() {
 		
 		// Add overlay div
 		element.insert('<div id="overlay" class="oo-block-overlay"></div>', 'top');
-		$('#overlay').setStyle({width:element.getWidth()-12+'px', height:element.getHeight()-12+'px'});
+		//$('#overlay').setStyle({width:element.getWidth()-12+'px', height:element.getHeight()-12+'px'});
 	
 		// Set click handler
 		$('#overlay').on('click', function(el, e) {
@@ -243,13 +243,13 @@ function ooToggleHud(id) {
 	// Allow HUD to be dragged out of the way
 	// dd = new YAHOO.util.DD(id);
 
-	var vp = Ojay.getViewportSize()
-	var l = (vp.width - 825)/2;
-	var t = (vp.height - 250)/2;
+	//var vp = Ojay.getViewportSize()
+	//var l = (vp.width - 825)/2;
+	//var t = (vp.height - 250)/2;
 
 	var hud = $('#'+id);
-	hud.setStyle({left: l+'px'});
-	hud.setStyle({top: t+'px'});
+	//hud.setStyle({left: l+'px'});
+	//hud.setStyle({top: t+'px'});
 
 	if(hud.getStyle('display')!='block')
 		hud.show();

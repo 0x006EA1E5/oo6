@@ -204,20 +204,27 @@ Renders a textbox for a date property.
 
 <#macro formSingleSelect path options attributes="" empty=false>
     <#if empty>
+    	<#assign expression = path?substring(7) />
+  		
+	    <select id="${expression}" name="${expression}" ${attributes}>
+	        <option value="">-</option>
+	    	<#list options as option>
+	        <option value="${option.id?html}">${option.ooLabel?html}</option>
+	        </#list>
+	    </select>
 	<#else>
-	<@bind path/>
-    <select id="${ooStatus.expression}" name="${ooStatus.expression}" ${attributes}>
-        <option>-</option>
-    	<#list options as option>
-    	
-        <option value="${option.id?html}"<@checkSelected option.id/>>${option.ooLabel?html}</option>
-        </#list>
-    </select>
+		<@bind path/>
+	    <select id="${ooStatus.expression}" name="${ooStatus.expression}" ${attributes}>
+	        <option value="">-</option>
+	    	<#list options as option>
+	        <option value="${option.id?html}"<@checkSelected option.id/>>${option.ooLabel?html}</option>
+	        </#list>
+	    </select>
     </#if>
 </#macro>
 
 <#--
-Ê* checkSelected
+ * checkSelected
  *
  * FIXME Need to support non-nodes.
  -->

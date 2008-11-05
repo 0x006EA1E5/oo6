@@ -9,6 +9,9 @@ BODY {background:#CCC;}
 .message {background:#FFF; border:1px solid #000; padding:15px; font:14px Arial; width:400px; margin:100px auto 0px auto; -moz-border-radius:8px; -webkit-border-radius:8px; }
 H1 {padding:0px 0px 0px 10px;}
 P {padding:10px 0px 0px 10px;}
+UL {padding-top:20px;}
+LI {list-style:none; margin-left:20px; padding-bottom:10px;}
+LI A {padding-left:20px; background:url(${oo.resourceUrl('/otherobjects/static/hud/icons/add.png')}) no-repeat 0px 0px;}
 </style>
 </head>
 <body>
@@ -21,11 +24,16 @@ P {padding:10px 0px 0px 10px;}
 <div class="message">
 <h1>Since you are an editor...</h1>
 <p>... maybe you would like to create one?</p>
-<p>+ <a href="javascript:ooShowCreateForm('ArticlePage', '${requestedPath}')">Create article here</a></p>
-<p>+ <a href="javascript:ooShowCreateForm('org.otherobjects.cms.model.SyndicationFeedResource','${requestedPath}')">Create syndication feed here</a></p>
+<ul>
+<#list folder.allAllowedTypes as type>
+<#if type?exists>
+<li class="divider"><a href="${oo.url('/otherobjects/workbench/create/${type.name}?container=${folder.id}&code=${newCode}')}">New ${type.label} ...</a></li>
+</#if>
+</#list>
+</ul>
 </div>
 </@oo.authorize>
 <@oo.hud />
-
+<img src="${oo.resourceUrl('/otherobjects/static/hud/icons/add.png')}"/>
 </body>
 </html>

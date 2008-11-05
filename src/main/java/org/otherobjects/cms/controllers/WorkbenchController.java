@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.otherobjects.cms.Url;
 import org.otherobjects.cms.dao.DaoService;
+import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.Folder;
@@ -108,7 +109,10 @@ public class WorkbenchController
         ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/edit");
 
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
-        mav.addObject("object", universalJcrDao.create(type));
+        BaseNode create = universalJcrDao.create(type);
+        if(request.getParameter("code")!=null)
+            create.setCode(request.getParameter("code"));
+        mav.addObject("object", create);
         mav.addObject("containerId", request.getParameter("container"));
         mav.addObject("typeDef", typeDef);
         return mav;
@@ -125,6 +129,7 @@ public class WorkbenchController
         SiteFolder folder = folderDao.get(id);
         mav.addObject("folder", folder);
         mav.addObject("items", universalJcrDao.getAllByPath(folder.getJcrPath()));
+        
         return mav;
     }
     

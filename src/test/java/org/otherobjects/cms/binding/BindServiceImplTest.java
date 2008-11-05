@@ -68,6 +68,7 @@ public class BindServiceImplTest extends TestCase
         req.addParameter("name", "");
         req.addParameter("testString", "  no trailing white space\n");
         req.addParameter("testDate", "");
+        req.addParameter("testReference", "");
         
         TestObject t = new TestObject();
 
@@ -78,6 +79,7 @@ public class BindServiceImplTest extends TestCase
 
         assertEquals(null, t.getName());
         assertEquals("no trailing white space", t.getTestString());
+        assertEquals(null, t.getTestReference());
         assertEquals(null, t.getTestDate());
     }
     

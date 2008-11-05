@@ -12,7 +12,6 @@ import org.springframework.mock.web.MockServletContext;
 
 public class DebugControllerTest extends TestCase
 {
-
     public void testScript() throws Exception
     {
         DebugController debugController = new DebugController();
@@ -20,7 +19,6 @@ public class DebugControllerTest extends TestCase
         HttpServletResponse response = new MockHttpServletResponse();
         ServletContext sc = new MockServletContext();
         debugController.setServletContext(sc);
-        debugController.script(request, response, null);
+        debugController.script(request, response);
     }
-
 }
