@@ -5,143 +5,135 @@
   <bookinfo>
     <title>OTHERobjects CMS</title>
 
-    <subtitle>Site Designer Guide</subtitle>
+    <subtitle>Developer Guide</subtitle>
 
-    <releaseinfo>0.3</releaseinfo>
+    <releaseinfo>0.6 Draft</releaseinfo>
   </bookinfo>
 
   <toc></toc>
 
-  <preface id="preface">
-    <title>Preface</title>
+  <part>
+    <title>Building your site</title>
 
-    <section id="section-why-another-framework">
-      <title>Who is this guide for?</title>
+    <preface id="preface">
+      <title>Preface</title>
 
-      <para>This guide is for users who wish to build their own website. It
-      covers installing and running OTHERobjects, configuring data types and
-      building templates and adding action logic to events and scheduled
-      tasks.</para>
+      <section id="section-why-another-framework">
+        <title>Who is this guide for?</title>
 
-      <para>For information on adding content and maintaining an existing site
-      please see the User Guide.</para>
+        <para>This guide is for users who wish to build their own website. It
+        covers installing and running OTHERobjects, configuring data types and
+        building templates and adding action logic to events and scheduled
+        tasks.</para>
 
-      <para>Move advanced users wishing to extend OTHERobjects should read the
-      Developer Guide.</para>
+        <para>For information on adding content and maintaining an existing
+        site please see the User Guide.</para>
 
-      <para>You should be comfortable with the command line, HTML, and simple
-      scripting.</para>
+        <para>Move advanced users wishing to extend OTHERobjects should read
+        the Developer Guide.</para>
 
-      <para>You don't need any knowledge of Java.</para>
-    </section>
-  </preface>
+        <para>You should be comfortable with the command line, HTML, and
+        simple scripting.</para>
 
-  <chapter id="chapter-using-the-framework">
-    <title>Getting started</title>
+        <para>You don't need any knowledge of Java.</para>
+      </section>
+    </preface>
 
-    <para>TODO Setting up admin user (for more info see Users and permissions
-    chapter).</para>
+    <chapter id="chapter-using-the-framework">
+      <title>Getting started</title>
 
-    <section>
-      <title>Installing required software</title>
-
-      <para>There is some key software that you will need before you can start
-      developing with OTHERobjects.</para>
+      <para>TODO Setting up admin user (for more info see Users and
+      permissions chapter).</para>
 
       <section>
-        <title>Java</title>
+        <title>Installing required software</title>
 
-        <para>OTHERobjects is Java-powered, so you will need a recent version
-        of the JVM to run it. If your system does not come with a JVM
-        installed we would recommend the latest Sun JDK from
-        java.sun.com/download. Check that your JVM is installed by running:
-        the following command:</para>
+        <para>There is some key software that you will need before you can
+        start developing with OTHERobjects.</para>
 
-        <programlisting>iMac:~ rich$ <emphasis role="bold">java -version</emphasis>
-java version "1.5.0_07" 
-Java(TM) 2 Runtime Environment, Standard Edition (build 1.5.0_07-164)
-Java HotSpot(TM) Client VM (build 1.5.0_07-87, mixed mode, sharing)
+        <section>
+          <title>Java</title>
+
+          <para>OTHERobjects is Java-powered, so you will need a recent
+          version of the JVM to run it. If your system does not come with a
+          JVM installed we would recommend the latest Sun JDK from
+          java.sun.com/download. Check that your JVM is installed by running:
+          the following command:</para>
+
+          <programlisting>iMac:~ rich$ <emphasis role="bold">java -version</emphasis>
+java version "1.5.0_07" Java(TM) 2 Runtime Environment, Standard Edition (build 1.5.0_07-164) Java HotSpot(TM) Client VM (build 1.5.0_07-87, mixed mode, sharing) 
 iMac:~ rich$
 </programlisting>
 
-        <para>You will need version 1.5.0 or greater.</para>
-      </section>
+          <para>You will need version 1.5.0 or greater.</para>
+        </section>
 
-      <section>
-        <title>Apache Maven</title>
+        <section>
+          <title>Apache Maven</title>
 
-        <para>We use Maven behing the scenes to download dependecies, run the
-        development server and to backage up your site ready for deployment.
-        You'll need Apache Maven version 2.0.7 or greater. You can download it
-        from: <uri>http://maven.apache.org/download.html</uri> . Once you have
-        downloaded and installed Maven you should make sure that the <emphasis
-        role="bold">mvn</emphasis> command is included in your path:</para>
+          <para>We use Maven behing the scenes to download dependecies, run
+          the development server and to backage up your site ready for
+          deployment. You'll need Apache Maven version 2.0.9 or greater. You
+          can download it from:
+          <uri>http://maven.apache.org/download.html</uri> . Once you have
+          downloaded and installed Maven you should make sure that the
+          <emphasis role="bold">mvn</emphasis> command is included in your
+          path:</para>
 
-        <para><programlisting>iMac:~ rich$ <emphasis role="bold">mvn -version</emphasis> 
-Maven version: 2.0.7
-iMac:~ rich$
-</programlisting></para>
-
-        <para>Also set MAVEN_OPTS="-Xms128M -Xmx256M
-        -Djava.awt.headless=true"</para>
-      </section>
-    </section>
-
-    <section>
-      <title>Installing OTHERobjects</title>
-
-      <para>Download from http://www.otherobjects.org/download/</para>
-
-      <para>Unzip the file somewhere on your system.</para>
-
-      <para>Set the OTHEROBJECTS_HOME environment variable.</para>
-
-      <para>Add $OTHEROBJECTS_HOME/bin to your path.</para>
-
-      <section>
-        <title>Creating your first site</title>
-
-        <para>If all your software has been properly installed then you should
-        be ready to create your first site.</para>
-
-        <para>First of all check that OTHERobjects has been installed:</para>
-
-        <programlisting>iMac:mysite rich$ <emphasis role="bold">oo version</emphasis>
-
-OTHERObjects CMS v0.5-SNAPSHOT
-
+          <para><programlisting>iMac:~ rich$ <emphasis role="bold">mvn -version</emphasis>
 Maven version: 2.0.9
-Java version: 1.5.0_13
-OS name: "mac os x" version: "10.5.3" arch: "i386" Family: "unix"
-
-iMac:mysite rich$ 
-</programlisting>
-
-        <para>If you get any errors check the required software has been
-        correctly installed.</para>
-
-        <para>Now go ahead and create your first site:</para>
-
-        <para><programlisting>iMac:mysite rich$ <emphasis role="bold">oo create demo</emphasis>
-
-...
-
-Your new site has been created. To start it up type:
-
-  cd oo2
-  oo run
+iMac:~ rich$
 </programlisting></para>
 
-        <para>Finally (as told by the create task) change into your new
-        directory and type <emphasis role="bold">oo run</emphasis>. The server
-        will start and you should get this:</para>
+          <para>Also set MAVEN_OPTS="-Xms128M -Xmx256M
+          -Djava.awt.headless=true"</para>
+        </section>
+      </section>
 
-        <programlisting>INFO  [o.o.cms.util.StartupMessage] ************************************************************** 
-INFO  [o.o.cms.util.StartupMessage] ************************************************************** 
-INFO  [o.o.cms.util.StartupMessage]   ___ _____ _   _ _____ ____       _     _           _        
-INFO  [o.o.cms.util.StartupMessage]  / _ \_   _| | | | ____|  _ \ ___ | |__ (_) ___  ___| |_ ___  
-INFO  [o.o.cms.util.StartupMessage] | | | || | | |_| |  _| | |_) / _ \| '_ \| |/ _ \/ __| __/ __| 
-INFO  [o.o.cms.util.StartupMessage] | |_| || | |  _  | |___|  _ &lt; (_) | |_) | |  __/ (__| |_\__ \ 
+      <section>
+        <title>Installing OTHERobjects</title>
+
+        <para>Download from http://www.otherobjects.org/download/</para>
+
+        <para>Unzip the file somewhere on your system.</para>
+
+        <para>Set the OTHEROBJECTS_HOME environment variable.</para>
+
+        <para>Add $OTHEROBJECTS_HOME/bin to your path.</para>
+
+        <section>
+          <title>Creating your first site</title>
+
+          <para>If all your software has been properly installed then you
+          should be ready to create your first site.</para>
+
+          <para>First of all check that OTHERobjects has been
+          installed:</para>
+
+          <programlisting>
+						iMac:mysite rich$
+						<emphasis role="bold">oo version</emphasis>
+						OTHERObjects CMS v0.5-SNAPSHOT Maven version: 2.0.9 Java version: 1.5.0_13 OS name: "mac os x" version: "10.5.3" arch: "i386" Family: "unix" iMac:mysite rich$
+					</programlisting>
+
+          <para>If you get any errors check the required software has been
+          correctly installed.</para>
+
+          <para>Now go ahead and create your first site:</para>
+
+          <para><programlisting>
+							iMac:mysite rich$
+							<emphasis role="bold">oo create demo</emphasis>
+							... Your new site has been created. To start it up type: cd oo2 oo run
+						</programlisting></para>
+
+          <para>Finally (as told by the create task) change into your new
+          directory and type <emphasis role="bold">oo run</emphasis> . The
+          server will start and you should get this:</para>
+
+          <programlisting>INFO [o.o.cms.util.StartupMessage] ************************************************************** INFO [o.o.cms.util.StartupMessage]
+						************************************************************** INFO [o.o.cms.util.StartupMessage] ___ _____ _ _ _____ ____ _ _ _ INFO [o.o.cms.util.StartupMessage] / _ \_ _| | | | ____| _ \ ___
+						| |__ (_) ___ ___| |_ ___ INFO [o.o.cms.util.StartupMessage] | | | || | | |_| | _| | |_) / _ \| '_ \| |/ _ \/ __| __/ __| INFO [o.o.cms.util.StartupMessage] | |_| || | | _ | |___| _ &lt; (_) | |_) | |  __/ (__| |_\__ \ 
 INFO  [o.o.cms.util.StartupMessage]  \___/ |_| |_| |_|_____|_| \_\___/|_.__// |\___|\___|\__|___/ 
 INFO  [o.o.cms.util.StartupMessage]                                       |__/                 
 INFO  [o.o.cms.util.StartupMessage]  
@@ -155,890 +147,2149 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
 INFO  [o.o.cms.util.StartupMessage] ************************************************************** 
 </programlisting>
 
-        <para>Congratulations! Your site has started up correctly and you can
-        now go to http://localhost:8080/ to see your first page.</para>
+          <para>Congratulations! Your site has started up correctly and you
+          can now go to http://localhost:8080/ to see your first page.</para>
+        </section>
       </section>
-    </section>
-  </chapter>
+    </chapter>
 
-  <chapter>
-    <title>Where does the data go?</title>
+    <chapter>
+      <title>Where does the data go?</title>
 
-    <para>Before starting to build your site it important to understand the
-    different data stores. You will want to back up your data and move it
-    between servers so it's essential to know how and where it is
-    stored.</para>
+      <para>Before starting to build your site it important to understand the
+      different data stores. You will want to back up your data and move it
+      between servers so it's essential to know how and where it is
+      stored.</para>
 
-    <para>Database:</para>
+      <para>Database:</para>
 
-    <para>JCR:</para>
+      <para>JCR:</para>
 
-    <para>Uploaded images etc:</para>
+      <para>Uploaded images etc:</para>
 
-    <para>Templates/assets:</para>
+      <para>Templates/assets:</para>
 
-    <para></para>
+      <para></para>
 
-    <para>OTHERobjects sites use Maven under the hood to manage a variety of
-    build functions. The standard maven directory layout
-    (http://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html)
-    is quite deep and unnecessray for most OO projects. Our standard layout is
-    described below:.</para>
-
-    <para></para>
-
-    <para></para>
-
-    <para>As you build you site you will be adding all sorts of code and data.
-    It is obviously important to keep this safe.</para>
-
-    <para>Templates and type definitions</para>
-
-    <para>Assets: JS, CSS, graphics</para>
-
-    <para>Scripts</para>
-
-    <para>Site data: added data, UGC, uploaded files</para>
-
-    <section>
-      <title>What to back up</title>
+      <para>OTHERobjects sites use Maven under the hood to manage a variety of
+      build functions. The standard maven directory layout
+      (http://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html)
+      is quite deep and unnecessray for most OO projects. Our standard layout
+      is described below:.</para>
 
       <para></para>
 
       <para></para>
-    </section>
 
-    <section>
-      <title>Using SCM</title>
+      <para>As you build you site you will be adding all sorts of code and
+      data. It is obviously important to keep this safe.</para>
 
-      <para>SVN, CVS, Git</para>
+      <para>Templates and type definitions</para>
 
-      <para>When checking in to SCM ignore the private-data and public-data
-      folders</para>
-    </section>
-  </chapter>
+      <para>Assets: JS, CSS, graphics</para>
 
-  <chapter id="chapter-overview-of-steps">
-    <title>Overview of steps involved to build a site</title>
+      <para>Scripts</para>
 
-    <para>There are a couple of steps that you will need to go through each
-    tme you build a site with OTHERobjects. We will very briefly go over these
-    here to give you an idea of what's involved.</para>
+      <para>Site data: added data, UGC, uploaded files</para>
 
-    <itemizedlist>
-      <listitem>
-        <para>First you will need to think about the various different types
-        (or objects if you are coming from a programming background) you will
-        need in your site. Obvious ones that almost all sites will need are
-        articles and news items. But there might also be things like jobs,
-        events, products, press releases to name but a few.</para>
-      </listitem>
+      <section>
+        <title>What to back up</title>
 
-      <listitem>
-        <para>Then you will need to define those in a file called
-        src/main/resources/site.resources/bootstrap-data/jcr-data-types.xml in
-        your sites project folder. Have a look at that file and its sibling in
-        the OTHERobjects project folder in
-        src/main/resources/otherobjects.resources/bootstrap-data/jcr-data-types.xml
-        to get a feeling on what that involves. We might add a type designer
-        in the wrokbench in the future to do that.</para>
-      </listitem>
+        <para></para>
 
-      <listitem>
-        <para>Then log in to the workbench and create the overall folder
-        structure of your site (at least the first level).</para>
-      </listitem>
+        <para></para>
+      </section>
 
-      <listitem>
-        <para>Then create at least one layout file in
-        src/main/resources/site.resources/templates/layouts. Create a
-        corresponding entry in the workbench in Designer &gt; Layouts giving
-        the filename (without the path) as the content of the 'Code' field. A
-        layout is the main document making up your site's html documents. It
-        contains the Doctype and HTML head and body sections and controls the
-        overall layout of your sites pages (as the name implies). You can have
-        as many layout files as you want but it is advisable to keep the
-        number down. A useful scheme that has evolved over time is to have one
-        layout for the home page, one for the subfolder index listing pages
-        and one for all other content pages.</para>
-      </listitem>
+      <section>
+        <title>Using SCM</title>
 
-      <listitem>
-        <para>Then create a block for at least one of your types in
-        src/main/resources/site.resources/templates/blocks. A block is a mini
-        template that controls with what markup the properties of your types
-        are inserted into the site pages. It can also contain simple content
-        logic, like list the 5 latest news items etc.</para>
-      </listitem>
+        <para>SVN, CVS, Git</para>
 
-      <listitem>
-        <para>Now that you have types and layouts and blocks you can create
-        templates (Designer &gt; Templates). A template wires together blocks
-        and layouts by specifying which blocks go into which designated
-        regions in a layout in what order.</para>
-      </listitem>
+        <para>When checking in to SCM ignore the private-data and public-data
+        folders</para>
+      </section>
+    </chapter>
 
-      <listitem>
-        <para>Now when you create any of your types by going to a folder
-        listing and choosing 'Add Object' you can choose from the template(s)
-        you created and whatever template you choose is then used to view (and
-        preview) that type.</para>
-      </listitem>
-    </itemizedlist>
-  </chapter>
+    <chapter id="chapter-overview-of-steps">
+      <title>Overview of steps involved to build a site</title>
 
-  <chapter>
-    <title>Defining object types</title>
+      <para>There are a couple of steps that you will need to go through each
+      tme you build a site with OTHERobjects. We will very briefly go over
+      these here to give you an idea of what's involved.</para>
 
-    <para>All of the data for your site is stored in objects. A number of
-    standard objects are provided for Images, Files, Articles, News Stories
-    and such. You will more than likely want to customise these and add your
-    own object types too. This is easy to do and this section explains how it
-    is done.</para>
+      <itemizedlist>
+        <listitem>
+          <para>First you will need to think about the various different types
+          (or objects if you are coming from a programming background) you
+          will need in your site. Obvious ones that almost all sites will need
+          are articles and news items. But there might also be things like
+          jobs, events, products, press releases to name but a few.</para>
+        </listitem>
 
-    <para>Note for advanced users: This section only covers live editing of
-    dynamic object types. For more advanced use cases you may want to create
-    real Java object to store and process your data. You can also choose to
-    store data in the database rather than the content repository. More
-    informatino about these options can be found in the developer
-    guide.</para>
+        <listitem>
+          <para>Then you will need to define those in a file called
+          src/main/resources/site.resources/bootstrap-data/jcr-data-types.xml
+          in your sites project folder. Have a look at that file and its
+          sibling in the OTHERobjects project folder in
+          src/main/resources/otherobjects.resources/bootstrap-data/jcr-data-types.xml
+          to get a feeling on what that involves. We might add a type designer
+          in the wrokbench in the future to do that.</para>
+        </listitem>
 
-    <para></para>
+        <listitem>
+          <para>Then log in to the workbench and create the overall folder
+          structure of your site (at least the first level).</para>
+        </listitem>
 
-    <para>TypeDef must have: name</para>
+        <listitem>
+          <para>Then create at least one layout file in
+          src/main/resources/site.resources/templates/layouts. Create a
+          corresponding entry in the workbench in Designer &gt; Layouts giving
+          the filename (without the path) as the content of the 'Code' field.
+          A layout is the main document making up your site's html documents.
+          It contains the Doctype and HTML head and body sections and controls
+          the overall layout of your sites pages (as the name implies). You
+          can have as many layout files as you want but it is advisable to
+          keep the number down. A useful scheme that has evolved over time is
+          to have one layout for the home page, one for the subfolder index
+          listing pages and one for all other content pages.</para>
+        </listitem>
 
-    <para>Properties much have: name, type, size?</para>
+        <listitem>
+          <para>Then create a block for at least one of your types in
+          src/main/resources/site.resources/templates/blocks. A block is a
+          mini template that controls with what markup the properties of your
+          types are inserted into the site pages. It can also contain simple
+          content logic, like list the 5 latest news items etc.</para>
+        </listitem>
 
-    <para>Choose a base object ie is it a page or not.</para>
+        <listitem>
+          <para>Now that you have types and layouts and blocks you can create
+          templates (Designer &gt; Templates). A template wires together
+          blocks and layouts by specifying which blocks go into which
+          designated regions in a layout in what order.</para>
+        </listitem>
 
-    <para>Conventions: page objects have title, content, summary (for
-    elsewhere), image</para>
+        <listitem>
+          <para>Now when you create any of your types by going to a folder
+          listing and choosing 'Add Object' you can choose from the
+          template(s) you created and whatever template you choose is then
+          used to view (and preview) that type.</para>
+        </listitem>
+      </itemizedlist>
+    </chapter>
 
-    <para>Sholud name always end in Page? EventPage?</para>
+    <chapter>
+      <title>Defining object types</title>
 
-    <section>
-      <title>How to edit and define objects</title>
+      <para>All of the data for your site is stored in objects. A number of
+      standard objects are provided for Images, Files, Articles, News Stories
+      and such. You will more than likely want to customise these and add your
+      own object types too. This is easy to do and this section explains how
+      it is done.</para>
 
-      <para>Go to Workbench &gt; Data Types &gt; Add or Edit</para>
-
-      <para>Type Def options</para>
+      <para>Note for advanced users: This section only covers live editing of
+      dynamic object types. For more advanced use cases you may want to create
+      real Java object to store and process your data. You can also choose to
+      store data in the database rather than the content repository. More
+      informatino about these options can be found in the developer
+      guide.</para>
 
       <para></para>
 
-      <table>
-        <title>Options for an Object Type Definition</title>
+      <para>TypeDef must have: name</para>
 
-        <tgroup cols="2">
-          <tbody>
-            <row>
-              <entry>code</entry>
+      <para>Properties much have: name, type, size?</para>
 
-              <entry>a unique code for this type. Use your domain name for
-              namespace. Required</entry>
-            </row>
+      <para>Choose a base object ie is it a page or not.</para>
 
-            <row>
-              <entry>label</entry>
+      <para>Conventions: page objects have title, content, summary (for
+      elsewhere), image</para>
 
-              <entry>human readable label</entry>
-            </row>
+      <para>Sholud name always end in Page? EventPage?</para>
 
-            <row>
-              <entry>description</entry>
+      <section>
+        <title>How to edit and define objects</title>
 
-              <entry>a more complete description of this object type</entry>
-            </row>
+        <para>Go to Workbench &gt; Data Types &gt; Add or Edit</para>
 
-            <row>
-              <entry>help</entry>
+        <para>Type Def options</para>
 
-              <entry>instructions for users using this object type</entry>
-            </row>
+        <para></para>
 
-            <row>
-              <entry>labelProperty</entry>
+        <table>
+          <title>Options for an Object Type Definition</title>
 
-              <entry>which property to use to descripe this object</entry>
-            </row>
+          <tgroup cols="2">
+            <tbody>
+              <row>
+                <entry>code</entry>
 
-            <row>
-              <entry>descriptionProperty</entry>
-            </row>
+                <entry>a unique code for this type. Use your domain name for
+                namespace. Required</entry>
+              </row>
 
-            <row>
-              <entry>iconProperty</entry>
-            </row>
+              <row>
+                <entry>label</entry>
 
-            <row>
-              <entry>imageProperty</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
+                <entry>human readable label</entry>
+              </row>
 
-      <para>Property Types</para>
+              <row>
+                <entry>description</entry>
 
-      <para>Simple Properties: string, text, number, decimal, boolean, date,
-      time, timestamp</para>
+                <entry>a more complete description of this object type</entry>
+              </row>
 
-      <para>Sub objects: reference, component</para>
+              <row>
+                <entry>help</entry>
 
-      <para>Collection types: list</para>
+                <entry>instructions for users using this object type</entry>
+              </row>
+
+              <row>
+                <entry>labelProperty</entry>
+
+                <entry>which property to use to descripe this object</entry>
+              </row>
+
+              <row>
+                <entry>descriptionProperty</entry>
+              </row>
+
+              <row>
+                <entry>iconProperty</entry>
+              </row>
+
+              <row>
+                <entry>imageProperty</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>Property Types</para>
+
+        <para>Simple Properties: string, text, number, decimal, boolean, date,
+        time, timestamp</para>
+
+        <para>Sub objects: reference, component</para>
+
+        <para>Collection types: list</para>
+
+        <para></para>
+
+        <para>Common objects you may want to reference: CmsImage, CmsFile,
+        OoResource?, CmsRichMedia, User, Role</para>
+      </section>
+
+      <section>
+        <title>Forms, fields</title>
+
+        <para>Each property has a standard field type, but alternate
+        implementations may be available</para>
+
+        <para></para>
+
+        <table>
+          <title>Properties and avaiable field types</title>
+
+          <tgroup cols="2">
+            <tbody>
+              <row>
+                <entry>string</entry>
+
+                <entry>text field, password field, picklist</entry>
+              </row>
+
+              <row>
+                <entry>text</entry>
+
+                <entry>textarea, wikieditor, htmleditor</entry>
+              </row>
+
+              <row>
+                <entry>date</entry>
+
+                <entry>calendar</entry>
+              </row>
+
+              <row>
+                <entry>time</entry>
+
+                <entry>time selector</entry>
+              </row>
+
+              <row>
+                <entry>timestamp</entry>
+
+                <entry>calendar and time selector</entry>
+              </row>
+
+              <row>
+                <entry>boolean</entry>
+
+                <entry>checkbox, radiobuttons, slider</entry>
+              </row>
+
+              <row>
+                <entry>number, decimal</entry>
+
+                <entry>textfeld, slider, pick list</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>Note: string based fields are automatically trimmed and turned
+        to nulls if empty via StringTrimmerEditor.</para>
+      </section>
+
+      <section>
+        <title>Validation</title>
+
+        <para>Form binding just verifies data types (ie you can't put set
+        "one" into a Number property.</para>
+
+        <para>The Validator validates each object.</para>
+
+        <para>Properties have three preconfigured validation options but you
+        can create your own validators (TODO how? via Valang
+        functions?):</para>
+
+        <para>required (note: does this have special meaning for
+        booleans)</para>
+
+        <para>size (currently this is only relevant for the String
+        value)</para>
+
+        <para>valang (a valand method)</para>
+
+        <para>Example valangs:</para>
+
+        <para>in range {? : 5 &lt; ? 10 : : } Note you can have multiple rules
+        in the string.</para>
+
+        <para>For more info:
+        http://opensource.atlassian.com/confluence/spring/display/MODULES/Using+Valang+validator</para>
+
+        <para>TODO: How to validate emails, dates (relative)</para>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Understanding templates</title>
+
+      <para>blocks: section of a page. may be global or specific (folder or
+      page).</para>
+
+      <para>template: arrangement of configured blocks within a layout</para>
+
+      <para>Templates</para>
+
+      <para>Pages are assembled from templates. Layouts define the struture of
+      the page (2-col, 3-col etc.)</para>
+
+      <para>Blocks define an are of the page (header, advert, main content
+      etc.)</para>
+
+      <para>A Template consists of a Layout template and an arrangement of
+      Block Templates.</para>
+
+      <para>Each template is designed for one or more primary site objects. By
+      default the template with the same name as the object is used. For
+      example, when rendering an Article object, the template name Article is
+      used. Templates can be overridden in the following places: * Per folder
+      (and descendents) * Per object * Per link (is this a good idea?)</para>
+    </chapter>
+
+    <chapter>
+      <title>Writing templates</title>
+
+      <para>Template paths</para>
+
+      <para>Reserved folder names: otherobjects, plugins</para>
+
+      <para>(To be moved to Designer Guide) Need quick Freemarker tutorial and
+      links to docs You have the following directives: &lt;@oo. &lt;@format.
+      &lt;@data. &lt;@debug. inspect object, list directives? &lt;@security.
+      &lt;@forms. parameteters links resources images/files ajax/blocks ? Help
+      tools to insepc Methods available from templates L10N message Propreties
+      DAOs - access to all Tools - security checks Tools - link generation
+      Current Resource Object Current User Current Folder</para>
+
+      <section>
+        <title>Standard data</title>
+
+        <para>resourceObject (via SiteController only)</para>
+
+        <para>folder (via SiteController only)</para>
+
+        <para>url ?</para>
+      </section>
+
+      <section>
+        <title>Loading additional data</title>
+
+        <para>daoService</para>
+
+        <para>selectors</para>
+      </section>
+
+      <section>
+        <title>Linking to pages and assets</title>
+
+        <para>All links to pages should go via the url function. This is
+        needed to ensure that context paths are maintained correctly and that
+        SSL is set correctly.</para>
+
+        <para>Linking to other pages on the site:</para>
+
+        <para><code>&lt;a href="${oo.url("/contact-us.html")}"&gt;Contact
+        Us&lt;/a&gt;</code></para>
+
+        <para>You need to pass in the full relative url to the page.</para>
+
+        <para>Linking to assets:</para>
+
+        <para><code>&lt;img
+        src="${oo.resourceUrl("/site/static/graphics/logo.png")}"&gt;</code></para>
+
+        <para>For asset links you should use an internal OO path. See section
+        on <link linkend="understanding-paths">Understanding Paths</link> for
+        more info.</para>
+
+        <para>Linking to data items:</para>
+
+        <para>TBD</para>
+
+        <para>Linking to external pages:</para>
+
+        <para>Just enter the link as normal. No need to wrap with the url
+        function.</para>
+      </section>
+
+      <section>
+        <title>Acesssing parameters, session and cookie data</title>
+
+        <para>${RequestParameters.pageNo}</para>
+
+        <para>${Request}</para>
+
+        <para>${Application}</para>
+
+        <para>${Session}</para>
+      </section>
+
+      <section>
+        <title>Messages</title>
+
+        <para>The message service will provide localised versions of text for
+        templates. The strings are defined in</para>
+
+        <para>spring.message</para>
+
+        <para>store in messages.properties</para>
+      </section>
+
+      <section>
+        <title>Formatting and converting content</title>
+
+        <para>date</para>
+
+        <para>boolean</para>
+
+        <para>decimal</para>
+      </section>
+
+      <section>
+        <title>Security</title>
+
+        <para>Show current user details: security.user</para>
+
+        <para>Test if user has role: security.athorize ifAllGranted</para>
+      </section>
+
+      <section>
+        <title>Forms</title>
+
+        <para>See separate chapter.</para>
+      </section>
+
+      <section>
+        <title>XSS</title>
+
+        <para>ALways use ?html on strings from user input.</para>
+
+        <para>Working on a way for this to happen automatically.</para>
+      </section>
+
+      <section>
+        <title>Layouts</title>
+
+        <para>Must include</para>
+
+        <para>oo-hud</para>
+
+        <para>oo-flash</para>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Creating forms</title>
+
+      <para>Forms in the admin interface are created automatically based on
+      the information in the type definitions. See defining objects for more
+      information.</para>
+
+      <para>Site forms need to be hand coded and the easiest way of doing this
+      is with Spring's form macros. Standard form macros are ok for simple
+      forms. But for more advanced datamodels (with lists and components) you
+      will need to use OO macros.</para>
+
+      <para>For more information see here:
+      http://static.springframework.org/spring/docs/2.5.x/reference/view.html#view-velocity-forms</para>
+
+      <para>General principal:</para>
+
+      <para>Get or create object to be bound to form</para>
+
+      <para>Bind object</para>
+
+      <para>Render out fields and error messages.</para>
+
+      <para>TODO Example</para>
+
+      <para>Notes about special fields</para>
+
+      <para>Booleans: need placeholder for false values. This is done with a
+      hidden field prefixed with "_" and an empty value.</para>
+    </chapter>
+
+    <chapter>
+      <title>Writing actions</title>
+
+      <para>Actions update the model.</para>
+
+      <para>Can be written in Groovy or Java.</para>
+
+      <para>Put in /webapp/WEB-INF/scripts/</para>
+
+      <para>Called via url /_action/ActionName</para>
+
+      <para>Must be posted to.</para>
+
+      <para>Must redirect on completion.</para>
+
+      <para>What is available in the binding?</para>
+
+      <para>Flash message support.</para>
+
+      <para>Redirects</para>
+
+      <para>Form handling</para>
 
       <para></para>
+    </chapter>
 
-      <para>Common objects you may want to reference: CmsImage, CmsFile,
-      OoResource?, CmsRichMedia, User, Role</para>
-    </section>
+    <chapter id="understanding-paths">
+      <title>Understanding paths</title>
 
-    <section>
-      <title>Forms, fields</title>
+      <para>With resources spread across multiple projects (your site,
+      OTHERobjects and your plugins), potentially across multiple servers (a
+      static server or external data server) and running in different
+      environments (development, staging and production) it can become very
+      difficult to handle paths.</para>
 
-      <para>Each property has a standard field type, but alternate
-      implementations may be available</para>
+      <para>We aim to simplify this by having a single path naming convention
+      for all resources which is then resolved to the correct
+      locations.</para>
+
+      <para>What you need from a Resource:</para>
+
+      <para>internalPath -- unique path reference that remains constant</para>
+
+      <para>filePath -- path of the file on disk (if appropriate)</para>
+
+      <para>externalUrl -- externally accessible URL (if appropriate)</para>
+
+      <para>inputStream -- for reading data (guaranteed to always work)</para>
+
+      <para>outputSteram -- for writing data (if appropraite)</para>
+
+      <para>In addition, specfic resources may have their own addtional
+      paths.</para>
+
+      <para>Internal path format:</para>
+
+      <para>/module/type/resource.ext</para>
+
+      <para>/site/static/image.png</para>
+
+      <para>/otherobjects/template/header.ftl</para>
+
+      <para>/site/data/uploaded-image-123.jpg</para>
+
+      <para>/plugins/polls/static/graph.png</para>
+
+      <para>Note if the path represents a directory it MUST end with a
+      slash.</para>
+
+      <para>The site URL structure is crucial to help you users gain a mental
+      model of your site hierarchy. You can generally use any folder name but
+      a few top level folders are reserved.</para>
+
+      <para>otherobjects -- main interface</para>
+
+      <para>static -- static files when served on local server (reserved even
+      when not)</para>
+
+      <para>data -- data files when served locally</para>
+
+      <para>plugins -- reseved for plugins</para>
+
+      <para>debug -- diagnostics information</para>
+    </chapter>
+
+    <chapter>
+      <title>Handling errors</title>
+
+      <para>There are 3 key error situations that you will need to handle on
+      your site:</para>
+
+      <para>404 Not found (page has moved or URL typed incorrectly)</para>
+
+      <para>- content managed page if this is missing default to 500)</para>
+
+      <para>500 Internal Server Error (something bad in template or
+      code)</para>
+
+      <para>401 Unathorised User is unathorised (doesn't have correct
+      permissions to access resource or execute code)</para>
 
       <para></para>
+    </chapter>
 
-      <table>
-        <title>Properties and avaiable field types</title>
+    <chapter>
+      <title>Defining custom template directives / tools</title>
 
-        <tgroup cols="2">
-          <tbody>
-            <row>
-              <entry>string</entry>
+      <para>Replacement for tools in OO. Can be done in macros or in Java.
+      Groovy too?</para>
 
-              <entry>text field, password field, picklist</entry>
-            </row>
+      <para>http://freemarker.sourceforge.net/docs/dgui_misc_userdefdir.html</para>
+    </chapter>
 
-            <row>
-              <entry>text</entry>
-
-              <entry>textarea, wikieditor, htmleditor</entry>
-            </row>
-
-            <row>
-              <entry>date</entry>
-
-              <entry>calendar</entry>
-            </row>
-
-            <row>
-              <entry>time</entry>
-
-              <entry>time selector</entry>
-            </row>
-
-            <row>
-              <entry>timestamp</entry>
-
-              <entry>calendar and time selector</entry>
-            </row>
-
-            <row>
-              <entry>boolean</entry>
-
-              <entry>checkbox, radiobuttons, slider</entry>
-            </row>
-
-            <row>
-              <entry>number, decimal</entry>
-
-              <entry>textfeld, slider, pick list</entry>
-            </row>
-
-            <row>
-              <entry></entry>
-
-              <entry></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-
-      <para>Note: string based fields are automatically trimmed and turned to
-      nulls if empty via StringTrimmerEditor.</para>
-    </section>
-
-    <section>
-      <title>Validation</title>
-
-      <para>Form binding just verifies data types (ie you can't put set "one"
-      into a Number property.</para>
-
-      <para>The Validator validates each object.</para>
-
-      <para>Properties have three preconfigured validation options but you can
-      create your own validators (TODO how? via Valang functions?):</para>
-
-      <para>required (note: does this have special meaning for
-      booleans)</para>
-
-      <para>size (currently this is only relevant for the String value)</para>
-
-      <para>valang (a valand method)</para>
-
-      <para>Example valangs:</para>
-
-      <para>in range {? : 5 &lt; ? 10 : : } Note you can have multiple rules
-      in the string.</para>
-
-      <para>For more info:
-      http://opensource.atlassian.com/confluence/spring/display/MODULES/Using+Valang+validator</para>
-
-      <para>TODO: How to validate emails, dates (relative)</para>
-    </section>
-  </chapter>
-
-  <chapter>
-    <title>Understanding templates</title>
-
-    <para>blocks: section of a page. may be global or specific (folder or
-    page).</para>
-
-    <para>template: arrangement of configured blocks within a layout</para>
-
-    <para>Templates</para>
-
-    <para>Pages are assembled from templates. Layouts define the struture of
-    the page (2-col, 3-col etc.)</para>
-
-    <para>Blocks define an are of the page (header, advert, main content
-    etc.)</para>
-
-    <para>A Template consists of a Layout template and an arrangement of Block
-    Templates.</para>
-
-    <para>Each template is designed for one or more primary site objects. By
-    default the template with the same name as the object is used. For
-    example, when rendering an Article object, the template name Article is
-    used. Templates can be overridden in the following places: * Per folder
-    (and descendents) * Per object * Per link (is this a good idea?)</para>
-  </chapter>
-
-  <chapter>
-    <title>Writing templates</title>
-
-    <para>Template paths</para>
-
-    <para>Reserved folder names: otherobjects, plugins</para>
-
-    <para>(To be moved to Designer Guide) Need quick Freemarker tutorial and
-    links to docs You have the following directives: &lt;@oo. &lt;@format.
-    &lt;@data. &lt;@debug. inspect object, list directives? &lt;@security.
-    &lt;@forms. parameteters links resources images/files ajax/blocks ? Help
-    tools to insepc Methods available from templates L10N message Propreties
-    DAOs - access to all Tools - security checks Tools - link generation
-    Current Resource Object Current User Current Folder</para>
-
-    <section>
-      <title>Standard data</title>
-
-      <para>resourceObject (via SiteController only)</para>
-
-      <para>folder (via SiteController only)</para>
-
-      <para>url ?</para>
-    </section>
-
-    <section>
-      <title>Loading additional data</title>
-
-      <para>daoService</para>
-
-      <para>selectors</para>
-    </section>
-
-    <section>
-      <title>Linking to pages and assets</title>
-
-      <para>All links to pages should go via the url function. This is needed
-      to ensure that context paths are maintained correctly and that SSL is
-      set correctly.</para>
-
-      <para>Linking to other pages on the site:</para>
-
-      <para><code>&lt;a href="${oo.url("/contact-us.html")}"&gt;Contact
-      Us&lt;/a&gt;</code></para>
-
-      <para>You need to pass in the full relative url to the page.</para>
-
-      <para>Linking to assets:</para>
-
-      <para><code>&lt;img
-      src="${oo.resourceUrl("/site/static/graphics/logo.png")}"&gt;</code></para>
-
-      <para>For asset links you should use an internal OO path. See section on
-      <link linkend="understanding-paths">Understanding Paths</link> for more
-      info.</para>
-
-      <para>Linking to data items:</para>
-
-      <para>TBD</para>
-
-      <para>Linking to external pages:</para>
-
-      <para>Just enter the link as normal. No need to wrap with the url
-      function.</para>
-    </section>
-
-    <section>
-      <title>Acesssing parameters, session and cookie data</title>
-
-      <para>${RequestParameters.pageNo}</para>
-
-      <para>${Request}</para>
-
-      <para>${Application}</para>
-
-      <para>${Session}</para>
-    </section>
-
-    <section>
-      <title>Messages</title>
-
-      <para>The message service will provide localised versions of text for
-      templates. The strings are defined in</para>
-
-      <para>spring.message</para>
-
-      <para>store in messages.properties</para>
-    </section>
-
-    <section>
-      <title>Formatting and converting content</title>
-
-      <para>date</para>
-
-      <para>boolean</para>
-
-      <para>decimal</para>
-    </section>
-
-    <section>
+    <chapter>
       <title>Security</title>
 
-      <para>Show current user details: security.user</para>
-
-      <para>Test if user has role: security.athorize ifAllGranted</para>
-    </section>
-
-    <section>
-      <title>Forms</title>
-
-      <para>See separate chapter.</para>
-    </section>
-
-    <section>
-      <title>XSS</title>
-
-      <para>ALways use ?html on strings from user input.</para>
-
-      <para>Working on a way for this to happen automatically.</para>
-    </section>
-
-    <section>
-      <title>Layouts</title>
-
-      <para>Must include</para>
-
-      <para>oo-hud</para>
-
-      <para>oo-flash</para>
-    </section>
-  </chapter>
-
-  <chapter>
-    <title>Creating forms</title>
-
-    <para>Forms in the admin interface are created automatically based on the
-    information in the type definitions. See defining objects for more
-    information.</para>
-
-    <para>Site forms need to be hand coded and the easiest way of doing this
-    is with Spring's form macros. Standard form macros are ok for simple
-    forms. But for more advanced datamodels (with lists and components) you
-    will need to use OO macros.</para>
-
-    <para>For more information see here:
-    http://static.springframework.org/spring/docs/2.5.x/reference/view.html#view-velocity-forms</para>
-
-    <para>General principal:</para>
-
-    <para>Get or create object to be bound to form</para>
-
-    <para>Bind object</para>
-
-    <para>Render out fields and error messages.</para>
-
-    <para>TODO Example</para>
-
-    <para>Notes about special fields</para>
-
-    <para>Booleans: need placeholder for false values. This is done with a
-    hidden field prefixed with "_" and an empty value.</para>
-  </chapter>
-
-  <chapter>
-    <title>Writing actions</title>
-
-    <para>Actions update the model.</para>
-
-    <para>Can be written in Groovy or Java.</para>
-
-    <para>Put in /webapp/WEB-INF/scripts/</para>
-
-    <para>Called via url /_action/ActionName</para>
-
-    <para>Must be posted to.</para>
-
-    <para>Must redirect on completion.</para>
-
-    <para>What is available in the binding?</para>
-
-    <para>Flash message support.</para>
-
-    <para>Redirects</para>
-
-    <para>Form handling</para>
-
-    <para></para>
-  </chapter>
-
-  <chapter id="understanding-paths">
-    <title>Understanding paths</title>
-
-    <para>With resources spread across multiple projects (your site,
-    OTHERobjects and your plugins), potentially across multiple servers (a
-    static server or external data server) and running in different
-    environments (development, staging and production) it can become very
-    difficult to handle paths.</para>
-
-    <para>We aim to simplify this by having a single path naming convention
-    for all resources which is then resolved to the correct locations.</para>
-
-    <para>What you need from a Resource:</para>
-
-    <para>internalPath -- unique path reference that remains constant</para>
-
-    <para>filePath -- path of the file on disk (if appropriate)</para>
-
-    <para>externalUrl -- externally accessible URL (if appropriate)</para>
-
-    <para>inputStream -- for reading data (guaranteed to always work)</para>
-
-    <para>outputSteram -- for writing data (if appropraite)</para>
-
-    <para>In addition, specfic resources may have their own addtional
-    paths.</para>
-
-    <para>Internal path format:</para>
-
-    <para>/module/type/resource.ext</para>
-
-    <para>/site/static/image.png</para>
-
-    <para>/otherobjects/template/header.ftl</para>
-
-    <para>/site/data/uploaded-image-123.jpg</para>
-
-    <para>/plugins/polls/static/graph.png</para>
-
-    <para>Note if the path represents a directory it MUST end with a
-    slash.</para>
-
-    <para>The site URL structure is crucial to help you users gain a mental
-    model of your site hierarchy. You can generally use any folder name but a
-    few top level folders are reserved.</para>
-
-    <para>otherobjects -- main interface</para>
-
-    <para>static -- static files when served on local server (reserved even
-    when not)</para>
-
-    <para>data -- data files when served locally</para>
-
-    <para>plugins -- reseved for plugins</para>
-
-    <para>debug -- diagnostics information</para>
-  </chapter>
-
-  <chapter>
-    <title>Handling errors</title>
-
-    <para>There are 3 key error situations that you will need to handle on
-    your site:</para>
-
-    <para>404 Not found (page has moved or URL typed incorrectly)</para>
-
-    <para>- content managed page if this is missing default to 500)</para>
-
-    <para>500 Internal Server Error (something bad in template or code)</para>
-
-    <para>401 Unathorised User is unathorised (doesn't have correct
-    permissions to access resource or execute code)</para>
-
-    <para></para>
-  </chapter>
-
-  <chapter>
-    <title>Defining custom template directives / tools</title>
-
-    <para>Replacement for tools in OO. Can be done in macros or in Java.
-    Groovy too?</para>
-
-    <para>http://freemarker.sourceforge.net/docs/dgui_misc_userdefdir.html</para>
-  </chapter>
-
-  <chapter>
-    <title>Security</title>
-
-    <para>How to create a custom user.</para>
-
-    <para></para>
-
-    <section>
-      <title>Securing folders, pages, data and actions</title>
+      <para>How to create a custom user.</para>
 
       <para></para>
-    </section>
 
-    <section>
-      <title>Customising the User</title>
+      <section>
+        <title>Securing folders, pages, data and actions</title>
 
-      <para>Saving user properties/preferences</para>
-    </section>
-  </chapter>
+        <para></para>
+      </section>
 
-  <chapter>
-    <title>Scheduling tasks</title>
+      <section>
+        <title>Customising the User</title>
 
-    <para>How to create scheduled tasks.</para>
+        <para>Saving user properties/preferences</para>
+      </section>
+    </chapter>
 
-    <para>Currently we support two types of scheduled Jobs:</para>
+    <chapter>
+      <title>Scheduling tasks</title>
 
-    <itemizedlist>
-      <listitem>
-        <para>Jobs written in Java</para>
-      </listitem>
+      <para>How to create scheduled tasks.</para>
 
-      <listitem>
-        <para>Jobs written in Groovy</para>
-      </listitem>
-    </itemizedlist>
+      <para>Currently we support two types of scheduled Jobs:</para>
 
-    <para>Both Job types share the same abstract base class as executor:
-    org.otherobjects.cms.scheduler.AbstractSpringQuartzJob whose main purpose
-    is to provide some contextual setup extracted from the JobExecutionContext
-    and to setup security so as to not run these jobs without any security
-    context (remember that these jobs are run asynchronously outside of any
-    http reqest scope).</para>
+      <itemizedlist>
+        <listitem>
+          <para>Jobs written in Java</para>
+        </listitem>
 
-    <para>To create a Java job, write a java class extending above mentioned
-    AbstractSpringQuartzJob. In your class you can get access to the root web
-    application context by calling getApplicationContext(). Then create a
-    Scheduled Job in the scheduler folder in workbench and fill in the fully
-    qualified class name in the 'Name of job class' field. The job only gets
-    added to the scheduler once you publish it.</para>
+        <listitem>
+          <para>Jobs written in Groovy</para>
+        </listitem>
+      </itemizedlist>
 
-    <para>To create a groovy job, follow the same steps aas above but instead
-    of filling in the 'Name of job class' field, type or paste your script in
-    'Groovy script source' field. The script will have access to the root web
-    application context via the 'appCtx' variable.</para>
+      <para>Both Job types share the same abstract base class as executor:
+      org.otherobjects.cms.scheduler.AbstractSpringQuartzJob whose main
+      purpose is to provide some contextual setup extracted from the
+      JobExecutionContext and to setup security so as to not run these jobs
+      without any security context (remember that these jobs are run
+      asynchronously outside of any http reqest scope).</para>
 
-    <para>The jobs are always run under the security context of the user that
-    created them.</para>
+      <para>To create a Java job, write a java class extending above mentioned
+      AbstractSpringQuartzJob. In your class you can get access to the root
+      web application context by calling getApplicationContext(). Then create
+      a Scheduled Job in the scheduler folder in workbench and fill in the
+      fully qualified class name in the 'Name of job class' field. The job
+      only gets added to the scheduler once you publish it.</para>
 
-    <para>How to configuer timings. See:
-    http://quartz.sourceforge.net/javadoc/org/quartz/CronTrigger.html</para>
-  </chapter>
+      <para>To create a groovy job, follow the same steps aas above but
+      instead of filling in the 'Name of job class' field, type or paste your
+      script in 'Groovy script source' field. The script will have access to
+      the root web application context via the 'appCtx' variable.</para>
 
-  <chapter>
-    <title>Message service</title>
+      <para>The jobs are always run under the security context of the user
+      that created them.</para>
 
-    <para>The message service provides a central localised repository of
-    strings for use throughout your site.</para>
+      <para>How to configuer timings. See:
+      http://quartz.sourceforge.net/javadoc/org/quartz/CronTrigger.html</para>
+    </chapter>
 
-    <section>
-      <title>Why use the message service?</title>
+    <chapter>
+      <title>Message service</title>
 
-      <para>Avoid duplication. Eg site telephone number can be changed
-      globally.</para>
+      <para>The message service provides a central localised repository of
+      strings for use throughout your site.</para>
 
-      <para>Allows localised messages.</para>
-    </section>
+      <section>
+        <title>Why use the message service?</title>
 
-    <section>
-      <title>Defining messages</title>
+        <para>Avoid duplication. Eg site telephone number can be changed
+        globally.</para>
 
-      <para>Put your messages in the message.properties file in
-      WEB-INF/messages This in automatically reloaded.</para>
-    </section>
+        <para>Allows localised messages.</para>
+      </section>
 
-    <section>
-      <title>Using messages</title>
+      <section>
+        <title>Defining messages</title>
 
-      <para>In templates:</para>
+        <para>Put your messages in the message.properties file in
+        WEB-INF/messages This in automatically reloaded.</para>
+      </section>
 
-      <para><programlisting>&lt;p&gt;Please call &lt;@spring.message "site.support.telephone" /&gt; for assistance.&lt;/p?</programlisting></para>
+      <section>
+        <title>Using messages</title>
 
-      <para>In code:</para>
+        <para>In templates:</para>
 
-      <para><programlisting>applcationContext.getMessage("site.support.telephone")</programlisting></para>
-    </section>
-  </chapter>
+        <para><programlisting>&lt;p&gt;Please call &lt;@spring.message "site.support.telephone" /&gt; for assistance.&lt;/p?</programlisting></para>
 
-  <chapter>
-    <title>Common features</title>
+        <para>In code:</para>
 
-    <note>
-      <para>This may become a separate Patterns Guide.</para>
-    </note>
+        <para><programlisting>applcationContext.getMessage("site.support.telephone")</programlisting></para>
+      </section>
+    </chapter>
 
-    <para>Print versions</para>
+    <chapter>
+      <title>Common features</title>
 
-    <para>Text only</para>
+      <note>
+        <para>This may become a separate Patterns Guide.</para>
+      </note>
 
-    <para>Calendaring</para>
+      <para>Print versions</para>
 
-    <para>Commenting</para>
+      <para>Text only</para>
 
-    <para>Header data</para>
+      <para>Calendaring</para>
 
-    <para>Images and links</para>
+      <para>Commenting</para>
 
-    <para>Navigation</para>
-  </chapter>
+      <para>Header data</para>
 
-  <chapter>
-    <title>Writing tests</title>
+      <para>Images and links</para>
 
-    <para>A stable and high-quality website requires thorough testing. All too
-    often this testing is on the form "Does this page look sort of right?" or
-    "Well It worked for me when I built it so it's OK to go live". Whilst this
-    approach will work for very simple sites, as soon as the complexity
-    increases there just isn't time to look at every page and try every action
-    manually after each change. This in where automated testing comes
-    in.</para>
+      <para>Navigation</para>
+    </chapter>
 
-    <para>People who are new to testing often bemoan the amount of time they
-    spend writing tests, especially at first when the tools and techniques are
-    new and need to be mastered. This, however, is a small price to pay to
-    reduce the time spent debugging and fixing broken code. And as the testign
-    techniques become more familiar the tests become correspondingly easier to
-    write.</para>
+    <chapter>
+      <title>Writing tests</title>
 
-    <section>
-      <title>What needs testing</title>
+      <para>A stable and high-quality website requires thorough testing. All
+      too often this testing is on the form "Does this page look sort of
+      right?" or "Well It worked for me when I built it so it's OK to go
+      live". Whilst this approach will work for very simple sites, as soon as
+      the complexity increases there just isn't time to look at every page and
+      try every action manually after each change. This in where automated
+      testing comes in.</para>
 
-      <para>In a word: everything.</para>
-    </section>
+      <para>People who are new to testing often bemoan the amount of time they
+      spend writing tests, especially at first when the tools and techniques
+      are new and need to be mastered. This, however, is a small price to pay
+      to reduce the time spent debugging and fixing broken code. And as the
+      testign techniques become more familiar the tests become correspondingly
+      easier to write.</para>
 
-    <section>
-      <title>Testing scripts</title>
+      <section>
+        <title>What needs testing</title>
+
+        <para>In a word: everything.</para>
+      </section>
+
+      <section>
+        <title>Testing scripts</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Testing templates</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Functional testing</title>
+
+        <para></para>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Improving performance</title>
+
+      <para>OTHERobjects uses caching at several levels to keep your site
+      peforming well even under heavy loads. However, it is important to
+      understand how the caching works in order to get the best performance
+      out of it.</para>
+
+      <section>
+        <title>Understanding caching</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Monitoring page performance</title>
+
+        <para>To view the performance characteristics of a page press the
+        Escape key. A dialog will appear showing the major events that occured
+        whilst building the page and how long they took.</para>
+
+        <figure>
+          <title>Performance statistics dialog. Press Escape to show.</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/performance-stats-dialog.png"
+                         scale="50" />
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>TODO Warning indicator on pages with heavy loads eg &gt; 100
+        calls, or &gt; 5 seconds.</para>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Common problems</title>
+
+      <para>Something already runnign on the port?</para>
+
+      <section>
+        <title>Transactions</title>
+
+        <para>JCR queries (not traversals) are non-transactional. commit first
+        for them to work.</para>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Site checklist</title>
+
+      <para>Setting custom holding/error pages</para>
+
+      <para>Data backup</para>
+    </chapter>
+
+    <chapter>
+      <title>Patterns</title>
+
+      <para>Maintenance page: if on static server must ahve link back to main
+      site page. Provide esssential details.</para>
+    </chapter>
+
+    <chapter>
+      <title>Release and deploy</title>
+
+      <para>Run tests from maven</para>
+
+      <para>Make sure no snapshots as dependencies</para>
+
+      <para>Check everything in to a VCS.</para>
+
+      <para>mvn release:prepare</para>
+
+      <para>mvn release:perform</para>
+    </chapter>
+
+    <chapter>
+      <title>Terminology</title>
+
+      <para>Resource: object sent over the wire via HTTP. Could be a
+      Page/Image/RSS etc</para>
+
+      <para>Item: Any object managed by the CMS.</para>
+
+      <para>Folder: Contains Items</para>
+    </chapter>
+  </part>
+
+  <part>
+    <title>Advanced development</title>
+
+    <preface id="preface">
+      <title>Preface</title>
+
+      <para>This guide is for developers who want to extend the capabilities
+      of OTHERobjects beyond what is possible via the web interface and third
+      party plugins. You'll need this guide if you want to:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Create custom site components</para>
+        </listitem>
+
+        <listitem>
+          <para>Update and improve OTHERobjects itself</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>If you are just interested in building a standard website then you
+      should read the Site Builder Guide instead. If you're not sure then you
+      should start off with that simpler guide and come back here when you
+      need to.</para>
+    </preface>
+
+    <chapter id="chapter-using-the-framework">
+      <title>Getting ready</title>
+
+      <para>OTHERobjects in a pure-Java project based on the Spring framework
+      and built with Apache Maven. If you are an experienced Java developer
+      you will probably have your own preferences for an IDE, build process
+      and app server. In this case just skip ahead to the next chapter.</para>
+
+      <para>However, if you're fairly new to Java (or just want a setup that
+      will work with the minimum of fuss) then this section will help you get
+      your working environment prepared.</para>
+
+      <section id="section-configuring-your-documentation">
+        <title>Setting up the environment</title>
+
+        <para>Here's what we recommend.</para>
+
+        <section>
+          <title>Eclipse</title>
+
+          <para>Finally, you will need an IDE. We recommend Eclipse 3.3 with
+          the WTP (Web Tools Project) extensions, so download
+          <emphasis>Eclipse for JEE Developers</emphasis> from
+          http://www.eclipse.org/downloads/.</para>
+
+          <para>Once this is installed you should add the following plugins
+          via the Update Manager (items marked with a * are required, all
+          others are recommended):</para>
+
+          <table>
+            <title>Recommended Eclipse plugins</title>
+
+            <tgroup cols="2">
+              <thead>
+                <row>
+                  <entry align="center">Plugin</entry>
+
+                  <entry align="center">Update Site</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry>* Subversive 0.7.1 (Subversion SCM integration) +
+                  SKNKit 1.1 Connector</entry>
+
+                  <entry>Part of Ganymede (except connectors)
+                  http://www.eclipse.org/subversive/documentation/gettingStarted/aboutSubversive/install.php</entry>
+                </row>
+
+                <row>
+                  <entry>* M2Eclipse 0.9.2 (Maven integration)</entry>
+
+                  <entry>http://m2eclipse.sonatype.org/update/</entry>
+                </row>
+
+                <row>
+                  <entry>* run-jetty-run 1.0.1 (Embedded servlet
+                  container)</entry>
+
+                  <entry>http://run-jetty-run.googlecode.com/svn/trunk/updatesite</entry>
+                </row>
+
+                <row>
+                  <entry>SpringIDE 2.0.1 (Spring integration)</entry>
+
+                  <entry>http://springide.org/updatesite/</entry>
+                </row>
+
+                <row>
+                  <entry>MoreUnit 0.8.2 (Unit testing utilities)</entry>
+
+                  <entry>http://moreunit.sourceforge.net/org.moreunit.updatesite/</entry>
+                </row>
+
+                <row>
+                  <entry>FreeMarkerIDE 1.0.1GA</entry>
+
+                  <entry>http://download.jboss.org/jbosstools/updates/stable</entry>
+                </row>
+
+                <row>
+                  <entry>CheckStyle</entry>
+
+                  <entry></entry>
+                </row>
+
+                <row>
+                  <entry>EclEmma (code coverage)</entry>
+
+                  <entry>http://update.eclemma.org/</entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+
+          <para>See http://open.ncsu.edu/se/tutorials/install_plugin/ for a
+          instructions on installing plugins. There are other plugins that you
+          wish to add later but for now these essential ones will do.</para>
+
+          <para>You should now launch Eclipse and check that your plugins are
+          installed via the About Eclipse Platform menu option.</para>
+
+          <para>This guide assumes a basic knowledge of Eclipse. A good short
+          tutorial on using Eclipse is available at
+          http://www.cs.umd.edu/class/fall2004/cmsc131/EclipseTutorial/.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Checking out the code</title>
+
+        <para>The next step is to check out the source code to OTHERobjects
+        and to the sample project that we will use throughout the rest of this
+        guide.</para>
+
+        <para>First of all switch to the SVN Repository Exploring and create a
+        new Repository Location. OTHERobjects and the sample project are
+        located at:</para>
+
+        <programlisting>svn+ssh://svn.otherworks.com/data/svn/repos-ng</programlisting>
+
+        <para>You will be able to connect anonymously since you will only need
+        read-only access to the repository -- NB othermedia users should use
+        their normal SVN logins for now.</para>
+
+        <figure>
+          <title>Creating a repository location</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/svn-setup.png" scale="50" />
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>At this stage the projects you will need to checkout are:</para>
+
+        <programlisting>otherobjects/trunk test-site/trunk</programlisting>
+
+        <para>After the checkout the Maven plugin will detect that the
+        projects' dependencies and download them. Depending on the speed of
+        your Internet connection this mas take a few minutes. Once the
+        download is complete you should see these dependencies appear in the
+        Project Explorer.</para>
+
+        <para></para>
+
+        <figure>
+          <title>Maven dependencies as they will appear in Eclipse</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/maven-dependencies.png" scale="50" />
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>Now, with the projects checked out make sure that you have no
+        build errors and you can move onto the final step. If you do get
+        errors then check the Common problems sectsion of this gunide and
+        failing that search on the community forums for some help.</para>
+      </section>
+
+      <section>
+        <title>Running the tests</title>
+
+        <para>The final step of the preparation is to <ulink
+        url="http://www.google.com/">make</ulink> sure that the test suite
+        runs correctly. This will ensure that you have everything set up
+        properly and puts you in a good position to add to the suite as you
+        develop new functionality.</para>
+
+        <para>All the tests for the otherobjects project are in src/test/java.
+        Select this folder in the Package Explorer and then select Run As...
+        JUnit Test. You should also do this for any tests in the sample
+        project.</para>
+      </section>
+
+      <section>
+        <title>Getting your project into Eclipse</title>
+
+        <para>Import</para>
+
+        <para>Add maven nature. How?</para>
+      </section>
+
+      <section>
+        <title>Launching the site</title>
+
+        <para>So we are now ready to launch the site. We use the run-jetty-run
+        plugin to run the site inside the Jetty container directly in Eclipse.
+        This allows us to debug and use hot code replace easily -- no need for
+        build and deploy on each code iteration.</para>
+
+        <para>Open the Run Configurations window and create a new Jetty Webapp
+        configuration. Choose the test-site project, and set the WebApp dir to
+        webapp. Optionally you can set these VM arguments (in the second tab)
+        to increase the memory available to the site and to make sure it runs
+        headless (so no annoying windows pop up during image
+        processing):</para>
+
+        <para>-Djava.awt.headless=true. Using -server, -Xms256m
+        -Xmx256m.</para>
+
+        <para>The console should show the application starting up. If all has
+        gone well you should see a message stating that OTHERobjects is
+        running and you will be given the URL to both the site homepage and
+        the administration workbench. <emphasis></emphasis> <programlisting>************************************************************** ___ _____ _ _ _____ ____ _ _ _ / _ \_ _| | | | ____| _
+						\ ___ | |__ (_) ___ ___| |_ ___ | | | || | | |_| | _| | |_) / _ \| '_ \| |/ _ \/ __| __/ __| | |_| || | | _ | |___| _ &lt; (_) | |_) | |  __/ (__| |_\__ \
+ \___/ |_| |_| |_|_____|_| \_\___/|_.__// |\___|\___|\__|___/
+                                      |__/                   
+                                      
+******************* Started up successfully ******************
+
+Site  : http://localhost:8080/go/
+Admin : http://localhost:8080/go/workbench/
+
+**************************************************************</programlisting></para>
+
+        <para>Browse around the site and check that it works correctly. To log
+        in to the workbench use <emphasis role="bold">admin</emphasis> as the
+        username and <emphasis role="bold">mustchangethis</emphasis> as the
+        password.</para>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Creating custom controllers</title>
+
+      <para>Why? eg Products/Checkout</para>
+
+      <para>Can use standard freemarker system.</para>
+
+      <para>How to return string/binary directly from the controller.</para>
+
+      <para>How to bind to URLS.</para>
+
+      <para>Declare and map in site-servlet.xml</para>
+
+      <para>Annotate with @Controller and @RequestMapping:
+      http://static.springframework.org/spring/docs/2.5.x/reference/mvc.html#mvc-annotation</para>
+    </chapter>
+
+    <chapter>
+      <title>Creating services</title>
+
+      <para>Intro</para>
 
       <para></para>
-    </section>
 
-    <section>
-      <title>Testing templates</title>
+      <section>
+        <title>Handling errors</title>
+
+        <para>Unexpected and unrecoverable errors -- throw uncheched
+        exception</para>
+
+        <para>For user recovery throw ServiceException</para>
+
+        <para>Or for complex service throw subclasses of exception that will
+        be handled differently be the controller.</para>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Architecture</title>
+
+      <para>There are several key OTHERobjects components that it is important
+      to undestand before building your own plugins and extensions.</para>
+
+      <section>
+        <title>JCR Data Store</title>
+
+        <para>JCR (implemented via Jackrabbit) is a hierarchical tree of nodes
+        and properties.</para>
+
+        <para>We map an object to a node and it's fields to properties.</para>
+
+        <para>Object to node mapping done via Jackrabbit OCM.</para>
+
+        <para>OCM configured via our type service annotations.</para>
+
+        <para>DynaNodes are special cases. Custom OCM mapper.</para>
+      </section>
+    </chapter>
+
+    <chapter id="performance">
+      <title>Performance tuning</title>
+
+      <para>http://java.sun.com/performance/reference/whitepapers/tuning.html</para>
+
+      <para>Setting -Xms256m -Xmx256m and -server.</para>
+
+      <para>Using http://www.glassbox.com/glassbox/Project.html</para>
+
+      <para>http://www.ibm.com/developerworks/java/library/j-aopwork10/</para>
+    </chapter>
+
+    <chapter>
+      <title>Datastores and API</title>
+
+      <para>! Data Interface The heart of any CMS is the datastore.
+      OTHERobjects has 3 primary data stores: 1. JCR 2. Database 2. Filesystem
+      There are APIs for accessing and working with the data from server side
+      code, but what about external systems or from the browser? We provide a
+      simple yet powerful REST API for updating, fetching and querying data in
+      any of the supported datastores. Remember that the data stored is often
+      part of a more complex model so different objects may have more or less
+      than the standard methods. FileStore * get * put * delete * list (type?
+      sort? paging?) Database * get: type/id * put * delete * list JCR * get:
+      path or uuid * put: path * delete * list Need to be able to register
+      custom controller logic for model objects Need onChange events</para>
+    </chapter>
+
+    <chapter>
+      <title>Remote management with JMX</title>
+
+      <para>Much of OTHERobjects can be monitored and controlled remotely via
+      JMX (Java Management Extensions). Examples on what can be monitored
+      include:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Logging</para>
+        </listitem>
+
+        <listitem>
+          <para>Current users (TODO)</para>
+        </listitem>
+
+        <listitem>
+          <para>Scheduler</para>
+        </listitem>
+      </itemizedlist>
 
       <para></para>
-    </section>
 
-    <section>
-      <title>Functional testing</title>
+      <section>
+        <title>Enabling JMX</title>
+
+        <para>To allow a management console to connect we first need to enable
+        JMX. Add the following to the Java options when starting up
+        OTHERobjects:</para>
+
+        <programlisting>-Dcom.sun.management.jmxremote</programlisting>
+      </section>
+
+      <section>
+        <title>Connect a management console</title>
+
+        <para>Any JMX compliant service should be able to connect to a running
+        OTHERobjects instance. The easiest and most widely available one is
+        Sun's JConsole what ships with JDK 5.0 and later. To start the console
+        put the following command:</para>
+
+        <programlisting>jconsole &amp;</programlisting>
+
+        <para>If the site is running locally then you should see it listed in
+        the Connect dialog. For remote sites you will need to do something
+        more advanced. TODO Work out what this is!</para>
+
+        <figure>
+          <title>JConsole connection dialog</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/jmx-connect-dialog.png" scale="50" />
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>After connecting you will be able to browse information about
+        the running instance:</para>
+
+        <figure>
+          <title>JConsole example view</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/jmx-example-window.png" scale="50" />
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>For more information on usign JConsole see:
+        http://java.sun.com/j2se/1.5.0/docs/guide/management/jconsole.html.</para>
+      </section>
+
+      <section>
+        <title>JMX services</title>
+
+        <para>The following services are JMX enabled:</para>
+
+        <table>
+          <title>JMX enabled services</title>
+
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry align="center">Service</entry>
+
+                <entry align="center">MBeans</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>Logging</entry>
+
+                <entry>ch.qos.logback.classic:default</entry>
+              </row>
+
+              <row>
+                <entry>Scheduler</entry>
+
+                <entry>otherobjects:scheduler</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Event handling</title>
+
+      <para>Events that get sent:</para>
+
+      <para>Publsh</para>
+
+      <para>Save</para>
+
+      <para>Can we attach scripts to these events?</para>
+    </chapter>
+
+    <chapter>
+      <title>Creating model objects</title>
+
+      <para>For non dynanodes</para>
+
+      <para>DAOs</para>
+
+      <para>Annotations</para>
+    </chapter>
+
+    <chapter>
+      <title>Writing controllers</title>
+
+      <para>Can be annoated or declared in xml.</para>
+
+      <para>Conventions:</para>
+
+      <para>keep method names and mapping similar</para>
+
+      <para><programlisting>
+@Controller
+public class MyController
+
+  @RequestMapping(method = RequestMethod.GET)
+  public String showForm(Model model)
+  {
+    return "view";
+  }
+}
+
+
+</programlisting></para>
+
+      <para>+ register in mappings in site-servlet.xml</para>
 
       <para></para>
-    </section>
-  </chapter>
 
-  <chapter>
-    <title>Improving performance</title>
+      <para>Data access</para>
 
-    <para>OTHERobjects uses caching at several levels to keep your site
-    peforming well even under heavy loads. However, it is important to
-    understand how the caching works in order to get the best performance out
-    of it.</para>
-
-    <section>
-      <title>Understanding caching</title>
+      <para>JCR, Hibernate, Raw SQL</para>
 
       <para></para>
-    </section>
 
-    <section>
-      <title>Monitoring page performance</title>
+      <para>Form handling</para>
 
-      <para>To view the performance characteristics of a page press the Escape
-      key. A dialog will appear showing the major events that occured whilst
-      building the page and how long they took.</para>
+      <para>Returning views -- jsut the path to the view (no extension)</para>
 
-      <figure>
-        <title>Performance statistics dialog. Press Escape to show.</title>
+      <para>Returning partial content</para>
 
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/performance-stats-dialog.png"
-                       scale="50" />
-          </imageobject>
-        </mediaobject>
-      </figure>
+      <para>Returning XML</para>
 
-      <para>TODO Warning indicator on pages with heavy loads eg &gt; 100
-      calls, or &gt; 5 seconds.</para>
-    </section>
-  </chapter>
+      <para></para>
 
-  <chapter>
-    <title>Common problems</title>
+      <para>Returning JSON</para>
 
-    <para>Something already runnign on the port?</para>
+      <para>Returning binary content</para>
 
-    <section>
-      <title>Transactions</title>
+      <para></para>
+    </chapter>
 
-      <para>JCR queries (not traversals) are non-transactional. commit first
-      for them to work.</para>
-    </section>
-  </chapter>
+    <chapter>
+      <title>Transaction and data integrity</title>
 
-  <chapter>
-    <title>Site checklist</title>
+      <para>How to use transactions.</para>
 
-    <para>Setting custom holding/error pages</para>
+      <para>JCR vs Hibernate issues.</para>
 
-    <para>Data backup</para>
-  </chapter>
+      <para>Version flag.</para>
 
-  <chapter>
-    <title>Patterns</title>
+      <para>Publishing here?</para>
 
-    <para>Maintenance page: if on static server must ahve link back to main
-    site page. Provide esssential details.</para>
-  </chapter>
+      <para>Validation</para>
+    </chapter>
 
-  <chapter>
-    <title>Release and deploy</title>
+    <chapter>
+      <title>Using Maven</title>
 
-    <para>Run tests from maven</para>
+      <para>Maven is the software managment tool we use for OTHERobjects. It
+      handles tasks suchas building, testing, packaging and dependecy
+      management.</para>
 
-    <para>Make sure no snapshots as dependencies</para>
+      <section>
+        <title>Maven goals</title>
 
-    <para>Check everything in to a VCS.</para>
+        <table>
+          <title>Maven tasks</title>
 
-    <para>mvn release:prepare</para>
+          <tgroup cols="2">
+            <thead>
+              <row>
+                <entry align="center">Command</entry>
 
-    <para>mvn release:perform</para>
-  </chapter>
+                <entry align="center">Task</entry>
+              </row>
+            </thead>
 
-  <chapter>
-    <title>Terminology</title>
+            <tbody>
+              <row>
+                <entry>mvn clean</entry>
 
-    <para>Resource: object sent over the wire via HTTP. Could be a
-    Page/Image/RSS etc</para>
+                <entry>Removes build artifacts</entry>
+              </row>
 
-    <para>Item: Any object managed by the CMS.</para>
+              <row>
+                <entry>mvn compile</entry>
 
-    <para>Folder: Contains Items</para>
-  </chapter>
+                <entry>Compiles project source</entry>
+              </row>
+
+              <row>
+                <entry>mvn jetty:run</entry>
+
+                <entry>Runs app from source</entry>
+              </row>
+
+              <row>
+                <entry>mvn jetty:run-war</entry>
+
+                <entry>Builds war and runs from that</entry>
+              </row>
+
+              <row>
+                <entry>mvn war:war</entry>
+
+                <entry>Builds war (note: must compile first)</entry>
+              </row>
+
+              <row>
+                <entry>mvn site</entry>
+
+                <entry>Builds docs in target/site. Includes test results and
+                coverage.</entry>
+              </row>
+
+              <row>
+                <entry>mvn hibernate3:hbm2ddl</entry>
+
+                <entry>Generates and executes db schema</entry>
+              </row>
+
+              <row>
+                <entry>mvn jackrabbit:import</entry>
+
+                <entry>Seeds JCR with default data</entry>
+              </row>
+
+              <row>
+                <entry>mvn dbunit:operation</entry>
+
+                <entry>Seed database with default data</entry>
+              </row>
+
+              <row>
+                <entry>mvn surefire-report:report</entry>
+
+                <entry>Runs unit tests and generates test report</entry>
+              </row>
+
+              <row>
+                <entry>mvn jdocbook:generate</entry>
+
+                <entry>Creates documentation in target/docbook/</entry>
+              </row>
+
+              <row>
+                <entry>mvn plugin:xdoc</entry>
+
+                <entry>Generates plugin documentation</entry>
+              </row>
+
+              <row>
+                <entry>mvn javadoc:javadoc</entry>
+
+                <entry>Generates JavaDoc in target/site/apidocs/</entry>
+              </row>
+
+              <row>
+                <entry>mvn deploy</entry>
+
+                <entry>Deploys jars to repository</entry>
+              </row>
+
+              <row>
+                <entry>mvn -Dmaven.test.skip=true deploy</entry>
+
+                <entry>Deploys jars to repository (skipping tests</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+
+      <section>
+        <title>Deploy settings</title>
+
+        <para>You need to add the following to ~/.m2/settings.xml</para>
+
+        <programlisting>&lt;settings xmlns="http://maven.apache.org/POM/4.0.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"&gt;
+  &lt;servers&gt;
+    &lt;server&gt;
+      &lt;id&gt;otherobjects-snapshots&lt;/id&gt;
+      &lt;username&gt;deploy&lt;/username&gt;
+      &lt;password&gt;deploy998&lt;/password&gt;
+    &lt;/server&gt;
+  &lt;/servers&gt;
+&lt;/settings&gt;</programlisting>
+      </section>
+
+      <section>
+        <title>Useful resources</title>
+
+        <para>Official book: http://www.sonatype.com/book/</para>
+
+        <para>Repository search: http://www.mvnrepository.com/</para>
+
+        <para>Default repository: http://repo1.maven.org/maven2/</para>
+
+        <para>Host your own repository server (or just mirror ours):
+        http://www.jfrog.org/sites/artifactory/latest/</para>
+
+        <para>Plugin dev guide:
+        http://maven.apache.org/guides/plugin/guide-java-plugin-development.html</para>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Using Eclipse</title>
+
+      <para>OTHERobjects was developed using the Eclipse IDE. Other IDEs will
+      wokr just fine but Eclipse will be the best supported. This chapter
+      describes how to set up Eclipse</para>
+
+      <section>
+        <title>Launching with WTP</title>
+
+        <para>WTP allows your webapp to be launched on a variety of servers.
+        OTHERobjects has been tested against the follownig:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Jetty</para>
+          </listitem>
+
+          <listitem>
+            <para>Tomcat</para>
+          </listitem>
+
+          <listitem>
+            <para>Glassfish v2 (see
+            https://glassfishplugins.dev.java.net/eclipse33/index.html)</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Optional plugins</title>
+
+        <para>Here are some other Eclipse plugins that you may find useful
+        during OTHERobjects development.</para>
+
+        <table>
+          <title>Optional Eclipse plugins</title>
+
+          <tgroup cols="1">
+            <thead>
+              <row>
+                <entry align="center">Plugin</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>JCR Browser:
+                http://sourceforge.net/projects/jcrbrowser</entry>
+              </row>
+
+              <row>
+                <entry>Veloeclipse: Velocity editor</entry>
+              </row>
+
+              <row>
+                <entry>Clover: test coverage tool</entry>
+              </row>
+
+              <row>
+                <entry>Spket / Aptana: advanced JS editors</entry>
+              </row>
+
+              <row>
+                <entry>Logback: logger plugin allows linking back to
+                code</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+
+      <section>
+        <title>Other tips</title>
+
+        <para>http://www.vasanth.in/2004/01/13/EclipseTipKeepingPluginsAndWorkspaceSeparate.aspx</para>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Debugging</title>
+
+      <para>Some info at otherobjects/debug.</para>
+
+      <para>Can run test scripts at otherobjects/debug/script</para>
+
+      <para>Can also telnet in to an interactive Groovy shell on port
+      6789.</para>
+
+      <para>Using slf4j not commons-logging (JCL) to avoid the classloader
+      nightmares people have reported. Other libs coded against JCL are
+      supported via bridgse. Advice is for loggers not to be static.</para>
+
+      <para>Use &lt;@oo.inspect /&gt;</para>
+
+      <para>Performance tools coming.</para>
+    </chapter>
+
+    <chapter>
+      <title>Using Freemarker</title>
+
+      <para>OTHERobjects uses Freemarker as its preferred Template engine for
+      rendering web views as well as templated email bodies.</para>
+
+      <section>
+        <title>Configuration</title>
+
+        <para>OTHERobjects configures Freemarker so that it can be used by
+        generic text processing code as well as in a web specific context. The
+        central configuration happens in
+        /otherobjects.resources/config/applicationContext-freemarker.xml like
+        this</para>
+
+        <programlisting>&lt;!-- General Freemarker config --&gt;
+&lt;bean id="freemarkerConfiguration" class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean"&gt;
+  &lt;property name="templateLoaderPaths"&gt;
+    &lt;list&gt;
+      &lt;!-- Site tempates. Path in /webapp --&gt;
+      &lt;value&gt;/templates/&lt;/value&gt;
+      &lt;!-- OTHERobjects templates loaded from class path --&gt;
+      &lt;value&gt;classpath:/otherobjects.resources/templates/&lt;/value&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+  &lt;property name="freemarkerVariables"&gt;
+    &lt;map&gt;
+      &lt;entry key="daoService" value-ref="daoService" /&gt;
+   &lt;/map&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting>
+
+        <para>Here the Spring helper class is used to mainly setup all paths
+        were templates are expected to live. When you specify freemarker
+        template paths they are always relative to the paths configured
+        above.</para>
+
+        <para>Because we are using the Spring helper class you have always
+        access to Spring's Freemarker macros by putting something like this in
+        your template</para>
+
+        <programlisting>&lt;#import "spring.ftl" as spring/&gt;</programlisting>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Advantages</title>
+
+        <para>Here are some advantages Freemarker has over Velocity (in no
+        particular order)</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Freemarker can preserve whitespace</para>
+          </listitem>
+
+          <listitem>
+            <para>Freemarker macros have namespaces</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Notes to users of velocity</title>
+
+        <para>Freemarker works very similarly to Velocity but there are some
+        differences.</para>
+
+        <orderedlist>
+          <listitem>
+            <para>You always need to use the explicit syntax - i.e not $var
+            but ${var}</para>
+          </listitem>
+
+          <listitem>
+            <para>Freemarker discourages the use of custom tools for
+            formatting strings, numbers and dates. Use the Freemarker builtins
+            instead.</para>
+
+            <programlisting>&lt;#-- to trim a string variable --&gt;
+${var?trim}
+
+&lt;#-- to display the date part of a date variable --&gt;
+${datevar?date}</programlisting>
+
+            <para>See the Freemarker documentation at
+            http://freemarker.org/docs/</para>
+          </listitem>
+
+          <listitem>
+            <para>Everything that gets put into a Freemarker data model is
+            wrapped by freemarker which can lead to unexpected results. For
+            example, if you put an object that implements java.util.Iterator
+            into the data model you can then use Freemarkers &lt;#list&gt; tag
+            but you can't get to other methods that object might expose as
+            Freemarker wraps Iterator objects in a special Freemarker
+            Collection object. There might be other such wrappings that
+            effectively mask some things you might want to do with your
+            object.</para>
+          </listitem>
+        </orderedlist>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Testing</title>
+
+      <para>This extends the testing discussion in the Site Designer
+      Guide.</para>
+
+      <section>
+        <title>Running the tests</title>
+
+        <para>The tests can run either from Maven or within Eclipse. Before
+        the tests can run though the database and content repository need to
+        be seeded with sample data. This is done via Maven goals
+        (hibernate3:hdm2ddl, dbunit:operation, jackrabbit:import2) that are
+        run automatically before the main test goal.</para>
+
+        <para>To run the tests via Maven:</para>
+
+        <para><programlisting>mvn clean test site</programlisting> This runs
+        three Maven goals that:</para>
+
+        <orderedlist>
+          <listitem>
+            <para>Cleans out any old compiled classes and sample data</para>
+          </listitem>
+
+          <listitem>
+            <para>Compiles all the project code, prepares sample data and runs
+            the tests</para>
+          </listitem>
+
+          <listitem>
+            <para>Generates HTML versions of test results and coverage and
+            puts them in the target/site directory</para>
+          </listitem>
+        </orderedlist>
+
+        <para>Once the tests have been run via Maven once the sample data will
+        be in place and the tests can then be run as required inside
+        Eclipse.</para>
+      </section>
+
+      <section>
+        <title>Modifing the sample data</title>
+
+        <para>The sample data is stored in a set of XML files inside the
+        src/test folder.</para>
+
+        <section>
+          <title>Updating JCR data</title>
+
+          <para>The easiest way to do this in to set up and run the otherdemo
+          project. Add sample data as required (ideally via setup.script so
+          that it can be re-generated easily if the intenal JCR structure is
+          changed). The data can then be exported via:</para>
+
+          <para><programlisting>mvn jackrabbit:export2</programlisting>This
+          will dump the JCR data into target/jcr-data and this folder can now
+          be moved to src/test for use in seeding the tests.</para>
+        </section>
+      </section>
+
+      <section>
+        <title>Writing tests</title>
+
+        <para>http://unitils.sourceforge.net/spring_article.html</para>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Writing documentation</title>
+
+      <para>The documentation for OTHERobjects is written in DocBook format
+      and processed via JBoss's jdocbook Maven plugin. The design is based on
+      the XSL from Hibernate.</para>
+
+      <para>Information on customising DocBook XSL is here:
+      <uri>http://www.sagehill.net/docbookxsl/</uri>.</para>
+
+      <para>Documentation stuff do to still:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Make figure label font smaller.</para>
+        </listitem>
+
+        <listitem>
+          <para>Learn how to do links.</para>
+        </listitem>
+
+        <listitem>
+          <para>Style for suggesting menu commands.</para>
+        </listitem>
+
+        <listitem>
+          <para>Icons and background for info, warning, important
+          paragraphs.</para>
+        </listitem>
+
+        <listitem>
+          <para>Change colour on internal links</para>
+        </listitem>
+
+        <listitem>
+          <para>Don't duplicate URL in ulinks</para>
+        </listitem>
+
+        <listitem>
+          <para>Side bars</para>
+        </listitem>
+      </orderedlist>
+
+      <para><important>
+          <para>Here is a sample important paragraph.</para>
+        </important></para>
+
+      <section>
+        <title>JavaDoc</title>
+
+        <para>See: http://java.sun.com/j2se/javadoc/writingdoccomments/. The
+        style guide is particularly important.</para>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Style Guide</title>
+
+      <para>This chapter describes the conventions and styles used when
+      working with OTHERobjects.</para>
+
+      <section>
+        <title>Java</title>
+
+        <para>Standard advice applies. Link to resoucre? Also see book?</para>
+
+        <para>Exceptions: start curly brace on new line</para>
+
+        <para>An eclipse code formatting preferences file is provided.</para>
+
+        <para>Avoid all standard compiler warnings. Supress warnings only when
+        essential and in the smallest scope possible (method not
+        class).</para>
+
+        <para>The default eclipse warnings config should be used.</para>
+
+        <para>Templates are provided for common patterns. Use these whenever
+        possible.</para>
+
+        <para>[Check Style IDE format pref files
+        http://qalab.sourceforge.net/index.html]</para>
+      </section>
+
+      <section>
+        <title>Groovy</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Javascript</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Files on disk</title>
+
+        <para>Always lowercase. Use a hypen (not an underscrore) as a word
+        separator.</para>
+      </section>
+
+      <section>
+        <title>SQL and HQL</title>
+
+        <para>Kewords should be in uppercase. Table and object names in
+        lowercase.</para>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Common problems</title>
+
+      <para>Here are tips for dealing with the most common problems that users
+      experience.</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Maven dependencies don't appear: plugin / settings.xml /
+          connectivity.</para>
+        </listitem>
+      </orderedlist>
+    </chapter>
+
+    <chapter>
+      <title>Systems adminstation</title>
+
+      <section>
+        <title>Setting environment variables</title>
+
+        <para>On Mac OS X 10.4+ you should edit the .profile file in your home
+        folder.</para>
+
+        <programlisting>export PATH=$PATH:/opt/app/bin</programlisting>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Using a VCS</title>
+
+      <para>Don't check in:</para>
+
+      <para>web-app/WEB-INF</para>
+    </chapter>
+  </part>
+
+  <part>
+    <title>Hosting</title>
+
+    <preface id="preface">
+      <title>Preface</title>
+
+      <para>This guide explains the various options for hosting your
+      OTHERobjects powered site and making it highly available. It assumes a
+      good level of system administartion experience.</para>
+
+      <para>The standard installation will be fine for small and medium sized
+      sites but large or transaction sites will need more advanced hosting
+      options descripbed in this guide.</para>
+    </preface>
+
+    <chapter>
+      <title>Deploying</title>
+
+      <para>TODO Support maven prepeare and release</para>
+
+      <para>mvn compile</para>
+
+      <para>mvn war:war</para>
+
+      <para>Set the following Java System Property on live server:
+      otherobjects.environment=production</para>
+
+      <para><programlisting>export CATALINA_OPTS="-Dotherobjects.environment=production -Djava.awt.headless=true"</programlisting></para>
+    </chapter>
+
+    <chapter>
+      <title>Scaling</title>
+
+      <para>What needs to scale JCR JDBC Lucene Filestore Sessions Scheduler
+      Hibernate Cache Options App: shared JVM, dedicated JVM, clustered JVM
+      Static: embedded, dedicated, clustered Database: embedded, dedicated,
+      clustered JCR: embedded, (dedicated?), clustered Need recommended: App
+      server: Jetty, Glassfish JVM clusterer: Terracotta, Glassfish
+      LoadBalanacer: LVS, balance?, Glassfish Database: H2, Postgres, MySQL?
+      JCR: Jackrabbit, Alfresco Deployment models Model 1: Small sites (eg
+      Company website) * Single JVM: Embedded JCR, Embedded DB, Embedded
+      Static * One process. Dead easy to configure * Nightly backups to shared
+      or network drive * Optional Apache frontend forextra config Model 2:
+      Medium size sites, critical data (eg Medium sized e-commerce) * Critical
+      transactional data in dedicated DB with hot backup Model 3: HA sites *
+      Clustered JVM, Clustered JCR, Clusetered Static, Clustered
+      Database</para>
+    </chapter>
+
+    <chapter>
+      <title>Clustering</title>
+
+      <para>Clustering involves running the application on more than one
+      server.</para>
+
+      <section>
+        <title>Potential pitfalls</title>
+
+        <para>Stale objects on nodes.</para>
+
+        <para>Scheduler running same task simultaneously on each node.</para>
+      </section>
+
+      <section>
+        <title>Terracootta</title>
+
+        <para>Setting up a clustered OTHERobjects site with Terracotta</para>
+
+        <para>#) Download terracotta 2.4</para>
+
+        <para>#) Start terracotta server (which coordinates the distribution
+        of shared objects) with default config (to change the log and data
+        paths copy sample/tc-config.xml to the directory from where you start
+        tc and customise). ./bin/start-tc-server.sh</para>
+
+        <para>#) Modify OO sample tc-config.xml file making sure to get
+        jee-application name right.</para>
+
+        <para>#) Build site war file and copy to tomcat/webapps</para>
+
+        <para>#) Start a Tomcat instance using Terracotta using our
+        start-tc-tomcat script.</para>
+
+        <para>HA Terracotta Servers</para>
+
+        <para>http://www.terracotta.org/confluence/display/docs1/Terracotta+Server+Cluster
+        With Jetty</para>
+
+        <para>http://docs.codehaus.org/display/JETTY/Session+Clustering+with+Terracotta</para>
+
+        <para>http://www.nabble.com/Load-Balancing%5CClustering-in-6.14-tf3945950.html#a11312269</para>
+
+        <para>http://www.terracotta.org/confluence/display/docs1/Setting+Up+a+Tomcat+Web+Cluster</para>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Databases</title>
+
+      <para></para>
+    </chapter>
+
+    <chapter>
+      <title>Java Content Repository</title>
+
+      <para></para>
+    </chapter>
+
+    <chapter>
+      <title>Static content</title>
+
+      <para>* eTags * Expries headers * GZip</para>
+    </chapter>
+
+    <chapter>
+      <title>Monitoring availability</title>
+
+      <para></para>
+    </chapter>
+
+    <chapter>
+      <title>Load balancers</title>
+
+      <para>http://www.inlab.de/balance.html LVS</para>
+    </chapter>
+
+    <chapter>
+      <title>System configuration</title>
+
+      <para>System java settings.</para>
+    </chapter>
+
+    <chapter>
+      <title>Performance testing</title>
+
+      <para>http://www.lighttpd.net/benchmark</para>
+
+      <para>Jmeter</para>
+
+      <para>That tails one based on httperf</para>
+    </chapter>
+  </part>
 </book>
