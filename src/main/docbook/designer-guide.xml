@@ -15,9 +15,29 @@
   <part>
     <title>Building your site</title>
 
-    <partintro>
-    Intro
-    </partintro>
+    <preface id="preface">
+      <title>Preface</title>
+
+      <section id="section-why-another-framework">
+        <title>Who is this guide for?</title>
+
+        <para>This guide is for users who wish to build their own website. It
+        covers installing and running OTHERobjects, configuring data types and
+        building templates and adding action logic to events and scheduled
+        tasks.</para>
+
+        <para>For information on adding content and maintaining an existing
+        site please see the User Guide.</para>
+
+        <para>Move advanced users wishing to extend OTHERobjects should read
+        the Developer Guide.</para>
+
+        <para>You should be comfortable with the command line, HTML, and
+        simple scripting.</para>
+
+        <para>You don't need any knowledge of Java.</para>
+      </section>
+    </preface>
 
     <chapter id="chapter-using-the-framework">
       <title>Getting started</title>
@@ -1161,6 +1181,11 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
 
       <section>
         <title>Checking out the code</title>
+        
+        
+        <para>
+        TODO mvn eclipse:eclipse
+        </para>
 
         <para>The next step is to check out the source code to OTHERobjects
         and to the sample project that we will use throughout the rest of this
