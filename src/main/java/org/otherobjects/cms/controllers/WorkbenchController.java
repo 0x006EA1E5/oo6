@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.otherobjects.cms.Url;
 import org.otherobjects.cms.dao.DaoService;
-import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.Folder;
