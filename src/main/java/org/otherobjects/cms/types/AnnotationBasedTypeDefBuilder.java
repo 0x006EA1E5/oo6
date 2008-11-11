@@ -224,5 +224,4 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder, Initializi
     {
         initialisePropertyFormats();
     }
-
 }

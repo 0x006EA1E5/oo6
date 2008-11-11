@@ -48,4 +48,9 @@
 		<property name="exposeSpringMacroHelpers" value="false" /> <!-- We'll expose our own thanks. -->
 		<property name="viewClass" value="org.otherobjects.cms.views.OOFreeMarkerView" />
 	</bean>
+	
+	<bean id="freemarkerToolProvider" class="org.otherobjects.cms.views.FreemarkerToolProvider" >
+		<property name="scanner" ref="annotatedClassesScanner" />
+		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
+	</bean>
 </beans>

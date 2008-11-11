@@ -1,1 +1,1 @@
-OTHERObjects CMS v0.5-SNAPSHOT
+OTHERObjects CMS v0.6 Pre-release

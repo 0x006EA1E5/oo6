@@ -13,6 +13,7 @@ import org.otherobjects.cms.tools.FormatTool;
 import org.otherobjects.cms.tools.SecurityTool;
 import org.otherobjects.cms.tools.UrlTool;
 import org.otherobjects.cms.util.ObjectInspector;
+import org.otherobjects.cms.views.FreemarkerToolProvider;
 import org.springframework.context.MessageSource;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -23,6 +24,7 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
     private OoResourceLoader ooResourceLoader;
     private OtherObjectsConfigurator otherObjectsConfigurator;
     private MessageSource messageSource;
+    private FreemarkerToolProvider freemarkerToolProvider;
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception
@@ -54,9 +56,12 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             modelAndView.addObject("security", new SecurityTool());
             modelAndView.addObject("daoService", daoService);
             modelAndView.addObject("dao", daoService);
-
             modelAndView.addObject("flash", new FlashMessageTool(request));
             modelAndView.addObject("jcr", daoService.getDao("BaseNode"));
+            
+            // Add auto-detected tools
+            if(freemarkerToolProvider!=null)
+                modelAndView.addAllObjects(freemarkerToolProvider.getTools());
         }
 
     }
@@ -81,4 +86,8 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
         this.otherObjectsConfigurator = otherObjectsConfigurator;
     }
 
+    public void setFreemarkerToolProvider(FreemarkerToolProvider freemarkerToolProvider)
+    {
+        this.freemarkerToolProvider = freemarkerToolProvider;
+    }
 }

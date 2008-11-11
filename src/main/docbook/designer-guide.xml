@@ -15,29 +15,9 @@
   <part>
     <title>Building your site</title>
 
-    <preface id="preface">
-      <title>Preface</title>
-
-      <section id="section-why-another-framework">
-        <title>Who is this guide for?</title>
-
-        <para>This guide is for users who wish to build their own website. It
-        covers installing and running OTHERobjects, configuring data types and
-        building templates and adding action logic to events and scheduled
-        tasks.</para>
-
-        <para>For information on adding content and maintaining an existing
-        site please see the User Guide.</para>
-
-        <para>Move advanced users wishing to extend OTHERobjects should read
-        the Developer Guide.</para>
-
-        <para>You should be comfortable with the command line, HTML, and
-        simple scripting.</para>
-
-        <para>You don't need any knowledge of Java.</para>
-      </section>
-    </preface>
+    <partintro>
+    Intro
+    </partintro>
 
     <chapter id="chapter-using-the-framework">
       <title>Getting started</title>
@@ -111,10 +91,9 @@ iMac:~ rich$
           installed:</para>
 
           <programlisting>
-						iMac:mysite rich$
-						<emphasis role="bold">oo version</emphasis>
-						OTHERObjects CMS v0.5-SNAPSHOT Maven version: 2.0.9 Java version: 1.5.0_13 OS name: "mac os x" version: "10.5.3" arch: "i386" Family: "unix" iMac:mysite rich$
-					</programlisting>
+iMac:mysite rich$ <emphasis role="bold">oo version</emphasis>
+OTHERObjects CMS v0.5-SNAPSHOT Maven version: 2.0.9 Java version: 1.5.0_13 OS name: "mac os x" version: "10.5.3" arch: "i386" Family: "unix" 
+iMac:mysite rich$</programlisting>
 
           <para>If you get any errors check the required software has been
           correctly installed.</para>
@@ -122,29 +101,35 @@ iMac:~ rich$
           <para>Now go ahead and create your first site:</para>
 
           <para><programlisting>
-							iMac:mysite rich$
-							<emphasis role="bold">oo create demo</emphasis>
-							... Your new site has been created. To start it up type: cd oo2 oo run
-						</programlisting></para>
+iMac:mysite rich$<emphasis role="bold"> oo create demo</emphasis>
+
+...
+
+Your new site has been created. To start it up type: cd oo2 oo run
+
+iMac:mysite rich$</programlisting></para>
 
           <para>Finally (as told by the create task) change into your new
           directory and type <emphasis role="bold">oo run</emphasis> . The
           server will start and you should get this:</para>
 
-          <programlisting>INFO [o.o.cms.util.StartupMessage] ************************************************************** INFO [o.o.cms.util.StartupMessage]
-						************************************************************** INFO [o.o.cms.util.StartupMessage] ___ _____ _ _ _____ ____ _ _ _ INFO [o.o.cms.util.StartupMessage] / _ \_ _| | | | ____| _ \ ___
-						| |__ (_) ___ ___| |_ ___ INFO [o.o.cms.util.StartupMessage] | | | || | | |_| | _| | |_) / _ \| '_ \| |/ _ \/ __| __/ __| INFO [o.o.cms.util.StartupMessage] | |_| || | | _ | |___| _ &lt; (_) | |_) | |  __/ (__| |_\__ \ 
-INFO  [o.o.cms.util.StartupMessage]  \___/ |_| |_| |_|_____|_| \_\___/|_.__// |\___|\___|\__|___/ 
-INFO  [o.o.cms.util.StartupMessage]                                       |__/                 
-INFO  [o.o.cms.util.StartupMessage]  
-INFO  [o.o.cms.util.StartupMessage] ******************* Started up successfully ****************** 
-INFO  [o.o.cms.util.StartupMessage]  
-INFO  [o.o.cms.util.StartupMessage] Environment : dev 
-INFO  [o.o.cms.util.StartupMessage] Site        : [unknown] 
-INFO  [o.o.cms.util.StartupMessage] Admin       : [unknown] 
-INFO  [o.o.cms.util.StartupMessage]  
-INFO  [o.o.cms.util.StartupMessage] ************************************************************** 
-INFO  [o.o.cms.util.StartupMessage] ************************************************************** 
+          <programlisting>INFO [o.o.cms.util.StartupMessage] **************************************************************
+INFO [o.o.cms.util.StartupMessage] **************************************************************
+INFO [o.o.cms.util.StartupMessage]  ___ _____ _ _ _____ ____ _ _ _ 
+INFO [o.o.cms.util.StartupMessage] / _ \_ _| | | | ____| _ \ ___| |__ (_) ___ ___| |_ ___ 
+INFO [o.o.cms.util.StartupMessage] | | | || | | |_| | _| | |_) / _ \| '_ \| |/ _ \/ __| __/ __| 
+INFO [o.o.cms.util.StartupMessage] | |_| || | | _ | |___| _ &lt; (_) | |_) | |  __/ (__| |_\__ \ 
+INFO [o.o.cms.util.StartupMessage]  \___/ |_| |_| |_|_____|_| \_\___/|_.__// |\___|\___|\__|___/ 
+INFO [o.o.cms.util.StartupMessage]                                       |__/                 
+INFO [o.o.cms.util.StartupMessage]  
+INFO [o.o.cms.util.StartupMessage] ******************* Started up successfully ****************** 
+INFO [o.o.cms.util.StartupMessage]  
+INFO [o.o.cms.util.StartupMessage] Environment : dev 
+INFO [o.o.cms.util.StartupMessage] Site        : [unknown] 
+INFO [o.o.cms.util.StartupMessage] Admin       : [unknown] 
+INFO [o.o.cms.util.StartupMessage]  
+INFO [o.o.cms.util.StartupMessage] ************************************************************** 
+INFO [o.o.cms.util.StartupMessage] ************************************************************** 
 </programlisting>
 
           <para>Congratulations! Your site has started up correctly and you

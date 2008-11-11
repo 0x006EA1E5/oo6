@@ -1,8 +1,10 @@
-package org.otherobjects.cms.util;
+package org.otherobjects.cms.tools;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
+
+import org.otherobjects.cms.views.Tool;
 
 /**
  * Generates URL to Gravatar images based on user email address.
@@ -15,6 +17,7 @@ import java.security.MessageDigest;
  * 
  * @author rich
  */
+@Tool("gravatar")
 public class GravatarUtils
 {
     private static final String GRAVATAR_SERVER = "http://www.gravatar.com/avatar/";

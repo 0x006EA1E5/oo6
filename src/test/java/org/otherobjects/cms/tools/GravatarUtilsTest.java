@@ -1,4 +1,4 @@
-package org.otherobjects.cms.util;
+package org.otherobjects.cms.tools;
 
 import junit.framework.TestCase;
 
