@@ -12,7 +12,7 @@
 		<data.path>${project.build.directory}/data/</data.path>
 		<jdbc.groupId>com.h2database</jdbc.groupId>
 		<jdbc.artifactId>h2</jdbc.artifactId>
-		<jdbc.version>1.0.20070617</jdbc.version>
+		<jdbc.version>1.0.79</jdbc.version>
 		<jdbc.driverClassName>org.h2.Driver</jdbc.driverClassName>
 		<jdbc.url>jdbc:h2:${data.path}database</jdbc.url>
 		<jdbc.username>admin</jdbc.username>
@@ -332,11 +332,13 @@
 		</plugins>
 	</reporting>
 	<dependencies>
+		<!-- 
 		<dependency>
 			<groupId>${jdbc.groupId}</groupId>
 			<artifactId>${jdbc.artifactId}</artifactId>
 			<version>${jdbc.version}</version>
 		</dependency>
+		 -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-annotations</artifactId>
