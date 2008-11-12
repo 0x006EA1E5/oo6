@@ -14,8 +14,8 @@ import org.otherobjects.cms.util.StringUtils;
 
 import flexjson.JSON;
 
-@Type(labelProperty = "id")
-public class SiteFolder extends BaseNode implements Folder //, SiteItem
+@Type(labelProperty = "label")
+public class SiteFolder extends BaseNode implements Folder
 {
     private String label;
     private String extraNavigationLabel;
@@ -24,7 +24,18 @@ public class SiteFolder extends BaseNode implements Folder //, SiteItem
     private Url url;
     private boolean inMenu = true;
     private String tags;
-    
+
+    @Property(order = 5)
+    public String getCode()
+    {
+        return super.getCode();
+    }
+
+    public void setCode(String code)
+    {
+        super.setCode(code);
+    }
+
     public String getTags()
     {
         return tags;
@@ -40,14 +51,6 @@ public class SiteFolder extends BaseNode implements Folder //, SiteItem
     {
         return true;
     }
-
-    //    @Override
-    //    public String getCode()
-    //    {
-    //        if (super.getCode() == null)
-    //            super.setCode(StringUtils.generateUrlCode(getLabel()));
-    //        return super.getCode();
-    //    }
 
     public List<TypeDef> getAllAllowedTypes()
     {
@@ -94,8 +97,7 @@ public class SiteFolder extends BaseNode implements Folder //, SiteItem
     @Property(order = 20)
     public String getLabel()
     {
-        // FIXME Label should be fetched via dedicated method
-        return (String) (label != null ? label : (getPropertyValue(getLabelProperty()) != null ? getPropertyValue(getLabelProperty()) : getId()));
+        return this.label;
     }
 
     @Override

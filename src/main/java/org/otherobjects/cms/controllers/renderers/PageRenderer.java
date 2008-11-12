@@ -28,11 +28,22 @@ public class PageRenderer implements ResourceRenderer
 
         // Determine template to use
         Template template = determineTemplate(resourceObject);
-        Assert.notNull(template, "No template found for type: " + resourceObject.getTypeDef().getName());
+        if (template == null)
+        {
+            ModelAndView mv = new ModelAndView("/otherobjects/templates/pages/oo-500-create-template");
+            mv.addObject("resourceObject", resourceObject);
+            String templateName = resourceObject.getTypeDef().getLabel();
+            mv.addObject("templateName", templateName);
+            // FIXME Bring this into a generic place
+            mv.addObject("templateCode", templateName.toLowerCase().replaceAll("\\s", ""));
+            mv.addObject("templates", getTemplates());
+            mv.addObject("layouts", getLayouts());
+            return mv;
+        }
 
         // Return page and context
         TemplateLayout layout = template.getLayout();
-        Assert.notNull(layout, "No layout defined for template: " +template.getLabel());
+        Assert.notNull(layout, "No layout defined for template: " + template.getLabel());
 
         ModelAndView view = new ModelAndView("/site/templates/layouts/" + layout.getCode().replaceAll("\\.html", "") + "");
 
@@ -54,6 +65,18 @@ public class PageRenderer implements ResourceRenderer
         view.addObject("daoService", this.daoService);
         return view;
     }
+    
+    private Object getTemplates()
+    {
+        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
+        return universalJcrDao.getAllByType(Template.class);
+    }
+
+    private Object getLayouts()
+    {
+        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
+        return universalJcrDao.getAllByType(TemplateLayout.class);
+    }
 
     public DaoService getDaoService()
     {
@@ -73,9 +96,9 @@ public class PageRenderer implements ResourceRenderer
     private Template determineTemplate(BaseNode resourceObject)
     {
         Template template = null;
-        
+
         // FIXME This needs to be more generic -- or at least tied to SitePage
-        if(resourceObject.getPropertyValue("data.publishingOptions") != null)
+        if (resourceObject.getPropertyValue("data.publishingOptions") != null)
         {
             template = (Template) resourceObject.getPropertyValue("data.publishingOptions.template");
             if (template != null)

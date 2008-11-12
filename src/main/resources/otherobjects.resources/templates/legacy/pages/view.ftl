@@ -10,8 +10,11 @@
 		<#if prop.type == "component" >
 			${object.getPropertyValue(prop.propertyPath)!}
 		<#elseif prop.type == "date" >
-			
-			${object.getPropertyValue(prop.propertyPath)?string("d MMM yyyy")}
+			${object.getPropertyValue(prop.propertyPath)?date?string("d MMM yyyy")}
+		<#elseif prop.type == "time" >
+			${object.getPropertyValue(prop.propertyPath)?time?string("HH:mm")}
+		<#elseif prop.type == "timestamp" >
+			${object.getPropertyValue(prop.propertyPath)?datetime?string("HH:mm 'on' d MMM yyyy")}
 		<#elseif prop.type == "boolean" >
 			${object.getPropertyValue(prop.propertyPath)?string("Yes", "No")}	
 	  	<#else>
@@ -19,7 +22,7 @@
 	  	</#if>
   	<#else>
   		<span style="color:#888">No value</span>
-  	</#if>  	
+  	</#if>  
 </td>
 </tr>
 </#macro>

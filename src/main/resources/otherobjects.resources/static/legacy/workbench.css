@@ -155,7 +155,7 @@ BODY.oo-multiselection {margin:0px;}
 .oo-listing .oo-action A.down {background:url($static.setPath("/otherobjects/static/graphics/arrow_down.gif")) no-repeat 10px 10px;}
 .oo-listing .oo-action A.down:hover, .oo-content .oo-listing .oo-action A.down:active {background-color:#C8E8F5;}
 .oo-listing .oo-help {width:20px; padding:5px 10px 5px 10px; text-align:center;}
-.oo-listing .oo-label {width:100px; padding:5px 10px 5px 10px;}
+.oo-listing .oo-label {width:125px; padding:5px 10px 5px 10px;}
 .oo-listing .oo-field {padding:5px 10px 5px 10px;}
 .oo-listing .oo-field-none {padding:5px 10px 5px 10px;}
 .oo-listing .oo-field A {float:left; padding:5px 10px 5px 20px; background:url($static.setPath("/otherobjects/static/graphics/arrow_right.gif")) no-repeat 10px 10px;}

@@ -5,7 +5,7 @@
 <head>
 <title>${pageTitle!} | ${oo.msg("site.name")} | OTHERobjects</title>
 <@oo.css "/otherobjects/static/legacy/workbench.css" />
-
+<@oo.js "/otherobjects/static/legacy/workbench.js" />
 <@oo.js "/otherobjects/static/legacy/yui-2.6.0-all-min.js" />
 <@oo.js "/otherobjects/static/legacy/ojay-r307-all-min.js" />
 

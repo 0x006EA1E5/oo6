@@ -14,6 +14,7 @@ case $1 in
         echo "  version              show which version of OTHERobjects in installed"
         echo "  create [sitename]    creates a site in this directory"
         echo "  run                  runs the site"
+        echo "  war                  builds .war file in target/"
         echo "  deploy               deploys the site to the server"
         echo 
         echo "  (developer tasks)"
@@ -45,6 +46,12 @@ case $1 in
 
     run)
         mvn jetty:run
+        ;;
+    
+    war)
+    	mvn clean
+    	mvn compile
+        mvn war:war
         ;;
     
     deploy)

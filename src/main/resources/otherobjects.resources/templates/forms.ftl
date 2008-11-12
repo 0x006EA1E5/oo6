@@ -3,28 +3,6 @@ Form Macros
 -->
 
 <#macro renderForm typeDef empty=false>
-<script>
-function addToList()
-{
-	// Get field
-	var f = $('.oo-list-empty-field').at(0);
-	
-	// Insert copy
-	n = $(f.node.cloneNode(true));
-	console.log(n);
-	n.setStyle({display:'block'});
-	n.removeClass("oo-list-template");
-	f.insert(n.node, 'after');
-}
-function removeFromList()
-{
-	// Get field
-	var all = $('.oo-list-last-field');
-	var f = all.at(all.length-1);
-	// Insert copy
-	f.parents().at(0).node.removeChild(f.node);
-}
-</script>
 <@renderType typeDef "object." empty/>
 </#macro>
 
@@ -98,6 +76,10 @@ Renders a field inputter by choosing the correct inputter renderer. Also handles
   		<@formSingleSelect "${path}" dao.get(prop.relatedType).getAllByType("${prop.relatedType}") "" empty/>
 	<#elseif type == "date" >
   		<@formDate "${path}" "" empty/>
+	<#elseif type == "time" >
+  		<@formTime "${path}" "" empty/>
+	<#elseif type == "timestamp" >
+  		<@formTimestamp "${path}" "" empty/>
   	<#elseif type == "text" >
   		<@formTextarea "${path}" "" empty/>
 	<#elseif type == "boolean" >
@@ -200,7 +182,46 @@ Renders a textbox for a date property.
 		</#if>
 		<input type="text" class="text" id="${ooStatus.expression}" name="${ooStatus.expression}" value="${stringStatusValue}">
 	</#if>
+	<input type="button" value="Today" onclick="document.getElementById('${ooStatus.expression}').value=formatDate(new Date());"/>
 </#macro>	
+
+<#--
+Renders a textbox for a date property.
+-->
+<#macro formTime path attributes="" empty=false>
+	<#if empty>
+		<@formInput path attributes "text" empty/>
+	<#else>
+		<@bind path />
+		<#assign ooStatus = springMacroRequestContext.getBindStatus("${path}")>
+		<#if ooStatus.value?? && ooStatus.value?is_date>
+	    	<#assign stringStatusValue=ooStatus.value?time?string("HH:mm:ss")>
+		<#else>
+	  	  	<#assign stringStatusValue=ooStatus.value?default("")>
+		</#if>
+		<input type="text" class="text" id="${ooStatus.expression}" name="${ooStatus.expression}" value="${stringStatusValue}">
+	</#if>
+	<input type="button" value="Now" onclick="document.getElementById('${ooStatus.expression}').value=formatTime(new Date());"/>
+</#macro>
+
+<#--
+Renders a textbox for a date property.
+-->
+<#macro formTimestamp path attributes="" empty=false>
+	<#if empty>
+		<@formInput path attributes "text" empty/>
+	<#else>
+		<@bind path />
+		<#assign ooStatus = springMacroRequestContext.getBindStatus("${path}")>
+		<#if ooStatus.value?? && ooStatus.value?is_date>
+	    	<#assign stringStatusValue=ooStatus.value?datetime?string("yyyy-MM-dd HH:mm:ss")>
+		<#else>
+	  	  	<#assign stringStatusValue=ooStatus.value?default("")>
+		</#if>
+		<input type="text" class="text" id="${ooStatus.expression}" name="${ooStatus.expression}" value="${stringStatusValue}">
+	</#if>
+	<input type="button" value="Now" onclick="document.getElementById('${ooStatus.expression}').value=formatTimestamp(new Date());"/>
+</#macro>
 
 <#macro formSingleSelect path options attributes="" empty=false>
     <#if empty>

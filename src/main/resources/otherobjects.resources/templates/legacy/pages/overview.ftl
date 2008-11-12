@@ -23,8 +23,8 @@ class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
 
 <ul>
 <#list edits.items as edit>
-    <li class="published-false><a href="${edit.linkPath}">${edit.label} </a>
-    <small>at ${edit.modificationTimestamp?date} </small></li>
+    <li class="published-false><a href="${edit.linkPath}">${edit.label!} </a>
+    <small>at {edit.modificationTimestamp?date} </small></li>
 </#list>
 </ul>
 
@@ -44,8 +44,8 @@ class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
 <#assign latestChanges = daoService.getDao("baseNode").pageByJcrExpression("/jcr:root/site//element(*, oo:node) [not(jcr:like(@ooType,'%MetaData'))] order by @modificationTimestamp descending",10,1) >
 <ul>
 <#list latestChanges.items as change>
-    <li class="published-true><a href="${change.linkPath}">${change.label} </a> 
-    <small>at ${change.modificationTimestamp?date} by ${change.userName}</small></li>
+    <li class="published-true><a href="${change.linkPath}">${change.label!} </a> 
+    <small>at {change.modificationTimestamp?date} by ${change.userName!}</small></li>
 </#list>
 </ul>
 

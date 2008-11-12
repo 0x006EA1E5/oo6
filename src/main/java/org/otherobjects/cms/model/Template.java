@@ -1,5 +1,6 @@
 package org.otherobjects.cms.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.otherobjects.cms.types.annotation.Property;
@@ -9,10 +10,9 @@ import org.otherobjects.cms.types.annotation.Type;
 @Type
 public class Template extends BaseNode
 {
-    private String code;
     private String label;
     private TemplateLayout layout;
-    private List<TemplateRegion> regions;
+    private List<TemplateRegion> regions = new ArrayList<TemplateRegion>();
 
     public TemplateRegion getRegion(String regionCode)
     {
@@ -29,12 +29,12 @@ public class Template extends BaseNode
     @Property(order = 10)
     public String getCode()
     {
-        return code;
+        return super.getCode();
     }
 
     public void setCode(String code)
     {
-        this.code = code;
+        super.setCode(code);
     }
 
     @Property(order = 20)

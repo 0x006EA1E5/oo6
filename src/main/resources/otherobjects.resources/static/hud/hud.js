@@ -129,7 +129,7 @@ function ooSaveTemplateDesign()
 	});
 	var json = YAHOO.lang.JSON.stringify(regions);
 	console.log(regions);
-	Ojay.HTTP.POST('/otherobjects/block/saveArrangement?templateId='+ooTemplateId, {arrangement: json}, {});
+	Ojay.HTTP.POST('/otherobjects/designer/saveArrangement?templateId='+ooTemplateId, {arrangement: json}, {});
 }
 
 
