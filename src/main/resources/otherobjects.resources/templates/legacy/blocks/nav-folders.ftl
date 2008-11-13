@@ -12,11 +12,8 @@
 	#end>
 	#else
 	-->
-	<#if f.children?has_content>
-	<li class="oo-folder-open">
-	<#else>
-	<li class="oo-folder-empty">
-	</#if>
+	
+	<li class="<#if f.children?has_content>oo-folder-open<#else>oo-folder-empty</#if> <#if f.item.published>oo-folder-published<#else>oo-folder-in-progress</#if>">
 	<span></span><a href="${oo.url("/otherobjects/workbench/list/"+f.item.id)}">${oo.msg(f.item.label)}</a>	
 	<@ooFolderNavList f/>
 	</li>

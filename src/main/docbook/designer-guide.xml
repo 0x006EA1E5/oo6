@@ -15,29 +15,9 @@
   <part>
     <title>Building your site</title>
 
-    <preface id="preface">
-      <title>Preface</title>
-
-      <section id="section-why-another-framework">
-        <title>Who is this guide for?</title>
-
-        <para>This guide is for users who wish to build their own website. It
-        covers installing and running OTHERobjects, configuring data types and
-        building templates and adding action logic to events and scheduled
-        tasks.</para>
-
-        <para>For information on adding content and maintaining an existing
-        site please see the User Guide.</para>
-
-        <para>Move advanced users wishing to extend OTHERobjects should read
-        the Developer Guide.</para>
-
-        <para>You should be comfortable with the command line, HTML, and
-        simple scripting.</para>
-
-        <para>You don't need any knowledge of Java.</para>
-      </section>
-    </preface>
+    <partintro>
+       Intro 
+    </partintro>
 
     <chapter id="chapter-using-the-framework">
       <title>Getting started</title>
@@ -647,6 +627,25 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
     </chapter>
 
     <chapter>
+      <title>Syndictation: In &amp; Out</title>
+
+      <para>To publish an Atom/RSS feed you can create a
+      org.otherobjects.cms.model.SyndicationFeedResource</para>
+
+      <para>Recommended types: atom_1.0</para>
+
+      <para>Mappings (these may disappear in favour of ooLabel and
+      ooDescription): title:data.title</para>
+
+      <para>You can add your feed to the header: TODO</para>
+
+      <para>To put a feed on your page the use a Syndication Feed block
+      TODO.</para>
+
+      <para></para>
+    </chapter>
+
+    <chapter>
       <title>Creating forms</title>
 
       <para>Forms in the admin interface are created automatically based on
@@ -1019,7 +1018,7 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
     </chapter>
 
     <chapter>
-      <title>Release and deploy</title>
+      <title>Release management</title>
 
       <para>Run tests from maven</para>
 
@@ -1181,11 +1180,6 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
 
       <section>
         <title>Checking out the code</title>
-        
-        
-        <para>
-        TODO mvn eclipse:eclipse
-        </para>
 
         <para>The next step is to check out the source code to OTHERobjects
         and to the sample project that we will use throughout the rest of this
@@ -2178,16 +2172,40 @@ ${datevar?date}</programlisting>
     <chapter>
       <title>Deploying</title>
 
-      <para>TODO Support maven prepeare and release</para>
+      <para>Consider release first</para>
 
-      <para>mvn compile</para>
+      <para>The server that is deployed to is specified in your poject pom.xml
+      file:</para>
 
-      <para>mvn war:war</para>
+      <para><programlisting>&lt;!-- Specify where to deploy to --&gt;
+&lt;plugin&gt;
+  &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+  &lt;artifactId&gt;tomcat-maven-plugin&lt;/artifactId&gt;
+  &lt;configuration&gt;
+    &lt;url&gt;http://www.server.com:8080/manager&lt;/url&gt;
+    &lt;server&gt;live-server&lt;/server&gt;
+    &lt;path&gt;/&lt;/path&gt;
+  &lt;/configuration&gt;
+&lt;/plugin&gt;
+</programlisting>If the credentials for the manager app are not admin/[blank]
+      then you will need to put them in your maven settings file (make sure
+      server id matches):</para>
 
-      <para>Set the following Java System Property on live server:
-      otherobjects.environment=production</para>
+      <para><programlisting>&lt;settings&gt; 
+ &lt;servers&gt; 
+  &lt;server&gt; 
+   &lt;id&gt;live-server&lt;/id&gt; 
+   &lt;username&gt;admin&lt;/username&gt; 
+   &lt;password&gt;password&lt;/password&gt; 
+  &lt;/server&gt;
+ &lt;/servers&gt; 
+&lt;/settings&gt; </programlisting></para>
 
-      <para><programlisting>export CATALINA_OPTS="-Dotherobjects.environment=production -Djava.awt.headless=true"</programlisting></para>
+      <para>oo deploy (mvn compile, mvn war:war)</para>
+
+      <para>Set the following Java System Property on live server:</para>
+
+      <para><programlisting>export CATALINA_OPTS="-server -Xmx512m -Dotherobjects.environment=production -Djava.awt.headless=true"</programlisting></para>
     </chapter>
 
     <chapter>

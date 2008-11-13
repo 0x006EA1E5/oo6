@@ -1,6 +1,7 @@
 package org.otherobjects.cms.tools;
 
 import java.io.StringWriter;
+import java.text.NumberFormat;
 import java.util.Locale;
 
 import net.java.textilej.parser.MarkupParser;
@@ -74,6 +75,34 @@ public class FormatTool
     }
 
     /**
+     * Formats file size into huma readable form.
+     * 
+     * @param size in bytes
+     * @return formatted string
+     */
+    public static String formatFileSize(Long size)
+    {
+        NumberFormat f = NumberFormat.getInstance();
+        f.setMaximumFractionDigits(1);
+        f.setMinimumFractionDigits(1);
+
+        double s = (double) size / (double) 1024;
+        if (s < 1028 * 0.8)
+        {
+            return f.format(s) + " KB";
+        }
+
+        s /= 1024;
+        if (s < 1024 * 0.8)
+        {
+            return f.format(s) + " MB";
+        }
+        
+        s /= 1024;
+        return f.format(s) + " GB";
+    }
+
+    /**
      * Parses a string and looks up messages if appropriate. Useful for form labels that may or may note use
      * message codes. If the string appears to be a message code then this is looked up otherwise the string
      * is returned unaltered.
@@ -91,7 +120,7 @@ public class FormatTool
             // FIXME Get locale from somewhere better
             return messageSource.getMessage(message.substring(2, message.length() - 1), null, Locale.ENGLISH);
         }
-        if (message.contains("."))
+        if (message.contains(".") && !message.endsWith(".") && message.matches("[a-z0-9\\.]*"))
         {
             // Message
             // FIXME proper regexp here

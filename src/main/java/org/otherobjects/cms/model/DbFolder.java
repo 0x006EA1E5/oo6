@@ -11,10 +11,9 @@ import org.otherobjects.cms.types.annotation.Type;
 import flexjson.JSON;
 
 @SuppressWarnings("unchecked")
-@Type
+@Type(labelProperty="label")
 public class DbFolder extends BaseNode implements Folder
 {
-    private String code;
     private String label;
     private String mainType;
     private String mainTypeQuery;
@@ -24,12 +23,12 @@ public class DbFolder extends BaseNode implements Folder
     @Property(order=0)
     public String getCode()
     {
-        return code;
+        return super.getCode();
     }
 
     public void setCode(String code)
     {
-        this.code = code;
+        super.setCode(code);
     }
 
     public List getAllAllowedTypes()

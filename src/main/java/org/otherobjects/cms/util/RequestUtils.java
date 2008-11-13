@@ -23,6 +23,15 @@ public class RequestUtils
         String pathInfo = request.getPathInfo();
         return pathInfo.substring(pathInfo.lastIndexOf("/") + 1);
     }
+    
+    public static int getInt(HttpServletRequest request, String paramName, int defaultValue)
+    {
+        String parameter = request.getParameter(paramName);
+        if(parameter == null)
+            return defaultValue;
+        else
+            return Integer.parseInt(parameter);
+    }
 
 //    /**
 //     * Returns the last part of the path info after the method string.

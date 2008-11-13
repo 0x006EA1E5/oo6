@@ -14,7 +14,8 @@ public class FolderDaoImpl extends GenericJcrDaoJackrabbit<SiteFolder> implement
 
     public List<SiteFolder> getFolders()
     {
-        return getAllByJcrExpression("/jcr:root//element(*) [@ooType='org.otherobjects.cms.model.SiteFolder']");
+        // FIXME Need folder indicator
+        return getAllByJcrExpression("/jcr:root//element(*) [jcr:like(@ooType,'%Folder')]");
     }
     
     @SuppressWarnings("unchecked")

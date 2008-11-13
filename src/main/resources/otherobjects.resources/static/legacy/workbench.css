@@ -47,6 +47,7 @@ BODY.oo-multiselection {margin:0px;}
 .oo-folders .oo-folder-full-open SPAN {background:url(graphics/folder-full-open.gif) no-repeat;}
 .oo-folders .oo-folder-empty-open {background:url(graphics/dots-vertical.gif) repeat-y 8px 0px; margin:0px; padding:0px;}
 .oo-folders .oo-folder-empty-open SPAN {background:url(graphics/folder-empty-open.gif) no-repeat;}
+.oo-folders .oo-folder-in-progress A {color:#F00;}
 .oo-folders .oo-folder-full SPAN {background:url(graphics/folder-full.gif) no-repeat;}
 .oo-folders .oo-folder-empty SPAN {background:url(graphics/folder-empty.gif) no-repeat;}
 .oo-folders .oo-trashcan {color:red; margin:0px; padding:0px;}

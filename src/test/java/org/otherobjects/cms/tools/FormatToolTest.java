@@ -44,10 +44,18 @@ public class FormatToolTest extends TestCase
         StaticMessageSource messageSource = new StaticMessageSource();
         messageSource.addMessage("message.code", Locale.ENGLISH, "My message");
         FormatTool formatTool = new FormatTool(messageSource);
-        
-        assertEquals("not a message",formatTool.getMessage("not a message"));
-        assertEquals("My message",formatTool.getMessage("message.code"));
-        assertEquals("My message",formatTool.getMessage("${message.code}"));
-        
+
+        assertEquals("not a message", formatTool.getMessage("not a message"));
+        assertEquals("not a message.", formatTool.getMessage("not a message."));
+        assertEquals("My message", formatTool.getMessage("message.code"));
+        assertEquals("My message", formatTool.getMessage("${message.code}"));
+
+    }
+
+    public void testFormatFileSize()
+    {
+        assertEquals("0.1 KB",FormatTool.formatFileSize(100L));
+        assertEquals("1.0 KB",FormatTool.formatFileSize(1024L));
+        assertEquals("698.8 MB",FormatTool.formatFileSize(732766208L));
     }
 }
