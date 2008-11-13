@@ -90,7 +90,7 @@ A.button {background: #cccccc; padding:3px; color:#000000;}
 <h2>Status</h2>
 
 <table>
-    <tr><td class="label">User</td><td class="info"> ${(security.user.username)!} [<a href="${oo.url("/logout.html")}">Logout</a>]  </td></tr>
+    <tr><td class="label">User</td><td class="info"> ${(security.user.username)!} [<a href="${oo.url("/otherobjects/logout.html")}">Logout</a>]  </td></tr>
     <tr><td class="label">Admin?</td><td class="info">${security.authorize("ROLE_ADMIN",null,"ROLE_GUEST")?string("Yes","No")}</td></tr>
 </table>
 
@@ -103,7 +103,7 @@ A.button {background: #cccccc; padding:3px; color:#000000;}
 </table>
 </#if>
 
-<h2>System</h2>
+<h2>Dependencies</h2>
 
 <table>
     <#if imageMagickVersion??>
@@ -112,6 +112,11 @@ A.button {background: #cccccc; padding:3px; color:#000000;}
     <#if imageMagickError??>
     <tr><td class="label">Imagemagick</td><td class="fail">FAIL ${imageMagickError}</td></tr>        
     </#if>
+</table>
+
+<h2>System</h2>
+
+<table>
     <tr><td class="label">Freemarker version</td><td class="info">${.version}</td></tr>
     <tr><td class="label">Servlet API</td><td class="info">${servletApiVersion}</td></tr>
     <tr><td class="label">Default Encoding</td><td class="info">${defaultEncoding}</td></tr>
@@ -119,6 +124,9 @@ A.button {background: #cccccc; padding:3px; color:#000000;}
     <tr><td class="label">System Timezone</td><td class="info">${systemUserTimezone}</td></tr>
     <tr><td class="label">Java version</td><td class="info">${javaVersion} (${javaVendor})</td></tr>
     <tr><td class="label">System Username</td><td class="info">${systemUserName}</td></tr>
+    <tr><td class="label">Operating System</td><td class="info">${systemOsName} ${systemOsVersion} (${systemOsArch})</td></tr>
+    <tr><td class="label">Server Name</td><td class="info">${serverName} (${serverIp})</td></tr>
+    <tr><td class="label">Memory</td><td class="info">${formatTool.formatFileSize(totalMemory)} used  ${formatTool.formatFileSize(freeMemory)} available (${formatTool.formatFileSize(maxMemory)} max)</td></tr>
     <tr><td class="label">Operating System</td><td class="info">${systemOsName} ${systemOsVersion} (${systemOsArch})</td></tr>
 </table>
 

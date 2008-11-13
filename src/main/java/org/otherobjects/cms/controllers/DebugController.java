@@ -5,9 +5,11 @@ import groovy.lang.GroovyShell;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.UnknownHostException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -143,21 +145,16 @@ public class DebugController implements ServletContextAware, ApplicationContextA
 
         // System Properties
         Properties properties = System.getProperties();
-                
         mav.addObject("defaultEncoding", java.nio.charset.Charset.defaultCharset().name());
-
         mav.addObject("systemUserName", properties.getProperty("user.name"));
         mav.addObject("systemUserLanguage", properties.getProperty("user.language"));
         mav.addObject("systemUserCountry", properties.getProperty("user.country"));
         mav.addObject("systemUserTimezone", properties.getProperty("user.timezone"));
-
         mav.addObject("javaVendor", properties.getProperty("java.vendor"));
         mav.addObject("javaVersion", properties.getProperty("java.version"));
-
         mav.addObject("systemOsName", properties.getProperty("os.name"));
         mav.addObject("systemOsVersion", properties.getProperty("os.version"));
         mav.addObject("systemOsArch", properties.getProperty("os.arch"));
-
         mav.addObject("servletApiVersion", servletContext.getMajorVersion() + "." + servletContext.getMinorVersion());
 
         // Types
@@ -167,9 +164,18 @@ public class DebugController implements ServletContextAware, ApplicationContextA
         mav.addObject("testExternalUrl", httpPing(EXTERNAL_CONNECTIVITY_TEST_URL));
         mav.addObject("testInternalUrl", httpPing(new Url("/").getAbsoluteLink()));
         
+        // Server
+        mav.addObject("serverName", getServerName());
+        mav.addObject("serverIp", getServerIp());
+        
+        
+        // Memory
+        mav.addObject("freeMemory", Runtime.getRuntime().freeMemory());
+        mav.addObject("maxMemory", Runtime.getRuntime().maxMemory());
+        mav.addObject("totalMemory", Runtime.getRuntime().totalMemory()); // Total used
+    
         
         // Data stores
-        
         mav.addObject("privateDataPath", otherObjectsConfigurator.getProperty("site.private.data.path"));
         mav.addObject("publicDataPath", otherObjectsConfigurator.getProperty("site.public.data.path"));
         mav.addObject("dbUrl", otherObjectsConfigurator.getProperty("jdbc.url"));
@@ -242,6 +248,7 @@ public class DebugController implements ServletContextAware, ApplicationContextA
      * @return
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     @RequestMapping({"/debug/script", "/debug/script/"})
     public ModelAndView script(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
@@ -501,9 +508,30 @@ public class DebugController implements ServletContextAware, ApplicationContextA
     
     
     
-    
-    
-    
+    public static String getServerName()
+    {
+        try
+        {
+            return InetAddress.getLocalHost().toString();
+        }
+        catch (UnknownHostException e)
+        {
+            return "Could not get server name: " + e.getMessage();
+        }
+    }
+
+    public static String getServerIp()
+    {
+        try
+        {
+            return InetAddress.getLocalHost().toString();
+        }
+        catch (UnknownHostException e)
+        {
+            return "Could not get server IP: " + e.getMessage();
+        }
+    }
+ 
     
     
     public void setServletContext(ServletContext servletContext)
