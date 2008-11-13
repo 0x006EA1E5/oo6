@@ -17,12 +17,12 @@
 .oo-button-up {background:url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/icon-oo-logo.gif")}) no-repeat 5px 5px;}
 .oo-button-up:hover {background:#CCCCCC url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/icon-oo-logo.gif")}) no-repeat 5px 5px;}
 .oo-button-down, .oo-button-hold {background:#FFFFFF url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/icon-oo-logo.gif")}) no-repeat 5px 5px;}
+#OoLogoutButton {display:block; float:right; width:27px; height:25px; text-decoration:none; background:url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/log-out.png")}) no-repeat 5px 5px;}
 
 /* Icons */
 .oo-icon-overview {background:#FFFFFF url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/icon_overview.gif")}) no-repeat 3px 4px;}
 .oo-icon-user {background:#FFFFFF url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/icon_user.gif")}) no-repeat 3px 4px;}
 .oo-icon-favourites {background:#FFFFFF url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/icon_favourites.gif")}) no-repeat 3px 4px;}
-.oo-icon-logout {background:#FFFFFF url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/icon_logout.gif")}) no-repeat 3px 4px;}
 
 .oo-toolbar H3 {float:left;}
 .oo-toolbar P {float:left;}
@@ -50,7 +50,7 @@
 
 <h3><a id="OoLogoButton" class="oo-button-up" href="${oo.url("/otherobjects/workbench/")}"></a></h3>
 
-<#if resourceObject?exists>
+<#if resourceObject??>
 <p class="oo-divider">
     <a href="${oo.url("/otherobjects/workbench/")}">Back to workbench</a>
 </p>
@@ -68,7 +68,16 @@
 <p class="oo-divider">
     <a href="${oo.url("/")}">Back to site</a>
 </p>
+<#if ooTemplate??>
+<ul>
+	<li><a href="javascript:ooEnableBlockSelector()">Edit blocks</a></li>	
+	<li><a href="javascript:ooEnableBlockManagement()">Arrange blocks<#-- (${ooTemplate.ooLabel} : ${ooTemplate.layout.ooLabel})--></a></li>	
+</ul>
 </#if>
+</#if>
+
+<a id="OoLogoutButton" href="${oo.url("/otherobjects/logout.html")}"></a>
+
 
 </div>
 
