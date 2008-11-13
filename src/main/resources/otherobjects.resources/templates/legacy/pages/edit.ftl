@@ -3,7 +3,7 @@
 <#import "/forms.ftl" as forms />
 
 <#if object.id??>
-  <#assign pageTitle = "Editing: ${oo.msg(object.label!)}" />
+  <#assign pageTitle = "Editing: ${oo.msg(object.ooLabel!)}" />
 <#else>
   <#assign pageTitle = "Creating new ${oo.msg(typeDef.label)}" />
 </#if>
@@ -20,6 +20,7 @@ ${pageTitle}
 
 <#if object.id??>
   <input type="hidden" name="_oo_id" value="${id}">
+  <input type="hidden" name="_oo_type" value="${typeDef.name}">
 <#else>
   <input type="hidden" name="_oo_type" value="${typeDef.name}">
   <input type="hidden" name="_oo_containerId" value="${containerId}">

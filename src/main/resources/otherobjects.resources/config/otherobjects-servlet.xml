@@ -18,6 +18,7 @@
 					<property name="ooResourceLoader" ref="ooResourceLoader" />
 					<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
 					<property name="messageSource" ref="messageSource" />
+					<property name="freemarkerToolProvider" ref="freemarkerToolProvider" />
 				</bean>
 			</list>
 		</property>

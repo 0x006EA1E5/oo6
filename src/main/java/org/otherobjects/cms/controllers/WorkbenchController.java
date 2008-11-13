@@ -1,6 +1,7 @@
 package org.otherobjects.cms.controllers;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -8,12 +9,16 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.Url;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.GenericDao;
 import org.otherobjects.cms.dao.GenericJcrDao;
+import org.otherobjects.cms.datastore.DataStore;
+import org.otherobjects.cms.datastore.HibernateDataStore;
+import org.otherobjects.cms.datastore.JackrabbitDataStore;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.DbFolder;
@@ -25,6 +30,7 @@ import org.otherobjects.cms.model.SmartFolder;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.ActionUtils;
+import org.otherobjects.cms.util.IdentifierUtils;
 import org.otherobjects.cms.util.RequestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +59,12 @@ public class WorkbenchController
     @Resource
     private DaoService daoService;
 
+    @Resource
+    private HibernateDataStore hibernateDataStore;
+
+    @Resource
+    private JackrabbitDataStore jackrabbitDataStore;
+
     //    @Resource
     //    private LocaleResolver localeResolver;
 
@@ -74,8 +86,12 @@ public class WorkbenchController
     public ModelAndView view(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         String id = RequestUtils.getId(request);
+        DataStore store = getDataStore(detectStore(id));
+        Object item = store.get(id);
         ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/view");
         mav.addObject("id", id);
+        mav.addObject("item", item);
+        mav.addObject("typeDef", getTypeDef(item));
         return mav;
     }
 
@@ -83,27 +99,28 @@ public class WorkbenchController
     public ModelAndView edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         String id = RequestUtils.getId(request);
-        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
+        DataStore store = getDataStore(detectStore(id));
+        Object item = store.get(id);
         ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/edit");
-        BaseNode item = universalJcrDao.get(id);
         mav.addObject("id", id);
         mav.addObject("object", item);
-        mav.addObject("typeDef", item.getTypeDef());
+        mav.addObject("typeDef", getTypeDef(item));
         return mav;
     }
 
     @RequestMapping({"/workbench/create/*"})
-    public ModelAndView create(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    public ModelAndView create(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
     {
         String type = RequestUtils.getId(request);
         TypeDef typeDef = typeService.getType(type);
         ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/edit");
 
-        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
-        BaseNode create = universalJcrDao.create(type);
+        DataStore store = getDataStore(typeDef.getStore());
+        Object create = store.create(typeDef);
+
         if (request.getParameter("code") != null)
-            create.setCode(request.getParameter("code"));
-        mav.addObject("object", new Role());
+            PropertyUtils.setProperty(create, "code", request.getParameter("code"));
+        mav.addObject("object", create);
         mav.addObject("containerId", request.getParameter("container"));
         mav.addObject("typeDef", typeDef);
         return mav;
@@ -148,18 +165,18 @@ public class WorkbenchController
         }
         else if (folder instanceof SmartFolder)
         {
-//            SmartFolder smartFolder = (SmartFolder) node;
-//            String query = smartFolder.getSearchTerm();
-//            String jcr = smartFolder.getQuery();
-//            
-//            if (StringUtils.isNotEmpty(jcr))
-//                query = jcr;
-//            else
-//                query = "/jcr:root/site//*[jcr:contains(., '" + query + "') and not(jcr:like(@ooType,'%Folder'))] order by @modificationTimestamp descending";
-//            
-//            Assert.hasText(query, "SmartFolder must have a query.");
-//            pagedResult = this.universalJcrDao.pageByJcrExpression(query, ITEMS_PER_PAGE, getRequestedPage(request));
-            
+            //            SmartFolder smartFolder = (SmartFolder) node;
+            //            String query = smartFolder.getSearchTerm();
+            //            String jcr = smartFolder.getQuery();
+            //            
+            //            if (StringUtils.isNotEmpty(jcr))
+            //                query = jcr;
+            //            else
+            //                query = "/jcr:root/site//*[jcr:contains(., '" + query + "') and not(jcr:like(@ooType,'%Folder'))] order by @modificationTimestamp descending";
+            //            
+            //            Assert.hasText(query, "SmartFolder must have a query.");
+            //            pagedResult = this.universalJcrDao.pageByJcrExpression(query, ITEMS_PER_PAGE, getRequestedPage(request));
+
         }
         else
             throw new OtherObjectsException("Currently only listings for SiteFolder, DbFolder and SmartFolder are supported.");
@@ -244,6 +261,43 @@ public class WorkbenchController
     public ModelAndView reorder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         return null;
+    }
+
+    private DataStore getDataStore(String store)
+    {
+        if (store.equals(TypeDef.JACKRABBIT))
+            return this.jackrabbitDataStore;
+        else if (store.equals(TypeDef.HIBERNATE))
+            return this.hibernateDataStore;
+        else
+            throw new OtherObjectsException("No dataStore configured for: " + store);
+    }
+
+    /**
+     * Temporary method to detect store type base on id format. This only suports
+     * hibernate and jackrabbit stores at the moment.
+     * 
+     * @param id
+     * @return
+     */
+    private String detectStore(String id)
+    {
+        if (IdentifierUtils.isUUID(id))
+            return TypeDef.JACKRABBIT;
+        else
+            return TypeDef.HIBERNATE;
+    }
+
+    private Object getTypeDef(Object item)
+    {
+        if (item instanceof BaseNode)
+        {
+            return ((BaseNode) item).getTypeDef();
+        }
+        else
+        {
+            return typeService.getType(item.getClass());
+        }
     }
 
 }

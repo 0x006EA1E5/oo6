@@ -43,8 +43,8 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
         GenericDao dao = null;
 
         // Look in configured map first
-        if (daoMap != null)
-            daoMap.get(type);
+        if (daoMap != null && daoMap.containsKey(type))
+            return daoMap.get(type);
 
         if (dao == null)
         {
@@ -126,6 +126,11 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
         return beanName;
     }
 
+    public void addDao(String name, GenericDao dao)
+    {
+        getDaoMap().put(name, dao);
+    }
+    
     public Map<String, GenericDao> getDaoMap()
     {
         return daoMap;

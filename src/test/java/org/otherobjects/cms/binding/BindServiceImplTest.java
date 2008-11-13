@@ -1,5 +1,6 @@
 package org.otherobjects.cms.binding;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,11 +13,13 @@ import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.MockDaoService;
 import org.otherobjects.cms.dao.MockGenericDao;
+import org.otherobjects.cms.model.Role;
 import org.otherobjects.cms.model.Template;
 import org.otherobjects.cms.model.TemplateBlock;
 import org.otherobjects.cms.model.TemplateBlockReference;
 import org.otherobjects.cms.model.TemplateLayout;
 import org.otherobjects.cms.model.TemplateRegion;
+import org.otherobjects.cms.model.User;
 import org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder;
 import org.otherobjects.cms.types.PropertyDefImpl;
 import org.otherobjects.cms.types.TypeDef;
@@ -26,6 +29,7 @@ import org.otherobjects.cms.types.TypeServiceImpl;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockMultipartHttpServletRequest;
+import org.springframework.validation.BindingResult;
 
 public class BindServiceImplTest extends TestCase
 {
@@ -46,13 +50,18 @@ public class BindServiceImplTest extends TestCase
         typeDefBuilder.afterPropertiesSet();
 
         typeService.registerType(typeDefBuilder.getTypeDef(TestObject.class));
-        
         typeService.registerType(typeDefBuilder.getTypeDef(Template.class));
         typeService.registerType(typeDefBuilder.getTypeDef(TemplateLayout.class));
         typeService.registerType(typeDefBuilder.getTypeDef(TemplateRegion.class));
         typeService.registerType(typeDefBuilder.getTypeDef(TemplateBlock.class));
         typeService.registerType(typeDefBuilder.getTypeDef(TemplateBlockReference.class));
         ((TypeServiceImpl) typeService).reset();
+
+        // Hibernate stored types
+        typeService.registerType(typeDefBuilder.getTypeDef(User.class));
+        typeService.registerType(typeDefBuilder.getTypeDef(Role.class));
+        
+        
         
         // Add DynaNode type
         TypeDefImpl td = new TypeDefImpl("ArticlePage");
@@ -219,4 +228,34 @@ public class BindServiceImplTest extends TestCase
         BindServiceImpl bs = new BindServiceImpl();
         bs.setValue(to, "name", "Test");
     }
+    
+    public void testHibernateBinding() throws Exception
+    {
+        MockHttpServletRequest req = new MockHttpServletRequest();
+        req.addParameter("email", "user@email.com");
+        req.addParameter("username", "test");
+        req.addParameter("roles[0]", "org.otherobjects.cms.model.Role-1");
+
+        //setup objects
+        Role role = new Role();
+        role.setId(1L);
+        role.setName("Test Role");
+        
+        Map<Serializable, Object> objects = new HashMap<Serializable, Object>();
+        objects.put(1L, role);
+        MockGenericDao roleDao = new MockGenericDao(objects);
+
+        BindServiceImpl bs = new BindServiceImpl();
+        bs.setDaoService(new MockDaoService(roleDao));
+
+        TypeDef userTypeDef = typeService.getType(User.class);
+
+        User u = new User();
+        
+        BindingResult result = bs.bind(u, userTypeDef, req);
+        
+        assertEquals(0,result.getErrorCount());
+        
+    }
+
 }

@@ -55,6 +55,7 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder, Initializi
         typeDef.setName(clazz.getName());
         typeDef.setClassName(clazz.getName());
         typeDef.setSuperClassName(typeDefAnnotation.superClassName());
+        typeDef.setStore(typeDefAnnotation.store());
 
         typeDef.setLabel(typeDefAnnotation.label());
         // Infer label if not set

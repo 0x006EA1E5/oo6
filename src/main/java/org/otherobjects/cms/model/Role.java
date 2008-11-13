@@ -28,7 +28,7 @@ import org.springframework.security.GrantedAuthority;
  */
 @Entity
 @Table(name = "role")
-@Type(label = "Role", description = "", labelProperty = "name")
+@Type(label = "Role", description = "", labelProperty = "name", store="hibernate")
 public class Role implements Serializable, GrantedAuthority, Editable
 {
     private static final long serialVersionUID = 3690197650654049848L;
@@ -67,7 +67,7 @@ public class Role implements Serializable, GrantedAuthority, Editable
     }
 
     @Transient
-    public String getLabel()
+    public String getOoLabel()
     {
         // FIXME Move this to an superclass? Fetch via annotation?
         return getName();

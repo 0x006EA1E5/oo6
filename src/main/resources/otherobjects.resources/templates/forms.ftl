@@ -73,7 +73,12 @@ Renders a field inputter by choosing the correct inputter renderer. Also handles
 			<@renderType prop.relatedTypeDef "${path}." true/>
 		</#if>
 	<#elseif type == "reference" >
-  		<@formSingleSelect "${path}" dao.get(prop.relatedType).getAllByType("${prop.relatedType}") "" empty/>
+		<#if prop.relatedTypeDef.store =="jackrabbit">
+			<#assign options = dao.get(prop.relatedType).getAllByType(prop.relatedType) />
+		<#else>
+			<#assign options = dao.get(prop.relatedType).all />
+		</#if>
+  		<@formSingleSelect "${path}" options "" empty/>
 	<#elseif type == "date" >
   		<@formDate "${path}" "" empty/>
 	<#elseif type == "time" >
@@ -230,7 +235,7 @@ Renders a textbox for a date property.
 	    <select id="${expression}" name="${expression}" ${attributes}>
 	        <option value="">-</option>
 	    	<#list options as option>
-	        <option value="${option.id?html}">${option.ooLabel?html}</option>
+	        <option value="${option.editableId?html}">${option.ooLabel?html}</option>
 	        </#list>
 	    </select>
 	<#else>
@@ -238,7 +243,7 @@ Renders a textbox for a date property.
 	    <select id="${ooStatus.expression}" name="${ooStatus.expression}" ${attributes}>
 	        <option value="">-</option>
 	    	<#list options as option>
-	        <option value="${option.id?html}"<@checkSelected option.id/>>${option.ooLabel?html}</option>
+	        <option value="${option.editableId?html}"<@checkSelected option.editableId/>>${option.ooLabel?html}</option>
 	        </#list>
 	    </select>
     </#if>
@@ -250,7 +255,7 @@ Renders a textbox for a date property.
  * FIXME Need to support non-nodes.
  -->
 <#macro checkSelected value>
-    <#if (ooStatus.actualValue.id)! == value>selected="selected"</#if>
+    <#if (ooStatus.actualValue.editableId)! == value>selected="selected"</#if>
 </#macro>
 
 <#--

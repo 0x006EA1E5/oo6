@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.io.OoResourceLoader;
+import org.otherobjects.cms.tools.BeanTool;
 import org.otherobjects.cms.tools.CmsImageTool;
 import org.otherobjects.cms.tools.FlashMessageTool;
 import org.otherobjects.cms.tools.FormatTool;

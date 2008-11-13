@@ -1,24 +1,30 @@
 <#import "/spring.ftl" as spring />
 <#import "/oo.ftl" as oo />
-<#assign object = daoService.getDao("baseNode").get(id) />
+<#assign object = item />
 
 <#macro renderProperty prop object>
 <tr>
 <td class="oo-label">${prop.label}</td>
 <td class="oo-field-none">
-	<#if object.getPropertyValue(prop.propertyPath)?? >
+	<#if beanTool.getPropertyValue(object, prop.propertyPath)?? >
 		<#if prop.type == "component" >
-			${object.getPropertyValue(prop.propertyPath)!}
+			${beanTool.getPropertyValue(object, prop.propertyPath)!}
 		<#elseif prop.type == "date" >
-			${object.getPropertyValue(prop.propertyPath)?date?string("d MMM yyyy")}
+			${beanTool.getPropertyValue(object, prop.propertyPath)?date?string("d MMM yyyy")}
 		<#elseif prop.type == "time" >
-			${object.getPropertyValue(prop.propertyPath)?time?string("HH:mm")}
+			${beanTool.getPropertyValue(object, prop.propertyPath)?time?string("HH:mm")}
 		<#elseif prop.type == "timestamp" >
-			${object.getPropertyValue(prop.propertyPath)?datetime?string("HH:mm 'on' d MMM yyyy")}
+			${beanTool.getPropertyValue(object, prop.propertyPath)?datetime?string("HH:mm 'on' d MMM yyyy")}
 		<#elseif prop.type == "boolean" >
-			${object.getPropertyValue(prop.propertyPath)?string("Yes", "No")}	
+			${beanTool.getPropertyValue(object, prop.propertyPath)?string("Yes", "No")}	
+		<#elseif prop.type == "list" >
+			<ul>
+			<#list beanTool.getPropertyValue(object, prop.propertyPath) as item>
+			<li>${item}</li>
+			</#list>
+			</ul>	
 	  	<#else>
-			${object.getPropertyValue(prop.propertyPath)!}
+			${beanTool.getPropertyValue(object, prop.propertyPath)!}
 	  	</#if>
   	<#else>
   		<span style="color:#888">No value</span>
@@ -44,7 +50,7 @@ ${pageTitle}
 </tr>
 </thead>
 <tbody>
-<#list object.typeDef.properties as prop>
+<#list typeDef.properties as prop>
 <@renderProperty prop object />
 </#list>
 </tbody>
@@ -54,9 +60,11 @@ ${pageTitle}
 <div class="oo-actions">
 <h2>Actions</h2>
 <ul>
-<li><a href="${oo.url('/otherobjects/workbench/edit/${object.id}')}">Edit</a></li>
-<li class="divider"><a href="${oo.url('/otherobjects/workbench/publish/${object.id}')}">Publish</a></li>
-<li class="divider"><a href="${oo.url('/otherobjects/workbench/delete/${object.id}')}">Delete</a></li>
+<li><a href="${oo.url('/otherobjects/workbench/edit/${object.editableId}')}">Edit</a></li>
+<#if item.published??>
+<li class="divider"><a href="${oo.url('/otherobjects/workbench/publish/${object.editableId}')}">Publish</a></li>
+</#if>
+<li class="divider"><a href="${oo.url('/otherobjects/workbench/delete/${object.editableId}')}">Delete</a></li>
 </ul>
 </div>
 

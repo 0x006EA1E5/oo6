@@ -39,7 +39,7 @@ import org.springframework.security.userdetails.UserDetails;
 @Entity
 @Table(name = "app_user")
 @SequenceGenerator(name = "UserSeq", sequenceName = "app_user_seq")
-@Type(label = "User", description = "A User", labelProperty = "email")
+@Type(label = "User", description = "A User", labelProperty = "email", store="hibernate")
 public class User implements Serializable, UserDetails, Editable
 {
 

@@ -7,9 +7,16 @@ import java.util.Collection;
  */
 public interface TypeDef
 {
+    // TODO These need to be pluggable
+    String JACKRABBIT = "jackrabbit";
+    String HIBERNATE = "hibernate";
+    String FILESYSTEM = "FILESYSTEM";
+    
     PropertyDef getProperty(String name);
 
     String getName();
+
+    String getStore();
 
     Collection<PropertyDef> getProperties();
 

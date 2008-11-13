@@ -6,6 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.otherobjects.cms.types.TypeDef;
+
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
@@ -19,5 +21,7 @@ public @interface Type
     String description() default "";
 
     String labelProperty() default "code";
+    
+    String store() default TypeDef.JACKRABBIT;
 
 }

@@ -12,8 +12,13 @@ public class MockGenericDao implements GenericDao
 {
     private Object mockObject;
     private List<Object> allObjects;
-    private Map<String, Object> keyedObjects = Collections.EMPTY_MAP;
+    private Map<Serializable, Object> keyedObjects = Collections.EMPTY_MAP;
 
+    public MockGenericDao()
+    {
+        allObjects = new ArrayList<Object>();
+    }
+    
     public MockGenericDao(Object mockObject)
     {
         this.mockObject = mockObject;
@@ -26,7 +31,7 @@ public class MockGenericDao implements GenericDao
         this.allObjects = mockObjects;
     }
 
-    public MockGenericDao(Map<String, Object> mockObjects)
+    public MockGenericDao(Map<Serializable, Object> mockObjects)
     {
         this.keyedObjects = mockObjects;
     }

@@ -318,11 +318,11 @@ public class Url
         {
             otherObjectsConfigurator = (OtherObjectsConfigurator) SingletonBeanLocator.getBean("otherObjectsConfigurator");
             if (otherObjectsConfigurator == null)
-                throw new OtherObjectsException("No otherObjectConfigurator bean found in current context. Somthing must have gone wrong at startup");
+                throw new OtherObjectsException("No otherObjectConfigurator bean found in applicationContext.");
         }
         catch (Exception e)
         {
-            throw new OtherObjectsException("Problems accessing applicationContext to get otherObjectConfigurator", e);
+            throw new OtherObjectsException("Could not access applicationContext to get otherObjectConfigurator.", e);
         }
         return otherObjectsConfigurator;
     }

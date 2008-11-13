@@ -81,5 +81,8 @@
 			</bean>
 		</property>
 	</bean>
+	
+	<!-- DataStore -->
+	<bean id="jackrabbitDataStore" class="org.otherobjects.cms.datastore.JackrabbitDataStore" />
 
 </beans>

@@ -26,4 +26,5 @@
 	<bean id="validatorService" class="org.otherobjects.cms.validation.ValidatorServiceImpl">
 		<property name="defaultValidator" ref="typeDefConfiguredValidator" />
 	</bean>
+	
 </beans>

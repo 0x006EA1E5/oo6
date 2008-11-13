@@ -5,6 +5,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.dao.DaoService;
+import org.otherobjects.cms.model.CompositeDatabaseId;
+import org.otherobjects.cms.util.IdentifierUtils;
 import org.springframework.util.StringUtils;
 
 public class EntityReferenceEditor extends PropertyEditorSupport
@@ -31,13 +33,18 @@ public class EntityReferenceEditor extends PropertyEditorSupport
             // Treat empty String as null value.
             setValue(null);
         }
-        else if (!pattern.matcher(id).matches())
-        {
-            throw new IllegalArgumentException("Not a valid ID: " + id);
-        }
         else
         {
-            setValue(daoService.getDao(type).get(new Long(Long.parseLong(id))));
+            CompositeDatabaseId compositeDatabaseId = IdentifierUtils.getCompositeDatabaseId(id);
+            if (compositeDatabaseId == null)
+            {
+                throw new IllegalArgumentException("Not a valid ID: " + id);
+            }
+            else
+            {
+                Object value = daoService.getDao(type).get(compositeDatabaseId.getId());
+                setValue(value);
+            }
         }
     }
 
@@ -50,7 +57,7 @@ public class EntityReferenceEditor extends PropertyEditorSupport
         boolean hasId = false;
         try
         {
-            hasId = getValue().getClass().getMethod("getId") != null;
+            hasId = getValue().getClass().getMethod("getEditableId") != null;
         }
         catch (Exception e)
         {
@@ -59,17 +66,17 @@ public class EntityReferenceEditor extends PropertyEditorSupport
 
         if (hasId)
         {
-            Long id = null;
+            String id = null;
             try
             {
-                id = (Long) PropertyUtils.getSimpleProperty(getValue(), "id");
+                id = (String) PropertyUtils.getSimpleProperty(getValue(), "editableId");
             }
             catch (Exception e)
             {
                 // do nothing
             }
 
-            return (id != null) ? id.toString() : null;
+            return id;
         }
         else
             return null;

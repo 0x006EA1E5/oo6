@@ -49,6 +49,9 @@ public class TypeDefImpl implements TypeDef
 
     /** Stores which property should be used for the labe.. */
     private String labelProperty;
+    
+    /** Which data store to use for this type. */
+    private String store = TypeDef.JACKRABBIT;
 
     public TypeDefImpl()
     {
@@ -200,5 +203,15 @@ public class TypeDefImpl implements TypeDef
     public boolean equals(Object obj)
     {
         return EqualsBuilder.reflectionEquals(this, obj);
+    }
+
+    public String getStore()
+    {
+        return store;
+    }
+
+    public void setStore(String store)
+    {
+        this.store = store;
     }
 }

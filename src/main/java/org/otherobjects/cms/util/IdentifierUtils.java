@@ -22,6 +22,7 @@ public class IdentifierUtils
     }
 
     /**
+     * Creates a CompositeDatabaseIt object from an id string. Returns null if not in the correct format.
      * 
      * @param compositeId compositeId of form com.some.package.Class-123
      * @return CompositeDatabaseId object or null if compositeId was of wrong format or some error occurred
@@ -38,6 +39,7 @@ public class IdentifierUtils
         catch (Exception e)
         {
             // TODO Explain why we ignore exception
+            return null;
         }
 
         return compositeDatabaseId;

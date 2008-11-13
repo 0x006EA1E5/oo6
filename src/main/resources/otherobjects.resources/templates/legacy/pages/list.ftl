@@ -50,14 +50,14 @@ ${pageTitle}
 <#list items as item>
 <#if ! item.class.name?ends_with("Folder")> <!--FIXME -->
  <tr>
-	<td><a class="oo-<#if item.published?? && list.published>live<#else>edited</#if>" href="${oo.url('/otherobjects/workbench/view/${item.id}')}">${item.label!}</a></td>
+	<td><a class="oo-<#if item.published?? && item.published>live<#else>edited</#if>" href="${oo.url('/otherobjects/workbench/view/${item.editableId}')}">${item.label!}</a></td>
 	<#if item.linkPath??>
 		<td title="${item.typeDef.name}"><p>${item.typeDef.label}</p></td>
 	<#else>
 		<td title="${item.class.name}"><p>${item.class.name}</p></td>	
 	</#if>
 	<td class="oo-action"><#if item.linkPath??><a href="${oo.url(item.linkPath)}">Preview</a></#if></td>
-	<td class="oo-action"><a href="${oo.url('/otherobjects/workbench/edit/${item.id}')}">Edit</a></td>
+	<td class="oo-action"><a href="${oo.url('/otherobjects/workbench/edit/${item.editableId}')}">Edit</a></td>
 </tr>
 </#if>
 </#list>

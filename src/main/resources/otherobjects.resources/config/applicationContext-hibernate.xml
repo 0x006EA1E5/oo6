@@ -53,4 +53,6 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+	<!-- DataStore -->
+	<bean id="hibernateDataStore" class="org.otherobjects.cms.datastore.HibernateDataStore" />
 </beans>
