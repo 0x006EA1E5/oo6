@@ -50,9 +50,13 @@ ${pageTitle}
 <#list items as item>
 <#if ! item.class.name?ends_with("Folder")> <!--FIXME -->
  <tr>
-	<td><a class="oo-<#if item.published>live<#else>edited</#if>" href="${oo.url('/otherobjects/workbench/view/${item.id}')}">${item.label!}</a></td>
-	<td title="${item.typeDef.name}"><p>${item.typeDef.label}</p></td>
-	<td class="oo-action"><a href="${oo.url(item.linkPath)}">Preview</a></td>
+	<td><a class="oo-<#if item.published?? && list.published>live<#else>edited</#if>" href="${oo.url('/otherobjects/workbench/view/${item.id}')}">${item.label!}</a></td>
+	<#if item.linkPath??>
+		<td title="${item.typeDef.name}"><p>${item.typeDef.label}</p></td>
+	<#else>
+		<td title="${item.class.name}"><p>${item.class.name}</p></td>	
+	</#if>
+	<td class="oo-action"><#if item.linkPath??><a href="${oo.url(item.linkPath)}">Preview</a></#if></td>
 	<td class="oo-action"><a href="${oo.url('/otherobjects/workbench/edit/${item.id}')}">Edit</a></td>
 </tr>
 </#if>
@@ -67,7 +71,7 @@ ${pageTitle}
 <h2>Actions</h2>
 
 <ul>
-<li><a href="${oo.url('/otherobjects/workbench/edit/'+folder.id)}">Edit this folder ...</a></li>
+<li><a href="${oo.url('/otherobjects/workbench/view/'+folder.id)}">View folder details ...</a></li>
 <li><a href="${oo.url('/otherobjects/workbench/create/org.otherobjects.cms.model.SiteFolder?container='+folder.id)}">New sub folder ...</a></li>
 <#list folder.allAllowedTypes as type>
 <#if type?exists>

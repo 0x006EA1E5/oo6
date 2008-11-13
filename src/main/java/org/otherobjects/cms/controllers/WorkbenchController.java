@@ -8,13 +8,20 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.Url;
 import org.otherobjects.cms.dao.DaoService;
+import org.otherobjects.cms.dao.GenericDao;
+import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
+import org.otherobjects.cms.model.DbFolder;
 import org.otherobjects.cms.model.Folder;
 import org.otherobjects.cms.model.FolderDao;
+import org.otherobjects.cms.model.Role;
 import org.otherobjects.cms.model.SiteFolder;
+import org.otherobjects.cms.model.SmartFolder;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.ActionUtils;
@@ -22,12 +29,22 @@ import org.otherobjects.cms.util.RequestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * Main workbench controller. Handles critical list/view/edit functions.
+ * 
+ * <p>Surretly only supports SiteFolders, DbFolders and SmartFolders.
+ * 
+ * @author rich
+ */
 @Controller
 public class WorkbenchController
 {
+    private static final int ITEMS_PER_PAGE = 50;
+
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Resource
@@ -51,31 +68,6 @@ public class WorkbenchController
 
         ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/overview");
         return mav;
-
-        /*
-        String path = request.getPathInfo();
-
-        if (path.length() < 10)
-            path = "/otherobjects/workbench/workbench";
-        else
-        {
-            path = path.substring(10);
-            if (path.equals("/"))
-                path = "/otherobjects/workbench/workbench";
-            else
-                path = "/otherobjects/workbench/" + path;
-        }
-        path = path.replaceAll(".html", "");
-        this.logger.info("WorkbenchController: " + path);
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        ModelAndView view = new ModelAndView(path);
-        view.addObject("user", principal);
-        view.addObject("request", request);
-        view.addObject("cmsImageTool", new CmsImageTool());
-        return view;
-        */
     }
 
     @RequestMapping({"/workbench/view/*"})
@@ -109,36 +101,79 @@ public class WorkbenchController
 
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
         BaseNode create = universalJcrDao.create(type);
-        if(request.getParameter("code")!=null)
+        if (request.getParameter("code") != null)
             create.setCode(request.getParameter("code"));
-        mav.addObject("object", create);
+        mav.addObject("object", new Role());
         mav.addObject("containerId", request.getParameter("container"));
         mav.addObject("typeDef", typeDef);
         return mav;
     }
 
+    @SuppressWarnings("unchecked")
     @RequestMapping({"/workbench/list/*"})
     public ModelAndView list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         String id = RequestUtils.getId(request);
+        int requestedPage = RequestUtils.getInt(request, "page", 1);
+        String q = null; // TODO 
+
         FolderDao folderDao = (FolderDao) this.daoService.getDao(Folder.class);
-        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
+        Folder folder = folderDao.get(id);
         ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/list");
         mav.addObject("id", id);
-        SiteFolder folder = folderDao.get(id);
         mav.addObject("folder", folder);
-        mav.addObject("items", universalJcrDao.getAllByPath(folder.getJcrPath()));
-        
+
+        if (folder instanceof SiteFolder)
+        {
+            UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
+            mav.addObject("items", universalJcrDao.getAllByPath(((SiteFolder) folder).getJcrPath()));
+        }
+        else if (folder instanceof DbFolder)
+        {
+            DbFolder dbFolder = (DbFolder) folder;
+            String dbType = dbFolder.getMainType();
+            String dbQuery = dbFolder.getMainTypeQuery();
+
+            GenericDao genericDao = this.daoService.getDao(dbType);
+
+            Assert.notNull(genericDao, "No DAO found for: " + dbType);
+            Assert.isTrue(!(genericDao instanceof GenericJcrDao), "Dao must be defined for this database object.");
+
+            String sort = null;
+            boolean asc = true;
+            if (StringUtils.isNotBlank(dbQuery))
+                mav.addObject("items", genericDao.getPagedByQuery(dbQuery, ITEMS_PER_PAGE, requestedPage, q, sort, asc).getItems());
+            else
+                mav.addObject("items", genericDao.getAllPaged(ITEMS_PER_PAGE, requestedPage, q, sort, asc).getItems());
+        }
+        else if (folder instanceof SmartFolder)
+        {
+//            SmartFolder smartFolder = (SmartFolder) node;
+//            String query = smartFolder.getSearchTerm();
+//            String jcr = smartFolder.getQuery();
+//            
+//            if (StringUtils.isNotEmpty(jcr))
+//                query = jcr;
+//            else
+//                query = "/jcr:root/site//*[jcr:contains(., '" + query + "') and not(jcr:like(@ooType,'%Folder'))] order by @modificationTimestamp descending";
+//            
+//            Assert.hasText(query, "SmartFolder must have a query.");
+//            pagedResult = this.universalJcrDao.pageByJcrExpression(query, ITEMS_PER_PAGE, getRequestedPage(request));
+            
+        }
+        else
+            throw new OtherObjectsException("Currently only listings for SiteFolder, DbFolder and SmartFolder are supported.");
+
         return mav;
     }
-    
+
     @RequestMapping({"/workbench/search*"})
     public ModelAndView search(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         // Search JCR
         String q = request.getParameter("q");
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
-        List<BaseNode> results = universalJcrDao.getAllByJcrExpression("/jcr:root/site//(*) [jcr:contains(data/., '" + q + "')]");        
+        List<BaseNode> results = universalJcrDao.getAllByJcrExpression("/jcr:root/site//(*) [jcr:contains(data/., '" + q + "')]");
 
         // Search DB
         ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/search");
@@ -151,7 +186,7 @@ public class WorkbenchController
     {
         return null;
     }
-    
+
     /* Actions */
 
     @RequestMapping({"/workbench/publish/*"})
@@ -164,7 +199,7 @@ public class WorkbenchController
         universalJcrDao.publish(item, null);
 
         // FIXME - Catch errors
-        
+
         // Response
         ActionUtils actionUtils = new ActionUtils(request, response, null, null);
         actionUtils.flashInfo("Your object was published.");
@@ -186,13 +221,13 @@ public class WorkbenchController
         String id = RequestUtils.getId(request);
         FolderDao folderDao = (FolderDao) this.daoService.getDao(Folder.class);
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
-        
+
         BaseNode item = universalJcrDao.get(id);
         universalJcrDao.remove(id);
-        
+
         ActionUtils actionUtils = new ActionUtils(request, response, null, null);
         actionUtils.flashInfo("Your object was deleted.");
-        
+
         SiteFolder folder = folderDao.getByPath(item.getPath());
         Url u = new Url("/otherobjects/workbench/list/" + folder.getId());
         response.sendRedirect(u.toString());
