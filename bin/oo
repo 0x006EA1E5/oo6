@@ -33,7 +33,7 @@ case $1 in
     	;;
 
 	create)
-    	unzip $OTHEROBJECTS_HOME/bin/otherobjects-basic-site.zip -d $2
+    	unzip $OTHEROBJECTS_HOME/bin/site-template.zip -d $2
         sed -i -e 's/SITENAME/'$2'/g' $2/pom.xml
            
         echo
@@ -63,7 +63,7 @@ case $1 in
     	cd $OTHEROBJECTS_HOME
     	svn update
     	mvn install
-    	cd ../test-site/
+    	cd ../site-template/
     	ant create-archive
     	echo
         echo "OTHERobjects has been updated to the latest version,"
