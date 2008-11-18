@@ -480,7 +480,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
             {
                 try
                 {
-                    String versionName = getVersionNameFromLabel(object.getId(), changeNumber + "", manager.getSession());
+                    String versionName = getVersionNameFromLabel(object.getId(), changeNumber + 1 + "", manager.getSession());
                     return manager.getObject(object.getJcrPath(), versionName);
                 }
                 catch (Exception e)
