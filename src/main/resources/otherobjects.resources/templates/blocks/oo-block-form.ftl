@@ -11,6 +11,7 @@
 <#if blockData??>
 	<#-- Existing block -->
 	<input type="hidden" class="hidden" name="_oo_id" value="${blockData.id}" />
+	<input type="hidden" class="hidden" name="_oo_type" value="${blockData.typeDef.name}" />
 	<@forms.renderForm blockData.typeDef/>
 <#else> 
 	<#-- New block --> 

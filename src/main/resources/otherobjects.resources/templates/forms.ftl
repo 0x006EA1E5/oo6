@@ -89,6 +89,8 @@ Renders a field inputter by choosing the correct inputter renderer. Also handles
   		<@formTextarea "${path}" "" empty/>
 	<#elseif type == "boolean" >
   		<@formCheckbox "${path}" "" empty/>
+	<#elseif type == "transient" >
+		<@formFile "${path}" "" empty/>
 	<#elseif type == "string" >
   		<@formInput "${path}" "" "text" empty />  		
 	<#elseif type == "none" >
@@ -135,6 +137,13 @@ Renders a password field.
 -->
 <#macro formPassword path attributes="" fieldType="text" empty=false>
 	<@formInput path attributes "password" empty/>
+</#macro>
+
+<#--
+Renders a file field.
+-->
+<#macro formFile path attributes="" fieldType="text" empty=false>
+	<@formInput path attributes "file" empty/>
 </#macro>
 
 <#--

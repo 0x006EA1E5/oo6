@@ -108,6 +108,35 @@ Displays flash messages.
 </#if>
 </#macro>
 
+<#-- 
+Workbench: displays property value as string.
+-->
+<#macro renderPropertyValue prop object>
+<#if beanTool.getPropertyValue(object, prop.propertyPath)?? >
+	<#if prop.type == "component" >
+		${beanTool.getPropertyValue(object, prop.propertyPath)!}
+	<#elseif prop.type == "date" >
+		${beanTool.getPropertyValue(object, prop.propertyPath)?date?string("d MMM yyyy")}
+	<#elseif prop.type == "time" >
+		${beanTool.getPropertyValue(object, prop.propertyPath)?time?string("HH:mm")}
+	<#elseif prop.type == "timestamp" >
+		${beanTool.getPropertyValue(object, prop.propertyPath)?datetime?string("HH:mm 'on' d MMM yyyy")}
+	<#elseif prop.type == "boolean" >
+		${beanTool.getPropertyValue(object, prop.propertyPath)?string("Yes", "No")}	
+	<#elseif prop.type == "list" >
+		<ul>
+		<#list beanTool.getPropertyValue(object, prop.propertyPath) as item>
+		<li>${item}</li>
+		</#list>
+		</ul>	
+  	<#else>
+		${beanTool.getPropertyValue(object, prop.propertyPath)!}
+  	</#if>
+<#else>
+	<span style="color:#888">No value</span>
+</#if>  
+</#macro>
+
 <#--
 Displays up to 10 paragraphs of Lipsum.
 -->
