@@ -178,13 +178,17 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
                 else if (propertyType.equals(PropertyDef.REFERENCE))
                 {
                     Assert
-                            .isTrue(StringUtils.isNotEmpty(propDef.getRelatedType()), "If this property is a reference the relatedType needs to have been set: " + typeDef.getName() + "."
-                                    + propertyName);
+                    .isTrue(StringUtils.isNotEmpty(propDef.getRelatedType()), "If this property is a reference the relatedType needs to have been set: " + typeDef.getName() + "."
+                            + propertyName);
                     BeanDescriptor bd = new BeanDescriptor();
                     bd.setFieldName(propDef.getName());
                     bd.setJcrName(propDef.getName());
                     bd.setConverter(ReferenceBeanConverterImpl.class.getName());
                     cd.addBeanDescriptor(bd);
+                }
+                else if (propertyType.equals(PropertyDef.TRANSIENT))
+                {
+                    // Transient properties are not mapped
                 }
                 else
                 {
