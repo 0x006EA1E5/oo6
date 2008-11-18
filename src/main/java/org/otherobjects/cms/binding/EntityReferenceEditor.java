@@ -1,7 +1,6 @@
 package org.otherobjects.cms.binding;
 
 import java.beans.PropertyEditorSupport;
-import java.util.regex.Pattern;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.dao.DaoService;
@@ -19,8 +18,6 @@ public class EntityReferenceEditor extends PropertyEditorSupport
         this.daoService = daoService;
         this.type = type;
     }
-
-    private static Pattern pattern = Pattern.compile("^\\d+$");
 
     /**
      * Lookup an Entity from an id string.
