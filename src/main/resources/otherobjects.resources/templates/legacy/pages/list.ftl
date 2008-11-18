@@ -1,28 +1,6 @@
 <#import "/spring.ftl" as spring />
 <#import "/oo.ftl" as oo />
 
-<#macro renderProperty prop object>
-<tr>
-<td class="oo-label">${prop.label}</td>
-<td class="oo-field-none">
-	<#if object.getPropertyValue(prop.propertyPath)?? >
-		<#if prop.type == "component" >
-			${object.getPropertyValue(prop.propertyPath)!}
-		<#elseif prop.type == "date" >
-			
-			${object.getPropertyValue(prop.propertyPath)?string("d MMM yyyy")}
-		<#elseif prop.type == "boolean" >
-			${object.getPropertyValue(prop.propertyPath)?string("Yes", "No")}	
-	  	<#else>
-			${object.getPropertyValue(prop.propertyPath)!}
-	  	</#if>
-  	<#else>
-  		No value
-  	</#if>  	
-</td>
-</tr>
-</#macro>
-
 <#assign object = daoService.getDao("baseNode").get(id) />
 
 <#assign pageTitle = "Listing: ${oo.msg(folder.label)}" />

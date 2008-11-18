@@ -2,7 +2,10 @@ package org.otherobjects.cms.controllers;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -13,6 +16,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.Url;
+import org.otherobjects.cms.binding.BindService;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.GenericDao;
 import org.otherobjects.cms.dao.GenericJcrDao;
@@ -22,9 +26,9 @@ import org.otherobjects.cms.datastore.JackrabbitDataStore;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.DbFolder;
+import org.otherobjects.cms.model.Editable;
 import org.otherobjects.cms.model.Folder;
 import org.otherobjects.cms.model.FolderDao;
-import org.otherobjects.cms.model.Role;
 import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.cms.model.SmartFolder;
 import org.otherobjects.cms.types.TypeDef;
@@ -32,17 +36,24 @@ import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.ActionUtils;
 import org.otherobjects.cms.util.IdentifierUtils;
 import org.otherobjects.cms.util.RequestUtils;
+import org.otherobjects.cms.validation.ValidatorService;
+import org.otherobjects.cms.views.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Main workbench controller. Handles critical list/view/edit functions.
  * 
- * <p>Surretly only supports SiteFolders, DbFolders and SmartFolders.
+ * <p>Currently only supports SiteFolders, DbFolders and SmartFolders.
+ * 
+ * <p>TODO May need a dedicated XHR version of this
  * 
  * @author rich
  */
@@ -64,6 +75,12 @@ public class WorkbenchController
 
     @Resource
     private JackrabbitDataStore jackrabbitDataStore;
+
+    @Resource
+    private BindService bindService;
+
+    @Resource
+    private ValidatorService validatorService;
 
     //    @Resource
     //    private LocaleResolver localeResolver;
@@ -112,16 +129,17 @@ public class WorkbenchController
     public ModelAndView create(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
     {
         String type = RequestUtils.getId(request);
+        String containerId = request.getParameter("container");
         TypeDef typeDef = typeService.getType(type);
         ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/edit");
 
         DataStore store = getDataStore(typeDef.getStore());
-        Object create = store.create(typeDef);
+        Object create = store.create(typeDef, containerId);
 
         if (request.getParameter("code") != null)
             PropertyUtils.setProperty(create, "code", request.getParameter("code"));
         mav.addObject("object", create);
-        mav.addObject("containerId", request.getParameter("container"));
+        mav.addObject("containerId", containerId);
         mav.addObject("typeDef", typeDef);
         return mav;
     }
@@ -201,10 +219,137 @@ public class WorkbenchController
     @RequestMapping({"/workbench/history/*"})
     public ModelAndView history(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        return null;
+        String id = RequestUtils.getId(request);
+        DataStore store = getDataStore(detectStore(id));
+        BaseNode item = (BaseNode) store.get(id);
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/history");
+        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
+        mav.addObject("id", id);
+        mav.addObject("item", item);
+        mav.addObject("versions", universalJcrDao.getVersions(item));
+        mav.addObject("typeDef", getTypeDef(item));
+        return mav;
+    }
+
+    @RequestMapping({"/workbench/diff/*"})
+    public ModelAndView diff(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        String id = RequestUtils.getId(request);
+        int versionNumber = RequestUtils.getInt(request, "version");
+        DataStore store = getDataStore(detectStore(id));
+        BaseNode item = (BaseNode) store.get(id);
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/diff");
+        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
+        mav.addObject("id", id);
+        mav.addObject("item", item);
+        mav.addObject("item1", item);
+        mav.addObject("item2", universalJcrDao.getVersionByChangeNumber(item, versionNumber));
+        mav.addObject("versions", universalJcrDao.getVersions(item));
+        mav.addObject("typeDef", getTypeDef(item));
+        return mav;
     }
 
     /* Actions */
+
+    @SuppressWarnings("unchecked")
+    @RequestMapping({"/workbench/save"})
+    public ModelAndView save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        ActionUtils actionUtils = new ActionUtils(request, response, null, null);
+
+        // Prepare object (create or fetch)
+        String id = request.getParameter("_oo_id");
+        String typeName = request.getParameter("_oo_type");
+        String containerId = request.getParameter("_oo_containerId");
+        Assert.notNull(typeName, "Type name not specified in _oo_type parameter.");
+        TypeDef typeDef = typeService.getType(typeName);
+        Assert.notNull(typeDef, "No typeDef found for type: " + typeName);
+
+        Editable item = null;
+        DataStore store = getDataStore(typeDef.getStore());
+        GenericDao genericDao = store.getDao(typeDef);
+
+        if (StringUtils.isNotBlank(id))
+        {
+            item = (Editable) store.get(id);
+        }
+        else
+        {
+            item = (Editable) store.create(typeDef, containerId);
+        }
+        
+        
+
+        Assert.notNull(item, "Could not prepare item for binding: " + typeName);
+
+        // Bind and validate
+        BindingResult errors = null;
+        errors = bindService.bind(item, typeDef, request);
+        Validator validator = validatorService.getValidator(item);
+        if (validator != null)
+            validator.validate(item, errors);
+        else
+            logger.warn("No validator for item of class " + item.getClass() + " found");
+
+        // Save
+        boolean success = false;
+        if (!(errors != null && errors.hasErrors()))
+        {
+            // Save new object
+            item = (Editable) genericDao.save(item, false);
+            success = true;
+        }
+
+        // Prepare return data
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("success", success);
+        data.put("formObject", item);
+        if (!success)
+        {
+            List<Object> jsonErrors = new ArrayList<Object>();
+            for (FieldError e : (List<FieldError>) errors.getFieldErrors())
+            {
+                Map<String, String> error = new HashMap<String, String>();
+                error.put("id", e.getField());
+                //error.put("msg", requestContext.getMessage(e.getCode(), e.getArguments()));
+                jsonErrors.add(error);
+            }
+            data.put("success", false);
+            data.put("errors", jsonErrors);
+        }
+
+        // Return
+        if (RequestUtils.isXhr(request))
+        {
+            // Return via XHR
+            ModelAndView view = new ModelAndView("jsonView");
+            view.addObject(JsonView.JSON_DATA_KEY, data);
+            return view;
+        }
+        else
+        {
+            // Return normally
+            if (success)
+            {
+                actionUtils.flashInfo("Your object was saved.");
+                Url u = new Url("/otherobjects/workbench/view/" + item.getEditableId());
+                response.sendRedirect(u.toString());
+                return null;
+            }
+            else
+            {
+                actionUtils.flashWarning("Your object could not be saved. See below for errors.");
+                ModelAndView view = new ModelAndView("/otherobjects/templates/legacy/pages/edit");
+                view.addObject("success", success);
+                view.addObject("id", item.getEditableId());
+                view.addObject("typeDef", typeDef);
+                view.addObject("object", item);
+                view.addObject("containerId", containerId);
+                view.addObject("org.springframework.validation.BindingResult.object", errors);
+                return view;
+            }
+        }
+    }
 
     @RequestMapping({"/workbench/publish/*"})
     public ModelAndView publish(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -251,9 +396,22 @@ public class WorkbenchController
         return null;
     }
 
-    @RequestMapping({"/workbench/revert/*"})
-    public ModelAndView revert(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    @RequestMapping({"/workbench/restore/*"})
+    public ModelAndView restore(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+        // FIXME Need to publish this delete too.
+        String id = RequestUtils.getId(request);
+        int versionNumber = RequestUtils.getInt(request, "version");
+        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
+
+        BaseNode item = universalJcrDao.get(id);
+        universalJcrDao.restoreVersionByChangeNumber(item, versionNumber);
+
+        ActionUtils actionUtils = new ActionUtils(request, response, null, null);
+        actionUtils.flashInfo("Your object was restored.");
+
+        Url u = new Url("/otherobjects/workbench/view/" + item.getId());
+        response.sendRedirect(u.toString());
         return null;
     }
 
@@ -298,6 +456,26 @@ public class WorkbenchController
         {
             return typeService.getType(item.getClass());
         }
+    }
+
+    public void setTypeService(TypeService typeService)
+    {
+        this.typeService = typeService;
+    }
+
+    public void setDaoService(DaoService daoService)
+    {
+        this.daoService = daoService;
+    }
+
+    public void setBindService(BindService bindService)
+    {
+        this.bindService = bindService;
+    }
+
+    public void setValidatorService(ValidatorService validatorService)
+    {
+        this.validatorService = validatorService;
     }
 
 }

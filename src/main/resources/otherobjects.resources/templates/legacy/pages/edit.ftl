@@ -16,7 +16,7 @@
 ${pageTitle}
 </h2>
 
-<form id="oo-form" action="${oo.url("/otherobjects/form")}" method="post">
+<form id="oo-form" action="${oo.url(typeDef.adminControllerUrl + "/save")}" method="post" enctype="multipart/form-data">
 
 <#if object.id??>
   <input type="hidden" name="_oo_id" value="${id}">

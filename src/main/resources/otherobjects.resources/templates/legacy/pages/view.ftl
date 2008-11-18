@@ -6,29 +6,7 @@
 <tr>
 <td class="oo-label">${prop.label}</td>
 <td class="oo-field-none">
-	<#if beanTool.getPropertyValue(object, prop.propertyPath)?? >
-		<#if prop.type == "component" >
-			${beanTool.getPropertyValue(object, prop.propertyPath)!}
-		<#elseif prop.type == "date" >
-			${beanTool.getPropertyValue(object, prop.propertyPath)?date?string("d MMM yyyy")}
-		<#elseif prop.type == "time" >
-			${beanTool.getPropertyValue(object, prop.propertyPath)?time?string("HH:mm")}
-		<#elseif prop.type == "timestamp" >
-			${beanTool.getPropertyValue(object, prop.propertyPath)?datetime?string("HH:mm 'on' d MMM yyyy")}
-		<#elseif prop.type == "boolean" >
-			${beanTool.getPropertyValue(object, prop.propertyPath)?string("Yes", "No")}	
-		<#elseif prop.type == "list" >
-			<ul>
-			<#list beanTool.getPropertyValue(object, prop.propertyPath) as item>
-			<li>${item}</li>
-			</#list>
-			</ul>	
-	  	<#else>
-			${beanTool.getPropertyValue(object, prop.propertyPath)!}
-	  	</#if>
-  	<#else>
-  		<span style="color:#888">No value</span>
-  	</#if>  
+<@oo.renderPropertyValue prop object />
 </td>
 </tr>
 </#macro>
@@ -60,8 +38,10 @@ ${pageTitle}
 <div class="oo-actions">
 <h2>Actions</h2>
 <ul>
-<li><a href="${oo.url('/otherobjects/workbench/edit/${object.editableId}')}">Edit</a></li>
+<#-- <li><a href="${oo.url('/otherobjects/workbench/list/${folder.editableId}')}">Back to listing</a></li> -->
+<li class="divider"><a href="${oo.url('/otherobjects/workbench/edit/${object.editableId}')}">Edit</a></li>
 <#if item.published??>
+<li class="divider"><a href="${oo.url('/otherobjects/workbench/history/${object.editableId}')}">View history</a></li>
 <li class="divider"><a href="${oo.url('/otherobjects/workbench/publish/${object.editableId}')}">Publish</a></li>
 </#if>
 <li class="divider"><a href="${oo.url('/otherobjects/workbench/delete/${object.editableId}')}">Delete</a></li>
