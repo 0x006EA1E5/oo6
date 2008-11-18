@@ -39,7 +39,7 @@ import org.springframework.security.userdetails.UserDetails;
 @Entity
 @Table(name = "app_user")
 @SequenceGenerator(name = "UserSeq", sequenceName = "app_user_seq")
-@Type(label = "User", description = "A User", labelProperty = "email", store="hibernate")
+@Type(label = "User", description = "A User", labelProperty = "email", store = "hibernate")
 public class User implements Serializable, UserDetails, Editable
 {
 
@@ -51,7 +51,7 @@ public class User implements Serializable, UserDetails, Editable
     protected Integer version;
     protected String email; // required; unique
     protected String username; // required
-    protected String password; // required
+    protected String password = ""; // Defaults to empty string so no login until reset
     //    protected String plainTextPassword; // required
     //    protected String plainTextConfirmPassword;
     protected String passwordHint;
@@ -112,14 +112,14 @@ public class User implements Serializable, UserDetails, Editable
     }
 
     @Column(name = "first_name", nullable = false, length = 50)
-    @Property(type = PropertyType.STRING, label = "First name", order = 2)
+    @Property(type = PropertyType.STRING, label = "First name", required = true, order = 2)
     public String getFirstName()
     {
         return this.firstName;
     }
 
     @Column(name = "last_name", nullable = false, length = 50)
-    @Property(type = PropertyType.STRING, label = "Last name", order = 3)
+    @Property(type = PropertyType.STRING, label = "Last name", required = true, order = 3)
     public String getLastName()
     {
         return this.lastName;
