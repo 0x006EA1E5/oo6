@@ -2,6 +2,7 @@ package org.otherobjects.cms.datastore;
 
 import java.util.List;
 
+import org.otherobjects.cms.dao.GenericDao;
 import org.otherobjects.cms.types.TypeDef;
 
 /**
@@ -15,9 +16,12 @@ import org.otherobjects.cms.types.TypeDef;
  */
 public interface DataStore
 {
+    @SuppressWarnings("unchecked")
+    GenericDao getDao(TypeDef typeDef);
+
     List<Object> list(String query);
 
-    Object create(TypeDef typeDef);
+    Object create(TypeDef typeDef, String containerId);
 
     Object get(String id);
 

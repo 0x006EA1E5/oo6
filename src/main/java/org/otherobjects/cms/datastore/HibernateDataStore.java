@@ -12,12 +12,13 @@ import org.otherobjects.cms.model.Editable;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.util.IdentifierUtils;
 
+@SuppressWarnings("unchecked")
 public class HibernateDataStore implements DataStore
 {
     @Resource
     private DaoService daoService;
 
-    public Object create(TypeDef typeDef)
+    public Object create(TypeDef typeDef, String containerId)
     {
         try
         {
@@ -52,6 +53,11 @@ public class HibernateDataStore implements DataStore
     {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    public GenericDao getDao(TypeDef typeDef)
+    {
+        return daoService.getDao(typeDef.getClassName());
     }
 
 }
