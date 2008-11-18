@@ -4,7 +4,7 @@ package org.otherobjects.cms.types.annotation;
 public enum PropertyType
 {
     UNDEFINED("undefined"), STRING("string"), TEXT("text"), DATE("date"), TIME("time"), TIMESTAMP("timestamp"), BOOLEAN("boolean"), NUMBER("number"), DECIMAL("decimal"), COMPONENT("component"), REFERENCE(
-            "reference"), LIST("list"), OORESOURCE("ooresource");
+            "reference"), LIST("list"), OORESOURCE("ooresource"), TRANSIENT("transient");
 
     private final String value;
 

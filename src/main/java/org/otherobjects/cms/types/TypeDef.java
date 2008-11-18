@@ -27,6 +27,8 @@ public interface TypeDef
     String getHelp();
 
     String getClassName();
+    
+    String getAdminControllerUrl();
 
     boolean hasClass();
 

@@ -19,6 +19,8 @@ public @interface Type
     String label() default "";
 
     String description() default "";
+    
+    String adminControllerUrl() default "";
 
     String labelProperty() default "code";
     

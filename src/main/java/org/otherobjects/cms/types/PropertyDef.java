@@ -41,6 +41,8 @@ import java.beans.PropertyEditor;
  */
 public interface PropertyDef
 {
+    // FIXME These are also in PropertyType enum 
+    Object TRANSIENT = "transient";
     Object LIST = "list";
     Object REFERENCE = "reference";
     Object COMPONENT = "component";

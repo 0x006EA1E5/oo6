@@ -17,6 +17,8 @@ import flexjson.JSON;
  */
 public class TypeDefImpl implements TypeDef
 {
+    private static final String DEFAULT_ADMIN_CONTROLLER_URL = "/otherobjects/workbench";
+
     private static final String DEFAULT_SUPER_CLASS_NAME = BaseNode.class.getName();
 
     /** The unique name for this type. */
@@ -49,9 +51,12 @@ public class TypeDefImpl implements TypeDef
 
     /** Stores which property should be used for the labe.. */
     private String labelProperty;
-    
+
     /** Which data store to use for this type. */
     private String store = TypeDef.JACKRABBIT;
+
+    /** Custom admin controller URL. */
+    private String customAdminController;
 
     public TypeDefImpl()
     {
@@ -110,8 +115,8 @@ public class TypeDefImpl implements TypeDef
     public String getLabel()
     {
         if (org.apache.commons.lang.StringUtils.isEmpty(label))
-        {   
-            if(getName().contains("."))
+        {
+            if (getName().contains("."))
                 return StringUtils.generateLabel(org.apache.commons.lang.StringUtils.substringAfterLast(getName(), "."));
             else
                 return StringUtils.generateLabel(getName());
@@ -213,5 +218,23 @@ public class TypeDefImpl implements TypeDef
     public void setStore(String store)
     {
         this.store = store;
+    }
+
+    public String getAdminControllerUrl()
+    {
+        if (customAdminController != null)
+            return customAdminController;
+        else
+            return DEFAULT_ADMIN_CONTROLLER_URL;
+    }
+
+    public String getCustomAdminController()
+    {
+        return customAdminController;
+    }
+
+    public void setCustomAdminController(String customAdminController)
+    {
+        this.customAdminController = customAdminController;
     }
 }

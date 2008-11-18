@@ -56,6 +56,8 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder, Initializi
         typeDef.setClassName(clazz.getName());
         typeDef.setSuperClassName(typeDefAnnotation.superClassName());
         typeDef.setStore(typeDefAnnotation.store());
+        if(StringUtils.isNotBlank(typeDefAnnotation.adminControllerUrl()))
+            typeDef.setCustomAdminController(typeDefAnnotation.adminControllerUrl());
 
         typeDef.setLabel(typeDefAnnotation.label());
         // Infer label if not set
