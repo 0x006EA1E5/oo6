@@ -3,12 +3,13 @@ package org.otherobjects.cms.tools;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
+import java.io.IOException;
 
+import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.cms.io.OoResource;
+import org.otherobjects.cms.io.OoResourceLoader;
 import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.CmsImageSize;
-import org.otherobjects.cms.model.DataFile;
-import org.otherobjects.cms.model.DataFileDao;
-import org.otherobjects.cms.model.DataFileDaoFileSystem;
 import org.otherobjects.cms.util.ImageMagickResizer;
 import org.otherobjects.cms.util.ImageResizer;
 import org.otherobjects.cms.util.ImageUtils;
@@ -21,6 +22,12 @@ import org.springframework.util.Assert;
  * <p>FIXME Delete sizes on image change
  * <p>FIXME Don't create backgrounds if they won't be seen
  * 
+ * <p>All images are stored in the data directory in a folder named "images".
+ * Within "images" there are subdirectories for each size/background combination.
+ * 
+ * <p>There is one special case folder "images/originals" which contains the 
+ * original untouched uploaded files. This is handy for backups.
+ * 
  * @author rich
  */
 public class CmsImageTool
@@ -28,19 +35,23 @@ public class CmsImageTool
     private static final String THUMBNAIL_BACKGROUND_COLOR = "#FFFFFF";
     private static final int THUMBNAIL_SIZE = 100;
 
-    private final DataFileDao dataFileDao = new DataFileDaoFileSystem();
-    private final ImageResizer imageResizer = new ImageMagickResizer();
+    // FIXME Injectable image resizer. Or list with fallbacks.
+    private ImageResizer imageResizer = new ImageMagickResizer();
+    private OoResourceLoader ooResourceLoader;
 
+    /**
+     * Return CmsImageSize representing orignally uploaded image.
+     * @param image
+     * @return
+     */
     public CmsImageSize getOriginal(CmsImage image)
     {
         Assert.notNull(image, "Image must be provided.");
         CmsImageSize original = new CmsImageSize();
-        original.setFileName(image.getFileName());
-        // If no width/height set then we will assume that we want the original
-        original.setDataFile(this.dataFileDao.get(original.getFileId()));
-        Assert.notNull(original.getDataFile(), "Could not find original data file: " + original.getFileId());
-        original.setWidth(image.getOriginalWidth());
-        original.setHeight(image.getOriginalHeight());
+        original.setImage(image.getResource());
+        original.setWidth(image.getOriginalWidth().intValue());
+        original.setHeight(image.getOriginalHeight().intValue());
+        original.setDescription(image.getDescription());
         return original;
     }
 
@@ -81,70 +92,69 @@ public class CmsImageTool
 
     public CmsImageSize getSize(CmsImage image, Integer width, Integer height, String backgroundColor)
     {
-        Assert.notNull(width, "Image width must be provided.");
-        Assert.notNull(height, "Image height must be provided.");
-
-        if (width.equals(longToInteger(image.getOriginalWidth())) && height.equals(longToInteger(image.getOriginalHeight())))
-            return getOriginal(image);
-
-        CmsImageSize size = new CmsImageSize();
-        size.setFileName(image.getFileName());
-        size.setWidth(integerToLong(width));
-        size.setHeight(integerToLong(height));
-        size.setBackgroundColor(backgroundColor);
-
-        DataFile dataFile = null;
-
-        // Does file already exist?
-        if (this.dataFileDao.exists(size.getFileId()))
-            dataFile = this.dataFileDao.get(size.getFileId());
-        else
+        try
         {
-            dataFile = createResizedDataFile(image, size);
-            // Check that file resized correctly
-            Dimension imageDimensions = ImageUtils.getImageDimensions(dataFile.getFile());
-            if (size.getWidth() != null)
-                Assert.isTrue(size.getWidth().equals(new Long((long) imageDimensions.getWidth())), "Resize failed. Dimension is " + imageDimensions.getWidth() + " but should be " + size.getWidth()
-                        + ".");
-            if (size.getHeight() != null)
-                Assert.isTrue(size.getHeight().equals(new Long((long) imageDimensions.getHeight())));
-            size.setWidth(new Long((long) imageDimensions.getWidth()));
-            size.setHeight(new Long((long) imageDimensions.getHeight()));
+            Assert.notNull(width, "Image width must be provided.");
+            Assert.notNull(height, "Image height must be provided.");
+
+            if (width.equals(image.getOriginalWidth()) && height.equals(image.getOriginalHeight()))
+                return getOriginal(image);
+
+            CmsImageSize size = new CmsImageSize();
+            size.setWidth(width);
+            size.setHeight(height);
+            size.setBackgroundColor(backgroundColor);
+
+            OoResource resource = determineResource(image, size);
+
+            // Does file already exist?
+            if (!resource.exists())
+            {
+                createResizedDataFile(image, size, resource);
+                // Check that file resized correctly
+                Dimension imageDimensions = ImageUtils.getImageDimensions(resource.getFile());
+                Assert.isTrue(size.getWidth() == imageDimensions.getWidth(), "Resize failed. Width is " + imageDimensions.getWidth() + " but should be " + size.getWidth() + ".");
+                Assert.isTrue(size.getHeight() == imageDimensions.getHeight(), "Resize failed. Height is " + imageDimensions.getWidth() + " but should be " + size.getWidth() + ".");
+            }
+
+            size.setImage(resource);
+            return size;
         }
-
-        size.setDataFile(dataFile);
-        return size;
+        catch (IOException e)
+        {
+            throw new OtherObjectsException("Error resizing image.", e);
+        }
     }
 
-    private Long integerToLong(Integer integer)
+    private OoResource determineResource(CmsImage image, CmsImageSize size) throws IOException
     {
-        if (integer == null)
-            return null;
-        else
-            return Long.valueOf(integer);
+        StringBuffer path = new StringBuffer(CmsImage.DEFAULT_FOLDER);
+        path.append(size.getWidth());
+        path.append("x");
+        path.append(size.getHeight());
+        if (size.getBackgroundColor() != null)
+            path.append(size.getBackgroundColor());
+        path.append("/");
+        path.append(image.getOriginalFileName());
+        return ooResourceLoader.getResource(path.toString());
     }
 
-    private Integer longToInteger(Long lng)
+    protected void createResizedDataFile(CmsImage image, CmsImageSize size, OoResource resized) throws IOException
     {
-        if (lng == null)
-            return null;
-        else
-            return lng.intValue();
-    }
-
-    private DataFile createResizedDataFile(CmsImage image, CmsImageSize size)
-    {
-        File originalFile = getOriginal(image).getDataFile().getFile();
-        // FIXME better naming for temp file needed
-        File destinationFile = new File("/tmp/" + image.getFileName());
+        File originalFile = image.getResource().getFile();
+        File destinationFile = resized.getFile();
         Color color = size.getBackgroundColor() != null ? Color.decode(size.getBackgroundColor()) : null;
-        this.imageResizer.resize(originalFile, destinationFile, longToInteger(size.getWidth()), longToInteger(size.getHeight()), color, null);
-
-        // Save data file
-        DataFile dataFile = new DataFile(destinationFile);
-        dataFile.setId(size.getFileId());
-        this.dataFileDao.save(dataFile);
-        destinationFile.delete();
-        return dataFile;
+        this.imageResizer.resize(originalFile, destinationFile, size.getWidth(), size.getHeight(), color, null);
     }
+
+    public void setImageResizer(ImageResizer imageResizer)
+    {
+        this.imageResizer = imageResizer;
+    }
+
+    public void setOoResourceLoader(OoResourceLoader ooResourceLoader)
+    {
+        this.ooResourceLoader = ooResourceLoader;
+    }
+
 }
