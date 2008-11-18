@@ -2,6 +2,7 @@ package org.otherobjects.cms.model;
 
 import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.types.annotation.Property;
+import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
 
 @Type(labelProperty = "label")
@@ -102,7 +103,7 @@ public class CmsFile extends BaseNode
     //        this.newFile = newFile;
     //    }
 
-    @Property(order = 70)
+    @Property(order = 70, type=PropertyType.OORESOURCE)
     public OoResource getFile()
     {
         return file;

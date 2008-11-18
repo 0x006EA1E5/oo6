@@ -1,5 +1,6 @@
 package org.otherobjects.cms.model;
 
+import org.otherobjects.cms.io.OoResource;
 import org.springframework.util.Assert;
 
 /**
@@ -9,78 +10,58 @@ import org.springframework.util.Assert;
  */
 public class CmsImageSize
 {
-    private String fileName;
-    private Long width;
-    private Long height;
+    private String description;
+    private int width;
+    private int height;
     private String backgroundColor;
-    private DataFile dataFile;
+    private OoResource image;
 
     @Override
     public String toString()
     {
-        return getFileId();
+        return "[CmsImageSize: " + (image.getFilename() !=null ? image.getFilename() : "-") +  "]";
     }
 
-    public String getFileId()
+    public OoResource getImage()
     {
-        Assert.notNull(getFileName(), "CmsImageSize fileName can not be null");
-        return "/" + CmsImage.DATA_FILE_COLLECTION_NAME + getCollectionPath() + getFileName();
+        return image;
     }
 
-    public String getCollectionPath()
+    public void setImage(OoResource image)
     {
-        StringBuffer cp = new StringBuffer();
-        if (getWidth() == null && getHeight() == null)
-            cp.append(CmsImage.ORIGINALS_PATH);
-        else
-        {
-            cp.append("/");
-            cp.append(getWidth());
-            cp.append("x");
-            cp.append(getHeight());
-            if (getBackgroundColor() != null)
-                cp.append(getBackgroundColor());
-            cp.append("/");
-        }
-        return cp.toString();
+        this.image = image;
     }
 
-    public DataFile getDataFile()
+    /**
+     * Returns description of image contents. Used for ALT text on image tags.
+     * @return
+     */
+    public String getDescription()
     {
-        return this.dataFile;
+        return description;
     }
 
-    public void setDataFile(DataFile file)
+    public void setDescription(String description)
     {
-        this.dataFile = file;
+        this.description = description;
     }
 
-    public String getFileName()
-    {
-        return this.fileName;
-    }
-
-    public void setFileName(String fileName)
-    {
-        this.fileName = fileName;
-    }
-
-    public Long getWidth()
+    public int getWidth()
     {
         return this.width;
     }
 
-    public void setWidth(Long width)
+    public void setWidth(int width)
     {
         this.width = width;
     }
 
-    public Long getHeight()
+    public int getHeight()
     {
         return this.height;
     }
 
-    public void setHeight(Long height)
+    public void setHeight(int height)
     {
         this.height = height;
     }

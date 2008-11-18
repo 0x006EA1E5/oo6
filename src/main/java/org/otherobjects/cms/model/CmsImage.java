@@ -1,11 +1,11 @@
 package org.otherobjects.cms.model;
 
-import java.io.File;
-
+import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
 import org.otherobjects.cms.util.StringUtils;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 /**
  * Represents a content managed image object.
@@ -22,11 +22,11 @@ import org.otherobjects.cms.util.StringUtils;
  * 
  * @author rich
  */
-@Type(labelProperty = "label")
+@Type(labelProperty = "label", adminControllerUrl="/otherobjects/image")
 public class CmsImage extends BaseNode
 {
-    public static final String DATA_FILE_COLLECTION_NAME = "images";
-    public static final String ORIGINALS_PATH = "/originals/";
+    public static final String DEFAULT_FOLDER = "/data/images/";
+    public static final String ORIGINALS_PATH = "originals/";
 
     // Meta data
     private String label;
@@ -43,7 +43,7 @@ public class CmsImage extends BaseNode
     private String providerId;
 
     // Temporary holder for new and relacement files
-    private File newFile;
+    private CommonsMultipartFile newFile;
     private String thumbnailPath;
 
     /**
@@ -132,7 +132,7 @@ public class CmsImage extends BaseNode
         this.copyright = copyright;
     }
 
-    @Property(order = 70, required = true)
+    @Property(order = 70, required = false)
     public Long getOriginalWidth()
     {
         return this.originalWidth;
@@ -143,7 +143,7 @@ public class CmsImage extends BaseNode
         this.originalWidth = originalWidth;
     }
 
-    @Property(order = 80, required = true)
+    @Property(order = 80, required = false)
     public Long getOriginalHeight()
     {
         return this.originalHeight;
@@ -165,13 +165,13 @@ public class CmsImage extends BaseNode
         this.originalProvider = originalProvider;
     }
 
-    public void setNewFile(File newFile)
+    public void setNewFile(CommonsMultipartFile newFile)
     {
         this.newFile = newFile;
     }
 
-    @Property(type = PropertyType.TEXT)
-    public File getNewFile()
+    @Property(order=150, type=PropertyType.TRANSIENT)
+    public CommonsMultipartFile getNewFile()
     {
         return this.newFile;
     }
@@ -182,7 +182,7 @@ public class CmsImage extends BaseNode
         return getCode();
     }
 
-    @Property(order = 90, required = true)
+    @Property(order = 90, required = false)
     public String getOriginalFileName()
     {
         return originalFileName;
@@ -235,6 +235,9 @@ public class CmsImage extends BaseNode
      */
     private String getExtension()
     {
+        if(getOriginalFileName() == null)
+            return null;
+        
         String extension = getOriginalFileName().substring(getOriginalFileName().lastIndexOf(".") + 1);
         return extension;
     }
@@ -242,6 +245,12 @@ public class CmsImage extends BaseNode
     public void setMimeType(String mimeType)
     {
         this.mimeType = mimeType;
+    }
+
+    public OoResource getResource()
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
