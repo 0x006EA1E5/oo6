@@ -1,6 +1,6 @@
 package org.otherobjects.cms.types;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * @author rich
@@ -18,7 +18,7 @@ public interface TypeDef
 
     String getStore();
 
-    Collection<PropertyDef> getProperties();
+    List<PropertyDef> getProperties();
 
     String getLabel();
 

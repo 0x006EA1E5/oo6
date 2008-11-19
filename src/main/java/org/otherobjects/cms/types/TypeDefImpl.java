@@ -3,6 +3,7 @@ package org.otherobjects.cms.types;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -88,7 +89,7 @@ public class TypeDefImpl implements TypeDef
         this.name = name;
     }
 
-    public void setProperties(Collection<PropertyDef> properties)
+    public void setProperties(List<PropertyDef> properties)
     {
         this.properties = new LinkedHashMap<String, PropertyDef>();
         if (properties == null)
@@ -97,7 +98,7 @@ public class TypeDefImpl implements TypeDef
             addProperty(pd);
     }
 
-    public Collection<PropertyDef> getProperties()
+    public List<PropertyDef> getProperties()
     {
         ArrayList<PropertyDef> properties = new ArrayList<PropertyDef>();
         properties.addAll(this.properties.values());

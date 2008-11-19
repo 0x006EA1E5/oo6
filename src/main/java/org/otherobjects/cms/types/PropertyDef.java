@@ -87,5 +87,7 @@ public interface PropertyDef
     PropertyEditor getPropertyEditor();
     
     String getFieldName();
+    
+    String getPropertyPath();
 
 }
