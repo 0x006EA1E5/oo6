@@ -25,12 +25,19 @@ function addToList()
 	// Get field
 	var f = $('.oo-list-empty-field').at(0);
 	
+
+	
 	// Insert copy
 	n = $(f.node.cloneNode(true));
+	var re = new RegExp("\\[\\d\\]", "g");
+	
+	// Insert new index 
+	n.node.innerHTML = n.node.innerHTML.replace(re, "["+ nextIndex +"]");
 	console.log(n);
 	n.setStyle({display:'block'});
 	n.removeClass("oo-list-template");
 	f.insert(n.node, 'after');
+	nextIndex++;
 }
 
 function removeFromList()
@@ -40,4 +47,5 @@ function removeFromList()
 	var f = all.at(all.length-1);
 	// Insert copy
 	f.parents().at(0).node.removeChild(f.node);
+	nextIndex--;
 }

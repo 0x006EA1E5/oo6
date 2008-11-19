@@ -63,6 +63,7 @@ Renders a field inputter by choosing the correct inputter renderer. Also handles
   		<div style="display:none;" class="oo-list-empty-field oo-list-template">
   		<@renderField prop prop.collectionElementType "${path}[${nextIndex}]" true/>
   		</div>
+  		<script>var nextIndex = ${nextIndex};</script>
   	<#elseif type == "component" >	
   		<#if !empty>
 	  		<@bind path />
