@@ -18,8 +18,11 @@ public class JackrabbitDataStore implements DataStore
     public Object create(TypeDef typeDef, String containerId)
     {
         BaseNode item = universalJcrDao.create(typeDef.getName());
-        BaseNode container = universalJcrDao.get(containerId);
-        item.setPath(container.getJcrPath());
+        if (containerId != null)
+        {
+            BaseNode container = universalJcrDao.get(containerId);
+            item.setPath(container.getJcrPath());
+        }
         return item;
     }
 
@@ -46,5 +49,10 @@ public class JackrabbitDataStore implements DataStore
     public GenericDao getDao(TypeDef typeDef)
     {
         return universalJcrDao;
+    }
+
+    public void setUniversalJcrDao(UniversalJcrDao universalJcrDao)
+    {
+        this.universalJcrDao = universalJcrDao;
     }
 }

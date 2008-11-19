@@ -17,6 +17,15 @@ public class HibernateDataStore implements DataStore
 {
     @Resource
     private DaoService daoService;
+    
+    public HibernateDataStore()
+    {
+    }
+
+    public HibernateDataStore(DaoService daoService)
+    {
+        this.daoService = daoService;
+    }
 
     public Object create(TypeDef typeDef, String containerId)
     {
