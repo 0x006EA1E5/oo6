@@ -15,7 +15,7 @@ import org.otherobjects.cms.views.Tool;
 @Tool("beanTool")
 public class BeanTool
 {
-    public Object getPropertyValue(Object bean, String propertyName) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
+    public static Object getPropertyValue(Object bean, String propertyName) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException
     {
         return PropertyUtils.getProperty(bean, propertyName);
     }

@@ -35,11 +35,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.Url;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.GenericDao;
+import org.otherobjects.cms.io.ObjectXmlEncoder;
+import org.otherobjects.cms.jcr.UniversalJcrDao;
+import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.tools.SecurityTool;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.HtmlLogger;
@@ -94,7 +102,10 @@ public class DebugController implements ServletContextAware, ApplicationContextA
 
     @Resource
     private TypeService typeService;
-    
+
+    @Resource
+    private DaoService daoService;
+
     //@Resource
     //private MailService mailService;
 
@@ -137,7 +148,6 @@ public class DebugController implements ServletContextAware, ApplicationContextA
             imageMagickError = "Could not find ImageMagick binary: " + e.getMessage();
         }
 
-
         ModelAndView mav = new ModelAndView("/debug/debug");
         mav.addObject("imageMagickError", imageMagickError);
         mav.addObject("imageMagickVersion", imageMagickVersion);
@@ -163,18 +173,16 @@ public class DebugController implements ServletContextAware, ApplicationContextA
         // Connectivity
         mav.addObject("testExternalUrl", httpPing(EXTERNAL_CONNECTIVITY_TEST_URL));
         mav.addObject("testInternalUrl", httpPing(new Url("/").getAbsoluteLink()));
-        
+
         // Server
         mav.addObject("serverName", getServerName());
         mav.addObject("serverIp", getServerIp());
-        
-        
+
         // Memory
         mav.addObject("freeMemory", Runtime.getRuntime().freeMemory());
         mav.addObject("maxMemory", Runtime.getRuntime().maxMemory());
         mav.addObject("totalMemory", Runtime.getRuntime().totalMemory()); // Total used
-    
-        
+
         // Data stores
         mav.addObject("privateDataPath", otherObjectsConfigurator.getProperty("site.private.data.path"));
         mav.addObject("publicDataPath", otherObjectsConfigurator.getProperty("site.public.data.path"));
@@ -182,7 +190,7 @@ public class DebugController implements ServletContextAware, ApplicationContextA
         mav.addObject("dbSchemaVersion", otherObjectsConfigurator.getProperty("db.schema.version"));
         mav.addObject("jcrLocation", otherObjectsConfigurator.getProperty("jcr.repository.location"));
         mav.addObject("jcrSchemaVersion", otherObjectsConfigurator.getProperty("jcr.schema.version"));
-        
+
         mav.addObject("security", new SecurityTool());
         return mav;
     }
@@ -262,7 +270,7 @@ public class DebugController implements ServletContextAware, ApplicationContextA
             {
                 Binding binding = new Binding();
                 binding.setVariable("app", applicationContext);
-                GenericDao dao = ((DaoService)applicationContext.getBean("daoService")).getDao("baseNode");
+                GenericDao dao = ((DaoService) applicationContext.getBean("daoService")).getDao("baseNode");
                 binding.setVariable("dao", dao);
                 StringWriter writer = new StringWriter();
                 binding.setProperty("logger", new HtmlLogger(writer));
@@ -282,10 +290,11 @@ public class DebugController implements ServletContextAware, ApplicationContextA
                 logger.error("Error running script.", e);
             }
         }
-        
+
         mav.addObject("script", script);
         return mav;
     }
+
     /**
      * Runs Resource Scanner.
      * 
@@ -301,6 +310,39 @@ public class DebugController implements ServletContextAware, ApplicationContextA
     {
         resourceScanner.updateResources();
         response.getWriter().print("<p>Resource scanning... complete.</p>");
+        return null;
+    }
+
+    /**
+     * Exports all site data in XML format.
+     * 
+     * <p>TODO Need to restrict this to superusers only
+     * 
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/debug/export")
+    public ModelAndView export(HttpServletRequest request, HttpServletResponse response) throws Exception
+    {
+        Document document = DocumentHelper.createDocument();
+
+        Element objects = document.addElement("objects");
+        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao(BaseNode.class);
+        ObjectXmlEncoder encoder = new ObjectXmlEncoder();
+        for (BaseNode item : dao.getAllByJcrExpression("/jcr:root//* [@ooType]"))
+        {
+            Element element = objects.addElement("object");
+            if (item.getTypeDef() != null)
+                encoder.addObject(element, item, item.getTypeDef());
+        }
+
+        OutputFormat outformat = OutputFormat.createPrettyPrint();
+        outformat.setEncoding("UTF-8");
+        XMLWriter writer = new XMLWriter(response.getWriter(), outformat);
+        writer.write(document);
+        writer.flush();
         return null;
     }
 
@@ -446,7 +488,6 @@ public class DebugController implements ServletContextAware, ApplicationContextA
         return "WARN Didn't send test email to: " + recipient;
     }
 
-    
     /**
      * TODO From GrailsUtil.
      * 
@@ -504,10 +545,7 @@ public class DebugController implements ServletContextAware, ApplicationContextA
         }
         return true;
     }
-    
-    
-    
-    
+
     public static String getServerName()
     {
         try
@@ -531,9 +569,7 @@ public class DebugController implements ServletContextAware, ApplicationContextA
             return "Could not get server IP: " + e.getMessage();
         }
     }
- 
-    
-    
+
     public void setServletContext(ServletContext servletContext)
     {
         this.servletContext = servletContext;
