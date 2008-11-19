@@ -478,4 +478,14 @@ public class WorkbenchController
         this.validatorService = validatorService;
     }
 
+    public void setHibernateDataStore(HibernateDataStore hibernateDataStore)
+    {
+        this.hibernateDataStore = hibernateDataStore;
+    }
+
+    public void setJackrabbitDataStore(JackrabbitDataStore jackrabbitDataStore)
+    {
+        this.jackrabbitDataStore = jackrabbitDataStore;
+    }
+
 }
