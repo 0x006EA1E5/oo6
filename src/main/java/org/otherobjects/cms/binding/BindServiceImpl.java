@@ -52,6 +52,9 @@ public class BindServiceImpl implements BindService
     public BindingResult bind(Object item, TypeDef typeDef, HttpServletRequest request)
     {
         this.binder = new ServletRequestDataBinder(item);
+        
+        // FIXME Implement setAllowedFields from TypeDef
+        // binder.setAllowedFields(null);
         this.request = request;
 
         try
