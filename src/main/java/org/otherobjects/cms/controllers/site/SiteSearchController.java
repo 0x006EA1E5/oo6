@@ -21,10 +21,10 @@ public class SiteSearchController {
     public ModelAndView search(HttpServletRequest request, HttpServletResponse response)
     {
         UniversalJcrDao jcr = (UniversalJcrDao) daoService.getDao("BaseNode");
-        Object ooTemplate = jcr.getByPath("/designer/templates/searchresults");
+        Object ooTemplate = jcr.getByPath("/designer/templates/single-column-plus-33-33-33");
         
         // Choose layout
-        ModelAndView mv  = new ModelAndView("/site/templates/layouts/two-column");
+        ModelAndView mv  = new ModelAndView("/site/templates/layouts/single-column-plus-33-33-33");
         mv.addObject("ooTemplate", ooTemplate);
         mv.addObject("test", "Hello Rich");
         return mv;
