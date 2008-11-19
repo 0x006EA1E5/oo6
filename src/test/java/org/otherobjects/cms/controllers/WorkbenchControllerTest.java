@@ -8,6 +8,7 @@ import org.otherobjects.cms.binding.MockWebApplicationContext;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.DaoServiceImpl;
 import org.otherobjects.cms.dao.MockGenericDao;
+import org.otherobjects.cms.datastore.HibernateDataStore;
 import org.otherobjects.cms.model.Role;
 import org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder;
 import org.otherobjects.cms.types.PropertyDefImpl;
@@ -65,6 +66,7 @@ public class WorkbenchControllerTest extends TestCase
 
         WorkbenchController controller = new WorkbenchController();
         controller.setTypeService(typeService);
+        controller.setHibernateDataStore(new HibernateDataStore(daoService));
         controller.setDaoService(daoService);
         controller.setBindService(new BindServiceImpl());
         
