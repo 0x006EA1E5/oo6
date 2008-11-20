@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.io.OoResourceLoader;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
+import org.otherobjects.cms.model.Template;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -21,11 +23,13 @@ public class SiteSearchController {
     public ModelAndView search(HttpServletRequest request, HttpServletResponse response)
     {
         UniversalJcrDao jcr = (UniversalJcrDao) daoService.getDao("BaseNode");
-        Object ooTemplate = jcr.getByPath("/designer/templates/single-column-plus-33-33-33");
+        Template ooTemplate = (Template) jcr.getByPath("/designer/templates/searchresults");
+        Assert.notNull(ooTemplate, "No search results template found: /designer/templates/searchresults");
         
         // Choose layout
-        ModelAndView mv  = new ModelAndView("/site/templates/layouts/single-column-plus-33-33-33");
-        mv.addObject("ooTemplate", ooTemplate);
+        // FIXME Merge this nasty code with PageRenderer
+        ModelAndView mv  = new ModelAndView("/site/templates/layouts/" + ooTemplate.getLayout().getCode().replaceAll("\\.html", "") + "");
+        mv.addObject("ooTemplate", ooTemplate); 
         mv.addObject("test", "Hello Rich");
         return mv;
     }
