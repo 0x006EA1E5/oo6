@@ -45,24 +45,24 @@
 	<distributionManagement>
 		<repository>
 			<id>otherobjects-releases</id>
-			<url>dav:http://maven.richaston.com:8081/artifactory/libs-releases</url>
+			<url>http://maven.otherobjects.org/content/repositories/releases</url>
 		</repository>
 		<snapshotRepository>
 			<id>otherobjects-releases</id>
-			<url>dav:http://maven.richaston.com:8081/artifactory/libs-snapshots</url>
+			<url>http://maven.otherobjects.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<repositories>
 		<repository>
 			<id>central</id>
-			<url>http://maven.richaston.com:8081/artifactory/repo</url>
+			<url>http://maven.otherobjects.org/content/groups/public</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
 		<repository>
 			<id>snapshots</id>
-			<url>http://maven.richaston.com:8081/artifactory/repo</url>
+			<url>http://maven.otherobjects.org/content/groups/public</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -71,14 +71,14 @@
 	<pluginRepositories>
 		<pluginRepository>
 			<id>central</id>
-			<url>http://maven.richaston.com:8081/artifactory/repo</url>
+			<url>http://maven.otherobjects.org/content/groups/public</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
 		</pluginRepository>
 		<pluginRepository>
 			<id>snapshots</id>
-			<url>http://maven.richaston.com:8081/artifactory/repo</url>
+			<url>http://maven.otherobjects.org/content/groups/public</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -99,7 +99,7 @@
 	<scm>
 		<connection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/tags/otherobjects-0.5.4</connection>
 		<developerConnection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/tags/otherobjects-0.5.4</developerConnection>
-		<url>http://www.otherobjects.org/tags/otherobjects-0.5.4</url>
+		<url>http://svn.otherobjects.org/viewvc/otherobjects/trunk/</url>
 	</scm>
 	<build>
 		<extensions>
@@ -952,6 +952,11 @@
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20070829</version>
+		</dependency>
+		<dependency>
+		    <groupId>javax.transaction</groupId>
+		    <artifactId>jta</artifactId>
+		    <version>1.1</version>
 		</dependency>
 		<!-- Testing only -->
 		<dependency>
