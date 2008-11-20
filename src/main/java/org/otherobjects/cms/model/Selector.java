@@ -117,7 +117,7 @@ public class Selector extends BaseNode
     {
         this.queryTypeName = queryTypeName;
     }
-    
+
     @Property(order = 41)
     public String getOrderBy()
     {
@@ -128,7 +128,6 @@ public class Selector extends BaseNode
     {
         this.orderBy = orderBy;
     }
-    
 
     @Property(order = 50)
     public String getCustomQuery()
@@ -190,11 +189,19 @@ public class Selector extends BaseNode
         // Construct type query
         if (StringUtils.isNotBlank(getQueryTypeName()))
         {
-            // TODO Validate that typeName is a real type
-            query.append(" [@ooType='" + getQueryTypeName() + "']");
+            if (getQueryTypeName().contains("%"))
+            {
+                // Support wildcard matches
+                query.append(" [jcr:like(@ooType,'" + getQueryTypeName() + "')]");
+            }
+            else
+            {
+                // TODO Validate that typeName is a real type
+                query.append(" [@ooType='" + getQueryTypeName() + "']");
+            }
         }
 
-        if(StringUtils.isNotBlank(getOrderBy()))
+        if (StringUtils.isNotBlank(getOrderBy()))
             query.append(" order by " + getOrderBy());
 
         // Add custom OO selector

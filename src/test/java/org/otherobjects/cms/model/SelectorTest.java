@@ -14,5 +14,11 @@ public class SelectorTest extends TestCase
         s.setEnd(5L);
         assertEquals("/jcr:root/site/news//* {5}", s.getQuery());
         
+        Selector s2 = new Selector();
+        s2.setQueryTypeName("org.otherobjects.cms.model.Template");
+        assertEquals("/jcr:root//* [@ooType='org.otherobjects.cms.model.Template']", s2.getQuery());
+        s2.setQueryTypeName("%Folder");
+        assertEquals("/jcr:root//* [jcr:like(@ooType,'%Folder')]", s2.getQuery());
+        
     }
 }
