@@ -43,7 +43,7 @@ public class JackrabbitDataStore implements DataStore
 
     public Object save(Object object)
     {
-        return null;
+        return universalJcrDao.save((BaseNode) object);
     }
 
     public GenericDao getDao(TypeDef typeDef)
