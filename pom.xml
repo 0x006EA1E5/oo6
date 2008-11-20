@@ -51,6 +51,10 @@
 			<id>otherobjects-releases</id>
 			<url>http://maven.otherobjects.org/content/repositories/snapshots</url>
 		</snapshotRepository>
+		<site>
+			<id>otherobjects-docs</id>
+			<url>scp://docs.otherobjects.org/data/webroot/docs.otherobjects.org/</url>
+		</site>
 	</distributionManagement>
 	<repositories>
 		<repository>
@@ -83,18 +87,10 @@
 				<enabled>false</enabled>
 			</releases>
 		</pluginRepository>
-		<!-- Temp plugin repo until Checkstyle plugin 2.2 is released
-		<pluginRepository>
-			<id>apache.org</id>
-			<name>Maven Plugin Snapshots</name>
-			<url>http://people.apache.org/repo/m2-snapshot-repository</url>
-			<releases>
-				<enabled>false</enabled> 
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository> -->
+		<!--
+			Temp plugin repo until Checkstyle plugin 2.2 is released <pluginRepository> <id>apache.org</id> <name>Maven Plugin Snapshots</name> <url>http://people.apache.org/repo/m2-snapshot-repository</url>
+			<releases> <enabled>false</enabled> </releases> <snapshots> <enabled>true</enabled> </snapshots> </pluginRepository>
+		-->
 	</pluginRepositories>
 	<scm>
 		<connection>scm:svn:svn+ssh://svn.otherworks.com/data/svn/repos-ng/otherobjects/tags/otherobjects-0.5.4</connection>
@@ -110,48 +106,16 @@
 			</extension>
 		</extensions>
 		<plugins>
-			<!-- Fix for Cobertura 100% coverage problem. See: http://jira.codehaus.org/browse/MCOBERTURA-61 
-				<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-				<systemProperties>
-				<property>
-				<name>net.sourceforge.cobertura.datafile</name>
-				<value>${project.build.directory}/cobertura/cobertura.ser</value>
-				</property>
-				</systemProperties>
-				</configuration>
-				</plugin>
+			<!--
+				Fix for Cobertura 100% coverage problem. See: http://jira.codehaus.org/browse/MCOBERTURA-61 <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-surefire-plugin</artifactId>
+				<configuration> <systemProperties> <property> <name>net.sourceforge.cobertura.datafile</name> <value>${project.build.directory}/cobertura/cobertura.ser</value> </property> </systemProperties>
+				</configuration> </plugin>
 			-->
-			<!--  Documentation generation 
-			<plugin>
-				<groupId>org.jboss.maven.plugins</groupId>
-				<artifactId>maven-jdocbook-plugin</artifactId>
-				<extensions>true</extensions>
-				<version>2.1.1</version>
-				<configuration>
-					<formats>
-						<format>
-							<formatName>pdf</formatName>
-							<stylesheetResource>file:${basedir}/src/main/docbook/xslt/pdf/main-pdf.xsl</stylesheetResource>
-						</format>
-						<format>
-							<formatName>html</formatName>
-						</format>
-					</formats>
-					<sourceDocumentName>${docbook.name}.xml</sourceDocumentName>
-					<imageResource>
-						<directory>src/main/docbook/images</directory>
-						<targetPath>images</targetPath>
-						<filtering>false</filtering>
-					</imageResource>
-					<options>
-						<useRelativeImageUris>false</useRelativeImageUris>
-						<xincludeSupported>false</xincludeSupported>
-					</options>
-				</configuration>
-			</plugin>
+			<!--
+				Documentation generation <plugin> <groupId>org.jboss.maven.plugins</groupId> <artifactId>maven-jdocbook-plugin</artifactId> <extensions>true</extensions> <version>2.1.1</version> <configuration>
+				<formats> <format> <formatName>pdf</formatName> <stylesheetResource>file:${basedir}/src/main/docbook/xslt/pdf/main-pdf.xsl</stylesheetResource> </format> <format> <formatName>html</formatName>
+				</format> </formats> <sourceDocumentName>${docbook.name}.xml</sourceDocumentName> <imageResource> <directory>src/main/docbook/images</directory> <targetPath>images</targetPath>
+				<filtering>false</filtering> </imageResource> <options> <useRelativeImageUris>false</useRelativeImageUris> <xincludeSupported>false</xincludeSupported> </options> </configuration> </plugin>
 			-->
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
@@ -295,39 +259,14 @@
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-					<configLocation>ide-support/checkstyle/config.xml</configLocation>
+					<configLocation>support/checkstyle.xml</configLocation>
 				</configuration>
 			</plugin>
-			<!-- 
-				<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>findbugs-maven-plugin</artifactId>
-				</plugin>
-				<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-changelog-plugin</artifactId>
-				</plugin>
-				<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jdepend-maven-plugin</artifactId>
-				</plugin>
-				<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>dashboard-maven-plugin</artifactId>
-				</plugin>
-				<plugin>
-				<groupId>net.objectlab</groupId>
-				<artifactId>mvn-qalab-plugin</artifactId>
-				<version>2.2</version>
-				<reportSets>
-				<reportSet>
-				<reports>
-				<report>report-merge-chart</report>
-				<report>report-movers-all</report>
-				</reports>
-				</reportSet>
-				</reportSets>
-				</plugin>
+			<!--
+				<plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>findbugs-maven-plugin</artifactId> </plugin> <plugin> <groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-changelog-plugin</artifactId> </plugin> <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>jdepend-maven-plugin</artifactId> </plugin> <plugin>
+				<groupId>org.codehaus.mojo</groupId> <artifactId>dashboard-maven-plugin</artifactId> </plugin> <plugin> <groupId>net.objectlab</groupId> <artifactId>mvn-qalab-plugin</artifactId>
+				<version>2.2</version> <reportSets> <reportSet> <reports> <report>report-merge-chart</report> <report>report-movers-all</report> </reports> </reportSet> </reportSets> </plugin>
 			-->
 		</plugins>
 	</reporting>
@@ -954,9 +893,9 @@
 			<version>20070829</version>
 		</dependency>
 		<dependency>
-		    <groupId>javax.transaction</groupId>
-		    <artifactId>jta</artifactId>
-		    <version>1.1</version>
+			<groupId>javax.transaction</groupId>
+			<artifactId>jta</artifactId>
+			<version>1.1</version>
 		</dependency>
 		<!-- Testing only -->
 		<dependency>
@@ -979,4 +918,3 @@
 		</dependency>
 	</dependencies>
 </project>
-
