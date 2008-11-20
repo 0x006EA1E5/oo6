@@ -14,7 +14,6 @@ import org.otherobjects.cms.Url;
 import org.otherobjects.cms.binding.BindService;
 import org.otherobjects.cms.dao.GenericDao;
 import org.otherobjects.cms.datastore.JackrabbitDataStore;
-import org.otherobjects.cms.io.OoResourceLoader;
 import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.Editable;
 import org.otherobjects.cms.types.TypeDef;
@@ -57,11 +56,11 @@ public class CmsImageController
     @Resource
     private ValidatorService validatorService;
 
-    @Resource
-    private OoResourceLoader ooResourceLoader;
+    //@Resource
+    //private OoResourceLoader ooResourceLoader;
 
     @RequestMapping({"/image/save"})
-    private ModelAndView save(MultipartHttpServletRequest multipartRequest, HttpServletResponse response, CmsImage cmsImage) throws IOException
+    public ModelAndView save(MultipartHttpServletRequest multipartRequest, HttpServletResponse response, CmsImage cmsImage) throws IOException
     {
         ActionUtils actionUtils = new ActionUtils(multipartRequest, response, null, null);
 

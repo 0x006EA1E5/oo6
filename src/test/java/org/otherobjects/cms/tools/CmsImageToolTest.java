@@ -2,11 +2,8 @@ package org.otherobjects.cms.tools;
 
 import junit.framework.TestCase;
 
-import org.otherobjects.cms.config.OtherObjectsConfigurator;
-import org.otherobjects.cms.io.OoResourceLoader;
 import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.CmsImageSize;
-import org.springframework.core.io.DefaultResourceLoader;
 
 public class CmsImageToolTest extends TestCase
 {
