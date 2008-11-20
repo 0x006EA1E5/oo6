@@ -4,6 +4,7 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -39,15 +40,19 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.Url;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.GenericDao;
+import org.otherobjects.cms.datastore.JackrabbitDataStore;
+import org.otherobjects.cms.io.ObjectXmlDecoder;
 import org.otherobjects.cms.io.ObjectXmlEncoder;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
+import org.otherobjects.cms.model.Selector;
 import org.otherobjects.cms.tools.SecurityTool;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.HtmlLogger;
@@ -72,6 +77,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 import org.springmodules.jcr.JcrCallback;
 import org.springmodules.jcr.JcrTemplate;
 
@@ -105,6 +111,9 @@ public class DebugController implements ServletContextAware, ApplicationContextA
 
     @Resource
     private DaoService daoService;
+
+    @Resource
+    private JackrabbitDataStore jackrabbitDataStore;
 
     //@Resource
     //private MailService mailService;
@@ -314,7 +323,7 @@ public class DebugController implements ServletContextAware, ApplicationContextA
     }
 
     /**
-     * Exports all site data in XML format.
+     * Exports site data in XML format.
      * 
      * <p>TODO Need to restrict this to superusers only
      * 
@@ -326,12 +335,14 @@ public class DebugController implements ServletContextAware, ApplicationContextA
     @RequestMapping("/debug/export")
     public ModelAndView export(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
+        String xpath = request.getParameter("xpath");
+
         Document document = DocumentHelper.createDocument();
 
         Element objects = document.addElement("objects");
         UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao(BaseNode.class);
         ObjectXmlEncoder encoder = new ObjectXmlEncoder();
-        for (BaseNode item : dao.getAllByJcrExpression("/jcr:root//* [@ooType]"))
+        for (BaseNode item : dao.getAllByJcrExpression(xpath))
         {
             Element element = objects.addElement("object");
             if (item.getTypeDef() != null)
@@ -347,6 +358,59 @@ public class DebugController implements ServletContextAware, ApplicationContextA
     }
 
     /**
+     * Imports site data in XML format.
+     * 
+     * <p>TODO Need to restrict this to superusers only
+     * 
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/debug/import")
+    public ModelAndView importXml(HttpServletRequest request, HttpServletResponse response) throws Exception
+    {
+        ModelAndView mav = new ModelAndView("/debug/import");
+        String xml = request.getParameter("xml");
+
+        if (StringUtils.isBlank(xml))
+        {
+            return mav;
+        }
+
+        SAXReader xmlReader = new SAXReader();
+        Document document = null;
+        try
+        {
+            document = xmlReader.read(new StringReader(xml));
+            ObjectXmlDecoder decoder = new ObjectXmlDecoder();
+            decoder.setDaoService(daoService);
+            decoder.setJackrabbitDataStore(jackrabbitDataStore);
+            decoder.setTypeService(typeService);
+
+            StringWriter writer = new StringWriter();
+            HtmlLogger htmlLogger = new HtmlLogger(writer);
+            List<Object> objects = decoder.decode(document);
+            for (Object o : objects)
+            {
+                htmlLogger.info("Importing: " + o);
+                jackrabbitDataStore.save(o);
+            }
+            mav.addObject("log", writer.toString());
+            mav.addObject("xml", xml);
+
+        }
+        catch (Exception e)
+        {
+            e = (Exception) sanitize(e);
+            mav.addObject("exception", e);
+            logger.error("Error running script.", e);
+            mav.addObject("xml", xml);
+        }
+        return mav;
+    }
+
+    /**
      * Provides a view onto the data in JCR.
      * 
      * @param request
@@ -358,10 +422,25 @@ public class DebugController implements ServletContextAware, ApplicationContextA
     public ModelAndView jcr(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         String xpath = request.getParameter("xpath");
-        String folder = request.getParameter("folder");
+        String path = request.getParameter("path");
+        String type = request.getParameter("type");
+        String export = request.getParameter("export");
 
-        if (StringUtils.isNotEmpty(folder))
-            xpath = "/jcr:root/site" + folder + "/element(*)";
+        if (StringUtils.isNotBlank(path) || StringUtils.isNotBlank(type))
+        {
+            Selector s = new Selector();
+            s.setQueryPath(path);
+            s.setQueryTypeName(type);
+            xpath = s.getQuery();
+        }
+
+        if (StringUtils.isNotEmpty(export))
+        {
+            RedirectView redirectView = new RedirectView("/otherobjects/debug/export", true, false, true);
+            ModelAndView modelAndView = new ModelAndView(redirectView);
+            modelAndView.addObject("xpath", xpath);
+            return modelAndView;
+        }
 
         String liveNodesHtml = null;
         String editNodesHtml = null;
@@ -393,6 +472,8 @@ public class DebugController implements ServletContextAware, ApplicationContextA
         mav.addObject("liveNodesHtml", liveNodesHtml);
         mav.addObject("editNodesHtml", editNodesHtml);
         mav.addObject("xpath", xpath);
+        mav.addObject("path", path);
+        mav.addObject("type", type);
         return mav;
     }
 

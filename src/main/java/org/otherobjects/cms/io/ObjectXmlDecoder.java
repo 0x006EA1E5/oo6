@@ -61,10 +61,13 @@ public class ObjectXmlDecoder
         for (Element element : elements)
         {
             String typeName = element.attribute("type").getValue();
-            String id = element.attribute("id").getValue();
-            TypeDef typeDef = typeService.getType(typeName);
-            Object object = jackrabbitDataStore.create(typeDef, null);
-            objects.put(id, object);
+            if (element.attribute("id") != null)
+            {
+                String id = element.attribute("id").getValue();
+                TypeDef typeDef = typeService.getType(typeName);
+                Object object = jackrabbitDataStore.create(typeDef, null);
+                objects.put(id, object);
+            }
         }
     }
 
@@ -80,17 +83,25 @@ public class ObjectXmlDecoder
     {
         List<Element> elements = document.selectNodes("/objects/object");
 
+        List<Object> populatedObjects = new ArrayList<Object>();
         for (Element element : elements)
         {
             String typeName = element.attribute("type").getValue();
-            String id = element.attribute("id").getValue();
             TypeDef typeDef = typeService.getType(typeName);
-            Object item = objects.get(id);
+            Object item = null;
+            if (element.attribute("id") != null)
+            {
+                String id = element.attribute("id").getValue();
+                item = objects.get(id);
+            }
+            else
+            {
+                item = jackrabbitDataStore.create(typeDef, null);
+            }
 
             populateObject(element, typeDef, item);
+            populatedObjects.add(item);
         }
-        List<Object> populatedObjects = new ArrayList<Object>();
-        populatedObjects.addAll(objects.values());
         return populatedObjects;
     }
 
