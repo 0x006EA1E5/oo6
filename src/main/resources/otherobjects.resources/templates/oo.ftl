@@ -10,6 +10,19 @@ Convenience macro to insert CSS link tag.
 -->
 <#macro css path media="screen">
 <link rel="stylesheet" href="${resourceUrl(path)}" type="text/css" media="${media}" />
+</#macro>  
+
+<#-- 
+Convenience macro to insert CSS link tag.
+-->
+<#macro combinableCss paths combinedPath media="screen">
+<#if ooEnvironment == "dev">
+<#list paths as path>
+<link rel="stylesheet" href="${resourceUrl(path)}" type="text/css" media="${media}" />
+</#list>
+<#else>
+<link rel="stylesheet" href="${resourceUrl(combinedPath)}" type="text/css" media="${media}" />
+</#if>
 </#macro>    
 
 <#-- 

@@ -58,6 +58,7 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             modelAndView.addObject("dao", daoService);
             modelAndView.addObject("flash", new FlashMessageTool(request));
             modelAndView.addObject("jcr", daoService.getDao("BaseNode"));
+            modelAndView.addObject("ooEnvironment", otherObjectsConfigurator.getProperty("otherobjects.environment"));
             
             // Add auto-detected tools
             if(freemarkerToolProvider!=null)

@@ -47,6 +47,8 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer impl
         System.setProperty("file.encoding", "UTF-8");
 
         String environmentPrefix = getEnvironmentName();
+        
+        mergedProperties.setProperty("otherobjects.environment", environmentPrefix);
 
         Pattern pattern = Pattern.compile("^" + environmentPrefix + "\\.");
 

@@ -16,6 +16,7 @@ case $1 in
         echo "  run                  runs the site"
         echo "  war                  builds .war file in target/"
         echo "  deploy               deploys the site to the server"
+        echo "  minify               trigger CSS/Javascript minification"
         echo 
         echo "  (developer tasks)"
         echo
@@ -56,6 +57,10 @@ case $1 in
     
     deploy)
         mvn tomcat:deploy
+        ;;
+    
+    minify)
+        mvn net.sf.alchim:yuicompressor-maven-plugin:compress
         ;;
     
     oo-update)

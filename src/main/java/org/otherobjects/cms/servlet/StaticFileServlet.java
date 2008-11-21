@@ -32,6 +32,8 @@ import org.slf4j.LoggerFactory;
  */
 public class StaticFileServlet extends HttpServlet
 {
+    private static final long DEFAULT_CACHE_TIME_MS = 15 * 60 * 1000;
+
     private final Logger logger = LoggerFactory.getLogger(StaticFileServlet.class);
 
     private static final long serialVersionUID = -1850176862525216468L;
@@ -61,7 +63,7 @@ public class StaticFileServlet extends HttpServlet
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        
+
         ReadableByteChannel in = null;
         try
         {
@@ -77,6 +79,8 @@ public class StaticFileServlet extends HttpServlet
 
             // start returning the response
             response.setContentType(getContentTypeFor(relativePath));
+            // FIXME Cache content for 15 minutes by default
+            response.setDateHeader("Expires", System.currentTimeMillis() + DEFAULT_CACHE_TIME_MS*4*24*365);
             OutputStream out = response.getOutputStream();
 
             // read the bytes, returning them in the response
@@ -135,12 +139,12 @@ public class StaticFileServlet extends HttpServlet
         }
 
         // check for modifications
-//        long ifModifiedSince = request.getDateHeader("If-Modified-Since");
-//        long lastModified = file.lastModified();
-//        if (ifModifiedSince != -1 && lastModified < ifModifiedSince)
-//        {
-//            throw new NotModifiedException();
-//        }
+        //        long ifModifiedSince = request.getDateHeader("If-Modified-Since");
+        //        long lastModified = file.lastModified();
+        //        if (ifModifiedSince != -1 && lastModified < ifModifiedSince)
+        //        {
+        //            throw new NotModifiedException();
+        //        }
 
         // setup IO streams
         return new FileInputStream(file).getChannel();
@@ -179,6 +183,14 @@ public class StaticFileServlet extends HttpServlet
         return typeMap.getContentType(fileName);
     }
 
+    /** 
+     * Return last modified date for this resource.
+     * 
+     * <p>FIXME Implement this
+     */
+    //    public long getLastModified(HttpServletRequest req) {
+    //        return dataModified.getTime(  ) / 1000 * 1000;
+    //      }
     /**
      * An exception when the source object has not been modified.
      * While this condition is not a failure, it is a break from the normal flow of execution.
