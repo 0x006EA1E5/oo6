@@ -181,7 +181,7 @@ function ooQuickSaveForm(blockId, hide)
 			Ojay.HTTP.GET(ooBaseUrl + 'otherobjects/block/get/'+blockId+'?resourceObjectId='+resourceObjectId).insertInto('#oo-block-'+blockId);
 		}
 	}};
-	var cObj = YAHOO.util.Connect.asyncRequest('POST', ooBaseUrl + 'otherobjects/form/', callback );
+	var cObj = YAHOO.util.Connect.asyncRequest('POST', ooBaseUrl + 'otherobjects/workbench/save', callback );
 	return false;
 } 
 
