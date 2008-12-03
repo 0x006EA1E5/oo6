@@ -18,8 +18,8 @@
 .oo-block-delete {padding:2px 2px 2px 20px;background:#CAA url(icons/delete.png) no-repeat 2px 2px; color:#900;}
 
 
-#oo-form-overlay {position:fixed; top:50px; width:700px; height:500px; left:80px; background:#FFF; border:1px solid #000; padding:10px; overflow:scroll; text-align:left; z-index:99999}
-
+#oo-form-overlay {position:fixed; top:50px; width:700px; height:500px; left:80px; background:#FFF; border:1px solid #000; padding:10px; overflow:scroll; text-align:left!important; z-index:99999}
+#oo-form-overlay P {text-align:left;}
 #oo-form-overlay CAPTION {font:bold 120% Arial; padding: 0px 0px 4px 0px; }
 #oo-form-overlay TH {background:#eeeeee; font:normal 100% Arial; text-align:left; padding:4px 10px 4px 10px; border-right:1px solid #ffffff;}
 #oo-form-overlay TR {border-bottom:1px solid #eeeeee;}
