@@ -51,6 +51,7 @@ ${pageTitle}
 <ul>
 <li><a href="${oo.url('/otherobjects/workbench/view/'+folder.id)}">View folder details ...</a></li>
 <li><a href="${oo.url('/otherobjects/workbench/create/org.otherobjects.cms.model.SiteFolder?container='+folder.id)}">New sub folder ...</a></li>
+<li><a href="${oo.url('/otherobjects/workbench/create/org.otherobjects.cms.model.DbFolder?container='+folder.id)}">New database folder ...</a></li>
 <#list folder.allAllowedTypes as type>
 <#if type?exists>
 <li class="divider"><a href="${oo.url('/otherobjects/workbench/create/${type.name}?container=${folder.id}')}">New ${type.label} ...</a></li>
