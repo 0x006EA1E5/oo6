@@ -1,4 +1,4 @@
-package org.otherobjects.cms.util;
+package org.otherobjects.cms.site;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class TreeBuilderTest extends TestCase
         flat.add(node2);
 
         TreeBuilder treeBuilder = new TreeBuilder();
-        TreeBuilder.Tree tree = treeBuilder.buildTree(flat);
+        Tree tree = treeBuilder.buildTree(flat);
         tree.print();
 
         assertEquals(2, tree.getNode("/").getChildren().size());

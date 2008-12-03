@@ -15,25 +15,25 @@ public class PublishingOptions extends BaseNode
 {
     private Date embargoUntil;
     private Date expireOn;
-    private Boolean showInMenu;
+    private Boolean showInNavigation;
     private Boolean hidden;
+    private String navigationLabel;
     private String accessbilityHotKey;
     private Template template;
 
-    
     @Override
     public String getOoLabel()
     {
         return "Publishing Options";
     }
-    
+
     @Override
     public String getCode()
     {
         // FIXME This should not be needed -- should be determined by parent typeDef.
         return "publishingOptions";
     }
-    
+
     @Property(order = 10)
     public Date getEmbargoUntil()
     {
@@ -57,17 +57,17 @@ public class PublishingOptions extends BaseNode
     }
 
     @Property(order = 30)
-    public Boolean getShowInMenu()
+    public Boolean getShowInNavigation()
     {
-        return showInMenu;
+        return showInNavigation;
     }
 
-    public void setShowInMenu(Boolean showInMenu)
+    public void setShowInNavigation(Boolean showInNavigation)
     {
-        this.showInMenu = showInMenu;
+        this.showInNavigation = showInNavigation;
     }
 
-    @Property(order = 40)
+    @Property(order = 40, help="Hide this item from site search and index.")
     public Boolean getHidden()
     {
         return hidden;
@@ -76,6 +76,17 @@ public class PublishingOptions extends BaseNode
     public void setHidden(Boolean hidden)
     {
         this.hidden = hidden;
+    }
+
+    @Property(order = 35, help = "Overrides default label when this item is shown in navigation.")
+    public String getNavigationLabel()
+    {
+        return navigationLabel;
+    }
+
+    public void setNavigationLabel(String navigationLabel)
+    {
+        this.navigationLabel = navigationLabel;
     }
 
     @Property(order = 50)

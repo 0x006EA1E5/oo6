@@ -7,6 +7,8 @@ import javax.servlet.http.HttpSession;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.io.OoResourceLoader;
+import org.otherobjects.cms.site.NavigationService;
+import org.otherobjects.cms.site.NavigationTool;
 import org.otherobjects.cms.tools.CmsImageTool;
 import org.otherobjects.cms.tools.FlashMessageTool;
 import org.otherobjects.cms.tools.FormatTool;
@@ -25,6 +27,7 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
     private OtherObjectsConfigurator otherObjectsConfigurator;
     private MessageSource messageSource;
     private FreemarkerToolProvider freemarkerToolProvider;
+    private NavigationService navigationService;
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception
@@ -53,6 +56,7 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             modelAndView.addObject("urlTool", new UrlTool(ooResourceLoader));
             modelAndView.addObject("objectInspector", new ObjectInspector());
             modelAndView.addObject("formatTool", new FormatTool(messageSource, otherObjectsConfigurator));
+            modelAndView.addObject("navigationTool", new NavigationTool(navigationService));
             modelAndView.addObject("security", new SecurityTool());
             modelAndView.addObject("daoService", daoService);
             modelAndView.addObject("dao", daoService);
@@ -90,5 +94,10 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
     public void setFreemarkerToolProvider(FreemarkerToolProvider freemarkerToolProvider)
     {
         this.freemarkerToolProvider = freemarkerToolProvider;
+    }
+
+    public void setNavigationService(NavigationService navigationService)
+    {
+        this.navigationService = navigationService;
     }
 }

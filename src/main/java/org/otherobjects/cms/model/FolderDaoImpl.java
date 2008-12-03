@@ -3,8 +3,13 @@ package org.otherobjects.cms.model;
 import java.util.List;
 
 import org.otherobjects.cms.jcr.GenericJcrDaoJackrabbit;
-import org.otherobjects.cms.util.TreeBuilder;
+import org.otherobjects.cms.site.Tree;
+import org.otherobjects.cms.site.TreeBuilder;
 
+/**
+ * TODO Merge with NavigationSrevice 
+ * @author rich
+ */
 public class FolderDaoImpl extends GenericJcrDaoJackrabbit<SiteFolder> implements FolderDao
 {
     public FolderDaoImpl()
@@ -19,7 +24,7 @@ public class FolderDaoImpl extends GenericJcrDaoJackrabbit<SiteFolder> implement
     }
     
     @SuppressWarnings("unchecked")
-    public TreeBuilder.Tree getFolderTree()
+    public Tree getFolderTree()
     {
         TreeBuilder tb = new TreeBuilder();
         List all = getFolders();
