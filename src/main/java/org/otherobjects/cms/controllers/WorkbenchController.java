@@ -256,6 +256,8 @@ public class WorkbenchController
     public ModelAndView save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         ActionUtils actionUtils = new ActionUtils(request, response, null, null);
+        
+        RequestUtils.logParameters(logger, request);
 
         // Prepare object (create or fetch)
         String id = request.getParameter("_oo_id");
@@ -277,8 +279,6 @@ public class WorkbenchController
         {
             item = (Editable) store.create(typeDef, containerId);
         }
-        
-        
 
         Assert.notNull(item, "Could not prepare item for binding: " + typeName);
 
