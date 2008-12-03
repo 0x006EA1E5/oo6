@@ -71,6 +71,8 @@ public class Selector extends BaseNode
 
     public void setQueryPath(String queryPath)
     {
+        if(queryPath!=null && !queryPath.endsWith("/"))
+            queryPath = queryPath + "/"; // Path queries must end in slash
         this.queryPath = queryPath;
     }
 
