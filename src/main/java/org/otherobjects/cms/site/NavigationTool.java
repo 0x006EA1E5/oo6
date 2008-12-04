@@ -21,8 +21,8 @@ public class NavigationTool
         return navigationService.getNavigation(path, startDepth, endDepth);
     }
 
-    public List<TreeNode> getParents(String location)
+    public List<TreeNode> getTrail(String location)
     {
-        return navigationService.getParents(location);
+        return navigationService.getTrail(location);
     }
 }

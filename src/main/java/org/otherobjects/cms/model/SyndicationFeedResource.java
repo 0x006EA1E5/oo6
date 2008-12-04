@@ -41,7 +41,7 @@ public class SyndicationFeedResource extends BaseNode
 
     public Url getFeedUrl()
     {
-        return new Url(getLinkPath());
+        return new Url(getOoUrlPath());
     }
 
     @JSON(include = false)

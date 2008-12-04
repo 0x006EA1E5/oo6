@@ -3,9 +3,11 @@ package org.otherobjects.cms.site;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
+import org.springframework.util.Assert;
 
 /**
  * TODO Sort order
@@ -23,19 +25,84 @@ public class NavigationServiceImpl implements NavigationService
 
     protected TreeNode tree;
 
+    public NavigationServiceImpl()
+    {
+    }
+
     public TreeNode getNavigation(String path, int startDepth, int endDepth)
     {
-        // FIXME Need to synchronise this
-        //if (tree == null)
-            buildTree();
+        return getNavigation(path, startDepth, endDepth, null);
+    }
 
-        // Start at correct depth and location
+    public TreeNode getNavigation(String path, int startDepth, int endDepth, String currentPath)
+    {
+        try
+        {
+            Assert.isTrue(startDepth >= 0, "Navigation start depth must be >= 0");
+            Assert.isTrue(endDepth > startDepth, "Navigation end depth must be > start depth");
 
-        // Prune off unnecessarily deep branches
+            // FIXME Need to synchronise this
+            //if (tree == null)
+                buildTree();
 
-        path = path.substring(5);
-            
-        return tree.getNode(path);
+            // Start at correct depth and location by trimming path to correct depth
+            path = trimPath(path, startDepth);
+            TreeNode startNode = (TreeNode) tree.getNode(path);
+
+            // Clone tree but only to required depth
+            TreeNode clone = (TreeNode) startNode.clone(endDepth - startDepth);
+
+            // Mark selected nodes
+            if (currentPath != null)
+                markSelected(clone, currentPath);
+
+            return clone;
+        }
+        catch (Exception e)
+        {
+            throw new OtherObjectsException("Could not create nagivation tree.", e);
+        }
+    }
+
+    /**
+     * Finds nodes in tree which match the current path and flags them as selected. 
+     * 
+     * @param clone
+     * @param currentPath
+     */
+    protected void markSelected(TreeNode node, String path)
+    {
+        int pos = 0;
+        while (pos < path.length())
+        {
+            pos = path.indexOf("/", pos) + 1;
+            if (pos == 0)
+                pos = path.length();
+            String p = path.substring(0, pos);
+            TreeNode n = node.getNode(p);
+            if (n != null)
+                n.setSelected(true);
+        }
+    }
+
+    /**
+     * Trims a path to the correct depth. For example: / has a depth of 0, /about/ has a depth of 1.
+     * 
+     * @param path
+     * @param startDepth
+     * @return
+     */
+    protected String trimPath(String path, int startDepth)
+    {
+        int pos = 0;
+        int depth = 0;
+        while (pos < path.length())
+        {
+            pos = path.indexOf("/", pos) + 1;
+            if (++depth > startDepth)
+                break;
+        }
+        return path.substring(0, pos);
     }
 
     /**
@@ -53,14 +120,12 @@ public class NavigationServiceImpl implements NavigationService
         {
             String label = (String) (b.hasProperty("data.publishingOptions.navigationLabel") && b.getPropertyValue("data.publishingOptions.navigationLabel") != null ? b
                     .getPropertyValue("data.publishingOptions.navigationLabel") : b.getOoLabel());
-            String path = b.getJcrPath().contains(".") ? b.getJcrPath() : b.getJcrPath() + "/"; // FIXME Need to clear up this Jcr Path stuff.
-            path = path.substring(5); // Remove /site so we have proper URLs
-            flat.add(new TreeNode(path, b.getId(), label));
+            flat.add(new TreeNode(b.getOoUrlPath(), b.getId(), label));
         }
 
         appendAdditionalNodes(flat);
 
-        this.tree = tb.buildTree(flat, "/");
+        this.tree = tb.buildTree(flat, new TreeNode("/",null,"Home"));
     }
 
     /**
@@ -74,9 +139,29 @@ public class NavigationServiceImpl implements NavigationService
 
     }
 
-    public List<TreeNode> getParents(String path)
+    public List<TreeNode> getTrail(String path)
     {
-        return null;
+        try
+        {
+            List<TreeNode> parents = new ArrayList<TreeNode>();
+            int pos = 0;
+            while (pos < path.length())
+            {
+                pos = path.indexOf("/", pos) + 1;
+                if (pos == 0)
+                    break;
+                    //pos = path.length();
+                String p = path.substring(0, pos);
+                TreeNode node = tree.getNode(p);
+                if(node!=null)
+                    parents.add((TreeNode) node.clone(0));
+            }
+            return parents;
+        }
+        catch (CloneNotSupportedException e)
+        {
+            throw new OtherObjectsException("Could not create nagivation trail.", e);
+        }
     }
 
     /**

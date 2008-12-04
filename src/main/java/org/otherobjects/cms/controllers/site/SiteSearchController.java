@@ -29,6 +29,7 @@ public class SiteSearchController {
         // Choose layout
         // FIXME Merge this nasty code with PageRenderer
         ModelAndView mv  = new ModelAndView("/site/templates/layouts/" + ooTemplate.getLayout().getCode().replaceAll("\\.html", "") + "");
+        mv.addObject("resourceObject", jcr.getByPath("/site/search.html")); 
         mv.addObject("ooTemplate", ooTemplate); 
         mv.addObject("test", "Hello Rich");
         return mv;

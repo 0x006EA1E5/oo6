@@ -102,7 +102,7 @@ public class DesignerController
         template.setLayout(layout);
         dao.save(template, false);
         // FIXME Need to wrap linkPath
-        response.sendRedirect(resourceObject.getLinkPath());
+        response.sendRedirect(resourceObject.getOoUrlPath());
         return null;
     }
 

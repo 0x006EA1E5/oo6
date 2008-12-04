@@ -3,15 +3,14 @@ package org.otherobjects.cms.site;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
-public class TreeNode
+public class TreeNode implements Cloneable
 {
     private String id;
     private String path;
     private String label;
     private Object object;
     private List<TreeNode> children = new ArrayList<TreeNode>();
+    private boolean selected = false;
 
     public TreeNode()
     {
@@ -35,6 +34,31 @@ public class TreeNode
         this.id = id;
         this.label = label;
         this.object = object;
+    }
+
+    /**
+     * Clones the tree but only to the maximum depth specified.
+     * @param depth
+     * @return
+     */
+    public TreeNode clone(int depth) throws CloneNotSupportedException
+    {
+        TreeNode clone = (TreeNode) super.clone();
+        if (depth > 0)
+        {
+            List<TreeNode> childrenClone = new ArrayList<TreeNode>();
+            for (TreeNode child : getChildren())
+            {
+                childrenClone.add((TreeNode) child.clone(depth - 1));
+            }
+            clone.setChildren(childrenClone);
+        }
+        else
+        {
+            // Remove pointer to original list of children
+            clone.setChildren(new ArrayList<TreeNode>());
+        }
+        return clone;
     }
 
     public TreeNode getNode(String string)
@@ -139,5 +163,15 @@ public class TreeNode
     public void setObject(Object object)
     {
         this.object = object;
+    }
+
+    public boolean isSelected()
+    {
+        return selected;
+    }
+
+    public void setSelected(boolean selected)
+    {
+        this.selected = selected;
     }
 }

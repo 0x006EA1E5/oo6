@@ -74,7 +74,7 @@ public abstract class SitePage extends BaseNode //implements SiteItem
     public Url getHref()
     {
         if (url == null)
-            url = new Url(getLinkPath());
+            url = new Url(getOoUrlPath());
         return url;
     }
 

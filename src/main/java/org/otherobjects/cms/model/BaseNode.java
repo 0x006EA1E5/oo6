@@ -251,12 +251,27 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
 
     /**
      * FIXME Better name needed?
+     * @deprecated
      */
     public String getLinkPath()
     {
         if (getJcrPath() == null)
             return null;
 
+        String linkPath = getJcrPath().replaceAll("^/site", "");
+        if (isFolder())
+            linkPath += "/";
+        return linkPath;
+    }
+
+    /**
+     * Returns url path for this object.
+     */
+    public String getOoUrlPath()
+    {
+        if (getJcrPath() == null)
+            return null;
+        
         String linkPath = getJcrPath().replaceAll("^/site", "");
         if (isFolder())
             linkPath += "/";

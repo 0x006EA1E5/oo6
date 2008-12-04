@@ -38,7 +38,7 @@ public class SiteMapGenerator
         Element urlset = doc.addElement("urlset");
         for (BaseNode item : items)
         {
-            String linkPath = item.getLinkPath();
+            String linkPath = item.getOoUrlPath();
             Date modificationTimestamp = item.getModificationTimestamp();
 
             Assert.hasText(linkPath, "URL can not be null for item: " + item.getJcrPath());

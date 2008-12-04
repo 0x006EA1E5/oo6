@@ -114,7 +114,7 @@ public class SiteFolder extends BaseNode implements Folder
     public Url getHref()
     {
         if (url == null)
-            url = new Url(getLinkPath());
+            url = new Url(getOoUrlPath());
         return url;
     }
 
