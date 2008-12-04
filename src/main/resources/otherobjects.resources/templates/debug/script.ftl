@@ -9,6 +9,7 @@ cou can get any bean via getBean()</p>
 <textarea style="width:600px; height:300px;" name="script">${script!}</textarea>
 
 <p><small>eg return app.getBean("userDao")</small></p>
+<p><small>Available: app (ApplicationContext), jcr (UniversalJcrDao), logger (HtmlLogger)</small></p>
 
 <p><input type="submit" value="Run"/></p>
 </form>

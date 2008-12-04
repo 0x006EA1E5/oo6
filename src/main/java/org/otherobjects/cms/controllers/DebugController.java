@@ -280,7 +280,7 @@ public class DebugController implements ServletContextAware, ApplicationContextA
                 Binding binding = new Binding();
                 binding.setVariable("app", applicationContext);
                 GenericDao dao = ((DaoService) applicationContext.getBean("daoService")).getDao("baseNode");
-                binding.setVariable("dao", dao);
+                binding.setVariable("jcr", dao);
                 StringWriter writer = new StringWriter();
                 binding.setProperty("logger", new HtmlLogger(writer));
                 GroovyShell shell = new GroovyShell(binding);
