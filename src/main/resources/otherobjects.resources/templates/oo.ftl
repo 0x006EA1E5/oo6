@@ -6,14 +6,14 @@ Renders an image.
 </#macro>
 
 <#-- 
-Convenience macro to insert CSS link tag.
+Convenience macro to insert a CSS link tag.
 -->
 <#macro css path media="screen">
 <link rel="stylesheet" href="${resourceUrl(path)}" type="text/css" media="${media}" />
 </#macro>  
 
 <#-- 
-Convenience macro to insert CSS link tag.
+Convenience macro to insert a CSS link tag.
 -->
 <#macro combinableCss paths combinedPath media="screen">
 <#if ooEnvironment == "dev">
@@ -26,17 +26,24 @@ Convenience macro to insert CSS link tag.
 </#macro>    
 
 <#-- 
-Convenience macro to insert CSS link tag.
+Convenience macro to insert a JavaScript CSS link tag.
 -->
 <#macro js path>
 <script type="text/javascript" src="${resourceUrl(path)}"></script>
 </#macro>
 
 <#-- 
-Convenience macro to insert favicon link tag.
+Convenience macro to insert a favicon link tag.
 -->
 <#macro favicon path>
-<link rel="shortcut icon" href="${resourceUrl(path)}" type="image/x-icon" />
+<link rel="shortcut icon" href="${resourceUrl(path)}" />
+</#macro>  
+
+<#-- 
+Convenience macro to insert an Apple Touch Icon link tag.
+-->
+<#macro appleTouchIcon path>
+<link rel="apple-touch-icon" href="${resourceUrl(path)}"/>
 </#macro>  
 
 <#-- 
