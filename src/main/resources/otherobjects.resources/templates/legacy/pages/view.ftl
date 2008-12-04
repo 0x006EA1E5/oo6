@@ -45,6 +45,10 @@ ${pageTitle}
 <li class="divider"><a href="${oo.url('/otherobjects/workbench/publish/${object.editableId}')}">Publish</a></li>
 </#if>
 <li class="divider"><a href="${oo.url('/otherobjects/workbench/delete/${object.editableId}')}">Delete</a></li>
+
+<#if item.linkPath??>
+<li class="divider"><a href="${oo.url(item.linkPath)}">Preview</a></li>
+</#if>
 </ul>
 </div>
 
