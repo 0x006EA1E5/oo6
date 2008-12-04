@@ -153,11 +153,6 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
         setCode(jcrPath.substring(slashPos + 1));
     }
 
-    public boolean hasProperty(String name)
-    {
-        return getTypeDef().getProperty(name) != null;
-    }
-
     public Object getPropertyValue(String name)
     {
         // FIXME Need consistent method for accessing properties Spring vs BeanWrapper
@@ -168,6 +163,20 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
         catch (Exception e)
         {
             throw new OtherObjectsException("Could not get property value for '" + name + "' in: " + getTypeDef().getName(), e);
+        }
+    }
+    
+    public boolean hasProperty(String name)
+    {
+        // FIXME Need consistent method for accessing properties Spring vs BeanWrapper
+        try
+        {
+            PropertyUtils.getProperty(this, name);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
         }
     }
 

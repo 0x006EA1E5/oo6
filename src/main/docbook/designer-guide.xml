@@ -497,6 +497,9 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
     <chapter>
       <title>Writing templates</title>
 
+      <para>Terminology: template is an arrangement of blocks within a layout.
+      Rule of thumb: 1 wireframe = 1 template.</para>
+
       <para>Template paths</para>
 
       <para>Reserved folder names: otherobjects, plugins</para>
@@ -517,6 +520,8 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
         <para>folder (via SiteController only)</para>
 
         <para>url ?</para>
+
+        <para>ooTemplate</para>
       </section>
 
       <section>
@@ -624,10 +629,39 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
 
         <para>oo-flash</para>
       </section>
+
+      <section>
+        <title>Navigation elements (breakout)</title>
+
+        <para>Describe standard blockn and macros. See chapter ??</para>
+      </section>
     </chapter>
 
     <chapter>
-      <title>Syndictation: In &amp; Out</title>
+      <title>Navigation</title>
+
+      <para>Uses Navigation Service</para>
+
+      <para>For: navigation areas (inc highlihting selected items) - may be
+      limited in depth. hightlight current page. can optionally include
+      parents (via show in navigation flag).</para>
+
+      <para>For: breadcrumbs</para>
+
+      <para>For: sitemap</para>
+
+      <para>For: pageTitles</para>
+
+      <para>For: sitemap.xml</para>
+
+      <para>TODO Link checking</para>
+
+      <para>How to register urls from other controllers (subclass
+      NavService)</para>
+    </chapter>
+
+    <chapter>
+      <title>Syndication: In &amp; Out</title>
 
       <para>To publish an Atom/RSS feed you can create a
       org.otherobjects.cms.model.SyndicationFeedResource</para>
@@ -1561,7 +1595,7 @@ public class MyController
 
       <para>Returning XML</para>
 
-      <para></para>
+      <para>ReturnXLS: AbstractJExcelView ?</para>
 
       <para>Returning JSON</para>
 
