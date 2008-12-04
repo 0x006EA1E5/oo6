@@ -153,7 +153,7 @@ public class WorkbenchController
         String q = null; // TODO 
 
         FolderDao folderDao = (FolderDao) this.daoService.getDao(Folder.class);
-        Folder folder = folderDao.get(id);
+        Folder folder = (Folder) folderDao.get(id);
         ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/list");
         mav.addObject("id", id);
         mav.addObject("folder", folder);
@@ -390,7 +390,7 @@ public class WorkbenchController
         ActionUtils actionUtils = new ActionUtils(request, response, null, null);
         actionUtils.flashInfo("Your object was deleted.");
 
-        SiteFolder folder = folderDao.getByPath(item.getPath());
+        SiteFolder folder = (SiteFolder) folderDao.getByPath(item.getPath());
         Url u = new Url("/otherobjects/workbench/list/" + folder.getId());
         response.sendRedirect(u.toString());
         return null;
