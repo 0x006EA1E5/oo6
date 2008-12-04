@@ -2,23 +2,40 @@ package org.otherobjects.cms.site;
 
 import java.util.List;
 
-import org.otherobjects.cms.model.BaseNode;
+import org.apache.commons.lang.StringUtils;
 
 public class TreeBuilder
 {
-    public Tree buildTree(List<BaseNode> flat)
+    public TreeNode buildTree(List<TreeNode> flat)
     {
         return buildTree(flat, "/");
     }
 
-    public Tree buildTree(List<BaseNode> flat, String rootPath)
+    public TreeNode buildTree(List<TreeNode> flat, String rootPath)
     {
-        Tree tree = new Tree();
-        ((RootTreeItem) tree.getRootItem()).setPath(rootPath);
-        for (BaseNode node : flat)
+        TreeNode tree = new TreeNode(rootPath);
+        return buildTree(flat, tree);
+    }
+
+    public TreeNode buildTree(List<TreeNode> flat, TreeNode tree)
+    {
+        for (TreeNode node : flat)
         {
-            tree.addItem(node);
+            addItemToTree(tree, node);
         }
         return tree;
     }
+
+    private void addItemToTree(TreeNode tree, TreeNode node)
+    {
+        String parentPath = node.getPath();
+        if (parentPath.endsWith("/"))
+            parentPath = parentPath.substring(0, parentPath.length() - 1);
+        parentPath = StringUtils.substringBeforeLast(parentPath, "/") + "/";
+
+        TreeNode parent = tree.getNode(parentPath);
+        if (parent != null)
+            parent.getChildren().add(node);
+    }
+
 }

@@ -1,33 +1,39 @@
 package org.otherobjects.cms.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.otherobjects.cms.jcr.GenericJcrDaoJackrabbit;
-import org.otherobjects.cms.site.Tree;
 import org.otherobjects.cms.site.TreeBuilder;
+import org.otherobjects.cms.site.TreeNode;
 
 /**
  * TODO Merge with NavigationSrevice 
  * @author rich
  */
-public class FolderDaoImpl extends GenericJcrDaoJackrabbit<SiteFolder> implements FolderDao
+public class FolderDaoImpl extends GenericJcrDaoJackrabbit<BaseNode> implements FolderDao
 {
     public FolderDaoImpl()
     {
-        super(SiteFolder.class);
+        super(BaseNode.class);
     }
 
-    public List<SiteFolder> getFolders()
+    public List<BaseNode> getFolders()
     {
         // FIXME Need folder indicator
         return getAllByJcrExpression("/jcr:root//element(*) [jcr:like(@ooType,'%Folder')]");
     }
-    
-    @SuppressWarnings("unchecked")
-    public Tree getFolderTree()
+
+    public TreeNode getFolderTree()
     {
         TreeBuilder tb = new TreeBuilder();
-        List all = getFolders();
-        return tb.buildTree(all);
+        List<BaseNode> all = getFolders();
+        List<TreeNode> flat = new ArrayList<TreeNode>();
+        for (BaseNode b : all)
+        {
+            flat.add(new TreeNode(b.getJcrPath()+"/", b.getId(), b.getOoLabel(), b)); 
+        }
+
+        return tb.buildTree(flat);
     }
 }

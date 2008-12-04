@@ -16,12 +16,12 @@ public class NavigationTool
         this.navigationService = navigationService;
     }
 
-    public Tree getNavigation(SiteNode location, int startDepth, int endDepth)
+    public TreeNode getNavigation(String path, int startDepth, int endDepth)
     {
-        return navigationService.getNavigation(location, startDepth, endDepth);
+        return navigationService.getNavigation(path, startDepth, endDepth);
     }
 
-    public List<SiteNode> getParents(SiteNode location)
+    public List<TreeNode> getParents(String location)
     {
         return navigationService.getParents(location);
     }
