@@ -48,7 +48,6 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
 
         if (dao == null)
         {
-
             String daoBeanName = determineDaoBeanName(type);
 
             //then try find named bean in context
@@ -124,6 +123,14 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
         beanName = beanName + "Dao";
 
         return beanName;
+    }
+
+    public void addDao(GenericDao dao)
+    {
+        String name = dao.getClass().getName();
+        // FIXME This could be nicer
+        name = name.replaceAll("DaoImpl","");
+        getDaoMap().put(name, dao);
     }
 
     public void addDao(String name, GenericDao dao)

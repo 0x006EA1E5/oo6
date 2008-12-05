@@ -8,4 +8,6 @@ public interface DaoService
     GenericDao getDao(String type);
     
     boolean hasDao(String type);
+
+    void addDao(GenericDao dao);
 }
