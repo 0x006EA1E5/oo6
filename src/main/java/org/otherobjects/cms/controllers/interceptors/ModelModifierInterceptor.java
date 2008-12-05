@@ -7,8 +7,6 @@ import javax.servlet.http.HttpSession;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.io.OoResourceLoader;
-import org.otherobjects.cms.site.NavigationService;
-import org.otherobjects.cms.site.NavigationTool;
 import org.otherobjects.cms.tools.CmsImageTool;
 import org.otherobjects.cms.tools.FlashMessageTool;
 import org.otherobjects.cms.tools.FormatTool;
@@ -18,6 +16,7 @@ import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.ObjectInspector;
 import org.otherobjects.cms.views.FreemarkerToolProvider;
 import org.springframework.context.MessageSource;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -64,10 +63,6 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             modelAndView.addObject("flash", new FlashMessageTool(request));
             modelAndView.addObject("jcr", daoService.getDao("BaseNode"));
             modelAndView.addObject("ooEnvironment", otherObjectsConfigurator.getProperty("otherobjects.environment"));
-         
-            // FIXME Temp test -- must be removed
-            modelAndView.addObject("comment", Class.forName("com.othermedia.nawb.model.Comment").newInstance());
-            modelAndView.addObject("commentTypeDef", typeService.getType("com.othermedia.nawb.model.Comment"));
             
             // Add auto-detected tools
             if(freemarkerToolProvider!=null)

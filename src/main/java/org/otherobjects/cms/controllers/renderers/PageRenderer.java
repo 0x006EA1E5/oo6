@@ -50,15 +50,7 @@ public class PageRenderer implements ResourceRenderer
 
         view.addObject("ooTemplate", template);
 
-        HttpSession session = request.getSession(false);
-        if (session != null)
-        {
-            BindingResult fo = (BindingResult) session.getAttribute("errors");
-            if (fo != null && fo.getModel() != null)
-            {
-                view.addObject("org.springframework.validation.BindingResult.formObject", fo);
-            }
-        }
+        
        return view;
     }
     
