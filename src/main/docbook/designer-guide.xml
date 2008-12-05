@@ -638,6 +638,18 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
     </chapter>
 
     <chapter>
+      <title>Assets</title>
+
+      <para>Css: use macro and spec combined.css in pom.xml</para>
+
+      <para>Graphics</para>
+
+      <para>JS</para>
+
+      <para>Favicon / Apple Touch Icon</para>
+    </chapter>
+
+    <chapter>
       <title>Navigation</title>
 
       <para>Uses Navigation Service</para>
@@ -1372,7 +1384,7 @@ Admin : http://localhost:8080/go/workbench/
 
       <para>Can be found automatically.</para>
 
-      <para>Add @Tool("name") annotation </para>
+      <para>Add @Tool("name") annotation</para>
     </chapter>
 
     <chapter>
