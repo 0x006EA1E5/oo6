@@ -77,9 +77,17 @@ public class NavigationServiceImplTest extends TestCase
 
     public void testGetTrail()
     {
-        List<TreeNode> trail = navigationService.getTrail("/products/kitchen/products.html");
+        List<TreeNode> trail = navigationService.getTrail("/products/kitchen/products.html", 0, false);
         assertEquals(4, trail.size());
         assertEquals("/", trail.get(0).getPath());
         assertEquals("/products/kitchen/products.html", trail.get(3).getPath());
+        
+        trail = navigationService.getTrail("/products/kitchen/products.html", 0, true);
+        assertEquals("/products/kitchen/", trail.get(2).getPath());
+        assertEquals(3, trail.size());
+
+        trail = navigationService.getTrail("/products/kitchen/products.html", 1, true);
+        assertEquals(2, trail.size());
+        assertEquals("/products/", trail.get(0).getPath());
     }
 }

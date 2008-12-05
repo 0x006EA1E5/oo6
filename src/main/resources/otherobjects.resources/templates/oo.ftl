@@ -47,6 +47,27 @@ Convenience macro to insert an Apple Touch Icon link tag.
 </#macro>  
 
 <#-- 
+Inserts page title, including trail. Allows override via page metaData.
+-->
+<#macro pageTitle resourceObject default>
+<title>
+	<#if (resourceObject.data.metaData.title)??>${resourceObject.data.metaData.title}<#else>${resourceObject.ooLabel}</#if> |
+	<#list navigationTool.getTrail(resourceObject.ooUrlPath, 1, true)?reverse as trailItem>
+		${trailItem.label!} |
+	</#list>
+	${default}
+</title>
+</#macro>  
+
+<#-- 
+Inserts page metaData.
+-->
+<#macro metaData resourceObject>
+<#if (resourceObject.data.metaData.keywords)??><meta name="keywords" content="${resourceObject.data.metaData.keywords}"/></#if>
+<#if (resourceObject.data.metaData.keywords)??><meta name="description" content="${resourceObject.data.metaData.description}"/></#if>
+</#macro>  
+
+<#-- 
 Renders an exception stack trace. Output is not wrapped in a block element.
 -->
 <#macro renderException exception>

@@ -12,9 +12,10 @@ import org.springframework.util.Assert;
 /**
  * TODO Sort order
  * TODO Dealing with default pages (don't duplicate with folder)
- * TODO Don't store whole object: id, url, label. 
  * TODO Allow injection of other paths eg for non-jcr pages
- * 
+ * TODO Live/edit trees
+ * TODO Update tree on relevant events
+ *  
  * @author rich
  *
  */
@@ -42,7 +43,7 @@ public class NavigationServiceImpl implements NavigationService
             Assert.isTrue(endDepth > startDepth, "Navigation end depth must be > start depth");
 
             // FIXME Need to synchronise this
-            //if (tree == null)
+            if (tree == null)
                 buildTree();
 
             // Start at correct depth and location by trimming path to correct depth
@@ -61,6 +62,42 @@ public class NavigationServiceImpl implements NavigationService
         catch (Exception e)
         {
             throw new OtherObjectsException("Could not create nagivation tree.", e);
+        }
+    }
+
+    public List<TreeNode> getTrail(String path, int startDepth, boolean foldersOnly)
+    {
+        try
+        {
+            Assert.isTrue(startDepth >= 0, "Navigation start depth must be >= 0");
+
+            // FIXME Need to synchronise this
+            if (tree == null)
+                buildTree();
+            
+            List<TreeNode> parents = new ArrayList<TreeNode>();
+            int pos = 0;
+            int depth = 0;
+            while (pos < path.length())
+            {
+                pos = path.indexOf("/", pos) + 1;
+                if (pos == 0)
+                {
+                    if (foldersOnly)
+                        break;
+                    else
+                        pos = path.length();
+                }
+                String p = path.substring(0, pos);
+                TreeNode node = tree.getNode(p);
+                if (node != null && depth++ >= startDepth)
+                    parents.add((TreeNode) node.clone(0));
+            }
+            return parents;
+        }
+        catch (CloneNotSupportedException e)
+        {
+            throw new OtherObjectsException("Could not create nagivation trail.", e);
         }
     }
 
@@ -125,7 +162,7 @@ public class NavigationServiceImpl implements NavigationService
 
         appendAdditionalNodes(flat);
 
-        this.tree = tb.buildTree(flat, new TreeNode("/",null,"Home"));
+        this.tree = tb.buildTree(flat, new TreeNode("/", null, "Home"));
     }
 
     /**
@@ -137,31 +174,6 @@ public class NavigationServiceImpl implements NavigationService
     {
         nodes.add(new TreeNode("/engage/survey", "", "Survey"));
 
-    }
-
-    public List<TreeNode> getTrail(String path)
-    {
-        try
-        {
-            List<TreeNode> parents = new ArrayList<TreeNode>();
-            int pos = 0;
-            while (pos < path.length())
-            {
-                pos = path.indexOf("/", pos) + 1;
-                if (pos == 0)
-                    break;
-                    //pos = path.length();
-                String p = path.substring(0, pos);
-                TreeNode node = tree.getNode(p);
-                if(node!=null)
-                    parents.add((TreeNode) node.clone(0));
-            }
-            return parents;
-        }
-        catch (CloneNotSupportedException e)
-        {
-            throw new OtherObjectsException("Could not create nagivation trail.", e);
-        }
     }
 
     /**
