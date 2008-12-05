@@ -66,6 +66,11 @@ public class OoBootstrapper implements InitializingBean
             dbSchemaInitialiser.initialise(true);
             boostrapProperties.setProperty(DB_SCHEMA_VERSION_KEY, "1");
         }
+        else
+        {
+            // FIXME We should not do this on every startup
+            dbSchemaInitialiser.update();
+        }
 
         try
         {

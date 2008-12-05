@@ -35,4 +35,9 @@ public class DbSchemaInitialiser
         }
         sessionFactoryBean.createDatabaseSchema();
     }
+    
+    public void update() throws Exception
+    {
+        sessionFactoryBean.updateDatabaseSchema();
+    }
 }
