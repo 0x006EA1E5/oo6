@@ -81,7 +81,6 @@ public class SetupController
             return null;
         }
 
-
         // Validate 
         ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "email", "field.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "oldPassword", "field.required");
