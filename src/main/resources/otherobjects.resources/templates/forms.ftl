@@ -225,6 +225,7 @@ Renders a textbox for a date property.
 <#macro formTimestamp path attributes="" empty=false>
 	<#if empty>
 		<@formInput path attributes "text" empty/>
+		<input type="button" value="Now" onclick="document.getElementById('${path}').value=formatTimestamp(new Date());"/>
 	<#else>
 		<@bind path />
 		<#assign ooStatus = springMacroRequestContext.getBindStatus("${path}")>
@@ -234,8 +235,8 @@ Renders a textbox for a date property.
 	  	  	<#assign stringStatusValue=ooStatus.value?default("")>
 		</#if>
 		<input type="text" class="text" id="${ooStatus.expression}" name="${ooStatus.expression}" value="${stringStatusValue}">
+		<input type="button" value="Now" onclick="document.getElementById('${ooStatus.expression}').value=formatTimestamp(new Date());"/>
 	</#if>
-	<input type="button" value="Now" onclick="document.getElementById('${ooStatus.expression}').value=formatTimestamp(new Date());"/>
 </#macro>
 
 <#macro formSingleSelect path options attributes="" empty=false>
