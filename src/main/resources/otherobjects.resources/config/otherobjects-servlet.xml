@@ -23,6 +23,12 @@
 			</list>
 		</property>
 	</bean>
+	
+		
+	<bean id="freemarkerToolProvider" class="org.otherobjects.cms.views.FreemarkerToolProvider" >
+		<property name="scanner" ref="annotatedClassesScanner" />
+		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
+	</bean>
 
 	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping" parent="handlerMappingTemplate">
 		<property name="mappings">
