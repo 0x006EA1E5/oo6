@@ -79,7 +79,7 @@ public class TypeDefConfiguredValidator implements Validator
                     ValidationUtils.rejectIfEmptyOrWhitespace(errors, fieldName, "field.required");
 
                 int size = propertyDef.getSize();
-                if (size > -1)
+                if (size > -1 && value != null)
                 {
                     int actualSize = value.toString().length();
                     if (value != null && actualSize > size)
