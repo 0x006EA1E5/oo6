@@ -14,6 +14,7 @@ import org.otherobjects.cms.tools.FlashMessageTool;
 import org.otherobjects.cms.tools.FormatTool;
 import org.otherobjects.cms.tools.SecurityTool;
 import org.otherobjects.cms.tools.UrlTool;
+import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.ObjectInspector;
 import org.otherobjects.cms.views.FreemarkerToolProvider;
 import org.springframework.context.MessageSource;
@@ -27,7 +28,7 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
     private OtherObjectsConfigurator otherObjectsConfigurator;
     private MessageSource messageSource;
     private FreemarkerToolProvider freemarkerToolProvider;
-    private NavigationService navigationService;
+    private TypeService typeService;
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception
@@ -56,13 +57,17 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             modelAndView.addObject("urlTool", new UrlTool(ooResourceLoader));
             modelAndView.addObject("objectInspector", new ObjectInspector());
             modelAndView.addObject("formatTool", new FormatTool(messageSource, otherObjectsConfigurator));
-            modelAndView.addObject("navigationTool", new NavigationTool(navigationService));
+            //modelAndView.addObject("navigationTool", new NavigationTool(navigationService));
             modelAndView.addObject("security", new SecurityTool());
             modelAndView.addObject("daoService", daoService);
             modelAndView.addObject("dao", daoService);
             modelAndView.addObject("flash", new FlashMessageTool(request));
             modelAndView.addObject("jcr", daoService.getDao("BaseNode"));
             modelAndView.addObject("ooEnvironment", otherObjectsConfigurator.getProperty("otherobjects.environment"));
+         
+            // FIXME Temp test -- must be removed
+            modelAndView.addObject("comment", Class.forName("com.othermedia.nawb.model.Comment").newInstance());
+            modelAndView.addObject("commentTypeDef", typeService.getType("com.othermedia.nawb.model.Comment"));
             
             // Add auto-detected tools
             if(freemarkerToolProvider!=null)
@@ -96,8 +101,8 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
         this.freemarkerToolProvider = freemarkerToolProvider;
     }
 
-    public void setNavigationService(NavigationService navigationService)
+    public void setTypeService(TypeService typeService)
     {
-        this.navigationService = navigationService;
+        this.typeService = typeService;
     }
 }

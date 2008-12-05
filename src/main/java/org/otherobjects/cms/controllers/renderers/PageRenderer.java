@@ -8,7 +8,6 @@ import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsNode;
-import org.otherobjects.cms.model.Comment;
 import org.otherobjects.cms.model.Template;
 import org.otherobjects.cms.model.TemplateLayout;
 import org.otherobjects.cms.util.StringUtils;
@@ -60,10 +59,7 @@ public class PageRenderer implements ResourceRenderer
                 view.addObject("org.springframework.validation.BindingResult.formObject", fo);
             }
         }
-        // FIXME Let's not add this stuff here
-        view.addObject("formObject", new Comment());
-        view.addObject("daoService", this.daoService);
-        return view;
+       return view;
     }
     
     private Object getTemplates()
