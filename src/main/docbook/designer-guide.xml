@@ -1368,6 +1368,14 @@ Admin : http://localhost:8080/go/workbench/
     </chapter>
 
     <chapter>
+      <title>Creating tools</title>
+
+      <para>Can be found automatically.</para>
+
+      <para>Add @Tool("name") annotation </para>
+    </chapter>
+
+    <chapter>
       <title>Architecture</title>
 
       <para>There are several key OTHERobjects components that it is important
@@ -2352,6 +2360,14 @@ ${datevar?date}</programlisting>
       <para>Jmeter</para>
 
       <para>That tails one based on httperf</para>
+    </chapter>
+
+    <chapter>
+      <title>Profiling &amp; Troubleshooting</title>
+
+      <para>http://wiki.eclipse.org/index.php/MemoryAnalyzer</para>
+
+      <para>Profiler? TPTP?</para>
     </chapter>
   </part>
 </book>
