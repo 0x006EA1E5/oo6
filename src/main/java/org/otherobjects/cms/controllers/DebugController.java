@@ -430,6 +430,7 @@ public class DebugController implements ServletContextAware, ApplicationContextA
         {
             Selector s = new Selector();
             s.setQueryPath(path);
+            s.setSubFolders(true);
             s.setQueryTypeName(type);
             xpath = s.getQuery();
         }

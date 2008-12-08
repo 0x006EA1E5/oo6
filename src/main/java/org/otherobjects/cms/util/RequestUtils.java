@@ -29,6 +29,13 @@ public class RequestUtils
         return pathInfo.substring(pathInfo.lastIndexOf("/") + 1);
     }
 
+    
+    public static String getId(HttpServletRequest request, String defaultValue)
+    {
+        String id = getId(request);
+        return id != null ? id : defaultValue;
+    }
+
     public static int getInt(HttpServletRequest request, String paramName)
     {
         String parameter = request.getParameter(paramName);
@@ -75,7 +82,7 @@ public class RequestUtils
         while (parameterNames.hasMoreElements())
         {
             String name = (String) parameterNames.nextElement();
-            log.debug("Parameter: {} = {}", name, request.getParameter(name));
+            log.error("Parameter: {} = {}", name, request.getParameter(name));
         }
     }
 

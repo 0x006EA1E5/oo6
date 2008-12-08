@@ -25,4 +25,8 @@ public class MockDaoService implements DaoService
         return true;
     }
 
+    public void addDao(GenericDao dao)
+    {
+    }
+
 }

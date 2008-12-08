@@ -24,7 +24,7 @@
                 hibernate.query.substitutions=true 'Y', false 'N'
                 hibernate.cache.use_second_level_cache=true
                 hibernate.cache.provider_class=org.hibernate.cache.EhCacheProvider
-                hibernate.jdbc.batch_size=0
+                hibernate.jdbc.batch_size=25
                 hibernate.show_sql=true
                 hibernate.search.default.directory_provider = org.hibernate.search.store.FSDirectoryProvider
                 hibernate.search.default.indexBase = ./webapp/WEB-INF/lucene

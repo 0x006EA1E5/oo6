@@ -98,9 +98,12 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
             public Object doInHibernate(Session session)
             {
                 Query q = session.createQuery(query);
-                for (String key : queryParams.keySet())
+                if (queryParams != null)
                 {
-                    q.setParameter(key, queryParams.get(key));
+                    for (String key : queryParams.keySet())
+                    {
+                        q.setParameter(key, queryParams.get(key));
+                    }
                 }
                 return q.list();
             }
