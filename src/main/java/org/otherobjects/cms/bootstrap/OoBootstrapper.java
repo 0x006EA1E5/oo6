@@ -63,7 +63,7 @@ public class OoBootstrapper implements InitializingBean
         // initialise db schema
         if (schemaUpdateRequired())
         {
-            dbSchemaInitialiser.initialise(true);
+            dbSchemaInitialiser.initialise(false);
             boostrapProperties.setProperty(DB_SCHEMA_VERSION_KEY, "1");
         }
         else
