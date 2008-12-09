@@ -44,7 +44,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
         Assert.notNull(dataDirPath, "Property site.public.data.path has not been set. Add it to your properties file");
 
         uploadDirPath = otherObjectsConfigurator.getProperty("site.private.data.path") + "uploads/";
-        
+
         // set some static props on DefautOoResource as a kind of poor DI
         DefaultOoResource.setDataDirPath(dataDirPath);
 
@@ -59,9 +59,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
 
         //wrap in ooResource
         DefaultOoResource ooResource = new DefaultOoResource(resource, path, resourceInfo.getPrefix(), resourceInfo.isWritable());
-//        if(path.endsWith("create.ftl"))
-//            ooResource = new DefaultOoResource(resource, path, resourceInfo.getPrefix(), resourceInfo.isWritable());
-        
+
         if (resource.exists())
         {
             postprocessResource(ooResource);
@@ -157,6 +155,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
             if (matcher.lookingAt())
                 return rewritePathAccordingToPrefix(matcher.replaceFirst(""), prefix);
         }
+
         // return unchanged if no prefix matched, defaults to non writable because with non-prefixed paths you shouldn't use OoResource specific stuff anyway
         return new ResourceInfo(path, null, false);
     }
@@ -194,13 +193,13 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
                 buf.append("file:");
                 buf.append(dataDirPath);
                 buf.append(path);
-                writable = true; //only resources in the data path should be writable
+                writable = true; //resources in the data path should be writable
                 break;
             case UPLOAD :
                 buf.append("file:");
                 buf.append(uploadDirPath);
                 buf.append(path);
-                writable = true; //only resources in the data path should be writable
+                writable = true; // resources in the data path should be writable
                 break;
 
             default :
@@ -223,7 +222,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
 
         public ResourceInfo(String path, OoResourcePathPrefix prefix, boolean writable)
         {
-            this.path = path;
+            this.path = path;// != null ? path.replaceAll("//","/") : path;
             this.prefix = prefix;
             this.writable = writable;
         }
@@ -235,7 +234,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
 
         public String getPath()
         {
-            return (prefix!=null ? prefix.replacementFilePathPrefix() : "") + path;
+            return (prefix != null && prefix.replacementFilePathPrefix() != null ? prefix.replacementFilePathPrefix() : "") + path;
         }
 
         public boolean isWritable()
