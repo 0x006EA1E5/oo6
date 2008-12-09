@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 /**
@@ -32,6 +33,7 @@ import org.springframework.util.Assert;
  *
  * @author AppFuse <a href="mailto:bwnoll@gmail.com">Bryan Noll</a>
  */
+@Transactional
 public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDaoSupport implements GenericDao<T, PK>
 {
     protected final Logger log = LoggerFactory.getLogger(getClass());

@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
-
-	<bean name="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"> 
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd 
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+	<tx:annotation-driven />
+	<bean name="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean" depends-on="hibernateEntityConfigProvider">
-        <property name="dataSource" ref="dataSource"/>
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean" depends-on="hibernateEntityConfigProvider">
+		<property name="dataSource" ref="dataSource" />
         <!-- 
         <property name="configLocation" value="${hibernate.config.path}"/>
         <property name="schemaUpdate" value="true" />
         -->
-        <property name="annotatedClasses">
-        	<bean factory-bean="hibernateEntityConfigProvider" factory-method="getAnnotatedClasses" />
-        </property>
-        <property name="annotatedPackages">
-        	<bean factory-bean="hibernateEntityConfigProvider" factory-method="getAnnotatedPackages" />
-        </property>
-        <property name="hibernateProperties">
-            <value>
+		<property name="annotatedClasses">
+			<bean factory-bean="hibernateEntityConfigProvider" factory-method="getAnnotatedClasses" />
+		</property>
+		<property name="annotatedPackages">
+			<bean factory-bean="hibernateEntityConfigProvider" factory-method="getAnnotatedPackages" />
+		</property>
+		<property name="hibernateProperties">
+			<value>
                 hibernate.dialect=${hibernate.dialect}
                 hibernate.query.substitutions=true 'Y', false 'N'
                 hibernate.cache.use_second_level_cache=true
@@ -29,29 +30,31 @@
                 hibernate.search.default.directory_provider = org.hibernate.search.store.FSDirectoryProvider
                 hibernate.search.default.indexBase = ./webapp/WEB-INF/lucene
             </value>
-        </property>
-        <property name="namingStrategy" ref="namingStrategy"/>
-    </bean>
+		</property>
+		<property name="namingStrategy" ref="namingStrategy" />
+	</bean>
+	
+	<!-- Keep session open in view -->
+	<bean id="openSessionInViewInterceptor" class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor">
+		<property name="singleSession" value="false" />
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
 	
 	<!-- Use single-case naming strategy -->
-	<bean id="namingStrategy" class="org.hibernate.cfg.ImprovedNamingStrategy"/>
-	
-	<bean id="hibernateEntityConfigProvider" class="org.otherobjects.cms.hibernate.HibernateEntityConfigProvider" >
+	<bean id="namingStrategy" class="org.hibernate.cfg.ImprovedNamingStrategy" />
+	<bean id="hibernateEntityConfigProvider" class="org.otherobjects.cms.hibernate.HibernateEntityConfigProvider">
 		<property name="scanner" ref="annotatedClassesScanner" />
 		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
 	</bean>
-	
-    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
-    <bean id="userDao" class="org.otherobjects.cms.dao.UserDaoHibernate">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
-    <bean id="roleDao" class="org.otherobjects.cms.dao.RoleDaoHibernate">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="userDao" class="org.otherobjects.cms.dao.UserDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="roleDao" class="org.otherobjects.cms.dao.RoleDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
 
 	<!-- DataStore -->
 	<bean id="hibernateDataStore" class="org.otherobjects.cms.datastore.HibernateDataStore" />
