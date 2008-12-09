@@ -1,14 +1,10 @@
 package org.otherobjects.cms.seo;
 
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.dom4j.Document;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.XMLWriter;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.otherobjects.cms.controllers.handlers.TestPage;
@@ -41,20 +37,23 @@ public class SiteMapGeneratorTest extends TestCase
         items.add(page2);
         items.add(page3);
 
-        SiteMapGenerator smg = new SiteMapGenerator();
-        Document siteMap = smg.generateSiteMap(items);
-
-        // Output XML for info
-        StringWriter sw = new StringWriter();
-        OutputFormat outformat = OutputFormat.createPrettyPrint();
-        outformat.setEncoding("UTF-8");
-        XMLWriter writer = new XMLWriter(sw, outformat);
-        writer.write(siteMap);
-        writer.flush();
-        System.out.print(sw.toString());
-
-        assertEquals(3, siteMap.selectNodes("/urlset/url").size());
-        assertEquals("/articles/article-3.html", siteMap.valueOf("/urlset/url[3]/loc"));
+        
+        fail(); // Reimplemtn with TreeNode
+        
+//        SiteMapGenerator smg = new SiteMapGenerator();
+//        Document siteMap = null;//smg.generateSiteMap(items);
+//
+//        // Output XML for info
+//        StringWriter sw = new StringWriter();
+//        OutputFormat outformat = OutputFormat.createPrettyPrint();
+//        outformat.setEncoding("UTF-8");
+//        XMLWriter writer = new XMLWriter(sw, outformat);
+//        writer.write(siteMap);
+//        writer.flush();
+//        System.out.print(sw.toString());
+//
+//        assertEquals(3, siteMap.selectNodes("/urlset/url").size());
+//        assertEquals("/articles/article-3.html", siteMap.valueOf("/urlset/url[3]/loc"));
     }
 
     private TestPage createSamplePage(String title, DateTime date) throws Exception

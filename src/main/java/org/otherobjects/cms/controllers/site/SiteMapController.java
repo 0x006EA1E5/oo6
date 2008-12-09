@@ -1,7 +1,6 @@
-package org.otherobjects.cms.controllers;
+package org.otherobjects.cms.controllers.site;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -11,9 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.dom4j.Document;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
-import org.otherobjects.cms.jcr.UniversalJcrDao;
-import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.seo.SiteMapGenerator;
+import org.otherobjects.cms.site.NavigationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -30,18 +28,16 @@ public class SiteMapController
 {
     private final Logger logger = LoggerFactory.getLogger(SiteMapController.class);
 
-    @Resource
-    private UniversalJcrDao universalJcrDao;
 
-    @RequestMapping("/map.xml")
+    @Resource
+    private NavigationService navigationService;
+
+    @RequestMapping
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         this.logger.info("Generating sitemap.");
-        // TODO This list could be huge -- we need to be careful of memory
-        // FIXME Better way of exculding components needed
-        List<BaseNode> items = universalJcrDao.getAllByJcrExpression("/jcr:root/site//element(*, oo:node) [@ooType != 'org.otherobjects.cms.model.MetaData']");
         SiteMapGenerator siteMapGenerator = new SiteMapGenerator();
-        Document siteMap = siteMapGenerator.generateSiteMap(items);
+        Document siteMap = siteMapGenerator.generateSiteMap(navigationService.getAllNodes());
 
         // Send output
         OutputFormat outformat = OutputFormat.createPrettyPrint();

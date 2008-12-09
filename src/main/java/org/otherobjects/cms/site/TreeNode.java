@@ -1,6 +1,7 @@
 package org.otherobjects.cms.site;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TreeNode implements Cloneable
@@ -12,6 +13,7 @@ public class TreeNode implements Cloneable
     private Object object;
     private List<TreeNode> children = new ArrayList<TreeNode>();
     private boolean selected = false;
+    private Date modificationTimestamp = new Date(); // For SEO sitemap
 
     public TreeNode()
     {
@@ -201,5 +203,15 @@ public class TreeNode implements Cloneable
     public void setRedirectPath(String redirectPath)
     {
         this.redirectPath = redirectPath;
+    }
+
+    public Date getModificationTimestamp()
+    {
+        return modificationTimestamp;
+    }
+
+    public void setModificationTimestamp(Date modificationTimestamp)
+    {
+        this.modificationTimestamp = modificationTimestamp;
     }
 }

@@ -9,7 +9,7 @@ import org.dom4j.Element;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.otherobjects.cms.model.BaseNode;
+import org.otherobjects.cms.site.TreeNode;
 import org.springframework.util.Assert;
 
 /**
@@ -30,19 +30,19 @@ public class SiteMapGenerator
      * @param items
      * @return
      */
-    public Document generateSiteMap(List<BaseNode> items)
+    public Document generateSiteMap(List<TreeNode> items)
     {
         Document doc = DocumentFactory.getInstance().createDocument();
         // Must be in UTF-8 according to spec
         doc.setXMLEncoding("UTF-8");
         Element urlset = doc.addElement("urlset");
-        for (BaseNode item : items)
+        for (TreeNode item : items)
         {
-            String linkPath = item.getOoUrlPath();
+            String linkPath = item.getUrl();
             Date modificationTimestamp = item.getModificationTimestamp();
 
-            Assert.hasText(linkPath, "URL can not be null for item: " + item.getJcrPath());
-            Assert.notNull(modificationTimestamp, "modificationTimestamp can not be null for item: " + item.getJcrPath());
+            Assert.hasText(linkPath, "URL can not be null for item: " + item.getPath());
+            Assert.notNull(modificationTimestamp, "modificationTimestamp can not be null for item: " + item.getPath());
 
             // Required elements
             Element entry = urlset.addElement("url");

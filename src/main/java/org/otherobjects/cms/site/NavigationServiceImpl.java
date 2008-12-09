@@ -28,6 +28,7 @@ public class NavigationServiceImpl implements NavigationService
     private DaoService daoService;
 
     protected TreeNode tree;
+    protected List<TreeNode> nodes;
 
     public NavigationServiceImpl()
     {
@@ -47,7 +48,7 @@ public class NavigationServiceImpl implements NavigationService
 
             // FIXME Need to synchronise this
             //if (tree == null)
-                buildTree();
+            buildTree();
 
             // Start at correct depth and location by trimming path to correct depth
             path = trimPath(path, startDepth);
@@ -77,7 +78,7 @@ public class NavigationServiceImpl implements NavigationService
             // FIXME Need to synchronise this
             if (tree == null)
                 buildTree();
-            
+
             List<TreeNode> parents = new ArrayList<TreeNode>();
             int pos = 0;
             int depth = 0;
@@ -166,6 +167,25 @@ public class NavigationServiceImpl implements NavigationService
         appendAdditionalNodes(flat);
 
         this.tree = tb.buildTree(flat, new TreeNode("/", null, "Home"));
+        this.nodes = flat;
+    }
+
+    public List<TreeNode> getAllNodes()
+    {
+        // FIXME Need to synchronise this
+        if (tree == null)
+            buildTree();
+
+        return this.nodes;
+    }
+
+    public TreeNode getNode(String path)
+    {
+        // FIXME Need to synchronise this
+        if (tree == null)
+            buildTree();
+        
+        return tree.getNode(path);
     }
 
     /**
