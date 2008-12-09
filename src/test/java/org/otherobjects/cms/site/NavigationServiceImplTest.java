@@ -52,6 +52,9 @@ public class NavigationServiceImplTest extends TestCase
 
         // Test selected nodes
         assertTrue(navigationService.getNavigation("/products/kitchen/", 1, 2, "/products/kitchen/product.html").getNode("/products/kitchen/").isSelected());
+        
+        // Test out of range
+        assertNull(navigationService.getNavigation("", 1, 2).getNode("/"));
     }
 
     public void testTrimPath()
