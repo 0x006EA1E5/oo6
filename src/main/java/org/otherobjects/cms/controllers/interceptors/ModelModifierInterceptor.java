@@ -64,6 +64,11 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             modelAndView.addObject("jcr", daoService.getDao("BaseNode"));
             modelAndView.addObject("ooEnvironment", otherObjectsConfigurator.getProperty("otherobjects.environment"));
             
+            // Add url to context if not already defined
+            // FIXME Is this the right name?
+            if(!modelAndView.getModelMap().containsKey("url"))
+                modelAndView.addObject("url",request.getPathInfo());
+            
             // Add auto-detected tools
             if(freemarkerToolProvider!=null)
                 modelAndView.addAllObjects(freemarkerToolProvider.getTools());
