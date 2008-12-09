@@ -7,6 +7,7 @@ public class TreeNode implements Cloneable
 {
     private String id;
     private String path;
+    private String redirectPath;
     private String label;
     private Object object;
     private List<TreeNode> children = new ArrayList<TreeNode>();
@@ -26,6 +27,14 @@ public class TreeNode implements Cloneable
         this.path = path;
         this.id = id;
         this.label = label;
+    }
+
+    public TreeNode(String path, String id, String label, String redirectPath)
+    {
+        this.path = path;
+        this.id = id;
+        this.label = label;
+        this.redirectPath = redirectPath;
     }
 
     public TreeNode(String path, String id, String label, Object object)
@@ -109,6 +118,15 @@ public class TreeNode implements Cloneable
         }
     }
 
+    public String getUrl()
+    {
+        // FIXME Deal with context path here?
+        if (getRedirectPath() != null)
+            return getRedirectPath();
+        else
+            return getPath();
+    }
+
     @Override
     public String toString()
     {
@@ -173,5 +191,15 @@ public class TreeNode implements Cloneable
     public void setSelected(boolean selected)
     {
         this.selected = selected;
+    }
+
+    public String getRedirectPath()
+    {
+        return redirectPath;
+    }
+
+    public void setRedirectPath(String redirectPath)
+    {
+        this.redirectPath = redirectPath;
     }
 }
