@@ -2,7 +2,6 @@ package org.otherobjects.cms.controllers.renderers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
@@ -12,7 +11,6 @@ import org.otherobjects.cms.model.Template;
 import org.otherobjects.cms.model.TemplateLayout;
 import org.otherobjects.cms.util.StringUtils;
 import org.springframework.util.Assert;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 
 public class PageRenderer implements ResourceRenderer

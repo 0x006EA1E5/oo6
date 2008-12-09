@@ -3,6 +3,8 @@ package org.otherobjects.cms.site;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
@@ -22,6 +24,7 @@ import org.springframework.util.Assert;
 @SuppressWarnings("unchecked")
 public class NavigationServiceImpl implements NavigationService
 {
+    @Resource
     private DaoService daoService;
 
     protected TreeNode tree;
@@ -43,7 +46,7 @@ public class NavigationServiceImpl implements NavigationService
             Assert.isTrue(endDepth > startDepth, "Navigation end depth must be > start depth");
 
             // FIXME Need to synchronise this
-            if (tree == null)
+            //if (tree == null)
                 buildTree();
 
             // Start at correct depth and location by trimming path to correct depth
@@ -61,7 +64,7 @@ public class NavigationServiceImpl implements NavigationService
         }
         catch (Exception e)
         {
-            throw new OtherObjectsException("Could not create nagivation tree.", e);
+            throw new OtherObjectsException("Could not create navigation tree.", e);
         }
     }
 
@@ -172,8 +175,6 @@ public class NavigationServiceImpl implements NavigationService
      */
     protected void appendAdditionalNodes(List<TreeNode> nodes)
     {
-        nodes.add(new TreeNode("/engage/survey", "", "Survey"));
-
     }
 
     /**

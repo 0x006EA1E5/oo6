@@ -10,6 +10,7 @@ public class DaoProvider implements ApplicationContextAware
     
     private ApplicationContext applicationContext;
 
+    @SuppressWarnings("unchecked")
     public void init()
     {
         for (String beanName : applicationContext.getBeanDefinitionNames())

@@ -12,11 +12,9 @@ import org.otherobjects.cms.tools.FlashMessageTool;
 import org.otherobjects.cms.tools.FormatTool;
 import org.otherobjects.cms.tools.SecurityTool;
 import org.otherobjects.cms.tools.UrlTool;
-import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.ObjectInspector;
 import org.otherobjects.cms.views.FreemarkerToolProvider;
 import org.springframework.context.MessageSource;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -27,7 +25,6 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
     private OtherObjectsConfigurator otherObjectsConfigurator;
     private MessageSource messageSource;
     private FreemarkerToolProvider freemarkerToolProvider;
-    private TypeService typeService;
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception
@@ -66,8 +63,9 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             
             // Add url to context if not already defined
             // FIXME Is this the right name?
-            if(!modelAndView.getModelMap().containsKey("url"))
-                modelAndView.addObject("url",request.getPathInfo());
+            if(!modelAndView.getModelMap().containsKey("urlPath"))
+                modelAndView.addObject("urlPath",request.getPathInfo());
+            modelAndView.addObject("url",request.getPathInfo());
             
             // Add auto-detected tools
             if(freemarkerToolProvider!=null)
@@ -99,10 +97,5 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
     public void setFreemarkerToolProvider(FreemarkerToolProvider freemarkerToolProvider)
     {
         this.freemarkerToolProvider = freemarkerToolProvider;
-    }
-
-    public void setTypeService(TypeService typeService)
-    {
-        this.typeService = typeService;
     }
 }
