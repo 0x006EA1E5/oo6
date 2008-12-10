@@ -15,7 +15,7 @@ Convenience macro to insert a CSS link tag.
 <#-- 
 Convenience macro to insert a CSS link tag.
 -->
-<#macro combinableCss paths combinedPath media="screen">
+<#macro combinableCss paths combinedPath media="all">
 <#if ooEnvironment == "dev">
 <#list paths as path>
 <link rel="stylesheet" href="${resourceUrl(path)}" type="text/css" media="${media}" />

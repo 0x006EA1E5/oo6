@@ -42,6 +42,8 @@
 .oo-toolbar LI STRONG A:hover {background-color:#ffffff;}
 </style>
 
+<div class="no-print">
+
 <div id="OoMenu">
 <h2>OTHER Objects</h2>
 </div>
@@ -95,4 +97,5 @@ var ooBlockInEdit = "";
 <#list daoService.getDao("baseNode").getAllByType("org.otherobjects.cms.model.TemplateBlock") as block>
 <a class="oo-chooser-button" id="${block.code}">${block.label} &rarr;</a>
 </#list>
+</div>
 </div>
