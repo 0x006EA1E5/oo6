@@ -1161,7 +1161,8 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
                   <entry>* Subversive 0.7.1 (Subversion SCM integration) +
                   SKNKit 1.1 Connector</entry>
 
-                  <entry>Part of Ganymede (except connectors)
+                  <entry>Instructions here. Don't use Ganymede version, use
+                  latest. SVNKit 1.2 is good connector.
                   http://www.eclipse.org/subversive/documentation/gettingStarted/aboutSubversive/install.php</entry>
                 </row>
 
@@ -1207,6 +1208,12 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
 
                   <entry>http://update.eclemma.org/</entry>
                 </row>
+
+                <row>
+                  <entry>Mylyn Trac Extra</entry>
+
+                  <entry>Enable mylyn/extras in update sites. </entry>
+                </row>
               </tbody>
             </tgroup>
           </table>
@@ -1221,6 +1228,8 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
           <para>This guide assumes a basic knowledge of Eclipse. A good short
           tutorial on using Eclipse is available at
           http://www.cs.umd.edu/class/fall2004/cmsc131/EclipseTutorial/.</para>
+
+          <para>TODO Install eclipse prefs, format style and templates.</para>
         </section>
       </section>
 
