@@ -48,10 +48,13 @@ public class PageRenderer implements ResourceRenderer
 
         view.addObject("ooTemplate", template);
 
+        // TODO Would be good to have a flag to enable this for testing
+//         ActionUtils actionUtils = new ActionUtils(request, response, null, null);
+//         actionUtils.flashWarning("Hey guys! How is it going?");
         
-       return view;
+        return view;
     }
-    
+
     private Object getTemplates()
     {
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
