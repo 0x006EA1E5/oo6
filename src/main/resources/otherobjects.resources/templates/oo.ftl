@@ -13,7 +13,7 @@ Convenience macro to insert a CSS link tag.
 </#macro>  
 
 <#-- 
-Convenience macro to insert a CSS link tag.
+Macro to insert CSS tag using either a combined file or individual ones as appropriate.
 -->
 <#macro combinableCss paths combinedPath media="all">
 <#if ooEnvironment == "dev">
@@ -22,6 +22,18 @@ Convenience macro to insert a CSS link tag.
 </#list>
 <#else>
 <link rel="stylesheet" href="${resourceUrl(combinedPath)}" type="text/css" media="${media}" />
+</#if>
+</#macro>    
+
+<#-- 
+Macro to insert link tags for SyndicationFeeds.
+-->
+<#macro feeds>
+<#assign feedList = syndicationFeedTool.getFeeds()>
+<#if feedList?has_content>
+	<#list syndicationFeedTool.getFeeds() as feed>
+	<link rel="alternate" type="${feed.feedMimeType}" title="${feed.label}" href="${feed.feedUrl}">
+	</#list>
 </#if>
 </#macro>    
 
@@ -130,7 +142,7 @@ Macro to insert HUD code
 Renders the contents of the block if the roles match.
 -->
 <#macro authorize ifAllGranted ifAnyGranted="" ifNoneGranted="">
-<#if security.authorize(ifAllGranted,ifAnyGranted,ifNoneGranted) >
+<#if securityTool.authorize(ifAllGranted,ifAnyGranted,ifNoneGranted) >
 <#nested>
 </#if>
 </#macro>
