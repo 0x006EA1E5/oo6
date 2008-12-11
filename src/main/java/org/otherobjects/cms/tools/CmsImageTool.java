@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 
+import javax.annotation.Resource;
+
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.io.OoResourceLoader;
@@ -13,6 +15,8 @@ import org.otherobjects.cms.model.CmsImageSize;
 import org.otherobjects.cms.util.ImageMagickResizer;
 import org.otherobjects.cms.util.ImageResizer;
 import org.otherobjects.cms.util.ImageUtils;
+import org.otherobjects.cms.views.Tool;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 /**
@@ -30,6 +34,8 @@ import org.springframework.util.Assert;
  * 
  * @author rich
  */
+@Component
+@Tool
 public class CmsImageTool
 {
     private static final String THUMBNAIL_BACKGROUND_COLOR = "#FFFFFF";
@@ -37,6 +43,8 @@ public class CmsImageTool
 
     // FIXME Injectable image resizer. Or list with fallbacks.
     private ImageResizer imageResizer = new ImageMagickResizer();
+
+    @Resource
     private OoResourceLoader ooResourceLoader;
 
     /**
@@ -72,9 +80,13 @@ public class CmsImageTool
         // Allow for fixed height images
         Assert.notNull(image, "Image must be provided.");
         if (width == null)
+        {
             width = calculateWidth(height, image.getAspectRatio());
+        }
         if (height == null)
+        {
             height = calculateHeight(width, image.getAspectRatio());
+        }
         return getSize(image, width, height, null);
     }
 
@@ -133,10 +145,12 @@ public class CmsImageTool
         path.append("x");
         path.append(size.getHeight());
         if (size.getBackgroundColor() != null)
+        {
             path.append(size.getBackgroundColor());
+        }
         path.append("/");
         path.append(image.getOriginalFileName());
-        return ooResourceLoader.getResource(path.toString());
+        return this.ooResourceLoader.getResource(path.toString());
     }
 
     protected void createResizedDataFile(CmsImage image, CmsImageSize size, OoResource resized) throws IOException

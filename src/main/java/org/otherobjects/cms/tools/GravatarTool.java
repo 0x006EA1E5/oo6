@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 
 import org.otherobjects.cms.views.Tool;
+import org.springframework.stereotype.Component;
 
 /**
  * Generates URL to Gravatar images based on user email address.
@@ -17,8 +18,9 @@ import org.otherobjects.cms.views.Tool;
  * 
  * @author rich
  */
-@Tool("gravatar")
-public class GravatarUtils
+@Component
+@Tool
+public class GravatarTool
 {
     private static final String GRAVATAR_SERVER = "http://www.gravatar.com/avatar/";
 
@@ -52,13 +54,17 @@ public class GravatarUtils
         // Add options
         StringBuffer options = new StringBuffer();
         if (size > 0)
+        {
             options.append("s=" + size);
+        }
         try
         {
             if (placeholder != null)
             {
                 if (options.length() > 0)
+                {
                     options.append("&");
+                }
                 options.append("d=" + URLEncoder.encode(placeholder, "UTF-8"));
             }
         }
@@ -68,7 +74,9 @@ public class GravatarUtils
         }
 
         if (options.length() > 0)
+        {
             url.append("?" + options.toString());
+        }
 
         return url.toString();
     }

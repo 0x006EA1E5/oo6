@@ -2,15 +2,19 @@ package org.otherobjects.cms.tools;
 
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.security.SecurityUtil;
+import org.otherobjects.cms.views.Tool;
 import org.springframework.security.taglibs.velocity.Authz;
 import org.springframework.security.taglibs.velocity.AuthzImpl;
 import org.springframework.security.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 /**
  * Based on Spring Security Taglib.
  * 
  * @author rich
  */
+@Component
+@Tool
 public class SecurityTool
 {
     /**
