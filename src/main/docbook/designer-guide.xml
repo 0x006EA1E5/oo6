@@ -574,6 +574,7 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
 
         <para>${Application}</para>
 
+        <para>Cookies??? -- also add section in Action section</para>
         <para>${Session}</para>
       </section>
 
