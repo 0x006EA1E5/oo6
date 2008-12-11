@@ -12,10 +12,13 @@ import java.util.regex.Pattern;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
+import org.otherobjects.cms.datastore.DataStore;
+import org.otherobjects.cms.datastore.HibernateDataStore;
+import org.otherobjects.cms.datastore.JackrabbitDataStore;
 import org.otherobjects.cms.jcr.dynamic.DynaNode;
-import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.PropertyDefImpl;
@@ -46,13 +49,19 @@ public class BindServiceImpl implements BindService
     @Resource
     private DaoService daoService;
 
+    @Resource
+    private HibernateDataStore hibernateDataStore;
+
+    @Resource
+    private JackrabbitDataStore jackrabbitDataStore;
+
     private ServletRequestDataBinder binder = null;
     private HttpServletRequest request;
 
     public BindingResult bind(Object item, TypeDef typeDef, HttpServletRequest request)
     {
         this.binder = new ServletRequestDataBinder(item);
-        
+
         // FIXME Implement setAllowedFields from TypeDef
         // binder.setAllowedFields(null);
         this.request = request;
@@ -66,16 +75,16 @@ public class BindServiceImpl implements BindService
             throw new OtherObjectsException("Could not bind object: " + item, e);
         }
 
-        binder.bind(request);
-        return binder.getBindingResult();
+        this.binder.bind(request);
+        return this.binder.getBindingResult();
     }
-    
+
     public void setValue(Object target, String propertyName, Object value)
     {
         BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(target);
         bw.setPropertyValue(propertyName, value);
     }
-    
+
     public Object getValue(Object target, String propertyName)
     {
         BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(target);
@@ -110,7 +119,7 @@ public class BindServiceImpl implements BindService
             String rootPath = rootPathPrefix + path;
 
             // Check if we have matching parameters
-            Map<String, String> matchingParams = WebUtils.getParametersStartingWith(request, rootPath);
+            Map<String, String> matchingParams = WebUtils.getParametersStartingWith(this.request, rootPath);
 
             boolean correspondingParamPresent = matchingParams.size() > 0;
 
@@ -122,7 +131,9 @@ public class BindServiceImpl implements BindService
                     // instantiate list? ensure capacity?
                     List<Object> list = (List<Object>) getValue(item, path);
                     if (list != null)
+                    {
                         list.clear();
+                    }
                     else
                     {
                         list = new ArrayList<Object>();
@@ -138,10 +149,14 @@ public class BindServiceImpl implements BindService
                         String relatedType = propertyDef.getRelatedType();
                         Class<?> clazz = Class.forName(relatedType);
                         String store = propertyDef.getRelatedTypeDef().getStore();
-                        if(store.equals(TypeDef.HIBERNATE))
-                            binder.registerCustomEditor(clazz, rootPath, new EntityReferenceEditor(daoService, clazz));
-                        else if(store.equals(TypeDef.JACKRABBIT))
-                            binder.registerCustomEditor(CmsNode.class, rootPath, new CmsNodeReferenceEditor(daoService, relatedType));
+                        if (store.equals(TypeDef.HIBERNATE))
+                        {
+                            this.binder.registerCustomEditor(clazz, rootPath, new EntityReferenceEditor(this.daoService, clazz));
+                        }
+                        else if (store.equals(TypeDef.JACKRABBIT))
+                        {
+                            this.binder.registerCustomEditor(CmsNode.class, rootPath, new CmsNodeReferenceEditor(this.daoService, relatedType));
+                        }
                     }
                     else if (propertyDef.getCollectionElementType().equals("component"))
                     {
@@ -153,14 +168,14 @@ public class BindServiceImpl implements BindService
                     }
                     else
                     {
-                        binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), rootPath, propertyDef.getPropertyEditor());
+                        this.binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), rootPath, propertyDef.getPropertyEditor());
                     }
                 }
                 else if (propertyDef.getType().equals("reference")) // deal with references
                 {
                     // register suitable PropertyEditor
                     String relatedType = propertyDef.getRelatedType();
-                    binder.registerCustomEditor(CmsNode.class, rootPath, new CmsNodeReferenceEditor(daoService, relatedType));
+                    this.binder.registerCustomEditor(CmsNode.class, rootPath, new CmsNodeReferenceEditor(this.daoService, relatedType));
                 }
                 else if (propertyDef.getType().equals("component"))// deal with components
                 {
@@ -169,7 +184,7 @@ public class BindServiceImpl implements BindService
                 else
                 // simple props
                 {
-                    binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), rootPath, propertyDef.getPropertyEditor());
+                    this.binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), rootPath, propertyDef.getPropertyEditor());
                 }
             }
         }
@@ -183,12 +198,14 @@ public class BindServiceImpl implements BindService
 
     private void prepareComponent(Object parent, PropertyDef propertyDef, Integer index, String rootPathPrefix) throws Exception
     {
-        String propertyPath = ((PropertyDefImpl)propertyDef).getFieldName();
+        String propertyPath = ((PropertyDefImpl) propertyDef).getFieldName();
 
         if (index != null)
+        {
             propertyPath += "[" + index + "]";
+        }
 
-        BaseNode component = (BaseNode) getValue(parent, propertyPath);
+        Object component = getValue(parent, propertyPath);
 
         if (component == null)
         {
@@ -198,7 +215,7 @@ public class BindServiceImpl implements BindService
         }
 
         // Recurse into the component
-        prepareObject(component, component.getTypeDef(), rootPathPrefix + propertyPath + ".");
+        prepareObject(component, propertyDef.getRelatedTypeDef(), rootPathPrefix + propertyPath + ".");
     }
 
     /**
@@ -228,20 +245,14 @@ public class BindServiceImpl implements BindService
      * FIXME Merge this with FormController/TypeService
      * FIXME this is very hacky atm
      */
-    private BaseNode createObject(PropertyDef propertyDef)
+    private Object createObject(PropertyDef propertyDef)
     {
         // FIXME Allow DynaNode creation here
         // TODO Are types arways class names?
 
-        try
-        {
-            BaseNode object = (BaseNode) Class.forName(propertyDef.getRelatedType()).newInstance();
-            return object;
-        }
-        catch (Exception e)
-        {
-            return new DynaNode(propertyDef.getRelatedType());
-        }
+        TypeDef typeDef = propertyDef.getRelatedTypeDef();
+        DataStore store = getDataStore(typeDef.getStore());
+        return store.create(typeDef, null);
 
     }
 
@@ -269,74 +280,55 @@ public class BindServiceImpl implements BindService
 
     class ListProps
     {
-        private Set<Integer> usedIndices = new HashSet<Integer>();
+        private final Set<Integer> usedIndices = new HashSet<Integer>();
 
         private int currentHighestIndex = -1;
 
         public void addIndex(int index)
         {
-            usedIndices.add(new Integer(index));
-            if (index > currentHighestIndex)
-                currentHighestIndex = index;
+            this.usedIndices.add(new Integer(index));
+            if (index > this.currentHighestIndex)
+            {
+                this.currentHighestIndex = index;
+            }
         }
 
         public Set<Integer> getUsedIndices()
         {
-            return usedIndices;
+            return this.usedIndices;
         }
 
         public int getRequiredSize()
         {
-            return currentHighestIndex + 1;
+            return this.currentHighestIndex + 1;
         }
 
     }
 
-    //    /**
-    //     * 
-    //     * @param bindingResult
-    //     * @return
-    //     */
-    //    private BindingResult wrapBindingResult(BindingResult bindingResult)
-    //    {
-    //        return (BindingResult) Proxy
-    //                .newProxyInstance(bindingResult.getClass().getClassLoader(), new Class[]{BindingResult.class}, new BindingResultWrapper(bindingResult, request.getRewrittenPaths()));
-    //    }
-
-    //    /**
-    //     * wraps the given request in a proxy that effectively allows you to rewrite request parameter names
-    //     * @param request
-    //     * @return 
-    //     */
-    //    private MutableHttpServletRequest wrapRequest(HttpServletRequest request)
-    //    {
-    //        if (request instanceof MultipartHttpServletRequest)
-    //            return (MutableHttpServletRequest) Proxy.newProxyInstance(request.getClass().getClassLoader(), new Class[]{MutableHttpServletRequest.class, MultipartHttpServletRequest.class},
-    //                    new BindingRequestWrapper(request));
-    //        else
-    //            return (MutableHttpServletRequest) Proxy.newProxyInstance(request.getClass().getClassLoader(), new Class[]{MutableHttpServletRequest.class}, new BindingRequestWrapper(request));
-    //    }
-    
-    /*
-     * Get the correct parameter path String for the given {@link PropertyDef}, which will just be the name of the property or - if the item is a 
-     * {@link DynaNode} - {@link #DYNA_NODE_DATAMAP_NAME}[propertyName] (to work with Springs data binding map syntax)
+    /**
+     * FIXME This must merge with code in WorkbenchController.
      * 
-     * @param item
-     * @param propertyDef
-     * @param rootPathPrefix
+     * @param store
      * @return
-    private String calcPropertyPath(Object item, PropertyDef propertyDef, String rootPathPrefix)
+     */
+    private DataStore getDataStore(String store)
     {
-        // FIXME Merge this with propertyDef.propertyPath
-        if (item instanceof DynaNode)
-        {
-            String propertyPath = DynaNode.DYNA_NODE_DATAMAP_NAME + "[" + propertyDef.getName() + "]";
-            String propertyPath2 = ((PropertyDefImpl) propertyDef).getFieldName();
-            //request.rewriteParameter(rootPathPrefix + propertyDef.getName(), rootPathPrefix + propertyPath);
-            return propertyPath2;
-        }
+        if (store.equals(TypeDef.JACKRABBIT))
+            return this.jackrabbitDataStore;
+        else if (store.equals(TypeDef.HIBERNATE))
+            return this.hibernateDataStore;
         else
-            return propertyDef.getName();
-    }*/
+            throw new OtherObjectsException("No dataStore configured for: " + store);
+    }
+
+    protected void setHibernateDataStore(HibernateDataStore hibernateDataStore)
+    {
+        this.hibernateDataStore = hibernateDataStore;
+    }
+
+    protected void setJackrabbitDataStore(JackrabbitDataStore jackrabbitDataStore)
+    {
+        this.jackrabbitDataStore = jackrabbitDataStore;
+    }
 
 }

@@ -13,6 +13,8 @@ import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.MockDaoService;
 import org.otherobjects.cms.dao.MockGenericDao;
+import org.otherobjects.cms.dao.UniversalJcrDaoJackrabbit;
+import org.otherobjects.cms.datastore.JackrabbitDataStore;
 import org.otherobjects.cms.model.Role;
 import org.otherobjects.cms.model.Template;
 import org.otherobjects.cms.model.TemplateBlock;
@@ -33,14 +35,14 @@ import org.springframework.validation.BindingResult;
 
 public class BindServiceImplTest extends TestCase
 {
-    private TypeService typeService = new TypeServiceImpl();
+    private final TypeService typeService = new TypeServiceImpl();
 
     @Override
     protected void setUp() throws Exception
     {
         //setup type service for Template, TemplateRegion TemplateBlock
         super.setUp();
-        SingletonBeanLocator.registerTestBean("typeService", typeService);
+        SingletonBeanLocator.registerTestBean("typeService", this.typeService);
         AnnotationBasedTypeDefBuilder typeDefBuilder = new AnnotationBasedTypeDefBuilder();
         OtherObjectsConfigurator otherObjectsConfigurator = new OtherObjectsConfigurator();
         otherObjectsConfigurator.setProperty("otherobjects.default.date.format", "yyy-MM-dd");
@@ -49,25 +51,23 @@ public class BindServiceImplTest extends TestCase
         typeDefBuilder.setOtherObjectsConfigurator(otherObjectsConfigurator);
         typeDefBuilder.afterPropertiesSet();
 
-        typeService.registerType(typeDefBuilder.getTypeDef(TestObject.class));
-        typeService.registerType(typeDefBuilder.getTypeDef(Template.class));
-        typeService.registerType(typeDefBuilder.getTypeDef(TemplateLayout.class));
-        typeService.registerType(typeDefBuilder.getTypeDef(TemplateRegion.class));
-        typeService.registerType(typeDefBuilder.getTypeDef(TemplateBlock.class));
-        typeService.registerType(typeDefBuilder.getTypeDef(TemplateBlockReference.class));
-        ((TypeServiceImpl) typeService).reset();
+        this.typeService.registerType(typeDefBuilder.getTypeDef(TestObject.class));
+        this.typeService.registerType(typeDefBuilder.getTypeDef(Template.class));
+        this.typeService.registerType(typeDefBuilder.getTypeDef(TemplateLayout.class));
+        this.typeService.registerType(typeDefBuilder.getTypeDef(TemplateRegion.class));
+        this.typeService.registerType(typeDefBuilder.getTypeDef(TemplateBlock.class));
+        this.typeService.registerType(typeDefBuilder.getTypeDef(TemplateBlockReference.class));
+        ((TypeServiceImpl) this.typeService).reset();
 
         // Hibernate stored types
-        typeService.registerType(typeDefBuilder.getTypeDef(User.class));
-        typeService.registerType(typeDefBuilder.getTypeDef(Role.class));
-        
-        
-        
+        this.typeService.registerType(typeDefBuilder.getTypeDef(User.class));
+        this.typeService.registerType(typeDefBuilder.getTypeDef(Role.class));
+
         // Add DynaNode type
         TypeDefImpl td = new TypeDefImpl("ArticlePage");
         td.setLabelProperty("title");
         td.addProperty(new PropertyDefImpl("title", "string", null, null, true));
-        typeService.registerType(td);
+        this.typeService.registerType(td);
 
     }
 
@@ -78,11 +78,11 @@ public class BindServiceImplTest extends TestCase
         req.addParameter("testString", "  no trailing white space\n");
         req.addParameter("testDate", "");
         req.addParameter("testReference", "");
-        
+
         TestObject t = new TestObject();
 
         BindServiceImpl binder = new BindServiceImpl();
-        TypeDef typeDef = typeService.getType(TestObject.class);
+        TypeDef typeDef = this.typeService.getType(TestObject.class);
 
         binder.bind(t, typeDef, req);
 
@@ -91,7 +91,7 @@ public class BindServiceImplTest extends TestCase
         assertEquals(null, t.getTestReference());
         assertEquals(null, t.getTestDate());
     }
-    
+
     public void testFairlyComplexOOTemplateBinding() throws Exception
     {
         MockHttpServletRequest req = new MockHttpServletRequest();
@@ -137,9 +137,16 @@ public class BindServiceImplTest extends TestCase
         MockGenericDao dao = new MockGenericDao(objects);
 
         BindServiceImpl bs = new BindServiceImpl();
+        JackrabbitDataStore jackrabbitDataStore = new JackrabbitDataStore();
+        UniversalJcrDaoJackrabbit universalJcrDao = new UniversalJcrDaoJackrabbit();
+        universalJcrDao.setTypeService(this.typeService);
+        jackrabbitDataStore.setUniversalJcrDao(universalJcrDao);
+        bs.setJackrabbitDataStore(jackrabbitDataStore);
+        //        bs.setHibernateDataStore(new HibernateDataStore(daoService));
+
         bs.setDaoService(new MockDaoService(dao));
 
-        TypeDef templateTypeDef = typeService.getType(Template.class);
+        TypeDef templateTypeDef = this.typeService.getType(Template.class);
 
         bs.bind(rootItem, templateTypeDef, req);
 
@@ -203,9 +210,14 @@ public class BindServiceImplTest extends TestCase
         MockGenericDao dao = new MockGenericDao(objects);
 
         BindServiceImpl bs = new BindServiceImpl();
+        JackrabbitDataStore jackrabbitDataStore = new JackrabbitDataStore();
+        UniversalJcrDaoJackrabbit universalJcrDao = new UniversalJcrDaoJackrabbit();
+        universalJcrDao.setTypeService(this.typeService);
+        jackrabbitDataStore.setUniversalJcrDao(universalJcrDao);
+        bs.setJackrabbitDataStore(jackrabbitDataStore);
         bs.setDaoService(new MockDaoService(dao));
 
-        TypeDef templateTypeDef = typeService.getType(Template.class);
+        TypeDef templateTypeDef = this.typeService.getType(Template.class);
 
         bs.bind(rootItem, templateTypeDef, req);
 
@@ -222,13 +234,13 @@ public class BindServiceImplTest extends TestCase
 
     }
 
-    public void testSetValue() 
+    public void testSetValue()
     {
         TestObject to = new TestObject();
         BindServiceImpl bs = new BindServiceImpl();
         bs.setValue(to, "name", "Test");
     }
-    
+
     public void testHibernateBinding() throws Exception
     {
         MockHttpServletRequest req = new MockHttpServletRequest();
@@ -240,7 +252,7 @@ public class BindServiceImplTest extends TestCase
         Role role = new Role();
         role.setId(1L);
         role.setName("Test Role");
-        
+
         Map<Serializable, Object> objects = new HashMap<Serializable, Object>();
         objects.put(1L, role);
         MockGenericDao roleDao = new MockGenericDao(objects);
@@ -248,14 +260,14 @@ public class BindServiceImplTest extends TestCase
         BindServiceImpl bs = new BindServiceImpl();
         bs.setDaoService(new MockDaoService(roleDao));
 
-        TypeDef userTypeDef = typeService.getType(User.class);
+        TypeDef userTypeDef = this.typeService.getType(User.class);
 
         User u = new User();
-        
+
         BindingResult result = bs.bind(u, userTypeDef, req);
-        
-        assertEquals(0,result.getErrorCount());
-        
+
+        assertEquals(0, result.getErrorCount());
+
     }
 
 }
