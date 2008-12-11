@@ -20,11 +20,13 @@
 					<property name="messageSource" ref="messageSource" />
 					<property name="freemarkerToolProvider" ref="freemarkerToolProvider" />
 				</bean>
+				<ref bean="openSessionInViewInterceptor" />
 			</list>
 		</property>
 	</bean>
 	
-		
+	<!-- Scan for Tools -->
+	<context:component-scan base-package="org.otherobjects.cms.tools" />	
 	<bean id="freemarkerToolProvider" class="org.otherobjects.cms.views.FreemarkerToolProvider" />
 
 	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping" parent="handlerMappingTemplate">
@@ -84,5 +86,8 @@
 			<value>1000</value>
 		</property>
 	</bean>
+	
+	<!-- TODO Need this for NavTool but maybe we don't use the tool -->
+	<bean name="navigationService" class="org.otherobjects.cms.site.NavigationServiceImpl" />
 
 </beans>

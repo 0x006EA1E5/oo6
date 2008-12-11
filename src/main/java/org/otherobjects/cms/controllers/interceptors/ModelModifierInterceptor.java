@@ -7,12 +7,10 @@ import javax.servlet.http.HttpSession;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.io.OoResourceLoader;
-import org.otherobjects.cms.tools.CmsImageTool;
 import org.otherobjects.cms.tools.FlashMessageTool;
 import org.otherobjects.cms.tools.FormatTool;
-import org.otherobjects.cms.tools.SecurityTool;
 import org.otherobjects.cms.tools.UrlTool;
-import org.otherobjects.cms.util.ObjectInspector;
+import org.otherobjects.cms.util.CookieManager;
 import org.otherobjects.cms.views.FreemarkerToolProvider;
 import org.springframework.context.MessageSource;
 import org.springframework.web.servlet.ModelAndView;
@@ -42,34 +40,41 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             {
                 Integer counter = (Integer) session.getAttribute("counter");
                 if (counter == null)
+                {
                     counter = 0;
+                }
                 session.setAttribute("counter", ++counter);
 
                 modelAndView.addObject("counter", counter);
                 modelAndView.addObject("sessionId", session.getId());
             }
             // tools
-            modelAndView.addObject("cmsImageTool", new CmsImageTool());
-            modelAndView.addObject("urlTool", new UrlTool(ooResourceLoader));
-            modelAndView.addObject("objectInspector", new ObjectInspector());
-            modelAndView.addObject("formatTool", new FormatTool(messageSource, otherObjectsConfigurator));
+            modelAndView.addObject("urlTool", new UrlTool(this.ooResourceLoader));
+            modelAndView.addObject("formatTool", new FormatTool(this.messageSource, this.otherObjectsConfigurator));
             //modelAndView.addObject("navigationTool", new NavigationTool(navigationService));
-            modelAndView.addObject("security", new SecurityTool());
-            modelAndView.addObject("daoService", daoService);
-            modelAndView.addObject("dao", daoService);
+            modelAndView.addObject("daoService", this.daoService);
+            modelAndView.addObject("dao", this.daoService);
             modelAndView.addObject("flash", new FlashMessageTool(request));
-            modelAndView.addObject("jcr", daoService.getDao("BaseNode"));
-            modelAndView.addObject("ooEnvironment", otherObjectsConfigurator.getProperty("otherobjects.environment"));
-            
+            modelAndView.addObject("jcr", this.daoService.getDao("BaseNode"));
+            modelAndView.addObject("ooEnvironment", this.otherObjectsConfigurator.getProperty("otherobjects.environment"));
+
+            // Add cookies
+            modelAndView.addObject("Cookies", new CookieManager(request));
+
             // Add url to context if not already defined
             // FIXME Is this the right name?
-            if(!modelAndView.getModelMap().containsKey("urlPath"))
-                modelAndView.addObject("urlPath",request.getPathInfo());
-            modelAndView.addObject("url",request.getPathInfo());
-            
+            if (!modelAndView.getModelMap().containsKey("urlPath"))
+            {
+                modelAndView.addObject("urlPath", request.getPathInfo());
+            }
+            modelAndView.addObject("url", request.getPathInfo());
+
             // Add auto-detected tools
-            if(freemarkerToolProvider!=null)
-                modelAndView.addAllObjects(freemarkerToolProvider.getTools());
+            if (this.freemarkerToolProvider != null)
+            {
+                // FIXME Add scoping and caching to tool generation
+                modelAndView.addAllObjects(this.freemarkerToolProvider.getTools());
+            }
         }
 
     }
