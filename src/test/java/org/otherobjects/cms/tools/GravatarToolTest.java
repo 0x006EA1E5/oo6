@@ -2,11 +2,11 @@ package org.otherobjects.cms.tools;
 
 import junit.framework.TestCase;
 
-public class GravatarUtilsTest extends TestCase
+public class GravatarToolTest extends TestCase
 {
     public void testGetUrl()
     {
-        GravatarUtils gu = new GravatarUtils();
+        GravatarTool gu = new GravatarTool();
         String r1r = gu.getUrl("rich.aston@othermedia.com");
         String r1a = "http://www.gravatar.com/avatar/f3393615ce87349a39acb05efb134314.jpg";
         assertEquals(r1a, r1r);

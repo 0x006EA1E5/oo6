@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 
 @Retention(RUNTIME)
 public @interface Tool {
-   
-    String value();
-    
+
+    String value() default "";
+
 }
