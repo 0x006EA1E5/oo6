@@ -8,7 +8,6 @@ import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.GenericDao;
 import org.otherobjects.cms.model.CompositeDatabaseId;
-import org.otherobjects.cms.model.Editable;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.util.IdentifierUtils;
 
@@ -17,7 +16,7 @@ public class HibernateDataStore implements DataStore
 {
     @Resource
     private DaoService daoService;
-    
+
     public HibernateDataStore()
     {
     }
@@ -31,7 +30,7 @@ public class HibernateDataStore implements DataStore
     {
         try
         {
-            return (Editable) Class.forName(typeDef.getClassName()).newInstance();
+            return Class.forName(typeDef.getClassName()).newInstance();
         }
         catch (Exception e)
         {
@@ -42,7 +41,7 @@ public class HibernateDataStore implements DataStore
     public Object get(String compositeId)
     {
         CompositeDatabaseId compositeDatabaseId = IdentifierUtils.getCompositeDatabaseId(compositeId);
-        GenericDao dao = daoService.getDao(compositeDatabaseId.getClazz());
+        GenericDao dao = this.daoService.getDao(compositeDatabaseId.getClazz());
         return dao.get(compositeDatabaseId.getId());
     }
 
@@ -66,7 +65,7 @@ public class HibernateDataStore implements DataStore
 
     public GenericDao getDao(TypeDef typeDef)
     {
-        return daoService.getDao(typeDef.getClassName());
+        return this.daoService.getDao(typeDef.getClassName());
     }
 
 }
