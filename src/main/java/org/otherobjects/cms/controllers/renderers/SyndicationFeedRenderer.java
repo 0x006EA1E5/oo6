@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.otherobjects.cms.Url;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.PagedList;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
@@ -64,13 +63,12 @@ public class SyndicationFeedRenderer implements ResourceRenderer
         feed.setFeedType(feedObject.getFeedFormat());
 
         feed.setTitle(feedObject.getLabel());
-        Url feedUrl = feedObject.getFeedUrl();
-        feed.setLink(feedUrl.getAbsoluteLink());
+        feed.setLink(feedObject.getFeedUrl());
         feed.setDescription(feedObject.getDescription());
 
         List<SyndEntry> entries = new ArrayList<SyndEntry>();
 
-        Object daoObject = daoService.getDao(BaseNode.class);
+        Object daoObject = this.daoService.getDao(BaseNode.class);
 
         PagedList<BaseNode> items = ((UniversalJcrDao) daoObject).pageByJcrExpression(feedObject.getSelector().getQuery(), 15, 1);
 
@@ -96,31 +94,31 @@ public class SyndicationFeedRenderer implements ResourceRenderer
                     }
                     catch (Exception e)
                     {
-                        logger.warn("Couldn't get description value from node " + node.getId(), e);
+                        this.logger.warn("Couldn't get description value from node " + node.getId(), e);
                     }
                     //mappings.remove("description");
                 }
 
-//                if (mappings.containsKey("image"))
-//                {
-//                    try
-//                    {
-//                        CmsImage image = (CmsImage) PropertyUtils.getNestedProperty(node, mappings.get("image"));
-//                        SyndEnclosure enclosure = new SyndEnclosureImpl();
-//                        CmsImageSize size = cmsImageTool.getSize(image, (int) feedObject.getDefaultImageWidth());
-//                        DataFile dataFile = size.getDataFile();
-//
-//                        enclosure.setUrl(dataFile.getExternalUrl());
-//                        enclosure.setType(dataFile.getMimeType().toString());
-//                        enclosure.setLength(dataFile.getFileSize());
-//                        entry.getEnclosures().add(enclosure);
-//                    }
-//                    catch (Exception e)
-//                    {
-//                        logger.warn("Couldn't get image object ", e);
-//                    }
-//                    mappings.remove("image");
-//                }
+                //                if (mappings.containsKey("image"))
+                //                {
+                //                    try
+                //                    {
+                //                        CmsImage image = (CmsImage) PropertyUtils.getNestedProperty(node, mappings.get("image"));
+                //                        SyndEnclosure enclosure = new SyndEnclosureImpl();
+                //                        CmsImageSize size = cmsImageTool.getSize(image, (int) feedObject.getDefaultImageWidth());
+                //                        DataFile dataFile = size.getDataFile();
+                //
+                //                        enclosure.setUrl(dataFile.getExternalUrl());
+                //                        enclosure.setType(dataFile.getMimeType().toString());
+                //                        enclosure.setLength(dataFile.getFileSize());
+                //                        entry.getEnclosures().add(enclosure);
+                //                    }
+                //                    catch (Exception e)
+                //                    {
+                //                        logger.warn("Couldn't get image object ", e);
+                //                    }
+                //                    mappings.remove("image");
+                //                }
 
                 for (Map.Entry<String, String> singleMapping : mappings.entrySet())
                 {
@@ -132,11 +130,11 @@ public class SyndicationFeedRenderer implements ResourceRenderer
                     }
                     catch (Exception e)
                     {
-                        logger.warn("Couldn't get or set property with key " + singleMapping.getKey());
+                        this.logger.warn("Couldn't get or set property with key " + singleMapping.getKey());
                     }
                 }
 
-                //entry.setAuthor(node.getUserName());
+                //FIXME entry.setAuthor(node.getUserName());
                 entry.setUpdatedDate(node.getModificationTimestamp());
 
                 entries.add(entry);

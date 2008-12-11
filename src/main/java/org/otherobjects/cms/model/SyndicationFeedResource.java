@@ -29,9 +29,11 @@ public class SyndicationFeedResource extends BaseNode
     private String label;
     private String description;
     private Selector selector;
-    private String mapping;
-    private String feedFormat;
+    private String mapping = "title:ooLabel\ndescription:teaser";
+    private String feedFormat = "atom_1.0";
     private long defaultImageWidth = 300;
+    private String customUrl;
+    private Boolean includeInHeader;
 
     @Override
     public String getCode()
@@ -39,9 +41,23 @@ public class SyndicationFeedResource extends BaseNode
         return org.otherobjects.cms.util.StringUtils.generateUrlCode(getLabel()) + ".xml";
     }
 
-    public Url getFeedUrl()
+    public String getFeedUrl()
     {
-        return new Url(getOoUrlPath());
+        if (StringUtils.isNotEmpty(getCustomUrl()))
+            return getCustomUrl();
+        else
+            return new Url(getOoUrlPath()).getAbsoluteLink();
+    }
+
+    public String getFeedMimeType()
+    {
+        // FIXME There must be a better way
+        if (this.feedFormat.startsWith("atom"))
+            return "application/atom+xml";
+        else if (this.feedFormat.startsWith("rss"))
+            return "application/rss+xml";
+        else
+            return "application/xml";
     }
 
     @JSON(include = false)
@@ -73,7 +89,7 @@ public class SyndicationFeedResource extends BaseNode
     @Property(order = 10)
     public String getLabel()
     {
-        return label;
+        return this.label;
     }
 
     @Override
@@ -82,10 +98,10 @@ public class SyndicationFeedResource extends BaseNode
         this.label = label;
     }
 
-    @Property(type=PropertyType.COMPONENT, order = 20)
+    @Property(type = PropertyType.COMPONENT, order = 20)
     public Selector getSelector()
     {
-        return selector;
+        return this.selector;
     }
 
     public void setSelector(Selector selector)
@@ -96,7 +112,7 @@ public class SyndicationFeedResource extends BaseNode
     @Property(type = PropertyType.TEXT, order = 30)
     public String getMapping()
     {
-        return mapping;
+        return this.mapping;
     }
 
     public void setMapping(String mapping)
@@ -107,7 +123,7 @@ public class SyndicationFeedResource extends BaseNode
     @Property(order = 40)
     public String getFeedFormat()
     {
-        return feedFormat;
+        return this.feedFormat;
     }
 
     /**
@@ -122,7 +138,7 @@ public class SyndicationFeedResource extends BaseNode
     @Property(type = PropertyType.TEXT, order = 15)
     public String getDescription()
     {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description)
@@ -133,12 +149,34 @@ public class SyndicationFeedResource extends BaseNode
     @Property(type = PropertyType.NUMBER, order = 50)
     public long getDefaultImageWidth()
     {
-        return defaultImageWidth;
+        return this.defaultImageWidth;
     }
 
     public void setDefaultImageWidth(long defaultImageWidth)
     {
         this.defaultImageWidth = defaultImageWidth;
+    }
+
+    @Property(order = 60, size = 250)
+    public String getCustomUrl()
+    {
+        return this.customUrl;
+    }
+
+    public void setCustomUrl(String customUrl)
+    {
+        this.customUrl = customUrl;
+    }
+
+    @Property(order = 70)
+    public Boolean getIncludeInHeader()
+    {
+        return this.includeInHeader;
+    }
+
+    public void setIncludeInHeader(Boolean includeInHeader)
+    {
+        this.includeInHeader = includeInHeader;
     }
 
 }
