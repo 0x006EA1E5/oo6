@@ -47,19 +47,26 @@ public class NavigationServiceImpl implements NavigationService
             Assert.isTrue(endDepth > startDepth, "Navigation end depth must be > start depth");
 
             // FIXME Need to synchronise this
-            //if (tree == null)
-            buildTree();
+            if (this.tree == null)
+            {
+                buildTree();
+            }
 
             // Start at correct depth and location by trimming path to correct depth
             path = trimPath(path, startDepth);
-            TreeNode startNode = (TreeNode) tree.getNode(path);
+            TreeNode startNode = this.tree.getNode(path);
 
             // Clone tree but only to required depth
-            TreeNode clone = (TreeNode) startNode.clone(endDepth - startDepth);
+            if (startNode == null)
+                throw new OtherObjectsException("Could not create navigation. Path does not exist: " + path);
+
+            TreeNode clone = startNode.clone(endDepth - startDepth);
 
             // Mark selected nodes
             if (currentPath != null)
+            {
                 markSelected(clone, currentPath);
+            }
 
             return clone;
         }
@@ -76,8 +83,10 @@ public class NavigationServiceImpl implements NavigationService
             Assert.isTrue(startDepth >= 0, "Navigation start depth must be >= 0");
 
             // FIXME Need to synchronise this
-            if (tree == null)
+            if (this.tree == null)
+            {
                 buildTree();
+            }
 
             List<TreeNode> parents = new ArrayList<TreeNode>();
             int pos = 0;
@@ -88,14 +97,20 @@ public class NavigationServiceImpl implements NavigationService
                 if (pos == 0)
                 {
                     if (foldersOnly)
+                    {
                         break;
+                    }
                     else
+                    {
                         pos = path.length();
+                    }
                 }
                 String p = path.substring(0, pos);
-                TreeNode node = tree.getNode(p);
+                TreeNode node = this.tree.getNode(p);
                 if (node != null && depth++ >= startDepth)
-                    parents.add((TreeNode) node.clone(0));
+                {
+                    parents.add(node.clone(0));
+                }
             }
             return parents;
         }
@@ -118,11 +133,15 @@ public class NavigationServiceImpl implements NavigationService
         {
             pos = path.indexOf("/", pos) + 1;
             if (pos == 0)
+            {
                 pos = path.length();
+            }
             String p = path.substring(0, pos);
             TreeNode n = node.getNode(p);
             if (n != null)
+            {
                 n.setSelected(true);
+            }
         }
     }
 
@@ -141,7 +160,9 @@ public class NavigationServiceImpl implements NavigationService
         {
             pos = path.indexOf("/", pos) + 1;
             if (++depth > startDepth)
+            {
                 break;
+            }
         }
         return path.substring(0, pos);
     }
@@ -173,19 +194,30 @@ public class NavigationServiceImpl implements NavigationService
     public List<TreeNode> getAllNodes()
     {
         // FIXME Need to synchronise this
-        if (tree == null)
+        if (this.tree == null)
+        {
             buildTree();
+        }
 
         return this.nodes;
     }
 
-    public TreeNode getNode(String path)
+    public TreeNode getNode(String path, String currentPath)
     {
         // FIXME Need to synchronise this
-        if (tree == null)
+        if (this.tree == null)
+        {
             buildTree();
-        
-        return tree.getNode(path);
+        }
+
+        // Mark selected nodes
+        TreeNode node = this.tree.getNode(path);
+        if (currentPath != null)
+        {
+            markSelected(node, currentPath);
+        }
+
+        return node;
     }
 
     /**

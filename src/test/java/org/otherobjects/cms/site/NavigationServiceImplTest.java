@@ -32,45 +32,52 @@ public class NavigationServiceImplTest extends TestCase
         TreeBuilder treeBuilder = new TreeBuilder();
         TreeNode tree = treeBuilder.buildTree(flat, new TreeNode("/"));
 
-        navigationService = new NavigationServiceImpl();
-        navigationService.tree = tree;
+        this.navigationService = new NavigationServiceImpl();
+        this.navigationService.tree = tree;
     }
 
     public void testGetNavigation()
     {
         // Test start depths
-        assertEquals(5, navigationService.getNavigation("/", 0, 1).getChildren().size());
-        assertEquals(1, navigationService.getNavigation("/about/", 1, 2).getChildren().size());
-        assertEquals(3, navigationService.getNavigation("/products/", 1, 2).getChildren().size());
-        assertEquals(5, navigationService.getNavigation("/about/", 0, 1).getChildren().size());
+        assertEquals(5, this.navigationService.getNavigation("/", 0, 1).getChildren().size());
+        assertEquals(1, this.navigationService.getNavigation("/about/", 1, 2).getChildren().size());
+        assertEquals(3, this.navigationService.getNavigation("/products/", 1, 2).getChildren().size());
+        assertEquals(5, this.navigationService.getNavigation("/about/", 0, 1).getChildren().size());
 
         // Test end depths
-        assertNotNull(navigationService.getNavigation("/", 0, 1).getNode("/about/"));
-        assertEquals(0, navigationService.getNavigation("/", 0, 1).getNode("/about/").getChildren().size());
-        assertNotNull(navigationService.getNavigation("/products/kitchen/", 1, 2).getNode("/products/kitchen/"));
-        assertEquals(0, navigationService.getNavigation("/products/kitchen/", 1, 2).getNode("/products/kitchen/").getChildren().size());
+        assertNotNull(this.navigationService.getNavigation("/", 0, 1).getNode("/about/"));
+        assertEquals(0, this.navigationService.getNavigation("/", 0, 1).getNode("/about/").getChildren().size());
+        assertNotNull(this.navigationService.getNavigation("/products/kitchen/", 1, 2).getNode("/products/kitchen/"));
+        assertEquals(0, this.navigationService.getNavigation("/products/kitchen/", 1, 2).getNode("/products/kitchen/").getChildren().size());
 
         // Test selected nodes
-        assertTrue(navigationService.getNavigation("/products/kitchen/", 1, 2, "/products/kitchen/product.html").getNode("/products/kitchen/").isSelected());
-        
+        assertTrue(this.navigationService.getNavigation("/products/kitchen/", 1, 2, "/products/kitchen/product.html").getNode("/products/kitchen/").isSelected());
+
         // Test out of range
-        assertNull(navigationService.getNavigation("", 1, 2).getNode("/"));
+        try
+        {
+            assertNull(this.navigationService.getNavigation("", 1, 2).getNode("/"));
+            fail();// We should get an exception before this line
+        }
+        catch (Exception e)
+        {
+        }
     }
 
     public void testTrimPath()
     {
-        assertEquals("/", navigationService.trimPath("/", 0));
-        assertEquals("/", navigationService.trimPath("/about/", 0));
-        assertEquals("/", navigationService.trimPath("/about/test.html", 0));
-        assertEquals("/about/", navigationService.trimPath("/about/", 1));
-        assertEquals("/about/", navigationService.trimPath("/about/this/test.html", 1));
-        assertEquals("/about/", navigationService.trimPath("/about/test.html", 1));
+        assertEquals("/", this.navigationService.trimPath("/", 0));
+        assertEquals("/", this.navigationService.trimPath("/about/", 0));
+        assertEquals("/", this.navigationService.trimPath("/about/test.html", 0));
+        assertEquals("/about/", this.navigationService.trimPath("/about/", 1));
+        assertEquals("/about/", this.navigationService.trimPath("/about/this/test.html", 1));
+        assertEquals("/about/", this.navigationService.trimPath("/about/test.html", 1));
     }
 
     public void testMarkSelected()
     {
-        TreeNode node = navigationService.getNavigation("/products/kitchen/products.html", 0, 3);
-        navigationService.markSelected(node, "/products/kitchen/products.html");
+        TreeNode node = this.navigationService.getNavigation("/products/kitchen/products.html", 0, 3);
+        this.navigationService.markSelected(node, "/products/kitchen/products.html");
         assertTrue(node.isSelected());
         assertTrue(node.getNode("/products/").isSelected());
         assertTrue(node.getNode("/products/kitchen/").isSelected());
@@ -80,16 +87,16 @@ public class NavigationServiceImplTest extends TestCase
 
     public void testGetTrail()
     {
-        List<TreeNode> trail = navigationService.getTrail("/products/kitchen/products.html", 0, false);
+        List<TreeNode> trail = this.navigationService.getTrail("/products/kitchen/products.html", 0, false);
         assertEquals(4, trail.size());
         assertEquals("/", trail.get(0).getPath());
         assertEquals("/products/kitchen/products.html", trail.get(3).getPath());
-        
-        trail = navigationService.getTrail("/products/kitchen/products.html", 0, true);
+
+        trail = this.navigationService.getTrail("/products/kitchen/products.html", 0, true);
         assertEquals("/products/kitchen/", trail.get(2).getPath());
         assertEquals(3, trail.size());
 
-        trail = navigationService.getTrail("/products/kitchen/products.html", 1, true);
+        trail = this.navigationService.getTrail("/products/kitchen/products.html", 1, true);
         assertEquals(2, trail.size());
         assertEquals("/products/", trail.get(0).getPath());
     }
