@@ -12,6 +12,6 @@ HTML.oo BODY {position:absolute; width:100%; -webkit-box-shadow: 0 5px 15px rgba
 .oo-panel {-webkit-border-image:url(assets/panel.png) 20 18 30 18 stretch stretch; -moz-border-image:url(assets/panel.png) 20 18 30 18 stretch stretch; border-width:20px 18px 30px 18px;}
 
 /* Toolbar */
-.oo-toolbar {position:fixed; top:-50; left:50%; margin:-20px 0 0 -490px; padding:20px 0 0 0; width:944px;}
+.oo-toolbar {position:fixed; top:-60px; left:50%; margin:-20px 0 0 -490px; padding:20px 0 0 0; width:944px;}
 .oo-toolbar .oo-toolbar-item {padding-right:0;}
 .oo-toolbar .oo-toolbar-item:hover .oo-icon {background-position:50% -100px;}

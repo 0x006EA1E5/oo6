@@ -7,11 +7,12 @@ Ojay('div.oo-icon').on('click', function (el, e) {
 	if(hudVisible) {
 		// Animate hud closed
 		Ojay('html').animate({paddingTop:{from: 100, to: 0}, paddingBottom:{from: 200, to: 0}}, 0.5).removeClass('oo');
+		Ojay('.oo-toolbar').animate({top:{from: 0, to: -60}}, 0.5);
 		Ojay('body').
+			wait(0.3).
 			setStyle({'overflowX' : 'hidden'}).
 			animate({left: {to:0}, width: {to: YAHOO.util.Dom.getViewportWidth()}}, 0.5).
 			setStyle({'overflowX' : siteBodyOverflow});
-		Ojay('.oo-toolbar').animate({top:{from: 0, to: -60}}, 0.75);
 		hudVisible = false;
 	} else {
 		// Animate hud open
@@ -20,7 +21,8 @@ Ojay('div.oo-icon').on('click', function (el, e) {
 			setStyle({'overflowX' : 'hidden'}).
 			animate({left: {to: Math.floor((YAHOO.util.Dom.getViewportWidth()-siteMinWidth)/2)}, width: {from:YAHOO.util.Dom.getViewportWidth(), to: siteMinWidth}}, 0.75).
 			setStyle({'overflowX' : siteBodyOverflow});
-		Ojay('.oo-toolbar').animate({top:{from: -60, to: 0}}, 0.75);
+		Ojay('.oo-toolbar').wait(0.3).animate({top:{from: -60, to: 0},opacity:{from: 0, to: 1}}, 0.5);
+		
 		hudVisible = true;
 	}
 });
