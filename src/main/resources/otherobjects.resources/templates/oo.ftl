@@ -252,7 +252,7 @@ OO Interface Integration macros
 Macro to insert HTML tag to support OO interface
 -->
 <#macro html id="" class="">
-<html <#if id?has_content>id="${id}"</#if><@authorize "ROLE_ADMIN"> class="ooTest ${class!}"</@authorize>>
+<html <#if id?has_content>id="${id}"</#if><@authorize "ROLE_ADMIN"> class="${class!}"</@authorize>>
 </#macro>
 
 <#-- 
@@ -267,10 +267,11 @@ Macro to insert OO interface CSS headers
 Macro to insert HUD code
 -->
 <#macro foot>
-<@authorize "ROLE_ADMIN"> 
-<div id="oo-icon"></div>
-<div id="oo-hud">
+<@authorize "ROLE_ADMIN">
+<div class="oo-icon"></div>
+<div class="oo-hud">
 </div>
+<#include "/otherobjects/templates/hud/hud.ftl" />
 <@oo.js "/otherobjects/static/hud/hud.js" />
 </@authorize>
 </#macro>

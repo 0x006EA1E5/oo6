@@ -1,1 +1,17 @@
+/* Super Reset */
+DIV.oo-icon, DIV.oo-hud, DIV.oo-hud * {padding:0; margin:0; border:0;}
+
 /* Hud CSS */
+DIV.oo-icon {position:fixed; background:url(assets/hud-icon.png); width:40px; height:40px; top:0; right:0; opacity:0.8;}
+DIV.oo-icon:hover {opacity:1; cursor:pointer;}
+
+HTML.oo {background:#666 url(assets/html-background.png) fixed;}
+HTML.oo BODY {position:absolute; width:100%; -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8); -moz-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8); overflowx-x:hidden;}
+
+/* Panel */
+.oo-panel {-webkit-border-image:url(assets/panel.png) 20 18 30 18 stretch stretch; -moz-border-image:url(assets/panel.png) 20 18 30 18 stretch stretch; border-width:20px 18px 30px 18px;}
+
+/* Toolbar */
+.oo-toolbar {position:fixed; top:0; left:50%; margin:-20px 0 0 -490px; padding:20px 0 0 0; width:944px;}
+.oo-toolbar .oo-toolbar-item {padding-right:0;}
+.oo-toolbar .oo-toolbar-item:hover .oo-icon {background-position:50% -100px;}
