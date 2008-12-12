@@ -40,13 +40,13 @@
 	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
 		<property name="configuration" ref="freemarkerConfiguration" />
 	</bean>
-	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+	<bean id="freemarkerViewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
 		<property name="cache" value="true" />
 		<property name="prefix" value="" />
 		<property name="suffix" value=".ftl" />
 		<property name="requestContextAttribute" value="requestContext" />
 		<property name="exposeSpringMacroHelpers" value="false" /> <!-- We'll expose our own thanks. -->
 		<property name="viewClass" value="org.otherobjects.cms.views.OOFreeMarkerView" />
+		<property name="order" value="10000"/>
 	</bean>
-
 </beans>
