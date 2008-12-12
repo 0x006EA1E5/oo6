@@ -130,15 +130,6 @@ Macro to insert region
 
 
 <#-- 
-Macro to insert HUD code
--->
-<#macro hud>
-<@authorize "ROLE_ADMIN"> 
-<#include "/otherobjects/templates/legacy/blocks/toolbar.ftl" />
-</@authorize>
-</#macro>
-
-<#-- 
 Renders the contents of the block if the roles match.
 -->
 <#macro authorize ifAllGranted ifAnyGranted="" ifNoneGranted="">
@@ -244,3 +235,59 @@ Functions
 <#function msg message>
 <#return "${formatTool.getMessage(message)}">
 </#function>
+
+
+
+
+
+
+
+
+
+<#--
+OO Interface Integration macros
+-->
+
+<#-- 
+Macro to insert HTML tag to support OO interface
+-->
+<#macro html id="" class="">
+<html <#if id?has_content>id="${id}"</#if><@authorize "ROLE_ADMIN"> class="ooTest ${class!}"</@authorize>>
+</#macro>
+
+<#-- 
+Macro to insert OO interface CSS headers
+-->
+<#macro head>
+<@oo.css "/otherobjects/static/hud/hud.css" />
+<@oo.css "/otherobjects/static/hud/skins/default/skin.css" />
+</#macro>
+
+<#-- 
+Macro to insert HUD code
+-->
+<#macro foot>
+<@authorize "ROLE_ADMIN"> 
+<div id="oo-icon"></div>
+<div id="oo-hud">
+</div>
+<@oo.js "/otherobjects/static/hud/hud.js" />
+</@authorize>
+</#macro>
+
+<#-- 
+Macro to insert legacy toolbar code
+-->
+<#macro legacyToolbar>
+<@authorize "ROLE_ADMIN"> 
+<#include "/otherobjects/templates/legacy/blocks/toolbar.ftl" />
+</@authorize>
+</#macro>
+
+
+
+
+
+
+
+
