@@ -1,0 +1,67 @@
+
+
+#oo-chooser-hud {position:fixed; top:50px; width:700px; height:500px; left:80px; background:#FFF; border:1px solid #000; padding:10px; text-align:left;z-index:100;}
+#oo-chooser-hud H1 {font-size:150%;padding:0px 0px 20px 0px;}
+#oo-chooser-hud A {float:left;width:180px; font-size:110%; font-family:Helvetica, Arial, sans-serif; padding:15px; background:#CCCCCC; margin:0px 10px 10px 0px; color:#000;}
+#oo-chooser-hud A:hover {background:#FFF; text-decoration:none;}
+
+
+
+
+.oo-region {min-height:50px;}
+
+.oo-block-overlay {position:absolute; background:#000; z-index:15; opacity:0.45; border:6px dashed red;}
+.oo-block-new {text-align:center; border:6px dashed black; background:#666; color:#FFF; padding:10px; font:bold 14px Arial; min-height:100px; margin:0px 10px 10px 0px;}
+.oo-block-error {text-align:center; border:6px dashed #F80; background:#FF0; color:#000; padding:10px; font:bold 14px Arial; min-height:100px; margin:0px 10px 10px 0px;}
+
+.oo-block-add {padding:2px 2px 2px 20px;background:#ACA url(icons/add.png) no-repeat 2px 2px; color:#090;}
+.oo-block-delete {padding:2px 2px 2px 20px;background:#CAA url(icons/delete.png) no-repeat 2px 2px; color:#900;}
+
+
+#oo-form-overlay {position:fixed; top:50px; width:700px; height:500px; left:80px; background:#FFF; border:1px solid #000; padding:10px; overflow:scroll; text-align:left!important; z-index:99999}
+#oo-form-overlay P {text-align:left;}
+#oo-form-overlay CAPTION {font:bold 120% Arial; padding: 0px 0px 4px 0px; }
+#oo-form-overlay TH {background:#eeeeee; font:normal 100% Arial; text-align:left; padding:4px 10px 4px 10px; border-right:1px solid #ffffff;}
+#oo-form-overlay TR {border-bottom:1px solid #eeeeee;}
+#oo-form-overlay TD {padding:3px 1px 3px 0px; border-bottom:1px solid #eeeeee;}
+#oo-form-overlay TD P {padding:5px 10px 5px 10px;}
+#oo-form-overlay TD .oo-neutral {background:url($static.setPath("/otherobjects/static/graphics/icon_neutral.gif")) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
+#oo-form-overlay .oo-icon {width:40px;}
+#oo-form-overlay .oo-button A {color:#000000; text-decoration:none; float:left; padding:5px 10px 5px 10px;}
+#oo-form-overlay .oo-button A:hover, .oo-content #oo-form-overlay .oo-button A:active {background-color:#C8E8F5;}
+#oo-form-overlay TD.oo-action {width:40px;}
+#oo-form-overlay .oo-help {width:20px; padding:5px 10px 5px 10px; text-align:center;}
+#oo-form-overlay .oo-label {width:100px; padding:5px 10px 5px 10px;}
+#oo-form-overlay .oo-field {padding:5px 10px 5px 10px;}
+#oo-form-overlay .oo-field-none {padding:5px 10px 5px 10px;}
+#oo-form-overlay .oo-field A {display:block; color:#000000; text-decoration:none; float:left; padding:5px 10px 5px 20px; background:url($static.setPath("/otherobjects/static/graphics/arrow_right.gif")) no-repeat 10px 10px;}
+#oo-form-overlay .oo-field P {padding:5px 5px 5px 10px; clear:both;} 
+#oo-form-overlay .oo-field P.oo-neutral {padding:5px 5px 5px 25px; clear:both;} 
+#oo-form-overlay .oo-field A:hover, .oo-content #oo-form-overlay .oo-field A:active {background-color:#C8E8F5;}
+#oo-form-overlay .oo-field LI IMG {display:block;}
+#oo-form-overlay .oo-section { border-top:3px solid #eeeeee;}
+#oo-form-overlay .oo-disabled {color:#999999;}
+
+
+#oo-form-overlay H2 {font:bold 140% Arial; color:#253D56; padding:10px 0px 10px 0px;}
+#oo-form-overlay H2 A {text-decoration:none; color:#253D56;}
+#oo-form-overlay H3 {font:bold 120% Arial; color:#253D56; padding:10px 0px 10px 0px;}
+#oo-form-overlay UL {margin:0px 0px 0px 20px; list-style:square;}
+#oo-form-overlay LI {padding:0px 0px 5px 0px;}
+#oo-form-overlay P {padding:0px 0px 15px 0px;}
+#oo-form-overlay P.divider {padding:5px 0px 15px 0px; margin:0px 100px 0px 0px; border-top:1px solid #eeeeee;}
+#oo-form-overlay EM {font-style:normal; color:#999999;}
+#oo-form-overlay .oo-required {font:bold 110% Verdana; color:#990000;}
+#oo-form-overlay .text {border:1px solid #CCCCCC; padding:2px; font:100% Arial; width:250px; margin:0px 5px 0px 0px;}
+#oo-form-overlay .password {border:1px solid #CCCCCC; padding:2px; font:100% Arial; width:250px; margin:0px 5px 0px 0px;}
+#oo-form-overlay .textarea {width:100%; height:75px; border:1px solid #cccccc; padding:2px; font:100% Arial;  margin:0px 5px 5px 0px;}
+#oo-form-overlay .wikitextarea {width:100%; height:75px; border:1px solid #cccccc; padding:2px; font:115% Courier, Monanco, Arial;  margin:0px 5px 5px 0px;}
+#oo-form-overlay .textareasmall {width:100%; height:60px; border:1px solid #cccccc; padding:2px; font:100% Arial;  margin:0px 5px 5px 0px;}
+#oo-form-overlay .oo-format-large .textarea {height:300px;}
+#oo-form-overlay .oo-format-large .wikitextarea {height:300px;}
+#oo-form-overlay .select {font:100% Arial; margin:0px 5px 0px 0px;}
+#oo-form-overlay FORM LABEL {display:block; width:55px; line-height:25px; float:left;}
+#oo-form-overlay A.oo-action  {color:#000000; text-decoration:none; float:left; padding:5px 10px 5px 20px; background:url(graphics/arrow-right.gif) no-repeat 10px 9px;}
+#oo-form-overlay A.oo-action:hover, #oo-form-overlay A.oo-action:active {background-color:#C8E8F5;}
+#oo-form-overlay A.oo-action  IMG {float:left;margin-top:-3px;padding-right:3px;}
+#oo-form-overlay TH, #oo-form-overlay TD {vertical-align:top;}

@@ -1,3 +1,5 @@
+<#import "/oo.ftl" as oo>
+
 <style type="text/css">
 #OoMenu {display:none;}
 #OoMenu H2 {font:70%/600% Arial, sans-serif; width:195px; height:120px; left:0px; position:fixed; bottom:25px; z-index:11; color:#FFFFFF; background:url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/menu.png")});}

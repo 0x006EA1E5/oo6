@@ -1,6 +1,6 @@
 <hr class="oo-clear" />
 </div></div>
-<@oo.hud  />
+<@oo.legacyToolbar  />
 </body>
 </html>
 
