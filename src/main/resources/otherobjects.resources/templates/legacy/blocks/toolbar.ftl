@@ -42,6 +42,14 @@
 .oo-toolbar LI A:hover {background-color:#cccccc;}
 .oo-toolbar LI STRONG A {background-color:#ffffff;}
 .oo-toolbar LI STRONG A:hover {background-color:#ffffff;}
+
+/* Stats */
+.oo-stats {position:fixed; top:100px; left:100px;text-align:left; background:#FFF; border:1px solid black; display:none;}
+.oo-stats H2 {background:#000; color:#FFF; width:100%; font-size:120%; padding-bottom:5px; margin:0px;}
+.oo-stats H2 EM {padding:2px;}
+.oo-stats TD {text-align:left; padding:5px;}
+.oo-stats TD {text-align:left; padding:5px;}
+.oo-stats TR {border-top:1px solid #666;}
 </style>
 
 <div class="no-print">
@@ -79,9 +87,20 @@
 </ul>
 </#if>
 </#if>
+<ul>
+	<li><a href="javascript:ooToggle('.oo-stats')">${performanceInfo.events?size} queries</a></li>	
+</ul>
 
 <a id="OoLogoutButton" href="${oo.url("/otherobjects/logout.html")}"></a>
 
+<div class="oo-stats">
+<h2><em>Page performance statistics</em></h2>
+<table>
+<#list performanceInfo.events as event>
+<tr><td>${event.details}</td><td>${event.time}ms</td></tr>
+</#list>
+</table>
+</div>
 
 </div>
 

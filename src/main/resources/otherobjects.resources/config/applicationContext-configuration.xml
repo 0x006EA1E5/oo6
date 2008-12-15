@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans 
-		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
-		http://www.springframework.org/schema/context 
-		http://www.springframework.org/schema/context/spring-context-2.5.xsd">
-
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-2.5.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 	<context:annotation-config />
-
 	<bean name="singletonBeanLocator" class="org.otherobjects.cms.SingletonBeanLocator" />
-
 	<bean id="annotatedClassesScanner" class="org.otherobjects.cms.discovery.AnnotatedClassesScannerImpl" />
 
 	<!-- For properties -->
@@ -21,14 +20,12 @@
 			</list>
 		</property>
 	</bean>
-	
 	<bean id="ooResourceLoader" class="org.otherobjects.cms.io.OoResourceLoader">
 		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
 	</bean>
 
 	<!-- JNDI DataSource for J2EE environments -->
 	<!--<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/appfuse"/>-->
-
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="${jdbc.driver}" />
 		<property name="url" value="${jdbc.url}" />
@@ -54,6 +51,15 @@
 			</map>
 		</property>
 	</bean>
-	
 	<bean id="eventLogger" class="org.otherobjects.cms.events.EventLogger" />
+	
+	<!-- Performance Monitoring -->
+	<aop:aspectj-autoproxy />
+	<context:component-scan base-package="org.otherobjects.cms.monitoring" scoped-proxy="interfaces" />
+	<aop:config>
+		<aop:aspect ref="performanceInterceptor">
+			<aop:pointcut id="performanceLogging" expression="execution(* org.otherobjects.cms.jcr.UniversalJcrDao.*(..)) || execution(* org.otherobjects.cms.dao.GenericDao.*(..)) || execution(* org.otherobjects.cms.model.*DaoImpl.*(..))" />
+			<aop:around pointcut-ref="performanceLogging" method="log" />
+		</aop:aspect>
+	</aop:config>
 </beans>

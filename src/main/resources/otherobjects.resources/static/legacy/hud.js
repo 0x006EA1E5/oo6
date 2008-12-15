@@ -258,6 +258,14 @@ function ooToggleHud(id) {
 	
 }
 
+function ooToggle(selector) {
+	var hud = Ojay(selector);
+	if(hud.getStyle('display')!='block')
+		hud.setStyle({display:'block'})
+	else
+		hud.setStyle({display:'none'})
+}
+
 function ooLoadHud(url) 
 {
 	Ojay.HTTP.GET('/otherobjects/blocks/render/oo-hud').insertInto('#oo-main-hud');//.evalScriptTags();
