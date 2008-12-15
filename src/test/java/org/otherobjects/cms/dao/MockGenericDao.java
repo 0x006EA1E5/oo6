@@ -19,6 +19,12 @@ public class MockGenericDao implements GenericDao
         allObjects = new ArrayList<Object>();
     }
     
+    public String getPersistentClassName()
+    {
+        // Try if possible
+        return mockObject.getClass().getName();
+    }
+    
     public MockGenericDao(Object mockObject)
     {
         this.mockObject = mockObject;

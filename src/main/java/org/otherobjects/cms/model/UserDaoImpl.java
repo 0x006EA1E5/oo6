@@ -1,4 +1,4 @@
-package org.otherobjects.cms.dao;
+package org.otherobjects.cms.model;
 
 import java.util.List;
 
@@ -6,7 +6,6 @@ import org.springframework.security.userdetails.UserDetails;
 import org.springframework.security.userdetails.UserDetailsService;
 import org.springframework.security.userdetails.UsernameNotFoundException;
 import org.otherobjects.cms.hibernate.GenericDaoHibernate;
-import org.otherobjects.cms.model.User;
 
 /**
  * This class interacts with Spring's HibernateTemplate to save/delete and
@@ -18,16 +17,16 @@ import org.otherobjects.cms.model.User;
  *   Modified by <a href="mailto:bwnoll@gmail.com">Bryan Noll</a> to work with 
  *   the new BaseDaoHibernate implementation that uses generics.
 */
-public class UserDaoHibernate extends GenericDaoHibernate<User, Long> implements UserDao, UserDetailsService
+public class UserDaoImpl extends GenericDaoHibernate<User, Long> implements UserDao, UserDetailsService
 {
 
-    public UserDaoHibernate()
+    public UserDaoImpl()
     {
         super(User.class);
     }
 
     /**
-     * @see org.otherobjects.cms.UserDao#getUsers()
+     * @see org.otherobjects.cms.model.UserDao#getUsers()
      */
     @SuppressWarnings("unchecked")
     public List<User> getUsers()
@@ -36,7 +35,7 @@ public class UserDaoHibernate extends GenericDaoHibernate<User, Long> implements
     }
 
     /**
-     * @see org.otherobjects.cms.UserDao#saveUser(org.appfuse.model.User)
+     * @see org.otherobjects.cms.model.UserDao#saveUser(org.appfuse.model.User)
      */
     public User saveUser(User user)
     {

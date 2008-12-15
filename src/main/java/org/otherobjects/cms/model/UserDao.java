@@ -1,10 +1,10 @@
-package org.otherobjects.cms.dao;
+package org.otherobjects.cms.model;
 
 import java.util.List;
 
 import org.springframework.security.userdetails.UserDetails;
 import org.springframework.security.userdetails.UsernameNotFoundException;
-import org.otherobjects.cms.model.User;
+import org.otherobjects.cms.dao.GenericDao;
 import org.springframework.transaction.annotation.Transactional;
 
 /**

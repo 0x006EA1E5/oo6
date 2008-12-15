@@ -1,6 +1,6 @@
-package org.otherobjects.cms.dao;
+package org.otherobjects.cms.model;
 
-import org.otherobjects.cms.model.Role;
+import org.otherobjects.cms.dao.GenericDao;
 
 /**
  * Role Data Access Object (DAO) interface.

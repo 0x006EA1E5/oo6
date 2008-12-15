@@ -6,6 +6,7 @@ import java.util.Map;
 import junit.framework.TestCase;
 
 import org.otherobjects.cms.hibernate.GenericDaoHibernate;
+import org.otherobjects.cms.model.UserDaoImpl;
 import org.otherobjects.cms.types.PropertyDefImpl;
 import org.otherobjects.cms.types.TypeDefImpl;
 import org.otherobjects.cms.types.TypeService;
@@ -25,7 +26,7 @@ public class DaoServiceImplTest extends TestCase
         this.daoService = new DaoServiceImpl();
 
         Map daoMap = new HashMap();
-        daoMap.put("org.otherobjects.cms.model.User", new UserDaoHibernate());
+        daoMap.put("org.otherobjects.cms.model.User", new UserDaoImpl());
         this.daoService.setDaoMap(daoMap);
         
         GenericApplicationContext ac = new GenericApplicationContext();

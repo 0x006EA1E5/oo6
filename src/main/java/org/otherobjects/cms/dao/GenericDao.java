@@ -9,6 +9,11 @@ import java.util.List;
 public interface GenericDao<T, PK extends Serializable>
 {
     /**
+     * Returns the name of the class persisted by this Dao.
+     */
+    String getPersistentClassName();
+    
+    /**
      * Saves the object. If the object already exists then it
      * is updated, otherwise it is inserted.
      */

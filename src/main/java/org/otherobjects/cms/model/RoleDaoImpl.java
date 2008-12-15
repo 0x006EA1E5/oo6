@@ -1,9 +1,8 @@
-package org.otherobjects.cms.dao;
+package org.otherobjects.cms.model;
 
 import java.util.List;
 
 import org.otherobjects.cms.hibernate.GenericDaoHibernate;
-import org.otherobjects.cms.model.Role;
 
 /**
  * This class interacts with Spring's HibernateTemplate to save/delete and
@@ -11,10 +10,10 @@ import org.otherobjects.cms.model.Role;
  *
  * @author <a href="mailto:bwnoll@gmail.com">Bryan Noll</a> 
  */
-public class RoleDaoHibernate extends GenericDaoHibernate<Role, Long> implements RoleDao
+public class RoleDaoImpl extends GenericDaoHibernate<Role, Long> implements RoleDao
 {
 
-    public RoleDaoHibernate()
+    public RoleDaoImpl()
     {
         super(Role.class);
     }

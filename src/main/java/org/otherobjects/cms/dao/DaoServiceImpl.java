@@ -127,9 +127,7 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
 
     public void addDao(GenericDao dao)
     {
-        String name = dao.getClass().getName();
-        // FIXME This could be nicer
-        name = name.replaceAll("DaoImpl","");
+        String name = dao.getPersistentClassName();
         getDaoMap().put(name, dao);
     }
 
