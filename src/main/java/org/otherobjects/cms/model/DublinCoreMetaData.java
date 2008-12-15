@@ -28,6 +28,8 @@ Rights
 http://dublincore.org/documents/dcmi-terms/
 http://dublincore.org/documents/dcmes-xml/
 
+
+Also : https://addons.mozilla.org/en-US/firefox/addon/528
  */
 @Type
 public class DublinCoreMetaData extends BaseNode
@@ -45,7 +47,7 @@ public class DublinCoreMetaData extends BaseNode
     @Property(order = 10)
     public String getTitle()
     {
-        return title;
+        return this.title;
     }
 
     public void setTitle(String title)
@@ -56,7 +58,7 @@ public class DublinCoreMetaData extends BaseNode
     @Property(order = 20)
     public String getDescription()
     {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description)
@@ -67,7 +69,7 @@ public class DublinCoreMetaData extends BaseNode
     @Property(order = 30)
     public List<String> getKeywords()
     {
-        return keywords;
+        return this.keywords;
     }
 
     public void setKeywords(List<String> keywords)
