@@ -1,9 +1,9 @@
 package org.otherobjects.cms.security;
 
 import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.dao.UserDao;
 import org.otherobjects.cms.model.Role;
 import org.otherobjects.cms.model.User;
+import org.otherobjects.cms.model.UserDao;
 import org.springframework.security.Authentication;
 import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;

@@ -16,11 +16,11 @@ import org.springframework.security.providers.UsernamePasswordAuthenticationToke
 import org.springframework.security.userdetails.UserDetails;
 import org.apache.commons.io.IOUtils;
 import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.dao.RoleDao;
-import org.otherobjects.cms.dao.UserDao;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.Role;
+import org.otherobjects.cms.model.RoleDao;
 import org.otherobjects.cms.model.User;
+import org.otherobjects.cms.model.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;

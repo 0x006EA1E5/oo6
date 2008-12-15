@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.otherobjects.cms.dao.DaoService;
-import org.otherobjects.cms.dao.UserDao;
 import org.otherobjects.cms.model.User;
+import org.otherobjects.cms.model.UserDao;
 import org.otherobjects.cms.security.PasswordChanger;
 import org.otherobjects.cms.security.PasswordService;
 import org.otherobjects.cms.security.SecurityUtil;
