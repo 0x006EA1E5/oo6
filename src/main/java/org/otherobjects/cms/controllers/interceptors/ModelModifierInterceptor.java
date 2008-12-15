@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.io.OoResourceLoader;
+import org.otherobjects.cms.monitoring.PerformanceInfo;
 import org.otherobjects.cms.tools.FlashMessageTool;
 import org.otherobjects.cms.tools.FormatTool;
 import org.otherobjects.cms.tools.UrlTool;
@@ -23,6 +24,7 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
     private OtherObjectsConfigurator otherObjectsConfigurator;
     private MessageSource messageSource;
     private FreemarkerToolProvider freemarkerToolProvider;
+    private PerformanceInfo performanceInfo;
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception
@@ -56,6 +58,8 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             modelAndView.addObject("dao", this.daoService);
             modelAndView.addObject("flash", new FlashMessageTool(request));
             modelAndView.addObject("jcr", this.daoService.getDao("BaseNode"));
+            if (performanceInfo != null)
+                modelAndView.addObject("performanceInfo", performanceInfo);
             modelAndView.addObject("ooEnvironment", this.otherObjectsConfigurator.getProperty("otherobjects.environment"));
 
             // Add cookies
@@ -102,5 +106,10 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
     public void setFreemarkerToolProvider(FreemarkerToolProvider freemarkerToolProvider)
     {
         this.freemarkerToolProvider = freemarkerToolProvider;
+    }
+
+    public void setPerformanceInfo(PerformanceInfo performanceInfo)
+    {
+        this.performanceInfo = performanceInfo;
     }
 }

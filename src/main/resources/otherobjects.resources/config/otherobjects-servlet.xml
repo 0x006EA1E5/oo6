@@ -19,6 +19,7 @@
 					<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
 					<property name="messageSource" ref="messageSource" />
 					<property name="freemarkerToolProvider" ref="freemarkerToolProvider" />
+					<property name="performanceInfo" ref="performanceInfo" />
 				</bean>
 				<ref bean="openSessionInViewInterceptor" />
 			</list>
