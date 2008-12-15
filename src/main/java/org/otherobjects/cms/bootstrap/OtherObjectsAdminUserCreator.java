@@ -3,10 +3,10 @@ package org.otherobjects.cms.bootstrap;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.otherobjects.cms.dao.RoleDao;
-import org.otherobjects.cms.dao.UserDao;
 import org.otherobjects.cms.model.Role;
+import org.otherobjects.cms.model.RoleDao;
 import org.otherobjects.cms.model.User;
+import org.otherobjects.cms.model.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.providers.dao.SaltSource;
