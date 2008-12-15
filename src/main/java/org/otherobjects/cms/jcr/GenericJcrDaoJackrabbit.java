@@ -80,6 +80,11 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     {
         this.persistentClass = persistentClass;
     }
+    
+    public String getPersistentClassName()
+    {
+        return this.persistentClass.getName();
+    }
 
     public T save(T object)
     {

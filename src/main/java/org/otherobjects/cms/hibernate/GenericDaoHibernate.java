@@ -43,6 +43,11 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
     {
         this.persistentClass = persistentClass;
     }
+    
+    public String getPersistentClassName()
+    {
+        return this.persistentClass.getName();
+    }
 
     @SuppressWarnings("unchecked")
     public List<T> getAll()
