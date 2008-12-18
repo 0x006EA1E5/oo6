@@ -175,8 +175,17 @@ public class BindServiceImpl implements BindService
                 {
                     // register suitable PropertyEditor
                     String relatedType = propertyDef.getRelatedType();
-                    this.binder.registerCustomEditor(CmsNode.class, rootPath, new CmsNodeReferenceEditor(this.daoService, relatedType));
-                }
+                    TypeDef relatedTypeDef = propertyDef.getRelatedTypeDef();
+                    if (relatedTypeDef.getStore().equals(TypeDef.HIBERNATE))
+                    {
+                        Class<?> clazz = Class.forName(relatedType);
+                        this.binder.registerCustomEditor(Object.class, rootPath, new EntityReferenceEditor(this.daoService, clazz));
+                    }
+                    else if (relatedTypeDef.getStore().equals(TypeDef.JACKRABBIT))
+                    {
+                        this.binder.registerCustomEditor(CmsNode.class, rootPath, new CmsNodeReferenceEditor(this.daoService, relatedType));
+                    }
+                }   
                 else if (propertyDef.getType().equals("component"))// deal with components
                 {
                     prepareComponent(item, propertyDef, rootPathPrefix);
