@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ResourceScanner
 {
-    private Logger logger = LoggerFactory.getLogger(ResourceScanner.class);
+    private final Logger logger = LoggerFactory.getLogger(ResourceScanner.class);
 
     @Resource
     private DaoService daoService;
@@ -49,72 +49,80 @@ public class ResourceScanner
         try
         {
             // TODO Make missing items from disk deleted/inactive/warned
-            UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
+            UniversalJcrDao dao = (UniversalJcrDao) this.daoService.getDao("baseNode");
 
             // Process blocks
-            List<OoResource> resources = ooResourceLoader.getResources("/site/templates/blocks/");
+            List<OoResource> resources = this.ooResourceLoader.getResources("/site/templates/blocks/");
             String jcrPath = "/designer/blocks/";
 
             for (OoResource r : resources)
             {
                 Date fileDate = new Date(r.getFile().lastModified());
-                String code = StringUtils.substringBefore(r.getFilename(), ".");
+                String code = org.apache.commons.lang.StringUtils.substringBefore(r.getFilename(), ".");
 
                 OoResourceMetaData metaData = r.getMetaData();
                 if (metaData != null && metaData.getTypeDef() != null)
-                    typeService.registerType(metaData.getTypeDef());
+                {
+                    this.typeService.registerType(metaData.getTypeDef());
+                }
 
                 TemplateBlock block = (TemplateBlock) dao.getByPath(jcrPath + code);
-                if (block == null || block.getModificationTimestamp().before(fileDate))
+                //                if (block == null || block.getModificationTimestamp().before(fileDate))
+                //                {
+
+                // Don't include private blocks
+                if (metaData != null && metaData.getKeywords() != null && metaData.getKeywords().contains("private"))
                 {
-
-                    // Don't include private blocks
-                    if (metaData != null && metaData.getKeywords() != null && metaData.getKeywords().contains("private"))
-                    {
-                        logger.info("Ignoring private block: " + jcrPath + code);
-                        continue;
-                    }
-
-                    logger.info("Updating metaData for block: " + jcrPath + code);
-
-                    if (block == null)
-                    {
-                        block = new TemplateBlock();
-                        block.setPath(jcrPath);
-                    }
-                    block.setCode(code);
-                    block.setLabel(code);
-                    if (metaData != null)
-                    {
-                        if (metaData.getTitle() != null)
-                            block.setLabel(metaData.getTitle());
-                        else
-                            block.setDescription(metaData.getDescription());
-                        if (metaData.getKeywords() != null && metaData.getKeywords().contains("global"))
-                            block.setGlobal(true);
-                    }
-
-                    dao.save(block);
-                    dao.publish(block, null);
+                    this.logger.info("Ignoring private block: " + jcrPath + code);
+                    continue;
                 }
-                else
+
+                this.logger.info("Updating metaData for block: " + jcrPath + code);
+
+                if (block == null)
                 {
-                    logger.info("Found current block: " + jcrPath + code);
+                    block = new TemplateBlock();
+                    block.setPath(jcrPath);
                 }
+                block.setCode(code);
+                block.setLabel(code);
+                if (metaData != null)
+                {
+                    if (metaData.getTitle() != null)
+                    {
+                        block.setLabel(metaData.getTitle());
+                    }
+                    else
+                    {
+                        block.setDescription(metaData.getDescription());
+                    }
+                    if (metaData.getKeywords() != null && metaData.getKeywords().contains("global"))
+                    {
+                        block.setGlobal(true);
+                    }
+                }
+
+                dao.save(block);
+                dao.publish(block, null);
+                //                }
+                //                else
+                //                {
+                //                    logger.info("Found current block: " + jcrPath + code);
+                //                }
             }
 
             // Process layouts
-            resources = ooResourceLoader.getResources("/site/templates/layouts/");
+            resources = this.ooResourceLoader.getResources("/site/templates/layouts/");
             jcrPath = "/designer/layouts/";
             for (OoResource r : resources)
             {
                 Date fileDate = new Date(r.getFile().lastModified());
 
-                String code = StringUtils.substringBefore(r.getFilename(), ".");
+                String code = org.apache.commons.lang.StringUtils.substringBefore(r.getFilename(), ".");
                 TemplateLayout layout = (TemplateLayout) dao.getByPath(jcrPath + code);
                 if (layout == null || layout.getModificationTimestamp().before(fileDate))
                 {
-                    logger.info("Updating metaData for layout: " + jcrPath + code);
+                    this.logger.info("Updating metaData for layout: " + jcrPath + code);
 
                     if (layout == null)
                     {
@@ -126,16 +134,20 @@ public class ResourceScanner
                     if (r.getMetaData() != null)
                     {
                         if (r.getMetaData().getTitle() != null)
+                        {
                             layout.setLabel(r.getMetaData().getTitle());
+                        }
                         else
+                        {
                             layout.setDescription(r.getMetaData().getDescription());
+                        }
                     }
                     dao.save(layout);
                     dao.publish(layout, null);
                 }
                 else
                 {
-                    logger.info("Found current layout: " + jcrPath + code);
+                    this.logger.info("Found current layout: " + jcrPath + code);
                 }
             }
         }
@@ -151,7 +163,7 @@ public class ResourceScanner
     @SuppressWarnings("unchecked")
     public Template createTemplate(String code, String label, String layout, List<Map> regions)
     {
-        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
+        UniversalJcrDao dao = (UniversalJcrDao) this.daoService.getDao("baseNode");
 
         String path = "/designer/templates/" + code;
         Template template = (Template) dao.getByPath(path);
