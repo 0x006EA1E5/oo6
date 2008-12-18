@@ -6,10 +6,10 @@ var bodyWidth = Ojay('body').setStyle({'width' : YAHOO.util.Dom.getViewportWidth
 Ojay('div.oo-icon').on('click', function (el, e) {
 	if(hudVisible) {
 		// Animate hud closed
-		Ojay('html').animate({paddingTop:{from: 100, to: 0}, paddingBottom:{from: 200, to: 0}}, 0.5).removeClass('oo');
 		Ojay('.oo-toolbar').animate({top:{from: 0, to: -60}}, 0.5);
+		Ojay('html').wait(0.1).animate({paddingTop:{from: 100, to: 0}, paddingBottom:{from: 200, to: 0}}, 0.5).removeClass('oo');
 		Ojay('body').
-			wait(0.3).
+			wait(0.1).
 			setStyle({'overflowX' : 'hidden'}).
 			animate({left: {to:0}, width: {to: YAHOO.util.Dom.getViewportWidth()}}, 0.5).
 			setStyle({'overflowX' : siteBodyOverflow});
