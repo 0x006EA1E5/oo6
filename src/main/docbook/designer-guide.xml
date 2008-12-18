@@ -15,10 +15,6 @@
   <part>
     <title>Building your site</title>
 
-    <partintro>
-       Intro 
-    </partintro>
-
     <chapter id="chapter-using-the-framework">
       <title>Getting started</title>
 
@@ -575,6 +571,7 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
         <para>${Application}</para>
 
         <para>Cookies??? -- also add section in Action section</para>
+
         <para>${Session}</para>
       </section>
 
@@ -721,6 +718,24 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
 
       <para>Booleans: need placeholder for false values. This is done with a
       hidden field prefixed with "_" and an empty value.</para>
+
+      <para></para>
+
+      <para></para>
+
+      <section>
+        <title>Without dedicated controller</title>
+
+        <para>Make sure your TypeDef is correct by testing in OO.</para>
+
+        <para>Use formTool.getForm</para>
+      </section>
+
+      <section>
+        <title>With dedicated controller</title>
+
+        <para></para>
+      </section>
     </chapter>
 
     <chapter>
@@ -1093,7 +1108,7 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
   <part>
     <title>Advanced development</title>
 
-    <preface id="preface">
+    <chapter id="preface">
       <title>Preface</title>
 
       <para>This guide is for developers who want to extend the capabilities
@@ -1114,9 +1129,9 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
       should read the Site Builder Guide instead. If you're not sure then you
       should start off with that simpler guide and come back here when you
       need to.</para>
-    </preface>
+    </chapter>
 
-    <chapter id="chapter-using-the-framework">
+    <chapter id="chapter-using-the-framework-2">
       <title>Getting ready</title>
 
       <para>OTHERobjects in a pure-Java project based on the Spring framework
@@ -1213,7 +1228,7 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
                 <row>
                   <entry>Mylyn Trac Extra</entry>
 
-                  <entry>Enable mylyn/extras in update sites. </entry>
+                  <entry>Enable mylyn/extras in update sites.</entry>
                 </row>
               </tbody>
             </tgroup>
@@ -2221,7 +2236,7 @@ ${datevar?date}</programlisting>
   <part>
     <title>Hosting</title>
 
-    <preface id="preface">
+    <chapter id="hosting-preface">
       <title>Preface</title>
 
       <para>This guide explains the various options for hosting your
@@ -2231,7 +2246,7 @@ ${datevar?date}</programlisting>
       <para>The standard installation will be fine for small and medium sized
       sites but large or transaction sites will need more advanced hosting
       options descripbed in this guide.</para>
-    </preface>
+    </chapter>
 
     <chapter>
       <title>Deploying</title>
