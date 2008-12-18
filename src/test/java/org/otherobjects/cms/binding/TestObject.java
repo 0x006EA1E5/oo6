@@ -9,7 +9,7 @@ import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
 
-@Type(labelProperty = "name")
+@Type(labelProperty = "name", store="jackrabbit")
 public class TestObject extends BaseNode
 {
     // Simple properties

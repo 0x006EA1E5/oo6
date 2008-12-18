@@ -52,6 +52,7 @@ public class BindServiceImplTest extends TestCase
         typeDefBuilder.afterPropertiesSet();
 
         this.typeService.registerType(typeDefBuilder.getTypeDef(TestObject.class));
+        this.typeService.registerType(typeDefBuilder.getTypeDef(TestReferenceObject.class));
         this.typeService.registerType(typeDefBuilder.getTypeDef(Template.class));
         this.typeService.registerType(typeDefBuilder.getTypeDef(TemplateLayout.class));
         this.typeService.registerType(typeDefBuilder.getTypeDef(TemplateRegion.class));

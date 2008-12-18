@@ -4,7 +4,7 @@ import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.Type;
 
-@Type(labelProperty = "name")
+@Type(labelProperty = "name", store="jackrabbit")
 public class TestReferenceObject extends BaseNode
 {
     private String name;
