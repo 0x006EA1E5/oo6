@@ -67,48 +67,48 @@ public class ResourceScanner
                 }
 
                 TemplateBlock block = (TemplateBlock) dao.getByPath(jcrPath + code);
-                //                if (block == null || block.getModificationTimestamp().before(fileDate))
-                //                {
-
-                // Don't include private blocks
-                if (metaData != null && metaData.getKeywords() != null && metaData.getKeywords().contains("private"))
+                if (block == null || block.getModificationTimestamp().before(fileDate))
                 {
-                    this.logger.info("Ignoring private block: " + jcrPath + code);
-                    continue;
+
+                    // Don't include private blocks
+                    if (metaData != null && metaData.getKeywords() != null && metaData.getKeywords().contains("private"))
+                    {
+                        this.logger.info("Ignoring private block: " + jcrPath + code);
+                        continue;
+                    }
+
+                    this.logger.info("Updating metaData for block: " + jcrPath + code);
+
+                    if (block == null)
+                    {
+                        block = new TemplateBlock();
+                        block.setPath(jcrPath);
+                    }
+                    block.setCode(code);
+                    block.setLabel(code);
+                    if (metaData != null)
+                    {
+                        if (metaData.getTitle() != null)
+                        {
+                            block.setLabel(metaData.getTitle());
+                        }
+                        else
+                        {
+                            block.setDescription(metaData.getDescription());
+                        }
+                        if (metaData.getKeywords() != null && metaData.getKeywords().contains("global"))
+                        {
+                            block.setGlobal(true);
+                        }
+                    }
+
+                    dao.save(block);
+                    dao.publish(block, null);
                 }
-
-                this.logger.info("Updating metaData for block: " + jcrPath + code);
-
-                if (block == null)
+                else
                 {
-                    block = new TemplateBlock();
-                    block.setPath(jcrPath);
+                    this.logger.info("Found current block: " + jcrPath + code);
                 }
-                block.setCode(code);
-                block.setLabel(code);
-                if (metaData != null)
-                {
-                    if (metaData.getTitle() != null)
-                    {
-                        block.setLabel(metaData.getTitle());
-                    }
-                    else
-                    {
-                        block.setDescription(metaData.getDescription());
-                    }
-                    if (metaData.getKeywords() != null && metaData.getKeywords().contains("global"))
-                    {
-                        block.setGlobal(true);
-                    }
-                }
-
-                dao.save(block);
-                dao.publish(block, null);
-                //                }
-                //                else
-                //                {
-                //                    logger.info("Found current block: " + jcrPath + code);
-                //                }
             }
 
             // Process layouts
