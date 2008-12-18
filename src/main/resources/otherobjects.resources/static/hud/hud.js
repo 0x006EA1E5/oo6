@@ -6,6 +6,7 @@ var bodyWidth = Ojay('body').setStyle({'width' : YAHOO.util.Dom.getViewportWidth
 Ojay('div.oo-icon').on('click', function (el, e) {
 	if(hudVisible) {
 		// Animate hud closed
+		Ojay('div.oo-edit-zones').node.innerHTML = "";
 		Ojay('.oo-toolbar').animate({top:{from: 0, to: -60}}, 0.5);
 		Ojay('html').wait(0.1).animate({paddingTop:{from: 100, to: 0}, paddingBottom:{from: 200, to: 0}}, 0.5).removeClass('oo');
 		Ojay('body').
@@ -21,18 +22,45 @@ Ojay('div.oo-icon').on('click', function (el, e) {
 			setStyle({'overflowX' : 'hidden'}).
 			animate({left: {to: Math.floor((YAHOO.util.Dom.getViewportWidth()-siteMinWidth)/2)}, width: {from:YAHOO.util.Dom.getViewportWidth(), to: siteMinWidth}}, 0.75).
 			setStyle({'overflowX' : siteBodyOverflow});
-		Ojay('.oo-toolbar').wait(0.3).animate({top:{from: -60, to: 0},opacity:{from: 0, to: 1}}, 0.5);
+		Ojay('.oo-toolbar')
+			.wait(0.3)
+			.animate({top:{from: -60, to: 0},opacity:{from: 0, to: 1}}, 0.5)
+			._('div.oo-block').forEach(function(el,i) {
+				// Get Regions Dimensions
+				var area = el.getRegion();
+				var zoneHtml = Ojay.HTML.div({id: 'OoEditZone' + i , className: 'oo-edit-zone'});
+				Ojay('div.oo-edit-zones').insert(zoneHtml,'top');
+				var labelHtml = Ojay.HTML.div({id: 'OoEditLabel' + i , className: 'oo-edit-label'}, function(HTML) {
+					HTML.div({className:'oo-edit-label-wrapper oo-text-style'}, el.node.title);
+				});
+				
+				Ojay('#OoEditZone' + i).insert(labelHtml,'top');
+				
+				Ojay('#OoEditZone' + i).setStyle({opacity: '0', top:area.top + 'px', left:area.left + 'px', width:(area.getWidth()-4) + 'px', height:(area.getHeight()-4) + 'px'}).animate({opacity:  {from: 0, to: 1}}, 0.5);
+			});
 		
 		hudVisible = true;
+		
+
+		;
 	}
 });
 
-/*
-Ojay('html').addClass('oo').animate({paddingTop:{from: 0, to: 100}, paddingBottom:{from: 0, to: 200}}, 0.75);
 
-Ojay('body').
-	setStyle({'overflowX' : 'hidden'}).
-	animate({left: {to: Math.floor((YAHOO.util.Dom.getViewportWidth()-siteMinWidth)/2)}, width: {from:YAHOO.util.Dom.getViewportWidth(), to: siteMinWidth}}, 0.75).
-	setStyle({'overflowX' : siteBodyOverflow});
-hudVisible = true;
+/*
+('.oo-editregion').forEach(function(el,i) {
+		// Loop create editregions
+	var area = el.getRegion();
+	var htmlIns = Ojay.HTML.div({id: 'editzone' + i , className: 'oo-editzone'});
+	Ojay('div.oo-editzones').insert(htmlIns,'top');
+		// Insert Drop item
+		var htmlEditIns = Ojay.HTML.div({id: 'draghandle' + i , className: 'oo-draghandle oo-text-style'});
+		Ojay('#editzone' + i).insert(htmlEditIns,'top');
+		
+	Ojay('#editzone' + i).setStyle({opacity: '0', top:area.top + 'px', left:area.left + 'px', width:(area.getWidth()-4) + 'px', height:(area.getHeight()-4) + 'px'}).animate({opacity:  {from: 0, to: 1}}, 0.5);
+		Ojay('#draghandle' + i).setContent('<span>' + el.node.title + '</span>');
+		
+		var dd2 = new YAHOO.util.DD('editzone' + i);
+		dd2.setHandleElId('draghandle' + i); 
+})
 */

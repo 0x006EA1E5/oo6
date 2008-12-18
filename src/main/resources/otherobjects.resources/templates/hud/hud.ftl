@@ -1,28 +1,34 @@
-<@panel "oo-panel oo-toolbar">
-	<div class="oo-toolbar-item oo-dashboard"></div>
-	<div class="oo-toolbar-item oo-new"></div>
-	<div class="oo-toolbar-item oo-user-management"></div>
-	<div class="oo-toolbar-item oo-more"></div>
-	<div class="oo-search">
-		<input type="text" class="oo-search-input" value="Search OTHERobjects">
-	</div>
-	<div class="oo-modes">
-		<div class="oo-mode oo-mode-edit"></div>
-		<div class="oo-mode oo-mode-design"></div>
-		<div class="oo-mode oo-mode-debug"></div>
-	</div>
-	<div class="oo-toolbar-item oo-log-out"></div>
-</@panel>
+<div class="oo-edit-zones"></div>
 
-<#macro panel classes>
-<#if false>
-<div class="panel ${classes}"><div class="panel-c"><div class="panel-t"></div>
-	<#nested>
-</div><div class="panel-b"><div></div></div></div>
-<#else>
-<div class="panel ${classes}">
-	<#nested>
+<div class="oo-toolbar oo-text-style">
+	<div class="oo-toolbar-icons">
+		
+		<div class="oo-toolbar-left">
+			<div class="oo-toolbar-icon oo-dashboard-icon "><div class="oo-small-badge"><div class="oo-small-badge-label">2</div></div></div>
+			<div class="oo-toolbar-icon oo-new-icon"></div>
+			<div class="oo-toolbar-icon oo-commerce-icon"></div>
+			<div class="oo-toolbar-icon oo-users-icon"></div>
+		</div>
+		
+		<div class="oo-toolbar-center">
+			<input class="oo-search-input" type="text">
+		</div>
+		
+		<div class="oo-toolbar-right">
+			<div class="oo-toolbar-radio">
+				<div class="oo-toolbar-icon oo-edit-icon oo-icon-selected"></div>
+				<div class="oo-toolbar-icon oo-stats-icon"></div>
+				<div class="oo-toolbar-icon oo-design-icon"></div>
+				<div class="oo-toolbar-icon oo-debug-icon"></div>
+			</div>
+			<div class="oo-toolbar-icon oo-logout-icon"></div>
+		</div>
+		
+	</div>
 </div>
-</#if>
-</#macro>
 
+<script>
+Ojay('.oo-logout-icon').on('click', function() {
+	location.href='${oo.url("/otherobjects/logout.html")}';
+}); 
+</script>

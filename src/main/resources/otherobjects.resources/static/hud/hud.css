@@ -8,10 +8,52 @@ DIV.oo-icon:hover {opacity:1; cursor:pointer;}
 HTML.oo {background:#666 url(assets/html-background.png) fixed;}
 HTML.oo BODY {position:absolute; width:100%; -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8); -moz-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8); overflowx-x:hidden;}
 
+/* Text Styling */
+.oo-text-style {font:12px Arial, sans-serif; color:#FFF; text-shadow:1px 1px 0 rgba(0,0,0,1);}
+
 /* Panel */
 .oo-panel {-webkit-border-image:url(assets/panel.png) 20 18 30 18 stretch stretch; -moz-border-image:url(assets/panel.png) 20 18 30 18 stretch stretch; border-width:20px 18px 30px 18px;}
 
+/* Search Input */
+.oo-search-input {-webkit-border-image:url(assets/text-input.png) 0 15 0 15 stretch stretch; background:#CCC;  border-width:0 15px; font:12px/27px Arial, sans-serif; color:#000; outline:none; width:100%; height:26px; -webkit-border-radius:13px; -moz-border-radius:7px; margin-top:-3px;}
+
 /* Toolbar */
-.oo-toolbar {position:fixed; top:-60px; left:50%; margin:-20px 0 0 -490px; padding:20px 0 0 0; width:944px;}
-.oo-toolbar .oo-toolbar-item {padding-right:0;}
-.oo-toolbar .oo-toolbar-item:hover .oo-icon {background-position:50% -100px;}
+.oo-toolbar {position:fixed; top:-60px; width:950px; left:50%; margin-left:-493px; -webkit-border-image:url(assets/toolbar.png) 0 18 30 18 stretch stretch; -moz-border-image:url(assets/toolbar.png) 0 18 30 18 stretch stretch; border-width:0 18px 30px 18px; height:32px;}
+
+.oo-toolbar-icon {float:left; background-image:url('assets/toolbar-icon-sprite.png'); width:45px; height:45px; background-position:0 50%; cursor:pointer; -webkit-transition:background-color 0.2s linear; border-right:1px solid rgba(255,255,255,0); border-left:1px solid rgba(0,0,0,0);}
+.oo-toolbar-icon:hover {background-color:rgba(255,255,255,0.2); border-right-color:rgba(255,255,255,0.1); border-left-color:1px solid rgba(0,0,0,1);}
+.oo-toolbar-icon:active {background-color:rgba(51,153,255,0.4);}
+
+.oo-toolbar-icons {margin:0 0 0 -7px; display:table; width:964px;}
+.oo-toolbar-left, .oo-toolbar-center, .oo-toolbar-right {display:table-cell; vertical-align:middle;}
+.oo-toolbar-left {width:270px;}
+.oo-toolbar-center {}
+.oo-toolbar-right {text-align:right; width:370px;}
+
+.oo-dashboard-icon {background-position:0 0; margin:0 15px 0 0; border-left:0px; -webkit-border-bottom-left-radius:7px; -moz-border-bottom-left-radius:7px;}
+.oo-new-icon {background-position:-270px 0;}
+.oo-commerce-icon {background-position:-315px 0;}
+.oo-users-icon {background-position:-360px 0;}
+
+.oo-edit-icon {background-position:-45px 0;}
+.oo-stats-icon {background-position:-91px 0;}
+.oo-design-icon {background-position:-137px 0;}
+.oo-debug-icon {background-position:-182px 0;}
+
+.oo-logout-icon {background-position:-225px 0; margin-left:10px; -webkit-border-bottom-right-radius:7px; -moz-border-bottom-right-radius:7px;}
+.oo-toolbar-radio {position:relative; display:inline-block; height:45px; top:0px;}
+.oo-logout-icon:hover {background-color:rgba(255,0,0,0.4);}
+.oo-toolbar-right .oo-toolbar-icon {float:right;}
+.oo-toolbar-radio .oo-toolbar-icon {float:left; width:41px; background-color:rgba(255,255,255,0.05);}
+.oo-toolbar-radio .oo-toolbar-icon:hover {background-color:rgba(255,255,255,0.2);}
+.oo-toolbar-radio .oo-icon-selected, .oo-toolbar-radio .oo-icon-selected:hover {background-color:rgba(51,153,255,0.4);}
+
+/* Badges */
+.oo-small-badge {position:absolute;  margin:7px 0 0 27px; -webkit-border-image:url('assets/small-badge.png') 0 8 0 8 stretch stretch; border-width:0 8px 0 8px; height:17px; line-height:16px; min-width:2px; text-align:center;}
+.oo-small-badge-label {margin:0 -2px 0 -2px; color:#FFF; text-shadow:1px 1px 0 rgba(0,0,0,0); font-size:10px;}
+
+/* Edit Zones */
+.oo-edit-zone {position:absolute; z-index:9000; text-align:center; background-color:rgba(0, 0, 0, 0.05); -webkit-transition:background-color 0.2s linear, border-color 0.2s linear; -webkit-border-radius:15px; -moz-transition:background-color 0.2s linear, border-color 0.2s linear; -moz-border-radius:15px; border:2px solid rgba(0,0,0,0.1);}
+.oo-edit-zone:hover {background-color:rgba(0, 0, 0, 0.2); border-color:rgba(0,0,0,0.2);}
+.oo-edit-label {-webkit-border-image:url(assets/edit-label.png) 16 19 23 19 stretch stretch; -moz-border-image:url(assets/edit-label.png) 16 19 23 19 stretch stretch; display:inline-block;  border-width:16px 19px 23px; margin-top:-10px; cursor:move;}
+.oo-edit-label-wrapper {margin:-7px 0 -6px;}
