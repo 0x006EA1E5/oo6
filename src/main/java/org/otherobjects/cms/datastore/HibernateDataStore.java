@@ -68,4 +68,9 @@ public class HibernateDataStore implements DataStore
         return this.daoService.getDao(typeDef.getClassName());
     }
 
+    public void setDaoService(DaoService daoService)
+    {
+        this.daoService = daoService;
+    }
+
 }
