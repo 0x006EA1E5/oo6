@@ -39,7 +39,7 @@ public class FreemarkerToolProvider implements ApplicationContextAware
             }
             catch (Exception e)
             {
-                this.logger.warn("Error scanning bean for @Tool: " + beanName, e);
+                //this.logger.warn("Error scanning bean for @Tool: " + beanName, e);
             }
         }
         return tools;
