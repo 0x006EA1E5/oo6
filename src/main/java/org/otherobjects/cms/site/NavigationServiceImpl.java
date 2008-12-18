@@ -204,20 +204,30 @@ public class NavigationServiceImpl implements NavigationService
 
     public TreeNode getNode(String path, String currentPath)
     {
-        // FIXME Need to synchronise this
-        if (this.tree == null)
+        try
         {
-            buildTree();
-        }
+            // FIXME Need to synchronise this
+            if (this.tree == null)
+            {
+                buildTree();
+            }
 
-        // Mark selected nodes
-        TreeNode node = this.tree.getNode(path);
-        if (currentPath != null)
+            // Mark selected nodes
+            TreeNode node = this.tree.getNode(path);
+
+            node = node.clone(1);
+
+            if (currentPath != null)
+            {
+                markSelected(node, currentPath);
+            }
+
+            return node;
+        }
+        catch (CloneNotSupportedException e)
         {
-            markSelected(node, currentPath);
+            throw new OtherObjectsException("Could not create nagivation trail.", e);
         }
-
-        return node;
     }
 
     /**
