@@ -28,12 +28,19 @@ Ojay('div.oo-icon').on('click', function (el, e) {
 			._('div.oo-block').forEach(function(el,i) {
 				// Get Regions Dimensions
 				var area = el.getRegion();
+				
+				// Create Edit Zone HTML
 				var zoneHtml = Ojay.HTML.div({id: 'OoEditZone' + i , className: 'oo-edit-zone'});
 				Ojay('div.oo-edit-zones').insert(zoneHtml,'top');
-				var labelHtml = Ojay.HTML.div({id: 'OoEditLabel' + i , className: 'oo-edit-label'}, function(HTML) {
-					HTML.div({className:'oo-edit-label-wrapper oo-text-style'}, el.node.title);
-				});
 				
+				//  Create Edit Label HTML
+				var labelHtml = Ojay.HTML.div({id: 'OoEditLabel' + i , className: 'oo-edit-label'}, function(HTML) {
+					// Insert Actions Arrow
+					HTML.div({id: 'OoEditActions' + i , className: 'oo-edit-label-actions'}, function(HTML) {
+						// Edit Status Gem and Label Text
+						HTML.div({className:'oo-text-style oo-edit-state oo-edit-state-' + el.node.getAttribute('editstate').toLowerCase(), title:'Status: ' + el.node.getAttribute('editstate') },el.node.getAttribute('editlabel'));
+					});
+				});
 				Ojay('#OoEditZone' + i).insert(labelHtml,'top');
 				
 				Ojay('#OoEditZone' + i).setStyle({opacity: '0', top:area.top + 'px', left:area.left + 'px', width:(area.getWidth()-4) + 'px', height:(area.getHeight()-4) + 'px'}).animate({opacity:  {from: 0, to: 1}}, 0.5);

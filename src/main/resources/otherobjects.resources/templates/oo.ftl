@@ -99,12 +99,12 @@ Macro to insert block
 	<#assign blockData = blockReference.blockData!/>
 	<#-- If block is global but has no data then render placeholder-->
 	<#if blockReference.block.global?has_content && !blockData?has_content>
-		<div class="oo-block" id="oo-block-${blockReference.id}" title="${blockReference.block.label}">
+		<div class="oo-block" id="oo-block-${blockReference.id}" editlabel="${blockReference.block.label}" editstate="Live">
 		<#include "blocks/oo-block-new.ftl">
 		</div>
 	<#else>
 		<#assign blockData = blockReference.blockData! >
-		<div class="oo-block" id="oo-block-${blockReference.id}" title="${blockReference.block.label}">
+		<div class="oo-block" id="oo-block-${blockReference.id}" editlabel="${blockReference.block.label}" editstate="Live">
 		<#include "/site/templates/blocks/${blockName}.ftl">
 		</div>
 	</#if>
