@@ -3,7 +3,10 @@ var siteMinWidth = 1016;
 var siteBodyOverflow = "auto"; // FIXME This needs to be recorded before entering hud.
 var bodyWidth = Ojay('body').setStyle({'width' : YAHOO.util.Dom.getViewportWidth()})
 
-Ojay('div.oo-icon').on('click', function (el, e) {
+Ojay.Keyboard.listen(document, 'ESCAPE', toggleHud);
+Ojay('div.oo-icon').on('click',toggleHud); 
+				
+function toggleHud(el, e) {
 	if(hudVisible) {
 		// Animate hud closed
 		Ojay('div.oo-edit-zones').node.innerHTML = "";
@@ -33,6 +36,19 @@ Ojay('div.oo-icon').on('click', function (el, e) {
 				var zoneHtml = Ojay.HTML.div({id: 'OoEditZone' + i , className: 'oo-edit-zone'});
 				Ojay('div.oo-edit-zones').insert(zoneHtml,'top');
 				
+				// Set click handler
+				Ojay('#OoEditZone'+i).on('click', function(el, e) {
+				    e.stopDefault();
+					//var overlay = $('.oo-menu').node;
+					//ooBlockInEdit = el.getId();
+					//alert(ooBlockInEdit);
+					$('.oo-menu').setStyle({display:"block"});
+					//Ojay.HTTP.GET('' + ooBaseUrl + 'otherobjects/block/form/'+blockReferenceId+'?resourceObjectId='+resourceObjectId).insertInto('#oo-form-overlay').evalScripts();
+				});
+				
+				
+				
+				
 				//  Create Edit Label HTML
 				var labelHtml = Ojay.HTML.div({id: 'OoEditLabel' + i , className: 'oo-edit-label'}, function(HTML) {
 					// Insert Actions Arrow
@@ -47,11 +63,8 @@ Ojay('div.oo-icon').on('click', function (el, e) {
 			});
 		
 		hudVisible = true;
-		
-
-		;
 	}
-});
+}
 
 
 /*

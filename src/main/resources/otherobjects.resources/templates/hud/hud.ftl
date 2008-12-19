@@ -1,4 +1,6 @@
-<div class="oo-menu">
+<div class="oo-menu" style="display:none;">
+	<div class="oo-menu-row-group" style="display:table-row-group; height:100%;">
+	<div class="oo-menu-row" style="display:table-row; height:100%;">
 	<div class="oo-menu-cell" style="width:50%;"></div>
 	<div class="oo-menu-cell">
 	<div class="oo-panel oo-text-style" style="width:750px; height:500px;">
@@ -104,13 +106,10 @@
 		</div>
 	</div></div>
 	<div class="oo-menu-cell" style="width:50%;"></div>
+	</div>
+	</div>
 </div>
 
-
-
-
-
-</div>
 
 <div class="oo-edit-zones"></div>
 
