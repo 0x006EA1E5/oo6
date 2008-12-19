@@ -260,7 +260,6 @@ Macro to insert OO interface CSS headers
 -->
 <#macro head>
 <@oo.css "/otherobjects/static/hud/hud.css" />
-<@oo.css "/otherobjects/static/hud/skins/default/skin.css" />
 </#macro>
 
 <#-- 
