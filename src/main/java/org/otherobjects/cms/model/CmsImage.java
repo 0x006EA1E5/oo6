@@ -1,6 +1,5 @@
 package org.otherobjects.cms.model;
 
-import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
@@ -57,7 +56,7 @@ public class CmsImage extends BaseNode
             return this.thumbnailPath;
 
         if (getOriginalFileName() != null)
-            return "/public-data" + getOriginalFileName().replaceAll("originals", "100x100%23FFFFFF");
+            return "/public-data" + getOriginalFileName().replaceAll("originals", "100x100-FFFFFF");
         else
             return null;
     }
@@ -68,7 +67,8 @@ public class CmsImage extends BaseNode
     @Override
     public String getCode()
     {
-        return this.code != null ? this.code : StringUtils.generateUrlCode(getLabel()) + "." + getExtension();
+        String fileStem = StringUtils.substringBeforeLast(getOriginalFileName(),".");
+        return this.code != null ? this.code : StringUtils.generateUrlCode(fileStem) + "." + getExtension();
     }
 
     /**
@@ -87,7 +87,7 @@ public class CmsImage extends BaseNode
     }
 
     @Override
-    @Property(order = 10, required = true)
+    @Property(order = 10)
     public String getLabel()
     {
         return this.label;
@@ -170,7 +170,7 @@ public class CmsImage extends BaseNode
         this.newFile = newFile;
     }
 
-    @Property(order=150, type=PropertyType.TRANSIENT)
+    @Property(order=5, type=PropertyType.TRANSIENT)
     public CommonsMultipartFile getNewFile()
     {
         return this.newFile;
@@ -233,7 +233,7 @@ public class CmsImage extends BaseNode
      * Returns extension of original file name. 
      * @return
      */
-    private String getExtension()
+    public String getExtension()
     {
         if(getOriginalFileName() == null)
             return null;
@@ -247,10 +247,9 @@ public class CmsImage extends BaseNode
         this.mimeType = mimeType;
     }
 
-    public OoResource getResource()
+    public String getOriginalResourcePath()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return DEFAULT_FOLDER + ORIGINALS_PATH + getCode();
     }
 
 }

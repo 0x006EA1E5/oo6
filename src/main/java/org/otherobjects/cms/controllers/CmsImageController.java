@@ -1,5 +1,6 @@
 package org.otherobjects.cms.controllers;
 
+import java.awt.Dimension;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,13 +13,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.Url;
 import org.otherobjects.cms.binding.BindService;
-import org.otherobjects.cms.dao.GenericDao;
+import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.datastore.JackrabbitDataStore;
+import org.otherobjects.cms.io.OoResource;
+import org.otherobjects.cms.io.OoResourceLoader;
 import org.otherobjects.cms.model.CmsImage;
-import org.otherobjects.cms.model.Editable;
+import org.otherobjects.cms.tools.CmsImageTool;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.ActionUtils;
+import org.otherobjects.cms.util.ImageUtils;
 import org.otherobjects.cms.util.RequestUtils;
 import org.otherobjects.cms.validation.ValidatorService;
 import org.otherobjects.cms.views.JsonView;
@@ -32,6 +36,10 @@ import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.iptc.IptcDirectory;
 
 /**
  * Controller to process form submissions. Only data for types registered in the TypeService is supported.
@@ -56,11 +64,14 @@ public class CmsImageController
     @Resource
     private ValidatorService validatorService;
 
-    //@Resource
-    //private OoResourceLoader ooResourceLoader;
+    @Resource
+    private OoResourceLoader ooResourceLoader;
+
+    @Resource
+    private CmsImageTool cmsImageTool;
 
     @RequestMapping({"/image/save"})
-    public ModelAndView save(MultipartHttpServletRequest multipartRequest, HttpServletResponse response, CmsImage cmsImage) throws IOException
+    public ModelAndView save(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws IOException
     {
         ActionUtils actionUtils = new ActionUtils(multipartRequest, response, null, null);
 
@@ -72,61 +83,98 @@ public class CmsImageController
         TypeDef typeDef = typeService.getType(typeName);
         Assert.notNull(typeDef, "No typeDef found for type: " + typeName);
 
-        Editable item = null;
-        GenericDao genericDao = jackrabbitDataStore.getDao(typeDef);
+        CmsImage cmsImage = null;
+        GenericJcrDao genericDao = (GenericJcrDao) jackrabbitDataStore.getDao(typeDef);
 
         if (StringUtils.isNotBlank(id))
         {
-            item = (Editable) jackrabbitDataStore.get(id);
+            cmsImage = (CmsImage) jackrabbitDataStore.get(id);
         }
         else
         {
-            item = (Editable) jackrabbitDataStore.create(typeDef, containerId);
+            cmsImage = (CmsImage) jackrabbitDataStore.create(typeDef, containerId);
         }
 
-        Assert.notNull(item, "Could not prepare item for binding: " + typeName);
+        Assert.notNull(cmsImage, "Could not prepare item for binding: " + typeName);
 
         // Bind and validate
         BindingResult errors = null;
-        errors = bindService.bind(item, typeDef, multipartRequest);
-        Validator validator = validatorService.getValidator(item);
+        errors = bindService.bind(cmsImage, typeDef, multipartRequest);
+        Validator validator = validatorService.getValidator(cmsImage);
         if (validator != null)
-            validator.validate(item, errors);
+            validator.validate(cmsImage, errors);
         else
-            logger.warn("No validator for item of class " + item.getClass() + " found");
+            logger.warn("No validator for item of class " + cmsImage.getClass() + " found");
+
+        // Set fileName so that code can be generated
+        if (StringUtils.isBlank(id))
+        {
+            // FIXME This should be done in the validation
+            Assert.notNull(cmsImage.getNewFile(), "A file must be uploaded when creating new images.");
+            cmsImage.setOriginalFileName(cmsImage.getNewFile().getOriginalFilename());
+
+            // Check if we have a image with the same name already stored
+            int suffix = 2;
+            Object existingImage = genericDao.getByPath(cmsImage.getJcrPath());
+            String fileStem = StringUtils.substringBeforeLast(cmsImage.getCode(), ".");
+            while (existingImage != null)
+            {
+                cmsImage.setCode(fileStem + "-" + (suffix++) + "." + cmsImage.getExtension());
+                existingImage = genericDao.getByPath(cmsImage.getJcrPath());
+            }
+        }
+        if (cmsImage.getNewFile() != null)
+        {
+            // Save image information
+            Dimension imageDimensions = ImageUtils.getImageDimensions(cmsImage.getNewFile().getInputStream());
+            cmsImage.setOriginalWidth(new Double(imageDimensions.getWidth()).longValue());
+            cmsImage.setOriginalHeight(new Double(imageDimensions.getHeight()).longValue());
+            
+            // Look for IPTC tags to read
+            Metadata imageMetadata = ImageUtils.getImageMetadata(cmsImage.getNewFile().getInputStream());
+            if (imageMetadata.containsDirectory(IptcDirectory.class))
+            {
+                Directory iptc = imageMetadata.getDirectory(IptcDirectory.class);
+                if (iptc.containsTag(IptcDirectory.TAG_OBJECT_NAME))
+                    cmsImage.setLabel(iptc.getString(IptcDirectory.TAG_OBJECT_NAME));
+                if (iptc.containsTag(IptcDirectory.TAG_CAPTION))
+                    cmsImage.setDescription(iptc.getString(IptcDirectory.TAG_CAPTION));
+                if (iptc.containsTag(IptcDirectory.TAG_COPYRIGHT_NOTICE))
+                    cmsImage.setCopyright(iptc.getString(IptcDirectory.TAG_COPYRIGHT_NOTICE));
+                if (iptc.containsTag(IptcDirectory.TAG_KEYWORDS))
+                    cmsImage.setKeywords(iptc.getString(IptcDirectory.TAG_KEYWORDS));
+            }
+
+            // Make sure we always have a label
+            if (cmsImage.getLabel() == null)
+                cmsImage.setLabel(cmsImage.getCode());
+
+        }
 
         // Save
         boolean success = false;
         if (!(errors != null && errors.hasErrors()))
         {
             // Save new object
-            item = (Editable) genericDao.save(item, false);
+            cmsImage = (CmsImage) genericDao.save(cmsImage, false);
             success = true;
         }
-        
-        CmsImage image = (CmsImage) item;
-        if (image.getNewFile() != null)
+
+        if (cmsImage.getNewFile() != null)
         {
-//            Dimension imageDimensions = ImageUtils.getImageDimensions(image.getNewFile());
-//            image.setOriginalWidth(new Double(imageDimensions.getWidth()).longValue());
-//            image.setOriginalHeight(new Double(imageDimensions.getHeight()).longValue());
-//            //DataFile original = new DataFile(image.getNewFile());
-//            original.setFileName(image.getCode());
-//            original.setCollection(CmsImage.DATA_FILE_COLLECTION_NAME);
-//            original.setPath(CmsImage.ORIGINALS_PATH);
-//            //original = this.dataFileDao.save(original);
-//            image.setOriginalFileName(original.getId());
-//            image.setNewFile(null);
-//
-//            // Create thumbnail
-//            this.cmsImageTool.getThumbnail(image);
+            // Store image in originals folder
+            // FIXME Delete previous one if needed
+            OoResource resource = ooResourceLoader.getResource("/data/images/originals/" + cmsImage.getCode());
+            cmsImage.getNewFile().transferTo(resource.getFile());
+
+            // Create thumbnail
+            this.cmsImageTool.getThumbnail(cmsImage);
         }
-        
 
         // Prepare return data
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("success", success);
-        data.put("formObject", item);
+        data.put("formObject", cmsImage);
         if (!success)
         {
             List<Object> jsonErrors = new ArrayList<Object>();
@@ -155,7 +203,7 @@ public class CmsImageController
             if (success)
             {
                 actionUtils.flashInfo("Your object was saved.");
-                Url u = new Url("/otherobjects/workbench/view/" + item.getEditableId());
+                Url u = new Url("/otherobjects/workbench/view/" + cmsImage.getEditableId());
                 response.sendRedirect(u.toString());
                 return null;
             }
@@ -164,67 +212,15 @@ public class CmsImageController
                 actionUtils.flashWarning("Your object could not be saved. See below for errors.");
                 ModelAndView view = new ModelAndView("/otherobjects/templates/legacy/pages/edit");
                 view.addObject("success", success);
-                view.addObject("id", item.getEditableId());
+                view.addObject("id", cmsImage.getEditableId());
                 view.addObject("typeDef", typeDef);
-                view.addObject("object", item);
+                view.addObject("object", cmsImage);
                 view.addObject("containerId", containerId);
                 view.addObject("org.springframework.validation.BindingResult.object", errors);
                 return view;
             }
         }
-        
-        /*
-        MultipartFile imageFile = (MultipartFile) multipartRequest.getFileMap().get("newFile");
-        this.logger.info("Received file " + imageFile.getOriginalFilename());
 
-        CmsImageDao cmsImageDao = (CmsImageDao) this.daoService.getDao(CmsImage.class);
-
-        File newFile = File.createTempFile("upload", "img");
-        newFile.deleteOnExit();
-
-        imageFile.transferTo(newFile);
-
-        cmsImage.setPath("/libraries/images/");
-        cmsImage.setCode(imageFile.getOriginalFilename());
-        cmsImage.setLabel(imageFile.getOriginalFilename());
-        cmsImage.setNewFile(newFile);
-
-        // some manual binding which is pants
-        cmsImage.setDescription(multipartRequest.getParameter("description"));
-        cmsImage.setKeywords(multipartRequest.getParameter("keywords"));
-        cmsImage.setOriginalProvider(multipartRequest.getParameter("originalProvider"));
-        cmsImage.setProviderId(multipartRequest.getParameter("providerId"));
-        cmsImage.setCopyright(multipartRequest.getParameter("copyright"));
-        
-
-        // Look for IPTC tags to read
-        Metadata imageMetadata = ImageUtils.getImageMetadata(newFile);
-        if (imageMetadata.containsDirectory(IptcDirectory.class))
-        {
-            Directory iptc = imageMetadata.getDirectory(IptcDirectory.class);
-            if (iptc.containsTag(IptcDirectory.TAG_OBJECT_NAME))
-                cmsImage.setLabel(iptc.getString(IptcDirectory.TAG_OBJECT_NAME));
-            if (iptc.containsTag(IptcDirectory.TAG_CAPTION))
-                cmsImage.setDescription(iptc.getString(IptcDirectory.TAG_CAPTION));
-            if (iptc.containsTag(IptcDirectory.TAG_COPYRIGHT_NOTICE))
-                cmsImage.setCopyright(iptc.getString(IptcDirectory.TAG_COPYRIGHT_NOTICE));
-            if (iptc.containsTag(IptcDirectory.TAG_KEYWORDS))
-                cmsImage.setKeywords(iptc.getString(IptcDirectory.TAG_KEYWORDS));
-        }
-
-        // Get file proprerties
-        cmsImageDao.save(cmsImage);
-        newFile.delete();
-
-        // We have errors so return error messages
-        ModelAndView view = new ModelAndView("jsonView");
-        view.addObject("mimeOverride", "text/html");
-
-        // All OK...
-        view.addObject("success", true);
-        view.addObject("formObject", cmsImage);
-        return view;
-        */
     }
 
     public void setTypeService(TypeService typeService)

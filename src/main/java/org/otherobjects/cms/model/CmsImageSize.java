@@ -6,6 +6,8 @@ import org.springframework.util.Assert;
 /**
  * Represents an instance of an image at a particular size.
  * 
+ * TODO Need alt text
+ * 
  * @author rich
  */
 public class CmsImageSize
