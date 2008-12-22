@@ -20,34 +20,30 @@ function toggleHud(el, e) {
 		hudVisible = false;
 	} else {
 		// Animate hud open
-		Ojay('html').addClass('oo').animate({paddingTop:{from: 0, to: 100}, paddingBottom:{from: 0, to: 200}}, 0.75);
+		Ojay('html').addClass('oo').animate({paddingTop:{from: 0, to: 100}, paddingBottom:{from: 0, to: 200}}, 0.3);
 		Ojay('body').
 			setStyle({'overflowX' : 'hidden'}).
-			animate({left: {to: Math.floor((YAHOO.util.Dom.getViewportWidth()-siteMinWidth)/2)}, width: {from:YAHOO.util.Dom.getViewportWidth(), to: siteMinWidth}}, 0.75).
+			animate({left: {to: Math.floor((YAHOO.util.Dom.getViewportWidth()-siteMinWidth)/2)}, width: {from:YAHOO.util.Dom.getViewportWidth(), to: siteMinWidth}}, 0.3).
 			setStyle({'overflowX' : siteBodyOverflow});
 		Ojay('.oo-toolbar')
-			.wait(0.3)
-			.animate({top:{from: -60, to: 0},opacity:{from: 0, to: 1}}, 0.5)
+			.wait(0.1)
+			.animate({top:{from: -60, to: 0},opacity:{from: 0, to: 1}}, 0.2)
 			._('div.oo-block').forEach(function(el,i) {
 				// Get Regions Dimensions
 				var area = el.getRegion();
-				
 				// Create Edit Zone HTML
-				var zoneHtml = Ojay.HTML.div({id: 'OoEditZone' + i , className: 'oo-edit-zone'});
+				var zoneHtml = Ojay.HTML.div({id: 'OoEditZone' + i , className: 'oo-edit-zone', title:el.node.id});
 				Ojay('div.oo-edit-zones').insert(zoneHtml,'top');
 				
 				// Set click handler
 				Ojay('#OoEditZone'+i).on('click', function(el, e) {
 				    e.stopDefault();
 					//var overlay = $('.oo-menu').node;
-					//ooBlockInEdit = el.getId();
-					//alert(ooBlockInEdit);
+				    ooBlockInEdit = el.node.getAttribute('title').substring(9);
 					$('.oo-menu').setStyle({display:"block"});
-					//Ojay.HTTP.GET('' + ooBaseUrl + 'otherobjects/block/form/'+blockReferenceId+'?resourceObjectId='+resourceObjectId).insertInto('#oo-form-overlay').evalScripts();
-				});
-				
-				
-				
+					var url = '' + ooBaseUrl + 'otherobjects/block/form/'+ooBlockInEdit+'?resourceObjectId='+resourceObjectId;
+					Ojay.HTTP.GET(url).insertInto('#OoMenu').evalScripts();
+				});			
 				
 				//  Create Edit Label HTML
 				var labelHtml = Ojay.HTML.div({id: 'OoEditLabel' + i , className: 'oo-edit-label'}, function(HTML) {
@@ -59,7 +55,7 @@ function toggleHud(el, e) {
 				});
 				Ojay('#OoEditZone' + i).insert(labelHtml,'top');
 				
-				Ojay('#OoEditZone' + i).setStyle({opacity: '0', top:area.top + 'px', left:area.left + 'px', width:(area.getWidth()-4) + 'px', height:(area.getHeight()-4) + 'px'}).animate({opacity:  {from: 0, to: 1}}, 0.5);
+				Ojay('#OoEditZone' + i).setStyle({opacity: '0', top:area.top + 'px', left:area.left + 'px', width:(area.getWidth()-4) + 'px', height:(area.getHeight()-4) + 'px'}).animate({opacity:  {from: 0, to: 1}}, 0.1);
 			});
 		
 		hudVisible = true;

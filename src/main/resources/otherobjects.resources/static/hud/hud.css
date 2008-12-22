@@ -93,7 +93,7 @@ HTML.oo BODY {position:absolute; width:100%; -webkit-box-shadow: 0 5px 15px rgba
 .oo-listing TFOOT {display:block;}
 .oo-listing TFOOT TR TD {-webkit-border-image:url(assets/listing-footer.png) 0 8 8 8 stretch stretch; border-width:0 0 8px 0; background-color:#CCC; text-align:left; line-height:-20px; padding:8px 10px 3px 10px; color:#333; -webkit-transition:background-color 0.1s linear; text-shadow:0px 0px 0 rgba(0,0,0,0);}
 .oo-listing TFOOT TR.oo-listing-arrow TD {cursor:pointer;}
-.oo-listing TFOOT TR.oo-listing-arrow:hover TD {background-color:#278AD6; color:#FFF;}
+/* .oo-listing TFOOT TR.oo-listing-arrow:hover TD {background-color:#278AD6; color:#FFF;} */
 .oo-listing TFOOT TD:first-child {border-left:8px; -webkit-border-bottom-left-radius:8px; padding-right:7px;}
 .oo-listing TFOOT TD:last-child {border-right:8px; -webkit-border-bottom-right-radius:8px; padding-right:37px;}
 
@@ -108,10 +108,16 @@ HTML.oo BODY {position:absolute; width:100%; -webkit-box-shadow: 0 5px 15px rgba
 .oo-listing TR.oo-listing-arrow TD:last-child {background-image:url(assets/arrow-list.png); background-position:100% 50%; background-repeat:no-repeat; padding-right:35px;}
 .oo-listing TR.oo-listing-arrow:hover {background-color:#CCC;}
 .oo-listing-field TD:first-child {font-weight:bold; font-size:11px; line-height:16px;}
-.oo-listing-field TEXTAREA {border:none; font:12px/16px Arial, sans-serif; height:auto; background:none; color:#333; resize:none; outline:none; width:100%; margin:-8px 0; padding:8px 0;}
+/*.oo-listing-field TEXTAREA {border:none; font:12px/16px Arial, sans-serif; height:auto; background:none; color:#333; resize:none; outline:none; width:100%; margin:-8px 0; padding:8px 0;}*/
 .oo-listing TR.oo-listing-field:hover TD {background-color:#EAF4FF;}
 .oo-listing-field UL {margin:0; padding-left:1.3em;}
 .oo-listing-field LI {list-style:url(assets/listing-bullet.png); margin:0; padding:0 0 5px 5px;}
+
+.oo-actions {display:table; width:100%;}
+.oo-actions .oo-action {display:table-cell;}
+.oo-action .oo-button {margin:5px 5px 0 0; padding:0px;}
+.oo-action:last-child .oo-button {margin-right:0;}
+.oo-action .oo-arrow {padding:0 23px 0 15px; text-align:left;}
 
 
 /* Button */
