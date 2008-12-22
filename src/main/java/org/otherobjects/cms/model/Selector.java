@@ -20,8 +20,8 @@ import org.otherobjects.cms.types.annotation.Type;
 @Type
 public class Selector extends BaseNode
 {
-    private String label;
-    private String description;
+    //    private String label;
+    //    private String description;
 
     private String queryPath;
     private String queryTypeName;
@@ -41,45 +41,48 @@ public class Selector extends BaseNode
         return "SELECTOR";
     }
 
-    @Property(order = 10)
-    public String getLabel()
-    {
-        return label;
-    }
-
-    public void setLabel(String label)
-    {
-        this.label = label;
-    }
-
-    @Property(order = 20)
-    public String getDescription()
-    {
-        return description;
-    }
-
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
+    //
+    //    @Property(order = 10)
+    //    public String getLabel()
+    //    {
+    //        return label;
+    //    }
+    //
+    //    public void setLabel(String label)
+    //    {
+    //        this.label = label;
+    //    }
+    //
+    //    @Property(order = 20)
+    //    public String getDescription()
+    //    {
+    //        return description;
+    //    }
+    //
+    //    public void setDescription(String description)
+    //    {
+    //        this.description = description;
+    //    }
 
     @Property(order = 30)
     public String getQueryPath()
     {
-        return queryPath;
+        return this.queryPath;
     }
 
     public void setQueryPath(String queryPath)
     {
-        if(queryPath!=null && !queryPath.endsWith("/"))
+        if (queryPath != null && !queryPath.endsWith("/"))
+        {
             queryPath = queryPath + "/"; // Path queries must end in slash
+        }
         this.queryPath = queryPath;
     }
 
     @Property(order = 35)
     public String getQueryTags()
     {
-        return queryTags;
+        return this.queryTags;
     }
 
     public void setQueryTags(String queryTags)
@@ -90,7 +93,7 @@ public class Selector extends BaseNode
     @Property(order = 34, label = "Random?")
     public Boolean getRandom()
     {
-        return random;
+        return this.random;
     }
 
     public void setRandom(Boolean random)
@@ -101,7 +104,7 @@ public class Selector extends BaseNode
     @Property(order = 35, label = "Sub folders?")
     public Boolean getSubFolders()
     {
-        return subFolders;
+        return this.subFolders;
     }
 
     public void setSubFolders(Boolean subFolders)
@@ -112,7 +115,7 @@ public class Selector extends BaseNode
     @Property(order = 40)
     public String getQueryTypeName()
     {
-        return queryTypeName;
+        return this.queryTypeName;
     }
 
     public void setQueryTypeName(String queryTypeName)
@@ -123,7 +126,7 @@ public class Selector extends BaseNode
     @Property(order = 41)
     public String getOrderBy()
     {
-        return orderBy;
+        return this.orderBy;
     }
 
     public void setOrderBy(String orderBy)
@@ -134,7 +137,7 @@ public class Selector extends BaseNode
     @Property(order = 50)
     public String getCustomQuery()
     {
-        return customQuery;
+        return this.customQuery;
     }
 
     public void setCustomQuery(String customQuery)
@@ -145,7 +148,7 @@ public class Selector extends BaseNode
     @Property(order = 60)
     public Long getStart()
     {
-        return start;
+        return this.start;
     }
 
     public void setStart(Long start)
@@ -156,7 +159,7 @@ public class Selector extends BaseNode
     @Property(order = 70)
     public Long getEnd()
     {
-        return end;
+        return this.end;
     }
 
     public void setEnd(Long end)
@@ -182,11 +185,15 @@ public class Selector extends BaseNode
         {
             query.append(getQueryPath());
             if (getSubFolders() != null && getSubFolders())
+            {
                 query.append("/"); // Add extra slast to query to allow recursion
+            }
             query.append("*");
         }
         else
+        {
             query.append("//*");
+        }
 
         // Construct type query
         if (StringUtils.isNotBlank(getQueryTypeName()))
@@ -204,18 +211,26 @@ public class Selector extends BaseNode
         }
 
         if (StringUtils.isNotBlank(getOrderBy()))
+        {
             query.append(" order by " + getOrderBy());
+        }
 
         // Add custom OO selector
         String range = "";
         if (getEnd() != null)
         {
             if (getStart() != null)
+            {
                 range = " {" + getStart() + ".." + getEnd() + "}";
+            }
             else if (getRandom())
+            {
                 range = " {%" + getEnd() + "}";
+            }
             else
+            {
                 range = " {" + getEnd() + "}";
+            }
         }
         query.append(range);
 
