@@ -2,35 +2,41 @@ package org.otherobjects.cms.util;
 
 import java.awt.Dimension;
 import java.awt.Image;
-import java.io.File;
+import java.io.InputStream;
 
-import javax.swing.ImageIcon;
+import javax.imageio.ImageIO;
 
 import org.otherobjects.cms.OtherObjectsException;
 
 import com.drew.imaging.jpeg.JpegMetadataReader;
-import com.drew.imaging.jpeg.JpegProcessingException;
 import com.drew.metadata.Metadata;
 
 public class ImageUtils
 {
-    public static Dimension getImageDimensions(File imageFile)
-    {
-        Image image = new ImageIcon(imageFile.getAbsolutePath()).getImage();
-        int width = image.getWidth(null);
-        int height = image.getHeight(null);
-        return new Dimension(width, height);
-    }
-
-    public static Metadata getImageMetadata(File imageFile)
+    public static Dimension getImageDimensions(InputStream inputStream)
     {
         try
         {
-            return JpegMetadataReader.readMetadata(imageFile);
+            Image image = ImageIO.read(inputStream);
+            int width = image.getWidth(null);
+            int height = image.getHeight(null);
+            return new Dimension(width, height);
         }
-        catch (JpegProcessingException e)
+        catch (Exception e)
         {
-            throw new OtherObjectsException("Could not read image metadata: s" + imageFile, e);
+            throw new OtherObjectsException("Could not read image dimensions.", e);
+        }
+    }
+
+    public static Metadata getImageMetadata(InputStream inputStream)
+    {
+        try
+        {
+            return JpegMetadataReader.readMetadata(inputStream);
+        }
+        catch (Exception e)
+        {
+            throw new OtherObjectsException("Could not read image metadata.", e);
         }
     }
 }
