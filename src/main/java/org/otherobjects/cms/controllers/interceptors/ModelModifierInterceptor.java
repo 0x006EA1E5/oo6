@@ -6,24 +6,18 @@ import javax.servlet.http.HttpSession;
 
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.DaoService;
-import org.otherobjects.cms.io.OoResourceLoader;
 import org.otherobjects.cms.monitoring.PerformanceInfo;
 import org.otherobjects.cms.tools.FlashMessageTool;
-import org.otherobjects.cms.tools.FormatTool;
-import org.otherobjects.cms.tools.UrlTool;
 import org.otherobjects.cms.util.CookieManager;
-import org.otherobjects.cms.views.FreemarkerToolProvider;
-import org.springframework.context.MessageSource;
+import org.otherobjects.cms.views.FreeMarkerToolProvider;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public class ModelModifierInterceptor extends HandlerInterceptorAdapter
 {
     private DaoService daoService;
-    private OoResourceLoader ooResourceLoader;
     private OtherObjectsConfigurator otherObjectsConfigurator;
-    private MessageSource messageSource;
-    private FreemarkerToolProvider freemarkerToolProvider;
+    private FreeMarkerToolProvider freeMarkerToolProvider;
     private PerformanceInfo performanceInfo;
 
     @Override
@@ -51,15 +45,11 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
                 modelAndView.addObject("sessionId", session.getId());
             }
             // tools
-            modelAndView.addObject("urlTool", new UrlTool(this.ooResourceLoader));
-            modelAndView.addObject("formatTool", new FormatTool(this.messageSource, this.otherObjectsConfigurator));
             //modelAndView.addObject("navigationTool", new NavigationTool(navigationService));
-            modelAndView.addObject("daoService", this.daoService);
-            modelAndView.addObject("dao", this.daoService);
             modelAndView.addObject("flash", new FlashMessageTool(request));
             modelAndView.addObject("jcr", this.daoService.getDao("BaseNode"));
-            //            modelAndView.addObject("ooNewUi", true);
-            modelAndView.addObject("ooNewUi", false);
+                        modelAndView.addObject("ooNewUi", true);
+//            modelAndView.addObject("ooNewUi", false);
             if (this.performanceInfo != null)
             {
                 modelAndView.addObject("performanceInfo", this.performanceInfo);
@@ -78,10 +68,10 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             modelAndView.addObject("url", request.getPathInfo());
 
             // Add auto-detected tools
-            if (this.freemarkerToolProvider != null)
+            if (this.freeMarkerToolProvider != null)
             {
                 // FIXME Add scoping and caching to tool generation
-                modelAndView.addAllObjects(this.freemarkerToolProvider.getTools());
+                modelAndView.addAllObjects(this.freeMarkerToolProvider.getTools());
             }
         }
 
@@ -92,24 +82,14 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
         this.daoService = daoService;
     }
 
-    public void setOoResourceLoader(OoResourceLoader ooResourceLoader)
-    {
-        this.ooResourceLoader = ooResourceLoader;
-    }
-
-    public void setMessageSource(MessageSource messageSource)
-    {
-        this.messageSource = messageSource;
-    }
-
     public void setOtherObjectsConfigurator(OtherObjectsConfigurator otherObjectsConfigurator)
     {
         this.otherObjectsConfigurator = otherObjectsConfigurator;
     }
 
-    public void setFreemarkerToolProvider(FreemarkerToolProvider freemarkerToolProvider)
+    public void setFreeMarkerToolProvider(FreeMarkerToolProvider freeMarkerToolProvider)
     {
-        this.freemarkerToolProvider = freemarkerToolProvider;
+        this.freeMarkerToolProvider = freeMarkerToolProvider;
     }
 
     public void setPerformanceInfo(PerformanceInfo performanceInfo)
