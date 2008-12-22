@@ -51,12 +51,13 @@ public class CmsImageTool
      * Return CmsImageSize representing orignally uploaded image.
      * @param image
      * @return
+     * @throws IOException 
      */
-    public CmsImageSize getOriginal(CmsImage image)
+    public CmsImageSize getOriginal(CmsImage image) throws IOException
     {
         Assert.notNull(image, "Image must be provided.");
         CmsImageSize original = new CmsImageSize();
-        original.setImage(image.getResource());
+        original.setImage(ooResourceLoader.getResource(image.getOriginalResourcePath()));
         original.setWidth(image.getOriginalWidth().intValue());
         original.setHeight(image.getOriginalHeight().intValue());
         original.setDescription(image.getDescription());
@@ -124,7 +125,7 @@ public class CmsImageTool
             {
                 createResizedDataFile(image, size, resource);
                 // Check that file resized correctly
-                Dimension imageDimensions = ImageUtils.getImageDimensions(resource.getFile());
+                Dimension imageDimensions = ImageUtils.getImageDimensions(resource.getInputStream());
                 Assert.isTrue(size.getWidth() == imageDimensions.getWidth(), "Resize failed. Width is " + imageDimensions.getWidth() + " but should be " + size.getWidth() + ".");
                 Assert.isTrue(size.getHeight() == imageDimensions.getHeight(), "Resize failed. Height is " + imageDimensions.getWidth() + " but should be " + size.getWidth() + ".");
             }
@@ -146,16 +147,16 @@ public class CmsImageTool
         path.append(size.getHeight());
         if (size.getBackgroundColor() != null)
         {
-            path.append(size.getBackgroundColor());
+            path.append("-"+size.getBackgroundColor().substring(1));
         }
         path.append("/");
-        path.append(image.getOriginalFileName());
+        path.append(image.getCode());
         return this.ooResourceLoader.getResource(path.toString());
     }
 
     protected void createResizedDataFile(CmsImage image, CmsImageSize size, OoResource resized) throws IOException
     {
-        File originalFile = image.getResource().getFile();
+        File originalFile = ooResourceLoader.getResource(image.getOriginalResourcePath()).getFile();
         File destinationFile = resized.getFile();
         Color color = size.getBackgroundColor() != null ? Color.decode(size.getBackgroundColor()) : null;
         this.imageResizer.resize(originalFile, destinationFile, size.getWidth(), size.getHeight(), color, null);

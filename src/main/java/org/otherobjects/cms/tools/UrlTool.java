@@ -2,17 +2,23 @@ package org.otherobjects.cms.tools;
 
 import java.io.IOException;
 
+import javax.annotation.Resource;
+
 import org.otherobjects.cms.Url;
 import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.io.OoResourceLoader;
+import org.otherobjects.cms.views.Tool;
+import org.springframework.stereotype.Component;
 
+@Component
+@Tool
 public class UrlTool
 {
+    @Resource
     private OoResourceLoader ooResourceLoader;
 
-    public UrlTool(OoResourceLoader ooResourceLoader)
+    public UrlTool()
     {
-        this.ooResourceLoader = ooResourceLoader;
     }
 
     public String getUrl(String path)
@@ -28,6 +34,6 @@ public class UrlTool
         if(url!=null)
             return url.toString().replaceAll("//","/");
         else
-            return "ERROR"; 
+            return "{error}"; 
     }
 }

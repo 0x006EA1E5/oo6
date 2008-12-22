@@ -4,33 +4,37 @@ import java.io.StringWriter;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import javax.annotation.Resource;
+
 import net.java.textilej.parser.MarkupParser;
 import net.java.textilej.parser.builder.HtmlDocumentBuilder;
 import net.java.textilej.parser.markup.textile.TextileDialect;
 
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.otherobjects.cms.views.Tool;
 import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Component;
 
 /**
  * Tool to be used from templates to aid in generating formatted text.
  * @author joerg
  *
  */
+@Component
+@Tool
 public class FormatTool
 {
+    @Resource
     private MessageSource messageSource;
 
+    @Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
+    
+    @Resource
+    private InlineFormatter inlineFormatter;
 
-    public FormatTool(MessageSource messageSource)
+    public FormatTool()
     {
-        this.messageSource = messageSource;
-    }
-
-    public FormatTool(MessageSource messageSource, OtherObjectsConfigurator otherObjectsConfigurator)
-    {
-        this.messageSource = messageSource;
-        this.otherObjectsConfigurator = otherObjectsConfigurator;
     }
 
     public String getProperty(String name)
@@ -43,24 +47,24 @@ public class FormatTool
      * @param textileSource
      * @return
      */
-    public static String formatTextile(String textileSource)
+    public String formatTextile(String textileSource)
     {
 
         // Remove double line breaks
-        String text = textileSource.replaceAll("/\n\n/", "\n");
+        String text = textileSource;//textileSource.replaceAll("/\n\n/", "\n");
 
         // Recode headings
-        text = text.replaceAll("(?m)^\\!!!", "h3. ");
-        text = text.replaceAll("(?m)^\\!!", "h2. ");
-        text = text.replaceAll("(?m)^\\!", "h1. ");
+        text = text.replaceAll("(?m)^h1. ", "h2. ");
+        text = text.replaceAll("(?m)^h2. ", "h3. ");
+        text = text.replaceAll("(?m)^h3. ", "h4. ");
 
         // Recode code blocks
-        text = text.replaceAll("\\[code\\]", "<pre>\n<code>\n");
-        text = text.replaceAll("\\[/code\\]", "\n</code>\n</pre>");
+        //        text = text.replaceAll("\\[code\\]", "<pre>\n<code>\n");
+        //        text = text.replaceAll("\\[/code\\]", "\n</code>\n</pre>");
 
         // Recode links
-        text = text.replaceAll("\\[LINK:([^|]*)\\|CAPTION:([^\\]]*)\\]", "\"$2\":$1");
-        text = text.replaceAll("(?m)\\[LINK:([^]]*)\\]", "\"$1\":$1");
+        //        text = text.replaceAll("\\[LINK:([^|]*)\\|CAPTION:([^\\]]*)\\]", "\"$2\":$1");
+        //        text = text.replaceAll("(?m)\\[LINK:([^]]*)\\]", "\"$1\":$1");
 
         // TODO This needs to be optimesd
         // TODO Add support for additional markups
@@ -71,7 +75,9 @@ public class FormatTool
         parser.setBuilder(builder);
         parser.parse(text);
         parser.setBuilder(null);
-        return out.toString();
+        String html = out.toString();
+        
+        return inlineFormatter.format(html);
     }
 
     /**
@@ -97,7 +103,7 @@ public class FormatTool
         {
             return f.format(s) + " MB";
         }
-        
+
         s /= 1024;
         return f.format(s) + " GB";
     }
@@ -138,5 +144,10 @@ public class FormatTool
     protected void setOtherObjectsConfigurator(OtherObjectsConfigurator otherObjectsConfigurator)
     {
         this.otherObjectsConfigurator = otherObjectsConfigurator;
+    }
+
+    protected void setInlineFormatter(InlineFormatter inlineFormatter)
+    {
+        this.inlineFormatter = inlineFormatter;
     }
 }

@@ -28,7 +28,6 @@ public class FlashMessageTool
         this.request = request;
     }
 
-    
     public BaseNode create(String typeName)
     {
         Assert.notNull(typeName, "typeName must not be null.");
