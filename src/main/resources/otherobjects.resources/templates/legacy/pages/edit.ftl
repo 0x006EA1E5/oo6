@@ -3,9 +3,9 @@
 <#import "/forms.ftl" as forms />
 
 <#if object.id??>
-  <#assign pageTitle = "Editing: ${oo.msg(object.ooLabel!)}" />
+  <#assign pageTitle = "Editing: ${object.ooLabel!}" />
 <#else>
-  <#assign pageTitle = "Creating new ${oo.msg(typeDef.label)}" />
+  <#assign pageTitle = "Creating new ${typeDef.label!}" />
 </#if>
 <#include "/otherobjects/templates/legacy/blocks/header.ftl" />
 <#include "/otherobjects/templates/legacy/blocks/nav-folders.ftl" />

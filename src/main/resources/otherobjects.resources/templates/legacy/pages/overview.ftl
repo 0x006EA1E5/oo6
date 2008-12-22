@@ -19,7 +19,7 @@ class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
 <#-- freemarker automatically wraps results which means our PagedList isn't usable from freemarker -->
 <#-- need to include current user in where criteria -->
 
-<#assign edits = daoService.getDao("baseNode").pageByJcrExpression("/jcr:root/site//(*, oo:node) [@published = 'false' and not(jcr:like(@ooType,'%MetaData'))] order by @modificationTimestamp descending",10,1) >
+<#assign edits = daoTool.get("baseNode").pageByJcrExpression("/jcr:root/site//(*, oo:node) [@published = 'false' and not(jcr:like(@ooType,'%MetaData'))] order by @modificationTimestamp descending",10,1) >
 
 <ul>
 <#list edits.items as edit>
@@ -41,7 +41,7 @@ class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
 
 <h2>What happened recently</h2>
 <p>Here are the last few changes to pages across the site:</p>
-<#assign latestChanges = daoService.getDao("baseNode").pageByJcrExpression("/jcr:root/site//element(*, oo:node) [not(jcr:like(@ooType,'%MetaData'))] order by @modificationTimestamp descending",10,1) >
+<#assign latestChanges = daoTool.get("baseNode").pageByJcrExpression("/jcr:root/site//element(*, oo:node) [not(jcr:like(@ooType,'%MetaData'))] order by @modificationTimestamp descending",10,1) >
 <ul>
 <#list latestChanges.items as change>
     <li class="published-true><a href="${change.linkPath}">${change.label!} </a> 

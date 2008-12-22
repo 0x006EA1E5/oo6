@@ -11,7 +11,7 @@
 </tr>
 </#macro>
 
-<#assign pageTitle = "Viewing: ${oo.msg(object.label!)}" />
+<#assign pageTitle = "Viewing: ${object.label!}" />
 <#include "/otherobjects/templates/legacy/blocks/header.ftl" />
 
 <#include "/otherobjects/templates/legacy/blocks/nav-folders.ftl" />
@@ -28,6 +28,12 @@ ${pageTitle}
 </tr>
 </thead>
 <tbody>
+<tr>
+<td class="oo-label">JCR Path</td>
+<td class="oo-field-none">
+${object.jcrPath}
+</td>
+</tr>
 <#list typeDef.properties as prop>
 <@renderProperty prop object />
 </#list>

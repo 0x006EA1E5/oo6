@@ -131,6 +131,18 @@ A.button {background: #cccccc; padding:3px; color:#000000;}
 </table>
 
 
+<h2>Browser</h2>
+
+<table>
+    <tr><td class="label">Yahoo BroswerPlus Version</td><td class="info" id="BrowserPlusVersion">Not installed</td></tr>
+	<script type="text/javascript" src="http://bp.yahooapis.com/2.1.14/browserplus-min.js"></script>  
+	<script type="text/javascript">  
+	BrowserPlus.init(function() {  
+	  	document.getElementById('BrowserPlusVersion').innerHTML = BrowserPlus.getPlatformInfo().version;  
+	});  
+	</script>  
+</table>
+
 <h2>Connectivity</h2>
 
 <table>

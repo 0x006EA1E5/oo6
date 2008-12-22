@@ -15,10 +15,8 @@
 				<ref bean="localeChangeInterceptor" />
 				<bean class="org.otherobjects.cms.controllers.interceptors.ModelModifierInterceptor">
 					<property name="daoService" ref="daoService" />
-					<property name="ooResourceLoader" ref="ooResourceLoader" />
 					<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
-					<property name="messageSource" ref="messageSource" />
-					<property name="freemarkerToolProvider" ref="freemarkerToolProvider" />
+					<property name="freeMarkerToolProvider" ref="freeMarkerToolProvider" />
 					<property name="performanceInfo" ref="performanceInfo" />
 				</bean>
 				<ref bean="openSessionInViewInterceptor" />
@@ -28,7 +26,7 @@
 	
 	<!-- Scan for Tools -->
 	<context:component-scan base-package="org.otherobjects.cms.tools" />	
-	<bean id="freemarkerToolProvider" class="org.otherobjects.cms.views.FreemarkerToolProvider" />
+	<bean id="freeMarkerToolProvider" class="org.otherobjects.cms.views.FreeMarkerToolProvider" />
 
 	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping" parent="handlerMappingTemplate">
 		<property name="mappings">

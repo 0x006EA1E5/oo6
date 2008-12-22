@@ -11,17 +11,19 @@ public class FormatToolTest extends TestCase
 
     public void testFormatTextileString()
     {
-        String html = FormatTool.formatTextile("bq. A test");
+        FormatTool formatTool = new FormatTool();
+        String html = formatTool.formatTextile("bq. A test");
         System.out.println(html);
         assertTrue(html.startsWith("<blockquote"));
 
         // Check that existing HTML is kept
-        html = FormatTool.formatTextile("<i>test</i>");
+        html = formatTool.formatTextile("<i>test</i>");
         assertTrue(html.startsWith("<p><i>"));
     }
 
     public void testBigDeanAllenTest()
     {
+        FormatTool formatTool = new FormatTool();
         String testInput = "h2{color:green}. This is a title\n\nh3. This is a subhead\n\np{color:red}. This is some text of dubious character. Isn't the use of \"quotes\" just lazy writing -- and "
                 + "theft of 'intellectual property' besides? I think the time has come to see a block quote.\n\nbq[fr]. This is a block quote. I'll admit it's not the most exciting block quote ever "
                 + "devised.\n\nSimple list:\n\n#{color:blue} one\n# two\n# three\n\nMulti-level list:\n\n# one\n## aye\n## bee\n## see\n# two\n## x\n## y\n# three\n\nMixed list:\n\n* Point one\n"
@@ -35,7 +37,7 @@ public class FormatToolTest extends TestCase
                 + "ext:\n\n<pre>\n<code>\n  $text = str_replace(\"<p>%::%</p>\",\"\",$text);\n  $text = str_replace(\"%::%</p>\",\"\",$text);\n $text = str_replace"
                 + "(\"%::%\",\"\",$text);\n\n</code>\n</pre>\n\nThis isn't code.\n\n\nSo you see, my friends:\n\n* The time is now\n* The time is not later\n* "
                 + "The time is not yesterday\n* We must act\n";
-        String html = FormatTool.formatTextile(testInput);
+        String html = formatTool.formatTextile(testInput);
         System.out.print(html);
     }
 
@@ -43,7 +45,8 @@ public class FormatToolTest extends TestCase
     {
         StaticMessageSource messageSource = new StaticMessageSource();
         messageSource.addMessage("message.code", Locale.ENGLISH, "My message");
-        FormatTool formatTool = new FormatTool(messageSource);
+        FormatTool formatTool = new FormatTool();
+        formatTool.setMessageSource(messageSource);
 
         assertEquals("not a message", formatTool.getMessage("not a message"));
         assertEquals("not a message.", formatTool.getMessage("not a message."));

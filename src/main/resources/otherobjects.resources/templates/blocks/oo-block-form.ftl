@@ -55,8 +55,8 @@
 	  <div class="oo-actions" style="width:750px;">
 		<div class="oo-action"><div class="oo-button oo-button-grey oo-center-text" id="OoFormClose">Close</div></div>
 		<div class="oo-action"><div class="oo-button oo-button-red oo-center-text" id="OoFormSave">Save</div></div>
-		<#--
 		<div class="oo-action"><div class="oo-button oo-button-green oo-center-text">Publish</div></div>
+		<#--
 		 <div class="oo-action"><div class="oo-button oo-button-blue oo-center-text oo-arrow">More</div></div>
 		-->
 	</div>
@@ -180,9 +180,9 @@ function ooSaveForm(blockId, hide)
 		</#if>
 	<#elseif type == "reference" >
 		<#if prop.relatedTypeDef.store =="jackrabbit">
-			<#assign options = dao.get(prop.relatedType).getAllByType(prop.relatedType) />
+			<#assign options = daoTool.get(prop.relatedType).getAllByType(prop.relatedType) />
 		<#else>
-			<#assign options = dao.get(prop.relatedType).all />
+			<#assign options = daoTool.get(prop.relatedType).all />
 		</#if>
   		<@forms.formSingleSelect "${path}" options "" empty/>
 	<#elseif type == "date" >

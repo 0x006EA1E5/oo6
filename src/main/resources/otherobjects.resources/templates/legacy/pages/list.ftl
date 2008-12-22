@@ -1,7 +1,7 @@
 <#import "/spring.ftl" as spring />
 <#import "/oo.ftl" as oo />
 
-<#assign object = daoService.getDao("baseNode").get(id) />
+<#assign object = daoTool.get("baseNode").get(id) />
 
 <#assign pageTitle = "Listing: ${oo.msg(folder.label)}" />
 

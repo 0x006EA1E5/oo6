@@ -1,8 +1,12 @@
 <#-- 
 Renders an image.
 -->
-<#macro image image class>
-<img src="${cmsImageTool.getOriginal(image).dataFile.externalUrl}" class="${class!}" />
+<#macro image image width=0 class="" id="">
+<#if width == 0>
+<img src="${cmsImageTool.getOriginal(image).image.url}" class="${class!}" alt="${image.description!}" title="${image.description!}"/>
+<#else>
+<img src="${cmsImageTool.getSize(image, width).image.url}" class="${class!}" alt="${image.description!}" title="${image.description!}"/>
+</#if>
 </#macro>
 
 <#-- 

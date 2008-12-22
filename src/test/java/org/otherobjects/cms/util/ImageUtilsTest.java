@@ -2,6 +2,8 @@ package org.otherobjects.cms.util;
 
 import java.awt.Dimension;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import junit.framework.TestCase;
 
@@ -13,18 +15,18 @@ import com.drew.metadata.iptc.IptcDirectory;
 public class ImageUtilsTest extends TestCase
 {
 
-    public void testGetImageDimensions()
+    public void testGetImageDimensions() throws FileNotFoundException
     {
         File dog = new File("src/test/java/org/otherobjects/cms/util/dog.jpg");
-        Dimension imageDimensions = ImageUtils.getImageDimensions(dog);
+        Dimension imageDimensions = ImageUtils.getImageDimensions(new FileInputStream(dog));
         assertEquals(800, (int) imageDimensions.getWidth());
         assertEquals(600, (int) imageDimensions.getHeight());
     }
 
-    public void testGetImageMetadata()
+    public void testGetImageMetadata() throws FileNotFoundException
     {
         File frog = new File("src/test/java/org/otherobjects/cms/util/frog.jpg");
-        Metadata imageMetadata = ImageUtils.getImageMetadata(frog);
+        Metadata imageMetadata = ImageUtils.getImageMetadata(new FileInputStream(frog));
         Directory iptcDirectory = imageMetadata.getDirectory(IptcDirectory.class);
         assertEquals("Frog", iptcDirectory.getString(IptcDirectory.TAG_OBJECT_NAME));
         assertEquals("Frog in grass", iptcDirectory.getString(IptcDirectory.TAG_CAPTION));

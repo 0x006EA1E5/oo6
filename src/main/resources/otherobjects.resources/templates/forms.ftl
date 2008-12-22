@@ -75,9 +75,9 @@ Renders a field inputter by choosing the correct inputter renderer. Also handles
 		</#if>
 	<#elseif type == "reference" >
 		<#if prop.relatedTypeDef.store =="jackrabbit">
-			<#assign options = dao.get(prop.relatedType).getAllByType(prop.relatedType) />
+			<#assign options = daoTool.get(prop.relatedType).getAllByType(prop.relatedType) />
 		<#else>
-			<#assign options = dao.get(prop.relatedType).all />
+			<#assign options = daoTool.get(prop.relatedType).all />
 		</#if>
   		<@formSingleSelect "${path}" options "" empty/>
 	<#elseif type == "date" >

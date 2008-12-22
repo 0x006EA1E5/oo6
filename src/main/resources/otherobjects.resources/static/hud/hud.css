@@ -98,7 +98,7 @@ HTML.oo BODY {position:absolute; width:100%; -webkit-box-shadow: 0 5px 15px rgba
 .oo-listing TFOOT TD:last-child {border-right:8px; -webkit-border-bottom-right-radius:8px; padding-right:37px;}
 
 
-.oo-listing TBODY {display:block; overflow-y:scroll; max-height:340px; padding:10px 0; border-right:2px solid #000; background:#FFF url(assets/listing-body.png) repeat-y;}
+.oo-listing TBODY {display:block; overflow-y:scroll; max-height:370px; padding:10px 0; border-right:2px solid #000; background:#FFF url(assets/listing-body.png) repeat-y;}
 .oo-listing TBODY TD {vertical-align:top; -webkit-border-image:url(assets/listing-row.png) 0 6 1 8 stretch stretch; border-width:0 0 1px 0; padding:8px 10px 8px 10px; color:#333; background:#FFF; -webkit-transition:background-color 0.2s linear; text-shadow:0px 0px 0 rgba(0,0,0,0);}
 .oo-listing TBODY TR:nth-child(even) TD {background-color:#F7F7F7;}
 .oo-listing TR.oo-listing-arrow TD {cursor:pointer;}
