@@ -29,7 +29,7 @@ public class FormatTool
 
     @Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
-    
+
     @Resource
     private InlineFormatter inlineFormatter;
 
@@ -76,8 +76,11 @@ public class FormatTool
         parser.parse(text);
         parser.setBuilder(null);
         String html = out.toString();
-        
-        return inlineFormatter.format(html);
+
+        if (inlineFormatter != null)
+            return inlineFormatter.format(html);
+        else
+            return html;
     }
 
     /**
