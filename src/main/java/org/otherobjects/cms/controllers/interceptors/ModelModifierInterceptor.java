@@ -48,8 +48,8 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
             //modelAndView.addObject("navigationTool", new NavigationTool(navigationService));
             modelAndView.addObject("flash", new FlashMessageTool(request));
             modelAndView.addObject("jcr", this.daoService.getDao("BaseNode"));
-                        modelAndView.addObject("ooNewUi", true);
-//            modelAndView.addObject("ooNewUi", false);
+//            modelAndView.addObject("ooNewUi", true);
+            modelAndView.addObject("ooNewUi", false);
             if (this.performanceInfo != null)
             {
                 modelAndView.addObject("performanceInfo", this.performanceInfo);
