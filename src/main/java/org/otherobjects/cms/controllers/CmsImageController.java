@@ -129,20 +129,23 @@ public class CmsImageController
             Dimension imageDimensions = ImageUtils.getImageDimensions(cmsImage.getNewFile().getInputStream());
             cmsImage.setOriginalWidth(new Double(imageDimensions.getWidth()).longValue());
             cmsImage.setOriginalHeight(new Double(imageDimensions.getHeight()).longValue());
-            
+
             // Look for IPTC tags to read
-            Metadata imageMetadata = ImageUtils.getImageMetadata(cmsImage.getNewFile().getInputStream());
-            if (imageMetadata.containsDirectory(IptcDirectory.class))
+            if (cmsImage.getExtension().endsWith("jpg")) // TODO Use MimeType instead
             {
-                Directory iptc = imageMetadata.getDirectory(IptcDirectory.class);
-                if (iptc.containsTag(IptcDirectory.TAG_OBJECT_NAME))
-                    cmsImage.setLabel(iptc.getString(IptcDirectory.TAG_OBJECT_NAME));
-                if (iptc.containsTag(IptcDirectory.TAG_CAPTION))
-                    cmsImage.setDescription(iptc.getString(IptcDirectory.TAG_CAPTION));
-                if (iptc.containsTag(IptcDirectory.TAG_COPYRIGHT_NOTICE))
-                    cmsImage.setCopyright(iptc.getString(IptcDirectory.TAG_COPYRIGHT_NOTICE));
-                if (iptc.containsTag(IptcDirectory.TAG_KEYWORDS))
-                    cmsImage.setKeywords(iptc.getString(IptcDirectory.TAG_KEYWORDS));
+                Metadata imageMetadata = ImageUtils.getImageMetadata(cmsImage.getNewFile().getInputStream());
+                if (imageMetadata.containsDirectory(IptcDirectory.class))
+                {
+                    Directory iptc = imageMetadata.getDirectory(IptcDirectory.class);
+                    if (iptc.containsTag(IptcDirectory.TAG_OBJECT_NAME))
+                        cmsImage.setLabel(iptc.getString(IptcDirectory.TAG_OBJECT_NAME));
+                    if (iptc.containsTag(IptcDirectory.TAG_CAPTION))
+                        cmsImage.setDescription(iptc.getString(IptcDirectory.TAG_CAPTION));
+                    if (iptc.containsTag(IptcDirectory.TAG_COPYRIGHT_NOTICE))
+                        cmsImage.setCopyright(iptc.getString(IptcDirectory.TAG_COPYRIGHT_NOTICE));
+                    if (iptc.containsTag(IptcDirectory.TAG_KEYWORDS))
+                        cmsImage.setKeywords(iptc.getString(IptcDirectory.TAG_KEYWORDS));
+                }
             }
 
             // Make sure we always have a label

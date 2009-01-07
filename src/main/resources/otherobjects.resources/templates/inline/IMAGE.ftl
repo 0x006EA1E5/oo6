@@ -1,2 +1,2 @@
 <#import "/oo.ftl" as oo>
-<@oo.image daoTool.get("org.otherobjects.cms.model.CmsImage").getByPath("/libraries/images/${tag.id}") tag.getInteger("width") />
+<span class="oo-image-${tag.get("align", "default")!}"><@oo.image daoTool.get("org.otherobjects.cms.model.CmsImage").getByPath("/libraries/images/${tag.id}") tag.getInteger("width") /></span>
