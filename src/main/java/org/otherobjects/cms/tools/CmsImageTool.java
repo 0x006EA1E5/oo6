@@ -12,7 +12,6 @@ import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.io.OoResourceLoader;
 import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.CmsImageSize;
-import org.otherobjects.cms.util.ImageMagickResizer;
 import org.otherobjects.cms.util.ImageResizer;
 import org.otherobjects.cms.util.ImageUtils;
 import org.otherobjects.cms.views.Tool;
@@ -41,8 +40,8 @@ public class CmsImageTool
     private static final String THUMBNAIL_BACKGROUND_COLOR = "#FFFFFF";
     private static final int THUMBNAIL_SIZE = 100;
 
-    // FIXME Injectable image resizer. Or list with fallbacks.
-    private ImageResizer imageResizer = new ImageMagickResizer();
+    @Resource
+    private ImageResizer imageResizer;
 
     @Resource
     private OoResourceLoader ooResourceLoader;

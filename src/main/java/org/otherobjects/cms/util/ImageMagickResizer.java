@@ -5,9 +5,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,11 +24,15 @@ public class ImageMagickResizer implements ImageResizer
     private static final int DEFAULT_QUALITY = 75;
     private static final Color DEFAULT_BACKGROUND_COLOR = new Color(255, 255, 255); // white
     private static final boolean PROGRESSIVE_INTERLACING = false;
-    private final String commandPath = "/opt/local/bin/";
     private final Logger logger = LoggerFactory.getLogger(ImageMagickResizer.class);
-
+    
+    @Resource
+    private OtherObjectsConfigurator otherObjectsConfigurator;
+    
     public void resize(File original, File destination, Integer targetWidth, Integer targetHeight, Color backgroundColor, Integer quality)
     {
+        String commandPath = otherObjectsConfigurator.getProperty("otherobjects.imagemagick.bin.path");
+        
         List<String> command = new ArrayList<String>();
 
         try
@@ -52,7 +59,7 @@ public class ImageMagickResizer implements ImageResizer
             destination.getParentFile().mkdirs();
 
             // Determine appropriate dimensions
-            command.add(this.commandPath + "convert");
+            command.add(commandPath + "convert");
 
             // Turn on interlacing
             if (PROGRESSIVE_INTERLACING)

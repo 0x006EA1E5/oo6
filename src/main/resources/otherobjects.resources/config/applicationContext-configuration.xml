@@ -58,8 +58,12 @@ http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 	<context:component-scan base-package="org.otherobjects.cms.monitoring" scoped-proxy="interfaces" />
 	<aop:config>
 		<aop:aspect ref="performanceInterceptor">
-			<aop:pointcut id="performanceLogging" expression="execution(* org.otherobjects.cms.jcr.UniversalJcrDao.*(..)) || execution(* org.otherobjects.cms.dao.GenericDao.*(..)) || execution(* org.otherobjects.cms.model.*DaoImpl.*(..))" />
+			<aop:pointcut id="performanceLogging"
+				expression="execution(* org.otherobjects.cms.jcr.UniversalJcrDao.*(..)) || execution(* org.otherobjects.cms.dao.GenericDao.*(..)) || execution(* org.otherobjects.cms.model.*DaoImpl.*(..))" />
 			<aop:around pointcut-ref="performanceLogging" method="log" />
 		</aop:aspect>
 	</aop:config>
+	
+	<!-- Image resizing -->
+	<bean id="imageResizer" class="org.otherobjects.cms.util.ImageMagickResizer" />
 </beans>
