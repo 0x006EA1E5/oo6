@@ -29,6 +29,7 @@ public class UrlTool
 
     public String getResourceUrl(String resourcePath) throws IOException
     {
+        // FIXME This is inefficient
         OoResource resource = ooResourceLoader.getResource(resourcePath); 
         Url url = resource.getUrl();
         if(url!=null)
