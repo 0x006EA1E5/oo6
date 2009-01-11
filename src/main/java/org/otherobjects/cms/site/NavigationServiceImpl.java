@@ -11,6 +11,8 @@ import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.springframework.util.Assert;
 
+import com.ibm.icu.util.Calendar;
+
 /**
  * TODO Sort order
  * TODO Dealing with default pages (don't duplicate with folder)
@@ -26,6 +28,8 @@ public class NavigationServiceImpl implements NavigationService
 {
     @Resource
     private DaoService daoService;
+
+    private long lastBuildTime = 0;
 
     protected TreeNode tree;
     protected List<TreeNode> nodes;
@@ -46,11 +50,7 @@ public class NavigationServiceImpl implements NavigationService
             Assert.isTrue(startDepth >= 0, "Navigation start depth must be >= 0");
             Assert.isTrue(endDepth > startDepth, "Navigation end depth must be > start depth");
 
-            // FIXME Need to synchronise this
-            if (this.tree == null)
-            {
-                buildTree();
-            }
+            buildTree();
 
             // Start at correct depth and location by trimming path to correct depth
             path = trimPath(path, startDepth);
@@ -82,11 +82,7 @@ public class NavigationServiceImpl implements NavigationService
         {
             Assert.isTrue(startDepth >= 0, "Navigation start depth must be >= 0");
 
-            // FIXME Need to synchronise this
-            if (this.tree == null)
-            {
-                buildTree();
-            }
+            buildTree();
 
             List<TreeNode> parents = new ArrayList<TreeNode>();
             int pos = 0;
@@ -170,9 +166,20 @@ public class NavigationServiceImpl implements NavigationService
     /**
      * Builds a tree representation of the navigational structure of the site. This is an expensive
      * operation and should only happen when tree structure changes.
+     * 
+     * FIXME Need to synchronise this
      */
-    private void buildTree()
+    private synchronized void buildTree()
     {
+        // FIXME Temp hack
+        //if (this.tree == null)
+        long now = Calendar.getInstance().getTimeInMillis();
+        if (Calendar.getInstance().getTimeInMillis() - lastBuildTime < 2000)
+        {
+            return;
+        }
+        lastBuildTime = now;
+
         TreeBuilder tb = new TreeBuilder();
 
         List<BaseNode> siteNodes = getSiteNodes();
@@ -193,12 +200,7 @@ public class NavigationServiceImpl implements NavigationService
 
     public List<TreeNode> getAllNodes()
     {
-        // FIXME Need to synchronise this
-        if (this.tree == null)
-        {
-            buildTree();
-        }
-
+        buildTree();
         return this.nodes;
     }
 
@@ -206,11 +208,7 @@ public class NavigationServiceImpl implements NavigationService
     {
         try
         {
-            // FIXME Need to synchronise this
-            if (this.tree == null)
-            {
-                buildTree();
-            }
+            buildTree();
 
             // Mark selected nodes
             TreeNode node = this.tree.getNode(path);
