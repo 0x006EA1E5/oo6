@@ -28,7 +28,7 @@ ${pageTitle}
 <#list items as item>
 <#if ! item.class.name?ends_with("Folder")> <!--FIXME -->
  <tr>
-	<td><a class="oo-<#if item.published?? && item.published>live<#else>edited</#if>" href="${oo.url('/otherobjects/workbench/view/${item.editableId}')}">${item.label!}</a></td>
+	<td><a class="oo-<#if item.published?? && item.published>live<#else>edited</#if>" href="${oo.url('/otherobjects/workbench/view/${item.editableId}')}">${item.ooLabel!}</a></td>
 	<#if item.linkPath??>
 		<td title="${item.typeDef.name}"><p>${item.typeDef.label}</p></td>
 	<#else>
