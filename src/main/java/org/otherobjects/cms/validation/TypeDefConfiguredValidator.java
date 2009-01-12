@@ -26,10 +26,10 @@ import org.springmodules.validation.valang.ValangValidator;
 public class TypeDefConfiguredValidator implements Validator
 {
     private final Logger logger = LoggerFactory.getLogger(TypeDefConfiguredValidator.class);
-    
+
     @Resource
     private TypeService typeService;
-    
+
     public boolean supports(Class clazz)
     {
         return typeService.getType(clazz) != null || BaseNode.class.isAssignableFrom(clazz);
@@ -39,10 +39,10 @@ public class TypeDefConfiguredValidator implements Validator
     {
         TypeDef typeDef;
         if (target instanceof BaseNode)
-            typeDef = ((BaseNode)target).getTypeDef();
+            typeDef = ((BaseNode) target).getTypeDef();
         else
             typeDef = typeService.getType(target.getClass());
-        
+
         StringBuffer valangRules = new StringBuffer();
 
         for (PropertyDef propertyDef : typeDef.getProperties())
@@ -103,7 +103,7 @@ public class TypeDefConfiguredValidator implements Validator
                 //FIXME this is not nice as it is implementation specific
                 ValangValidator val = new ValangValidator();
                 String rules = valangRules.toString();
-               // if(logger.isDebugEnabled())
+                if (logger.isDebugEnabled())
                     logger.debug("Valang rules for " + typeDef.getName() + ": " + rules);
                 val.setValang(rules);
                 val.afterPropertiesSet();
@@ -111,7 +111,7 @@ public class TypeDefConfiguredValidator implements Validator
             }
             catch (Throwable e)
             {
-                throw new OtherObjectsException("Incorrect validation rules on: "+ typeDef.getName(), e);
+                throw new OtherObjectsException("Incorrect validation rules on: " + typeDef.getName(), e);
             }
         }
 
