@@ -128,7 +128,7 @@ Renders a checkbox for a boolean property.
 	    <@spring.closeTag/>
 	<#else>
 		<@bind path />
-		<input type="${fieldType}" name="${ooStatus.expression}" id="${ooStatus.expression}" class="${fieldType}" value="<#if fieldType!="password">${stringStatusValue}</#if>" ${attributes}
+		<input type="${fieldType}" name="${ooStatus.expression}" id="${ooStatus.expression}" class="${fieldType}<#if ooStatus.errorMessages?size &gt; 0> errors</#if>" value="<#if fieldType!="password">${stringStatusValue}</#if>" ${attributes}
     	<@spring.closeTag/>
 	</#if>  	
 </#macro>
@@ -156,7 +156,7 @@ Renders a textarea field.
   		<textarea name="${expression}" id="${expression}" class="textarea" ${attributes}></textarea>
 	<#else>
 		<@bind path />
-  		<textarea name="${ooStatus.expression}" id="${ooStatus.expression}" class="textarea" ${attributes}>${stringStatusValue}</textarea>
+  		<textarea name="${ooStatus.expression}" id="${ooStatus.expression}" class="textarea<#if ooStatus.errorMessages?size &gt; 0> errors</#if>" ${attributes}>${stringStatusValue}</textarea>
 	</#if>  	
 </#macro>
 
