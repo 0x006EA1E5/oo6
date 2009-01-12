@@ -18,12 +18,12 @@ import flexjson.JSON;
 public class SiteFolder extends BaseNode implements Folder
 {
     private String label;
-    private String extraNavigationLabel;
     private String cssClass;
     private List<String> allowedTypes;
     private Url url;
     private boolean inMenu = true;
     private String tags;
+    private PublishingOptions publishingOptions;
 
     @Property(order = 5)
     public String getCode()
@@ -129,19 +129,22 @@ public class SiteFolder extends BaseNode implements Folder
         this.inMenu = inMenu;
     }
 
-    @Property(order = 25)
-    public String getExtraNavigationLabel()
+    @Property(order = 500, type = PropertyType.COMPONENT)
+    public PublishingOptions getPublishingOptions()
     {
-        return extraNavigationLabel;
+        return publishingOptions;
     }
 
-    public void setExtraNavigationLabel(String extraNavigationLabel)
+    public void setPublishingOptions(PublishingOptions publishingOptions)
     {
-        this.extraNavigationLabel = extraNavigationLabel;
+        this.publishingOptions = publishingOptions;
     }
 
     public String getNavigationLabel()
     {
-        return (StringUtils.isNotBlank(getExtraNavigationLabel())) ? getExtraNavigationLabel() : getLabel();
+        if (getPublishingOptions() != null)
+            return (StringUtils.isNotBlank(getPublishingOptions().getNavigationLabel())) ? getPublishingOptions().getNavigationLabel() : getLabel();
+        else
+            return getLabel();
     }
 }

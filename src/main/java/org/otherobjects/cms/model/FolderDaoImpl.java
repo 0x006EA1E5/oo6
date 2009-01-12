@@ -29,9 +29,10 @@ public class FolderDaoImpl extends GenericJcrDaoJackrabbit<BaseNode> implements 
         TreeBuilder tb = new TreeBuilder();
         List<BaseNode> all = getFolders();
         List<TreeNode> flat = new ArrayList<TreeNode>();
+        int count = 0;
         for (BaseNode b : all)
         {
-            flat.add(new TreeNode(b.getJcrPath()+"/", b.getId(), b.getOoLabel(), b)); 
+            flat.add(new TreeNode(b.getJcrPath()+"/", b.getId(), b.getOoLabel(), count++, b)); 
         }
 
         return tb.buildTree(flat);
