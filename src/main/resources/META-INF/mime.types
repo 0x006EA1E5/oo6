@@ -3,5 +3,7 @@ text/velocity	vm VM
 text/javascript js JS
 text/css		css CSS
 application/pdf pdf PDF
+application/vnd.ms-excel xls XLS
+application/msword doc DOC
 
 
