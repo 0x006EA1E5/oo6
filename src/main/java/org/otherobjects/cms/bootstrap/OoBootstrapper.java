@@ -33,7 +33,7 @@ public class OoBootstrapper implements InitializingBean
     private JackrabbitInitialiser jackrabbitInitialiser;
     private OtherObjectsAdminUserCreator otherObjectsAdminUserCreator;
     private JackrabbitPopulater jackrabbitPopulater;
-    private ResourceScanner resourceScanner;
+    //private ResourceScanner resourceScanner;
     private UserDao userDao;
 
     private static final String BOOTSTRAP_PROPERTIES_FILENAME = "/bootstrap.properties";
@@ -218,6 +218,6 @@ public class OoBootstrapper implements InitializingBean
 
     public void setResourceScanner(ResourceScanner resourceScanner)
     {
-        this.resourceScanner = resourceScanner;
+        //this.resourceScanner = resourceScanner;
     }
 }
