@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import edu.emory.mathcs.backport.java.util.Collections;
+
 public class TreeBuilder
 {
     public TreeNode buildTree(List<TreeNode> flat)
@@ -35,7 +37,11 @@ public class TreeBuilder
 
         TreeNode parent = tree.getNode(parentPath);
         if (parent != null)
+        {
             parent.getChildren().add(node);
+            // FIXME URGENT This is v bad performance wise
+            Collections.sort(parent.getChildren());
+        }
     }
 
 }

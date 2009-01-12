@@ -30,9 +30,9 @@ public class SiteMapGeneratorTest extends TestCase
         //        DateTime dt2 = new DateTime(2007, 8, 22, 12, 23, 34, 0, DateTimeZone.forID("+0200"));
         //        DateTime dt3 = new DateTime(2007, 10, 22, 12, 23, 34, 0, DateTimeZone.forID("+0200"));
         List<TreeNode> items = new ArrayList<TreeNode>();
-        items.add(new TreeNode("/articles/article-1.html", null, "Article 1"));
-        items.add(new TreeNode("/articles/article-2.html", null, "Article 2"));
-        items.add(new TreeNode("/articles/article-3.html", null, "Article 3"));
+        items.add(new TreeNode("/articles/article-1.html", null, "Article 1", 1));
+        items.add(new TreeNode("/articles/article-2.html", null, "Article 2", 2));
+        items.add(new TreeNode("/articles/article-3.html", null, "Article 3", 3));
 
         SiteMapGenerator smg = new SiteMapGenerator();
         Document siteMap = smg.generateSiteMap(items);

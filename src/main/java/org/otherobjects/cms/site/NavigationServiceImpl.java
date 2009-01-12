@@ -174,7 +174,7 @@ public class NavigationServiceImpl implements NavigationService
         // FIXME Temp hack
         //if (this.tree == null)
         long now = Calendar.getInstance().getTimeInMillis();
-        if (Calendar.getInstance().getTimeInMillis() - lastBuildTime < 2000)
+        if (Calendar.getInstance().getTimeInMillis() - lastBuildTime < 2 * 60 * 1000) // Cache for 2 minutes
         {
             return;
         }
@@ -185,16 +185,31 @@ public class NavigationServiceImpl implements NavigationService
         List<BaseNode> siteNodes = getSiteNodes();
 
         List<TreeNode> flat = new ArrayList<TreeNode>();
+        int count = 10000;
         for (BaseNode b : siteNodes)
         {
             String label = (String) (b.hasProperty("data.publishingOptions.navigationLabel") && b.getPropertyValue("data.publishingOptions.navigationLabel") != null ? b
                     .getPropertyValue("data.publishingOptions.navigationLabel") : b.getOoLabel());
-            flat.add(new TreeNode(b.getOoUrlPath(), b.getId(), label));
+
+            int sortOrder = count++;
+            if (b.hasProperty("data.publishingOptions.sortOrder"))
+            {
+                Long so = (Long) b.getPropertyValue("data.publishingOptions.sortOrder");
+                if (so != null)
+                    sortOrder = so.intValue();
+            }
+            if (b.hasProperty("publishingOptions.sortOrder"))
+            {
+                Long so = (Long) b.getPropertyValue("publishingOptions.sortOrder");
+                if (so != null)
+                    sortOrder = so.intValue();
+            }
+            flat.add(new TreeNode(b.getOoUrlPath(), b.getId(), label, sortOrder));
         }
 
         appendAdditionalNodes(flat);
 
-        this.tree = tb.buildTree(flat, new TreeNode("/", null, "Home"));
+        this.tree = tb.buildTree(flat, new TreeNode("/", null, "Home", 0));
         this.nodes = flat;
     }
 

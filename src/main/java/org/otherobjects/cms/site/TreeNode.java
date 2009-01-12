@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class TreeNode implements Cloneable
+public class TreeNode implements Cloneable, Comparable<TreeNode>
 {
     private String id;
     private String path;
     private String redirectPath;
     private String label;
+    private int sortOrder;
     private Object object;
     private List<TreeNode> children = new ArrayList<TreeNode>();
     private boolean selected = false;
@@ -24,27 +25,46 @@ public class TreeNode implements Cloneable
         this.path = path;
     }
 
-    public TreeNode(String path, String id, String label)
+    public TreeNode(String path, String id, String label, int sortOrder)
     {
         this.path = path;
         this.id = id;
         this.label = label;
+        this.sortOrder = sortOrder;
     }
 
-    public TreeNode(String path, String id, String label, String redirectPath)
+    public TreeNode(String path, String id, String label, int sortOrder, String redirectPath)
     {
         this.path = path;
         this.id = id;
         this.label = label;
         this.redirectPath = redirectPath;
+        this.sortOrder = sortOrder;
     }
 
-    public TreeNode(String path, String id, String label, Object object)
+    public TreeNode(String path, String id, String label, int sortOrder, Object object)
     {
         this.path = path;
         this.id = id;
         this.label = label;
         this.object = object;
+        this.sortOrder = sortOrder;
+    }
+
+    public int compareTo(TreeNode node)
+    {
+        Integer nodeSortOrder = node.getSortOrder();
+        return - nodeSortOrder.compareTo(this.getSortOrder());
+    }
+    
+    public int getSortOrder()
+    {
+        return sortOrder;
+    }
+
+    public void setSortOrder(int sortOrder)
+    {
+        this.sortOrder = sortOrder;
     }
 
     /**
