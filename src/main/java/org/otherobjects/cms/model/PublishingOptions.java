@@ -20,6 +20,7 @@ public class PublishingOptions extends BaseNode
     private String navigationLabel;
     private String accessbilityHotKey;
     private Template template;
+    private Long sortOrder = 0L; // FIXME This is only temporary
 
     @Override
     public String getOoLabel()
@@ -110,4 +111,16 @@ public class PublishingOptions extends BaseNode
     {
         this.template = template;
     }
+
+    @Property(order = 100)
+    public Long getSortOrder()
+    {
+        return sortOrder;
+    }
+
+    public void setSortOrder(Long sortOrder)
+    {
+        this.sortOrder = sortOrder;
+    }
+    
 }
