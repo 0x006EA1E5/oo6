@@ -54,7 +54,7 @@ def createArticle(dao, path, title, content) {
 }
 
 
-
+/*
 TypeDefImpl a = new TypeDefImpl();
 a.setName("org.otherobjects.cms.model.SamplePage");
 a.addProperty(new PropertyDefImpl("code", "string", null, null, true, true));
@@ -86,3 +86,4 @@ createFolder(dao, "/blocks", "Temp block data", "datatypes")
 //createFolder(dao, "/scheduler", "\${scheduler.label}", "scheduler")
 //createFolder(dao, "/trash", "\${trash.label}","trash")
 //createArticle(dao, "/site/welcome.html", "Welcome","<p>Welcome to OTHERobjects.</p>")
+*/
