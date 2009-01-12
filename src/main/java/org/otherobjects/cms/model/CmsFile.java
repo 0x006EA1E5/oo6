@@ -17,6 +17,7 @@ public class CmsFile extends BaseNode
     private String keywords;
     private String copyright;
     private String mimeType;
+    private Long fileSize;
 
     // Source information
     private String originalFileName;
@@ -101,18 +102,19 @@ public class CmsFile extends BaseNode
     {
         this.originalFileName = originalFileName;
     }
+    
+    
+    @Property(order = 70)
+    public Long getFileSize()
+    {
+        return fileSize;
+    }
 
-    //    @Property(type = PropertyType.TEXT)
-    //    @JSON(include = false)
-    //    public File getNewFile()
-    //    {
-    //        return newFile;
-    //    }
-    //
-    //    public void setNewFile(File newFile)
-    //    {
-    //        this.newFile = newFile;
-    //    }
+    public void setFileSize(Long fileSize)
+    {
+        this.fileSize = fileSize;
+    }
+    
 
     @Property(order = 5, type=PropertyType.TRANSIENT)
     public CommonsMultipartFile getNewFile()

@@ -121,6 +121,14 @@ public class CmsFileController
 
         }
 
+        if (cmsFile.getNewFile() != null)
+        {
+            // FIXME Merge this with code below
+            OoResource resource = ooResourceLoader.getResource("/data/files/" + cmsFile.getCode());
+            cmsFile.setMimeType(getMimeType(cmsFile.getCode()).toString());
+            cmsFile.setFileSize(resource.getFile().length());
+        }
+        
         // Save
         boolean success = false;
         if (!(errors != null && errors.hasErrors()))
@@ -135,7 +143,6 @@ public class CmsFileController
 
             OoResource resource = ooResourceLoader.getResource("/data/files/" + cmsFile.getCode());
             cmsFile.getNewFile().transferTo(resource.getFile());
-            cmsFile.setMimeType(getMimeType(cmsFile.getCode()).toString());
         }
 
         // Prepare return data
