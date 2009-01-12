@@ -40,6 +40,5 @@ LI A {padding-left:20px; background:url(${oo.resourceUrl('/otherobjects/static/h
 </form>
 </div>
 </@oo.authorize>
-<@oo.hud />
 </body>
 </html>
