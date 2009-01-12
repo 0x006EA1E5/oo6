@@ -31,7 +31,7 @@ ${pageTitle}
 <tr>
 <td class="oo-label">JCR Path</td>
 <td class="oo-field-none">
-${object.jcrPath}
+${object.jcrPath!}
 </td>
 </tr>
 <#list typeDef.properties as prop>
