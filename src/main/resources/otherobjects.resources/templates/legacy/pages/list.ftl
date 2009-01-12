@@ -26,7 +26,7 @@ ${pageTitle}
 </thead>
 <tbody>
 <#list items as item>
-<#if ! item.class.name?ends_with("Folder")> <!--FIXME -->
+<#if ! item.class.name?ends_with("Folder") && ! item.class.name?ends_with("PublishingOptions")> <!--FIXME -->
  <tr>
 	<td><a class="oo-<#if item.published?? && item.published>live<#else>edited</#if>" href="${oo.url('/otherobjects/workbench/view/${item.editableId}')}">${item.ooLabel!}</a></td>
 	<#if item.linkPath??>
