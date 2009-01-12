@@ -99,7 +99,7 @@ public class OoBootstrapper implements InitializingBean
                 if (repositoryPopulationRequired())
                 {
                 // Scan for resources in file system
-                resourceScanner.updateResources();
+                //resourceScanner.updateResources();
                 }
             }
         }
