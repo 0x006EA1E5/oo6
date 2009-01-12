@@ -87,7 +87,7 @@ public class PageRenderer implements ResourceRenderer
         Template template = null;
 
         // FIXME This needs to be more generic -- or at least tied to SitePage
-        if (resourceObject.getPropertyValue("data.publishingOptions") != null)
+        if (resourceObject.hasProperty("data.publishingOptions") && resourceObject.getPropertyValue("data.publishingOptions") != null)
         {
             template = (Template) resourceObject.getPropertyValue("data.publishingOptions.template");
             if (template != null)
