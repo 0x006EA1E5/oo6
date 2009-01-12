@@ -36,6 +36,22 @@ public class RequestUtils
         return id != null ? id : defaultValue;
     }
 
+    public static long getLong(HttpServletRequest request, String paramName)
+    {
+        String parameter = request.getParameter(paramName);
+        Assert.notNull(parameter, "No parameter found called: " + paramName);
+        return Long.parseLong(parameter);
+    }
+    
+    public static long getLong(HttpServletRequest request, String paramName, long defaultValue)
+    {
+        String parameter = request.getParameter(paramName);
+        if (parameter == null)
+            return defaultValue;
+        else
+            return Long.parseLong(parameter);
+    }
+    
     public static int getInt(HttpServletRequest request, String paramName)
     {
         String parameter = request.getParameter(paramName);
