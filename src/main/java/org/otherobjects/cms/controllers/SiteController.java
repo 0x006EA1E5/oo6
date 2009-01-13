@@ -12,6 +12,7 @@ import org.otherobjects.cms.controllers.renderers.ResourceRenderer;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
+import org.otherobjects.cms.model.PublishingOptions;
 import org.otherobjects.cms.model.SiteFolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +69,8 @@ public class SiteController extends AbstractController
 
                 for (BaseNode n : contents)
                 {
-                    if (!n.isFolder())
+                    // FIXME Need better way of dealing with components
+                    if (!n.isFolder() && !(n instanceof PublishingOptions))
                     {
                         resourceObject = n;
                         break;
