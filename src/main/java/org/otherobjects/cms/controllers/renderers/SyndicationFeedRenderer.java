@@ -135,7 +135,8 @@ public class SyndicationFeedRenderer implements ResourceRenderer
                 }
 
                 //FIXME entry.setAuthor(node.getUserName());
-                entry.setUpdatedDate(node.getModificationTimestamp());
+                if(entry.getUpdatedDate() == null)
+                    entry.setUpdatedDate(node.getCreationTimestamp());
 
                 entries.add(entry);
             }
