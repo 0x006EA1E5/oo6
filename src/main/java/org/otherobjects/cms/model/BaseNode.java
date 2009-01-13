@@ -37,6 +37,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
 
     private String userName;
     private String userId;
+    private Date creationTimestamp;
     private Date modificationTimestamp;
     private String comment;
     private int changeNumber = 0;
@@ -386,4 +387,20 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
     public void setOoTags(String ooTags) {
         this.ooTags = ooTags;
     }
+
+    public Date getCreationTimestamp()
+    {
+        // FIXME Need better way of doing this
+        if(creationTimestamp==null)
+        {
+            creationTimestamp = new Date();
+        }
+        return creationTimestamp;
+    }
+
+    public void setCreationTimestamp(Date creationTimestamp)
+    {
+        this.creationTimestamp = creationTimestamp;
+    }
+    
 }
