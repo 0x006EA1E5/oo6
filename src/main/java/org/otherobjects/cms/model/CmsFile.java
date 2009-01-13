@@ -6,6 +6,7 @@ import org.otherobjects.cms.types.annotation.Type;
 import org.otherobjects.cms.util.StringUtils;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+// FIXME Sets size to OLD file size not new file!
 @Type(labelProperty = "label", adminControllerUrl="/otherobjects/file")
 public class CmsFile extends BaseNode
 {
