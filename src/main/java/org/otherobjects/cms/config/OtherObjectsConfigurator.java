@@ -70,7 +70,7 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer impl
             }
         }
 
-        if (environmentPrefix.equals("production"))
+        if (! environmentPrefix.equals("dev"))
             jndiOverride(mergedProperties);
 
         // make sure handed down props contains the same values as mergedProperties
@@ -94,7 +94,7 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer impl
         else
             environment = defaultEnvironment;
 
-        Assert.isTrue(environment.equals("dev") || environment.equals("test") || environment.equals("production"), "environment must be one of 'dev, 'test' or 'production'");
+        Assert.isTrue(environment.equals("dev") || environment.equals("test") || environment.equals("stage") || environment.equals("production"), "environment must be one of 'dev', 'test', 'stage' or 'production'");
 
         return environment;
     }
