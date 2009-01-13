@@ -37,6 +37,22 @@ ${object.jcrPath!}
 <#list typeDef.properties as prop>
 <@renderProperty prop object />
 </#list>
+<#if object.creationTimestamp??>
+<tr>
+<td class="oo-label">Created</td>
+<td class="oo-field-none">
+${object.creationTimestamp!?datetime?string("long")}
+</td>
+</tr>
+<tr>
+<td class="oo-label">Last Modified</td>
+<td class="oo-field-none">
+${object.modificationTimestamp!?datetime?string("long")}
+by
+${object.userName}
+</td>
+</tr>
+</#if>	
 </tbody>
 </table>
 </div>
