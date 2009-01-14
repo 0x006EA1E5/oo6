@@ -259,6 +259,27 @@ Renders a textbox for a date property.
 	    </select>
     </#if>
 </#macro>
+<#-- FIXME Merge these 2-->
+<#macro formSimpleSelect path options attributes="" empty=false>
+    <#if empty>
+    	<#assign expression = path?substring(7) />
+  		
+	    <select id="${expression}" name="${expression}" ${attributes}>
+	        <option value="">-</option>
+	    	<#list options as option>
+	        <option value="${option.id?html}">${option.label?html}</option>
+	        </#list>
+	    </select>
+	<#else>
+		<@bind path/>
+	    <select id="${ooStatus.expression}" name="${ooStatus.expression}" ${attributes}>
+	        <option value="">-</option>
+	    	<#list options as option>
+	        <option value="${option.id?html}"<#if ooStatus.actualValue! == option.id> selected="selected"</#if>>${option.label?html}</option>
+	        </#list>
+	    </select>
+    </#if>
+</#macro>
 
 <#--
  * checkSelected
