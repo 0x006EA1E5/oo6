@@ -217,7 +217,7 @@ public class MailService
         }
         catch (MailException e)
         {
-            logger.warn("Mail couldn't be sent: " + mail, e);
+            throw new OtherObjectsException("Mail couldn't be sent: " + mail, e);
         }
     }
 
