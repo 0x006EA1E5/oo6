@@ -1,5 +1,9 @@
 package org.otherobjects.cms.util;
 
+import java.security.MessageDigest;
+
+import org.otherobjects.cms.OtherObjectsException;
+
 /**
  * FIXME Confused with SecurityUtil
  * @author rich
@@ -9,7 +13,29 @@ public class SecurityUtils
 {
     public static String md5Hash(String text)
     {
-        return null;
+        try
+        {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            md5.update(text.getBytes());
+            byte[] blackBytes = md5.digest();
+            String blackText = new String();
+            for (int i = 0; i < blackBytes.length; i++)
+            {
+                String thisByte = Integer.toHexString(blackBytes[i] & 0xFF);
+                if (thisByte.length() < 2)
+                {
+                    // Add leading zero if necessary
+                    thisByte = "0" + thisByte;
+                }
+                blackText += thisByte;
+            }
+            return blackText;
+        }
+        catch (Exception e)
+        {
+            throw new OtherObjectsException("Error creating secure hash.", e);
+        }
+
     }
 
     /**
