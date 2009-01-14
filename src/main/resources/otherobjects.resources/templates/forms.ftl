@@ -119,7 +119,7 @@ TODO Can we make an empty-compatible version of this?
 
 
 <#--
-Renders a checkbox for a boolean property.
+Renders a standard input field with cusomisable type.
 -->
 <#macro formInput path attributes="" fieldType="text" empty=false>
 	<#if empty>
