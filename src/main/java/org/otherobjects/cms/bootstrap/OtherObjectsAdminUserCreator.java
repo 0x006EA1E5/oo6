@@ -7,6 +7,7 @@ import org.otherobjects.cms.model.Role;
 import org.otherobjects.cms.model.RoleDao;
 import org.otherobjects.cms.model.User;
 import org.otherobjects.cms.model.UserDao;
+import org.otherobjects.cms.util.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.providers.dao.SaltSource;
@@ -62,7 +63,7 @@ public class OtherObjectsAdminUserCreator
     public void resetPassword(User user)
     {
         // Generate password 
-        generatedAdminPassword = generatePassword(GENERATED_PASSWORD_LENGTH);
+        generatedAdminPassword = SecurityUtils.generatePassword(GENERATED_PASSWORD_LENGTH);
         user.setPassword(passwordEncoder.encodePassword(generatedAdminPassword, saltSource.getSalt(user)));
         user = userDao.save(user);
     }
@@ -87,34 +88,5 @@ public class OtherObjectsAdminUserCreator
         return generatedAdminPassword;
     }
 
-    /**
-     * A simple random password generator, user can specify the length.
-     * 
-     * Copyright 1999 - 2003 Roseanne Zhang, All Rights Reserved
-     * http://bobcat.webappcabaret.net/javachina/jc/share/PwGen.htm
-     */
-    public static String generatePassword(int length)
-    {
-        char[] pw = new char[length];
-        int c = 'A';
-        int r1 = 0;
-        for (int i = 0; i < length; i++)
-        {
-            r1 = (int) (Math.random() * 3);
-            switch (r1)
-            {
-                case 0 :
-                    c = '0' + (int) (Math.random() * 10);
-                    break;
-                case 1 :
-                    c = 'a' + (int) (Math.random() * 26);
-                    break;
-                case 2 :
-                    c = 'a' + (int) (Math.random() * 26);
-                    break;
-            }
-            pw[i] = (char) c;
-        }
-        return new String(pw);
-    }
+   
 }
