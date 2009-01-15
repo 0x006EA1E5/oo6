@@ -54,6 +54,7 @@ public class FormatTool
         String text = textileSource;//textileSource.replaceAll("/\n\n/", "\n");
 
         // Recode headings
+        text = text.replaceAll("\\\\n", "\n");
         text = text.replaceAll("(?m)^h3. ", "h4. ");
         text = text.replaceAll("(?m)^h2. ", "h3. ");
         text = text.replaceAll("(?m)^h1. ", "h2. ");
