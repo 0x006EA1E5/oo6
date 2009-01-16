@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  */
 public class StaticFileServlet extends HttpServlet
 {
-    private static final long DEFAULT_CACHE_TIME_MS = 15 * 60 * 1000;
+    private static final long DEFAULT_CACHE_TIME_MS = 15 * 60 * 1000; // 15 minutes
 
     private final Logger logger = LoggerFactory.getLogger(StaticFileServlet.class);
 
@@ -80,7 +80,7 @@ public class StaticFileServlet extends HttpServlet
             // start returning the response
             response.setContentType(getContentTypeFor(relativePath));
             // FIXME Cache content for 15 minutes by default
-            response.setDateHeader("Expires", System.currentTimeMillis() + DEFAULT_CACHE_TIME_MS*4*24*365);
+            response.setDateHeader("Expires", System.currentTimeMillis() + DEFAULT_CACHE_TIME_MS);
             OutputStream out = response.getOutputStream();
 
             // read the bytes, returning them in the response
