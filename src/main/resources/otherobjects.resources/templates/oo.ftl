@@ -108,8 +108,7 @@ Macro to insert block
 	<#else>
 		<#assign blockData = blockReference.blockData! >
 		<div class="oo-block" id="oo-block-${blockReference.id}" editlabel="${blockReference.block.label}" editstate="Live">
-		
-		<#assign test = "com.othermedia.nawb.util.TestDirective"?new()>  
+		 
 		<@blockTool code=blockName />
 		
 		<#-- <#include "/site/templates/blocks/${blockName}.ftl">  -->
