@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
@@ -8,7 +7,6 @@
 		<property name="configuration" value="${jcr.config.path}" />
 		<property name="homeDir" value="${jcr.repository.location}" />
 	</bean>
-
 	<bean id="jcrSessionFactory" class="org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory">
 		<property name="repository" ref="repository" />
 		<property name="credentials">
@@ -20,7 +18,6 @@
 			</bean>
 		</property>
 	</bean>
-
 	<bean id="password" class="java.lang.String">
 		<constructor-arg index="0" value="${jcr.password}" />
 	</bean>
@@ -29,7 +26,6 @@
 	<bean id="jcrTransactionManager" class="org.springmodules.jcr.jackrabbit.LocalTransactionManager">
 		<property name="sessionFactory" ref="jcrSessionFactory" />
 	</bean>
-
 	<bean id="baseTransactionProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" abstract="true">
 		<property name="transactionManager" ref="jcrTransactionManager" />
 		<property name="transactionAttributes">
@@ -44,12 +40,16 @@
 		<constructor-arg index="0" value="classpath:otherobjects.resources/config/jcr-mapping.xml" />
 		<property name="typeService" ref="typeService" />
 	</bean>
-
 	<bean id="jcrMappingTemplate" class="org.springmodules.jcr.jackrabbit.ocm.JcrMappingTemplate">
 		<constructor-arg index="0" ref="jcrSessionFactory" />
 		<constructor-arg index="1" ref="jcrMappingDescriptor" />
 		<!-- TODO Is is wise to allow create here? -->
 		<property name="allowCreate" value="true" />
+	</bean>
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation">
+			<value>classpath:ehcache.xml</value>
+		</property>
 	</bean>
 
 	<!-- DAOs -->
@@ -60,6 +60,7 @@
 				<property name="typeService" ref="typeService" />
 				<property name="sessionFactory" ref="jcrSessionFactory" />
 				<property name="validator" ref="typeDefConfiguredValidator" />
+				<property name="cacheManager" ref="cacheManager" />
 			</bean>
 		</property>
 	</bean>
@@ -69,11 +70,11 @@
 				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
 				<property name="sessionFactory" ref="jcrSessionFactory" />
 				<property name="validator" ref="typeDefConfiguredValidator" />
+				<property name="cacheManager" ref="cacheManager" />
 			</bean>
 		</property>
 	</bean>
 	
 	<!-- DataStore -->
 	<bean id="jackrabbitDataStore" class="org.otherobjects.cms.datastore.JackrabbitDataStore" />
-
 </beans>

@@ -98,7 +98,6 @@ Macro to insert block
 -->
 <#macro block blockReference>
 <#attempt>
-
 	<#assign blockName = blockReference.block.code/>
 	<#assign blockData = blockReference.blockData!/>
 	<#-- If block is global but has no data then render placeholder-->
@@ -109,7 +108,11 @@ Macro to insert block
 	<#else>
 		<#assign blockData = blockReference.blockData! >
 		<div class="oo-block" id="oo-block-${blockReference.id}" editlabel="${blockReference.block.label}" editstate="Live">
-		<#include "/site/templates/blocks/${blockName}.ftl">
+		
+		<#assign test = "com.othermedia.nawb.util.TestDirective"?new()>  
+		<@blockTool code=blockName />
+		
+		<#-- <#include "/site/templates/blocks/${blockName}.ftl">  -->
 		</div>
 	</#if>
 <#recover>

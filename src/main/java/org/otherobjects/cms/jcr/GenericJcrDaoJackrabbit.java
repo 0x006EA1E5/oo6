@@ -15,6 +15,10 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.ocm.exception.JcrMappingException;
 import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
@@ -72,6 +76,16 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
 
     private Validator validator;
 
+    private Cache cache;
+
+    public void setCacheManager(CacheManager cacheManager)
+    {
+        this.cacheManager = cacheManager;
+        this.cache = cacheManager.getCache("org.otherobjects.cms.JCR_CACHE");
+    }
+
+    private CacheManager cacheManager;
+
     public GenericJcrDaoJackrabbit()
     {
     }
@@ -80,7 +94,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     {
         this.persistentClass = persistentClass;
     }
-    
+
     public String getPersistentClassName()
     {
         return this.persistentClass.getName();
@@ -199,7 +213,20 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         if (path.endsWith("/"))
             path = path.substring(0, path.lastIndexOf("/"));
 
-        return (T) jcrMappingTemplate.getObject(path);
+        
+        Element element = cache.get(path);
+        
+        if(element == null)
+        {
+            T object = (T) jcrMappingTemplate.getObject(path);
+            element = new Element(path, object);   
+            cache.put(element);
+            return object;
+        }
+        else
+        {
+            return (T) element.getObjectValue();
+        }
     }
 
     public boolean exists(String id)
@@ -231,7 +258,10 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
             {
                 public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
                 {
-                    return manager.getObjectByUuid(id);
+
+                    Object o = manager.getObjectByUuid(id);
+
+                    return o;
                 }
             }, true);
         }
