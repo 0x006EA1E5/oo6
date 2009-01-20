@@ -80,11 +80,8 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
 
     public void setCacheManager(CacheManager cacheManager)
     {
-        this.cacheManager = cacheManager;
         this.cache = cacheManager.getCache("org.otherobjects.cms.JCR_CACHE");
     }
-
-    private CacheManager cacheManager;
 
     public GenericJcrDaoJackrabbit()
     {
@@ -216,7 +213,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         
         Element element = cache.get(path);
         
-        if(element == null)
+        if(true || element == null)
         {
             T object = (T) jcrMappingTemplate.getObject(path);
             element = new Element(path, object);   

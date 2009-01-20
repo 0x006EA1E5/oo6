@@ -14,7 +14,6 @@ import net.sf.ehcache.Element;
 
 import org.otherobjects.cms.views.Tool;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import freemarker.core.Environment;
 import freemarker.template.SimpleScalar;
@@ -34,17 +33,15 @@ public class BlockTool implements TemplateDirectiveModel
     @Resource
     private CacheManager cacheManager;
 
-    @Resource
-    private FreeMarkerConfigurer freeMarkerConfigurer;
-
     private Cache cache;
 
     @PostConstruct
-    private void init()
+    protected void init()
     {
         this.cache = cacheManager.getCache("org.otherobjects.cms.BLOCK_CACHE");
     }
 
+    @SuppressWarnings("unchecked")
     public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws TemplateException, IOException
     {
         if (params.get("code") != null)
@@ -55,7 +52,7 @@ public class BlockTool implements TemplateDirectiveModel
 
             Element element = cache.get(code);
 
-            if (element == null)
+            if (true || element == null)
             {
                 Template templateForInclusion = env.getTemplateForInclusion(code, "UTF-8", true);
                 StringWriter htmlWriter = new StringWriter();
