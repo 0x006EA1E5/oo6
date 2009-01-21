@@ -12,6 +12,7 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
+import org.otherobjects.cms.security.SecurityUtil;
 import org.otherobjects.cms.views.Tool;
 import org.springframework.stereotype.Component;
 
@@ -48,24 +49,33 @@ public class BlockTool implements TemplateDirectiveModel
         {
             Writer out = env.getOut();
             String code = ((SimpleScalar) params.get("code")).toString();
-            code = "/site/templates/blocks/" + code + ".ftl";
+            String templatePath = "/site/templates/blocks/" + code + ".ftl";
+            String blockReference = ((SimpleScalar) params.get("ref")).toString();
+            String location = ((SimpleScalar) params.get("location")).toString();
 
-            Element element = cache.get(code);
-
-            if (true || element == null)
+            // Create key
+            String key = code + "-" + blockReference + "-" +location;
+            
+            // Don't use cache if logged in as editor 
+            if (SecurityUtil.isEditor())
             {
-                Template templateForInclusion = env.getTemplateForInclusion(code, "UTF-8", true);
+                Template templateForInclusion = env.getTemplateForInclusion(templatePath, "UTF-8", true);
+                env.include(templateForInclusion);
+                return;
+            }
+
+            Element element = cache.get(key);
+            if (element == null)
+            {
+                Template templateForInclusion = env.getTemplateForInclusion(templatePath, "UTF-8", true);
                 StringWriter htmlWriter = new StringWriter();
                 env.setOut(htmlWriter);
                 env.include(templateForInclusion);
                 env.setOut(out);
-                element = new Element(code, htmlWriter.toString());
+                element = new Element(key, htmlWriter.toString());
                 cache.put(element);
             }
-
             out.write((String) element.getObjectValue());
-
         }
     }
-
 }

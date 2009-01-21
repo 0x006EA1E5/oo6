@@ -1,10 +1,12 @@
 package org.otherobjects.cms.security;
 
 import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.cms.bootstrap.OtherObjectsAdminUserCreator;
 import org.otherobjects.cms.model.Role;
 import org.otherobjects.cms.model.User;
 import org.otherobjects.cms.model.UserDao;
 import org.springframework.security.Authentication;
+import org.springframework.security.GrantedAuthority;
 import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 import org.springframework.security.userdetails.UserDetails;
@@ -16,6 +18,7 @@ import org.springframework.security.userdetails.UserDetails;
  */
 public class SecurityUtil
 {
+    public static final String EDITOR_ROLE_NAME = OtherObjectsAdminUserCreator.DEFAULT_ADMIN_ROLE_NAME;
 
     /**
      * @return The id of the current user or null if no user is associated with the current thread.
@@ -42,6 +45,26 @@ public class SecurityUtil
         return id.equals(currentUserId.toString());
     }
 
+    /**
+     * Returns true if the current user is an editor.
+     * 
+     * @return
+     */
+    public static boolean isEditor()
+    {
+        //FIXME if we don't have any authentication return true so that the default (existing) workspace is returned. Otherwise JackrabbitSessionFactory.registerNamespaces() will fail
+        // when trying to obtain a session
+        if (SecurityContextHolder.getContext().getAuthentication() == null)
+            return true;
+
+        for (GrantedAuthority ga : SecurityContextHolder.getContext().getAuthentication().getAuthorities())
+        {
+            if (ga.getAuthority().equals(EDITOR_ROLE_NAME))
+                return true;
+        }
+        return false;
+    }
+    
     /**
      * @return Current user or null if no user associated with current thread.
      */

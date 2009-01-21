@@ -211,6 +211,10 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
             path = path.substring(0, path.lastIndexOf("/"));
 
         
+        // FIXME Caching: must be a better place
+        if(SecurityUtil.isEditor())
+            return (T) jcrMappingTemplate.getObject(path);
+            
         Element element = cache.get(path);
         
         if(true || element == null)
