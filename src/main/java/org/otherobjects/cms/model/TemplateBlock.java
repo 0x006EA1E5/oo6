@@ -11,6 +11,7 @@ public class TemplateBlock extends BaseNode
     private String code;
     private String label;
     private String description;
+    private String keywords;
     private Boolean global;
 
     @Property(order = 10)
@@ -35,6 +36,17 @@ public class TemplateBlock extends BaseNode
         this.label = label;
     }
 
+    @Property(order = 35, type = PropertyType.TEXT)
+    public String getKeywords()
+    {
+        return keywords;
+    }
+    
+    public void setKeywords(String keywords)
+    {
+        this.keywords = keywords;
+    }
+    
     @Property(order = 30, type = PropertyType.TEXT)
     public String getDescription()
     {

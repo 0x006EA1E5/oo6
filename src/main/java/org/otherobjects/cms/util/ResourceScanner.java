@@ -100,6 +100,10 @@ public class ResourceScanner
                         {
                             block.setGlobal(true);
                         }
+                        if (metaData.getKeywords() != null)
+                        {
+                            block.setKeywords(metaData.getKeywords());
+                        }
                     }
 
                     dao.save(block);
