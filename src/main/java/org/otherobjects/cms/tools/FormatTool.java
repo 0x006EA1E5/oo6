@@ -83,6 +83,24 @@ public class FormatTool
         else
             return html;
     }
+    
+    public String summarize(String content)
+    {
+        // FIXME Test and improve this
+        if(content.length()>150)
+        {
+            content = content.substring(0,150);
+            content = content.substring(0,content.lastIndexOf(' '));
+            if(!content.endsWith("."))
+                content += "...";
+        }
+
+        content = content.replaceAll("\\[[^\\]]*\\]"," ");
+        content = formatTextile(content);
+        content = content.replaceAll("<[a-zA-Z\\/][^>]*>","");
+        
+        return content;
+    }
 
     /**
      * Formats file size into huma readable form.
