@@ -109,9 +109,11 @@ Macro to insert block
 		<#assign blockData = blockReference.blockData! >
 		<div class="oo-block" id="oo-block-${blockReference.id}" editlabel="${blockReference.block.label}" editstate="Live">
 		 
-		<@blockTool code=blockName />
-		
-		<#-- <#include "/site/templates/blocks/${blockName}.ftl">  -->
+		 <#if (blockReference.block.keywords)!?contains("no-cache")>
+			<#include "/site/templates/blocks/${blockName}.ftl"> 
+		<#else>
+			<@blockTool code=blockName ref=blockReference.id location=urlPath />
+		</#if>
 		</div>
 	</#if>
 <#recover>
