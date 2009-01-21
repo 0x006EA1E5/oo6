@@ -35,6 +35,6 @@ public class GoogleAnalyticsTool
             if (m.matches())
                 return "/outgoing/" + m.group(1) + "/" + m.group(2);
         }
-        return null;
+        return "";
     }
 }

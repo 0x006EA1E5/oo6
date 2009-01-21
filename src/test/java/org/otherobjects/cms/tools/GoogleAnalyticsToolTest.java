@@ -19,7 +19,7 @@ public class GoogleAnalyticsToolTest extends TestCase
         assertEquals("/outgoing/mailto/othermedia.com/rich", gat.getPath("mailto:rich@othermedia.com?subject=not-logged"));
 
         // Internal links -- do not track
-        assertEquals(null, gat.getPath("/"));
-        assertEquals(null, gat.getPath("/home.html"));
+        assertEquals("", gat.getPath("/"));
+        assertEquals("", gat.getPath("/home.html"));
     }
 }
