@@ -174,7 +174,7 @@ public class NavigationServiceImpl implements NavigationService
         // FIXME Temp hack
         //if (this.tree == null)
         long now = Calendar.getInstance().getTimeInMillis();
-        if (Calendar.getInstance().getTimeInMillis() - lastBuildTime < 20 * 60 * 1000) // Cache for 2 minutes
+        if (Calendar.getInstance().getTimeInMillis() - lastBuildTime < 2 * 60 * 1000) // Cache for 2 minutes
         {
             return;
         }
