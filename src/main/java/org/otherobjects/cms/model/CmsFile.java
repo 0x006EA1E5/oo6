@@ -137,7 +137,7 @@ public class CmsFile extends BaseNode
         if(getOriginalFileName() == null)
             return null;
         
-        String extension = getOriginalFileName().substring(getOriginalFileName().lastIndexOf(".") + 1);
+        String extension = getOriginalFileName().substring(getOriginalFileName().lastIndexOf(".") + 1).toLowerCase();
         return extension;
     }
     
