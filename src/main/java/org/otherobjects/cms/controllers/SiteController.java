@@ -1,7 +1,6 @@
 package org.otherobjects.cms.controllers;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +11,6 @@ import org.otherobjects.cms.controllers.renderers.ResourceRenderer;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
-import org.otherobjects.cms.model.PublishingOptions;
 import org.otherobjects.cms.model.SiteFolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,19 +61,22 @@ public class SiteController extends AbstractController
 
             if (resourceObject instanceof SiteFolder)
             {
-                resourceObject = null;
-                // Folder requested. Get first item that isn't a folder.
-                List<BaseNode> contents = universalJcrDao.getAllByPath("/site" + path);
-
-                for (BaseNode n : contents)
-                {
-                    // FIXME Need better way of dealing with components
-                    if (!n.isFolder() && !(n instanceof PublishingOptions))
-                    {
-                        resourceObject = n;
-                        break;
-                    }
-                }
+//                resourceObject = null;
+//                // Folder requested. Get first item that isn't a folder.
+//                List<BaseNode> contents = universalJcrDao.getAllByPath("/site" + path);
+//
+//                for (BaseNode n : contents)
+//                {
+//                    // FIXME Need better way of dealing with components
+//                    if (!n.isFolder() && !(n instanceof PublishingOptions))
+//                    {
+//                        resourceObject = n;
+//                        break;
+//                    }
+//                }
+                SiteFolder folder = (SiteFolder) resourceObject;
+                String defaultPage = StringUtils.isNotBlank(folder.getDefaultPage()) ? folder.getDefaultPage() : "index.html";
+                resourceObject = universalJcrDao.getByPath(folder.getJcrPath() + "/" + defaultPage);
                 Assert.notNull(resourceObject, "No resources in this folder.");
             }
         }

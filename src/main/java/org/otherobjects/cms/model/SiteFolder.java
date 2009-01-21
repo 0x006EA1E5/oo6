@@ -19,6 +19,7 @@ public class SiteFolder extends BaseNode implements Folder
 {
     private String label;
     private String cssClass;
+    private String defaultPage;
     private List<String> allowedTypes;
     private Url url;
     private boolean inMenu = true;
@@ -99,11 +100,23 @@ public class SiteFolder extends BaseNode implements Folder
     {
         return this.label;
     }
-
+    
     @Override
     public void setLabel(String label)
     {
         this.label = label;
+    }
+    
+    
+    @Property(order = 25)
+    public String getDefaultPage()
+    {
+        return defaultPage;
+    }
+
+    public void setDefaultPage(String defaultPage)
+    {
+        this.defaultPage = defaultPage;
     }
 
     public int getDepth()
