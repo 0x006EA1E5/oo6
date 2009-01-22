@@ -101,6 +101,20 @@ public class FormatTool
         
         return content;
     }
+    
+    public String trim(String content, int maxLength)
+    {
+        // FIXME Test and improve this
+        // FIXME Respect max length and all puctation
+        if(content.length()>maxLength)
+        {
+            content = content.substring(0,maxLength);
+            content = content.substring(0,content.lastIndexOf(' '));
+            if(!content.endsWith("."))
+                content += "...";
+        }
+        return content;
+    }
 
     /**
      * Formats file size into huma readable form.
