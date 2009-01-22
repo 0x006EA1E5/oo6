@@ -37,4 +37,15 @@ public class UrlTool
         else
             return "{error}"; 
     }
+    
+    public String getAbsoluteResourceUrl(String resourcePath) throws IOException
+    {
+        // FIXME This is inefficient
+        OoResource resource = ooResourceLoader.getResource(resourcePath); 
+        Url url = resource.getUrl();
+        if(url!=null)
+            return url.getAbsoluteLink().replaceAll("//","/");
+        else
+            return "{error}"; 
+    }
 }
