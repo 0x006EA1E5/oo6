@@ -57,12 +57,12 @@ public class BlockTool implements TemplateDirectiveModel
             String key = code + "-" + blockReference + "-" +location;
             
             // Don't use cache if logged in as editor 
-            if (SecurityUtil.isEditor())
-            {
-                Template templateForInclusion = env.getTemplateForInclusion(templatePath, "UTF-8", true);
-                env.include(templateForInclusion);
-                return;
-            }
+//            if (SecurityUtil.isEditor())
+//            {
+//                Template templateForInclusion = env.getTemplateForInclusion(templatePath, "UTF-8", true);
+//                env.include(templateForInclusion);
+//                return;
+//            }
 
             Element element = cache.get(key);
             if (element == null)

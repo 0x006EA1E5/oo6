@@ -212,9 +212,10 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
 
         
         // FIXME Caching: must be a better place
-        if(SecurityUtil.isEditor())
-            return (T) jcrMappingTemplate.getObject(path);
-            
+//        if(SecurityUtil.isEditor())
+//            return (T) jcrMappingTemplate.getObject(path);
+           
+        
         Element element = cache.get(path);
         
         if(true || element == null)
