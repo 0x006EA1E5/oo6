@@ -23,7 +23,7 @@ public class OOFreeMarkerView extends FreeMarkerView
 {
     private final Logger logger = LoggerFactory.getLogger(OOFreeMarkerView.class);
     
-    private static final String DEFAULT_ERROR_TEMPLATE_PATH = "/site/templates/error-500.ftl";
+    private static final String DEFAULT_ERROR_TEMPLATE_PATH = "/site/templates/pages/500.ftl";
     private static final String DEFAULT_EXCEPTION_ATTRIBUTE = "exception";
 
     @SuppressWarnings("unchecked")
