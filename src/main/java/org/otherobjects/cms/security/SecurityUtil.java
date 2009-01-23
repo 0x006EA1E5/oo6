@@ -52,6 +52,8 @@ public class SecurityUtil
      */
     public static boolean isEditor()
     {
+        if(true)
+            return false;
         //FIXME if we don't have any authentication return true so that the default (existing) workspace is returned. Otherwise JackrabbitSessionFactory.registerNamespaces() will fail
         // when trying to obtain a session
         if (SecurityContextHolder.getContext().getAuthentication() == null)
