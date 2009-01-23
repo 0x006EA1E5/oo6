@@ -40,7 +40,7 @@
 
 	<!-- OTHERobjects exception resolver -->
 	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-		<property name="defaultErrorView" value="/site/templates/error-500" />
+		<property name="defaultErrorView" value="/site/templates/pages/500" />
 		<property name="defaultStatusCode" value="500" />
 		<property name="warnLogCategory" value="org.otherobjects.cms" />		
 	</bean>
