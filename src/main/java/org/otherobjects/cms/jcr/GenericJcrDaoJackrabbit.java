@@ -218,7 +218,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         
         Element element = cache.get(path);
         
-        if(true || element == null)
+        if(element == null)
         {
             T object = (T) jcrMappingTemplate.getObject(path);
             element = new Element(path, object);   

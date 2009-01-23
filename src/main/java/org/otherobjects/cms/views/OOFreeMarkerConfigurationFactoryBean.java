@@ -18,9 +18,11 @@ public class OOFreeMarkerConfigurationFactoryBean extends FreeMarkerConfiguratio
     @Override
     protected void postProcessConfiguration(Configuration config) throws IOException, TemplateException
     {
-        config.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
-        config.setSetting("template_update_delay", "5"); // Default
+        // FIXME Need to configure automatically in production
+//        config.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
+        config.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+//        config.setSetting("template_update_delay", "5"); // Default
 //        config.setSetting("template_update_delay", "0"); // Always check for template updates
-//        config.setSetting("template_update_delay", "1200"); // Always check for template updates
+        config.setSetting("template_update_delay", "60"); // Always check for template updates
     }
 }
