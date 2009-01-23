@@ -9,7 +9,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.StringUtils;
+import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.views.Tool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,18 @@ public class DebugTool
     private static final int ABBREVIATION_MAX = 100;
 
     public static final Pattern READ_ACCESSOR_PATTERN = Pattern.compile("^(?:(?:get)|(?:is))(\\w{1})(.*)$");
+
+    @Resource
+    private OtherObjectsConfigurator otherObjectsConfigurator;
+
+    public boolean isEnabled(String key)
+    {
+        String value = otherObjectsConfigurator.getProperty(key);
+        if (value == null || !value.equals("false"))
+            return true;
+        else
+            return false;
+    }
 
     public static String inspectAsText(Object object, boolean multiline)
     {
