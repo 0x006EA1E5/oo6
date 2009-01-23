@@ -260,7 +260,7 @@ OO Interface Integration macros
 Macro to insert HTML tag to support OO interface
 -->
 <#macro html id="" class="">
-<html <#if id?has_content>id="${id}"</#if><@authorize "ROLE_ADMIN"> class="${class!}"</@authorize>>
+<html<#if id?has_content> id="${id}"</#if><@authorize "ROLE_ADMIN"> class="${class!}"</@authorize>>
 </#macro>
 
 <#-- 
