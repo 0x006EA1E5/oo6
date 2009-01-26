@@ -34,6 +34,7 @@
 				 -->
 			</props>
 		</property>
+		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
 	</bean>
 
 	<!-- freemarker config proxy that proxies a general freemarker config for use by FreemarkerView -->
@@ -47,6 +48,6 @@
 		<property name="requestContextAttribute" value="requestContext" />
 		<property name="exposeSpringMacroHelpers" value="false" /> <!-- We'll expose our own thanks. -->
 		<property name="viewClass" value="org.otherobjects.cms.views.OOFreeMarkerView" />
-		<property name="order" value="10000"/>
+		<property name="order" value="10000" />
 	</bean>
 </beans>
