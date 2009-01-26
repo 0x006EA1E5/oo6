@@ -175,6 +175,29 @@ A.button {background: #cccccc; padding:3px; color:#000000;}
  	</td></tr>
 </table>
 
+<h2>SEO</h2>
+
+<table>
+ 	<tr><td class="label">robots.txt</td><td class="info"><a href="${oo.url("/robots.txt")}">${oo.url("/robots.txt")}</a></td></tr>
+ 	<tr><td class="label">Sitemap</td><td class="info"><a href="${oo.url("/sitemap.xml")}">${oo.url("/sitemap.xml")}</a> [<a href="http://www.validome.org/google/validate?url=${urlTool.getAbsoluteUrl("/sitemap.xml")}&lang=en&googleTyp=SITEMAP" target="_blank">Validate</a>]</td></tr>
+</table>
+
+<h2>Feeds</h2>
+
+<#assign feedList = syndicationFeedTool.getFeeds()>
+<#if feedList?has_content>
+<table>
+	<#list syndicationFeedTool.getFeeds() as feed>
+ 	<tr><td class="label">${feed.label} (${feed.feedMimeType})</td><td class="info"><a href="${oo.url(feed.ooUrlPath)}">${oo.url(feed.ooUrlPath)}</a> [<a href="http://feedvalidator.org/check.cgi?url=?url=${urlTool.getAbsoluteUrl(feed.ooUrlPath)}" target="_blank">Validate</a>] <#if feed.ooUrlPath != feed.feedUrl>[<a href="${feed.feedUrl}">Feed URL</a>]</#if></td></tr>
+	</#list>
+</table>
+<#else>
+<p>No feeds marked as inHeader</p>
+</#if>
+
+
+
+
 
 </div>
 </div>

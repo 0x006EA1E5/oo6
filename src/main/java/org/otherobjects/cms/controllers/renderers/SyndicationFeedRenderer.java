@@ -1,6 +1,7 @@
 package org.otherobjects.cms.controllers.renderers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang.StringUtils;
+import org.otherobjects.cms.Url;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.PagedList;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
@@ -26,6 +29,8 @@ import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndEntryImpl;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.feed.synd.SyndFeedImpl;
+import com.sun.syndication.feed.synd.SyndLink;
+import com.sun.syndication.feed.synd.SyndLinkImpl;
 import com.sun.syndication.io.SyndFeedOutput;
 
 /**
@@ -61,16 +66,34 @@ public class SyndicationFeedRenderer implements ResourceRenderer
 
         SyndFeed feed = new SyndFeedImpl();
         feed.setFeedType(feedObject.getFeedFormat());
+        feed.setUri("urn:uuid:" + feedObject.getId());
 
         feed.setTitle(feedObject.getLabel());
-        feed.setLink(feedObject.getFeedUrl());
-        feed.setDescription(feedObject.getDescription());
+        
+//        feed.setLink();
+        
+        List<SyndLink> links = new ArrayList<SyndLink>();
+        SyndLink self = new SyndLinkImpl();
+        self.setRel("self");
+        self.setHref(new Url(feedObject.getOoUrlPath()).getAbsoluteLink());
+        links.add(self);
+        feed.setLinks(links);
+        
+//        feed.setLink(feedObject.getOoUrlPath());
+        //feed.setLink(feedObject.getFeedUrl());
+        
+        if(StringUtils.isNotBlank(feedObject.getDescription()))
+                feed.setDescription(feedObject.getDescription());
 
+        
+        
         List<SyndEntry> entries = new ArrayList<SyndEntry>();
 
         Object daoObject = this.daoService.getDao(BaseNode.class);
 
         PagedList<BaseNode> items = ((UniversalJcrDao) daoObject).pageByJcrExpression(feedObject.getSelector().getQuery(), 15, 1);
+
+        Date mostRecentUpdate = null;
 
         for (BaseNode node : items)
         {
@@ -82,6 +105,8 @@ public class SyndicationFeedRenderer implements ResourceRenderer
 
                 String permaLink = ((Linkable) node).getHref().getAbsoluteLink();
                 entry.setLink(permaLink);
+
+                entry.setUri("urn:uuid:" + node.getId());
 
                 if (mappings.containsKey("description"))
                 {
@@ -135,12 +160,23 @@ public class SyndicationFeedRenderer implements ResourceRenderer
                 }
 
                 //FIXME entry.setAuthor(node.getUserName());
-                if(entry.getUpdatedDate() == null)
-                    entry.setUpdatedDate(node.getCreationTimestamp());
+                if (entry.getUpdatedDate() == null)
+                {
+                    entry.setUpdatedDate(node.getModificationTimestamp());
+                    if (mostRecentUpdate == null || node.getModificationTimestamp().after(mostRecentUpdate))
+                        mostRecentUpdate = node.getModificationTimestamp();
+                }
 
+                entry.setAuthor(feedObject.getAuthor());
+                
                 entries.add(entry);
             }
         }
+
+        if (mostRecentUpdate != null)
+            feed.setPublishedDate(mostRecentUpdate);
+        else
+            feed.setPublishedDate(new Date());
 
         feed.setEntries(entries);
 

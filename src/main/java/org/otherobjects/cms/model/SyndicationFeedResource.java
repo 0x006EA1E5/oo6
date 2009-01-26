@@ -28,6 +28,7 @@ public class SyndicationFeedResource extends BaseNode
 
     private String label;
     private String description;
+    private String author;
     private Selector selector;
     private String mapping = "title:ooLabel\ndescription:teaser";
     private String feedFormat = "atom_1.0";
@@ -146,6 +147,18 @@ public class SyndicationFeedResource extends BaseNode
         this.description = description;
     }
 
+
+    @Property(order = 20, required=true)
+    public String getAuthor()
+    {
+        return this.author;
+    }
+
+    public void setAuthor(String author)
+    {
+        this.author = author;
+    }
+    
     @Property(type = PropertyType.NUMBER, order = 50)
     public long getDefaultImageWidth()
     {
