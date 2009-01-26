@@ -252,7 +252,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
 
     /**
      * FIXME Better name needed?
-     * @deprecated
+     * @deprecated Use getOoUrlPath() instead
      */
     public String getLinkPath()
     {
