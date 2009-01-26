@@ -56,8 +56,7 @@ public class PasswordChangeController
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String processSubmit(@ModelAttribute("passwordChanger")
-    PasswordChanger passwordChanger, BindingResult result, HttpServletRequest request, SessionStatus status)
+    public String processSubmit(@ModelAttribute("passwordChanger") PasswordChanger passwordChanger, BindingResult result, HttpServletRequest request, SessionStatus status)
     {
 
         new PasswordChangerValidator().validate(passwordChanger, result);
@@ -72,7 +71,7 @@ public class PasswordChangeController
             // Change password
             passwordService.changePassword(passwordChanger);
             status.setComplete();
-            
+
             FlashMessageTool flashMessageTool = new FlashMessageTool(request);
             flashMessageTool.flashMessage(FlashMessage.INFO, "Your password has been changed successfully.");
             return "redirect:/otherobjects/login/auth";
