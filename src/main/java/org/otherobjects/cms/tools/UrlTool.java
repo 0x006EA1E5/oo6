@@ -38,6 +38,13 @@ public class UrlTool
             return "{error}"; 
     }
     
+    public String getAbsoluteUrl(String path) throws IOException
+    {
+        // FIXME This is inefficient
+        Url url = new Url(path);
+        return url.getAbsoluteLink();
+    }
+    
     public String getAbsoluteResourceUrl(String resourcePath) throws IOException
     {
         // FIXME This is inefficient
