@@ -6,9 +6,11 @@ import java.util.List;
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
+import org.dom4j.QName;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.otherobjects.cms.Url;
 import org.otherobjects.cms.site.TreeNode;
 import org.springframework.util.Assert;
 
@@ -32,13 +34,27 @@ public class SiteMapGenerator
      */
     public Document generateSiteMap(List<TreeNode> items)
     {
-        Document doc = DocumentFactory.getInstance().createDocument();
+        // Add urlset with correct namespace
+        QName rootName = DocumentFactory.getInstance().createQName("urlset", "", "http://www.sitemaps.org/schemas/sitemap/0.9");
+        Element urlset = DocumentFactory.getInstance().createElement(rootName);
+        Document doc = DocumentFactory.getInstance().createDocument(urlset);
+
         // Must be in UTF-8 according to spec
         doc.setXMLEncoding("UTF-8");
-        Element urlset = doc.addElement("urlset");
+        
+        urlset.addAttribute("xmlns:xsi","http://www.w3.org/2001/XMLSchema-instance");
+        urlset.addAttribute("xsi:schemaLocation","http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd");
+        
+//        //<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+//            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+//            xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+//            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+        
+        
         for (TreeNode item : items)
         {
-            String linkPath = item.getUrl();
+            // FIXME We should store URLs in the TreeNode?
+            String linkPath = new Url(item.getUrl()).getAbsoluteLink();
             Date modificationTimestamp = item.getModificationTimestamp();
 
             Assert.hasText(linkPath, "URL can not be null for item: " + item.getPath());
@@ -47,7 +63,7 @@ public class SiteMapGenerator
             // Required elements
             Element entry = urlset.addElement("url");
             entry.addElement("loc").addText(linkPath);
-
+            
             // Optional elements
             entry.addElement("lastmod").addText(formatW3CDateTime(modificationTimestamp));
             // recipient.addElement("changefreq").addText();
