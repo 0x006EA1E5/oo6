@@ -14,7 +14,6 @@ import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.SiteFolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
@@ -61,23 +60,31 @@ public class SiteController extends AbstractController
 
             if (resourceObject instanceof SiteFolder)
             {
-//                resourceObject = null;
-//                // Folder requested. Get first item that isn't a folder.
-//                List<BaseNode> contents = universalJcrDao.getAllByPath("/site" + path);
-//
-//                for (BaseNode n : contents)
-//                {
-//                    // FIXME Need better way of dealing with components
-//                    if (!n.isFolder() && !(n instanceof PublishingOptions))
-//                    {
-//                        resourceObject = n;
-//                        break;
-//                    }
-//                }
+                //                resourceObject = null;
+                //                // Folder requested. Get first item that isn't a folder.
+                //                List<BaseNode> contents = universalJcrDao.getAllByPath("/site" + path);
+                //
+                //                for (BaseNode n : contents)
+                //                {
+                //                    // FIXME Need better way of dealing with components
+                //                    if (!n.isFolder() && !(n instanceof PublishingOptions))
+                //                    {
+                //                        resourceObject = n;
+                //                        break;
+                //                    }
+                //                }
                 SiteFolder folder = (SiteFolder) resourceObject;
                 String defaultPage = StringUtils.isNotBlank(folder.getDefaultPage()) ? folder.getDefaultPage() : "index.html";
                 resourceObject = universalJcrDao.getByPath(folder.getJcrPath() + "/" + defaultPage);
-                Assert.notNull(resourceObject, "No resources in this folder.");
+
+                if (resourceObject == null)
+                {
+                    ModelAndView mv = new ModelAndView("/site/templates/pages/404");
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    mv.addObject("requestedPath", path);
+                    mv.addObject("folder", folder);
+                    return mv;
+                }
             }
         }
 
@@ -90,14 +97,14 @@ public class SiteController extends AbstractController
             Object folder = universalJcrDao.getByPath("/site" + path);
 
             //FIXME Add Security check here
-//            ModelAndView mv = new ModelAndView("/otherobjects/templates/pages/oo-404-create");
+            //            ModelAndView mv = new ModelAndView("/otherobjects/templates/pages/oo-404-create");
             ModelAndView mv = new ModelAndView("/site/templates/pages/404");
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             mv.addObject("requestedPath", path);
             mv.addObject("folder", folder);
             mv.addObject("newCode", newCode);
             return mv;
-            
-            
+
             //throw new NotFoundException("No resource at: " + path);
         }
 
