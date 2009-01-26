@@ -210,19 +210,21 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         if (path.endsWith("/"))
             path = path.substring(0, path.lastIndexOf("/"));
 
-        
         // FIXME Caching: must be a better place
         if (SecurityUtil.isEditor())
             return (T) jcrMappingTemplate.getObject(path);
-           
-        
+
         Element element = cache.get(path);
-        
-        if(element == null)
+
+        if (element == null)
         {
             T object = (T) jcrMappingTemplate.getObject(path);
-            element = new Element(path, object);   
-            cache.put(element);
+            if (object.isPublished())
+            {
+                // Only put published objects in the cache
+                element = new Element(path, object);
+                cache.put(element);
+            }
             return object;
         }
         else
@@ -422,6 +424,9 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         //FIXME this should display proper transactional behaviour which it doesn't at the moment as there are multiple jcr sessions involved
         if (baseNode.isPublished())
             throw new OtherObjectsException("baseNode " + baseNode.getJcrPath() + "[" + baseNode.getId() + "] couldn't be published as its published flag is already set ");
+
+        if (this.cache != null)
+            this.cache.put(new Element(baseNode.getJcrPath(), baseNode));
 
         // run node through rule engine if it is a CmsNode and cancel publish if rule engine doesn't set publish flag
         if (baseNode instanceof CmsNode)
