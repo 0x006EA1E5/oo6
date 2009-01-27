@@ -97,8 +97,13 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
         return getPagedByQuery("from " + persistentClass.getName(), pageSize, pageNo, filterQuery, sortField, asc);
     }
 
-    @SuppressWarnings("unchecked")
     public List<T> findByQuery(final String query, final Map<String, Object> queryParams)
+    {
+        return findByQuery(query, queryParams, null, null);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<T> findByQuery(final String query, final Map<String, Object> queryParams, final Integer start, final Integer limit)
     {
         return getHibernateTemplate().executeFind(new HibernateCallback()
         {
@@ -112,6 +117,10 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
                         q.setParameter(key, queryParams.get(key));
                     }
                 }
+                if(limit!=null)
+                    q.setMaxResults(limit);
+                if(start!=null)
+                    q.setFirstResult(start);
                 return q.list();
             }
         });
