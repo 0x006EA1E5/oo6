@@ -22,7 +22,7 @@ public class SiteFolder extends BaseNode implements Folder
     private String defaultPage;
     private List<String> allowedTypes;
     private Url url;
-    private boolean inMenu = true;
+    private boolean inMenu = true; // FIXME Merge this with publishingo options
     private String tags;
     private PublishingOptions publishingOptions;
 
