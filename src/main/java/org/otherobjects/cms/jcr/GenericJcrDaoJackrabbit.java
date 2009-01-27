@@ -219,7 +219,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         if (element == null)
         {
             T object = (T) jcrMappingTemplate.getObject(path);
-            if (object.isPublished())
+            if (object!=null && object.isPublished())
             {
                 // Only put published objects in the cache
                 element = new Element(path, object);
@@ -470,6 +470,8 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                         else
                         {
                             liveNode.update(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
+                            if(!baseNode.getJcrPath().equals(liveNode.getPath()))
+                                liveWorkspace.move(liveNode.getPath(), baseNode.getJcrPath());
                         }
 
                         // we got here so we successfully published
