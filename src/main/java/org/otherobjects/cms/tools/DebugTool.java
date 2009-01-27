@@ -11,6 +11,9 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Statistics;
+
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.views.Tool;
@@ -38,6 +41,9 @@ public class DebugTool
 
     @Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
+
+    @Resource
+    private CacheManager cacheManager;
 
     public boolean isEnabled(String key)
     {
@@ -190,6 +196,16 @@ public class DebugTool
         }
 
         return contentMap;
+    }
+
+    public List<Statistics> getCacheStatistics()
+    {
+        List<Statistics> stats = new ArrayList<Statistics>();
+        for (String name : cacheManager.getCacheNames())
+        {
+            stats.add(cacheManager.getCache(name).getStatistics());
+        }
+        return stats;
     }
 
 }

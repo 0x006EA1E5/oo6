@@ -199,6 +199,41 @@ A.button {background: #cccccc; padding:3px; color:#000000;}
 
 
 
+<h2>Cache Stats</h2>
+
+
+
+<table id="caches">
+<tr>
+<th>Name</th>
+<th>Size</th>
+<th>Hits</th>
+<th>Misses</th>
+<th>Rate</th>
+<th>Time to Idle</th>
+<th>Time to Live</th>
+<th>Max Elements</th>
+<th>Evicted</th>
+</tr>
+<#list debugTool.cacheStatistics as stats> 
+<tr>
+<td>${stats.associatedCacheName}</td>
+<td>${stats.objectCount}</td>
+<td>${stats.cacheHits}</td>
+<td>${stats.cacheMisses}</td>
+<td><#if stats.cacheMisses+stats.cacheHits gt 0>${(stats.cacheHits)/(stats.cacheMisses+stats.cacheMisses)*100}%</#if></td>
+<td>${stats.associatedCache.timeToIdleSeconds}</td>
+<td>${stats.associatedCache.timeToLiveSeconds}</td>
+<td>${stats.associatedCache.maxElementsInMemory}</td>
+<td>${stats.evictionCount}</td>
+</#list>
+</table>
+
+
+
+
+
+
 </div>
 </div>
 
