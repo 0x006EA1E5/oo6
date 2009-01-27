@@ -497,7 +497,6 @@ public class DebugController implements ServletContextAware, ApplicationContextA
                 }
                 else
                     return "";
-                //renderNodeInfo(html, session.getRootNode());
                 return html.toString();
             }
         });
@@ -522,14 +521,6 @@ public class DebugController implements ServletContextAware, ApplicationContextA
                 html.append(" " + prop.getName() + "=" + prop.getValue().getString() + "<br/>");
         }
         html.append("</span>");
-        html.append("</span>");
-
-        NodeIterator nodes = node.getNodes();
-        while (nodes.hasNext())
-        {
-            Node nextNode = nodes.nextNode();
-            renderNodeInfo(html, nextNode);
-        }
         html.append("</li>");
         html.append("</ul>");
     }
