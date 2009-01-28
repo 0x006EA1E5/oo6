@@ -65,7 +65,7 @@ public class BlockTool implements TemplateDirectiveModel
             }
 
             Element element = cache.get(key);
-            if (true || element == null)
+            if (element == null)
             {
                 Template templateForInclusion = env.getTemplateForInclusion(templatePath, "UTF-8", true);
                 StringWriter htmlWriter = new StringWriter();
