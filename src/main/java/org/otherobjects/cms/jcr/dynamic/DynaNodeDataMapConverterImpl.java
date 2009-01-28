@@ -74,7 +74,7 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
             }
 
             String jcrName = getCollectionJcrName(collectionDescriptor);
-            Node dataNode = parentNode.addNode(jcrName, "nt:unstructured");
+            Node dataNode = parentNode.addNode(jcrName, "oo:node");
             ValueFactory valueFactory = session.getValueFactory();
             Map map = (Map) collection;
 
