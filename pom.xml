@@ -628,7 +628,7 @@
 		<dependency>
 			<groupId>org.apache.jackrabbit</groupId>
 			<artifactId>jackrabbit-core</artifactId>
-			<version>1.4.4</version>
+			<version>1.4.7</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.apache.derby</groupId>
