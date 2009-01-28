@@ -213,6 +213,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         if (SecurityUtil.isEditor())
             return (T) jcrMappingTemplate.getObject(path);
 
+//        return  (T) jcrMappingTemplate.getObject(path);
         Element element = cache.get(path);
 
         if (element == null)
@@ -474,8 +475,8 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     public void publish(final T baseNode, final String message)
     {
         //FIXME this should display proper transactional behaviour which it doesn't at the moment as there are multiple jcr sessions involved
-        if (baseNode.isPublished())
-            throw new OtherObjectsException("baseNode " + baseNode.getJcrPath() + "[" + baseNode.getId() + "] couldn't be published as its published flag is already set ");
+//        if (baseNode.isPublished())
+//            throw new OtherObjectsException("baseNode " + baseNode.getJcrPath() + "[" + baseNode.getId() + "] couldn't be published as its published flag is already set ");
 
         if (this.cache != null)
             this.cache.put(new Element(baseNode.getJcrPath(), baseNode));
