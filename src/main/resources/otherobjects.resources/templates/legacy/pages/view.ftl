@@ -66,7 +66,10 @@ ${object.userName}
 <li class="divider"><a href="${oo.url('/otherobjects/workbench/history/${object.editableId}')}">View history</a></li>
 <li class="divider"><a href="${oo.url('/otherobjects/workbench/publish/${object.editableId}')}">Publish</a></li>
 </#if>
+<li class="divider"><a href="${oo.url('/otherobjects/workbench/copy/${object.editableId}')}">Make a copy</a></li>
 <li class="divider"><a href="${oo.url('/otherobjects/workbench/delete/${object.editableId}')}">Delete</a></li>
+
+<li class="divider"><a href="${oo.url('/otherobjects/debug/jcr?path=${object.jcrPath}')}">Debug</a></li>
 
 <#if item.linkPath??>
 <li class="divider"><a href="${oo.url(item.linkPath)}">Preview</a></li>
