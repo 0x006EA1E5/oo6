@@ -12,6 +12,7 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.Editable;
 import org.otherobjects.cms.tools.BeanTool;
@@ -50,6 +51,10 @@ public class ObjectXmlEncoder
         try
         {
             element.addAttribute("id", ((Editable) item).getEditableId());
+            
+            // FIXME Hacky hack
+            if(typeDef == null  && item instanceof DynaNode)
+                typeDef = ((BaseNode) item).getTypeDef();
             element.addAttribute("type", typeDef.getName());
             if(item instanceof BaseNode)
                 element.addAttribute("path", ((BaseNode)item).getJcrPath());
