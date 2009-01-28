@@ -29,7 +29,6 @@ import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.dao.PagedList;
 import org.otherobjects.cms.dao.PagedListImpl;
-import org.otherobjects.cms.events.PublishEvent;
 import org.otherobjects.cms.model.Audited;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.model.User;
@@ -219,7 +218,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         if (element == null)
         {
             T object = (T) jcrMappingTemplate.getObject(path);
-            if (object!=null && object.isPublished())
+            if (object != null && object.isPublished())
             {
                 // Only put published objects in the cache
                 element = new Element(path, object);
@@ -275,13 +274,66 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         }
     }
 
-    public void remove(String id)
+    public void remove(final String id)
     {
         String path = convertIdToPath(id);
         jcrMappingTemplate.remove(path);
         // FIXME Do we need these explicit saves? They break transcations?
         jcrMappingTemplate.save();
 
+        // Delete in live workspace too
+        jcrMappingTemplate.execute(new JcrMappingCallback()
+        {
+            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+            {
+                try
+                {
+                    Session liveSession = null;
+                    try
+                    {
+                        // get a live workspace session
+                        liveSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
+                        Node liveNode = liveSession.getNodeByUUID(id);
+                        liveNode.remove();
+                        liveSession.save();
+                    }
+                    finally
+                    {
+                        if (liveSession != null)
+                            liveSession.logout();
+                    }
+                    return null;
+                }
+                catch (Exception e)
+                {
+                    throw new JcrMappingException(e);
+                }
+            }
+        }, true);
+    }
+
+    @SuppressWarnings("unchecked")
+    public T copy(final String id, final String newPath)
+    {
+        return (T) jcrMappingTemplate.execute(new JcrMappingCallback()
+        {
+            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+            {
+                try
+                {
+                    Session session = manager.getSession();
+                    Node srcNode = session.getNodeByUUID(id);
+                    session.getWorkspace().copy(srcNode.getPath(), newPath);
+                    // FIXME Return new node: Node node = session.getRootNode().getNode(newPath);
+                    session.save();
+                    return null;
+                }
+                catch (Exception e)
+                {
+                    throw new JcrMappingException(e);
+                }
+            }
+        }, true);
     }
 
     public T rename(T object, String newPath)
@@ -438,6 +490,33 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
             //                return;
         }
 
+        // Update edited node. Must be done in separate transaction. See: 
+        jcrMappingTemplate.execute(new JcrMappingCallback()
+        {
+            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+            {
+                String jcrPath = baseNode.getJcrPath();
+                try
+                {
+                    // we got here so we successfully published
+                    updateAuditInfo(baseNode, message);
+                    saveInternal(baseNode, true); // set the status to published
+
+                    // create version and assign the current changeNumber as the label
+                    baseNode.setChangeNumber(baseNode.getChangeNumber() + 1);
+                    manager.checkin(jcrPath, new String[]{(baseNode.getChangeNumber()) + ""});
+                    manager.checkout(jcrPath);
+
+                    //applicationContext.publishEvent(new PublishEvent(this, baseNode));
+                }
+                catch (Exception e)
+                {
+                    throw new JcrMappingException(e);
+                }
+                return null;
+            }
+        }, true);
+
         jcrMappingTemplate.execute(new JcrMappingCallback()
         {
             public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
@@ -470,20 +549,9 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                         else
                         {
                             liveNode.update(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
-                            if(!baseNode.getJcrPath().equals(liveNode.getPath()))
+                            if (!baseNode.getJcrPath().equals(liveNode.getPath()))
                                 liveWorkspace.move(liveNode.getPath(), baseNode.getJcrPath());
                         }
-
-                        // we got here so we successfully published
-                        updateAuditInfo(baseNode, message);
-                        saveInternal(baseNode, true); // set the status to published
-
-                        // create version and assign the current changeNumber as the label
-                        baseNode.setChangeNumber(baseNode.getChangeNumber() + 1);
-                        manager.checkin(jcrPath, new String[]{(baseNode.getChangeNumber()) + ""});
-                        manager.checkout(jcrPath);
-
-                        applicationContext.publishEvent(new PublishEvent(this, baseNode));
                     }
                     finally
                     {
@@ -498,6 +566,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                 }
             }
         }, true);
+
     }
 
     private void updateAuditInfo(T baseNode, String comment)
@@ -703,7 +772,14 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                     while (nodeIterator.hasNext())
                     {
                         Node nextNode = nodeIterator.nextNode();
-                        results.add((T) manager.getObjectByUuid(nextNode.getUUID()));
+                        try
+                        {
+                            results.add((T) manager.getObjectByUuid(nextNode.getUUID()));
+                        }
+                        catch (Exception e)
+                        {
+                            logger.warn("Could not export: " + nextNode.getPath());
+                        }
                     }
 
                     if (selector != null)
