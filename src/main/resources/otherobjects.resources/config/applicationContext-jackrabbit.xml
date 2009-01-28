@@ -30,7 +30,8 @@
 		<property name="transactionManager" ref="jcrTransactionManager" />
 		<property name="transactionAttributes">
 			<props>
-				<prop key="*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+				<prop key="publish">PROPAGATION_NOT_SUPPORTED</prop>
 			</props>
 		</property>
 	</bean>
