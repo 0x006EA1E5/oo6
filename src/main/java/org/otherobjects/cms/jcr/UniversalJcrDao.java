@@ -13,4 +13,5 @@ public interface UniversalJcrDao extends GenericJcrDao<BaseNode>
     List<BaseNode> getByPathAndType(String path, String type);
     
     BaseNode create(String type);
+    BaseNode copy(String id, String newPath);
 }
