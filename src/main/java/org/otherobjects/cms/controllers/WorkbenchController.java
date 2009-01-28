@@ -379,7 +379,7 @@ public class WorkbenchController
     @RequestMapping({"/workbench/delete/*"})
     public ModelAndView delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        // FIXME Need to publish this delete too.
+        // FIXME Need new delete concept eg trash. Publishing?
         String id = RequestUtils.getId(request);
         FolderDao folderDao = (FolderDao) this.daoService.getDao(Folder.class);
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
@@ -390,6 +390,22 @@ public class WorkbenchController
         ActionUtils actionUtils = new ActionUtils(request, response, null, null);
         actionUtils.flashInfo("Your object was deleted.");
 
+        SiteFolder folder = (SiteFolder) folderDao.getByPath(item.getPath());
+        Url u = new Url("/otherobjects/workbench/list/" + folder.getId());
+        response.sendRedirect(u.toString());
+        return null;
+    }
+
+    @RequestMapping({"/workbench/copy/*"})
+    public ModelAndView copy(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        String id = RequestUtils.getId(request);
+        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
+        FolderDao folderDao = (FolderDao) this.daoService.getDao(Folder.class);
+        
+        BaseNode item = universalJcrDao.get(id);
+        universalJcrDao.copy(id, item.getJcrPath()+"-copy");
+        
         SiteFolder folder = (SiteFolder) folderDao.getByPath(item.getPath());
         Url u = new Url("/otherobjects/workbench/list/" + folder.getId());
         response.sendRedirect(u.toString());
