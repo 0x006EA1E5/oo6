@@ -174,7 +174,7 @@ public class NavigationServiceImpl implements NavigationService
         // FIXME Temp hack
         //if (this.tree == null)
         long now = Calendar.getInstance().getTimeInMillis();
-        if (Calendar.getInstance().getTimeInMillis() - lastBuildTime < 200 * 60 * 1000) // Cache for 2 minutes
+        if (Calendar.getInstance().getTimeInMillis() - lastBuildTime < 5 * 60 * 1000) // Cache for 2 minutes
         {
             return;
         }
@@ -261,7 +261,7 @@ public class NavigationServiceImpl implements NavigationService
     {
         // FIXME Need folder indicator
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
-        return universalJcrDao.getAllByJcrExpression("/jcr:root/site//element(*) [jcr:like(@ooType,'%Folder') or data/publishingOptions/@showInNavigation='true']");
+        return universalJcrDao.getAllByJcrExpression("/jcr:root/site//element(*) [(jcr:like(@ooType,'%Folder') and @inMenu='true') or data/publishingOptions/@showInNavigation='true']");
     }
 
     public void setDaoService(DaoService daoService)
