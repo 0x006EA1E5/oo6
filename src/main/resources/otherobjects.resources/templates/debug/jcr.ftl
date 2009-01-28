@@ -1,5 +1,10 @@
 <#import "/oo.ftl" as oo/>
 
+<style>
+.live LI {color:green;}
+.edit LI {color:red;}
+</style>
+
 <script type="text/javascript" src="http://cdn.othermedia.com/ojay-yui/2.4.1.js"></script>
 <script type="text/javascript" src="http://cdn.othermedia.com/ojay/0.1.2/all-min.js"></script>
 
@@ -14,11 +19,12 @@ and/or Type: <input style="width:300px;" type="text" name="type" value="${type!}
 <input name="submit" type="submit" value="Search"/>
 <input name="export" type="submit" value="Export"/>
 </form>
+
 Live workspace:<br/>
-${liveNodesHtml}
+<div class="live">${liveNodesHtml}</div>
 
 Edit workspace: <br/>
-${editNodesHtml!}
+<div class="edit">${editNodesHtml}</div>
 
 <script>
 $('.properties-area').setStyle({display:'none'}).insert(' <a class="view" href="javascript:void;">[View]</a>', 'before');
