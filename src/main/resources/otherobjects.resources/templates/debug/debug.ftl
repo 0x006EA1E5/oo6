@@ -188,7 +188,7 @@ A.button {background: #cccccc; padding:3px; color:#000000;}
 <#if feedList?has_content>
 <table>
 	<#list syndicationFeedTool.getFeeds() as feed>
- 	<tr><td class="label">${feed.label} (${feed.feedMimeType})</td><td class="info"><a href="${oo.url(feed.ooUrlPath)}">${oo.url(feed.ooUrlPath)}</a> [<a href="http://feedvalidator.org/check.cgi?url=?url=${urlTool.getAbsoluteUrl(feed.ooUrlPath)}" target="_blank">Validate</a>] <#if feed.ooUrlPath != feed.feedUrl>[<a href="${feed.feedUrl}">Feed URL</a>]</#if></td></tr>
+ 	<tr><td class="label">${feed.label} (${feed.feedMimeType})</td><td class="info"><a href="${oo.url(feed.ooUrlPath)}">${oo.url(feed.ooUrlPath)}</a> [<a href="http://feedvalidator.org/check.cgi?url=${urlTool.getAbsoluteUrl(feed.ooUrlPath)}" target="_blank">Validate</a>] <#if feed.ooUrlPath != feed.feedUrl>[<a href="${feed.feedUrl}">Feed URL</a>]</#if></td></tr>
 	</#list>
 </table>
 <#else>
@@ -197,11 +197,7 @@ A.button {background: #cccccc; padding:3px; color:#000000;}
 
 
 
-
-
 <h2>Cache Stats</h2>
-
-
 
 <table id="caches">
 <tr>
@@ -230,13 +226,8 @@ A.button {background: #cccccc; padding:3px; color:#000000;}
 </table>
 
 
-
-
-
-
 </div>
 </div>
-
 
 </body>
 </html>
