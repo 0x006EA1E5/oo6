@@ -33,6 +33,7 @@ public class NavigationServiceImplTest extends TestCase
         TreeNode tree = treeBuilder.buildTree(flat, new TreeNode("/"));
 
         this.navigationService = new NavigationServiceImpl();
+        this.navigationService.testMode = true;
         this.navigationService.tree = tree;
     }
 

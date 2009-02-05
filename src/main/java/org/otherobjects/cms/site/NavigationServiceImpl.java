@@ -33,6 +33,7 @@ public class NavigationServiceImpl implements NavigationService
 
     protected TreeNode tree;
     protected List<TreeNode> nodes;
+    protected boolean testMode;
 
     public NavigationServiceImpl()
     {
@@ -171,6 +172,9 @@ public class NavigationServiceImpl implements NavigationService
      */
     private synchronized void buildTree()
     {
+        if(testMode) 
+            return;
+        
         // FIXME Temp hack
         //if (this.tree == null)
         long now = Calendar.getInstance().getTimeInMillis();
