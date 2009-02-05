@@ -6,18 +6,13 @@
 
 <div class="oo-content">
 
-
 <#--
 <p>Drag this link: 
 <a href="javascript:location.href='http://del.icio.us/post?v=4;url='+encodeURIComponent(location.href)+';title='+encodeURIComponent(document.title.replace(/^\s*|\s*$/g,''))" 
 title="post to del.icio.us" onclick="window.alert('Drag this link to your bookmarks bar, or right-click it and choose Add Link to Bookmarks...');return false;"
 class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
--->
 
 <h2>My items in progress</h2>
-
-<#-- freemarker automatically wraps results which means our PagedList isn't usable from freemarker -->
-<#-- need to include current user in where criteria -->
 
 <#assign edits = daoTool.get("baseNode").pageByJcrExpression("/jcr:root/site//(*, oo:node) [@published = 'false' and not(jcr:like(@ooType,'%MetaData'))] order by @modificationTimestamp descending",10,1) >
 
@@ -29,7 +24,7 @@ class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
 </ul>
 
 
-<#--
+#--
 <div class="welcome-block">
 <h1>Bookmarklets</h1>
 <p>Drag this link: 
@@ -37,7 +32,7 @@ class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
 title="post to del.icio.us" onclick="window.alert('Drag this link to your bookmarks bar, or right-click it and choose Add Link to Bookmarks...');return false;"
 class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
 </div>
--->
+--
 
 <h2>What happened recently</h2>
 <p>Here are the last few changes to pages across the site:</p>
@@ -48,6 +43,7 @@ class="bookmarklet">Add to OTHERobjects</a> up to your Bookmarks Toolbar.</p>
     <small>at {change.modificationTimestamp?date} by ${change.userName!}</small></li>
 </#list>
 </ul>
+-->
 
 </div>
 
