@@ -7,7 +7,7 @@
 
     <subtitle>Developer Guide</subtitle>
 
-    <releaseinfo>0.6 Draft</releaseinfo>
+    <releaseinfo>0.6 Pre-release</releaseinfo>
   </bookinfo>
 
   <toc></toc>
@@ -15,17 +15,22 @@
   <part>
     <title>Building your site</title>
 
+    <partintro>
+      <para>This part details what you need to know to build a basic content
+      managed site. You will not need any Java knowedge or a Java IDE.</para>
+    </partintro>
+
     <chapter id="chapter-using-the-framework">
       <title>Getting started</title>
 
-      <para>TODO Setting up admin user (for more info see Users and
-      permissions chapter).</para>
+      <para>This chapter will explain how to get OTHERobjects running on your
+      system so that you can start to build you site.</para>
 
       <section>
         <title>Installing required software</title>
 
         <para>There is some key software that you will need before you can
-        start developing with OTHERobjects.</para>
+        start building your site.</para>
 
         <section>
           <title>Java</title>
@@ -41,14 +46,21 @@ java version "1.5.0_07" Java(TM) 2 Runtime Environment, Standard Edition (build 
 iMac:~ rich$
 </programlisting>
 
-          <para>You will need version 1.5.0 or greater.</para>
+          <para>You will need version 1.5.0 or greater but 1.6.0 of greater is
+          recommended.</para>
         </section>
 
         <section>
           <title>Apache Maven</title>
 
-          <para>We use Maven behing the scenes to download dependecies, run
-          the development server and to backage up your site ready for
+          <note>
+            <para>Maven is the build manager for OTHERobjects. Although
+            currently a requirement for basic site build we hope to remove
+            this dependency in the near future.</para>
+          </note>
+
+          <para>We use Maven behing the scenes to download dependencies, run
+          the development server and to prepare your site ready for
           deployment. You'll need Apache Maven version 2.0.9 or greater. You
           can download it from:
           <uri>http://maven.apache.org/download.html</uri> . Once you have
@@ -69,13 +81,24 @@ iMac:~ rich$
       <section>
         <title>Installing OTHERobjects</title>
 
-        <para>Download from http://www.otherobjects.org/download/</para>
+        <note>
+          <para>By 0.6 we will have a downloadable version that will simplify
+          this process and not require svn.</para>
+        </note>
 
-        <para>Unzip the file somewhere on your system.</para>
+        <para>Check out the project from SVN:</para>
 
-        <para>Set the OTHEROBJECTS_HOME environment variable.</para>
+        <programlisting>iMac:~ rich$ <emphasis role="bold">svn checkout svn+ssh://svn.otherobjects.org/data/svn/repos-ng/otherobjects/trunk otherobjects
+</emphasis></programlisting>
 
-        <para>Add $OTHEROBJECTS_HOME/bin to your path.</para>
+        <para>Set the OTHEROBJECTS_HOME environment variable in your .profile
+        or .bash_profile file and add the bin directory to your path.</para>
+
+        <programlisting>iMac:~ rich$ <emphasis role="bold">cat &gt;&gt; .profile
+export OTHEROBJECTS_HOME</emphasis><emphasis role="bold">=/Developer/otherobjects
+export PATH=$OTHEROBJECTS_HOME/bin:$PATH</emphasis>
+iMac:~ rich$
+</programlisting>
 
         <section>
           <title>Creating your first site</title>
@@ -88,7 +111,13 @@ iMac:~ rich$
 
           <programlisting>
 iMac:mysite rich$ <emphasis role="bold">oo version</emphasis>
-OTHERObjects CMS v0.5-SNAPSHOT Maven version: 2.0.9 Java version: 1.5.0_13 OS name: "mac os x" version: "10.5.3" arch: "i386" Family: "unix" 
+
+OTHERObjects CMS v0.6 Pre-release
+
+Maven version: 2.0.9
+Java version: 1.5.0_13 
+OS name: "mac os x" version: "10.5.3" arch: "i386" Family: "unix" 
+
 iMac:mysite rich$</programlisting>
 
           <para>If you get any errors check the required software has been
@@ -97,7 +126,7 @@ iMac:mysite rich$</programlisting>
           <para>Now go ahead and create your first site:</para>
 
           <para><programlisting>
-iMac:mysite rich$<emphasis role="bold"> oo create demo</emphasis>
+iMac:mysite rich$<emphasis role="bold"> oo create mysite</emphasis>
 
 ...
 
@@ -105,62 +134,141 @@ Your new site has been created. To start it up type: cd oo2 oo run
 
 iMac:mysite rich$</programlisting></para>
 
-          <para>Finally (as told by the create task) change into your new
-          directory and type <emphasis role="bold">oo run</emphasis> . The
-          server will start and you should get this:</para>
+          <para>Finally change into your new directory and type <emphasis
+          role="bold">oo run</emphasis> . The server will start and you should
+          get this:</para>
 
-          <programlisting>INFO [o.o.cms.util.StartupMessage] **************************************************************
-INFO [o.o.cms.util.StartupMessage] **************************************************************
-INFO [o.o.cms.util.StartupMessage]  ___ _____ _ _ _____ ____ _ _ _ 
-INFO [o.o.cms.util.StartupMessage] / _ \_ _| | | | ____| _ \ ___| |__ (_) ___ ___| |_ ___ 
-INFO [o.o.cms.util.StartupMessage] | | | || | | |_| | _| | |_) / _ \| '_ \| |/ _ \/ __| __/ __| 
-INFO [o.o.cms.util.StartupMessage] | |_| || | | _ | |___| _ &lt; (_) | |_) | |  __/ (__| |_\__ \ 
-INFO [o.o.cms.util.StartupMessage]  \___/ |_| |_| |_|_____|_| \_\___/|_.__// |\___|\___|\__|___/ 
-INFO [o.o.cms.util.StartupMessage]                                       |__/                 
-INFO [o.o.cms.util.StartupMessage]  
-INFO [o.o.cms.util.StartupMessage] ******************* Started up successfully ****************** 
-INFO [o.o.cms.util.StartupMessage]  
-INFO [o.o.cms.util.StartupMessage] Environment : dev 
-INFO [o.o.cms.util.StartupMessage] Site        : [unknown] 
-INFO [o.o.cms.util.StartupMessage] Admin       : [unknown] 
-INFO [o.o.cms.util.StartupMessage]  
-INFO [o.o.cms.util.StartupMessage] ************************************************************** 
-INFO [o.o.cms.util.StartupMessage] ************************************************************** 
+          <programlisting>INFO  [o.o.cms.util.StartupMessage] ************************************************************** 
+INFO  [o.o.cms.util.StartupMessage] ************************************************************** 
+INFO  [o.o.cms.util.StartupMessage]   ___ _____ _   _ _____ ____       _     _           _        
+INFO  [o.o.cms.util.StartupMessage]  / _ \_   _| | | | ____|  _ \ ___ | |__ (_) ___  ___| |_ ___  
+INFO  [o.o.cms.util.StartupMessage] | | | || | | |_| |  _| | |_) / _ \| '_ \| |/ _ \/ __| __/ __| 
+INFO  [o.o.cms.util.StartupMessage] | |_| || | |  _  | |___|  _ &lt; (_) | |_) | |  __/ (__| |_\__ \ 
+INFO  [o.o.cms.util.StartupMessage]  \___/ |_| |_| |_|_____|_| \_\___/|_.__// |\___|\___|\__|___/ 
+INFO  [o.o.cms.util.StartupMessage]                                       |__/                 
+INFO  [o.o.cms.util.StartupMessage]  
+INFO  [o.o.cms.util.StartupMessage] ************************************************************** 
+INFO  [o.o.cms.util.StartupMessage]  
+INFO  [o.o.cms.util.StartupMessage] Version      : 0.5.10-SNAPSHOT 
+INFO  [o.o.cms.util.StartupMessage] Environment  : dev 
+INFO  [o.o.cms.util.StartupMessage] Private data : data/private/ 
+INFO  [o.o.cms.util.StartupMessage] Public data  : data/public/ 
+INFO  [o.o.cms.util.StartupMessage]  
+INFO  [o.o.cms.util.StartupMessage] Please visit /otherobjects/setup to configure admin user 
+INFO  [o.o.cms.util.StartupMessage] Temporary admin password: rp2xu3 
+INFO  [o.o.cms.util.StartupMessage]  
+INFO  [o.o.cms.util.StartupMessage] ************************************************************** 
+INFO  [o.o.cms.util.StartupMessage] ************************************************************** 
 </programlisting>
 
           <para>Congratulations! Your site has started up correctly and you
-          can now go to http://localhost:8080/ to see your first page.</para>
+          can now go to <emphasis
+          role="bold">http://localhost:8080/</emphasis> to see the home page
+          of your site. You can stop the site at any time with <emphasis
+          role="bold">Ctrl-C</emphasis>.</para>
+        </section>
+
+        <section>
+          <title>Configuration</title>
+
+          <para>The site should work without any configuration but you may
+          want to check or change some settings. You can do this in the master
+          configuration file
+          src/main/resources/otherobjects.properties.</para>
+
+          <para>In particular you should check the mail server address
+          (otherobjects.mail.server), default site domain (site.server.name)
+          and the path to imagemagick
+          (otherobjects.imagemagick.bin.path).</para>
+
+          <para>By default the site runs with an embedded content repository
+          and database. If you are builing anything other than a very simple
+          site you will probably want to change to using a more powerful
+          database. See the Hosting part for more information.</para>
+        </section>
+
+        <section>
+          <title>Setting up the admin user</title>
+
+          <para>On first startup an admin user with full privileges is
+          created. To keep your new site secure this user is given a random
+          password which is printed in the startup message. You should go to
+          <emphasis
+          role="bold">http://localhost:8080/otherobjects/setup</emphasis> to
+          change the password and to configure the email address for the admin
+          user. Until you have done this a new admin password will be created
+          each time the site starts.</para>
         </section>
       </section>
     </chapter>
 
     <chapter>
-      <title>Where does the data go?</title>
+      <title>Where things go</title>
 
       <para>Before starting to build your site it important to understand the
       different data stores. You will want to back up your data and move it
       between servers so it's essential to know how and where it is
       stored.</para>
 
-      <para>Database:</para>
+      <para><table>
+          <title></title>
 
-      <para>JCR:</para>
+          <tgroup cols="3">
+            <tbody>
+              <row>
+                <entry>Site data</entry>
 
-      <para>Uploaded images etc:</para>
+                <entry>Articles, page information etc are stored in the Java
+                Content Repository.</entry>
 
-      <para>Templates/assets:</para>
+                <entry>/data/private/jcr</entry>
+              </row>
 
-      <para></para>
+              <row>
+                <entry>User data</entry>
 
-      <para>OTHERobjects sites use Maven under the hood to manage a variety of
-      build functions. The standard maven directory layout
+                <entry>Users, privilges, comments etc are stored in an
+                embedded database.</entry>
+
+                <entry>/data/private/db</entry>
+              </row>
+
+              <row>
+                <entry>Uploaded files</entry>
+
+                <entry>Images, media, documents are stored in the file
+                system</entry>
+
+                <entry>/webapp/public-data/</entry>
+              </row>
+
+              <row>
+                <entry>Site code</entry>
+
+                <entry>Config files, templates and other code that you write
+                are stored in several places. You will usually want to store
+                this in a SCM system.</entry>
+
+                <entry>/ (except folders above, /target and
+                /WEB-INF/libs)</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>OTHERobjects sites use Maven under the hood to manage a
+      variety of build functions. The standard maven directory layout
       (http://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html)
       is quite deep and unnecessray for most OO projects. Our standard layout
       is described below:.</para>
 
       <para></para>
 
-      <para></para>
+      <para>./src ./src/main ./src/main/resources ./target ./target/classes
+      ./target/work ./target/work/jsp ./webapp ./webapp/META-INF
+      ./webapp/public-data ./webapp/static ./webapp/static/css
+      ./webapp/static/graphics ./webapp/static/js ./webapp/WEB-INF
+      ./webapp/WEB-INF/actions ./webapp/WEB-INF/templates
+      ./webapp/WEB-INF/templates/blocks ./webapp/WEB-INF/templates/layouts
+      ./webapp/WEB-INF/templates/pages </para>
 
       <para>As you build you site you will be adding all sorts of code and
       data. It is obviously important to keep this safe.</para>
@@ -192,13 +300,17 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
     </chapter>
 
     <chapter id="chapter-overview-of-steps">
-      <title>Overview of steps involved to build a site</title>
+      <title>Site walkthrough</title>
 
       <para>There are a couple of steps that you will need to go through each
       tme you build a site with OTHERobjects. We will very briefly go over
       these here to give you an idea of what's involved.</para>
 
       <itemizedlist>
+        <listitem>
+          <para>Setup data paths</para>
+        </listitem>
+
         <listitem>
           <para>First you will need to think about the various different types
           (or objects if you are coming from a programming background) you
@@ -509,6 +621,16 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
       Current Resource Object Current User Current Folder</para>
 
       <section>
+        <title>Layouts</title>
+
+        <para>Must include</para>
+
+        <para>oo-hud</para>
+
+        <para>oo-flash</para>
+      </section>
+
+      <section>
         <title>Standard data</title>
 
         <para>resourceObject (via SiteController only)</para>
@@ -562,7 +684,7 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
       </section>
 
       <section>
-        <title>Acesssing parameters, session and cookie data</title>
+        <title>Accesssing parameters, session and cookie data</title>
 
         <para>${RequestParameters.pageNo}</para>
 
@@ -597,7 +719,7 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
       </section>
 
       <section>
-        <title>Security</title>
+        <title>Security &amp; XSS</title>
 
         <para>Show current user details: security.user</para>
 
@@ -611,21 +733,11 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
       </section>
 
       <section>
-        <title>XSS</title>
+        <title>XSS - KILL</title>
 
         <para>ALways use ?html on strings from user input.</para>
 
         <para>Working on a way for this to happen automatically.</para>
-      </section>
-
-      <section>
-        <title>Layouts</title>
-
-        <para>Must include</para>
-
-        <para>oo-hud</para>
-
-        <para>oo-flash</para>
       </section>
 
       <section>
@@ -969,86 +1081,6 @@ INFO [o.o.cms.util.StartupMessage] *********************************************
       <para>Images and links</para>
 
       <para>Navigation</para>
-    </chapter>
-
-    <chapter>
-      <title>Writing tests</title>
-
-      <para>A stable and high-quality website requires thorough testing. All
-      too often this testing is on the form "Does this page look sort of
-      right?" or "Well It worked for me when I built it so it's OK to go
-      live". Whilst this approach will work for very simple sites, as soon as
-      the complexity increases there just isn't time to look at every page and
-      try every action manually after each change. This in where automated
-      testing comes in.</para>
-
-      <para>People who are new to testing often bemoan the amount of time they
-      spend writing tests, especially at first when the tools and techniques
-      are new and need to be mastered. This, however, is a small price to pay
-      to reduce the time spent debugging and fixing broken code. And as the
-      testign techniques become more familiar the tests become correspondingly
-      easier to write.</para>
-
-      <section>
-        <title>What needs testing</title>
-
-        <para>In a word: everything.</para>
-      </section>
-
-      <section>
-        <title>Testing scripts</title>
-
-        <para></para>
-      </section>
-
-      <section>
-        <title>Testing templates</title>
-
-        <para></para>
-      </section>
-
-      <section>
-        <title>Functional testing</title>
-
-        <para></para>
-      </section>
-    </chapter>
-
-    <chapter>
-      <title>Improving performance</title>
-
-      <para>OTHERobjects uses caching at several levels to keep your site
-      peforming well even under heavy loads. However, it is important to
-      understand how the caching works in order to get the best performance
-      out of it.</para>
-
-      <section>
-        <title>Understanding caching</title>
-
-        <para></para>
-      </section>
-
-      <section>
-        <title>Monitoring page performance</title>
-
-        <para>To view the performance characteristics of a page press the
-        Escape key. A dialog will appear showing the major events that occured
-        whilst building the page and how long they took.</para>
-
-        <figure>
-          <title>Performance statistics dialog. Press Escape to show.</title>
-
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/performance-stats-dialog.png"
-                         scale="50" />
-            </imageobject>
-          </mediaobject>
-        </figure>
-
-        <para>TODO Warning indicator on pages with heavy loads eg &gt; 100
-        calls, or &gt; 5 seconds.</para>
-      </section>
     </chapter>
 
     <chapter>
@@ -2020,6 +2052,43 @@ ${datevar?date}</programlisting>
     </chapter>
 
     <chapter>
+      <title>Improving performance</title>
+
+      <para>OTHERobjects uses caching at several levels to keep your site
+      peforming well even under heavy loads. However, it is important to
+      understand how the caching works in order to get the best performance
+      out of it.</para>
+
+      <section>
+        <title>Understanding caching</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Monitoring page performance</title>
+
+        <para>To view the performance characteristics of a page press the
+        Escape key. A dialog will appear showing the major events that occured
+        whilst building the page and how long they took.</para>
+
+        <figure>
+          <title>Performance statistics dialog. Press Escape to show.</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/performance-stats-dialog.png"
+                         scale="50" />
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>TODO Warning indicator on pages with heavy loads eg &gt; 100
+        calls, or &gt; 5 seconds.</para>
+      </section>
+    </chapter>
+
+    <chapter>
       <title>Testing</title>
 
       <para>This extends the testing discussion in the Site Designer
@@ -2084,6 +2153,49 @@ ${datevar?date}</programlisting>
         <title>Writing tests</title>
 
         <para>http://unitils.sourceforge.net/spring_article.html</para>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Writing tests</title>
+
+      <para>A stable and high-quality website requires thorough testing. All
+      too often this testing is on the form "Does this page look sort of
+      right?" or "Well It worked for me when I built it so it's OK to go
+      live". Whilst this approach will work for very simple sites, as soon as
+      the complexity increases there just isn't time to look at every page and
+      try every action manually after each change. This in where automated
+      testing comes in.</para>
+
+      <para>People who are new to testing often bemoan the amount of time they
+      spend writing tests, especially at first when the tools and techniques
+      are new and need to be mastered. This, however, is a small price to pay
+      to reduce the time spent debugging and fixing broken code. And as the
+      testign techniques become more familiar the tests become correspondingly
+      easier to write.</para>
+
+      <section>
+        <title>What needs testing</title>
+
+        <para>In a word: everything.</para>
+      </section>
+
+      <section>
+        <title>Testing scripts</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Testing templates</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Functional testing</title>
+
+        <para></para>
       </section>
     </chapter>
 
