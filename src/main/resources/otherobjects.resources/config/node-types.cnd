@@ -11,3 +11,16 @@ orderable
 - * (UNDEFINED)
 - * (UNDEFINED) multiple
 + * = oo:node
+
+[oo:component] > nt:base
+orderable
+- * (UNDEFINED)
+- * (UNDEFINED) multiple
++ * = oo:component
+
+[oo:dynadata] > nt:base
+orderable
+- * (UNDEFINED)
+- * (UNDEFINED) multiple
++ * = oo:component
+
