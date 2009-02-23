@@ -60,7 +60,8 @@
 				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
 				<property name="typeService" ref="typeService" />
 				<property name="sessionFactory" ref="jcrSessionFactory" />
-				<property name="validator" ref="typeDefConfiguredValidator" />
+				<!-- FIXME Temp disabled for testing <property name="validator" ref="typeDefConfiguredValidator" /> -->
+				
 				<property name="cacheManager" ref="cacheManager" />
 			</bean>
 		</property>
