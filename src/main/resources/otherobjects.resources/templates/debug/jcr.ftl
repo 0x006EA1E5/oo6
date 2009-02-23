@@ -24,8 +24,11 @@ Live workspace:<br/>
 <div class="live">${liveNodesHtml}</div>
 
 Edit workspace: <br/>
+<#if editNodesHtml??>
 <div class="edit">${editNodesHtml}</div>
-
+<#else>
+<p>You are not an editor so you can not see the edit workspace.</p> 
+</#if>
 <script>
 $('.properties-area').setStyle({display:'none'}).insert(' <a class="view" href="javascript:void;">[View]</a>', 'before');
 $('.view').on('click').siblings().setStyle({display: 'block'});
@@ -34,5 +37,6 @@ $('.view').on('click').siblings().setStyle({display: 'block'});
 <hr>
 
 <p><a href="${oo.url("/otherobjects/debug/import")}">Import</a></p>
+
 
 
