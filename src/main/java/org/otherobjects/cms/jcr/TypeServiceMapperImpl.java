@@ -34,6 +34,8 @@ import org.apache.jackrabbit.ocm.mapper.model.FieldDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.MappingDescriptor;
 import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.jcr.dynamic.DynaNodeDataMapConverterImpl;
+import org.otherobjects.cms.model.MetaData;
+import org.otherobjects.cms.model.PublishingOptions;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
@@ -119,7 +121,11 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
     {
         ClassDescriptor cd = new ClassDescriptor();
         cd.setClassName(typeDef.getClassName());
-        cd.setJcrType("oo:node");
+
+        if (typeDef.getName().equals(MetaData.class.getName()) || typeDef.getName().equals(PublishingOptions.class.getName()))
+            cd.setJcrType("oo:component");
+        else
+            cd.setJcrType("oo:node");
 
         addStandardFields(cd);
 
@@ -172,14 +178,15 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
                     BeanDescriptor bd = new BeanDescriptor();
                     bd.setFieldName(propDef.getName());
                     bd.setJcrName(propDef.getName());
+                    bd.setDefaultPrimaryType("oo:component");
                     bd.setConverter(DefaultBeanConverterImpl.class.getName());
                     cd.addBeanDescriptor(bd);
                 }
                 else if (propertyType.equals(PropertyDef.REFERENCE))
                 {
                     Assert
-                    .isTrue(StringUtils.isNotEmpty(propDef.getRelatedType()), "If this property is a reference the relatedType needs to have been set: " + typeDef.getName() + "."
-                            + propertyName);
+                            .isTrue(StringUtils.isNotEmpty(propDef.getRelatedType()), "If this property is a reference the relatedType needs to have been set: " + typeDef.getName() + "."
+                                    + propertyName);
                     BeanDescriptor bd = new BeanDescriptor();
                     bd.setFieldName(propDef.getName());
                     bd.setJcrName(propDef.getName());
@@ -206,16 +213,24 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
     private void addStandardFields(ClassDescriptor cd)
     {
         // Add standard properties
-        FieldDescriptor fd = new FieldDescriptor();
-        fd.setFieldName("id");
-        fd.setJcrName("id");
-        fd.setUuid(true);
-        cd.addFieldDescriptor(fd);
+
+        // FIXME This is used for collections. Is there a better way?
+        FieldDescriptor fd5 = new FieldDescriptor();
+        fd5.setFieldName("code");
+        fd5.setJcrName("code");
+        if (!cd.getJcrType().equals("oo:component"))
+        {
+            fd5.setId(true);
+        }
+        cd.addFieldDescriptor(fd5);
 
         FieldDescriptor fd2 = new FieldDescriptor();
         fd2.setFieldName("jcrPath");
         fd2.setJcrName("jcrPath");
-        fd2.setPath(true);
+        if (!cd.getJcrType().equals("oo:component"))
+        {
+            fd2.setPath(true);
+        }
         cd.addFieldDescriptor(fd2);
 
         FieldDescriptor fd3 = new FieldDescriptor();
@@ -228,48 +243,51 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         fd4.setJcrName("ooType");
         cd.addFieldDescriptor(fd4);
 
-        // FIXME This is used for collections. Is there a better way?
-        FieldDescriptor fd5 = new FieldDescriptor();
-        fd5.setFieldName("code");
-        fd5.setJcrName("code");
-        fd5.setId(true);
-        cd.addFieldDescriptor(fd5);
+        if (!cd.getJcrType().equals("oo:component"))
+        {
+            FieldDescriptor fd = new FieldDescriptor();
+            fd.setFieldName("id");
+            fd.setJcrName("id");
+            fd.setUuid(true);
+            cd.addFieldDescriptor(fd);
 
-        FieldDescriptor fd6 = new FieldDescriptor();
-        fd6.setFieldName("published");
-        fd6.setJcrName("published");
-        cd.addFieldDescriptor(fd6);
+            FieldDescriptor fd6 = new FieldDescriptor();
+            fd6.setFieldName("published");
+            fd6.setJcrName("published");
+            cd.addFieldDescriptor(fd6);
 
-        // Audit info
-        FieldDescriptor fd7 = new FieldDescriptor();
-        fd7.setFieldName("userName");
-        fd7.setJcrName("userName");
-        cd.addFieldDescriptor(fd7);
+            // Audit info
+            FieldDescriptor fd7 = new FieldDescriptor();
+            fd7.setFieldName("userName");
+            fd7.setJcrName("userName");
+            cd.addFieldDescriptor(fd7);
 
-        FieldDescriptor fd8 = new FieldDescriptor();
-        fd8.setFieldName("userId");
-        fd8.setJcrName("userId");
-        cd.addFieldDescriptor(fd8);
-        
-        FieldDescriptor fd9 = new FieldDescriptor();
-        fd9.setFieldName("modificationTimestamp");
-        fd9.setJcrName("modificationTimestamp");
-        cd.addFieldDescriptor(fd9);
+            FieldDescriptor fd8 = new FieldDescriptor();
+            fd8.setFieldName("userId");
+            fd8.setJcrName("userId");
+            cd.addFieldDescriptor(fd8);
 
-        FieldDescriptor fd12 = new FieldDescriptor();
-        fd12.setFieldName("creationTimestamp");
-        fd12.setJcrName("creationTimestamp");
-        cd.addFieldDescriptor(fd12);
+            FieldDescriptor fd9 = new FieldDescriptor();
+            fd9.setFieldName("modificationTimestamp");
+            fd9.setJcrName("modificationTimestamp");
+            cd.addFieldDescriptor(fd9);
 
-        FieldDescriptor fd10 = new FieldDescriptor();
-        fd10.setFieldName("comment");
-        fd10.setJcrName("comment");
-        cd.addFieldDescriptor(fd10);
+            FieldDescriptor fd12 = new FieldDescriptor();
+            fd12.setFieldName("creationTimestamp");
+            fd12.setJcrName("creationTimestamp");
+            cd.addFieldDescriptor(fd12);
 
-        FieldDescriptor fd11 = new FieldDescriptor();
-        fd11.setFieldName("changeNumber");
-        fd11.setJcrName("changeNumber");
-        cd.addFieldDescriptor(fd11);
+            FieldDescriptor fd10 = new FieldDescriptor();
+            fd10.setFieldName("comment");
+            fd10.setJcrName("comment");
+            cd.addFieldDescriptor(fd10);
+
+            FieldDescriptor fd11 = new FieldDescriptor();
+            fd11.setFieldName("changeNumber");
+            fd11.setJcrName("changeNumber");
+            cd.addFieldDescriptor(fd11);
+
+        }
     }
 
     /**
