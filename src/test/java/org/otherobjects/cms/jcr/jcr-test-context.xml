@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+	<bean id="annotatedClassesScanner" class="org.otherobjects.cms.discovery.AnnotatedClassesScannerImpl" />
+
+	<!-- For properties -->
+	<bean id="otherObjectsConfigurator" class="org.otherobjects.cms.test.TestOtherObjectsConfigurator">
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath:otherobjects.resources/config/otherobjects.properties</value>
+			</list>
+		</property>
+	</bean>
+	<!--
+		<bean id="resourceCleaner" class="org.otherobjects.cms.test.ResourceCleaner" init-method="cleanup"> <property name="resource" value="file:./target/data"></property> </bean>
+	-->
+	<bean id="repository" class="org.springmodules.jcr.jackrabbit.TransientRepositoryFactoryBean">
+		<property name="configuration" value="${jcr.config.path}" />
+		<property name="homeDir" value="${jcr.repository.location}" />
+	</bean>
+	<bean id="jcrSessionFactory" class="org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory">
+		<property name="repository" ref="repository" />
+		<property name="credentials">
+			<bean class="javax.jcr.SimpleCredentials">
+				<constructor-arg index="0" value="${jcr.username}" />
+				<constructor-arg index="1">
+					<bean factory-bean="password" factory-method="toCharArray" />
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	<bean name="typeService" class="org.otherobjects.cms.types.TypeServiceImpl">
+		<property name="annotationBasedTypeDefBuilder" ref="annotationBasedTypeDefBuilder"></property>
+		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
+		<property name="scanner" ref="annotatedClassesScanner" />
+	</bean>
+	<bean id="annotationBasedTypeDefBuilder" class="org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder">
+		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator"></property>
+	</bean>
+	<bean id="jcrMappingDescriptor" class="org.otherobjects.cms.jcr.TypeServiceMapperImpl">
+		<constructor-arg index="0" value="classpath:otherobjects.resources/config/jcr-mapping.xml" />
+		<property name="typeService" ref="typeService" />
+	</bean>
+	<bean id="jcrMappingTemplate" class="org.springmodules.jcr.jackrabbit.ocm.JcrMappingTemplate">
+		<constructor-arg index="0" ref="jcrSessionFactory" />
+		<constructor-arg index="1" ref="jcrMappingDescriptor" />
+		<!-- TODO Is is wise to allow create here? -->
+		<property name="allowCreate" value="true" />
+	</bean>
+	<bean id="password" class="java.lang.String">
+		<constructor-arg index="0" value="${jcr.password}" />
+	</bean>
+	<bean id="daoService" class="org.otherobjects.cms.dao.DaoServiceImpl"></bean>
+	<bean id="jackrabbitInitialiser" class="org.otherobjects.cms.bootstrap.JackrabbitInitialiser">
+		<property name="jcrSessionFactory" ref="jcrSessionFactory" />
+		<property name="nodeTypesConfig" value="classpath:otherobjects.resources/config/node-types.cnd" />
+	</bean>
+	<bean id="ooBootstrapper" class="org.otherobjects.cms.bootstrap.OoBootstrapper">
+		<property name="jackrabbitInitialiser" ref="jackrabbitInitialiser" />
+		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
+	</bean>
+	<bean id="jcrTransactionManager" class="org.springmodules.jcr.jackrabbit.LocalTransactionManager">
+		<property name="sessionFactory" ref="jcrSessionFactory" />
+	</bean>
+	<bean id="baseTransactionProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" abstract="true">
+		<property name="transactionManager" ref="jcrTransactionManager" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+				<prop key="publish">PROPAGATION_NOT_SUPPORTED</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+
+	</bean>
+	<bean id="universalJcrDao" parent="baseTransactionProxy">
+		<property name="target">
+			<bean class="org.otherobjects.cms.dao.UniversalJcrDaoJackrabbit">
+				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
+				<property name="typeService" ref="typeService" />
+				<property name="sessionFactory" ref="jcrSessionFactory" />
+				<property name="cacheManager" ref="cacheManager" />
+			</bean>
+		</property>
+	</bean>
+</beans>
