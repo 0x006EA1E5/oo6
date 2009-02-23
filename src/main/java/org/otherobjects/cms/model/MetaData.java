@@ -9,19 +9,17 @@ import org.otherobjects.cms.types.annotation.Type;
  */
 // FIXME This must not extend BaseNode.
 @Type
-public class MetaData extends BaseNode
+public class MetaData extends BaseComponent
 {
     private String title;
     private String description;
     private String keywords;
 
-    @Override
     public String getOoLabel()
     {
         return "MD";
     }
     
-    @Override
     public String getCode()
     {
         // FIXME This should not be needed -- should be determined by parent typeDef.
