@@ -73,6 +73,8 @@ public class SetupController
     public String processForm(@ModelAttribute(value = "command") SetupAdminUserCommand setupAdminUserCommand, BindingResult bindingResult, SessionStatus status, HttpServletRequest request,
             HttpServletResponse response) throws IOException
     {
+        // FIXME Session/transaction problem here causing 2 sessions to be created
+        
         ActionUtils actionUtils = new ActionUtils(request, response, null, null);
 
         User currentUser = SecurityUtil.getCurrentUser();
