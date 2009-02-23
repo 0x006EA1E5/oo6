@@ -1,18 +1,18 @@
-package org.otherobjects.cms.beans;
+package org.otherobjects.cms.tools;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-public class DummyBean
+public class DebugToolTestBean
 {
     private Long id;
     private String firstName;
     private String lastName;
     private String description;
     private String[] emailAddresses;
-    private List<DummyBean> childDummyBeans;
+    private List<DebugToolTestBean> childDummyBeans;
     private boolean active;
 
     public boolean isActive()
@@ -65,12 +65,12 @@ public class DummyBean
         this.emailAddresses = emailAddresses;
     }
 
-    public List<DummyBean> getChildDummyBeans()
+    public List<DebugToolTestBean> getChildDummyBeans()
     {
         return childDummyBeans;
     }
 
-    public void setChildDummyBeans(List<DummyBean> childDummyBeans)
+    public void setChildDummyBeans(List<DebugToolTestBean> childDummyBeans)
     {
         this.childDummyBeans = childDummyBeans;
     }
@@ -80,10 +80,10 @@ public class DummyBean
         return (StringUtils.defaultIfEmpty(firstName, "") + " " + StringUtils.defaultString(lastName, "")).trim();
     }
 
-    public void addChildDummyBean(DummyBean dummyBean)
+    public void addChildDummyBean(DebugToolTestBean dummyBean)
     {
         if (childDummyBeans == null)
-            childDummyBeans = new ArrayList<DummyBean>();
+            childDummyBeans = new ArrayList<DebugToolTestBean>();
 
         childDummyBeans.add(dummyBean);
     }

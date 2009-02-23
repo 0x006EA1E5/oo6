@@ -5,11 +5,13 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.otherobjects.cms.binding.TestObject;
+
 public class PagedListImplTest extends TestCase
 {
 
     private List<String> testList;
-    private List<SampleBean> testList2;
+    private List<TestObject> testList2;
 
     @Override
     protected void setUp() throws Exception
@@ -23,22 +25,22 @@ public class PagedListImplTest extends TestCase
         testList.add("Item4");
         testList.add("Item5");
 
-        testList2 = new ArrayList<SampleBean>();
-        testList2.add(new SampleBean("Item2"));
-        testList2.add(new SampleBean("Item6"));
-        testList2.add(new SampleBean("Item4"));
-        testList2.add(new SampleBean("Item1"));
-        testList2.add(new SampleBean("Item5"));
-        testList2.add(new SampleBean("Item3"));
+        testList2 = new ArrayList<TestObject>();
+        testList2.add(new TestObject("Item2"));
+        testList2.add(new TestObject("Item6"));
+        testList2.add(new TestObject("Item4"));
+        testList2.add(new TestObject("Item1"));
+        testList2.add(new TestObject("Item5"));
+        testList2.add(new TestObject("Item3"));
 
     }
 
     public void testWithComparator()
     {
-        PagedListImpl<SampleBean> pr = new PagedListImpl<SampleBean>(3, 2, testList2, new BeanPropertyComparator("testProp"));
-        assertEquals("Item4", pr.next().getTestProp());
-        assertEquals("Item5", pr.next().getTestProp());
-        assertEquals("Item6", pr.next().getTestProp());
+        PagedListImpl<TestObject> pr = new PagedListImpl<TestObject>(3, 2, testList2, new BeanPropertyComparator("name"));
+        assertEquals("Item4", pr.next().getName());
+        assertEquals("Item5", pr.next().getName());
+        assertEquals("Item6", pr.next().getName());
 
     }
 

@@ -29,6 +29,7 @@ import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.dao.PagedList;
 import org.otherobjects.cms.dao.PagedListImpl;
+import org.otherobjects.cms.events.PublishEvent;
 import org.otherobjects.cms.model.Audited;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.model.User;
@@ -295,9 +296,15 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                     {
                         // get a live workspace session
                         liveSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
-                        Node liveNode = liveSession.getNodeByUUID(id);
-                        liveNode.remove();
-                        liveSession.save();
+                        try
+                        {
+                            Node liveNode = liveSession.getNodeByUUID(id);
+                            liveNode.remove();
+                            liveSession.save();
+                        }
+                        catch (Exception e)
+                        {
+                        }
                     }
                     finally
                     {
@@ -559,7 +566,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                     manager.checkin(jcrPath, new String[]{(baseNode.getChangeNumber()) + ""});
                     manager.checkout(jcrPath);
 
-                    //applicationContext.publishEvent(new PublishEvent(this, baseNode));
+                    applicationContext.publishEvent(new PublishEvent(this, baseNode));
                 }
                 catch (Exception e)
                 {

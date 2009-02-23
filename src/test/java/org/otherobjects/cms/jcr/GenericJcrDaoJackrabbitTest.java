@@ -1,5 +1,9 @@
 package org.otherobjects.cms.jcr;
 
+import org.otherobjects.cms.SingletonBeanLocator;
+import org.otherobjects.cms.binding.TestComponentObject;
+import org.otherobjects.cms.binding.TestObject;
+import org.otherobjects.cms.binding.TestReferenceObject;
 import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.model.SiteFolder;
 
@@ -14,23 +18,28 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        typeService.registerType(typeDefBuilder.getTypeDef(SampleObject.class));
-        genericJcrDao = (GenericJcrDao) daoService.getDao(SampleObject.class);
+        typeService.registerType(typeDefBuilder.getTypeDef(TestComponentObject.class));
+        typeService.registerType(typeDefBuilder.getTypeDef(TestReferenceObject.class));
+        typeService.registerType(typeDefBuilder.getTypeDef(TestObject.class));
+        genericJcrDao = (GenericJcrDao) daoService.getDao(TestObject.class);
+        SingletonBeanLocator.registerTestBean("typeService", typeService);
     }
 
     @Override
     protected void tearDown() throws Exception
     {
+        SingletonBeanLocator.registerTestBean("typeSevice", null);
         super.tearDown();
     }
 
-    private SampleObject createSampleObject(String path, String code, String name)
+    private TestObject createTestObject(String path, String code, String name)
     {
-        SampleObject a1 = new SampleObject();
+        TestObject a1 = new TestObject();
+        a1.setTypeDef(typeService.getType(TestObject.class));
         a1.setPath(path);
         a1.setCode(code);
         a1.setName(name);
-        return (SampleObject) genericJcrDao.save(a1);
+        return (TestObject) genericJcrDao.save(a1);
     }
 
     private SiteFolder createSampleFolder(String path, String name)
@@ -41,88 +50,88 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
         return (SiteFolder) genericJcrDao.save(folder);
     }
 
-//    public void testSave() throws Exception
-//    {
-//        SampleObject t1 = new SampleObject();
-//        GenericJcrDao<SampleObject> dao = (GenericJcrDao<SampleObject>) daoService.getDao(SampleObject.class);
-//
-//        t1.setPath("/");
-//        t1.setName("Test Object");
-//
-//        SampleObject t1s = dao.save(t1);
-//
-//        assertNotNull(t1s.getId());
-//        assertEquals("/test-object", t1s.getJcrPath());
-//        assertEquals(t1.getName(), t1s.getName());
-//    }
+    public void testSave() throws Exception
+    {
+        TestObject t1 = new TestObject();
+        GenericJcrDao<TestObject> dao = (GenericJcrDao<TestObject>) daoService.getDao(TestObject.class);
+
+        t1.setPath("/");
+        t1.setName("Test Object");
+
+        TestObject t1s = dao.save(t1);
+
+        assertNotNull(t1s.getId());
+        assertEquals("/test-object", t1s.getJcrPath());
+        assertEquals(t1.getName(), t1s.getName());
+    }
 
     public void testGet()
     {
-        SampleObject welcome = createSampleObject("/site/", "test.html", "Test Object");
-        SampleObject node = (SampleObject) genericJcrDao.get(welcome.getId());
+        TestObject welcome = createTestObject("/", "test.html", "Test Object");
+        TestObject node = (TestObject) genericJcrDao.get(welcome.getId());
         assertNotNull(node);
         assertEquals(welcome.getJcrPath(), node.getJcrPath());
     }
 
-//    public void testGetByPath()
-//    {
-//        createSampleObject("/site/", "test.html", "Test Object");
-//        createSampleFolder("/site/", "Test");
-//
-//        // Resources
-//        SampleObject t1r = (SampleObject) genericJcrDao.getByPath("/site/test.html");
-//        assertNotNull(t1r);
-//        assertEquals("Test Object", t1r.getName());
-//
-//        // Folders
-//        SiteFolder f1r = (SiteFolder) genericJcrDao.getByPath("/site/test/");
-//        assertNotNull(f1r);
-//        assertEquals("Test", f1r.getLabel());
-//    }
-//
-//    public void testRemove()
-//    {
-//        SampleObject welcome = createSampleObject("/site/", "test.html", "Test Object");
-//        SampleObject node = (SampleObject) genericJcrDao.get(welcome.getId());
-//        assertNotNull(node);
-//
-//        genericJcrDao.remove(node.getId());
-//        assertNull(genericJcrDao.get(node.getId()));
-//    }
-//
-//    public void testExists()
-//    {
-//        SampleObject welcome = createSampleObject("/site/", "test.html", "Test Object");
-//        assertTrue(genericJcrDao.exists(welcome.getId()));
-//        // Corrupt UUID to create non-existing id
-//        assertFalse(genericJcrDao.exists(welcome.getId().replaceAll("[0-9a-f]", "0")));
-//        try
-//        {
-//            genericJcrDao.exists(null);
-//            fail();
-//        }
-//        catch (RuntimeException e)
-//        {
-//            // TODO Explain why we ignore exception
-//        }
-//    }
-//
-//    public void testExistsAtPath()
-//    {
-//        createSampleObject("/site/", "test.html", "Test Object");
-//        assertTrue(genericJcrDao.existsAtPath("/site/test.html"));
-//        assertFalse(genericJcrDao.existsAtPath("/site/non-existent.html"));
-//        try
-//        {
-//            genericJcrDao.existsAtPath(null);
-//            fail();
-//        }
-//        catch (RuntimeException e)
-//        {
-//            // TODO Explain why we ignore exception
-//        }
-//    }
-//
+    public void testGetByPath()
+    {
+        createTestObject("/", "test.html", "Test Object");
+        createSampleFolder("/", "Test");
+
+        // Resources
+        TestObject t1r = (TestObject) genericJcrDao.getByPath("/test.html");
+        assertNotNull(t1r);
+        assertEquals("Test Object", t1r.getName());
+
+        // Folders
+        SiteFolder f1r = (SiteFolder) genericJcrDao.getByPath("/test/");
+        assertNotNull(f1r);
+        assertEquals("Test", f1r.getLabel());
+    }
+
+    public void testRemove()
+    {
+        TestObject welcome = createTestObject("/", "test.html", "Test Object");
+        TestObject node = (TestObject) genericJcrDao.get(welcome.getId());
+        assertNotNull(node);
+
+        genericJcrDao.remove(node.getId());
+        assertNull(genericJcrDao.get(node.getId()));
+    }
+
+    public void testExists()
+    {
+        TestObject welcome = createTestObject("/", "test.html", "Test Object");
+        assertTrue(genericJcrDao.exists(welcome.getId()));
+        // Corrupt UUID to create non-existing id
+        assertFalse(genericJcrDao.exists(welcome.getId().replaceAll("[0-9a-f]", "0")));
+        try
+        {
+            genericJcrDao.exists(null);
+            fail();
+        }
+        catch (RuntimeException e)
+        {
+            // TODO Explain why we ignore exception
+        }
+    }
+
+    public void testExistsAtPath()
+    {
+        createTestObject("/", "test.html", "Test Object");
+        assertTrue(genericJcrDao.existsAtPath("/test.html"));
+        assertFalse(genericJcrDao.existsAtPath("/non-existent.html"));
+        try
+        {
+            genericJcrDao.existsAtPath(null);
+            fail();
+        }
+        catch (RuntimeException e)
+        {
+            // TODO Explain why we ignore exception
+        }
+    }
+
 //    public void testPublish() throws Exception
 //    {
 //
@@ -133,7 +142,7 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
 //         */
 //        //        adminLogin();
 //        //
-//        //        TestObject welcome = createSampleObject("/", "test2.html", "Test Object");
+//        //        TestObject welcome = createTestObject("/", "test2.html", "Test Object");
 //        //        
 //        //        assertTrue(genericJcrDao.existsAtPath("/test2.html"));
 //        //        

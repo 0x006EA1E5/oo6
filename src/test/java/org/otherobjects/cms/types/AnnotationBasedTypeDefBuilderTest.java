@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.binding.TestComponentObject;
+import org.otherobjects.cms.binding.TestDbObject;
 import org.otherobjects.cms.binding.TestObject;
 import org.otherobjects.cms.binding.TestReferenceObject;
 import org.otherobjects.cms.types.annotation.Property;
@@ -15,17 +16,13 @@ public class AnnotationBasedTypeDefBuilderTest extends TestCase
 
     public void testGetTypeDef() throws Exception
     {
-        TypeDef typeDef = new AnnotationBasedTypeDefBuilder().getTypeDef(TestBean.class);
+        TypeDef typeDef = new AnnotationBasedTypeDefBuilder().getTypeDef(TestDbObject.class);
 
         assertEquals(typeDef.getProperty("id").getType(), PropertyType.NUMBER.value());
 
-        PropertyDef[] dummy = {};
-        PropertyDef[] propertiesArray = typeDef.getProperties().toArray(dummy);
+        assertEquals(typeDef.getProperties().get(1).getName(), "role");
 
-        assertEquals(propertiesArray[2].getName(), "dob");
-
-        assertEquals(PropertyType.STRING.value(), typeDef.getProperty("others").getCollectionElementType());
-
+        assertEquals("org.otherobjects.cms.model.Role", typeDef.getProperties().get(1).getRelatedType());
     }
 
     public void testInferredAttributes() throws Exception

@@ -2,11 +2,10 @@ package org.otherobjects.cms.tools;
 
 import junit.framework.TestCase;
 
-import org.otherobjects.cms.beans.DummyBean;
 
 public class DebugToolTest extends TestCase
 {
-    private DummyBean testBean;
+    private DebugToolTestBean testBean;
     private static final String LIPSUM = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas id mi a ligula mollis fermentum. Integer eu sem ac ligula bibendum "
             + "tincidunt. Mauris iaculis tempor sem. Nulla risus lectus, malesuada vitae, eleifend eu, elementum auctor, tortor. Cras id nibh at odio ullamcorper accumsan. "
             + "Morbi non urna eu augue consequat dictum. Curabitur augue massa, molestie eu, ornare vel, blandit vitae, massa. Phasellus nec neque eget neque congue aliquam. "
@@ -20,7 +19,7 @@ public class DebugToolTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        this.testBean = new DummyBean();
+        this.testBean = new DebugToolTestBean();
 
         this.testBean.setFirstName("Test");
         this.testBean.setLastName("Tester");
@@ -29,7 +28,7 @@ public class DebugToolTest extends TestCase
         this.testBean.setId(new Long(1));
         this.testBean.setEmailAddresses(new String[]{"email1@test.com", "email2@test.com"});
 
-        DummyBean childBean1 = new DummyBean();
+        DebugToolTestBean childBean1 = new DebugToolTestBean();
         childBean1.setFirstName("Test");
         childBean1.setLastName(null);
         childBean1.setDescription(LIPSUM);
@@ -37,7 +36,7 @@ public class DebugToolTest extends TestCase
         childBean1.setId(new Long(1));
         childBean1.setEmailAddresses(new String[]{"child1a@test.com", "child1b@test.com"});
 
-        DummyBean childBean2 = new DummyBean();
+        DebugToolTestBean childBean2 = new DebugToolTestBean();
         childBean2.setFirstName("Test");
         childBean2.setLastName("Tester");
         childBean2.setDescription(LIPSUM);
@@ -45,7 +44,7 @@ public class DebugToolTest extends TestCase
         childBean2.setId(new Long(1));
         childBean2.setEmailAddresses(new String[]{"child2a@test.com", "child2b@test.com", "child2c@test.com"});
 
-        DummyBean childBean3 = null;
+        DebugToolTestBean childBean3 = null;
 
         this.testBean.addChildDummyBean(childBean1);
         this.testBean.addChildDummyBean(childBean2);

@@ -234,8 +234,8 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         cd.addFieldDescriptor(fd2);
 
         FieldDescriptor fd3 = new FieldDescriptor();
-        fd3.setFieldName("label");
-        fd3.setJcrName("label");
+        fd3.setFieldName("ooLabel");
+        fd3.setJcrName("ooLabel");
         cd.addFieldDescriptor(fd3);
 
         FieldDescriptor fd4 = new FieldDescriptor();

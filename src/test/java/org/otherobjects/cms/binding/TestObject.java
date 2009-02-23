@@ -36,6 +36,15 @@ public class TestObject extends BaseNode
     private List<TestReferenceObject> testReferencesList;
     private List<TestComponentObject> testComponentsList;
 
+    public TestObject()
+    {
+    }
+    
+    public TestObject(String name)
+    {
+        setName(name);
+    }
+    
     @Property
     public String getName()
     {

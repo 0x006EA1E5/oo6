@@ -61,55 +61,59 @@ public class OoBootstrapper implements InitializingBean
         jackrabbitInitialiser.initialise();
 
         // initialise db schema
-        if (schemaUpdateRequired())
+        if (dbSchemaInitialiser != null)
         {
-            dbSchemaInitialiser.initialise(false);
-            boostrapProperties.setProperty(DB_SCHEMA_VERSION_KEY, "1");
-        }
-        else
-        {
-            // FIXME We should not do this on every startup
-            dbSchemaInitialiser.update();
-        }
-
-        try
-        {
-            // create admin user if not yet existing
-            User adminUser = getAdminUser();
-            if (adminUser == null)
-                adminUser = otherObjectsAdminUserCreator.createAdminUser();
-            
-            else if (StringUtils.isEmpty(adminUser.getEmail()))
+            if (schemaUpdateRequired())
             {
-                // If email is empty then the admin user has not been configured,
-                // so we reset the password for safety.
-                otherObjectsAdminUserCreator.resetPassword(adminUser);
+                dbSchemaInitialiser.initialise(false);
+                boostrapProperties.setProperty(DB_SCHEMA_VERSION_KEY, "1");
             }
-            // Authenticate as new Admin user
-            Authentication authentication = new UsernamePasswordAuthenticationToken(adminUser, null, adminUser.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            // populate repository with default infrastructure (folders, welcome page etc.)
-            // FIXME Always run so that Types are created
-            if (true || repositoryPopulationRequired())
+            else
             {
-                jackrabbitPopulater.populateRepository();
-                boostrapProperties.setProperty(JCR_SCHEMA_VERSION_KEY, "1");
+                // FIXME We should not do this on every startup
+                dbSchemaInitialiser.update();
+            }
 
-                if (repositoryPopulationRequired())
+            try
+            {
+                // create admin user if not yet existing
+                User adminUser = getAdminUser();
+                if (adminUser == null)
+                    adminUser = otherObjectsAdminUserCreator.createAdminUser();
+
+                else if (StringUtils.isEmpty(adminUser.getEmail()))
                 {
-                // Scan for resources in file system
-                //resourceScanner.updateResources();
+                    // If email is empty then the admin user has not been configured,
+                    // so we reset the password for safety.
+                    otherObjectsAdminUserCreator.resetPassword(adminUser);
+                }
+                // Authenticate as new Admin user
+                Authentication authentication = new UsernamePasswordAuthenticationToken(adminUser, null, adminUser.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                // populate repository with default infrastructure (folders, welcome page etc.)
+                // FIXME Always run so that Types are created
+                if (true || repositoryPopulationRequired())
+                {
+                    jackrabbitPopulater.populateRepository();
+                    boostrapProperties.setProperty(JCR_SCHEMA_VERSION_KEY, "1");
+
+                    if (repositoryPopulationRequired())
+                    {
+                        // Scan for resources in file system
+                        //resourceScanner.updateResources();
+                    }
                 }
             }
-        }
-        finally
-        {
-            SecurityContextHolder.clearContext();
-        }
+            finally
+            {
+                SecurityContextHolder.clearContext();
+            }
 
-        // Save properties
-        storeProperties();
+            // Save properties
+            storeProperties();
+
+        }
 
         // Copy properties to main configurator
         otherObjectsConfigurator.setProperty(DB_SCHEMA_VERSION_KEY, boostrapProperties.getProperty(DB_SCHEMA_VERSION_KEY));
