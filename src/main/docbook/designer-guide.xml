@@ -16,11 +16,18 @@
     <title>Building your site</title>
 
     <partintro>
-      <para>This part details what you need to know to build a basic content
-      managed site. You will not need any Java knowedge or a Java IDE.</para>
+      <para>This part covers installation of OTHERobjects and building your
+      first. You will not need to know any Java to build a simple
+      content-based site but some knonwledge of Groovy will help you write
+      scripts to enhance your site. You will not need to restart the site for
+      your changes to take effect. All setup and site building can be done via
+      the web interface although it will often be easier to use a dedicated
+      text editor when editing templates and scripts.</para>
+
+      <para>See part 2 for more advanced development using Eclipse.</para>
     </partintro>
 
-    <chapter id="chapter-using-the-framework">
+   <chapter id="chapter-using-the-framework">
       <title>Getting started</title>
 
       <para>This chapter will explain how to get OTHERobjects running on your
@@ -201,8 +208,7 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
         </section>
       </section>
     </chapter>
-
-    <chapter>
+     <chapter>
       <title>Where things go</title>
 
       <para>Before starting to build your site it important to understand the
@@ -684,7 +690,7 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
       </section>
 
       <section>
-        <title>Accesssing parameters, session and cookie data</title>
+        <title>Acesssing parameters, session and cookie data</title>
 
         <para>${RequestParameters.pageNo}</para>
 
@@ -738,6 +744,16 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
         <para>ALways use ?html on strings from user input.</para>
 
         <para>Working on a way for this to happen automatically.</para>
+      </section>
+
+      <section>
+        <title>Layouts</title>
+
+        <para>Must include</para>
+
+        <para>oo-hud</para>
+
+        <para>oo-flash</para>
       </section>
 
       <section>
@@ -1081,6 +1097,86 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
       <para>Images and links</para>
 
       <para>Navigation</para>
+    </chapter>
+
+    <chapter>
+      <title>Writing tests</title>
+
+      <para>A stable and high-quality website requires thorough testing. All
+      too often this testing is on the form "Does this page look sort of
+      right?" or "Well It worked for me when I built it so it's OK to go
+      live". Whilst this approach will work for very simple sites, as soon as
+      the complexity increases there just isn't time to look at every page and
+      try every action manually after each change. This in where automated
+      testing comes in.</para>
+
+      <para>People who are new to testing often bemoan the amount of time they
+      spend writing tests, especially at first when the tools and techniques
+      are new and need to be mastered. This, however, is a small price to pay
+      to reduce the time spent debugging and fixing broken code. And as the
+      testign techniques become more familiar the tests become correspondingly
+      easier to write.</para>
+
+      <section>
+        <title>What needs testing</title>
+
+        <para>In a word: everything.</para>
+      </section>
+
+      <section>
+        <title>Testing scripts</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Testing templates</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Functional testing</title>
+
+        <para></para>
+      </section>
+    </chapter>
+
+    <chapter>
+      <title>Improving performance</title>
+
+      <para>OTHERobjects uses caching at several levels to keep your site
+      peforming well even under heavy loads. However, it is important to
+      understand how the caching works in order to get the best performance
+      out of it.</para>
+
+      <section>
+        <title>Understanding caching</title>
+
+        <para></para>
+      </section>
+
+      <section>
+        <title>Monitoring page performance</title>
+
+        <para>To view the performance characteristics of a page press the
+        Escape key. A dialog will appear showing the major events that occured
+        whilst building the page and how long they took.</para>
+
+        <figure>
+          <title>Performance statistics dialog. Press Escape to show.</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/performance-stats-dialog.png"
+                         scale="50" />
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>TODO Warning indicator on pages with heavy loads eg &gt; 100
+        calls, or &gt; 5 seconds.</para>
+      </section>
     </chapter>
 
     <chapter>
@@ -1853,7 +1949,9 @@ public class MyController
 
       <para>OTHERobjects was developed using the Eclipse IDE. Other IDEs will
       wokr just fine but Eclipse will be the best supported. This chapter
-      describes how to set up Eclipse</para>
+      describes how to set up Eclipse.</para>
+
+      <para>TODO Maven Plugin and artifacts.</para>
 
       <section>
         <title>Launching with WTP</title>
@@ -2089,6 +2187,8 @@ ${datevar?date}</programlisting>
     </chapter>
 
     <chapter>
+
+    <chapter>
       <title>Testing</title>
 
       <para>This extends the testing discussion in the Site Designer
@@ -2153,49 +2253,6 @@ ${datevar?date}</programlisting>
         <title>Writing tests</title>
 
         <para>http://unitils.sourceforge.net/spring_article.html</para>
-      </section>
-    </chapter>
-
-    <chapter>
-      <title>Writing tests</title>
-
-      <para>A stable and high-quality website requires thorough testing. All
-      too often this testing is on the form "Does this page look sort of
-      right?" or "Well It worked for me when I built it so it's OK to go
-      live". Whilst this approach will work for very simple sites, as soon as
-      the complexity increases there just isn't time to look at every page and
-      try every action manually after each change. This in where automated
-      testing comes in.</para>
-
-      <para>People who are new to testing often bemoan the amount of time they
-      spend writing tests, especially at first when the tools and techniques
-      are new and need to be mastered. This, however, is a small price to pay
-      to reduce the time spent debugging and fixing broken code. And as the
-      testign techniques become more familiar the tests become correspondingly
-      easier to write.</para>
-
-      <section>
-        <title>What needs testing</title>
-
-        <para>In a word: everything.</para>
-      </section>
-
-      <section>
-        <title>Testing scripts</title>
-
-        <para></para>
-      </section>
-
-      <section>
-        <title>Testing templates</title>
-
-        <para></para>
-      </section>
-
-      <section>
-        <title>Functional testing</title>
-
-        <para></para>
       </section>
     </chapter>
 
