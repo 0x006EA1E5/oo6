@@ -109,7 +109,8 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         if (validate)
         {
             Errors errors = new BeanPropertyBindingResult(object, "target");
-            validator.validate(object, errors);
+            if (validator != null)
+                validator.validate(object, errors);
             if (errors.getErrorCount() > 0)
             {
                 for (Object e : errors.getAllErrors())
@@ -213,7 +214,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         if (SecurityUtil.isEditor())
             return (T) jcrMappingTemplate.getObject(path);
 
-//        return  (T) jcrMappingTemplate.getObject(path);
+        //        return  (T) jcrMappingTemplate.getObject(path);
         Element element = cache.get(path);
 
         if (element == null)
@@ -475,8 +476,8 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     public void publish(final T baseNode, final String message)
     {
         //FIXME this should display proper transactional behaviour which it doesn't at the moment as there are multiple jcr sessions involved
-//        if (baseNode.isPublished())
-//            throw new OtherObjectsException("baseNode " + baseNode.getJcrPath() + "[" + baseNode.getId() + "] couldn't be published as its published flag is already set ");
+        //        if (baseNode.isPublished())
+        //            throw new OtherObjectsException("baseNode " + baseNode.getJcrPath() + "[" + baseNode.getId() + "] couldn't be published as its published flag is already set ");
 
         if (this.cache != null)
             this.cache.put(new Element(baseNode.getJcrPath(), baseNode));
@@ -490,33 +491,6 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
             //            if (!(result.length > 0) || !(result[0] instanceof Boolean) || !((Boolean) result[0]).booleanValue())
             //                return;
         }
-
-        // Update edited node. Must be done in separate transaction. See: 
-        jcrMappingTemplate.execute(new JcrMappingCallback()
-        {
-            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
-            {
-                String jcrPath = baseNode.getJcrPath();
-                try
-                {
-                    // we got here so we successfully published
-                    updateAuditInfo(baseNode, message);
-                    saveInternal(baseNode, true); // set the status to published
-
-                    // create version and assign the current changeNumber as the label
-                    baseNode.setChangeNumber(baseNode.getChangeNumber() + 1);
-                    manager.checkin(jcrPath, new String[]{(baseNode.getChangeNumber()) + ""});
-                    manager.checkout(jcrPath);
-
-                    //applicationContext.publishEvent(new PublishEvent(this, baseNode));
-                }
-                catch (Exception e)
-                {
-                    throw new JcrMappingException(e);
-                }
-                return null;
-            }
-        }, true);
 
         jcrMappingTemplate.execute(new JcrMappingCallback()
         {
@@ -565,6 +539,33 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                 {
                     throw new JcrMappingException(e);
                 }
+            }
+        }, true);
+
+        // Update edited node. Must be done in separate transaction. See: 
+        jcrMappingTemplate.execute(new JcrMappingCallback()
+        {
+            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+            {
+                String jcrPath = baseNode.getJcrPath();
+                try
+                {
+                    // we got here so we successfully published
+                    updateAuditInfo(baseNode, message);
+                    saveInternal(baseNode, true); // set the status to published
+
+                    // create version and assign the current changeNumber as the label
+                    baseNode.setChangeNumber(baseNode.getChangeNumber() + 1);
+                    manager.checkin(jcrPath, new String[]{(baseNode.getChangeNumber()) + ""});
+                    manager.checkout(jcrPath);
+
+                    //applicationContext.publishEvent(new PublishEvent(this, baseNode));
+                }
+                catch (Exception e)
+                {
+                    throw new JcrMappingException(e);
+                }
+                return null;
             }
         }, true);
 
