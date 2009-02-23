@@ -32,6 +32,7 @@ public class OtherObjectsJackrabbitSessionFactory extends JackrabbitSessionFacto
 
     public Session getSession(String workspaceName) throws RepositoryException
     {
+        //FIXME Is this a performance issues? 
         return addListeners(getRepository().login(credentials, workspaceName));
     }
 
