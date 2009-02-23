@@ -508,7 +508,7 @@ public class DebugController implements ServletContextAware, ApplicationContextA
             return;
 
         html.append("\n<ul>");
-        html.append("<li><strong>" + node.getPath() + "</strong><span class=\"properties-area\"");
+        html.append("<li><strong>" + node.getPath()  +" (" +  node.getPrimaryNodeType().getName()  + ")"+ "</strong><span class=\"properties-area\"");
         html.append("<br/>");
 
         PropertyIterator properties = node.getProperties();
