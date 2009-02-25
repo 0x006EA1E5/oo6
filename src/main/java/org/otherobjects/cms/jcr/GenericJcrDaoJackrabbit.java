@@ -8,9 +8,11 @@ import java.util.NoSuchElementException;
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Workspace;
+import javax.jcr.query.QueryResult;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
@@ -32,8 +34,10 @@ import org.otherobjects.cms.dao.PagedListImpl;
 import org.otherobjects.cms.events.PublishEvent;
 import org.otherobjects.cms.model.Audited;
 import org.otherobjects.cms.model.CmsNode;
+import org.otherobjects.cms.model.Selector;
 import org.otherobjects.cms.model.User;
 import org.otherobjects.cms.security.SecurityUtil;
+import org.otherobjects.cms.types.annotation.Property;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -243,6 +247,54 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         // PERF Access node without conversion for faster check
         T entity = get(id);
         return (entity != null);
+    }
+
+    public void renderNodeInfo(String path)
+    {
+        Selector s = new Selector();
+        s.setQueryPath(path);
+        s.setSubFolders(true);
+//        s.setQueryTypeName(type);
+        final String xpath = s.getQuery();
+        
+        jcrMappingTemplate.execute(new JcrCallback()
+        {
+            public Object doInJcr(Session session) throws RepositoryException
+            {
+                StringBuffer html = new StringBuffer();
+
+                if (xpath != null)
+                {
+                    javax.jcr.query.QueryManager queryManager = session.getWorkspace().getQueryManager();
+                    javax.jcr.query.Query query = queryManager.createQuery(xpath, javax.jcr.query.Query.XPATH);
+                    QueryResult queryResult = query.execute();
+                    NodeIterator nodeIterator = queryResult.getNodes();
+                    while (nodeIterator.hasNext())
+                        renderNodeInfo(nodeIterator.nextNode(), 0);
+                }
+                else
+                    return "";
+                return html.toString();
+            }
+        });
+    }
+
+    protected void renderNodeInfo(Node node, int depth) throws RepositoryException
+    {
+        if (node.getPath().equals("/jcr:system"))
+            return;
+
+        System.err.print("" + node.getPath() + " (" + node.getPrimaryNodeType().getName() + ")" + "");
+
+        PropertyIterator properties = node.getProperties();
+        while (properties.hasNext())
+        {
+            javax.jcr.Property prop = properties.nextProperty();
+            if (prop.getDefinition().isMultiple())
+                System.err.print(" " + prop.getName() + "=" + prop.getValues() + "<br/>");
+            else
+                System.err.print(" " + prop.getName() + "=" + prop.getValue().getString() + "<br/>");
+        }
     }
 
     public boolean existsAtPath(String path)

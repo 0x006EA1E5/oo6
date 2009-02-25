@@ -120,4 +120,6 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
 
     PagedList<T> pageByJcrExpression(String expression, int pageSize, int pageNo);
 
+    void renderNodeInfo(String id);
+    
 }

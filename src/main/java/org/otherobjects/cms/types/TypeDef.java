@@ -30,6 +30,8 @@ public interface TypeDef
     
     String getAdminControllerUrl();
 
+    boolean isComponent();
+    
     boolean hasClass();
 
     String getSuperClassName();

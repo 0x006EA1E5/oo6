@@ -2,13 +2,13 @@ package org.otherobjects.cms.binding;
 
 import java.util.List;
 
-import org.otherobjects.cms.model.BaseNode;
+import org.otherobjects.cms.model.BaseComponent;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
 
 @Type(labelProperty = "name")
-public class TestComponentObject extends BaseNode
+public class TestComponentObject extends BaseComponent
 {
     private String name;
     private String requiredString;

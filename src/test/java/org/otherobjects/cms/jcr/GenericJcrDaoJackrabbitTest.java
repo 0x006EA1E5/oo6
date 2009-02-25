@@ -1,5 +1,10 @@
 package org.otherobjects.cms.jcr;
 
+import javax.jcr.Node;
+import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
+import javax.jcr.RepositoryException;
+
 import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.binding.TestComponentObject;
 import org.otherobjects.cms.binding.TestObject;
@@ -17,6 +22,7 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
     @Override
     protected void setUp() throws Exception
     {
+        // FIXME Need to clear down any data in db
         super.setUp();
         typeService.registerType(typeDefBuilder.getTypeDef(TestComponentObject.class));
         typeService.registerType(typeDefBuilder.getTypeDef(TestReferenceObject.class));
@@ -39,6 +45,11 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
         a1.setPath(path);
         a1.setCode(code);
         a1.setName(name);
+        TestComponentObject testComponent = new TestComponentObject();
+        testComponent.setName("component1");
+        a1.setTestComponent(testComponent);
+        
+        
         return (TestObject) genericJcrDao.save(a1);
     }
 
@@ -60,10 +71,15 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
 
         TestObject t1s = dao.save(t1);
 
+        genericJcrDao.renderNodeInfo(t1s.getJcrPath());
+        
         assertNotNull(t1s.getId());
         assertEquals("/test-object", t1s.getJcrPath());
         assertEquals(t1.getName(), t1s.getName());
     }
+    
+    
+
 
     public void testGet()
     {
@@ -71,6 +87,7 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
         TestObject node = (TestObject) genericJcrDao.get(welcome.getId());
         assertNotNull(node);
         assertEquals(welcome.getJcrPath(), node.getJcrPath());
+        assertEquals(welcome.getTestComponent().getName(), node.getTestComponent().getName());
     }
 
     public void testGetByPath()

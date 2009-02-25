@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.io.OoResource;
+import org.otherobjects.cms.model.BaseComponent;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
@@ -51,12 +52,17 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder, Initializi
             return null;
 
         Type typeDefAnnotation = clazz.getAnnotation(Type.class);
+
         TypeDefImpl typeDef = new TypeDefImpl();
+
+        if (BaseComponent.class.isAssignableFrom(clazz))
+            typeDef.setComponent(true);
+        
         typeDef.setName(clazz.getName());
         typeDef.setClassName(clazz.getName());
         typeDef.setSuperClassName(typeDefAnnotation.superClassName());
         typeDef.setStore(typeDefAnnotation.store());
-        if(StringUtils.isNotBlank(typeDefAnnotation.adminControllerUrl()))
+        if (StringUtils.isNotBlank(typeDefAnnotation.adminControllerUrl()))
             typeDef.setCustomAdminController(typeDefAnnotation.adminControllerUrl());
 
         typeDef.setLabel(typeDefAnnotation.label());

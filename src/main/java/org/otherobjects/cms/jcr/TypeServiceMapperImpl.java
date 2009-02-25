@@ -34,8 +34,6 @@ import org.apache.jackrabbit.ocm.mapper.model.FieldDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.MappingDescriptor;
 import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.jcr.dynamic.DynaNodeDataMapConverterImpl;
-import org.otherobjects.cms.model.MetaData;
-import org.otherobjects.cms.model.PublishingOptions;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
@@ -122,7 +120,7 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         ClassDescriptor cd = new ClassDescriptor();
         cd.setClassName(typeDef.getClassName());
 
-        if (typeDef.getName().equals(MetaData.class.getName()) || typeDef.getName().equals(PublishingOptions.class.getName()))
+        if (typeDef.isComponent())
             cd.setJcrType("oo:component");
         else
             cd.setJcrType("oo:node");

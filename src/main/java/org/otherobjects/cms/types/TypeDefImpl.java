@@ -57,6 +57,9 @@ public class TypeDefImpl implements TypeDef
 
     /** Custom admin controller URL. */
     private String customAdminController;
+    
+    /** Is this mapping for a component. */
+    private boolean component = false;
 
     public TypeDefImpl()
     {
@@ -236,5 +239,15 @@ public class TypeDefImpl implements TypeDef
     public void setCustomAdminController(String customAdminController)
     {
         this.customAdminController = customAdminController;
+    }
+
+    public boolean isComponent()
+    {
+        return component;
+    }
+
+    public void setComponent(boolean component)
+    {
+        this.component = component;
     }
 }
