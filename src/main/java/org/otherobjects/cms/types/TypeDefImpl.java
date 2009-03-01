@@ -49,8 +49,11 @@ public class TypeDefImpl implements TypeDef
     /** Reference to TypeService where this TypeDef is registered. */
     private TypeService typeService;
 
-    /** Stores which property should be used for the labe.. */
+    /** Stores which property should be used for the label. */
     private String labelProperty;
+    
+    /** Stores which property should be used for the code */
+    private String codeProperty;
 
     /** Which data store to use for this type. */
     private String store = TypeDef.JACKRABBIT;
@@ -249,5 +252,15 @@ public class TypeDefImpl implements TypeDef
     public void setComponent(boolean component)
     {
         this.component = component;
+    }
+
+    public String getCodeProperty()
+    {
+        return codeProperty;
+    }
+
+    public void setCodeProperty(String codeProperty)
+    {
+        this.codeProperty = codeProperty;
     }
 }

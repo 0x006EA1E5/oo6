@@ -78,6 +78,7 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder, Initializi
 
         typeDef.setDescription(typeDefAnnotation.description());
         typeDef.setLabelProperty(typeDefAnnotation.labelProperty());
+        typeDef.setCodeProperty(typeDefAnnotation.codeProperty());
 
         // Create a list as a container to allow for ordered addition of found PropertyDefs
         List<PropertyDef> propDefs = new ArrayList<PropertyDef>();

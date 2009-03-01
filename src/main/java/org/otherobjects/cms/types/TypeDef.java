@@ -38,6 +38,8 @@ public interface TypeDef
     
     String getLabelProperty();
 
+    String getCodeProperty();
+
     void setTypeService(TypeService typeService);
 
     void setClassName(String createCustomDynaNodeClass);
