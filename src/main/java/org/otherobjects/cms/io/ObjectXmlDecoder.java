@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.clapper.util.html.HTMLUtil;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.otherobjects.cms.OtherObjectsException;
@@ -155,7 +156,7 @@ public class ObjectXmlDecoder
         else
         {
             PropertyEditor propertyEditor = property.getPropertyEditor();
-            propertyEditor.setAsText(element.attributeValue("value"));
+            propertyEditor.setAsText(element.getText());
             PropertyUtils.setProperty(object, path, propertyEditor.getValue());
         }
     }
@@ -172,7 +173,11 @@ public class ObjectXmlDecoder
         {
             CmsNodeReferenceEditor propertyEditor = new CmsNodeReferenceEditor(daoService, property.getRelatedType());
             propertyEditor.setAsText(element.attributeValue("ref"));
-            PropertyUtils.setProperty(object, path, propertyEditor.getValue());
+            if (property.getType().equals(PropertyType.TEXT.value()))
+                PropertyUtils.setProperty(object, path, HTMLUtil.convertCharacterEntities((String) propertyEditor.getValue()));
+            else
+                PropertyUtils.setProperty(object, path, propertyEditor.getValue());
+            
         }
     }
 

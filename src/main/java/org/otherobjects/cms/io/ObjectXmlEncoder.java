@@ -14,6 +14,7 @@ import org.dom4j.io.XMLWriter;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.model.BaseNode;
+import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.model.Editable;
 import org.otherobjects.cms.tools.BeanTool;
 import org.otherobjects.cms.types.PropertyDef;
@@ -50,15 +51,15 @@ public class ObjectXmlEncoder
     {
         try
         {
-            if(item instanceof Editable)
+            if (item instanceof Editable)
                 element.addAttribute("id", ((Editable) item).getEditableId());
-            
+
             // FIXME Hacky hack
-            if(typeDef == null  && item instanceof DynaNode)
+            if (typeDef == null && item instanceof DynaNode)
                 typeDef = ((BaseNode) item).getTypeDef();
             element.addAttribute("type", typeDef.getName());
-            if(item instanceof BaseNode)
-                element.addAttribute("path", ((BaseNode)item).getJcrPath());
+            if (item instanceof BaseNode)
+                element.addAttribute("path", ((BaseNode) item).getJcrPath());
             for (PropertyDef prop : typeDef.getProperties())
             {
                 addProperty(element, item, (PropertyDefImpl) prop);
@@ -107,8 +108,8 @@ public class ObjectXmlEncoder
         else
         {
             prop.addAttribute("name", name);
-            
-            for (int counter = 0; counter<list.size(); counter++)
+
+            for (int counter = 0; counter < list.size(); counter++)
             {
                 PropertyDefImpl pd = new PropertyDefImpl();
                 pd.setName(property.getName() + "[" + counter + "]");
@@ -159,7 +160,8 @@ public class ObjectXmlEncoder
         else
         {
             prop.addAttribute("name", name);
-            prop.addAttribute("ref", ((Editable) value).getEditableId());
+            prop.addAttribute("ref", ((CmsNode) value).getJcrPath());
+            prop.addAttribute("id", ((Editable) value).getEditableId());
         }
     }
 
@@ -181,7 +183,10 @@ public class ObjectXmlEncoder
             PropertyEditor propertyEditor = property.getPropertyEditor();
             propertyEditor.setValue(value);
             prop.addAttribute("name", name);
-            prop.addAttribute("value", propertyEditor.getAsText());
+//            if (property.getType().equals(PropertyType.TEXT.value()))
+//                prop.addAttribute("value", HTMLUtil.makeCharacterEntities(propertyEditor.getAsText()));
+//            else
+                prop.setText(propertyEditor.getAsText());
         }
     }
 }
