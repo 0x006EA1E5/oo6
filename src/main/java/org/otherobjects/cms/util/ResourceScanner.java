@@ -184,7 +184,10 @@ public class ResourceScanner
             for (String b : (List<String>) r.get("blocks"))
             {
                 TemplateBlockReference br = new TemplateBlockReference();
+                br.setPath("/blocks/");
                 br.setBlock((TemplateBlock) dao.getByPath("/designer/blocks/" + b));
+                br = (TemplateBlockReference) dao.save(br);
+                dao.publish(br, null);
                 blockReferenceObjects.add(br);
             }
             tr.setBlocks(blockReferenceObjects);

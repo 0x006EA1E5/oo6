@@ -79,6 +79,7 @@ public class BlockController
         TemplateBlock templateBlock = (TemplateBlock) dao.getByPath("/designer/blocks/"+blockName);
 
         TemplateBlockReference blockRef = new TemplateBlockReference();
+        blockRef.setPath("/blocks/");
         blockRef.setBlock(templateBlock);
         
         TemplateRegion region = template.getRegion(regionCode);

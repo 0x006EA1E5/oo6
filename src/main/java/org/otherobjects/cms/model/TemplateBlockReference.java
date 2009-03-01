@@ -15,15 +15,23 @@ import org.otherobjects.cms.types.annotation.Type;
 @Type
 public class TemplateBlockReference extends BaseNode
 {
+    private String code;
     private TemplateBlock block;
     private DynaNode blockData;
 
+    public TemplateBlockReference()
+    {
+        this.code = String.valueOf(new Date().getTime());
+    }
+
     public String getCode()
     {
-        if (this.code == null)
-            // FIXME Better to use a UUID
-            this.code = String.valueOf(new Date().getTime());
         return this.code;
+    }
+
+    public void setCode(String code)
+    {
+        this.code = code;
     }
 
     @Property(order = 10, type = PropertyType.REFERENCE)
