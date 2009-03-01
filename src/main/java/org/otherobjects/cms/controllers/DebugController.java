@@ -349,7 +349,8 @@ public class DebugController implements ServletContextAware, ApplicationContextA
                 encoder.addObject(element, item, item.getTypeDef());
         }
 
-        OutputFormat outformat = OutputFormat.createPrettyPrint();
+        OutputFormat outformat = new OutputFormat();
+        outformat.setNewlines(true);
         outformat.setEncoding("UTF-8");
         XMLWriter writer = new XMLWriter(response.getWriter(), outformat);
         writer.write(document);
