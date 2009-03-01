@@ -4,23 +4,27 @@ import java.util.Date;
 
 public interface Audited
 {
-    String getUserName();
+    String getCreator();
 
-    void setUserName(String userName);
+    void setCreator(String creator);
 
-    String getUserId();
+    Date getCreationTimestamp();
 
-    void setUserId(String userId);
+    void setCreationTimestamp(Date creationTimestamp);
+
+    String getModifier();
+
+    void setModifier(String modifier);
 
     Date getModificationTimestamp();
 
     void setModificationTimestamp(Date modificationTimestamp);
 
-    String getComment();
+    String getEditingComment();
 
-    void setComment(String comment);
+    void setEditingComment(String comment);
 
-    int getChangeNumber();
+    int getVersion();
 
-    void setChangeNumber(int changeNumber);
+    void setVersion(int version);
 }

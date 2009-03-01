@@ -35,12 +35,12 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
     /** TODO Why store this? Indication of whether this node is a folder or not. */
     private boolean folder = false;
 
-    private String userName;
-    private String userId;
+    private String creator;
     private Date creationTimestamp;
+    private String modifier;
     private Date modificationTimestamp;
-    private String comment;
-    private int changeNumber = 0;
+    private String editingComment;
+    private int version = 0;
     
     /** Tag list. */
     private String ooTags;
@@ -305,24 +305,39 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
         this.published = published;
     }
 
-    public String getUserName()
+    public String getCreator()
     {
-        return this.userName;
+        return creator;
     }
 
-    public void setUserName(String userName)
+    public void setCreator(String creator)
     {
-        this.userName = userName;
+        this.creator = creator;
     }
 
-    public String getUserId()
+    public String getModifier()
     {
-        return this.userId;
+        return modifier;
     }
 
-    public void setUserId(String userId)
+    public void setModifier(String modifier)
     {
-        this.userId = userId;
+        this.modifier = modifier;
+    }
+
+    public String getEditingComment()
+    {
+        return editingComment;
+    }
+
+    public void setEditingComment(String editingComment)
+    {
+        this.editingComment = editingComment;
+    }
+
+    public void setVersion(int version)
+    {
+        this.version = version;
     }
 
     public Date getModificationTimestamp()
@@ -335,24 +350,14 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
         this.modificationTimestamp = modificationTimestamp;
     }
 
-    public String getComment()
+    public int getVersion()
     {
-        return this.comment;
+        return this.version;
     }
 
-    public void setComment(String comment)
+    public void getVersion(int version)
     {
-        this.comment = comment;
-    }
-
-    public int getChangeNumber()
-    {
-        return this.changeNumber;
-    }
-
-    public void setChangeNumber(int changeNumber)
-    {
-        this.changeNumber = changeNumber;
+        this.version = version;
     }
 
     public String getEditableId()

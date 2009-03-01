@@ -11,7 +11,7 @@ import org.otherobjects.cms.types.annotation.Type;
  * @author rich
  */
 @Type
-public class PublishingOptions extends BaseNode
+public class PublishingOptions extends BaseComponent
 {
     private Date embargoUntil;
     private Date expireOn;
@@ -26,13 +26,6 @@ public class PublishingOptions extends BaseNode
     public String getOoLabel()
     {
         return "Publishing Options";
-    }
-
-    @Override
-    public String getCode()
-    {
-        // FIXME This should not be needed -- should be determined by parent typeDef.
-        return "publishingOptions";
     }
 
     @Property(order = 10)
