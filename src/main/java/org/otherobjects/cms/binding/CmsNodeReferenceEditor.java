@@ -1,6 +1,7 @@
 package org.otherobjects.cms.binding;
 
 import org.otherobjects.cms.dao.DaoService;
+import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.util.IdentifierUtils;
 import org.springframework.util.StringUtils;
@@ -30,7 +31,9 @@ public class CmsNodeReferenceEditor extends java.beans.PropertyEditorSupport
         }
         else if (text != null && !IdentifierUtils.isUUID(text))
         {
-            throw new IllegalArgumentException("Not a valid UUID: " + text);
+	        // FIXME Tidy this up
+            setValue(((GenericJcrDao)daoService.getDao(type)).getByPath(text));
+//            throw new IllegalArgumentException("Not a valid UUID: " + text);
         }
         else
         {
