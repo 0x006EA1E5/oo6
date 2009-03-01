@@ -91,11 +91,11 @@ public class ObjectXmlEncoderTest extends TestCase
         t1.setTestReference(tr1);
 
         TestComponentObject tc1 = new TestComponentObject();
-        tc1.setId("test-component-id-1");
+//        tc1.setId("test-component-id-1");
         tc1.setName("component-name");
         t1.setTestComponent(tc1);
         TestComponentObject tc2 = new TestComponentObject();
-        tc1.setId("test-component-id-2");
+//        tc1.setId("test-component-id-2");
         tc1.setName("component-name-2");
         t1.setTestComponent(tc1);
         

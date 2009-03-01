@@ -40,6 +40,7 @@ public class BindServiceImplTest extends TestCase
     @Override
     protected void setUp() throws Exception
     {
+        // FIXME Rewrite using TestObject
         //setup type service for Template, TemplateRegion TemplateBlock
         super.setUp();
         SingletonBeanLocator.registerTestBean("typeService", this.typeService);

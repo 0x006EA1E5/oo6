@@ -1,9 +1,6 @@
 package org.otherobjects.cms.jcr;
 
-import javax.jcr.Node;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
-import javax.jcr.RepositoryException;
+import java.util.ArrayList;
 
 import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.binding.TestComponentObject;
@@ -45,11 +42,9 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
         a1.setPath(path);
         a1.setCode(code);
         a1.setName(name);
-        TestComponentObject testComponent = new TestComponentObject();
-        testComponent.setName("component1");
+        TestComponentObject testComponent = new TestComponentObject("component1");
         a1.setTestComponent(testComponent);
-        
-        
+
         return (TestObject) genericJcrDao.save(a1);
     }
 
@@ -71,15 +66,102 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
 
         TestObject t1s = dao.save(t1);
 
-        genericJcrDao.renderNodeInfo(t1s.getJcrPath());
-        
+        genericJcrDao.renderNodeInfo(t1s.getId());
+
         assertNotNull(t1s.getId());
         assertEquals("/test-object", t1s.getJcrPath());
         assertEquals(t1.getName(), t1s.getName());
     }
-    
-    
 
+    public void testSaveComplex() throws Exception
+    {
+        TestObject t1 = new TestObject();
+        GenericJcrDao<TestObject> dao = (GenericJcrDao<TestObject>) daoService.getDao(TestObject.class);
+
+        t1.setPath("/");
+        t1.setName("Test Object");
+        
+        t1.setTestComponentsList(new ArrayList<TestComponentObject>());
+        t1.getTestComponentsList().add(new TestComponentObject("list-component-1"));
+        t1.getTestComponentsList().add(new TestComponentObject("list-component-2"));
+
+        TestObject t1s = dao.save(t1);
+
+        genericJcrDao.renderNodeInfo(t1s.getId());
+
+        assertNotNull(t1s.getId());
+        assertEquals("/test-object", t1s.getJcrPath());
+        assertEquals(t1.getName(), t1s.getName());
+        
+//        DynaNode c1 = createComponent("C1");
+//        DynaNode c2 = createComponent("C2");
+//        // Test nested 
+//        c1.set("component", c2);
+//
+//        List<DynaNode> componentsList = new ArrayList<DynaNode>();
+//        componentsList.add(createComponent("C3"));
+//        componentsList.add(createComponent("C4"));
+//        componentsList.add(createComponent("C5"));
+//
+//        DynaNode n1 = genericJcrDao.create("org.otherobjects.Dyna.jcr.TestObject");
+//        n1.setJcrPath("/site/news.html");
+//        n1.set("testString", "News Story 1");
+//        n1.set("testText", "Content of story");
+//
+//        Calendar date = Calendar.getInstance();
+//        date.set(2000, 01, 02, 0, 0, 0);
+//        Calendar time = Calendar.getInstance();
+//        time.set(0, 0, 0, 03, 04, 05);
+//        Calendar timestamp = Calendar.getInstance();
+//        timestamp.set(2000, 01, 02, 03, 04, 05);
+//        n1.set("testDate", date.getTime());
+//        n1.set("testTime", time.getTime());
+//        n1.set("testTimestamp", timestamp.getTime());
+//
+//        n1.set("testNumber", new Long(123456));
+//        n1.set("testDecimal", new BigDecimal("19.95"));
+//        n1.set("testBoolean", Boolean.TRUE);
+//
+//        n1.set("testComponent", c1);
+//        n1.set("testReference", r1);
+//
+//        String[] s = {"S1", "S2", "S3"};
+//        List<String> stringsList = new ArrayList<String>(Arrays.asList(s));
+//        n1.set("testStringsList", stringsList);
+//        n1.set("testComponentsList", componentsList);
+//        n1.set("testReferencesList", referencesList);
+//
+//        genericJcrDao.save(n1);
+//
+//        DynaNode ns2 = (DynaNode) genericJcrDao.getByPath("/site/news.html");
+//        assertEquals(n1.get("testString"), ns2.get("testString"));
+//        assertEquals(n1.get("testText"), ns2.get("testText"));
+//        assertEquals(n1.get("testDate"), ns2.get("testDate"));
+//        assertEquals(n1.get("testTime"), ns2.get("testTime"));
+//        assertEquals(n1.get("testTimestamp"), ns2.get("testTimestamp"));
+//        assertEquals(n1.get("testNumber"), ns2.get("testNumber"));
+//        assertEquals(n1.get("testDecimal"), ns2.get("testDecimal"));
+//        assertEquals(n1.get("testBoolean"), ns2.get("testBoolean"));
+//        assertNotNull(ns2.getId());
+//
+//        n1.set("testString", "News Story 1.1");
+//        genericJcrDao.save(n1);
+//        jcrMappingTemplate.save();
+//
+//        ns2 = (DynaNode) genericJcrDao.getByPath("/site/news.html");
+//        assertEquals(n1.get("testString"), ns2.get("testString"));
+//        assertEquals(c1.get("name"), ns2.get("testComponent.name"));
+//        //        assertEquals(c2.get("name"), ns2.get("testComponent.component.name"));
+//        assertEquals(r1.get("name"), ns2.get("testReference.name")); // Required reference
+//
+//        assertEquals(stringsList.size(), ((List) ns2.get("testStringsList")).size());
+//        assertEquals(stringsList.get(1), ((List) ns2.get("testStringsList")).get(1));
+//        //assertEquals(componentsList.size(), ((List) ns2.get("testComponentsList")).size());
+//        //assertEquals(componentsList.get(1), ((List) ns2.get("testComponentsList")).get(1));
+//        assertEquals(referencesList.size(), ((List) ns2.get("testReferencesList")).size());
+//        //assertEquals(referencesList.get(1), ((List) ns2.get("testReferencesList")).get(1));
+//        logout();
+    }
 
     public void testGet()
     {
@@ -88,6 +170,9 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
         assertNotNull(node);
         assertEquals(welcome.getJcrPath(), node.getJcrPath());
         assertEquals(welcome.getTestComponent().getName(), node.getTestComponent().getName());
+
+        genericJcrDao.renderNodeInfo(node.getId());
+
     }
 
     public void testGetByPath()
@@ -149,48 +234,48 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
         }
     }
 
-//    public void testPublish() throws Exception
-//    {
-//
-//        /*
-//         * FIXME Test: Implement publish() test
-//         * Note: publish has some problem with nodes not created in the same transaction.
-//         * This test does not work yet. 
-//         */
-//        //        adminLogin();
-//        //
-//        //        TestObject welcome = createTestObject("/", "test2.html", "Test Object");
-//        //        
-//        //        assertTrue(genericJcrDao.existsAtPath("/test2.html"));
-//        //        
-//        //        assertNotNull(welcome);
-//        //
-//        //        // Edit object
-//        //        String changedName = "New name " + new Date().toString();
-//        //        welcome.setName(changedName);
-//        //        welcome = (TestObject) genericJcrDao.save(welcome);
-//        //
-//        //        
-//        //        long countBefore = genericJcrDao.getVersions(welcome).size();
-//        //        System.out.println("There are " + countBefore + " in the repository before publishing");
-//        //        
-//        //        genericJcrDao.publish(welcome, null);
-//        //        long countAfter = genericJcrDao.getVersions(welcome).size();
-//        //        System.out.println("There are " + countAfter + " in the repository after publishing");
-//        //
-//        //        long countBefore=0;
-//        //        assertEquals(countBefore, countAfter - 1);
-//        //
-//        //        logout();
-//        //
-//        //        anoymousLogin();
-//        //
-//        //        TestObject node1 = (TestObject) genericJcrDao.getByPath(welcome.getJcrPath());
-//        //        String changedName="Test Object";
-//        //        assertEquals(changedName, node1.getName());
-//        //
-//        //        logout();
-//    }
+    //    public void testPublish() throws Exception
+    //    {
+    //
+    //        /*
+    //         * FIXME Test: Implement publish() test
+    //         * Note: publish has some problem with nodes not created in the same transaction.
+    //         * This test does not work yet. 
+    //         */
+    //        //        adminLogin();
+    //        //
+    //        //        TestObject welcome = createTestObject("/", "test2.html", "Test Object");
+    //        //        
+    //        //        assertTrue(genericJcrDao.existsAtPath("/test2.html"));
+    //        //        
+    //        //        assertNotNull(welcome);
+    //        //
+    //        //        // Edit object
+    //        //        String changedName = "New name " + new Date().toString();
+    //        //        welcome.setName(changedName);
+    //        //        welcome = (TestObject) genericJcrDao.save(welcome);
+    //        //
+    //        //        
+    //        //        long countBefore = genericJcrDao.getVersions(welcome).size();
+    //        //        System.out.println("There are " + countBefore + " in the repository before publishing");
+    //        //        
+    //        //        genericJcrDao.publish(welcome, null);
+    //        //        long countAfter = genericJcrDao.getVersions(welcome).size();
+    //        //        System.out.println("There are " + countAfter + " in the repository after publishing");
+    //        //
+    //        //        long countBefore=0;
+    //        //        assertEquals(countBefore, countAfter - 1);
+    //        //
+    //        //        logout();
+    //        //
+    //        //        anoymousLogin();
+    //        //
+    //        //        TestObject node1 = (TestObject) genericJcrDao.getByPath(welcome.getJcrPath());
+    //        //        String changedName="Test Object";
+    //        //        assertEquals(changedName, node1.getName());
+    //        //
+    //        //        logout();
+    //    }
 
     //    public void testGetAllVersions() throws Exception
     //    {

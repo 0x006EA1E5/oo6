@@ -7,7 +7,7 @@ import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
 
-@Type(labelProperty = "name")
+@Type(labelProperty = "name", codeProperty="name")
 public class TestComponentObject extends BaseComponent
 {
     private String name;
@@ -18,6 +18,16 @@ public class TestComponentObject extends BaseComponent
     private List<String> stringsList;
     private List<TestComponentObject> componentsList;
 
+    public TestComponentObject()
+    {
+    }
+    
+    public TestComponentObject(String name)
+    {
+        setName(name);
+    }
+
+    
     @Property
     public String getName()
     {
