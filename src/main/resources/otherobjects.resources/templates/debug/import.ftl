@@ -2,7 +2,7 @@
 
 <h1>XML Import</h1>
 
-<form method="post">
+<form method="post" accept-charset="UTF-8">
 <textarea style="width:600px; height:300px;" name="xml">${xml!}</textarea>
 <p><input type="submit" value="Import"/></p>
 </form>
