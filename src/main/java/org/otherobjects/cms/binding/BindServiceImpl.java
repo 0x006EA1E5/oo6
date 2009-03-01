@@ -185,7 +185,7 @@ public class BindServiceImpl implements BindService
                     {
                         this.binder.registerCustomEditor(CmsNode.class, rootPath, new CmsNodeReferenceEditor(this.daoService, relatedType));
                     }
-                }   
+                }
                 else if (propertyDef.getType().equals("component"))// deal with components
                 {
                     prepareComponent(item, propertyDef, rootPathPrefix);
@@ -219,7 +219,7 @@ public class BindServiceImpl implements BindService
         if (component == null)
         {
             // Create object if null 
-            component = createObject(propertyDef);
+            component = createComponent(propertyDef);
             setValue(parent, propertyPath, component);
         }
 
@@ -250,19 +250,32 @@ public class BindServiceImpl implements BindService
         return listProps;
     }
 
+//    private Object createObject(PropertyDef propertyDef)
+//    {
+//        // FIXME Allow DynaNode creation here
+//        // TODO Are types arways class names?
+//
+//        TypeDef typeDef = propertyDef.getRelatedTypeDef();
+//        DataStore store = getDataStore(typeDef.getStore());
+//        return store.create(typeDef, null);
+//
+//    }
+
     /**
      * FIXME Merge this with FormController/TypeService
      * FIXME this is very hacky atm
      */
-    private Object createObject(PropertyDef propertyDef)
+    private Object createComponent(PropertyDef propertyDef)
     {
-        // FIXME Allow DynaNode creation here
-        // TODO Are types arways class names?
-
-        TypeDef typeDef = propertyDef.getRelatedTypeDef();
-        DataStore store = getDataStore(typeDef.getStore());
-        return store.create(typeDef, null);
-
+        try
+        {
+            Object n = Class.forName(propertyDef.getRelatedTypeDef().getClassName()).newInstance();
+            return n;
+        }
+        catch (Exception e)
+        {
+            throw new OtherObjectsException("Could not create object for property: " + propertyDef, e);
+        }
     }
 
     /**
