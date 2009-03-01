@@ -81,6 +81,7 @@ public class BlockController
         TemplateBlockReference blockRef = new TemplateBlockReference();
         blockRef.setPath("/blocks/");
         blockRef.setBlock(templateBlock);
+        dao.save(blockRef,false);
         
         TemplateRegion region = template.getRegion(regionCode);
         if(region==null)
