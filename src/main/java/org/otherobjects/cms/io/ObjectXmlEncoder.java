@@ -50,7 +50,8 @@ public class ObjectXmlEncoder
     {
         try
         {
-            element.addAttribute("id", ((Editable) item).getEditableId());
+            if(item instanceof Editable)
+                element.addAttribute("id", ((Editable) item).getEditableId());
             
             // FIXME Hacky hack
             if(typeDef == null  && item instanceof DynaNode)

@@ -187,9 +187,26 @@ public class ObjectXmlDecoder
         }
         else
         {
-            Object component = jackrabbitDataStore.create(property.getRelatedTypeDef(), null);
+            Object component = createComponent(property);
             populateObject(element.element("object"), property.getRelatedTypeDef(), component);
             PropertyUtils.setProperty(object, path, component);
+        }
+    }
+    
+    /**
+     * FIXME Merge this with FormController/TypeService
+     * FIXME this is very hacky atm
+     */
+    private Object createComponent(PropertyDef propertyDef)
+    {
+        try
+        {
+            Object n = Class.forName(propertyDef.getRelatedTypeDef().getClassName()).newInstance();
+            return n;
+        }
+        catch (Exception e)
+        {
+            throw new OtherObjectsException("Could not create object for property: " + propertyDef, e);
         }
     }
 
