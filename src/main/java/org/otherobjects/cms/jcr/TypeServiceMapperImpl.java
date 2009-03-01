@@ -103,7 +103,7 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         cd.setJcrType("oo:node");
 
         // Map common fields
-        addStandardFields(cd);
+        addStandardFields(null, cd);
 
         // Map data map
         CollectionDescriptor cld = new CollectionDescriptor();
@@ -125,7 +125,7 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         else
             cd.setJcrType("oo:node");
 
-        addStandardFields(cd);
+        addStandardFields(typeDef, cd);
 
         // Add custom properties
         for (PropertyDef propDef : typeDef.getProperties())
@@ -208,28 +208,26 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
         return cd;
     }
 
-    private void addStandardFields(ClassDescriptor cd)
+    private void addStandardFields(TypeDef typeDef, ClassDescriptor cd)
     {
-        // Add standard properties
-
-        // FIXME This is used for collections. Is there a better way?
-        FieldDescriptor fd5 = new FieldDescriptor();
-        fd5.setFieldName("code");
-        fd5.setJcrName("code");
-        if (!cd.getJcrType().equals("oo:component"))
+        if (typeDef != null && StringUtils.isNotBlank(typeDef.getCodeProperty()))
         {
+            // FIXME This is used for collections. Is there a better way?
+            FieldDescriptor fd5 = new FieldDescriptor();
+            fd5.setFieldName(typeDef.getCodeProperty());
+            fd5.setJcrName(typeDef.getCodeProperty());
             fd5.setId(true);
+            cd.addFieldDescriptor(fd5);
         }
-        cd.addFieldDescriptor(fd5);
 
-        FieldDescriptor fd2 = new FieldDescriptor();
-        fd2.setFieldName("jcrPath");
-        fd2.setJcrName("jcrPath");
         if (!cd.getJcrType().equals("oo:component"))
         {
+            FieldDescriptor fd2 = new FieldDescriptor();
+            fd2.setFieldName("jcrPath");
+            fd2.setJcrName("jcrPath");
             fd2.setPath(true);
+            cd.addFieldDescriptor(fd2);
         }
-        cd.addFieldDescriptor(fd2);
 
         FieldDescriptor fd3 = new FieldDescriptor();
         fd3.setFieldName("ooLabel");
@@ -256,13 +254,13 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
 
             // Audit info
             FieldDescriptor fd7 = new FieldDescriptor();
-            fd7.setFieldName("userName");
-            fd7.setJcrName("userName");
+            fd7.setFieldName("modifier");
+            fd7.setJcrName("modifier");
             cd.addFieldDescriptor(fd7);
 
             FieldDescriptor fd8 = new FieldDescriptor();
-            fd8.setFieldName("userId");
-            fd8.setJcrName("userId");
+            fd8.setFieldName("creator");
+            fd8.setJcrName("creator");
             cd.addFieldDescriptor(fd8);
 
             FieldDescriptor fd9 = new FieldDescriptor();
@@ -276,13 +274,13 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
             cd.addFieldDescriptor(fd12);
 
             FieldDescriptor fd10 = new FieldDescriptor();
-            fd10.setFieldName("comment");
-            fd10.setJcrName("comment");
+            fd10.setFieldName("editingComment");
+            fd10.setJcrName("editingComment");
             cd.addFieldDescriptor(fd10);
 
             FieldDescriptor fd11 = new FieldDescriptor();
-            fd11.setFieldName("changeNumber");
-            fd11.setJcrName("changeNumber");
+            fd11.setFieldName("version");
+            fd11.setJcrName("version");
             cd.addFieldDescriptor(fd11);
 
         }
