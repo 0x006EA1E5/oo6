@@ -29,6 +29,12 @@ ${pageTitle}
 </thead>
 <tbody>
 <tr>
+<td class="oo-label">ID</td>
+<td class="oo-field-none">
+${object.id!}
+</td>
+</tr>
+<tr>
 <td class="oo-label">JCR Path</td>
 <td class="oo-field-none">
 ${object.jcrPath!}
@@ -42,6 +48,8 @@ ${object.jcrPath!}
 <td class="oo-label">Created</td>
 <td class="oo-field-none">
 ${object.creationTimestamp!?datetime?string("long")}
+by
+${object.creator!}
 </td>
 </tr>
 <tr>
@@ -49,7 +57,7 @@ ${object.creationTimestamp!?datetime?string("long")}
 <td class="oo-field-none">
 ${object.modificationTimestamp!?datetime?string("long")}
 by
-${object.userName}
+${object.modifier!}
 </td>
 </tr>
 </#if>	
