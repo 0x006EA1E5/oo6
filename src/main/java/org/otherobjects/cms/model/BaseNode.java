@@ -41,7 +41,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
     private Date modificationTimestamp;
     private String editingComment;
     private int version = 0;
-    
+
     /** Tag list. */
     private String ooTags;
 
@@ -56,7 +56,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
         // FIXME This should be in SitePage
         return new Url(getLinkPath());
     }
-    
+
     /**
      * FIXME Temp hack to sort out type labels in grid
      */
@@ -166,7 +166,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
             throw new OtherObjectsException("Could not get property value for '" + name + "' in: " + getTypeDef().getName(), e);
         }
     }
-    
+
     public boolean hasProperty(String name)
     {
         // FIXME Need consistent method for accessing properties Spring vs BeanWrapper
@@ -272,7 +272,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
     {
         if (getJcrPath() == null)
             return null;
-        
+
         String linkPath = getJcrPath().replaceAll("^/site", "");
         if (isFolder())
             linkPath += "/";
@@ -355,11 +355,6 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
         return this.version;
     }
 
-    public void getVersion(int version)
-    {
-        this.version = version;
-    }
-
     public String getEditableId()
     {
         return getId();
@@ -385,21 +380,18 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
         this.typeDef = typeDef;
     }
 
-    public String getOoTags() {
+    public String getOoTags()
+    {
         return ooTags;
     }
 
-    public void setOoTags(String ooTags) {
+    public void setOoTags(String ooTags)
+    {
         this.ooTags = ooTags;
     }
 
     public Date getCreationTimestamp()
     {
-        // FIXME Need better way of doing this
-        if(creationTimestamp==null)
-        {
-            creationTimestamp = new Date();
-        }
         return creationTimestamp;
     }
 
@@ -407,5 +399,5 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
     {
         this.creationTimestamp = creationTimestamp;
     }
-    
+
 }
