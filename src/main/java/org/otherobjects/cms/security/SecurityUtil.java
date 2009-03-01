@@ -36,13 +36,13 @@ public class SecurityUtil
      * @param id
      * @return True if the passed in id is equal to the id of the current User.  Else false.
      */
-    public static boolean isCurrentUser(String id)
+    public static boolean isCurrentUser(String username)
     {
-        Long currentUserId = getUserId();
-        if (id == null || currentUserId == null)
+        String currentUsername = getCurrentUser().getUsername();
+        if (username == null || currentUsername == null)
             return false;
 
-        return id.equals(currentUserId.toString());
+        return currentUsername.equals(username);
     }
 
     /**
