@@ -1,6 +1,8 @@
 package org.otherobjects.cms.jcr.dynamic;
 
-import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.ManagedHashMap;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.util.StringUtils;
@@ -15,11 +17,12 @@ import org.springframework.util.Assert;
  * 
  * @author rich
  */
+@SuppressWarnings("unchecked")
 public class DynaNode extends BaseNode
 {
     public static final String DYNA_NODE_DATAMAP_NAME = "data";
 
-    private ManagedHashMap data = new ManagedHashMap();
+    private Map data = new HashMap();
     private String ooType;
 
     public DynaNode()
@@ -83,12 +86,12 @@ public class DynaNode extends BaseNode
         setOoType(typeDef.getName());
     }
 
-    public ManagedHashMap getData()
+    public Map getData()
     {
         return data;
     }
 
-    public void setData(ManagedHashMap data)
+    public void setData(Map data)
     {
         this.data = data;
     }
@@ -100,12 +103,9 @@ public class DynaNode extends BaseNode
         return (String) (data.get("code") != null ? data.get("code") : StringUtils.generateUrlCode(getLabel()));
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void setCode(String code)
     {
         data.put("code", code);
     }
-    
-    
 }

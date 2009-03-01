@@ -1,6 +1,7 @@
 package org.otherobjects.cms.jcr.dynamic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -21,11 +22,11 @@ import org.apache.jackrabbit.ocm.manager.beanconverter.impl.DefaultBeanConverter
 import org.apache.jackrabbit.ocm.manager.beanconverter.impl.ReferenceBeanConverterImpl;
 import org.apache.jackrabbit.ocm.manager.collectionconverter.CollectionConverter;
 import org.apache.jackrabbit.ocm.manager.collectionconverter.ManageableCollection;
-import org.apache.jackrabbit.ocm.manager.collectionconverter.ManageableCollectionUtil;
+import org.apache.jackrabbit.ocm.manager.collectionconverter.ManageableObjects;
 import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.AbstractCollectionConverterImpl;
 import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.BeanReferenceCollectionConverterImpl;
 import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.DefaultCollectionConverterImpl;
-import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.ManagedHashMap;
+import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.ManageableMapImpl;
 import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.MultiValueCollectionConverterImpl;
 import org.apache.jackrabbit.ocm.manager.objectconverter.ObjectConverter;
 import org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImpl;
@@ -64,7 +65,8 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
      *
      * @see AbstractCollectionConverterImpl#doInsertCollection(Session, Node, CollectionDescriptor, ManageableCollection)
      */
-    protected void doInsertCollection(Session session, Node parentNode, CollectionDescriptor collectionDescriptor, ManageableCollection collection) throws RepositoryException
+    @Override
+    protected void doInsertCollection(Session session, Node parentNode, CollectionDescriptor descriptor, ManageableObjects collection) throws RepositoryException
     {
         try
         {
@@ -73,10 +75,10 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
                 return;
             }
 
-            String jcrName = getCollectionJcrName(collectionDescriptor);
+            String jcrName = getCollectionJcrName(descriptor);
             Node dataNode = parentNode.addNode(jcrName, "oo:dynadata");
             ValueFactory valueFactory = session.getValueFactory();
-            Map map = (Map) collection;
+            Map map = (Map) collection.getObjects();
 
             String ooType = parentNode.getProperty("ooType").getString();
             TypeDef type = typeService.getType(ooType);
@@ -112,7 +114,7 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
         }
         catch (ValueFormatException vfe)
         {
-            throw new PersistenceException("Cannot insert collection field : " + collectionDescriptor.getFieldName() + " of class " + collectionDescriptor.getClassDescriptor().getClassName(), vfe);
+            throw new PersistenceException("Cannot insert collection field : " + descriptor.getFieldName() + " of class " + descriptor.getClassDescriptor().getClassName(), vfe);
         }
     }
 
@@ -142,8 +144,8 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
         }
 
         collectionDescriptor.setElementClassName(elementClassName);
-        ManageableCollection manageableCollection = ManageableCollectionUtil.getManageableCollection(collection);
-        collectionConverter.insertCollection(session, dataNode, collectionDescriptor, manageableCollection);
+        //ManageableCollection manageableCollection = ManageableObjectsUtil.getManageableCollection(collection);
+        collectionConverter.insertCollection(session, dataNode, collectionDescriptor, new ManageableMapImpl((Map) collection));
     }
 
     private void insertReferenceProperty(Session session, Node dataNode, String key, Object fieldValue)
@@ -179,7 +181,8 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
      *
      * @see AbstractCollectionConverterImpl#doUpdateCollection(Session, Node, CollectionDescriptor, ManageableCollection)
      */
-    protected void doUpdateCollection(Session session, Node parentNode, CollectionDescriptor collectionDescriptor, ManageableCollection collection) throws RepositoryException
+    @Override
+    protected void doUpdateCollection(Session session, Node parentNode, CollectionDescriptor collectionDescriptor, ManageableObjects collection) throws RepositoryException
     {
         String jcrName = getCollectionJcrName(collectionDescriptor);
 
@@ -196,7 +199,7 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
     /**
      * @see AbstractCollectionConverterImpl#doGetCollection(Session, Node, CollectionDescriptor, Class)
      */
-    protected ManageableCollection doGetCollection(Session session, Node parentNode, CollectionDescriptor collectionDescriptor, Class collectionFieldClass) throws RepositoryException
+    protected ManageableObjects doGetCollection(Session session, Node parentNode, CollectionDescriptor collectionDescriptor, Class collectionFieldClass) throws RepositoryException
     {
         try
         {
@@ -211,7 +214,7 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
             TypeDef type = typeService.getType(ooType);
 
             Node dataNode = parentNode.getNode(jcrName);
-            ManagedHashMap map = new ManagedHashMap();
+            Map map = new HashMap();
 
             for (PropertyDef property : type.getProperties())
             {
@@ -238,7 +241,7 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
                 map.put(property.getName(), value);
 
             }
-            return map;
+            return new ManageableMapImpl(map);
         }
         catch (ValueFormatException vfe)
         {
@@ -246,7 +249,7 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
         }
     }
 
-    private ManageableCollection retrieveList(Session session, Node dataNode, PropertyDef property)
+    private ManageableObjects retrieveList(Session session, Node dataNode, PropertyDef property)
     {
 
         CollectionDescriptor collectionDescriptor = new CollectionDescriptor();
@@ -310,9 +313,9 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
         {
             // FIXME Clean up this method
             String propertyName = property.getFieldName().replaceAll("data\\[","").replaceAll("\\]","");
-            if(!dataNode.hasProperty(propertyName + "/ocm:classname"))
+            if(!dataNode.hasProperty(propertyName + "/ocm_classname"))
                 return null;    
-            Property classNameProperty = dataNode.getProperty(propertyName + "/ocm:classname");
+            Property classNameProperty = dataNode.getProperty(propertyName + "/ocm_classname");
             String className = classNameProperty.getString();
             clazz = Class.forName(className);
         }
@@ -337,4 +340,5 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
         }
         return false;
     }
+
 }
