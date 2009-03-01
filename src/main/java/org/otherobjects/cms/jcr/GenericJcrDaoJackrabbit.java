@@ -1,5 +1,7 @@
 package org.otherobjects.cms.jcr;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,7 +14,6 @@ import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Workspace;
-import javax.jcr.query.QueryResult;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
@@ -34,10 +35,8 @@ import org.otherobjects.cms.dao.PagedListImpl;
 import org.otherobjects.cms.events.PublishEvent;
 import org.otherobjects.cms.model.Audited;
 import org.otherobjects.cms.model.CmsNode;
-import org.otherobjects.cms.model.Selector;
 import org.otherobjects.cms.model.User;
 import org.otherobjects.cms.security.SecurityUtil;
-import org.otherobjects.cms.types.annotation.Property;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -172,14 +171,14 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
 
         T compareNode = get(object.getId());
         // if the changeNumber has changed something else has saved the baseNode while we were working on it. So it shouldn't be saved.
-        if (compareNode != null && compareNode.getChangeNumber() == object.getChangeNumber())
+        if (compareNode != null && compareNode.getVersion() == object.getVersion())
             return true;
 
         // change number is fine so check for the rest 
         if (object.isPublished())
             return true;
 
-        if (SecurityUtil.isCurrentUser(object.getUserId()))
+        if (SecurityUtil.isCurrentUser(object.getModifier()))
             return true;
 
         return false;
@@ -200,7 +199,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
             return true;
 
         // if it is not we can save only if the current AuditInfo.getUserId()  is equal to the current users id
-        if (SecurityUtil.isCurrentUser(baseNode.getUserId()))
+        if (SecurityUtil.isCurrentUser(baseNode.getModifier()))
             return true;
 
         return false;
@@ -249,34 +248,42 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         return (entity != null);
     }
 
-    public void renderNodeInfo(String path)
+    public void renderNodeInfo(String uuid)
     {
-        Selector s = new Selector();
-        s.setQueryPath(path);
-        s.setSubFolders(true);
-//        s.setQueryTypeName(type);
-        final String xpath = s.getQuery();
-        
-        jcrMappingTemplate.execute(new JcrCallback()
+        try
         {
-            public Object doInJcr(Session session) throws RepositoryException
+            Node node = jcrMappingTemplate.getNodeByUUID(uuid);
+            
+            jcrMappingTemplate.execute(new JcrCallback()
             {
-                StringBuffer html = new StringBuffer();
-
-                if (xpath != null)
+                public Object doInJcr(Session session) throws RepositoryException
                 {
-                    javax.jcr.query.QueryManager queryManager = session.getWorkspace().getQueryManager();
-                    javax.jcr.query.Query query = queryManager.createQuery(xpath, javax.jcr.query.Query.XPATH);
-                    QueryResult queryResult = query.execute();
-                    NodeIterator nodeIterator = queryResult.getNodes();
-                    while (nodeIterator.hasNext())
-                        renderNodeInfo(nodeIterator.nextNode(), 0);
+                    try
+                    {
+                        session.exportDocumentView("/", new FileOutputStream(new File("/tmp/out")), true, true);
+                    }
+                    catch (Exception e)
+                    {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    return null;
                 }
-                else
-                    return "";
-                return html.toString();
-            }
-        });
+            });
+            
+            
+//            exportDocumentView(String absPath, 
+//                    ContentHandler contentHandler, 
+//                    boolean skipBinary, 
+//                    boolean noRecurse) 
+
+            renderNodeInfo(node, 0);
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     protected void renderNodeInfo(Node node, int depth) throws RepositoryException
@@ -284,16 +291,23 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         if (node.getPath().equals("/jcr:system"))
             return;
 
-        System.err.print("" + node.getPath() + " (" + node.getPrimaryNodeType().getName() + ")" + "");
+        System.err.print("" + node.getPath() + " (" + node.getPrimaryNodeType().getName() + ")" + " [");
 
         PropertyIterator properties = node.getProperties();
         while (properties.hasNext())
         {
             javax.jcr.Property prop = properties.nextProperty();
             if (prop.getDefinition().isMultiple())
-                System.err.print(" " + prop.getName() + "=" + prop.getValues() + "<br/>");
+                System.err.print("" + prop.getName() + "=" + prop.getValues() + ", ");
             else
-                System.err.print(" " + prop.getName() + "=" + prop.getValue().getString() + "<br/>");
+                System.err.print("" + prop.getName() + "=" + prop.getValue().getString() + ", ");
+        }
+        System.err.println("]");
+
+        NodeIterator childNodes = node.getNodes();
+        while (childNodes.hasNext())
+        {
+            renderNodeInfo(childNodes.nextNode(), depth + 1);
         }
     }
 
@@ -614,8 +628,8 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                     saveInternal(baseNode, true); // set the status to published
 
                     // create version and assign the current changeNumber as the label
-                    baseNode.setChangeNumber(baseNode.getChangeNumber() + 1);
-                    manager.checkin(jcrPath, new String[]{(baseNode.getChangeNumber()) + ""});
+                    baseNode.setVersion(baseNode.getVersion() + 1);
+                    manager.checkin(jcrPath, new String[]{(baseNode.getVersion()) + ""});
                     manager.checkout(jcrPath);
 
                     applicationContext.publishEvent(new PublishEvent(this, baseNode));
@@ -632,17 +646,17 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
 
     private void updateAuditInfo(T baseNode, String comment)
     {
+        // FIXME Need to deal with creation data
         User user = SecurityUtil.getCurrentUser();
         if (user != null) // FIXME Need to reenable and then mock in tests
         {
             Assert.notNull(user, "auditInfo can't be updated if there is no current user");
-            baseNode.setUserName(user.getFullName());
-            baseNode.setUserId(user.getId().toString());
+            baseNode.setModifier(user.getUsername());
         }
         baseNode.setModificationTimestamp(new Date());
         if (StringUtils.isNotEmpty(comment))
-            baseNode.setComment(comment);
-        baseNode.setChangeNumber(baseNode.getChangeNumber() + 1);
+            baseNode.setEditingComment(comment);
+        baseNode.setVersion(baseNode.getVersion() + 1);
     }
 
     @SuppressWarnings("unchecked")
@@ -688,7 +702,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                     node.checkout();
 
                     // Update change number
-                    int newChangeNumber = object.getChangeNumber() + 1;
+                    int newChangeNumber = object.getVersion() + 1;
                     node.setProperty("changeNumber", newChangeNumber);
                     node.save();
 
