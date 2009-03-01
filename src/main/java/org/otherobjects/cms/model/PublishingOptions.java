@@ -10,7 +10,7 @@ import org.otherobjects.cms.types.annotation.Type;
  * 
  * @author rich
  */
-@Type
+@Type(codeProperty="")
 public class PublishingOptions extends BaseComponent
 {
     private Date embargoUntil;

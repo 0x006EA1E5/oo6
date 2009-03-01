@@ -8,7 +8,7 @@ import org.otherobjects.cms.types.annotation.Type;
  * stored and is primarily for SEO (internal search and external engines).
  */
 // FIXME This must not extend BaseNode.
-@Type
+@Type(codeProperty="")
 public class MetaData extends BaseComponent
 {
     private String title;
