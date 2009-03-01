@@ -136,26 +136,27 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
 
     protected T saveSimple(T object, boolean validate)
     {
-        if (object.getId() == null)
+        CmsNode existingObj = null;
+        // PERF Extra lookup required to check path change
+        if (object.getId() != null)
+            existingObj = get(object.getId());
+        if(object.getId() != null && existingObj == null)
+            existingObj = getByPath(object.getJcrPath());
+            
+
+        if (existingObj == null)
         {
             // New
             Assert.notNull(object.getJcrPath(), "jcrPath must not be null when saving.");
             jcrMappingTemplate.insert(object);
-
-            // PERF Extra lookup required to get UUID. Should be done in PM.
-            CmsNode newObj = getByPath(object.getJcrPath());
-            Assert.notNull(newObj, "Object not saved correctly. Could not read ID.");
-            object.setId(newObj.getId());
             jcrMappingTemplate.save();
             return object;
         }
         else
         {
-            // PERF Extra lookup required to check path change
-            CmsNode existingObj = get(object.getId());
+            // Existing object may not exist if this is an import
             if (!existingObj.getJcrPath().equals(object.getJcrPath()))
                 jcrMappingTemplate.move(existingObj.getJcrPath(), object.getJcrPath());
-
             // Update
             jcrMappingTemplate.update(object);
             jcrMappingTemplate.save();
@@ -170,6 +171,11 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
             return true;
 
         T compareNode = get(object.getId());
+
+        // Node doesn't exist in repo. Must be an import.
+        if (compareNode == null)
+            return true;
+
         // if the changeNumber has changed something else has saved the baseNode while we were working on it. So it shouldn't be saved.
         if (compareNode != null && compareNode.getVersion() == object.getVersion())
             return true;
@@ -253,7 +259,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         try
         {
             Node node = jcrMappingTemplate.getNodeByUUID(uuid);
-            
+
             jcrMappingTemplate.execute(new JcrCallback()
             {
                 public Object doInJcr(Session session) throws RepositoryException
@@ -270,12 +276,11 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                     return null;
                 }
             });
-            
-            
-//            exportDocumentView(String absPath, 
-//                    ContentHandler contentHandler, 
-//                    boolean skipBinary, 
-//                    boolean noRecurse) 
+
+            //            exportDocumentView(String absPath, 
+            //                    ContentHandler contentHandler, 
+            //                    boolean skipBinary, 
+            //                    boolean noRecurse) 
 
             renderNodeInfo(node, 0);
         }
@@ -650,10 +655,15 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         User user = SecurityUtil.getCurrentUser();
         if (user != null) // FIXME Need to reenable and then mock in tests
         {
+            if (baseNode.getCreator() == null)
+                baseNode.setCreator(user.getUsername());
+
             Assert.notNull(user, "auditInfo can't be updated if there is no current user");
             baseNode.setModifier(user.getUsername());
         }
         baseNode.setModificationTimestamp(new Date());
+        if (baseNode.getCreationTimestamp() == null)
+            baseNode.setCreationTimestamp(new Date());
         if (StringUtils.isNotEmpty(comment))
             baseNode.setEditingComment(comment);
         baseNode.setVersion(baseNode.getVersion() + 1);
@@ -772,7 +782,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                         Node n = nodes.nextNode();
                         //FIXME Extra lookup is bad. Can we avoid UUID requirement too
                         //FIXME Avoid jcr: nodes better...
-                        if (!n.getName().startsWith("jcr:"))
+                        if (!n.getName().startsWith("jcr:") && n.getPrimaryNodeType().getName().equals("oo:node"))
                             list.add((T) manager.getObjectByUuid(n.getUUID()));
                     }
                     return list;
