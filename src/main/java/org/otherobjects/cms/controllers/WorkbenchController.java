@@ -208,7 +208,7 @@ public class WorkbenchController
         // Search JCR
         String q = request.getParameter("q");
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
-        List<BaseNode> results = universalJcrDao.getAllByJcrExpression("/jcr:root/site//(*) [jcr:contains(data/., '" + q + "')]");
+        List<BaseNode> results = universalJcrDao.getAllByJcrExpression("/jcr:root/site//(*) [jcr:contains(., '" + q + "')]");
 
         // Search DB
         ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/search");
