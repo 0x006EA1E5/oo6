@@ -15,9 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
-import org.otherobjects.cms.datastore.DataStore;
-import org.otherobjects.cms.datastore.HibernateDataStore;
-import org.otherobjects.cms.datastore.JackrabbitDataStore;
 import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.types.PropertyDef;
@@ -49,11 +46,11 @@ public class BindServiceImpl implements BindService
     @Resource
     private DaoService daoService;
 
-    @Resource
-    private HibernateDataStore hibernateDataStore;
-
-    @Resource
-    private JackrabbitDataStore jackrabbitDataStore;
+//    @Resource
+//    private HibernateDataStore hibernateDataStore;
+//
+//    @Resource
+//    private JackrabbitDataStore jackrabbitDataStore;
 
     private ServletRequestDataBinder binder = null;
     private HttpServletRequest request;
@@ -327,30 +324,30 @@ public class BindServiceImpl implements BindService
 
     }
 
-    /**
-     * FIXME This must merge with code in WorkbenchController.
-     * 
-     * @param store
-     * @return
-     */
-    private DataStore getDataStore(String store)
-    {
-        if (store.equals(TypeDef.JACKRABBIT))
-            return this.jackrabbitDataStore;
-        else if (store.equals(TypeDef.HIBERNATE))
-            return this.hibernateDataStore;
-        else
-            throw new OtherObjectsException("No dataStore configured for: " + store);
-    }
+//    /**
+//     * FIXME This must merge with code in WorkbenchController.
+//     * 
+//     * @param store
+//     * @return
+//     */
+//    private DataStore getDataStore(String store)
+//    {
+//        if (store.equals(TypeDef.JACKRABBIT))
+//            return this.jackrabbitDataStore;
+//        else if (store.equals(TypeDef.HIBERNATE))
+//            return this.hibernateDataStore;
+//        else
+//            throw new OtherObjectsException("No dataStore configured for: " + store);
+//    }
 
-    protected void setHibernateDataStore(HibernateDataStore hibernateDataStore)
-    {
-        this.hibernateDataStore = hibernateDataStore;
-    }
-
-    protected void setJackrabbitDataStore(JackrabbitDataStore jackrabbitDataStore)
-    {
-        this.jackrabbitDataStore = jackrabbitDataStore;
-    }
+//    protected void setHibernateDataStore(HibernateDataStore hibernateDataStore)
+//    {
+//        this.hibernateDataStore = hibernateDataStore;
+//    }
+//
+//    protected void setJackrabbitDataStore(JackrabbitDataStore jackrabbitDataStore)
+//    {
+//        this.jackrabbitDataStore = jackrabbitDataStore;
+//    }
 
 }
