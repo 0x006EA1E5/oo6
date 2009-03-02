@@ -74,9 +74,7 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
             {
                 return;
             }
-
-            String jcrName = getCollectionJcrName(descriptor);
-            Node dataNode = parentNode.addNode(jcrName, "oo:dynadata");
+            Node dataNode = parentNode;//.addNode(jcrName, "oo:dynadata");
             ValueFactory valueFactory = session.getValueFactory();
             Map map = (Map) collection.getObjects();
 
@@ -99,6 +97,8 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
                 }
                 else if (propertyType.equals(PropertyDef.COMPONENT))
                 {
+                    if(parentNode.hasNode(propertyName))
+                        parentNode.getNode(propertyName).remove();
                     insertComponentProperty(session, dataNode, propertyName, fieldValue);
                 }
                 else if (propertyType.equals(PropertyDef.REFERENCE))
@@ -203,17 +203,15 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
     {
         try
         {
-            String jcrName = getCollectionJcrName(collectionDescriptor);
-
-            if (!parentNode.hasNode(jcrName))
-            {
-                return null;
-            }
+//            if (!parentNode.hasNode(jcrName))
+//            {
+//                return null;
+//            }
 
             String ooType = parentNode.getProperty("ooType").getString();
             TypeDef type = typeService.getType(ooType);
 
-            Node dataNode = parentNode.getNode(jcrName);
+            Node dataNode = parentNode;//.getNode(jcrName);
             Map map = new HashMap();
 
             for (PropertyDef property : type.getProperties())
@@ -332,6 +330,7 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
      */
     protected boolean doIsNull(Session session, Node parentNode, CollectionDescriptor collectionDescriptor, Class collectionFieldClass) throws RepositoryException
     {
+        // FIXME This doesn't work now we have don't have a subnode 
         String jcrName = getCollectionJcrName(collectionDescriptor);
 
         if (!parentNode.hasNode(jcrName))
