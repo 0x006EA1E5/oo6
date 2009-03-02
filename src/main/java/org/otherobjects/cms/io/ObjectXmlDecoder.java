@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.clapper.util.html.HTMLUtil;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.otherobjects.cms.OtherObjectsException;
@@ -173,11 +172,8 @@ public class ObjectXmlDecoder
         {
             CmsNodeReferenceEditor propertyEditor = new CmsNodeReferenceEditor(daoService, property.getRelatedType());
             propertyEditor.setAsText(element.attributeValue("ref"));
-            if (property.getType().equals(PropertyType.TEXT.value()))
-                PropertyUtils.setProperty(object, path, HTMLUtil.convertCharacterEntities((String) propertyEditor.getValue()));
-            else
-                PropertyUtils.setProperty(object, path, propertyEditor.getValue());
-            
+            PropertyUtils.setProperty(object, path, propertyEditor.getValue());
+
         }
     }
 
@@ -197,7 +193,7 @@ public class ObjectXmlDecoder
             PropertyUtils.setProperty(object, path, component);
         }
     }
-    
+
     /**
      * FIXME Merge this with FormController/TypeService
      * FIXME this is very hacky atm
