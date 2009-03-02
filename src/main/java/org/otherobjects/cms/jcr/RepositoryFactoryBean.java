@@ -8,7 +8,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.jackrabbit.api.JackrabbitRepository;
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.config.RepositoryConfig;
-import org.apache.tools.ant.filters.StringInputStream;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
@@ -92,7 +91,7 @@ public class RepositoryFactoryBean extends org.springmodules.jcr.RepositoryFacto
         String configXml = IOUtils.toString(configuration.getInputStream());
         configXml = replaceVariables(otherObjectsConfigurator.getProperties(), configXml, true);
 
-        repositoryConfig = RepositoryConfig.create(new InputSource(new StringInputStream(configXml)), homeDir.getFile().getAbsolutePath());
+        repositoryConfig = RepositoryConfig.create(new InputSource(IOUtils.toInputStream(configXml)), homeDir.getFile().getAbsolutePath());
     }
     
     
