@@ -879,11 +879,6 @@
 			<artifactId>jta</artifactId>
 			<version>1.1</version>
 		</dependency>
-		<dependency>
-			<groupId>org.clapper</groupId>
-			<artifactId>ocutil</artifactId>
-			<version>2.4.2</version>
-		</dependency>
 		<!-- Testing only -->
 		<dependency>
 			<groupId>org.subethamail</groupId>
@@ -903,11 +898,11 @@
 			<version>2.2.2</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- FIXME Don't want to use this for all tests -->
 		<dependency>
-			<groupId>postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>8.3-603.jdbc3</version>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.1.107</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
