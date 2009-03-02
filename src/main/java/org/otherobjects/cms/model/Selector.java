@@ -17,12 +17,9 @@ import org.otherobjects.cms.types.annotation.Type;
  *
  * @author rich
  */
-@Type
-public class Selector extends BaseNode
+@Type(codeProperty="")
+public class Selector extends BaseComponent
 {
-    //    private String label;
-    //    private String description;
-
     private String queryPath;
     private String queryTypeName;
     private String queryTags;
@@ -34,35 +31,6 @@ public class Selector extends BaseNode
     private String customQuery;
     private Long start;
     private Long end;
-
-    @Override
-    public String getCode()
-    {
-        return "SELECTOR";
-    }
-
-    //
-    //    @Property(order = 10)
-    //    public String getLabel()
-    //    {
-    //        return label;
-    //    }
-    //
-    //    public void setLabel(String label)
-    //    {
-    //        this.label = label;
-    //    }
-    //
-    //    @Property(order = 20)
-    //    public String getDescription()
-    //    {
-    //        return description;
-    //    }
-    //
-    //    public void setDescription(String description)
-    //    {
-    //        this.description = description;
-    //    }
 
     @Property(order = 30)
     public String getQueryPath()
