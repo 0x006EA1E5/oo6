@@ -1,67 +1,43 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-	<!--
-		File system config <Repository> <FileSystem class="org.apache.jackrabbit.core.fs.local.LocalFileSystem"> <param name="path" value="${rep.home}/repository"/> </FileSystem>
-		<Security appName="Jackrabbit"> <AccessManager class="org.apache.jackrabbit.core.security.SimpleAccessManager"/> <LoginModule
-		class="org.apache.jackrabbit.core.security.SimpleLoginModule"/> </Security> <Workspaces rootPath="${rep.home}/workspaces" defaultWorkspace="default" /> <Workspace
-		name="${wsp.name}"> <FileSystem class="org.apache.jackrabbit.core.fs.local.LocalFileSystem"> <param name="path" value="${wsp.home}"/> </FileSystem> <PersistenceManager
-		class="org.apache.jackrabbit.core.state.xml.XMLPersistenceManager" /> <SearchIndex class="org.apache.jackrabbit.core.query.lucene.SearchIndex"> <param name="path"
-		value="${wsp.home}/index"/> </SearchIndex> </Workspace> <Versioning rootPath="${rep.home}/versions"> <FileSystem class="org.apache.jackrabbit.core.fs.local.LocalFileSystem">
-		<param name="path" value="${rep.home}/versions"/> </FileSystem> <PersistenceManager class="org.apache.jackrabbit.core.state.xml.XMLPersistenceManager" /> </Versioning>
-		</Repository>
-	-->
+<?xml version="1.0"?>
+<!DOCTYPE Repository PUBLIC "-//The Apache Software Foundation//DTD Jackrabbit 1.5//EN"
+                            "http://jackrabbit.apache.org/dtd/repository-1.5.dtd">
 <Repository>
-	<FileSystem class="org.apache.jackrabbit.core.fs.db.DbFileSystem">
-		<param name="driver" value="org.postgresql.Driver" />
-		<param name="url" value="jdbc:postgresql://localhost/site-jcr" />
-		<param name="user" value="postgres" />
-		<param name="password" value="" />
-		<param name="schema" value="postgresql" />
-		<param name="schemaObjectPrefix" value="rep_" />
-	</FileSystem>
-	<Security appName="Jackrabbit">
-		<AccessManager class="org.apache.jackrabbit.core.security.SimpleAccessManager" />
-		<LoginModule class="org.apache.jackrabbit.core.security.SimpleLoginModule" />
-	</Security>
-	<Workspaces rootPath="${rep.home}/workspaces" defaultWorkspace="default" />
-	<Workspace name="${wsp.name}">
-		<FileSystem class="org.apache.jackrabbit.core.fs.db.DbFileSystem">
-			<param name="driver" value="org.postgresql.Driver" />
-			<param name="url" value="jdbc:postgresql://localhost/site-jcr" />
-			<param name="user" value="postgres" />
-			<param name="password" value="" />
-			<param name="schema" value="postgresql" />
-			<param name="schemaObjectPrefix" value="${wsp.name}_" />
-		</FileSystem>
-		<PersistenceManager class="org.apache.jackrabbit.core.state.db.SimpleDbPersistenceManager">
-			<param name="driver" value="org.postgresql.Driver" />
-			<param name="url" value="jdbc:postgresql://localhost/site-jcr" />
-			<param name="user" value="postgres" />
-			<param name="password" value="" />
-			<param name="schema" value="postgresql" />
-			<param name="schemaObjectPrefix" value="${wsp.name}_" />
-			<param name="externalBLOBs" value="true" />
-		</PersistenceManager>
-		<SearchIndex class="org.apache.jackrabbit.core.query.lucene.SearchIndex">
-			<param name="path" value="${wsp.home}/index" />
-		</SearchIndex>
-	</Workspace>
-	<Versioning rootPath="${rep.home}/version">
-		<FileSystem class="org.apache.jackrabbit.core.fs.db.DbFileSystem">
-			<param name="driver" value="org.postgresql.Driver" />
-			<param name="url" value="jdbc:postgresql://localhost/site-jcr" />
-			<param name="user" value="postgres" />
-			<param name="password" value="" />
-			<param name="schema" value="postgresql" />
-			<param name="schemaObjectPrefix" value="version_" />
-		</FileSystem>
-		<PersistenceManager class="org.apache.jackrabbit.core.state.db.SimpleDbPersistenceManager">
-			<param name="driver" value="org.postgresql.Driver" />
-			<param name="url" value="jdbc:postgresql://localhost/site-jcr" />
-			<param name="user" value="postgres" />
-			<param name="password" value="" />
-			<param name="schema" value="postgresql" />
-			<param name="schemaObjectPrefix" value="version_" />
-			<param name="externalBLOBs" value="true" />
-		</PersistenceManager>
-	</Versioning>
+    <FileSystem class="org.apache.jackrabbit.core.fs.local.LocalFileSystem">
+        <param name="path" value="${rep.home}/repository"/>
+    </FileSystem>
+    <Security appName="Jackrabbit">
+        <AccessManager class="org.apache.jackrabbit.core.security.SimpleAccessManager" />
+        <LoginModule class="org.apache.jackrabbit.core.security.SimpleLoginModule" />
+    </Security>
+    <Workspaces rootPath="${rep.home}/workspaces" defaultWorkspace="default"/>
+    <Workspace name="${wsp.name}">
+        <FileSystem class="org.apache.jackrabbit.core.fs.local.LocalFileSystem">
+            <param name="path" value="${wsp.home}"/>
+        </FileSystem>
+        <PersistenceManager class="org.apache.jackrabbit.core.persistence.bundle.H2PersistenceManager">
+          <param name="url" value="jdbc:h2:file:${wsp.home}/db/itemState"/>
+          <param name="schemaObjectPrefix" value="${wsp.name}_"/>
+        </PersistenceManager>
+        <SearchIndex class="org.apache.jackrabbit.core.query.lucene.SearchIndex">
+            <param name="path" value="${wsp.home}/index"/>
+            <param name="textFilterClasses" value="org.apache.jackrabbit.extractor.MsWordTextExtractor,org.apache.jackrabbit.extractor.MsExcelTextExtractor,org.apache.jackrabbit.extractor.MsPowerPointTextExtractor,org.apache.jackrabbit.extractor.PdfTextExtractor,org.apache.jackrabbit.extractor.OpenOfficeTextExtractor,org.apache.jackrabbit.extractor.RTFTextExtractor,org.apache.jackrabbit.extractor.HTMLTextExtractor,org.apache.jackrabbit.extractor.XMLTextExtractor"/>
+            <param name="extractorPoolSize " value="2"/>
+            <param name="supportHighlighting" value="true"/>
+        </SearchIndex>
+    </Workspace>
+    <Versioning rootPath="${rep.home}/version">
+        <FileSystem class="org.apache.jackrabbit.core.fs.local.LocalFileSystem">
+            <param name="path" value="${rep.home}/version" />
+        </FileSystem>
+        <PersistenceManager class="org.apache.jackrabbit.core.persistence.bundle.H2PersistenceManager">
+          <param name="url" value="jdbc:h2:file:${rep.home}/db/itemState"/>
+          <param name="schemaObjectPrefix" value="version_"/>
+        </PersistenceManager>
+    </Versioning>
+    <SearchIndex class="org.apache.jackrabbit.core.query.lucene.SearchIndex">
+        <param name="path" value="${rep.home}/repository/index"/>
+        <param name="textFilterClasses" value="org.apache.jackrabbit.extractor.MsWordTextExtractor,org.apache.jackrabbit.extractor.MsExcelTextExtractor,org.apache.jackrabbit.extractor.MsPowerPointTextExtractor,org.apache.jackrabbit.extractor.PdfTextExtractor,org.apache.jackrabbit.extractor.OpenOfficeTextExtractor,org.apache.jackrabbit.extractor.RTFTextExtractor,org.apache.jackrabbit.extractor.HTMLTextExtractor,org.apache.jackrabbit.extractor.XMLTextExtractor"/>
+        <param name="extractorPoolSize " value="2"/>
+        <param name="supportHighlighting" value="true"/>
+    </SearchIndex>
 </Repository>

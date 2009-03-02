@@ -3,9 +3,10 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!-- Repository -->
-	<bean id="repository" class="org.springmodules.jcr.jackrabbit.RepositoryFactoryBean">
+	<bean id="repository" class="org.otherobjects.cms.jcr.RepositoryFactoryBean">
 		<property name="configuration" value="${jcr.config.path}" />
 		<property name="homeDir" value="${jcr.repository.location}" />
+		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
 	</bean>
 	<bean id="jcrSessionFactory" class="org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory">
 		<property name="repository" ref="repository" />
