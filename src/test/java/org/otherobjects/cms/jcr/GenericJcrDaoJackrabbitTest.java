@@ -7,7 +7,6 @@ import org.otherobjects.cms.binding.TestComponentObject;
 import org.otherobjects.cms.binding.TestObject;
 import org.otherobjects.cms.binding.TestReferenceObject;
 import org.otherobjects.cms.dao.GenericJcrDao;
-import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.model.SiteFolder;
 
 @SuppressWarnings("unchecked")
@@ -76,7 +75,6 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
 
     public void testSaveComplex() throws Exception
     {
-        genericJcrDao.remove(((CmsNode)genericJcrDao.getByPath("/test-object")).getId());
         TestObject t1 = new TestObject();
         GenericJcrDao<TestObject> dao = (GenericJcrDao<TestObject>) daoService.getDao(TestObject.class);
 

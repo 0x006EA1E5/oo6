@@ -64,7 +64,7 @@ public class HibernateBindServiceImplTest extends TestCase
         jackrabbitDataStore.setUniversalJcrDao(universalJcrDao);
         HibernateDataStore hibernateDataStore = new HibernateDataStore();
         hibernateDataStore.setDaoService(daoService);
-        bs.setHibernateDataStore(hibernateDataStore);
+//        bs.setHibernateDataStore(hibernateDataStore);
 
         bs.setDaoService(new MockDaoService(dao));
 

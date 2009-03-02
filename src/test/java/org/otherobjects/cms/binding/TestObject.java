@@ -8,6 +8,7 @@ import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
+import org.springframework.web.multipart.MultipartFile;
 
 @Type(labelProperty = "name", store="jackrabbit")
 public class TestObject extends BaseNode
@@ -36,6 +37,9 @@ public class TestObject extends BaseNode
     private List<TestReferenceObject> testReferencesList;
     private List<TestComponentObject> testComponentsList;
 
+    // File
+    private MultipartFile testFile;
+    
     public TestObject()
     {
     }
@@ -219,5 +223,15 @@ public class TestObject extends BaseNode
     public void setTestComponentsList(List<TestComponentObject> testComponentsList)
     {
         this.testComponentsList = testComponentsList;
+    }
+
+    public MultipartFile getTestFile()
+    {
+        return testFile;
+    }
+
+    public void setTestFile(MultipartFile testFile)
+    {
+        this.testFile = testFile;
     }
 }

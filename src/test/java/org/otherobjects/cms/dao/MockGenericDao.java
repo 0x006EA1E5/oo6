@@ -37,7 +37,7 @@ public class MockGenericDao implements GenericDao
         this.allObjects = mockObjects;
     }
 
-    public MockGenericDao(Map<Serializable, Object> mockObjects)
+    public MockGenericDao(Map mockObjects)
     {
         this.keyedObjects = mockObjects;
     }

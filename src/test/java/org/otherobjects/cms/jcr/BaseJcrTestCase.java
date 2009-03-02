@@ -17,7 +17,7 @@ import org.springframework.security.providers.UsernamePasswordAuthenticationToke
 import org.springframework.security.providers.anonymous.AnonymousAuthenticationProvider;
 import org.springframework.security.providers.anonymous.AnonymousAuthenticationToken;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit38.AbstractJUnit38SpringContextTests;
+import org.springframework.test.context.junit38.AbstractTransactionalJUnit38SpringContextTests;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.springmodules.jcr.jackrabbit.ocm.JcrMappingTemplate;
@@ -26,7 +26,7 @@ import org.springmodules.jcr.jackrabbit.ocm.JcrMappingTemplate;
 @ContextConfiguration(locations = {"jcr-test-context.xml"})
 @TransactionConfiguration(transactionManager = "jcrTransactionManager", defaultRollback = true)
 @Transactional
-public abstract class BaseJcrTestCase extends AbstractJUnit38SpringContextTests
+public abstract class BaseJcrTestCase extends AbstractTransactionalJUnit38SpringContextTests
 {
     @Autowired
     protected JcrMappingTemplate jcrMappingTemplate;

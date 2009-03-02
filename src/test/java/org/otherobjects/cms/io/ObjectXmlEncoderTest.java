@@ -13,7 +13,7 @@ import org.otherobjects.cms.binding.TestObject;
 import org.otherobjects.cms.binding.TestReferenceObject;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.MockDaoService;
-import org.otherobjects.cms.dao.MockGenericDao;
+import org.otherobjects.cms.dao.MockGenericJcrDao;
 import org.otherobjects.cms.dao.UniversalJcrDaoJackrabbit;
 import org.otherobjects.cms.datastore.JackrabbitDataStore;
 import org.otherobjects.cms.model.Role;
@@ -87,15 +87,14 @@ public class ObjectXmlEncoderTest extends TestCase
         t1.setTestBoolean(true);
         
         TestReferenceObject tr1 = new TestReferenceObject();
+        tr1.setJcrPath("/test/tr1");
         tr1.setId("4135bb8e-61e3-4cbc-a20a-fdc7d143ddb9");
         t1.setTestReference(tr1);
 
         TestComponentObject tc1 = new TestComponentObject();
-//        tc1.setId("test-component-id-1");
         tc1.setName("component-name");
         t1.setTestComponent(tc1);
         TestComponentObject tc2 = new TestComponentObject();
-//        tc1.setId("test-component-id-2");
         tc1.setName("component-name-2");
         t1.setTestComponent(tc1);
         
@@ -106,7 +105,7 @@ public class ObjectXmlEncoderTest extends TestCase
         TypeDef type = typeService.getType(TestObject.class);
         Document doc = encoder.encode(t1, type);
         
-        MockGenericDao dao = new MockGenericDao(tr1);
+        MockGenericJcrDao dao = new MockGenericJcrDao(tr1);
         MockDaoService daoService = new MockDaoService(dao);
         
         ObjectXmlDecoder decoder = new ObjectXmlDecoder();

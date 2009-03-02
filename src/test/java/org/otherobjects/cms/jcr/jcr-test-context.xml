@@ -68,13 +68,12 @@
 		<property name="transactionManager" ref="jcrTransactionManager" />
 		<property name="transactionAttributes">
 			<props>
-				<prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
-				<prop key="publish">PROPAGATION_NOT_SUPPORTED</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+				<prop key="publish">PROPAGATION_REQUIRED</prop>
 			</props>
 		</property>
 	</bean>
 	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-
 	</bean>
 	<bean id="universalJcrDao" parent="baseTransactionProxy">
 		<property name="target">
@@ -86,4 +85,7 @@
 			</bean>
 		</property>
 	</bean>
+	
+	<!-- This has to be here for AbstractTransactionalJUnit38SpringContextTests although not used. -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" />
 </beans>
