@@ -155,4 +155,9 @@ public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer impl
     {
         this.defaultEnvironment = defaultEnvironment;
     }
+
+    public Properties getProperties()
+    {
+        return mergedProperties;
+    }
 }
