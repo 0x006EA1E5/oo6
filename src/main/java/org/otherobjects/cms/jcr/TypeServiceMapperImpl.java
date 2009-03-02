@@ -21,6 +21,7 @@ import java.io.IOException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.ocm.exception.IncorrectPersistentClassException;
 import org.apache.jackrabbit.ocm.exception.InitMapperException;
+import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.Date2LongTypeConverterImpl;
 import org.apache.jackrabbit.ocm.manager.beanconverter.impl.DefaultBeanConverterImpl;
 import org.apache.jackrabbit.ocm.manager.beanconverter.impl.ReferenceBeanConverterImpl;
 import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.BeanReferenceCollectionConverterImpl;
@@ -266,11 +267,13 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
             FieldDescriptor fd9 = new FieldDescriptor();
             fd9.setFieldName("modificationTimestamp");
             fd9.setJcrName("modificationTimestamp");
+            fd9.setConverter(Date2LongTypeConverterImpl.class.getName());
             cd.addFieldDescriptor(fd9);
 
             FieldDescriptor fd12 = new FieldDescriptor();
             fd12.setFieldName("creationTimestamp");
             fd12.setJcrName("creationTimestamp");
+            fd12.setConverter(Date2LongTypeConverterImpl.class.getName());
             cd.addFieldDescriptor(fd12);
 
             FieldDescriptor fd10 = new FieldDescriptor();
