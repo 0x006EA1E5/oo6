@@ -115,7 +115,7 @@ var ooBlockInEdit = "";
 <div id="oo-form-overlay" style="display:none;"></div>
 <div id="oo-chooser-hud" style="display:none;">
 <h1>Choose a block to insert:</h1>
-<#list daoTool.get("baseNode").getAllByType("org.otherobjects.cms.model.TemplateBlock") as block>
+<#list daoTool.get("baseNode").getAllByJcrExpression("/jcr:root/designer//element(*) [@ooType = 'org.otherobjects.cms.model.TemplateBlock']") as block>
 <a class="oo-chooser-button" id="${block.code}">${block.label} &rarr;</a>
 </#list>
 </div>
