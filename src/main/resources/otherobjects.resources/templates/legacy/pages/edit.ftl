@@ -10,11 +10,9 @@
 <#include "/otherobjects/templates/legacy/blocks/header.ftl" />
 <#include "/otherobjects/templates/legacy/blocks/nav-folders.ftl" />
 
+<div id="ooContent">
 <div class="oo-content">
-
-<h2>
-${pageTitle}
-</h2>
+<h2>${pageTitle}</h2>
 
 <form id="oo-form" action="${oo.url(typeDef.adminControllerUrl + "/save")}" method="post" enctype="multipart/form-data">
 
@@ -56,11 +54,10 @@ function disableFormTemplates()
 
 
 </div>
+</div>
 
-<div class="oo-actions">
-<h2>Actions</h2>
-<ul>
-<li><a href="javascript:formSubmit();">Save</a></li>
+<div id="ooActions" class="oo-panel oo-text-style">
+<a class="oo-item" href="javascript:formSubmit();"><div class="oo-arrow">Save</div></a>
 </ul>
 </div>
 

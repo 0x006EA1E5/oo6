@@ -16,12 +16,12 @@
 
 <#include "/otherobjects/templates/legacy/blocks/nav-folders.ftl" />
 
+<div id="ooContent"> 
 <div class="oo-content">
-<h2>
-${pageTitle}
-</h2>
-<table class="oo-listing">
-<thead>
+
+<h2>${pageTitle}</h2>
+
+<table class="oo-listing"><thead>
 <tr>
 <th>Field</th>
 <th>Value</th>
@@ -64,23 +64,22 @@ ${object.modifier!}
 </tbody>
 </table>
 </div>
+</div>
 
-<div class="oo-actions">
-<h2>Actions</h2>
-<ul>
-<#-- <li><a href="${oo.url('/otherobjects/workbench/list/${folder.editableId}')}">Back to listing</a></li> -->
-<li class="divider"><a href="${oo.url('/otherobjects/workbench/edit/${object.editableId}')}">Edit</a></li>
+<div id="ooActions" class="oo-panel oo-text-style">
+<#-- <li><a href="${oo.url('/otherobjects/workbench/list/${folder.editableId}')}">Back to listing</a></div></div>> -->
+<a class="oo-item" href="${oo.url('/otherobjects/workbench/edit/${object.editableId}')}"><div class="oo-arrow">Edit</div></a>
 <#if item.published??>
-<li class="divider"><a href="${oo.url('/otherobjects/workbench/history/${object.editableId}')}">View history</a></li>
-<li class="divider"><a href="${oo.url('/otherobjects/workbench/publish/${object.editableId}')}">Publish</a></li>
+<div class="oo-item"><div class="oo-arrow"><a href="${oo.url('/otherobjects/workbench/history/${object.editableId}')}">View history</a></div></div>
+<div class="oo-item"><div class="oo-arrow"><a href="${oo.url('/otherobjects/workbench/publish/${object.editableId}')}">Publish</a></div></div>
 </#if>
-<li class="divider"><a href="${oo.url('/otherobjects/workbench/copy/${object.editableId}')}">Make a copy</a></li>
-<li class="divider"><a href="${oo.url('/otherobjects/workbench/delete/${object.editableId}')}">Delete</a></li>
+<div class="oo-item"><div class="oo-arrow"><a href="${oo.url('/otherobjects/workbench/copy/${object.editableId}')}">Make a copy</a></div></div>
+<div class="oo-item"><div class="oo-arrow"><a href="${oo.url('/otherobjects/workbench/delete/${object.editableId}')}">Delete</a></div></div>
 
-<li class="divider"><a href="${oo.url('/otherobjects/debug/jcr?path=${object.jcrPath}')}">Debug</a></li>
+<div class="oo-item"><div class="oo-arrow"><a href="${oo.url('/otherobjects/debug/jcr?path=${object.jcrPath}')}">Debug</a></div></div>
 
 <#if item.linkPath??>
-<li class="divider"><a href="${oo.url(item.linkPath)}">Preview</a></li>
+<div class="oo-item"><div class="oo-arrow"><a href="${oo.url(item.linkPath)}">Preview</a></div></div>
 </#if>
 </ul>
 </div>

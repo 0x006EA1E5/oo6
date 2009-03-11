@@ -132,6 +132,7 @@ Macro to insert region
 <#list (template.getRegion(regionCode)!).blocks! as block>
 <@oo.block block />
 </#list>
+
 </div>
 
 </#macro>  

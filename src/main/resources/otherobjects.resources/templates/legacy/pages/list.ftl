@@ -9,11 +9,10 @@
 
 <#include "/otherobjects/templates/legacy/blocks/nav-folders.ftl" />
 
+<div id="ooContent"> 
 <div class="oo-content">
-<h2>
-${pageTitle}
-</h2>
 
+<h2>${pageTitle}</h2>
 
 <table class="oo-listing">
 <thead>
@@ -45,19 +44,26 @@ ${pageTitle}
 
 
 
-<div class="oo-actions">
-<h2>Actions</h2>
+<div id="ooActions" class="oo-panel oo-text-style">
 
-<ul>
-<li><a href="${oo.url('/otherobjects/workbench/view/'+folder.id)}">View folder details ...</a></li>
-<li><a href="${oo.url('/otherobjects/workbench/create/org.otherobjects.cms.model.SiteFolder?container='+folder.id)}">New sub folder ...</a></li>
-<li><a href="${oo.url('/otherobjects/workbench/create/org.otherobjects.cms.model.DbFolder?container='+folder.id)}">New database folder ...</a></li>
+<#--<div class="oo-title"><big>Actions</big></div>--> 
+<a class="oo-item" href="${oo.url('/otherobjects/workbench/view/'+folder.id)}"><div class="oo-arrow">View folder details</div></a>
+<a class="oo-item" href="${oo.url('/otherobjects/workbench/create/org.otherobjects.cms.model.SiteFolder?container='+folder.id)}"><div class="oo-arrow">New sub folder</div></a>
+<a class="oo-item" href="${oo.url('/otherobjects/workbench/create/org.otherobjects.cms.model.DbFolder?container='+folder.id)}"><div class="oo-arrow">New database folder</div></a>
 <#list folder.allAllowedTypes as type>
 <#if type?exists>
-<li class="divider"><a href="${oo.url('/otherobjects/workbench/create/${type.name}?container=${folder.id}')}">New ${type.label} ...</a></li>
+<a class="oo-item" href="${oo.url('/otherobjects/workbench/create/${type.name}?container=${folder.id}')}"><div class="oo-arrow">New ${type.label}</div></a>
 </#if>
 </#list>
+<#--
+<ul>
+<li></li>
+<li></li>
+<li></li>
+
 </ul>
+-->
+</div>
 </div>
 
 <#include "/otherobjects/templates/legacy/blocks/footer.ftl" />

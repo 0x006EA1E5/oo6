@@ -7,6 +7,7 @@
 
 <#include "/otherobjects/templates/legacy/blocks/nav-folders.ftl" />
 
+<div id="ooContent">
 <div class="oo-content">
 <h2>
 ${pageTitle}
@@ -33,6 +34,7 @@ ${pageTitle}
 </#list>
 </tbody>
 </table>
+</div>
 </div>
 
 

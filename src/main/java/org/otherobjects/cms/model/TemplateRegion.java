@@ -1,5 +1,6 @@
 package org.otherobjects.cms.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.otherobjects.cms.types.annotation.Property;
@@ -11,7 +12,7 @@ public class TemplateRegion extends BaseComponent
 {
     private String code;
     private String label;
-    private List<TemplateBlockReference> blocks;
+    private List<TemplateBlockReference> blocks = new ArrayList<TemplateBlockReference>();
 
     @Property(order = 10)
     public String getCode()

@@ -5,7 +5,8 @@ var bodyWidth = Ojay('body').setStyle({'width' : YAHOO.util.Dom.getViewportWidth
 
 Ojay.Keyboard.listen(document, 'ESCAPE', toggleHud);
 Ojay('div.oo-icon').on('click',toggleHud); 
-				
+
+
 function toggleHud(el, e) {
 	if(hudVisible) {
 		// Animate hud closed
@@ -63,6 +64,8 @@ function toggleHud(el, e) {
 }
 
 
+
+
 /*
 ('.oo-editregion').forEach(function(el,i) {
 		// Loop create editregions
@@ -80,3 +83,129 @@ function toggleHud(el, e) {
 		dd2.setHandleElId('draghandle' + i); 
 })
 */
+
+/**
+ * ooSaveTemplateDesign
+ * 
+ * Encodes arrangement of regions and blocks as JSON string and posts to backend
+ * to save against template.
+ */
+function ooSaveTemplateDesign()
+{
+	// Detects region/blcok arrangement and serialises it to a JSON string 
+	// with is then posted to the BlockController to save.
+	var regions = new Array();
+	Ojay(".oo-region").forEach(function(e) {
+		var blocks = new Array();
+		e.descendants(".oo-block").forEach(function(e) {
+			blocks[blocks.length]=e.node.id.slice(9);
+		});
+		regions[regions.length]={name:e.node.id.slice(10), blockIds:blocks};
+	});
+	var json = YAHOO.lang.JSON.stringify(regions);
+	console.log(json);
+	Ojay.HTTP.POST('/otherobjects/designer/saveArrangement?templateId='+ooTemplateId, {arrangement: json}, {});
+}
+
+
+YAHOO.namespace("OO");
+
+YAHOO.OO.DDBlock = function(id, sGroup, config) {
+    YAHOO.OO.DDBlock.superclass.constructor.apply(this, arguments);
+    this.initBlock(id, sGroup, config);
+};
+
+YAHOO.lang.extend(YAHOO.OO.DDBlock, YAHOO.util.DDProxy, {
+
+    initBlock: function(id, sGroup, config) {
+        if (!id) { 
+            return; 
+        }
+        this.isTarget = false;
+    },
+
+    endDrag: function(e) {
+    },
+
+    
+    onDragDrop: function(e, id) {
+        // get the drag and drop object that was targeted
+        var oDD;
+        
+        if ("string" == typeof id) {
+            oDD = YAHOO.util.DDM.getDDById(id);
+        } else {
+            oDD = YAHOO.util.DDM.getBestMatch(id);
+        }
+
+        var el = this.getEl();
+
+        Ojay(oDD.getEl()).insert(this.getEl(),'top');
+
+		ooSaveTemplateDesign();
+    }
+});
+
+
+function toggleDesignMode(el, e) {
+	
+	// Change icon selected state
+	Ojay('#ooToolbarIconDesignMode').addClass('oo-icon-selected');
+	Ojay('#ooToolbarIconEditMode').removeClass('oo-icon-selected');
+	
+	Ojay('html').addClass('oo-design-mode');
+	
+	// Add labels to regions
+	Ojay('div.oo-region').forEach(function(el,i) {
+
+		//  Create Add button
+		var labelHtml = Ojay.HTML.div({className: 'oo-region-label'}, function(HTML) {
+			// Insert Actions Arrow
+			HTML.div({className: 'oo-region-label-actions'}, function(HTML) {
+				// Edit Status Gem and Label Text
+				HTML.div({className:'oo-text-style oo-edit-state oo-edit-state-none', title:'Status: ' + el.node.getAttribute('editstate') },'Add');
+			});
+		});
+		el.insert(labelHtml,'bottom');
+	});
+
+	
+	// Set click handler
+	Ojay('.oo-region-label').on('click', function(el, e) {
+	    e.stopDefault();
+		//var overlay = $('.oo-menu').node;
+	    $('.oo-menu').setStyle({display:"block"});
+		var url = '' + ooBaseUrl + 'otherobjects/block/choose/' + el.ancestors('.oo-region').node.id.slice(10);
+		Ojay.HTTP.GET(url).insertInto('#OoMenu').evalScripts();
+	});	
+	
+	// Enable drag drop
+	Ojay('.oo-block').forEach(function(e) {
+		new YAHOO.OO.DDBlock(e.node.id);	
+	});
+	
+	Ojay('.oo-region').forEach(function(e) {
+		new YAHOO.util.DDTarget(e.node.id);	
+	});
+	
+	function ooMoveToTrash(el) {}
+	function ooPutOnShelf(el) {}
+	function ooAddToLibrary(el) {}
+	     
+	var oBlockContextMenuItemData = [
+	        { text: "Move to trash", onclick: { fn: ooMoveToTrash } },
+	        { text: "Put on shelf", onclick: { fn: ooPutOnShelf } },
+	        { text: "Add to library", onclick: { fn: ooAddToLibrary } },  
+	    ];
+
+	var oFieldContextMenu = new YAHOO.widget.ContextMenu(
+        "blockContextMenu",
+        {
+            trigger:  Ojay('.oo-block').toArray(),
+            itemdata: oBlockContextMenuItemData,
+            lazyload: true
+		}
+	);
+	
+	
+}

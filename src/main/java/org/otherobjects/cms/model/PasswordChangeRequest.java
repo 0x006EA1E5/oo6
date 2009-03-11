@@ -10,11 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.springframework.util.Assert;
 
 @Entity
+@Table(name = "password_change_request")
 @SequenceGenerator(name = "PasswordChangeRequestSequence", sequenceName = "password_change_request_seq")
 public class PasswordChangeRequest
 {

@@ -123,6 +123,7 @@ public class BlockController
         }
         return view;
     }
+    
     /**
      * Renders block and associated data.
      * 
@@ -157,6 +158,18 @@ public class BlockController
         return view;
     }
 
+    /**
+     * Renders block and associated data.
+     * 
+     */
+    @RequestMapping("/block/choose/**")
+    public ModelAndView choose(HttpServletRequest request, HttpServletResponse response) throws Exception
+    {
+        ModelAndView view = new ModelAndView("blocks/oo-block-chooser");
+        view.addObject("regionCode", RequestUtils.getId(request));
+        return view;
+    }
+    
     /**
      * Renders form for requested block. Path Id should either be a UUID to edit an existing object,
      * or a type name for creating new objects. 
