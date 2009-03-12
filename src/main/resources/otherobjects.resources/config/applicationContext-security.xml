@@ -3,6 +3,7 @@
                         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.2.xsd">
 	<http auto-config="true">
 		<!-- the order of these matters, the more specific the pattern the earlier it must appear  -->
+		<intercept-url pattern="/otherobjects/debug/import" access="IS_AUTHENTICATED_REMEMBERED" />
 		<intercept-url pattern="/otherobjects/debug/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<intercept-url pattern="/otherobjects/workbench/api/**" access="ROLE_USER" />
 		<intercept-url pattern="/otherobjects/password/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
