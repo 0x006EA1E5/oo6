@@ -6,15 +6,14 @@
 <title>${pageTitle!} | ${oo.msg("site.name")} | OTHERobjects</title>
 <@oo.css "/otherobjects/static/hud/workbench.css" />
 <@oo.js "/otherobjects/static/legacy/workbench.js" />
-<#--
 <@oo.js "/otherobjects/static/legacy/yui-2.6.0-all-min.js" />
 <@oo.js "/otherobjects/static/legacy/ojay-r307-all-min.js" />
--->
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/fonts/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/treeview/assets/skins/sam/treeview.css" />
 
-<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/treeview/treeview-min.js"></script>
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.6.0/build/fonts/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.6.0/build/treeview/assets/skins/sam/treeview.css" />
+
+<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/treeview/treeview-min.js"></script>
 </head>
 <body>
 
