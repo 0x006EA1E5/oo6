@@ -1,4 +1,6 @@
 var hudVisible = false;
+var mode = "none";
+var hudVisible = false;
 var siteMinWidth = 1016;
 var siteBodyOverflow = "auto"; // FIXME This needs to be recorded before entering hud.
 var bodyWidth = Ojay('body').setStyle({'width' : YAHOO.util.Dom.getViewportWidth()})
@@ -10,30 +12,44 @@ Ojay('div.oo-icon').on('click',toggleHud);
 function toggleHud(el, e) {
 	if(hudVisible) {
 		// Animate hud closed
-		Ojay('div.oo-edit-zones').node.innerHTML = "";
+		//Ojay('div.oo-edit-zones').node.innerHTML = "";
 		Ojay('.oo-toolbar').animate({top:{from: 0, to: -60}}, 0.5);
-		Ojay('html').wait(0.1).animate({paddingTop:{from: 100, to: 0}, paddingBottom:{from: 200, to: 0}}, 0.5).removeClass('oo');
-		Ojay('body').
-			wait(0.1).
-			setStyle({'overflowX' : 'hidden'}).
-			animate({left: {to:0}, width: {to: YAHOO.util.Dom.getViewportWidth()}}, 0.5).
-			setStyle({'overflowX' : siteBodyOverflow});
+		Ojay('html').wait(0.1).animate({paddingTop:{from: 60, to: 0}}, 0.5);
+//		Ojay('body').
+//			wait(0.1).
+//			setStyle({'overflowX' : 'hidden'}).
+//			animate({left: {to:0}, width: {to: YAHOO.util.Dom.getViewportWidth()}}, 0.5).
+//			setStyle({'overflowX' : siteBodyOverflow});
 		hudVisible = false;
 	} else {
 		// Animate hud open
-		Ojay('html').addClass('oo').animate({paddingTop:{from: 0, to: 100}, paddingBottom:{from: 0, to: 200}}, 0.3);
-		Ojay('body').
-			setStyle({'overflowX' : 'hidden'}).
-			animate({left: {to: Math.floor((YAHOO.util.Dom.getViewportWidth()-siteMinWidth)/2)}, width: {from:YAHOO.util.Dom.getViewportWidth(), to: siteMinWidth}}, 0.3).
-			setStyle({'overflowX' : siteBodyOverflow});
+		Ojay('html').animate({paddingTop:{from: 0, to: 60}}, 0.3);
+//		Ojay('body').
+//			setStyle({'overflowX' : 'hidden'}).
+//			animate({left: {to: Math.floor((YAHOO.util.Dom.getViewportWidth()-siteMinWidth)/2)}, width: {from:YAHOO.util.Dom.getViewportWidth(), to: siteMinWidth}}, 0.3).
+//			setStyle({'overflowX' : siteBodyOverflow});
 		Ojay('.oo-toolbar')
 			.wait(0.1)
 			.animate({top:{from: -60, to: 0},opacity:{from: 0, to: 1}}, 0.2)
-			._('div.oo-block').forEach(function(el,i) {
+		hudVisible = true;
+		//toggleDesignMode();
+	}
+}
+
+
+function toggleEditMode(el, e) {
+	if(mode == "edit") {
+		
+	} else {
+		
+		Ojay('div.oo-block').forEach(function(el,i) {
 				// Get Regions Dimensions
 				var area = el.getRegion();
+				var state = el.node.getAttribute('published').toLowerCase();
+				
 				// Create Edit Zone HTML
-				var zoneHtml = Ojay.HTML.div({id: 'OoEditZone' + i , className: 'oo-edit-zone', title:el.node.id});
+				console.log(el.node);
+				var zoneHtml = Ojay.HTML.div({id: 'OoEditZone' + i , className: 'oo-edit-zone oo-edit-zone-'+state, title:el.node.id});
 				Ojay('div.oo-edit-zones').insert(zoneHtml,'top');
 				
 				// Set click handler
@@ -51,7 +67,7 @@ function toggleHud(el, e) {
 					// Insert Actions Arrow
 					HTML.div({id: 'OoEditActions' + i , className: 'oo-edit-label-actions'}, function(HTML) {
 						// Edit Status Gem and Label Text
-						HTML.div({className:'oo-text-style oo-edit-state oo-edit-state-' + el.node.getAttribute('editstate').toLowerCase(), title:'Status: ' + el.node.getAttribute('editstate') },el.node.getAttribute('editlabel'));
+						HTML.div({className:'oo-text-style oo-edit-state oo-edit-state-' + state, title:'Status: ' + el.node.getAttribute('published') },el.node.getAttribute('editlabel'));
 					});
 				});
 				Ojay('#OoEditZone' + i).insert(labelHtml,'top');
@@ -62,7 +78,6 @@ function toggleHud(el, e) {
 		hudVisible = true;
 	}
 }
-
 
 
 
@@ -140,8 +155,14 @@ YAHOO.lang.extend(YAHOO.OO.DDBlock, YAHOO.util.DDProxy, {
 
         var el = this.getEl();
 
-        Ojay(oDD.getEl()).insert(this.getEl(),'top');
-
+        console.log(oDD.getEl());
+        if(oDD.getEl().id == "OoDesignTrash") {
+        	Ojay(this.getEl()).remove();
+        }
+        else {        	
+        	Ojay(oDD.getEl()).insert(this.getEl(),'top');
+        }
+        	
 		ooSaveTemplateDesign();
     }
 });
@@ -149,63 +170,52 @@ YAHOO.lang.extend(YAHOO.OO.DDBlock, YAHOO.util.DDProxy, {
 
 function toggleDesignMode(el, e) {
 	
-	// Change icon selected state
-	Ojay('#ooToolbarIconDesignMode').addClass('oo-icon-selected');
-	Ojay('#ooToolbarIconEditMode').removeClass('oo-icon-selected');
+	if(mode=="design") {
+		
+	}
+	else {
 	
-	Ojay('html').addClass('oo-design-mode');
+		// Change icon selected state
+		Ojay('#ooToolbarIconDesignMode').addClass('oo-icon-selected');
+		Ojay('DIV.oo-toolbar-icon').removeClass('oo-icon-selected');
 	
-	// Add labels to regions
-	Ojay('div.oo-region').forEach(function(el,i) {
-
-		//  Create Add button
-		var labelHtml = Ojay.HTML.div({className: 'oo-region-label'}, function(HTML) {
-			// Insert Actions Arrow
-			HTML.div({className: 'oo-region-label-actions'}, function(HTML) {
-				// Edit Status Gem and Label Text
-				HTML.div({className:'oo-text-style oo-edit-state oo-edit-state-none', title:'Status: ' + el.node.getAttribute('editstate') },'Add');
+		Ojay('html').addClass('oo-design-mode');
+		
+		// Add labels to regions
+		Ojay('div.oo-region').forEach(function(el,i) {
+	
+			//  Create Add button
+			var labelHtml = Ojay.HTML.div({className: 'oo-region-label'}, function(HTML) {
+				// Insert Actions Arrow
+				HTML.div({className: 'oo-region-label-actions'}, function(HTML) {
+					// Edit Status Gem and Label Text
+					HTML.div({className:'oo-text-style oo-edit-state oo-edit-state-none', title:'Status: ' + el.node.getAttribute('editstate') },'Add');
+				});
 			});
+			el.insert(labelHtml,'bottom');
 		});
-		el.insert(labelHtml,'bottom');
-	});
-
 	
-	// Set click handler
-	Ojay('.oo-region-label').on('click', function(el, e) {
-	    e.stopDefault();
-		//var overlay = $('.oo-menu').node;
-	    $('.oo-menu').setStyle({display:"block"});
-		var url = '' + ooBaseUrl + 'otherobjects/block/choose/' + el.ancestors('.oo-region').node.id.slice(10);
-		Ojay.HTTP.GET(url).insertInto('#OoMenu').evalScripts();
-	});	
+		
+		// Set click handler
+		Ojay('.oo-region-label').on('click', function(el, e) {
+		    e.stopDefault();
+			//var overlay = $('.oo-menu').node;
+		    $('.oo-menu').setStyle({display:"block"});
+			var url = '' + ooBaseUrl + 'otherobjects/block/choose/' + el.ancestors('.oo-region').node.id.slice(10);
+			Ojay.HTTP.GET(url).insertInto('#OoMenu').evalScripts();
+		});	
+		
+		// Enable drag drop
+		Ojay('.oo-block').forEach(function(e) {
+			new YAHOO.OO.DDBlock(e.node.id);	
+		});
+		
+		Ojay('.oo-region').forEach(function(e) {
+			new YAHOO.util.DDTarget(e.node.id);	
+		});
 	
-	// Enable drag drop
-	Ojay('.oo-block').forEach(function(e) {
-		new YAHOO.OO.DDBlock(e.node.id);	
-	});
-	
-	Ojay('.oo-region').forEach(function(e) {
-		new YAHOO.util.DDTarget(e.node.id);	
-	});
-	
-	function ooMoveToTrash(el) {}
-	function ooPutOnShelf(el) {}
-	function ooAddToLibrary(el) {}
-	     
-	var oBlockContextMenuItemData = [
-	        { text: "Move to trash", onclick: { fn: ooMoveToTrash } },
-	        { text: "Put on shelf", onclick: { fn: ooPutOnShelf } },
-	        { text: "Add to library", onclick: { fn: ooAddToLibrary } },  
-	    ];
-
-	var oFieldContextMenu = new YAHOO.widget.ContextMenu(
-        "blockContextMenu",
-        {
-            trigger:  Ojay('.oo-block').toArray(),
-            itemdata: oBlockContextMenuItemData,
-            lazyload: true
-		}
-	);
-	
+		new YAHOO.util.DDTarget("OoDesignTrash");	
+		
+	}
 	
 }
