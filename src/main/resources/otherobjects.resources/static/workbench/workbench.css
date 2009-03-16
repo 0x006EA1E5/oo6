@@ -1,0 +1,156 @@
+* {margin:0px; padding:0px; border:0px;}
+
+HTML.oo {background:#666 url(../hud/assets/html-background.png) fixed;}
+
+.oo-toolbar {top:0px;}
+
+/* Text Styling */
+.oo-text-style {font:12px Arial, sans-serif; color:#FFF; text-shadow:1px 1px 0 rgba(0,0,0,1);}
+.oo-text-style A {background:none!important; color:#FFF!important;}
+
+#ooNavigation {position:absolute; top:60px; left:-20px; width:200px; padding-left:10px;}
+#ooNavigation TD {background-color:transparent!important;}
+
+#ooActions {position:fixed; top:150px; right:10px; width:180px;}
+
+.oo-item {display:block; text-decoration:none; -webkit-border-image:url(../hud/assets/item.png) 1 0 1 0 stretch stretch; -webkit-transition:background-color 0.2s linear; padding-right:10px; margin:0 -7px; border-width:1px 0; cursor:pointer;}
+.oo-item:hover, .oo-item:focus, .oo-item:active {-webkit-border-image:url(../hud/assets/item-hover.png) 1 0 1 0 stretch stretch;}
+.oo-item:hover, .oo-item:focus {background-color:#444!important;}
+.oo-item:active {background-color:#278AD6;}
+.oo-arrow {background-image:url(../hud/assets/arrow.png); background-position:100% 50%; background-repeat:no-repeat; padding:10px 23px 10px 15px;}
+
+
+/* Panel */
+.oo-panel {-webkit-border-image:url(../hud/assets/panel.png) 20 18 30 18 stretch stretch; -moz-border-image:url(../hud/assets/panel.png) 20 18 30 18 stretch stretch; border-width:20px 18px 30px 18px;}
+
+/* Super Reset */
+DIV.oo-icon, DIV.oo-hud, DIV.oo-hud * {padding:0; margin:0; border:0;}
+
+/* Hud CSS */
+DIV.oo-icon {position:fixed; background:url(../hud/assets/hud-icon.png); width:40px; height:40px; top:0; right:0; opacity:0.8;}
+DIV.oo-icon:hover {opacity:1; cursor:pointer;}
+
+/* Search Input */
+.oo-search-input {-webkit-border-image:url(../hud/assets/search-input.png) 0 15 0 29 stretch stretch; background:#CCC;  border-width:0 15px 0 29px; font:12px/14px Arial, sans-serif; color:#000; outline:none; width:100%; height:26px; -webkit-border-radius:13px; -moz-border-radius:13px; margin-top:-3px;}
+
+/* Edit Zones */
+.oo-edit-zone {position:absolute; z-index:9000; text-align:center; background-color:rgba(0, 0, 0, 0.05); -webkit-transition:background-color 0.2s linear, border-color 0.2s linear; -webkit-border-radius:5px; -moz-transition:background-color 0.2s linear, border-color 0.2s linear; -moz-border-radius:5px; border:2px solid rgba(0,0,0,0.1);}
+.oo-edit-zone:hover {background-color:rgba(0, 0, 0, 0.2); border-color:rgba(0,0,0,0.2);}
+.oo-edit-label {-webkit-border-image:url(../hud/assets/edit-label.png) 16 19 23 19 stretch stretch; -moz-border-image:url(../hud/assets/edit-label.png) 16 19 23 19 stretch stretch; display:inline-block;  border-width:16px 19px 23px; margin-top:-10px;}
+
+/* Edit Label Actions Arrow */
+.oo-edit-label-actions {opacity:0.8; cursor:pointer; background:url(../hud/assets/edit-actions-sprite.png) 100% 2px no-repeat; margin:-7px -5px -6px -4px; padding:0 18px 0 0;}
+.oo-edit-label-actions:hover {opacity:1; background-position:100% -108px;}
+
+/* Edit State Gems */
+.oo-edit-state {background:url(../hud/assets/edit-state-sprite.png) no-repeat; padding:2px 0 1px 18px;}
+.oo-edit-state-live {background-position:0 2px;}
+.oo-edit-state-submitted {background-position:0 -59px;}
+.oo-edit-state-modified {background-position:0 -120px;}
+.oo-edit-state-embargoed {background-position:0 -181px;}
+.oo-edit-state-default {background-image:0 -242px;}
+.oo-edit-state-none {background-image:none; margin-left:0; padding-left:0;}
+
+
+#ooContent {margin:70px 230px 0px 230px; padding:5px; background-color:#999; -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8); -moz-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);}
+
+.oo-content {padding:10px 10px 10px 10px; -webkit-border-radius:5px; -moz-border-radius:5px; background-color:#FFF; min-height:600px;}
+.oo-content H2 {font:bold 140% Arial; color:#333; padding:10px 0px 10px 0px;}
+.oo-content H2 A {text-decoration:none; color:#253D56;}
+.oo-content H3 {font:bold 120% Arial; color:#253D56; padding:10px 0px 10px 0px;}
+.oo-content UL {margin:0px 0px 0px 20px; list-style:square;}
+.oo-content LI {padding:0px 0px 5px 0px;}
+.oo-content P {padding:0px 0px 15px 0px;}
+.oo-content P.divider {padding:5px 0px 15px 0px; margin:0px 100px 0px 0px; border-top:1px solid #eeeeee;}
+.oo-content EM {font-style:normal; color:#999999;}
+.oo-content .oo-required {font:bold 110% Verdana; color:#990000;}
+.oo-content .text {border:1px solid #CCCCCC; padding:2px; font:100% Arial; width:250px; margin:0px 5px 0px 0px;}
+.oo-content .password {border:1px solid #CCCCCC; padding:2px; font:100% Arial; width:250px; margin:0px 5px 0px 0px;}
+.oo-content .textarea {width:100%; height:250px; border:1px solid #cccccc; padding:2px; font:100% Courier, Monaco, Arial;  margin:0px 5px 5px 0px;}
+.oo-content .wikitextarea {width:100%; height:75px; border:1px solid #cccccc; padding:2px; font:115% Courier, Monanco, Arial;  margin:0px 5px 5px 0px;}
+.oo-content .textareasmall {width:100%; height:60px; border:1px solid #cccccc; padding:2px; font:100% Arial;  margin:0px 5px 5px 0px;}
+.oo-content .oo-format-large .textarea {height:300px;}
+.oo-content .oo-format-large .wikitextarea {height:300px;}
+.oo-content .select {font:100% Arial; margin:0px 5px 0px 0px;}
+.oo-content FORM LABEL {display:block; width:55px; line-height:25px; float:left;}
+.oo-content .submit {padding:0px 10px 0px 10px; background:#dddddd; height:20px; font:100%/180% Arial; border:0px solid #000000; cursor:pointer; color:#000000;}
+.oo-content .submit-hover {padding:0px 10px 0px 10px; background:#C8E8F5; height:20px; font:100%/180% Arial; border:0px solid #000000; cursor:pointer; color:#000000;}
+.oo-content A.oo-action  {color:#000000; text-decoration:none; float:left; padding:5px 10px 5px 20px; background:url(assets/arrow-right.gif) no-repeat 10px 9px;}
+.oo-content A.oo-action:hover, .oo-content A.oo-action:active {background-color:#C8E8F5;}
+.oo-content A.oo-action  IMG {float:left;margin-top:-3px;padding-right:3px;}
+.oo-content TH, .oo-content TD {vertical-align:top;}
+
+.oo-preformatted {height:50px; overflow:auto; border:1px solid #eeeeee; padding:5px;}
+
+.oo-content UL.oo-sortable-list  {margin:0px 0px 20px 0px; list-style:none;}
+.oo-content .oo-sortable-list LI {padding:5px; margin:10px; border:1px solid #999999; cursor:move; background:#eeeeee;}
+.oo-content .oo-sortable-hover {border:1px solid #ff0000;}
+
+
+.oo-listing {border-collapse:collapse; width:100%; margin:0px 0px 20px 0px; }
+.oo-listing CAPTION { font:bold 120% Arial; padding: 0px 0px 4px 0px; }
+.oo-listing TH {background:#eeeeee; font:normal 100% Arial; text-align:left; padding:4px 10px 4px 10px; border-right:1px solid #ffffff;}
+.oo-listing TH.oo-filter {padding:0px;}
+.oo-listing TH.oo-filter A {display:block; height:14px; padding:4px 10px 4px 10px; text-decoration:none; color:#000000;}
+.oo-listing TH.oo-filter A:hover, .oo-content .oo-listing TH.filter A:active {background-color:#eeeeee;}
+.oo-listing TH.oo-filter STRONG A {background:#eeeeee url($static.setPath("/otherobjects/static/graphics/arrow_down.gif")) no-repeat right center;}
+.oo-listing TR {border-bottom:1px solid #eeeeee;}
+.oo-listing TD {padding:3px 1px 3px 0px; border-bottom:1px solid #eeeeee;}
+.oo-listing TD P {padding:5px 10px 5px 10px;}
+.oo-listing TD .oo-edited, .oo-content .oo-listing TD .oo-new {display:block; background:url(assets/icon-in-progress.gif) no-repeat 8px 9px; padding:5px 10px 5px 20px; background-color:#ffffff;}
+.oo-listing TD .oo-pending {display:block; background:url(assets/icon-submitted.gif) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
+.oo-listing TD .oo-live {display:block; background:url(assets/icon-live.gif) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
+.oo-listing TD .oo-deleted {display:block; background:url(assets/icon-deleted.gif) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
+.oo-listing TD .oo-locked {display:block; background:url(assets/icon-locked.gif) no-repeat 8px 7px; padding:5px 10px 5px 20px;}
+.oo-listing TD A {display:block; color:#000000; text-decoration:none; padding:5px 10px 5px 10px;}
+.oo-listing TD A:hover, .oo-content .oo-listing TD A:active {background-color:#C8E8F5;}
+.oo-listing TD .oo-neutral {background:url($static.setPath("/otherobjects/static/graphics/icon_neutral.gif")) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
+.oo-listing .oo-icon {width:40px;}
+.oo-listing TD.oo-image {width:20%; vertical-align:bottom;}
+.oo-listing .oo-image IMG {margin:3px 0px 0px 0px;}
+.oo-listing .oo-image IMG {border-top:4px solid #CCCCCC;} 
+.oo-listing .oo-image A {color:#000000; text-decoration:none; display:block; padding:5px 10px 5px 10px;}
+.oo-listing .oo-image A:hover, .oo-content .oo-listing .oo-image A:active {background-color:#C8E8F5;}
+.oo-listing .oo-image A.oo-action {width:100px;}
+.oo-listing .oo-button A {color:#000000; text-decoration:none; float:left; padding:5px 10px 5px 10px;}
+.oo-listing .oo-button A:hover, .oo-content .oo-listing .oo-button A:active {background-color:#C8E8F5;}
+.oo-listing TD.oo-action {width:40px;}
+.oo-listing .oo-action A {color:#000000; height:11px; text-decoration:none; display:block; padding:5px 10px 5px 20px; background:url(assets/arrow-right.gif) no-repeat 10px 9px;}
+.oo-listing .oo-action A:hover, .oo-content .oo-listing .oo-action A:active {background-color:#C8E8F5;}
+.oo-listing .oo-action A.up {background:url($static.setPath("/otherobjects/static/graphics/arrow_up.gif")) no-repeat 10px 10px;}
+.oo-listing .oo-action A.up:hover, .oo-content .oo-listing .oo-action A.up:active {background-color:#C8E8F5;}
+.oo-listing .oo-action A.down {background:url($static.setPath("/otherobjects/static/graphics/arrow_down.gif")) no-repeat 10px 10px;}
+.oo-listing .oo-action A.down:hover, .oo-content .oo-listing .oo-action A.down:active {background-color:#C8E8F5;}
+.oo-listing .oo-help {width:20px; padding:5px 10px 5px 10px; text-align:center;}
+.oo-listing .oo-label {width:125px; padding:5px 10px 5px 10px;}
+.oo-listing .oo-field {padding:5px 10px 5px 10px;}
+.oo-listing .oo-field-none {padding:5px 10px 5px 10px;}
+.oo-listing .oo-field A {float:left; padding:5px 10px 5px 20px; background:url($static.setPath("/otherobjects/static/graphics/arrow_right.gif")) no-repeat 10px 10px;}
+.oo-listing .oo-field P {padding:5px 5px 5px 10px; clear:both;} 
+.oo-listing .oo-field P.oo-neutral {padding:5px 5px 5px 25px; clear:both;} 
+.oo-listing .oo-field A:hover, .oo-content .oo-listing .oo-field A:active {background-color:#C8E8F5;}
+.oo-listing .oo-section { border-top:3px solid #eeeeee;}
+.oo-listing .oo-disabled {color:#999999;}
+
+.oo-edit {border-collapse:collapse; width:100%; margin:0px 0px 20px 0px; }
+.oo-edit CAPTION { font:bold 120% Arial; padding: 0px 0px 4px 0px; }
+.oo-edit TH {background:#eeeeee; font:normal 100% Arial; text-align:left; padding:4px 10px 4px 10px; border-right:1px solid #ffffff;}
+.oo-edit TR {border-bottom:1px solid #eeeeee;}
+.oo-edit TD {padding:3px 1px 3px 0px; border-bottom:1px solid #eeeeee;}
+.oo-edit TD P {padding:5px 10px 5px 10px;}
+.oo-edit TD .oo-neutral {background:url($static.setPath("/otherobjects/static/graphics/icon_neutral.gif")) no-repeat 8px 9px; padding:5px 10px 5px 20px;}
+.oo-edit .oo-icon {width:40px;}
+.oo-edit .oo-button A {color:#000000; text-decoration:none; float:left; padding:5px 10px 5px 10px;}
+.oo-edit .oo-button A:hover, .oo-content .oo-edit .oo-button A:active {background-color:#C8E8F5;}
+.oo-edit TD.oo-action {width:40px;}
+.oo-edit .oo-help {width:20px; padding:5px 10px 5px 10px; text-align:center;}
+.oo-edit .oo-label {width:100px; padding:5px 10px 5px 10px;}
+.oo-edit .oo-field {padding:5px 10px 5px 10px;}
+.oo-edit .oo-field-none {padding:5px 10px 5px 10px;}
+.oo-edit .oo-field A {display:block; color:#000000; text-decoration:none; float:left; padding:5px 10px 5px 20px; background:url($static.setPath("/otherobjects/static/graphics/arrow_right.gif")) no-repeat 10px 10px;}
+.oo-edit .oo-field P {padding:5px 5px 5px 10px; clear:both;} 
+.oo-edit .oo-field P.oo-neutral {padding:5px 5px 5px 25px; clear:both;} 
+.oo-edit .oo-field A:hover, .oo-content .oo-edit .oo-field A:active {background-color:#C8E8F5;}
+.oo-edit .oo-field LI IMG {display:block;}
+.oo-edit .oo-section { border-top:3px solid #eeeeee;}
+.oo-edit .oo-disabled {color:#999999;}
