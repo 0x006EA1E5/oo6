@@ -97,8 +97,8 @@ public class SiteController extends AbstractController
             Object folder = universalJcrDao.getByPath("/site" + path);
 
             //FIXME Add Security check here
-            //            ModelAndView mv = new ModelAndView("/otherobjects/templates/pages/oo-404-create");
-            ModelAndView mv = new ModelAndView("/site/templates/pages/404");
+                        ModelAndView mv = new ModelAndView("/otherobjects/templates/hud/error-handling/oo-404-create");
+//            ModelAndView mv = new ModelAndView("/site/templates/pages/404");
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             mv.addObject("requestedPath", path);
             mv.addObject("folder", folder);

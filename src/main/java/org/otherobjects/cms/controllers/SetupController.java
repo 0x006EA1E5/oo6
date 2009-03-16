@@ -66,7 +66,7 @@ public class SetupController
         setupAdminUserCommand.setPasswordHint(adminUser.getPasswordHint());
         model.addAttribute("command", setupAdminUserCommand);
         model.addAttribute("typeDef", typeService.getType("org.otherobjects.cms.model.User"));
-        return "/otherobjects/templates/otherobjects/login/setup";
+        return "/otherobjects/templates/workbench/user-management/setup";
     }
 
     @RequestMapping(method = RequestMethod.POST)

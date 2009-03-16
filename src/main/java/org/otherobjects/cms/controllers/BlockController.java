@@ -108,7 +108,7 @@ public class BlockController
         List<TemplateBlockReference> blocks = template.getRegion(regionCode).getBlocks();
         blockRef= blocks.get(blocks.size()-1);
         
-        ModelAndView view = new ModelAndView("blocks/oo-block-render");
+        ModelAndView view = new ModelAndView("/otherobjects/templates/hud/blocks/block-render");
         view.addObject("blockReference", blockRef);
         if (!blockRef.getBlock().isGlobalBlock())
         {
@@ -138,7 +138,7 @@ public class BlockController
 
         logger.info("Rendering block: {}", blockRef.getCode());
         
-        ModelAndView view = new ModelAndView("blocks/oo-block-render");
+        ModelAndView view = new ModelAndView("/otherobjects/templates/hud/blocks/block-render");
         view.addObject("blockReference", blockRef);
         if (!blockRef.getBlock().isGlobalBlock())
         {
@@ -165,7 +165,7 @@ public class BlockController
     @RequestMapping("/block/choose/**")
     public ModelAndView choose(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        ModelAndView view = new ModelAndView("blocks/oo-block-chooser");
+        ModelAndView view = new ModelAndView("/otherobjects/templates/hud/blocks/block-chooser");
         view.addObject("regionCode", RequestUtils.getId(request));
         return view;
     }
@@ -178,7 +178,7 @@ public class BlockController
     public ModelAndView form(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
-        ModelAndView view = new ModelAndView("blocks/oo-block-form");
+        ModelAndView view = new ModelAndView("/otherobjects/templates/hud/blocks/block-form");
 
         String blockRefId = RequestUtils.getId(request);
         String resourceObjectId = request.getParameter("resourceObjectId");

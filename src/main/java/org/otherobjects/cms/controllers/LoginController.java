@@ -40,7 +40,7 @@ public class LoginController
     {
         // FIXME If already logged in then redirect
 
-        ModelAndView mav = new ModelAndView("otherobjects/login/login");
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/workbench/user-management/login");
         AuthenticationException authenticationException = (AuthenticationException) WebUtils.getSessionAttribute(request, AbstractProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY);
         if (authenticationException != null)
         {
@@ -87,7 +87,7 @@ public class LoginController
         FreemarkerMail mail = new FreemarkerMail();
         mail.setFromAddress(new EmailAddress("rich@othermedia.com"));
         mail.addToRecipient(new EmailAddress("rich@othermedia.com"));
-        mail.setBodyTemplateResourcePath("/otherobjects/templates/otherobjects/emails/password-change.ftl");
+        mail.setBodyTemplateResourcePath("/otherobjects/templates/emails/password-change.ftl");
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("link", new Url("/otherobjects/password-change").getAbsoluteLink() + "?crc=" + passwordChangeRequestCode);
         mail.setModel(model);
@@ -95,7 +95,7 @@ public class LoginController
         //mail.setBody("http://localhost:8080/test/otherobjects/password-change?crc=" + passwordChangeRequestCode);
         mailService.send(mail);
 
-        ModelAndView mav = new ModelAndView("otherobjects/login/login");
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/workbench/user-management/login");
         FlashMessageTool flashMessageTool = new FlashMessageTool(request);
         flashMessageTool.flashMessage(FlashMessage.INFO, "You have been sent an email with password change instructions.");
         return mav;

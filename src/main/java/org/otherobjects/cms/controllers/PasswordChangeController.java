@@ -52,7 +52,7 @@ public class PasswordChangeController
             model.addAttribute("validCrc", false);
         }
         model.addAttribute("passwordChanger", passwordChanger);
-        return "otherobjects/login/change-password";
+        return "/otherobjects/templates/workbench/user-management/change-password";
     }
 
     @RequestMapping(method = RequestMethod.POST)

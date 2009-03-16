@@ -95,7 +95,7 @@ public class WorkbenchController
         //            this.logger.info("Locale set to: " + this.localeResolver.resolveLocale(request));
         //        }
 
-        ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/overview");
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/workbench/dashboard/overview");
         return mav;
     }
 
@@ -105,7 +105,7 @@ public class WorkbenchController
         String id = RequestUtils.getId(request);
         DataStore store = getDataStore(detectStore(id));
         Object item = store.get(id);
-        ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/view");
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/workbench/editor/view");
         mav.addObject("id", id);
         mav.addObject("item", item);
         mav.addObject("typeDef", getTypeDef(item));
@@ -118,7 +118,7 @@ public class WorkbenchController
         String id = RequestUtils.getId(request);
         DataStore store = getDataStore(detectStore(id));
         Object item = store.get(id);
-        ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/edit");
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/workbench/editor/edit");
         mav.addObject("id", id);
         mav.addObject("object", item);
         mav.addObject("typeDef", getTypeDef(item));
@@ -131,7 +131,7 @@ public class WorkbenchController
         String type = RequestUtils.getId(request);
         String containerId = request.getParameter("container");
         TypeDef typeDef = typeService.getType(type);
-        ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/edit");
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/workbench/editor/edit");
 
         DataStore store = getDataStore(typeDef.getStore());
         Object create = store.create(typeDef, containerId);
@@ -154,7 +154,7 @@ public class WorkbenchController
 
         FolderDao folderDao = (FolderDao) this.daoService.getDao(Folder.class);
         Folder folder = (Folder) folderDao.get(id);
-        ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/list");
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/workbench/editor/list");
         mav.addObject("id", id);
         mav.addObject("folder", folder);
 
@@ -211,7 +211,7 @@ public class WorkbenchController
         List<BaseNode> results = universalJcrDao.getAllByJcrExpression("/jcr:root/site//(*) [jcr:contains(., '" + q + "')]");
 
         // Search DB
-        ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/search");
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/workbench/editor/search");
         mav.addObject("results", results);
         return mav;
     }
@@ -222,7 +222,7 @@ public class WorkbenchController
         String id = RequestUtils.getId(request);
         DataStore store = getDataStore(detectStore(id));
         BaseNode item = (BaseNode) store.get(id);
-        ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/history");
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/workbench/editor/history");
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
         mav.addObject("id", id);
         mav.addObject("item", item);
@@ -238,7 +238,7 @@ public class WorkbenchController
         int versionNumber = RequestUtils.getInt(request, "version");
         DataStore store = getDataStore(detectStore(id));
         BaseNode item = (BaseNode) store.get(id);
-        ModelAndView mav = new ModelAndView("/otherobjects/templates/legacy/pages/diff");
+        ModelAndView mav = new ModelAndView("/otherobjects/templates/workbench/editor/diff");
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
         mav.addObject("id", id);
         mav.addObject("item", item);
