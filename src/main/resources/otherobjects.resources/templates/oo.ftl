@@ -102,14 +102,13 @@ Macro to insert block
 	<#assign blockData = blockReference.blockData!/>
 	<#-- If block is global but has no data then render placeholder-->
 	<#if blockReference.block.global?has_content && !blockData?has_content>
-		<div class="oo-block" id="oo-block-${blockReference.id}" editlabel="${blockReference.block.label}" editstate="Live">
-		<#include "blocks/oo-block-new.ftl">
+		<div class="oo-block" id="oo-block-${blockReference.id}" editlabel="${blockReference.block.label}" published="edit">
+		<#include "/otherobjects/templates/hud/blocks/block-new.ftl">
 		</div>
 	<#else>
 		<#assign blockData = blockReference.blockData! >
-		<div class="oo-block" id="oo-block-${blockReference.id}" editlabel="${blockReference.block.label}" editstate="Live">
-		 
-		 <#if (blockReference.block.keywords)!?contains("no-cache")>
+		<div class="oo-block" id="oo-block-${blockReference.id}" editlabel="${blockReference.block.label}" published="${blockReference.fullyPublished?string("live","edit")}">
+		<#if (blockReference.block.keywords)!?contains("no-cache")>
 			<#include "/site/templates/blocks/${blockName}.ftl"> 
 		<#else>
 			<@blockTool code=blockName ref=blockReference.id location=urlPath />
@@ -118,7 +117,7 @@ Macro to insert block
 	</#if>
 <#recover>
 	<div class="oo-block" id="oo-block-${blockReference.id}">
-	<#include "blocks/oo-block-error.ftl">
+	<#include "/otherobjects/templates/hud/blocks/block-error.ftl">
 	</div>
 </#attempt>
 </#macro>  
@@ -269,6 +268,7 @@ Macro to insert OO interface CSS headers
 -->
 <#macro head>
 <@oo.css "/otherobjects/static/hud/hud.css" />
+<@oo.css "/otherobjects/static/hud/toolbar.css" />
 </#macro>
 
 <#-- 
