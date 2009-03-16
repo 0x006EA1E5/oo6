@@ -1,0 +1,50 @@
+
+#OoMenuIcon {display:none;}
+#OoMenuIcon H2 {font:70%/600% Arial, sans-serif; width:195px; height:120px; left:0px; position:fixed; bottom:25px; z-index:11; color:#FFFFFF; background:url(assets/menu.png);}
+.oo-menu {position:fixed; font:70% Arial, sans-serif; width:180px; height:100px; left:0px; bottom:25px; z-index:12;}
+.oo-menu A {display:block; color:#000000; height:14px;  width:155px; padding:5px 0px 5px 25px; text-decoration:none;}
+.oo-menu A:hover {background-color:#dddddd;}
+.oo-menu LI {display:block; width:180px; background:#FFFFFF;}
+.oo-menu LI.oo-menudivider {background:#FFFFFF url(assets/dots.gif) repeat-x bottom left; padding:0px 0px 1px 0px;}
+.oo-menu LI LI {padding:0px;}
+.oo-menu LI LI A {padding:5px 0px 6px 25px;}
+
+/* Toolbar */
+.oo-toolbar {height:25px; width:100%; left:0px; position:fixed; z-index:10; font:70% Arial, sans-serif; overflow:hidden; bottom:0px; background:url(assets/toolbar.png); padding:15px 0px 0px 0px;}
+
+/* Menu Button */
+#OoLogoButton {display:block; overflow:hidden; text-indent:50px; width:27px; height:25px; text-decoration:none;}
+.oo-button-up {background:url(assets/icon-oo-logo.gif) no-repeat 5px 5px;}
+.oo-button-up:hover {background:#CCCCCC url(assets/icon-oo-logo.gif) no-repeat 5px 5px;}
+.oo-button-down, .oo-button-hold {background:#FFFFFF url(assets/icon-oo-logo.gif) no-repeat 5px 5px;}
+#OoLogoutButton {display:block; float:right; width:27px; height:25px; text-decoration:none; background:url(assets/log-out.png) no-repeat 5px 5px;}
+
+/* Icons */
+.oo-icon-overview {background:#FFFFFF url(assets/icon_overview.gif) no-repeat 3px 4px;}
+.oo-icon-user {background:#FFFFFF url(assets/icon_user.gif) no-repeat 3px 4px;}
+.oo-icon-favourites {background:#FFFFFF url(assets/icon_favourites.gif) no-repeat 3px 4px;}
+
+.oo-toolbar H3 {float:left;}
+.oo-toolbar P {float:left;}
+.oo-toolbar .oo-divider {background:url(assets/divider.gif) no-repeat; padding:0px 0px 0px 1px;}
+.oo-toolbar P A {color:#000000!important; text-decoration:none; height:12px; float:left; padding:6px 10px 7px 10px;}
+.oo-toolbar P A:hover {background-color:#cccccc;}
+.oo-toolbar P .oo-edited, .oo-toolbar P .oo-new {background:url(assets/icon-in-progress.gif) no-repeat 10px 9px; padding:6px 10px 7px 24px;}
+.oo-toolbar P .oo-live {background:url(assets/icon-live.gif) no-repeat 10px 9px; padding:6px 10px 7px 24px;}
+.oo-toolbar P .oo-neutral {background:url(assets/icon-neutral.gif) no-repeat 10px 9px; padding:6px 10px 7px 24px;}
+.oo-toolbar P .oo-locked {background:url(assets/icon-locked.gif) no-repeat 10px 9px; padding:6px 10px 7px 24px;}.oo-toolbar .oo-version {float:right; background:url(assets/divider.gif) no-repeat; padding:0px 0px 0px 1px;}
+.oo-toolbar P EM {display:none;}
+.oo-toolbar UL {float:left; display:table;}
+.oo-toolbar LI {float:left; display:table-cell;}
+.oo-toolbar LI A {color:#000000!important; background:url(assets/arrow-right.gif) no-repeat 10px 9px; text-decoration:none; height:12px; float:left; padding:6px 10px 7px 20px;}
+.oo-toolbar LI A:hover {background-color:#cccccc;}
+.oo-toolbar LI STRONG A {background-color:#ffffff;}
+.oo-toolbar LI STRONG A:hover {background-color:#ffffff;}
+
+/* Stats */
+.oo-stats {position:fixed; top:100px; left:100px;text-align:left; background:#FFF; border:1px solid black; display:none;}
+.oo-stats H2 {background:#000; color:#FFF; width:100%; font-size:120%; padding-bottom:5px; margin:0px;}
+.oo-stats H2 EM {padding:2px;}
+.oo-stats TD {text-align:left; padding:5px;}
+.oo-stats TD {text-align:left; padding:5px;}
+.oo-stats TR {border-top:1px solid #666;}

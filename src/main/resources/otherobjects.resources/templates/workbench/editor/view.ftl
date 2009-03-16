@@ -66,20 +66,22 @@ ${object.modifier!}
 </div>
 </div>
 
-<div id="ooActions" class="oo-panel oo-text-style">
-<#-- <li><a href="${oo.url('/otherobjects/workbench/list/${folder.editableId}')}">Back to listing</a></div></div>> -->
-<a class="oo-item" href="${oo.url('/otherobjects/workbench/edit/${object.editableId}')}"><div class="oo-arrow">Edit</div></a>
+<div class="oo-actions">
+<h2>Actions</h2>
+<ul>
+<#-- <li><a href="${oo.url('/otherobjects/workbench/list/${folder.editableId}')}">Back to listing</a></li> -->
+<li class="divider"><a href="${oo.url('/otherobjects/workbench/edit/${object.editableId}')}">Edit</a></li>
 <#if item.published??>
-<div class="oo-item"><div class="oo-arrow"><a href="${oo.url('/otherobjects/workbench/history/${object.editableId}')}">View history</a></div></div>
-<div class="oo-item"><div class="oo-arrow"><a href="${oo.url('/otherobjects/workbench/publish/${object.editableId}')}">Publish</a></div></div>
+<li class="divider"><a href="${oo.url('/otherobjects/workbench/history/${object.editableId}')}">View history</a></li>
+<li class="divider"><a href="${oo.url('/otherobjects/workbench/publish/${object.editableId}')}">Publish</a></li>
 </#if>
-<div class="oo-item"><div class="oo-arrow"><a href="${oo.url('/otherobjects/workbench/copy/${object.editableId}')}">Make a copy</a></div></div>
-<div class="oo-item"><div class="oo-arrow"><a href="${oo.url('/otherobjects/workbench/delete/${object.editableId}')}">Delete</a></div></div>
+<li class="divider"><a href="${oo.url('/otherobjects/workbench/copy/${object.editableId}')}">Make a copy</a></li>
+<li class="divider"><a href="${oo.url('/otherobjects/workbench/delete/${object.editableId}')}">Delete</a></li>
 
-<div class="oo-item"><div class="oo-arrow"><a href="${oo.url('/otherobjects/debug/jcr?path=${object.jcrPath}')}">Debug</a></div></div>
+<li class="divider"><a href="${oo.url('/otherobjects/debug/jcr?path=${object.jcrPath}')}">Debug</a></li>
 
 <#if item.linkPath??>
-<div class="oo-item"><div class="oo-arrow"><a href="${oo.url(item.linkPath)}">Preview</a></div></div>
+<li class="divider"><a href="${oo.url(item.linkPath)}">Preview</a></li>
 </#if>
 </ul>
 </div>

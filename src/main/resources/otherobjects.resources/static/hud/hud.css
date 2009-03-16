@@ -101,7 +101,7 @@ HTML.oo BODY {position:absolute; width:100%; -webkit-box-shadow: 0 5px 15px rgba
 
 /* Design Mode */
 .oo-design-tools {visibility:hidden; position:absolute; left:10px; top:10px;}
-.oo-design-mode .oo-design-tools {visibility:visible;}
+.oo-design-mode .oo-design-tools {visibility:visible; display:block!important;}
 .oo-design-trash {color:#FFF; width:75px; height:75px;}
 
 .oo-design-mode .oo-region {border:4px dashed #BBB; margin-top:20px; min-height:40px;}

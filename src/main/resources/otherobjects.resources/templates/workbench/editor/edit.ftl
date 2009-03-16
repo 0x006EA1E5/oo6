@@ -56,9 +56,12 @@ function disableFormTemplates()
 </div>
 </div>
 
-<div id="ooActions" class="oo-panel oo-text-style">
-<a class="oo-item" href="javascript:formSubmit();"><div class="oo-arrow">Save</div></a>
+<div class="oo-actions">
+<h2>Actions</h2>
+<ul>
+<li><a href="javascript:formSubmit();">Save</a></li>
 </ul>
 </div>
+
 
 <#include "/otherobjects/templates/workbench/shared/footer.ftl" />

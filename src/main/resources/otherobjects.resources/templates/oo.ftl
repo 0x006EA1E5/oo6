@@ -101,13 +101,13 @@ Macro to insert block
 	<#assign blockName = blockReference.block.code/>
 	<#assign blockData = blockReference.blockData!/>
 	<#-- If block is global but has no data then render placeholder-->
-	<#if blockReference.block.global?has_content && !blockData?has_content>
+	<#if blockReference.block.global && !blockData?has_content>
 		<div class="oo-block" id="oo-block-${blockReference.id}" editlabel="${blockReference.block.label}" published="edit">
 		<#include "/otherobjects/templates/hud/blocks/block-new.ftl">
 		</div>
 	<#else>
 		<#assign blockData = blockReference.blockData! >
-		<div class="oo-block" id="oo-block-${blockReference.id}" editlabel="${blockReference.block.label}" published="${blockReference.fullyPublished?string("live","edit")}">
+		<div class="oo-block" id="oo-block-${blockReference.id}" editlabel="${blockReference.block.label}" <#if blockReference.block.global>published="${blockReference.fullyPublished?string("live","edit")}"</#if>>
 		<#if (blockReference.block.keywords)!?contains("no-cache")>
 			<#include "/site/templates/blocks/${blockName}.ftl"> 
 		<#else>
@@ -120,6 +120,7 @@ Macro to insert block
 	<#include "/otherobjects/templates/hud/blocks/block-error.ftl">
 	</div>
 </#attempt>
+
 </#macro>  
 
 <#-- 
@@ -257,39 +258,20 @@ OO Interface Integration macros
 -->
 
 <#-- 
-Macro to insert HTML tag to support OO interface
--->
-<#macro html id="" class="">
-<html<#if id?has_content> id="${id}"</#if><@authorize "ROLE_ADMIN"> class="${class!}"</@authorize>>
-</#macro>
-
-<#-- 
-Macro to insert OO interface CSS headers
+Macro to insert OO interface headers
 -->
 <#macro head>
-<@oo.css "/otherobjects/static/hud/hud.css" />
-<@oo.css "/otherobjects/static/hud/toolbar.css" />
-</#macro>
-
-<#-- 
-Macro to insert HUD code
--->
-<#macro foot>
-<@authorize "ROLE_ADMIN">
-<div class="oo-icon"></div>
-<div class="oo-hud">
-</div>
-<#include "/otherobjects/templates/hud/hud.ftl" />
 <@oo.js "/otherobjects/static/hud/hud.js" />
-</@authorize>
+<@oo.css "/otherobjects/static/hud/hud.css" />
+<@oo.css "/otherobjects/static/workbench/toolbar.css" />
 </#macro>
 
 <#-- 
-Macro to insert legacy toolbar code
+Macro to insert toolbar code
 -->
-<#macro legacyToolbar>
+<#macro toolbar>
 <@authorize "ROLE_ADMIN"> 
-<#include "/otherobjects/templates/legacy/blocks/toolbar.ftl" />
+<#include "/otherobjects/templates/hud/toolbar.ftl" />
 </@authorize>
 </#macro>
 

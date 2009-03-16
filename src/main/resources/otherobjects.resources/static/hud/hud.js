@@ -4,48 +4,25 @@ var hudVisible = false;
 var siteMinWidth = 1016;
 var siteBodyOverflow = "auto"; // FIXME This needs to be recorded before entering hud.
 var bodyWidth = Ojay('body').setStyle({'width' : YAHOO.util.Dom.getViewportWidth()})
+var designElements = [];
 
-Ojay.Keyboard.listen(document, 'ESCAPE', toggleHud);
-Ojay('div.oo-icon').on('click',toggleHud); 
+// Setup key bindings
+Ojay.Keyboard.listen(document, 'ALT S', ooToggleEditMode);
+Ojay.Keyboard.listen(document, 'ALT D', ooToggleDesignMode);
 
+function ooToggleEditMode(el, e) {
 
-function toggleHud(el, e) {
-	if(hudVisible) {
-		// Animate hud closed
-		//Ojay('div.oo-edit-zones').node.innerHTML = "";
-		Ojay('.oo-toolbar').animate({top:{from: 0, to: -60}}, 0.5);
-		Ojay('html').wait(0.1).animate({paddingTop:{from: 60, to: 0}}, 0.5);
-//		Ojay('body').
-//			wait(0.1).
-//			setStyle({'overflowX' : 'hidden'}).
-//			animate({left: {to:0}, width: {to: YAHOO.util.Dom.getViewportWidth()}}, 0.5).
-//			setStyle({'overflowX' : siteBodyOverflow});
-		hudVisible = false;
-	} else {
-		// Animate hud open
-		Ojay('html').animate({paddingTop:{from: 0, to: 60}}, 0.3);
-//		Ojay('body').
-//			setStyle({'overflowX' : 'hidden'}).
-//			animate({left: {to: Math.floor((YAHOO.util.Dom.getViewportWidth()-siteMinWidth)/2)}, width: {from:YAHOO.util.Dom.getViewportWidth(), to: siteMinWidth}}, 0.3).
-//			setStyle({'overflowX' : siteBodyOverflow});
-		Ojay('.oo-toolbar')
-			.wait(0.1)
-			.animate({top:{from: -60, to: 0},opacity:{from: 0, to: 1}}, 0.2)
-		hudVisible = true;
-		//toggleDesignMode();
-	}
-}
-
-
-function toggleEditMode(el, e) {
 	if(mode == "edit") {
-		
+		mode = "none";
+		Ojay('div.oo-edit-zones').node.innerHTML="";
 	} else {
-		
+		mode = "edit";
 		Ojay('div.oo-block').forEach(function(el,i) {
 				// Get Regions Dimensions
 				var area = el.getRegion();
-				var state = el.node.getAttribute('published').toLowerCase();
+				var state = 'none';
+				if(el.node.getAttribute('published'))
+					state = el.node.getAttribute('published').toLowerCase();
 				
 				// Create Edit Zone HTML
 				console.log(el.node);
@@ -80,24 +57,6 @@ function toggleEditMode(el, e) {
 }
 
 
-
-/*
-('.oo-editregion').forEach(function(el,i) {
-		// Loop create editregions
-	var area = el.getRegion();
-	var htmlIns = Ojay.HTML.div({id: 'editzone' + i , className: 'oo-editzone'});
-	Ojay('div.oo-editzones').insert(htmlIns,'top');
-		// Insert Drop item
-		var htmlEditIns = Ojay.HTML.div({id: 'draghandle' + i , className: 'oo-draghandle oo-text-style'});
-		Ojay('#editzone' + i).insert(htmlEditIns,'top');
-		
-	Ojay('#editzone' + i).setStyle({opacity: '0', top:area.top + 'px', left:area.left + 'px', width:(area.getWidth()-4) + 'px', height:(area.getHeight()-4) + 'px'}).animate({opacity:  {from: 0, to: 1}}, 0.5);
-		Ojay('#draghandle' + i).setContent('<span>' + el.node.title + '</span>');
-		
-		var dd2 = new YAHOO.util.DD('editzone' + i);
-		dd2.setHandleElId('draghandle' + i); 
-})
-*/
 
 /**
  * ooSaveTemplateDesign
@@ -168,13 +127,25 @@ YAHOO.lang.extend(YAHOO.OO.DDBlock, YAHOO.util.DDProxy, {
 });
 
 
-function toggleDesignMode(el, e) {
+function ooToggleDesignMode(el, e) {
 	
 	if(mode=="design") {
+		mode = "none";
+		Ojay('div.oo-region-label').remove();
+		Ojay('html').removeClass('oo-design-mode');
 		
+		for(var i=0; i<designElements.length; i++)
+		{
+			//var tmp = designElements.pop();
+			//console.log('Destroying', tmp);
+			designElements[i].unreg();
+			designElements[i] == null;
+			
+		}
+		designElements = [];
 	}
 	else {
-	
+		mode = "design";
 		// Change icon selected state
 		Ojay('#ooToolbarIconDesignMode').addClass('oo-icon-selected');
 		Ojay('DIV.oo-toolbar-icon').removeClass('oo-icon-selected');
@@ -207,7 +178,7 @@ function toggleDesignMode(el, e) {
 		
 		// Enable drag drop
 		Ojay('.oo-block').forEach(function(e) {
-			new YAHOO.OO.DDBlock(e.node.id);	
+			designElements.push(new YAHOO.OO.DDBlock(e.node.id));	
 		});
 		
 		Ojay('.oo-region').forEach(function(e) {
@@ -216,6 +187,11 @@ function toggleDesignMode(el, e) {
 	
 		new YAHOO.util.DDTarget("OoDesignTrash");	
 		
+		console.log(designElements);
 	}
 	
+}
+
+function ooPublishTemplate(id) {
+	Ojay.HTTP.POST(ooBaseUrl + 'otherobjects/designer/publishTemplate/' + id);
 }

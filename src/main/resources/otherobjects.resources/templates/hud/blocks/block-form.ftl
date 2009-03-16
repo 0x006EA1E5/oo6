@@ -29,12 +29,13 @@
 			<#-- Existing block -->
 			<input type="hidden" class="hidden" name="_oo_id" value="${blockData.id}" />
 			<input type="hidden" class="hidden" name="_oo_type" value="${blockData.typeDef.name}" />
+			<#if blockGlobal><input type="text" class="text" name="code" value="blockData" /> </#if>
 			<@renderForm blockData.typeDef/>
 		<#else> 
 			<#-- New block --> 
 			<input type="hidden" class="hidden" name="_oo_containerId" value="${location}" />
 			<input type="hidden" class="hidden" name="_oo_type" value="${typeDef.name}" />
-			<!-- <input type="text" class="hidden" name="code" value="blockData" /> -->
+			<#if blockGlobal><input type="text" class="text" name="code" value="blockData" /> </#if>
 			<@renderForm typeDef true/>
 		</#if> 
 	
@@ -55,7 +56,7 @@
 	  <div class="oo-actions" style="width:750px;">
 		<div class="oo-action"><div class="oo-button oo-button-grey oo-center-text" id="OoFormClose">Close</div></div>
 		<div class="oo-action"><div class="oo-button oo-button-red oo-center-text" id="OoFormSave">Save</div></div>
-		<div class="oo-action"><div class="oo-button oo-button-green oo-center-text">Publish</div></div>
+		<div class="oo-action"><div class="oo-button oo-button-green oo-center-text" id="OoFormPublish">Publish</div></div>
 		<#--
 		 <div class="oo-action"><div class="oo-button oo-button-blue oo-center-text oo-arrow">More</div></div>
 		-->
@@ -66,18 +67,6 @@
 <div class="oo-menu-cell" style="width:50%;"></div>
 </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -94,6 +83,11 @@ Ojay('#OoFormSave').on('click', function(el,e) {
 Ojay('#OoFormClose').on('click', function(el,e) {
 	Ojay('#OoMenu').setStyle({display:"none"});
 	Ojay('#OoMenu').node.innerHTML = "";
+});
+Ojay('#OoFormPublish').on('click', function(el,e) {
+	Ojay.HTTP.POST(ooBaseUrl + 'otherobjects/block/publish/${blockReference.id}?resourceObjectId='+resourceObjectId).insertInto(Ojay('#oo-block-${blockReference.id}').parents());
+	Ojay('#OoMenu').setStyle({display:"none"});
+	
 });
 
 Ojay('#OoForm').on('submit', function(element, e) {
@@ -121,7 +115,7 @@ function ooSaveForm(blockId, hide)
 		onSuccess:function(eventType, args) { 
 			if(hide) 
 				Ojay('#OoMenu').setStyle({display:"none"});
-			Ojay.HTTP.GET(ooBaseUrl + 'otherobjects/block/get/'+blockId+'?resourceObjectId='+resourceObjectId).insertInto('#oo-block-'+blockId);
+			Ojay.HTTP.GET(ooBaseUrl + 'otherobjects/block/get/'+blockId+'?resourceObjectId='+resourceObjectId).insertInto(Ojay('#oo-block-'+blockId).parents());
 		}
 	}};
 	var cObj = YAHOO.util.Connect.asyncRequest('POST', ooBaseUrl + 'otherobjects/workbench/save', callback );

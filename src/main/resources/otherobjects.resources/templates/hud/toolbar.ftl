@@ -1,27 +1,84 @@
-<div class="oo-toolbar oo-text-style">
-	<div class="oo-toolbar-icons">
-		<div class="oo-toolbar-left">
-			<div class="oo-toolbar-radio">
-				<div class="oo-toolbar-icon oo-new-icon oo-icon-selected"  onclick="window.location='${oo.url("/")}'"></div>
-				<div class="oo-toolbar-icon oo-edit-icon" onclick="toggleEditMode(this);"></div>
-				<#--<div class="oo-toolbar-icon oo-stats-icon"></div>-->
-				<div class="oo-toolbar-icon oo-design-icon" onclick="toggleDesignMode(this);"></div>
-				<div class="oo-toolbar-icon oo-debug-icon" onclick="window.location='${oo.url("/otherobjects/debug")}'"></div>
-			</div>
-		
-		</div>
-		
-		<div class="oo-toolbar-center">
-			<form action="${oo.url("/otherobjects/workbench/search")}"><input class="oo-search-input" type="search" name="q" results="4" placeholder="Global Search" value="${RequestParameters.q!?html}"/></form>
-		</div>
-		
-		<div class="oo-toolbar-right">
-			<div class="oo-toolbar-icon oo-logout-icon" onclick="window.location='${oo.url("/otherobjects/logout")}'"></div>
-			<div class="oo-toolbar-icon oo-users-icon"></div>
-			<div class="oo-toolbar-icon oo-new-icon"></div>
-			<div class="oo-toolbar-icon oo-dashboard-icon" onclick="window.location='${oo.url("/otherobjects/")}'"><div class="oo-small-badge"><div class="oo-small-badge-label">2</div></div></div>
-			<#-- <div class="oo-toolbar-icon oo-commerce-icon"></div> -->
-		</div>
-		
-	</div>
+<#import "/oo.ftl" as oo>
+
+<style type="text/css">
+</style>
+
+<div class="no-print">
+
+<div id="OoMenuIcon">
+<h2>OTHER Objects</h2>
+</div>
+
+<div id="OoToolbar" class="oo-toolbar">
+
+<h3><a id="OoLogoButton" class="oo-button-up" href="${oo.url("/otherobjects/workbench/")}"></a></h3>
+
+<#if resourceObject??>
+<p class="oo-divider">
+    <a href="${oo.url("/otherobjects/workbench/")}">Back to workbench</a>
+</p>
+
+<p class="oo-divider">
+	<a class="oo-<#if resourceObject.published>live<#else>edited</#if>" href="${oo.url('/otherobjects/workbench/view/${resourceObject.id}')}">${resourceObject.typeDef.label}: ${resourceObject.ooLabel}</a>
+</p>
+
+<ul>
+	<li><a href="${oo.url('/otherobjects/workbench/edit/${resourceObject.id}')}">Edit page</a></li>	
+	<li><a href="javascript:ooToggleEditMode()">Edit blocks</a></li>	
+	<li><a href="javascript:ooToggleDesignMode()">Arrange blocks<#-- (${ooTemplate.ooLabel} : ${ooTemplate.layout.ooLabel})--></a></li>	
+	<#if ! ooTemplate.published>
+	<li><a href="javascript:ooPublishTemplate('${ooTemplate.id}')">Publish template (${ooTemplate.ooLabel})</a></li>
+	</#if>	
+</ul>
+<#else>
+<p class="oo-divider">
+    <a href="${oo.url("/")}">Back to site</a>
+</p>
+<#if ooTemplate??>
+
+</#if>
+</#if>
+<#--
+<ul>
+	<li><a href="javascript:ooToggle('.oo-stats')">${performanceInfo.events?size} queries</a></li>	
+</ul>
+-->
+
+<a id="OoLogoutButton" href="${oo.url("/otherobjects/logout.html")}"></a>
+
+<#--
+<div class="oo-stats">
+<h2><em>Page performance statistics</em></h2>
+<table>
+<#list performanceInfo.events as event>
+<tr><td>${event.details}</td><td>${event.time}ms</td></tr>
+</#list>
+</table>
+</div>
+-->
+
+</div>
+
+
+<div class="oo-menu" style="display:none;" id="OoMenu"></div>
+<div class="oo-edit-zones"></div>
+<div class="oo-design-tools" style="display:none;">
+<div id="OoDesignTrash" class="oo-design-trash oo-panel">Trash</div>
+</div>
+
+
+<script>
+var resourceObjectId = '${(resourceObject.id)!}';
+var ooTemplateId = '${(ooTemplate.id)!}';
+var ooBaseUrl = '${oo.url("/")}';
+var ooBlockInEdit = "";
+</script>
+
+<div id="oo-form-overlay" style="display:none;"></div>
+<div id="oo-chooser-hud" style="display:none;">
+<h1>Choose a block to insert:</h1>
+<#list daoTool.get("baseNode").getAllByJcrExpression("/jcr:root/designer//element(*) [@ooType = 'org.otherobjects.cms.model.TemplateBlock']") as block>
+<a class="oo-chooser-button" id="${block.code}">${block.label} &rarr;</a>
+</#list>
+</div>
 </div>
