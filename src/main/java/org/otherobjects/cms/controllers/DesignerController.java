@@ -75,9 +75,54 @@ public class DesignerController
             {
                 String blockId = (String) blockIds.get(j);
                 tr.getBlocks().add(blockRefs.get(blockId));
+                blockRefs.remove(blockId);
             }
         }
         dao.save(template, false);
+
+        // Delete removed blocks
+        // FIXME Need to remove deleted blocks from live
+        for (TemplateBlockReference ref : blockRefs.values())
+        {
+            dao.remove(ref.getId());
+        }
+
+        return null;
+    }
+
+    /**
+     * Saves arrangmement of blocks on a template.
+     */
+    @RequestMapping("/designer/publishTemplate/**")
+    public ModelAndView publishTemplate(HttpServletRequest request, HttpServletResponse response) throws Exception
+    {
+        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
+        String templateId = RequestUtils.getId(request);
+
+        // Load existing template
+        Template template = (Template) dao.get(templateId);
+        Map<String, TemplateBlockReference> blockRefs = new HashMap<String, TemplateBlockReference>();
+
+        // Gather all existing blockRefs
+        for (TemplateRegion tr : template.getRegions())
+        {
+            for (TemplateBlockReference trb : tr.getBlocks())
+            {
+                blockRefs.put(trb.getId(), trb);
+            }
+        }
+
+        // Check all blocks are published
+        for (TemplateBlockReference ref : blockRefs.values())
+        {
+            if (!ref.isPublished())
+                dao.publish(ref, null);
+            if (ref.getBlockData() != null && !ref.getBlockData().isPublished())
+                dao.publish(ref.getBlockData(), null);
+        }
+
+        // Publish template
+        dao.publish(template, null);
         return null;
     }
 

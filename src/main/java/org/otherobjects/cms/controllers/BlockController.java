@@ -69,45 +69,45 @@ public class BlockController
     public ModelAndView create(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
-        
+
         String blockName = RequestUtils.getId(request);
         String resourceObjectId = request.getParameter("resourceObjectId");
         String templateId = request.getParameter("templateId");
         String regionCode = request.getParameter("regionCode");
-        
+
         Template template = (Template) dao.get(templateId);
-        TemplateBlock templateBlock = (TemplateBlock) dao.getByPath("/designer/blocks/"+blockName);
+        TemplateBlock templateBlock = (TemplateBlock) dao.getByPath("/designer/blocks/" + blockName);
 
         TemplateBlockReference blockRef = new TemplateBlockReference();
         blockRef.setPath("/blocks/");
         blockRef.setBlock(templateBlock);
-        dao.save(blockRef,false);
-        
+        dao.save(blockRef, false);
+
         TemplateRegion region = template.getRegion(regionCode);
-        if(region==null)
+        if (region == null)
         {
             region = new TemplateRegion();
             region.setCode(regionCode);
             region.setLabel(regionCode);
-            if(template.getRegions()==null)
+            if (template.getRegions() == null)
                 template.setRegions(new ArrayList<TemplateRegion>());
             template.getRegions().add(region);
         }
         Assert.notNull(region, "No region found for code: " + regionCode);
-        
-        if(region.getBlocks()==null)
+
+        if (region.getBlocks() == null)
             region.setBlocks(new ArrayList<TemplateBlockReference>());
-        
+
         region.getBlocks().add(blockRef);
-        dao.save(template,false);
-        
+        dao.save(template, false);
+
         logger.info("Rendering block: {}", blockRef.getCode());
-        
+
         // FIXME This woudl not be needed if OCM always set UUIDs after save
         template = (Template) dao.get(templateId);
         List<TemplateBlockReference> blocks = template.getRegion(regionCode).getBlocks();
-        blockRef= blocks.get(blocks.size()-1);
-        
+        blockRef = blocks.get(blocks.size() - 1);
+
         ModelAndView view = new ModelAndView("/otherobjects/templates/hud/blocks/block-render");
         view.addObject("blockReference", blockRef);
         if (!blockRef.getBlock().isGlobalBlock())
@@ -123,7 +123,7 @@ public class BlockController
         }
         return view;
     }
-    
+
     /**
      * Renders block and associated data.
      * 
@@ -137,7 +137,7 @@ public class BlockController
         TemplateBlockReference blockRef = (TemplateBlockReference) dao.get(blockRefId);
 
         logger.info("Rendering block: {}", blockRef.getCode());
-        
+
         ModelAndView view = new ModelAndView("/otherobjects/templates/hud/blocks/block-render");
         view.addObject("blockReference", blockRef);
         if (!blockRef.getBlock().isGlobalBlock())
@@ -145,7 +145,7 @@ public class BlockController
             // Page block
             BaseNode resourceObject = dao.get(resourceObjectId);
             view.addObject("resourceObject", resourceObject);
-            
+
         }
         else
         {
@@ -154,6 +154,43 @@ public class BlockController
             view.addObject("bn", null);
             view.addObject("bf", false);
             view.addObject("bt", true);
+        }
+        return view;
+    }
+
+    /**
+     * Published block and associated data.
+     * 
+     */
+    @RequestMapping("/block/publish/**")
+    public ModelAndView publish(HttpServletRequest request, HttpServletResponse response) throws Exception
+    {
+        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
+        String blockRefId = RequestUtils.getId(request);
+        String resourceObjectId = request.getParameter("resourceObjectId");
+        TemplateBlockReference blockRef = (TemplateBlockReference) dao.get(blockRefId);
+
+        // Publish
+        dao.publish(blockRef, null);
+        if (blockRef.getBlockData() != null && !blockRef.getBlockData().isPublished())
+            dao.publish(blockRef.getBlockData(), null);
+
+        // FIXME Merge with above code
+        logger.info("Rendering block: {}", blockRef.getCode());
+
+        ModelAndView view = new ModelAndView("/otherobjects/templates/hud/blocks/block-render");
+        view.addObject("blockReference", blockRef);
+        if (!blockRef.getBlock().isGlobalBlock())
+        {
+            // Page block
+            BaseNode resourceObject = dao.get(resourceObjectId);
+            view.addObject("resourceObject", resourceObject);
+
+        }
+        else
+        {
+            // Global block
+            view.addObject("blockData", blockRef.getBlockData());
         }
         return view;
     }
@@ -169,7 +206,7 @@ public class BlockController
         view.addObject("regionCode", RequestUtils.getId(request));
         return view;
     }
-    
+
     /**
      * Renders form for requested block. Path Id should either be a UUID to edit an existing object,
      * or a type name for creating new objects. 
@@ -182,7 +219,7 @@ public class BlockController
 
         String blockRefId = RequestUtils.getId(request);
         String resourceObjectId = request.getParameter("resourceObjectId");
-        
+
         TemplateBlockReference blockRef = null;
         if (IdentifierUtils.isUUID(blockRefId))
         {
@@ -191,8 +228,8 @@ public class BlockController
             view.addObject("blockReference", blockRef);
         }
         view.addObject("resourceObjectForm", false);
-        
-        if(blockRef == null)
+
+        if (blockRef == null)
         {
             // New page block
             //view.addObject("blockData", blockData);
@@ -216,7 +253,7 @@ public class BlockController
             String typeDefName = StringUtils.codeToClassName(blockCode) + "Block";
             view.addObject("blockGlobal", true);
             BaseNode blockData = blockRef.getBlockData();
-            if (blockData  != null)
+            if (blockData != null)
             {
                 view.addObject("object", blockData);
                 view.addObject("blockData", blockData);

@@ -22,10 +22,15 @@ public class PublishingOptions extends BaseComponent
     private Template template;
     private Long sortOrder = 0L; // FIXME This is only temporary
 
+    public String toString()
+    {
+    	return "Publishing Options";
+    }
+    
     @Override
     public String getOoLabel()
     {
-        return "Publishing Options";
+        return toString();
     }
 
     @Property(order = 10)

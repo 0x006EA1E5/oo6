@@ -75,7 +75,7 @@ public class User implements Serializable, UserDetails, Editable
     }
 
     @Transient
-    public String getLabel()
+    public String getOoLabel()
     {
         // FIXME Move this to an superclass? Fetch via annotation?
         return getEmail();

@@ -473,6 +473,14 @@ public class PropertyDefImpl implements PropertyDef, Ordered
         return fieldType;
     }
 
+    /**
+     * Options: 
+     * 
+     * <li> null (will use default)
+     * <li> none (field will not be included in forms) 
+     * 
+     * @param fieldType
+     */
     public void setFieldType(String fieldType)
     {
         this.fieldType = fieldType;

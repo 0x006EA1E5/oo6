@@ -20,16 +20,13 @@ public abstract class AbstractTypeService implements TypeService
     public void registerType(TypeDef t)
     {
         // FIXME Allow re-registration of types
-        if (!this.types.containsKey(t.getName()))
+        if (this.types.containsKey(t.getName()))
         {
-            this.logger.info("Registering type: {}", t.getName());
-            this.types.put(t.getName(), t);
-            t.setTypeService(this);
+            this.logger.warn("Type already registered. Replacing existing one. Name: {}", t.getName());
         }
-        else
-        {
-            this.logger.warn("Type already registered. Ignoring: {}", t.getName());
-        }
+        this.logger.info("Registering type: {}", t.getName());
+        this.types.put(t.getName(), t);
+        t.setTypeService(this);
     }
 
     public void unregisterType(String typeName)
