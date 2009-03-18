@@ -29,6 +29,5 @@
 		<beans:property name="systemWideSalt" value="${otherobjects.system.wide.salt}" />
 	</beans:bean>
 	<beans:bean id="passwordService" class="org.otherobjects.cms.security.PasswordServiceImpl">
-		<beans:property name="sessionFactory" ref="sessionFactory" />
 	</beans:bean>
 </beans:beans>
