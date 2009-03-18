@@ -1,7 +1,6 @@
 package org.otherobjects.cms.security;
 
 import java.security.MessageDigest;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -9,23 +8,22 @@ import java.util.Random;
 import javax.annotation.Resource;
 
 import org.apache.commons.codec.binary.Base64;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.model.PasswordChangeRequest;
 import org.otherobjects.cms.model.User;
 import org.otherobjects.cms.model.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.security.providers.dao.SaltSource;
 import org.springframework.security.providers.encoding.PasswordEncoder;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-public class PasswordServiceImpl extends HibernateDaoSupport implements PasswordService
+@Repository
+public class PasswordServiceImpl implements PasswordService
 {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -41,6 +39,9 @@ public class PasswordServiceImpl extends HibernateDaoSupport implements Password
     @Resource
     private SaltSource saltSource;
 
+    @Resource
+    private SessionFactory sessionFactory;
+
     public String generatePasswordChangeRequestCode(String username) throws Exception
     {
         User user = (User) userDao.loadUserByUsername(username);
@@ -55,7 +56,7 @@ public class PasswordServiceImpl extends HibernateDaoSupport implements Password
         pcr.setUser(user);
         pcr.setRequestDate(new Date());
         pcr.setToken(generateToken());
-        getHibernateTemplate().save(pcr);
+        sessionFactory.getCurrentSession().save(pcr);
         return pcr.getChangeRequestCode();
     }
 
@@ -91,7 +92,10 @@ public class PasswordServiceImpl extends HibernateDaoSupport implements Password
         Object[] identifier = PasswordChangeRequest.splitPasswordChangeRequestIdentifier(changeRequestCode);
 
         // Get most recent requests
-        List pcrs = getHibernateTemplate().find("FROM PasswordChangeRequest WHERE id=? AND token=? ORDER BY id DESC", identifier);
+        Query query = sessionFactory.getCurrentSession().createQuery("FROM PasswordChangeRequest WHERE id=:id AND token=:token ORDER BY id DESC");
+        query.setLong("id", (Long) identifier[0]);
+        query.setString("token", (String) identifier[1]);
+        List pcrs = query.list();
 
         PasswordChangeRequest passwordChangeRequest = null;
 
@@ -123,7 +127,7 @@ public class PasswordServiceImpl extends HibernateDaoSupport implements Password
             return false;
         }
     }
-    
+
     @Transactional
     public boolean changePassword(User user, String oldPassword, String newPassword)
     {
@@ -156,7 +160,9 @@ public class PasswordServiceImpl extends HibernateDaoSupport implements Password
             userDao.save(user);
 
             // If we've gotten this far then we can safely delete all PCRs for this user
-            getHibernateTemplate().bulkUpdate("DELETE PasswordChangeRequest WHERE user = ?", user);
+            Query q = sessionFactory.getCurrentSession().createQuery("DELETE PasswordChangeRequest WHERE user = :user");
+            q.setEntity("user", user);
+            q.executeUpdate();
             return true;
         }
         catch (Exception e)
@@ -177,17 +183,9 @@ public class PasswordServiceImpl extends HibernateDaoSupport implements Password
     public void cleanExpiredPasswordChangeRequests()
     {
         final Date maximumValidAge = new Date(new Date().getTime() - MAXIMUM_TOKEN_AGE);
-        getHibernateTemplate().execute(new HibernateCallback()
-        {
-            public Object doInHibernate(Session session) throws HibernateException, SQLException
-            {
-                Query q = session.createQuery("delete from PasswordChangeRequest where requestDate < :requestDate");
-                q.setDate("requestDate", maximumValidAge);
-                q.executeUpdate();
-                return null;
-            }
-        });
-
+        Query q = sessionFactory.getCurrentSession().createQuery("delete from PasswordChangeRequest where requestDate < :requestDate");
+        q.setDate("requestDate", maximumValidAge);
+        q.executeUpdate();
     }
 
     public boolean isPasswordMatch(User user, String password)
