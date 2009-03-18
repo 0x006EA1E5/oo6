@@ -64,7 +64,7 @@ public class PasswordChangeController
         if (result.hasErrors())
         {
             // Return to form and try again
-            return "otherobjects/login/change-password";
+            return "/otherobjects/templates/workbench/user-management/change-password";
         }
         else
         {
