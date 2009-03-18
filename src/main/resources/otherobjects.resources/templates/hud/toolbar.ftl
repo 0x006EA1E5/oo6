@@ -60,7 +60,10 @@
 </div>
 
 
-<div class="oo-menu" style="display:none;" id="OoMenu"></div>
+<div class="oo-menu" id="OoMenu"></div>
+
+
+
 <div class="oo-edit-zones"></div>
 <div class="oo-design-tools" style="display:none;">
 <div id="OoDesignTrash" class="oo-design-trash oo-panel">Trash</div>

@@ -10,8 +10,20 @@ var designElements = [];
 Ojay.Keyboard.listen(document, 'ALT S', ooToggleEditMode);
 Ojay.Keyboard.listen(document, 'ALT D', ooToggleDesignMode);
 
+function toggleMode(mode) {
+}
+
+function ooPositionPanel() {
+	var oOpanelLeft = (Ojay.getViewportSize().width - 750)  / 2; // Center window horizontally
+	var oOpanelHeight = Ojay.getViewportSize().height - 200;
+	var oOpanelTop = (Ojay.getViewportSize().height - oOpanelHeight)  / 2; // Center window vertically
+	Ojay('#OoMenu').setStyle({height:oOpanelHeight+'px', top:oOpanelTop+'px', left:oOpanelLeft+'px'});
+}
+
 function ooToggleEditMode(el, e) {
 
+	ooPositionPanel();
+	
 	if(mode == "edit") {
 		mode = "none";
 		Ojay('div.oo-edit-zones').node.innerHTML="";
@@ -56,8 +68,76 @@ function ooToggleEditMode(el, e) {
 	}
 }
 
+function ooToggleDesignMode(el, e) {
+	
+	//ooPositionPanel();
+	
+	if(mode=="design") {
+		mode = "none";
+		Ojay('div.oo-region-label').remove();
+		Ojay('html').removeClass('oo-design-mode');
+		
+		for(var i=0; i<designElements.length; i++)
+		{
+			//var tmp = designElements.pop();
+			//console.log('Destroying', tmp);
+			designElements[i].unreg();
+			designElements[i] == null;
+			
+		}
+		designElements = [];
+	}
+	else {
+		mode = "design";
+		// Change icon selected state
+		Ojay('#ooToolbarIconDesignMode').addClass('oo-icon-selected');
+		Ojay('DIV.oo-toolbar-icon').removeClass('oo-icon-selected');
+	
+		Ojay('html').addClass('oo-design-mode');
+		
+		// Add labels to regions
+		Ojay('div.oo-region').forEach(function(el,i) {
+	
+			//  Create Add button
+			var labelHtml = Ojay.HTML.div({className: 'oo-region-label'}, function(HTML) {
+				// Insert Actions Arrow
+				HTML.div({className: 'oo-region-label-actions'}, function(HTML) {
+					// Edit Status Gem and Label Text
+					HTML.div({className:'oo-text-style oo-edit-state oo-edit-state-none', title:'Status: ' + el.node.getAttribute('editstate') },'Add');
+				});
+			});
+			el.insert(labelHtml,'bottom');
+		});
+	
+		
+		// Set click handler
+		Ojay('.oo-region-label').on('click', function(el, e) {
+		    e.stopDefault();
+			//var overlay = $('.oo-menu').node;
+		    $('.oo-menu').setStyle({display:"block"});
+			var url = '' + ooBaseUrl + 'otherobjects/block/choose/' + el.ancestors('.oo-region').node.id.slice(10);
+			Ojay.HTTP.GET(url).insertInto('#OoMenu').evalScripts();
+		});	
+		
+		// Enable drag drop
+		Ojay('.oo-block').forEach(function(e) {
+			designElements.push(new YAHOO.OO.DDBlock(e.node.id));	
+		});
+		
+		Ojay('.oo-region').forEach(function(e) {
+			new YAHOO.util.DDTarget(e.node.id);	
+		});
+	
+		new YAHOO.util.DDTarget("OoDesignTrash");	
+		
+		console.log(designElements);
+	}
+	
+}
 
-
+function ooPublishTemplate(id) {
+	Ojay.HTTP.POST(ooBaseUrl + 'otherobjects/designer/publishTemplate/' + id);
+}
 /**
  * ooSaveTemplateDesign
  * 
@@ -127,71 +207,3 @@ YAHOO.lang.extend(YAHOO.OO.DDBlock, YAHOO.util.DDProxy, {
 });
 
 
-function ooToggleDesignMode(el, e) {
-	
-	if(mode=="design") {
-		mode = "none";
-		Ojay('div.oo-region-label').remove();
-		Ojay('html').removeClass('oo-design-mode');
-		
-		for(var i=0; i<designElements.length; i++)
-		{
-			//var tmp = designElements.pop();
-			//console.log('Destroying', tmp);
-			designElements[i].unreg();
-			designElements[i] == null;
-			
-		}
-		designElements = [];
-	}
-	else {
-		mode = "design";
-		// Change icon selected state
-		Ojay('#ooToolbarIconDesignMode').addClass('oo-icon-selected');
-		Ojay('DIV.oo-toolbar-icon').removeClass('oo-icon-selected');
-	
-		Ojay('html').addClass('oo-design-mode');
-		
-		// Add labels to regions
-		Ojay('div.oo-region').forEach(function(el,i) {
-	
-			//  Create Add button
-			var labelHtml = Ojay.HTML.div({className: 'oo-region-label'}, function(HTML) {
-				// Insert Actions Arrow
-				HTML.div({className: 'oo-region-label-actions'}, function(HTML) {
-					// Edit Status Gem and Label Text
-					HTML.div({className:'oo-text-style oo-edit-state oo-edit-state-none', title:'Status: ' + el.node.getAttribute('editstate') },'Add');
-				});
-			});
-			el.insert(labelHtml,'bottom');
-		});
-	
-		
-		// Set click handler
-		Ojay('.oo-region-label').on('click', function(el, e) {
-		    e.stopDefault();
-			//var overlay = $('.oo-menu').node;
-		    $('.oo-menu').setStyle({display:"block"});
-			var url = '' + ooBaseUrl + 'otherobjects/block/choose/' + el.ancestors('.oo-region').node.id.slice(10);
-			Ojay.HTTP.GET(url).insertInto('#OoMenu').evalScripts();
-		});	
-		
-		// Enable drag drop
-		Ojay('.oo-block').forEach(function(e) {
-			designElements.push(new YAHOO.OO.DDBlock(e.node.id));	
-		});
-		
-		Ojay('.oo-region').forEach(function(e) {
-			new YAHOO.util.DDTarget(e.node.id);	
-		});
-	
-		new YAHOO.util.DDTarget("OoDesignTrash");	
-		
-		console.log(designElements);
-	}
-	
-}
-
-function ooPublishTemplate(id) {
-	Ojay.HTTP.POST(ooBaseUrl + 'otherobjects/designer/publishTemplate/' + id);
-}

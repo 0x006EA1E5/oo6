@@ -69,9 +69,12 @@ function formSubmit()
 </div>
 </div>
 
-<div id="ooActions" class="oo-panel oo-text-style">
+
+<div class="oo-actions">
 <h2>Actions</h2>
-<a class="oo-item" href="javascript:formSubmit();"><div class="oo-arrow">Save</div></a>
+<ul>
+<li><a href="javascript:formSubmit();">Save</a></li>
+</ul>
 </div>
 
 

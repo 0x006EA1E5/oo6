@@ -41,9 +41,7 @@ HTML.oo BODY {position:absolute; width:100%; -webkit-box-shadow: 0 5px 15px rgba
 /* DANGER - Quarantine - DANGER*/
 
 /* Menu */
-.oo-menu {position:fixed; top:0; left:0; display:table; height:100%; width:100%; border-collapse:collapse; z-index:9999;}
-.oo-menu-cell {display:table-cell; vertical-align:middle; height:900px;}
-
+#OoMenu {position:absolute; top:0; left:0; width:750px; height:500px;}
 
 /* Listing */
 .oo-title {text-align:left!important;} 

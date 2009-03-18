@@ -2,12 +2,7 @@
 <#import "/oo.ftl" as oo />
 <#import "/forms.ftl" as forms />
 
-<div class="oo-menu-row-group" style="display:table-row-group; height:100%;">
-<div class="oo-menu-row" style="display:table-row; height:100%;">
-<div class="oo-menu-cell" style="width:50%;"></div>
-<div class="oo-menu-cell">
-<div class="oo-panel oo-text-style" style="width:750px; height:500px;">
-
+<div class="oo-panel oo-text-style" style="width:100%;">
 
 <#if resourceObjectForm>
 <form id="OoForm" method="post" action="${oo.url("/otherobjects/form")}">
@@ -63,12 +58,7 @@
 	</div>
 </form>	
 	
-</div></div>
-<div class="oo-menu-cell" style="width:50%;"></div>
 </div>
-</div>
-
-
 
 
 <script type="text/javascript">

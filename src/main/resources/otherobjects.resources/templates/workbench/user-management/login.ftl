@@ -6,11 +6,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>OTHERobjects Workbench</title>
-<@oo.css "/otherobjects/static/legacy/workbench.css" />
+<@oo.css "/otherobjects/static/workbench/workbench.css" />
 <style>
-BODY {height:1000px; background:#006DA8 url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/admin-bg.gif")});}
-.oo-header {height:65px; background:url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/admin-top.png")});}
-.oo-footer {height:65px; background:url(${oo.resourceUrl("/otherobjects/static/legacy/graphics/admin-bottom.png")});}
+BODY {height:2000px; background:#006DA8 url(${oo.resourceUrl("/otherobjects/static/workbench/assets/admin-bg.gif")});}
+.oo-header {height:65px; background:url(${oo.resourceUrl("/otherobjects/static/workbench/assets/admin-top.png")});}
+.oo-footer {height:65px; background:url(${oo.resourceUrl("/otherobjects/static/workbench/assets/admin-bottom.png")});}
 .oo-content {padding:20px 155px 0px 180px; font:70% Arial; background:#FFFFFF;}
 .oo-build {padding:20px 20px 20px 180px; font:70% Arial; text-align:right; color:#999999; background:#FFFFFF;}
 .oo-indent {margin-left:55px;}
@@ -24,7 +24,7 @@ BODY {height:1000px; background:#006DA8 url(${oo.resourceUrl("/otherobjects/stat
 <div class="col100pc">
 <div class="oo-content">
 
-<h1><img src="${oo.resourceUrl("/otherobjects/static/legacy/graphics/logo-login.gif")}" height="60" width="250" alt="OTHER Objects" />
+<h1><img src="${oo.resourceUrl("/otherobjects/static/workbench/assets/logo-login.gif")}" height="60" width="250" alt="OTHER Objects" />
 </h1>
 
 

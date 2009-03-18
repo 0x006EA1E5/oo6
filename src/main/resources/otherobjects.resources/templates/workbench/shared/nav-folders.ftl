@@ -27,7 +27,7 @@
 <div class="oo-navigation">
 <ul class="oo-folders">
 <li class="oo-folder-full-open"><span onclick="ooExpandContract(this)"></span><a href="">OTHERobjects</a>
-<@ooFolderNavList daoTool.get("folder").folderTree />
+<@ooFolderNavList daoTool.get("folder").getFolderTree("/libraries/") />
 </li>
 </ul>
 </div>
