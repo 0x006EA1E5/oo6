@@ -9,5 +9,5 @@ public interface FolderDao extends GenericJcrDao<BaseNode>
 {
     // FIXME Need Interface for all folders
     List<BaseNode> getFolders();
-    TreeNode getFolderTree();
+    TreeNode getFolderTree(String rootPath);
 }

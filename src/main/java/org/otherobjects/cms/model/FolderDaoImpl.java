@@ -26,7 +26,7 @@ public class FolderDaoImpl extends GenericJcrDaoJackrabbit<BaseNode> implements 
         return getAllByJcrExpression("/jcr:root//element(*) [jcr:like(@ooType,'%Folder')] order by creationTimestamp");
     }
 
-    public TreeNode getFolderTree()
+    public TreeNode getFolderTree(String rootPath)
     {
         TreeBuilder tb = new TreeBuilder();
         List<BaseNode> all = getFolders();
@@ -37,6 +37,7 @@ public class FolderDaoImpl extends GenericJcrDaoJackrabbit<BaseNode> implements 
             flat.add(new TreeNode(b.getJcrPath()+"/", b.getId(), b.getOoLabel(), count++, b)); 
         }
         Collections.sort(flat,new TreeNodeComparator());
-        return tb.buildTree(flat);
+        TreeNode tree = tb.buildTree(flat);
+        return tree.getNode(rootPath);
     }
 }
