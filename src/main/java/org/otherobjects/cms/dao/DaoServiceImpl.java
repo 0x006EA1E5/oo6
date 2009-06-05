@@ -53,6 +53,8 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
             //then try find named bean in context
             if (beanFactory.containsBean(daoBeanName))
                 dao = (GenericDao) beanFactory.getBean(daoBeanName);
+            else if (beanFactory.containsBean(daoBeanName + "Impl"))
+                dao = (GenericDao) beanFactory.getBean(daoBeanName + "Impl");
             else
             {
                 // then return universal jcr dao for types extending baseNode
@@ -75,9 +77,9 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
                     else if (cls.getAnnotation(Entity.class) != null) // then return GenericDaoHibernate for hibernate entities
                     {
                         GenericDaoHibernate hibernateDao = new GenericDaoHibernate(cls);
-                        
+
                         // If sesion factory is null (ie during tests) then this will fail
-                        if(sessionFactory!=null)
+                        if (sessionFactory != null)
                             hibernateDao.setSessionFactory(sessionFactory);
                         dao = hibernateDao;
                         daoMap.put(daoBeanName, dao);
@@ -135,7 +137,7 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
     {
         getDaoMap().put(name, dao);
     }
-    
+
     public Map<String, GenericDao> getDaoMap()
     {
         return daoMap;
