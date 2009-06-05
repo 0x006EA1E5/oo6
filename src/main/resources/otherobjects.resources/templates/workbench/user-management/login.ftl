@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title>OTHERobjects Workbench</title>
+<title>Login | ${oo.msg("site.name")} | OTHERobjects</title>
 <@oo.css "/otherobjects/static/workbench/workbench.css" />
 <style>
 BODY {height:2000px; background:#006DA8 url(${oo.resourceUrl("/otherobjects/static/workbench/assets/admin-bg.gif")});}
@@ -24,14 +24,11 @@ BODY {height:2000px; background:#006DA8 url(${oo.resourceUrl("/otherobjects/stat
 <div class="col100pc">
 <div class="oo-content">
 
-<h1><img src="${oo.resourceUrl("/otherobjects/static/workbench/assets/logo-login.gif")}" height="60" width="250" alt="OTHER Objects" />
-</h1>
-
-
+<h1><img src="${oo.resourceUrl("/otherobjects/static/workbench/assets/logo-login.gif")}" height="60" width="250" alt="OTHER Objects" /></h1>
 
 <h2 class="oo-indent">Please Login</h2>
 
-<@oo.showFlashMessages />
+<div class="admin"><@oo.showFlashMessages /></div>
 
 <form action="${oo.url("/j_spring_security_check")}" method="post">
 <fieldset>
@@ -42,7 +39,10 @@ BODY {height:2000px; background:#006DA8 url(${oo.resourceUrl("/otherobjects/stat
 <input type="password" name="j_password"/></p>
 
 <p><label>Language:</label>
-<select name="lang"></select></p>
+<select name="locale">
+<option value="en">English</option>
+<option value="de">Deutsche</option>
+</select></p>
 
 <p><label>&nbsp;</label>
 <input type="checkbox" name="_spring_security_remember_me"/>Keep me logged in (until I manually log out)?<br/></p>

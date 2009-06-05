@@ -17,9 +17,13 @@ import org.otherobjects.cms.util.FlashMessage;
 import org.springframework.security.AuthenticationException;
 import org.springframework.security.ui.AbstractProcessingFilter;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
 
@@ -28,9 +32,12 @@ public class LoginController
 {
     @Resource
     private PasswordService passwordService;
-
+    
     @Resource
     private MailService mailService;
+
+    @Resource
+    private LocaleResolver localeResolver;
 
     /**
      * Shows the login form. If the user is already logged in then redirect them to the home page.
@@ -55,10 +62,19 @@ public class LoginController
     /**
      * Post-process login request. Actual login is performed by Spring Security's <code>AuthenticationProcessingfilter</code>, this
      * just catches any errors and turns them into flash messages. 
+     * @throws ServletRequestBindingException 
      */
     @RequestMapping(value = "/login/auth", method = RequestMethod.POST)
-    public ModelAndView processAuth(HttpServletRequest request, HttpServletResponse response)
+    public ModelAndView processAuth(HttpServletRequest request, HttpServletResponse response) throws ServletRequestBindingException
     {
+
+        String newLocale = ServletRequestUtils.getStringParameter(request, "locale");
+        if (newLocale != null)
+        {
+            this.localeResolver.setLocale(request, response, StringUtils.parseLocaleString(newLocale));
+            //this.logger.info("Locale set to: " + this.localeResolver.resolveLocale(request));
+        }
+
         ModelAndView mav = new ModelAndView("otherobjects/login/login");
 
         AuthenticationException authenticationException = (AuthenticationException) WebUtils.getSessionAttribute(request, AbstractProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY);
