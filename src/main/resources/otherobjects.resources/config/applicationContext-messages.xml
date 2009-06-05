@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-	<bean id="messageSource"
-		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="fileBasedMessageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<!-- FIXME Make sure the cache is turned on in production -->
 		<property name="cacheSeconds" value="0" />
 		<property name="basenames">
@@ -17,4 +15,23 @@
 			</list>
 		</property>
 	</bean>
+
+	<bean id="jdbcBasedMessageSource" class="org.otherobjects.cms.config.JdbcMessageSource">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<property name="sqlStatement">
+			<value>
+				select msg from localized_message where id = ? and locale=?
+          </value>
+		</property>
+	</bean>
+
+	<bean id="messageSource" class="org.otherobjects.cms.config.CompositeMessageSource">
+		<property name="messageSources">
+			<list>
+				<ref bean="fileBasedMessageSource" />
+				<ref bean="jdbcBasedMessageSource" />
+			</list>
+		</property>
+	</bean>
+
 </beans>
