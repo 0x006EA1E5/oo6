@@ -88,15 +88,16 @@ public class WorkbenchController
     @RequestMapping({"", "/", "/workbench/*"})
     public ModelAndView index(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        //        String newLocale = ServletRequestUtils.getStringParameter(request, "locale");
-        //        if (newLocale != null)
-        //        {
-        //            this.localeResolver.setLocale(request, response, StringUtils.parseLocaleString(newLocale));
-        //            this.logger.info("Locale set to: " + this.localeResolver.resolveLocale(request));
-        //        }
+        String id = RequestUtils.getId(request);
+        if (id != null && id.equals("overview.html"))
+        {
+            ModelAndView mav = new ModelAndView("/otherobjects/templates/workbench/dashboard/overview");
+            return mav;
+        }
 
-        ModelAndView mav = new ModelAndView("/otherobjects/templates/workbench/dashboard/overview");
-        return mav;
+        Url u = new Url("/otherobjects/workbench/overview.html");
+        response.sendRedirect(u.toString());
+        return null;
     }
 
     @RequestMapping({"/workbench/view/*"})
@@ -144,6 +145,15 @@ public class WorkbenchController
         return mav;
     }
 
+    /**
+     * Returns listing page for folder. If no id is specified in path then shows site root.
+     * 
+     * @param request
+     * @param response
+     * @return
+     * @throws ServletException
+     * @throws IOException
+     */
     @SuppressWarnings("unchecked")
     @RequestMapping({"/workbench/list/*"})
     public ModelAndView list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -153,7 +163,15 @@ public class WorkbenchController
         String q = null; // TODO 
 
         FolderDao folderDao = (FolderDao) this.daoService.getDao(Folder.class);
-        Folder folder = (Folder) folderDao.get(id);
+
+        Folder folder = null;
+        if (StringUtils.isEmpty(id))     {
+            folder = (Folder) folderDao.getByPath("/site/");
+            id = ((BaseNode)folder).getId();
+        }
+        else
+            folder = (Folder) folderDao.get(id);
+        
         ModelAndView mav = new ModelAndView("/otherobjects/templates/workbench/editor/list");
         mav.addObject("id", id);
         mav.addObject("folder", folder);
@@ -256,7 +274,7 @@ public class WorkbenchController
     public ModelAndView save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         ActionUtils actionUtils = new ActionUtils(request, response, null, null);
-        
+
         RequestUtils.logParameters(logger, request);
 
         // Prepare object (create or fetch)
@@ -402,10 +420,10 @@ public class WorkbenchController
         String id = RequestUtils.getId(request);
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
         FolderDao folderDao = (FolderDao) this.daoService.getDao(Folder.class);
-        
+
         BaseNode item = universalJcrDao.get(id);
-        universalJcrDao.copy(id, item.getJcrPath()+"-copy");
-        
+        universalJcrDao.copy(id, item.getJcrPath() + "-copy");
+
         SiteFolder folder = (SiteFolder) folderDao.getByPath(item.getPath());
         Url u = new Url("/otherobjects/workbench/list/" + folder.getId());
         response.sendRedirect(u.toString());
