@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -33,7 +35,7 @@ import org.springframework.util.Assert;
  *
  * @author AppFuse <a href="mailto:bwnoll@gmail.com">Bryan Noll</a>
  */
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDaoSupport implements GenericDao<T, PK>
 {
     protected final Logger log = LoggerFactory.getLogger(getClass());
@@ -43,7 +45,7 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
     {
         this.persistentClass = persistentClass;
     }
-    
+
     public String getPersistentClassName()
     {
         return this.persistentClass.getName();
@@ -101,7 +103,7 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
     {
         return findByQuery(query, queryParams, null, null);
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<T> findByQuery(final String query, final Map<String, Object> queryParams, final Integer start, final Integer limit)
     {
@@ -117,9 +119,9 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
                         q.setParameter(key, queryParams.get(key));
                     }
                 }
-                if(limit!=null)
+                if (limit != null)
                     q.setMaxResults(limit);
-                if(start!=null)
+                if (start != null)
                     q.setFirstResult(start);
                 return q.list();
             }
