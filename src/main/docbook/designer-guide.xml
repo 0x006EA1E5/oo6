@@ -2187,8 +2187,6 @@ ${datevar?date}</programlisting>
     </chapter>
 
     <chapter>
-
-    <chapter>
       <title>Testing</title>
 
       <para>This extends the testing discussion in the Site Designer
