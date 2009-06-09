@@ -19,10 +19,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.providers.dao.SaltSource;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 @Repository
+@Transactional(propagation=Propagation.REQUIRED)
 public class PasswordServiceImpl implements PasswordService
 {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -48,7 +50,6 @@ public class PasswordServiceImpl implements PasswordService
         return generatePasswordChangeRequestCode(user);
     }
 
-    @Transactional
     public String generatePasswordChangeRequestCode(User user) throws Exception
     {
         //cleanExpiredPasswordChangeRequests();
