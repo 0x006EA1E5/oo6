@@ -1,16 +1,17 @@
 package org.otherobjects.cms.model;
 
+import java.io.Serializable;
+
 public class CompositeDatabaseId
 {
     private String clazz;
-    private long id;
+    private Serializable id;
 
     public CompositeDatabaseId()
     {
-
     }
 
-    public CompositeDatabaseId(String clazz, long id)
+    public CompositeDatabaseId(String clazz, Serializable id)
     {
         this.clazz = clazz;
         this.id = id;
@@ -26,12 +27,12 @@ public class CompositeDatabaseId
         this.clazz = clazz;
     }
 
-    public long getId()
+    public Serializable getId()
     {
         return id;
     }
 
-    public void setId(long id)
+    public void setId(Serializable id)
     {
         this.id = id;
     }
