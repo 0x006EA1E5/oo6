@@ -88,9 +88,8 @@
 			</releases>
 		</pluginRepository>
 		<!--
-			Temp plugin repo until Checkstyle plugin 2.2 is released <pluginRepository> <id>apache.org</id> <name>Maven Plugin Snapshots</name>
-			<url>http://people.apache.org/repo/m2-snapshot-repository</url> <releases> <enabled>false</enabled> </releases> <snapshots> <enabled>true</enabled> </snapshots>
-			</pluginRepository>
+			Temp plugin repo until Checkstyle plugin 2.2 is released <pluginRepository> <id>apache.org</id> <name>Maven Plugin Snapshots</name> <url>http://people.apache.org/repo/m2-snapshot-repository</url>
+			<releases> <enabled>false</enabled> </releases> <snapshots> <enabled>true</enabled> </snapshots> </pluginRepository>
 		-->
 	</pluginRepositories>
 	<scm>
@@ -108,13 +107,35 @@
 		</extensions>
 		<plugins>
 			<!--
-				Documentation generation <plugin> <groupId>org.jboss.maven.plugins</groupId> <artifactId>maven-jdocbook-plugin</artifactId> <extensions>true</extensions>
-				<version>2.1.1</version> <configuration> <formats> <format> <formatName>pdf</formatName>
-				<stylesheetResource>file:${basedir}/src/main/docbook/xslt/pdf/main-pdf.xsl</stylesheetResource> </format> <format> <formatName>html</formatName> </format> </formats>
-				<sourceDocumentName>${docbook.name}.xml</sourceDocumentName> <imageResource> <directory>src/main/docbook/images</directory> <targetPath>images</targetPath>
-				<filtering>false</filtering> </imageResource> <options> <useRelativeImageUris>false</useRelativeImageUris> <xincludeSupported>false</xincludeSupported> </options>
-				</configuration> </plugin>
-			-->
+				Documentation generation
+			<plugin>
+				<groupId>org.jboss.maven.plugins</groupId>
+				<artifactId>maven-jdocbook-plugin</artifactId>
+				<extensions>true</extensions>
+				<version>2.1.1</version>
+				<configuration>
+					<formats>
+						<format>
+							<formatName>pdf</formatName>
+							<stylesheetResource>file:${basedir}/src/main/docbook/xslt/pdf/main-pdf.xsl</stylesheetResource>
+						</format>
+						<format>
+							<formatName>html</formatName>
+						</format>
+					</formats>
+					<sourceDocumentName>${docbook.name}.xml</sourceDocumentName>
+					<imageResource>
+						<directory>src/main/docbook/images</directory>
+						<targetPath>images</targetPath>
+						<filtering>false</filtering>
+					</imageResource>
+					<options>
+						<useRelativeImageUris>false</useRelativeImageUris>
+						<xincludeSupported>false</xincludeSupported>
+					</options>
+				</configuration>
+			</plugin>
+-->
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
@@ -176,9 +197,9 @@
 			</plugin>
 		</plugins>
 		<!--
-			<resources> <resource> <directory>src/main/resources</directory> <filtering>false</filtering> </resource> </resources> <testResources> <testResource>
-			<directory>src/test/resources</directory> <filtering>true</filtering> </testResource> <testResource> <directory>src/main/webapp</directory> <filtering>true</filtering>
-			<includes> <include>**/*.xml</include> </includes> </testResource> </testResources>
+			<resources> <resource> <directory>src/main/resources</directory> <filtering>false</filtering> </resource> </resources> <testResources> <testResource> <directory>src/test/resources</directory>
+			<filtering>true</filtering> </testResource> <testResource> <directory>src/main/webapp</directory> <filtering>true</filtering> <includes> <include>**/*.xml</include> </includes> </testResource>
+			</testResources>
 		-->
 	</build>
 	<reporting>
@@ -234,9 +255,8 @@
 			<!--
 				<plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>findbugs-maven-plugin</artifactId> </plugin> <plugin> <groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-changelog-plugin</artifactId> </plugin> <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>jdepend-maven-plugin</artifactId> </plugin> <plugin>
-				<groupId>org.codehaus.mojo</groupId> <artifactId>dashboard-maven-plugin</artifactId> </plugin> <plugin> <groupId>net.objectlab</groupId>
-				<artifactId>mvn-qalab-plugin</artifactId> <version>2.2</version> <reportSets> <reportSet> <reports> <report>report-merge-chart</report> <report>report-movers-all</report>
-				</reports> </reportSet> </reportSets> </plugin>
+				<groupId>org.codehaus.mojo</groupId> <artifactId>dashboard-maven-plugin</artifactId> </plugin> <plugin> <groupId>net.objectlab</groupId> <artifactId>mvn-qalab-plugin</artifactId>
+				<version>2.2</version> <reportSets> <reportSet> <reports> <report>report-merge-chart</report> <report>report-movers-all</report> </reports> </reportSet> </reportSets> </plugin>
 			-->
 		</plugins>
 	</reporting>
