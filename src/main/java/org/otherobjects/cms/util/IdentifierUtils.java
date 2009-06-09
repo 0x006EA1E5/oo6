@@ -9,7 +9,7 @@ public class IdentifierUtils
 {
     private static final Pattern UUID_PATTERN = Pattern.compile("\\p{XDigit}{8}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{12}");
 
-    private static final Pattern DB_COMPOSITE_ID_PATTERN = Pattern.compile("^([^-]+)-(\\d+)$");
+    private static final Pattern DB_COMPOSITE_ID_PATTERN = Pattern.compile("^([^-]+)-.*$");
 
     /**
      *
@@ -32,9 +32,10 @@ public class IdentifierUtils
         CompositeDatabaseId compositeDatabaseId = null;
         try
         {
-            Matcher matcher = DB_COMPOSITE_ID_PATTERN.matcher(compositeId);
+            Pattern DB_COMPOSITE_ID_PATTERN2 = Pattern.compile("^([^-]+)-(.*)$");
+            Matcher matcher = DB_COMPOSITE_ID_PATTERN2.matcher(compositeId);
             if (matcher.matches())
-                return new CompositeDatabaseId(matcher.group(1), Long.parseLong(matcher.group(2)));
+                return new CompositeDatabaseId(matcher.group(1), matcher.group(2));
         }
         catch (Exception e)
         {
