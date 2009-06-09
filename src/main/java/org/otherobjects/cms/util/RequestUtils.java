@@ -26,10 +26,11 @@ public class RequestUtils
     public static String getId(HttpServletRequest request)
     {
         String pathInfo = request.getPathInfo();
+        if (pathInfo == null || !pathInfo.contains("/"))
+            return null;
         return pathInfo.substring(pathInfo.lastIndexOf("/") + 1);
     }
 
-    
     public static String getId(HttpServletRequest request, String defaultValue)
     {
         String id = getId(request);
@@ -42,7 +43,7 @@ public class RequestUtils
         Assert.notNull(parameter, "No parameter found called: " + paramName);
         return Long.parseLong(parameter);
     }
-    
+
     public static long getLong(HttpServletRequest request, String paramName, long defaultValue)
     {
         String parameter = request.getParameter(paramName);
@@ -51,7 +52,7 @@ public class RequestUtils
         else
             return Long.parseLong(parameter);
     }
-    
+
     public static int getInt(HttpServletRequest request, String paramName)
     {
         String parameter = request.getParameter(paramName);
