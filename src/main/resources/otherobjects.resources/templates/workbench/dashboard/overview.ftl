@@ -2,8 +2,6 @@
 
 <#include "/otherobjects/templates/workbench/shared/header.ftl" />
 
-<#include "/otherobjects/templates/workbench/shared/nav-folders.ftl" />
-
 <div id="ooContent">
 <div class="oo-content">
 
