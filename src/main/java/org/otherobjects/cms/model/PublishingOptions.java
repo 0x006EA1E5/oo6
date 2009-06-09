@@ -24,7 +24,7 @@ public class PublishingOptions extends BaseComponent
 
     public String toString()
     {
-    	return "Publishing Options";
+        return "Publishing Options";
     }
     
     @Override

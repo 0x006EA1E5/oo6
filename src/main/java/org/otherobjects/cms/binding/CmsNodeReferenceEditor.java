@@ -31,7 +31,7 @@ public class CmsNodeReferenceEditor extends java.beans.PropertyEditorSupport
         }
         else if (text != null && !IdentifierUtils.isUUID(text))
         {
-	        // FIXME Tidy this up
+            // FIXME Tidy this up
             setValue(((GenericJcrDao)daoService.getDao(type)).getByPath(text));
 //            throw new IllegalArgumentException("Not a valid UUID: " + text);
         }

@@ -14,51 +14,51 @@ import org.otherobjects.cms.types.annotation.Type;
  */
 @Type
 public class TemplateBlockReference extends BaseNode {
-	private String code;
-	private TemplateBlock block;
-	private DynaNode blockData;
+    private String code;
+    private TemplateBlock block;
+    private DynaNode blockData;
 
-	public TemplateBlockReference() {
-		this.code = String.valueOf(new Date().getTime());
-	}
+    public TemplateBlockReference() {
+        this.code = String.valueOf(new Date().getTime());
+    }
 
-	/**
-	 * Determines if this block reference and it's data are both published.
-	 *  
-	 * @return
-	 */
-	public boolean isFullyPublished() {
-		if (!isPublished())
-			return false;
-		if (blockData != null && !blockData.isPublished())
-			return false;
-		return true;
-	}
+    /**
+     * Determines if this block reference and it's data are both published.
+     *  
+     * @return
+     */
+    public boolean isFullyPublished() {
+        if (!isPublished())
+            return false;
+        if (blockData != null && !blockData.isPublished())
+            return false;
+        return true;
+    }
 
-	public String getCode() {
-		return this.code;
-	}
+    public String getCode() {
+        return this.code;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	@Property(order = 10, type = PropertyType.REFERENCE)
-	public TemplateBlock getBlock() {
-		return block;
-	}
+    @Property(order = 10, type = PropertyType.REFERENCE)
+    public TemplateBlock getBlock() {
+        return block;
+    }
 
-	public void setBlock(TemplateBlock block) {
-		this.block = block;
-	}
+    public void setBlock(TemplateBlock block) {
+        this.block = block;
+    }
 
-	@Property(order = 20, type = PropertyType.COMPONENT, fieldType = "none")
-	public DynaNode getBlockData() {
-		return blockData;
-	}
+    @Property(order = 20, type = PropertyType.COMPONENT, fieldType = "none")
+    public DynaNode getBlockData() {
+        return blockData;
+    }
 
-	public void setBlockData(DynaNode blockData) {
-		this.blockData = blockData;
-	}
+    public void setBlockData(DynaNode blockData) {
+        this.blockData = blockData;
+    }
 
 }
