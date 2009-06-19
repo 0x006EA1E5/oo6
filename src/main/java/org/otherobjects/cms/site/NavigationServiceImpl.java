@@ -249,9 +249,9 @@ public class NavigationServiceImpl implements NavigationService
 
             return node;
         }
-        catch (CloneNotSupportedException e)
+        catch (Exception e)
         {
-            throw new OtherObjectsException("Could not create nagivation trail.", e);
+            throw new OtherObjectsException("Could not create nagivation trail for path: " + path, e);
         }
     }
 
