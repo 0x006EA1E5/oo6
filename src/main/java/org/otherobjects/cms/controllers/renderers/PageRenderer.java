@@ -27,7 +27,7 @@ public class PageRenderer implements ResourceRenderer
         Template template = determineTemplate(resourceObject);
         if (template == null)
         {
-            ModelAndView mv = new ModelAndView("/otherobjects/templates/pages/oo-500-create-template");
+            ModelAndView mv = new ModelAndView("/otherobjects/templates/hud/error-handling/oo-500-create-template");
             mv.addObject("resourceObject", resourceObject);
             String templateName = resourceObject.getTypeDef().getLabel();
             mv.addObject("templateName", templateName);
