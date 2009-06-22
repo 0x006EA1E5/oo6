@@ -9,7 +9,7 @@ public class IdentifierUtils
 {
     private static final Pattern UUID_PATTERN = Pattern.compile("\\p{XDigit}{8}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{12}");
 
-    private static final Pattern DB_COMPOSITE_ID_PATTERN = Pattern.compile("^([^-]+)-.*$");
+    //private static final Pattern DB_COMPOSITE_ID_PATTERN = Pattern.compile("^([^-]+)-.*$");
 
     /**
      *
