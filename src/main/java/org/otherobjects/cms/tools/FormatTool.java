@@ -158,15 +158,18 @@ public class FormatTool
     {
         if (message.startsWith("$"))
         {
-            // Message
+            // Supports messages in ${code} format
             // FIXME Get locale from somewhere better
-            return messageSource.getMessage(message.substring(2, message.length() - 1), null, Locale.ENGLISH);
+            String msg = messageSource.getMessage(message.substring(2, message.length() - 1), null, Locale.ENGLISH);
+            return msg != null ? msg : "?" + message + "?";
         }
         if (message.contains(".") && !message.endsWith(".") && message.matches("[a-z0-9\\.]*"))
         {
             // Message
             // FIXME proper regexp here
-            return messageSource.getMessage(message, null, Locale.ENGLISH);
+            String msg = messageSource.getMessage(message, null, Locale.ENGLISH);
+            return msg != null ? msg : "?" + message + "?";
+
         }
         else
             return message;
