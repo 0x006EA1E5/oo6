@@ -27,7 +27,7 @@
       <para>See part 2 for more advanced development using Eclipse.</para>
     </partintro>
 
-   <chapter id="chapter-using-the-framework">
+    <chapter id="chapter-using-the-framework">
       <title>Getting started</title>
 
       <para>This chapter will explain how to get OTHERobjects running on your
@@ -183,6 +183,9 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
           configuration file
           src/main/resources/otherobjects.properties.</para>
 
+          <para>Also change the settings at the top of the pom.xml file as
+          appropriate.</para>
+
           <para>In particular you should check the mail server address
           (otherobjects.mail.server), default site domain (site.server.name)
           and the path to imagemagick
@@ -208,7 +211,8 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
         </section>
       </section>
     </chapter>
-     <chapter>
+
+    <chapter>
       <title>Where things go</title>
 
       <para>Before starting to build your site it important to understand the
@@ -274,7 +278,7 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
       ./webapp/static/graphics ./webapp/static/js ./webapp/WEB-INF
       ./webapp/WEB-INF/actions ./webapp/WEB-INF/templates
       ./webapp/WEB-INF/templates/blocks ./webapp/WEB-INF/templates/layouts
-      ./webapp/WEB-INF/templates/pages </para>
+      ./webapp/WEB-INF/templates/pages</para>
 
       <para>As you build you site you will be adding all sorts of code and
       data. It is obviously important to keep this safe.</para>
@@ -2418,7 +2422,9 @@ ${datevar?date}</programlisting>
     <chapter>
       <title>Deploying</title>
 
-      <para>Consider release first</para>
+      <para>Consider release first.</para>
+
+      <para>Check stage/production settings in otherobjects.properties.</para>
 
       <para>The server that is deployed to is specified in your poject pom.xml
       file:</para>
@@ -2434,8 +2440,8 @@ ${datevar?date}</programlisting>
   &lt;/configuration&gt;
 &lt;/plugin&gt;
 </programlisting>If the credentials for the manager app are not admin/[blank]
-      then you will need to put them in your maven settings file (make sure
-      server id matches):</para>
+      then you will need to put them in your maven settings (.m2/setting.xml)
+      file (make sure server id matches):</para>
 
       <para><programlisting>&lt;settings&gt; 
  &lt;servers&gt; 
