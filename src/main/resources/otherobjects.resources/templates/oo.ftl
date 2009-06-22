@@ -116,7 +116,7 @@ Macro to insert block
 		</div>
 	</#if>
 <#recover>
-	<div class="oo-block" id="oo-block-${blockReference.id}">
+	<div class="oo-block" id="oo-block-${blockReference.id}" editlabel="${blockReference.block.label}" published="edit">
 	<#include "/otherobjects/templates/hud/blocks/block-error.ftl">
 	</div>
 </#attempt>

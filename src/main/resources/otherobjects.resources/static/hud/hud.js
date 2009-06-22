@@ -44,6 +44,9 @@ function ooToggleEditMode(el, e) {
 				// Set click handler
 				Ojay('#OoEditZone'+i).on('click', function(el, e) {
 				    e.stopDefault();
+				    mode = "none";
+					Ojay('div.oo-edit-zones').node.innerHTML="";
+
 					//var overlay = $('.oo-menu').node;
 				    ooBlockInEdit = el.node.getAttribute('title').substring(9);
 					$('.oo-menu').setStyle({display:"block"});

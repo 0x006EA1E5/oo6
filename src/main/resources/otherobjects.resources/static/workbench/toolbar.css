@@ -1,7 +1,7 @@
 
 #OoMenuIcon {display:none;}
 #OoMenuIcon H2 {font:70%/600% Arial, sans-serif; width:195px; height:120px; left:0px; position:fixed; bottom:25px; z-index:11; color:#FFFFFF; background:url(assets/menu.png);}
-.oo-menu {position:fixed; font:70% Arial, sans-serif; width:180px; height:100px; left:0px; bottom:25px; z-index:12;}
+.oo-menu {position:fixed; font:70% Arial, sans-serif; width:180px; height:100px; left:0px; bottom:25px; z-index:12; display:none;}
 .oo-menu A {display:block; color:#000000; height:14px;  width:155px; padding:5px 0px 5px 25px; text-decoration:none;}
 .oo-menu A:hover {background-color:#dddddd;}
 .oo-menu LI {display:block; width:180px; background:#FFFFFF;}

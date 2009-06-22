@@ -24,13 +24,13 @@
 			<#-- Existing block -->
 			<input type="hidden" class="hidden" name="_oo_id" value="${blockData.id}" />
 			<input type="hidden" class="hidden" name="_oo_type" value="${blockData.typeDef.name}" />
-			<#if blockGlobal><input type="text" class="text" name="code" value="blockData" /> </#if>
+			<#if blockGlobal><input type="text" class="text" name="code" value="blockData" /></#if>
 			<@renderForm blockData.typeDef/>
 		<#else> 
 			<#-- New block --> 
 			<input type="hidden" class="hidden" name="_oo_containerId" value="${location}" />
 			<input type="hidden" class="hidden" name="_oo_type" value="${typeDef.name}" />
-			<#if blockGlobal><input type="text" class="text" name="code" value="blockData" /> </#if>
+			<#-- <#if blockGlobal><input type="text" class="text" name="code" value="blockData" /> </#if> -->
 			<@renderForm typeDef true/>
 		</#if> 
 	
