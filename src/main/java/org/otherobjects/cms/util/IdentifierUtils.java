@@ -1,5 +1,6 @@
 package org.otherobjects.cms.util;
 
+import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,7 +36,18 @@ public class IdentifierUtils
             Pattern DB_COMPOSITE_ID_PATTERN2 = Pattern.compile("^([^-]+)-(.*)$");
             Matcher matcher = DB_COMPOSITE_ID_PATTERN2.matcher(compositeId);
             if (matcher.matches())
-                return new CompositeDatabaseId(matcher.group(1), matcher.group(2));
+            {
+                Serializable id = matcher.group(2);
+                try
+                {
+                    id = Long.parseLong((String) id);
+                }
+                catch (NumberFormatException nfe)
+                {
+                    // Not a long so leave it as a String
+                }
+                return new CompositeDatabaseId(matcher.group(1), id);
+            }
         }
         catch (Exception e)
         {
@@ -45,5 +57,4 @@ public class IdentifierUtils
 
         return compositeDatabaseId;
     }
-
 }

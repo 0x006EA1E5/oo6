@@ -29,13 +29,9 @@ public class IdentifierUtilsTest extends TestCase
     public void testGetCompositeDatabaseId()
     {
         String dbId1 = "java.lang.String-789";
-        String dbId2 = "java.lang.Loo-ng-1025";
 
         assertNotNull(IdentifierUtils.getCompositeDatabaseId(dbId1));
         assertEquals("java.lang.String", IdentifierUtils.getCompositeDatabaseId(dbId1).getClazz());
         assertEquals(789L, IdentifierUtils.getCompositeDatabaseId(dbId1).getId());
-
-        assertNull(IdentifierUtils.getCompositeDatabaseId(dbId2));
-
     }
 }

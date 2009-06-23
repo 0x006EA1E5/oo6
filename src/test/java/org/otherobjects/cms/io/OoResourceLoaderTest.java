@@ -18,7 +18,6 @@ public class OoResourceLoaderTest extends TestCase
 
         OoResourceLoader ooResourceLoader = new OoResourceLoader();
         assertEquals(p1r, ooResourceLoader.preprocessPath(p1).getPath());
-
     }
 
     public void testGetResource() throws IOException
@@ -27,10 +26,9 @@ public class OoResourceLoaderTest extends TestCase
         OoResourceLoader ooResourceLoader = new OoResourceLoader();
         ooResourceLoader.setResourceLoader(resourceLoader);
         
-        String p1 = "/otherobjects/templates/pages/oo-404-create.ftl";
+        String p1 = "/otherobjects/templates/hud/error-handling/oo-404-create.ftl";
         
         Resource resource = ooResourceLoader.getResource(p1);
         assertTrue(resource.exists());
     }
-
 }
