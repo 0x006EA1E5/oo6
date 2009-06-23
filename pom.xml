@@ -107,35 +107,11 @@
 		</extensions>
 		<plugins>
 			<!--
-				Documentation generation
-			<plugin>
-				<groupId>org.jboss.maven.plugins</groupId>
-				<artifactId>maven-jdocbook-plugin</artifactId>
-				<extensions>true</extensions>
-				<version>2.1.1</version>
-				<configuration>
-					<formats>
-						<format>
-							<formatName>pdf</formatName>
-							<stylesheetResource>file:${basedir}/src/main/docbook/xslt/pdf/main-pdf.xsl</stylesheetResource>
-						</format>
-						<format>
-							<formatName>html</formatName>
-						</format>
-					</formats>
-					<sourceDocumentName>${docbook.name}.xml</sourceDocumentName>
-					<imageResource>
-						<directory>src/main/docbook/images</directory>
-						<targetPath>images</targetPath>
-						<filtering>false</filtering>
-					</imageResource>
-					<options>
-						<useRelativeImageUris>false</useRelativeImageUris>
-						<xincludeSupported>false</xincludeSupported>
-					</options>
-				</configuration>
-			</plugin>
--->
+				Documentation generation <plugin> <groupId>org.jboss.maven.plugins</groupId> <artifactId>maven-jdocbook-plugin</artifactId> <extensions>true</extensions> <version>2.1.1</version> <configuration>
+				<formats> <format> <formatName>pdf</formatName> <stylesheetResource>file:${basedir}/src/main/docbook/xslt/pdf/main-pdf.xsl</stylesheetResource> </format> <format> <formatName>html</formatName>
+				</format> </formats> <sourceDocumentName>${docbook.name}.xml</sourceDocumentName> <imageResource> <directory>src/main/docbook/images</directory> <targetPath>images</targetPath>
+				<filtering>false</filtering> </imageResource> <options> <useRelativeImageUris>false</useRelativeImageUris> <xincludeSupported>false</xincludeSupported> </options> </configuration> </plugin>
+			-->
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
@@ -284,6 +260,10 @@
 			<version>3.3.1.GA</version>
 			<exclusions>
 				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate</artifactId>
+				</exclusion>
+				<exclusion>
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
 				</exclusion>
@@ -293,6 +273,12 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-commons-annotations</artifactId>
 			<version>3.3.0.ga</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>javassist</groupId>
@@ -375,6 +361,10 @@
 				<exclusion>
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -909,6 +899,12 @@
 			<groupId>commons-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
 			<version>3.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>jaxen</groupId>
