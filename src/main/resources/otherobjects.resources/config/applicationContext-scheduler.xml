@@ -9,8 +9,7 @@
 		</property>
 	</bean>
 
-	<bean id="scheduledJobProvider" class="org.otherobjects.cms.scheduler.ScheduledJobProvider" />
-
+	
 	<bean id="exporter" class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">
 		<property name="beans">
 			<map>

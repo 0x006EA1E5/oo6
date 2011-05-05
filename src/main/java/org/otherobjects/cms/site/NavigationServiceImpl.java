@@ -1,36 +1,53 @@
 package org.otherobjects.cms.site;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
+import org.otherobjects.cms.events.EventProxy;
+import org.otherobjects.cms.events.ModificationEvent;
+import org.otherobjects.cms.events.PublishEvent;
+import org.otherobjects.cms.events.RootEventListener;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
+import org.otherobjects.cms.security.SecurityUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import com.ibm.icu.util.Calendar;
-
 /**
- * TODO Sort order TODO Dealing with default pages (don't duplicate with folder)
- * TODO Allow injection of other paths eg for non-jcr pages TODO Live/edit trees
- * TODO Update tree on relevant events
- * 
  * @author rich
- * 
  */
+@Component
 @SuppressWarnings("unchecked")
-public class NavigationServiceImpl implements NavigationService
+public class NavigationServiceImpl implements NavigationService, RootEventListener, InitializingBean
 {
+    private final Logger logger = LoggerFactory.getLogger(NavigationServiceImpl.class);
+
     @Resource
     private DaoService daoService;
 
-    private long lastBuildTime = 0;
+    @Resource
+    private EventProxy eventProxy;
 
-    protected TreeNode tree;
-    protected List<TreeNode> nodes;
+    protected TreeNode liveTree;
+    protected TreeNode editTree;
+    protected List<TreeNode> liveNodes;
+    protected List<TreeNode> editNodes;
+
+    protected Map<String, TreeNode> secureLiveNodes = new HashMap<String, TreeNode>();
+    protected Map<String, TreeNode> secureEditNodes = new HashMap<String, TreeNode>();
+
     protected boolean testMode;
 
     public NavigationServiceImpl()
@@ -49,12 +66,12 @@ public class NavigationServiceImpl implements NavigationService
             Assert.isTrue(startDepth >= 0, "Navigation start depth must be >= 0");
             Assert.isTrue(endDepth > startDepth, "Navigation end depth must be > start depth");
 
-            buildTree();
+            buildTreeWithCacheCheck();
 
             // Start at correct depth and location by trimming path to correct
             // depth
             path = trimPath(path, startDepth);
-            TreeNode startNode = this.tree.getNode(path);
+            TreeNode startNode = getTree().getNode(path);
 
             // Clone tree but only to required depth
             if (startNode == null)
@@ -82,7 +99,7 @@ public class NavigationServiceImpl implements NavigationService
         {
             Assert.isTrue(startDepth >= 0, "Navigation start depth must be >= 0");
 
-            buildTree();
+            buildTreeWithCacheCheck();
 
             List<TreeNode> parents = new ArrayList<TreeNode>();
             int pos = 0;
@@ -102,7 +119,7 @@ public class NavigationServiceImpl implements NavigationService
                     }
                 }
                 String p = path.substring(0, pos);
-                TreeNode node = this.tree.getNode(p);
+                TreeNode node = getTree().getNode(p);
                 if (node != null && depth++ >= startDepth)
                 {
                     parents.add(node.clone(0));
@@ -143,7 +160,7 @@ public class NavigationServiceImpl implements NavigationService
     }
 
     /**
-     * Trims a path to the correct depth. For example: / has a depth of 0,
+     * Trims a path to the specified depth. For example: / has a depth of 0,
      * /about/ has a depth of 1.
      * 
      * @param path
@@ -172,28 +189,23 @@ public class NavigationServiceImpl implements NavigationService
      * 
      * FIXME Need to synchronise this
      */
-    private synchronized void buildTree()
+    private synchronized void buildTreeWithCacheCheck()
     {
         if (testMode)
             return;
 
-        // FIXME Temp hack
-        // if (this.tree == null)
-        long now = Calendar.getInstance().getTimeInMillis();
-        if (Calendar.getInstance().getTimeInMillis() - lastBuildTime < 5 * 60 * 10) // Cache
-        // for
-        // 2
-        // minutes
-        {
-            return;
-        }
-        lastBuildTime = now;
+        if(getNodes()==null || getSecureNodes()==null)
+            buildTree();
+    }
 
+    private synchronized void buildTree()
+    {
         TreeBuilder tb = new TreeBuilder();
 
         List<BaseNode> siteNodes = getSiteNodes();
 
         List<TreeNode> flat = new ArrayList<TreeNode>();
+        Map<String, TreeNode> secured = new HashMap<String, TreeNode>();
         int count = 10000;
         for (BaseNode b : siteNodes)
         {
@@ -216,29 +228,44 @@ public class NavigationServiceImpl implements NavigationService
                 if (so != null)
                     sortOrder = so.intValue();
             }
-            flat.add(new TreeNode(b.getOoUrlPath(), b.getId(), label, sortOrder));
+            TreeNode treeNode = new TreeNode(b.getOoUrlPath(), b.getId(), label, sortOrder);
+
+            // folder security
+            if (b.hasProperty("requiredRoles"))
+            {
+                treeNode.setRequiredRoles((List<String>) b.getPropertyValue("requiredRoles"));
+                secured.put(treeNode.getPath(), treeNode);
+            }
+
+            flat.add(treeNode);
         }
 
         appendAdditionalNodes(flat);
 
-        this.tree = tb.buildTree(flat, new TreeNode("/", null, "Home", 0));
-        this.nodes = flat;
+        // Sort by path first which is a pre-requisite for the tree-builder
+        Comparator<TreeNode> pathComparator = new PathComparator();
+        Collections.sort(flat, pathComparator);
+
+        setTree(tb.buildTree(flat, new TreeNode("/", null, "Home", 0)));
+        setNodes(flat);
+        setSecureNodes(secured);
     }
 
     public List<TreeNode> getAllNodes()
     {
-        buildTree();
-        return this.nodes;
+        buildTreeWithCacheCheck();
+        return getNodes();
     }
+
 
     public TreeNode getNode(String path, String currentPath)
     {
         try
         {
-            buildTree();
+            buildTreeWithCacheCheck();
 
             // Mark selected nodes
-            TreeNode node = this.tree.getNode(path);
+            TreeNode node = getTree().getNode(path);
 
             node = node.clone(1);
 
@@ -273,11 +300,104 @@ public class NavigationServiceImpl implements NavigationService
     {
         // FIXME Need folder indicator
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
-        return universalJcrDao.getAllByJcrExpression("/jcr:root/site//element(*) [(jcr:like(@ooType,'%Folder') and @inMenu='true') or publishingOptions/@showInNavigation='true']");
+        return universalJcrDao.getAllByJcrExpression("/jcr:root/site//element(*) [((jcr:like(@ooType,'%Folder') and @inMenu='true') or publishingOptions/@showInNavigation='true')]");
     }
 
+    /**
+     * find out requires roles for given path
+     * 
+     * @param path
+     * @return
+     */
+    public List<String> getRolesForPath(String path)
+    {
+        buildTreeWithCacheCheck();
+        if (getSecureNodes().containsKey(path))
+            return getSecureNodes().get(path).getRequiredRoles();
+
+        return null;
+    }
+
+   
     public void setDaoService(DaoService daoService)
     {
         this.daoService = daoService;
     }
+
+    public void onApplicationEvent(ApplicationEvent event)
+    {
+        if (event instanceof PublishEvent)
+        {
+            this.liveNodes = null;
+            this.secureLiveNodes = null;
+            logger.debug("PublishEvent received. Clearing live Navigation cache.");
+        }
+        if (event instanceof ModificationEvent)
+        {
+            this.editNodes = null;
+            this.secureEditNodes = null;
+            logger.debug("ModificationEvent received. Clearing edit Navigation cache.");
+        }
+    }
+
+    public void setEventProxy(EventProxy eventProxy)
+    {
+        this.eventProxy = eventProxy;
+    }
+
+    public void afterPropertiesSet() throws Exception
+    {
+        Assert.notNull(this.eventProxy, "To receive publishing events the event proxy needs to be injected");
+        this.eventProxy.addRootEventListener(this);
+    }
+    
+
+    protected TreeNode getTree()
+    {
+        if (SecurityUtil.isEditor())
+            return editTree;
+        else
+            return liveTree;
+    }
+    
+    protected void setTree(TreeNode tree)
+    {
+        if (SecurityUtil.isEditor())
+            editTree = tree;
+        else
+            liveTree = tree;
+    }
+    
+    protected List<TreeNode> getNodes()
+    {
+        if (SecurityUtil.isEditor())
+            return editNodes;
+        else
+            return liveNodes;
+    }
+
+    protected void setNodes(List<TreeNode> nodes)
+    {
+        if (SecurityUtil.isEditor())
+            editNodes = nodes;
+        else
+            liveNodes = nodes;
+    }
+
+    protected Map<String, TreeNode> getSecureNodes()
+    {
+        if (SecurityUtil.isEditor())
+            return secureEditNodes;
+        else
+            return secureLiveNodes;
+    }
+    
+    protected void setSecureNodes(Map<String, TreeNode> nodes)
+    {
+        if (SecurityUtil.isEditor())
+            secureEditNodes = nodes;
+        else
+            secureLiveNodes = nodes;
+    }
+
 }

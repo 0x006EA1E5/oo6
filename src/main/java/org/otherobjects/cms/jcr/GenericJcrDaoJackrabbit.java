@@ -28,6 +28,8 @@ import org.apache.jackrabbit.ocm.manager.ObjectContentManager;
 import org.apache.jackrabbit.ocm.query.Filter;
 import org.apache.jackrabbit.ocm.query.Query;
 import org.apache.jackrabbit.ocm.query.QueryManager;
+import org.apache.jackrabbit.ocm.spring.JcrMappingCallback;
+import org.apache.jackrabbit.ocm.spring.JcrMappingTemplate;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.dao.PagedList;
@@ -48,8 +50,6 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.springmodules.jcr.JcrCallback;
-import org.springmodules.jcr.jackrabbit.ocm.JcrMappingCallback;
-import org.springmodules.jcr.jackrabbit.ocm.JcrMappingTemplate;
 
 /**
  * Base class for all JCR DAOs.

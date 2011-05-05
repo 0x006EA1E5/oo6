@@ -9,6 +9,24 @@ package org.otherobjects.cms.util;
  */
 public class StringUtils extends org.apache.commons.lang.StringUtils
 {
+    
+    public static String trim(String content, int maxLength)
+    {
+        if(content == null)
+            return null;
+        
+        // FIXME Test and improve this
+        // FIXME Respect max length and all puctation
+        if (content.length() > maxLength)
+        {
+            content = content.substring(0, maxLength);
+            content = content.substring(0, content.lastIndexOf(' '));
+            if (!content.endsWith("."))
+                content += "...";
+        }
+        return content;
+    }
+
 
     public static String generateLabel(String original)
     {

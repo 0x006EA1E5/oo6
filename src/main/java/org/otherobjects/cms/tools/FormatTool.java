@@ -2,21 +2,29 @@ package org.otherobjects.cms.tools;
 
 import java.io.StringWriter;
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import javax.annotation.Resource;
 
-import net.java.textilej.parser.MarkupParser;
-import net.java.textilej.parser.builder.HtmlDocumentBuilder;
-import net.java.textilej.parser.markup.textile.TextileDialect;
 
+import org.eclipse.mylyn.wikitext.core.parser.MarkupParser;
+import org.eclipse.mylyn.wikitext.core.parser.builder.HtmlDocumentBuilder;
+import org.eclipse.mylyn.wikitext.textile.core.TextileLanguage;
 import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.otherobjects.cms.util.StringUtils;
 import org.otherobjects.cms.views.Tool;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+
+import com.ocpsoft.pretty.time.PrettyTime;
 
 /**
  * Tool to be used from templates to aid in generating formatted text.
+ * 
+ * FIXME 0.6 Use StringUtils methods were possible and align method names.
+ * 
  * @author joerg
  *
  */
@@ -24,6 +32,8 @@ import org.springframework.stereotype.Component;
 @Tool
 public class FormatTool
 {
+    private static final int DEFAULT_SUMMARY_LENGTH = 250;
+
     @Resource
     private MessageSource messageSource;
 
@@ -32,6 +42,8 @@ public class FormatTool
 
     @Resource
     private InlineFormatter inlineFormatter;
+
+    private static PrettyTime prettyTimeFormatter = new PrettyTime();
 
     public FormatTool()
     {
@@ -50,6 +62,9 @@ public class FormatTool
     public String formatTextile(String textileSource)
     {
 
+        WikiFormatter wf= new WikiFormatter() ; 
+        textileSource=wf.format(textileSource);
+        
         // Remove double line breaks
         String text = textileSource;//textileSource.replaceAll("/\n\n/", "\n");
 
@@ -69,7 +84,7 @@ public class FormatTool
 
         // TODO This needs to be optimesd
         // TODO Add support for additional markups
-        MarkupParser parser = new MarkupParser(new TextileDialect());
+        MarkupParser parser = new MarkupParser(new TextileLanguage());
         StringWriter out = new StringWriter();
         HtmlDocumentBuilder builder = new HtmlDocumentBuilder(out);
         builder.setEmitAsDocument(false);
@@ -81,39 +96,42 @@ public class FormatTool
         if (inlineFormatter != null)
             return inlineFormatter.format(html);
         else
-            return html;
+            return text;
     }
-    
+
+    public String formatRelativeTimestamp(Date timestamp)
+    {
+        return prettyTimeFormatter.format(timestamp);
+    }
+
     public String summarize(String content)
     {
+        return summarize(content, DEFAULT_SUMMARY_LENGTH);
+    }
+
+    public String summarize(String content, int maxLength)
+    {
+        content = content.replaceAll("\\[[^\\]]*\\]", " ");
+        WikiFormatter wf= new WikiFormatter() ; 
+        content=wf.format(content);
+        content = formatTextile(content);
+        content = content.replaceAll("<[a-zA-Z\\/][^>]*>", " ");
+
         // FIXME Test and improve this
-        if(content.length()>150)
+        if (content.length() > maxLength)
         {
-            content = content.substring(0,150);
-            content = content.substring(0,content.lastIndexOf(' '));
-            if(!content.endsWith("."))
+            content = content.substring(0, maxLength);
+            content = content.substring(0, content.lastIndexOf(' '));
+            if (!content.endsWith("."))
                 content += "...";
         }
 
-        content = content.replaceAll("\\[[^\\]]*\\]"," ");
-        content = formatTextile(content);
-        content = content.replaceAll("<[a-zA-Z\\/][^>]*>","");
-        
         return content;
     }
-    
+
     public String trim(String content, int maxLength)
     {
-        // FIXME Test and improve this
-        // FIXME Respect max length and all puctation
-        if(content.length()>maxLength)
-        {
-            content = content.substring(0,maxLength);
-            content = content.substring(0,content.lastIndexOf(' '));
-            if(!content.endsWith("."))
-                content += "...";
-        }
-        return content;
+        return StringUtils.trim(content, maxLength);
     }
 
     /**
@@ -143,7 +161,19 @@ public class FormatTool
         s /= 1024;
         return f.format(s) + " GB";
     }
+    
+    public static long getCurrentDate()
+    {       
+        Date d= new Date() ;
+        return d.getTime() ;
+    }
 
+    public static long getCurrentTime()
+    {       
+        long currentTimeInSeconds = System.currentTimeMillis()/1000;
+        return currentTimeInSeconds ;
+    }
+    
     /**
      * Parses a string and looks up messages if appropriate. Useful for form labels that may or may note use
      * message codes. If the string appears to be a message code then this is looked up otherwise the string
@@ -188,5 +218,14 @@ public class FormatTool
     protected void setInlineFormatter(InlineFormatter inlineFormatter)
     {
         this.inlineFormatter = inlineFormatter;
+    }
+    
+    public static String generateName(String name)
+    {
+        Assert.notNull(name, "Can not generate name from null string.");
+        // Strip off package
+        name = StringUtils.substringAfterLast(name, ".");
+        // Make first letter lowercase
+        return name.substring(0, 1).toLowerCase() + name.substring(1);
     }
 }

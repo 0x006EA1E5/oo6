@@ -11,6 +11,9 @@
 
 	<!-- *Required!* -->
 	<mvc:annotation-driven conversion-service="conversionService" />
+
+<context:component-scan base-package="org.otherobjects.cms.site" />
+
 	
 	<!-- 
 		Automatically detect controllers in the specified package(s) annotated with @Controller.
@@ -75,7 +78,7 @@
 		<context:exclude-filter type="regex" expression="org.otherobjects.cms.controllers.site.*"/>
 	</context:component-scan>
 	<context:component-scan base-package="org.otherobjects.cms.util" />
-
+	
 	<!-- Content negotiation, xml, json, html views -->
 	<bean id="contentNegotiatingViewResolver"
 		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver"
