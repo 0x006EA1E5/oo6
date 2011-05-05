@@ -35,8 +35,10 @@ http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 		<property name="maxIdle" value="30" />
 		<property name="maxWait" value="1000" />
 		<property name="defaultAutoCommit" value="true" />
+		<!-- Deprecated
 		<property name="removeAbandoned" value="true" />
 		<property name="removeAbandonedTimeout" value="60" />
+		-->
 	</bean>
 	
 	<!-- registers OoResourceEditor to enable OoResourcePaths specified in the application context to be automatically resolved to OoResource objects -->
@@ -52,6 +54,7 @@ http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 		</property>
 	</bean>
 	<bean id="eventLogger" class="org.otherobjects.cms.events.EventLogger" />
+	<bean id="eventProxy" class="org.otherobjects.cms.events.EventProxy" />
 	
 	<!-- Performance Monitoring -->
 	<aop:aspectj-autoproxy />

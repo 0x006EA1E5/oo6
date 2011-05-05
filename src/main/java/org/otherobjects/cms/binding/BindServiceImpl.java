@@ -1,6 +1,7 @@
 package org.otherobjects.cms.binding;
 
 import java.beans.PropertyEditor;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -25,17 +26,20 @@ import org.otherobjects.cms.types.annotation.PropertyType;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.util.WebUtils;
 
 /**
- * BindServiceImplNG is a service around Spring's {@link ServletRequestDataBinder} that pre- and postprocesses the data binding input/output.
+ * BindServiceImplNG is a service around Spring's
+ * {@link ServletRequestDataBinder} that pre- and postprocesses the data binding
+ * input/output.
  * It uses a target objects metadata available through {@link TypeService} to:
  * 
  * <ul>
- *  <li>register suitable {@link PropertyEditor PropertyEditors} </li>
- *  <li>instantiate missing object graph branches on the target object</li>
+ * <li>register suitable {@link PropertyEditor PropertyEditors}</li>
+ * <li>instantiate missing object graph branches on the target object</li>
  * </ul>
  * 
  * It must be used prototype scoped when used as a Spring bean (as is intended).
@@ -46,11 +50,11 @@ public class BindServiceImpl implements BindService
     @Resource
     private DaoService daoService;
 
-//    @Resource
-//    private HibernateDataStore hibernateDataStore;
-//
-//    @Resource
-//    private JackrabbitDataStore jackrabbitDataStore;
+    // @Resource
+    // private HibernateDataStore hibernateDataStore;
+    //
+    // @Resource
+    // private JackrabbitDataStore jackrabbitDataStore;
 
     private ServletRequestDataBinder binder = null;
     private HttpServletRequest request;
@@ -90,16 +94,25 @@ public class BindServiceImpl implements BindService
 
     /**
      * Recursive method that walks the object graph and does:
+     * 
      * <ul>
-     *  <li>instantiate {@link PropertyType#LIST List} and {@link PropertyType#COMPONENT Component} type child objects if required</li>
-     *  <li>sizes {@link PropertyType#LIST List} objects according to the given set of request parameters</li>
-     *  <li>rewrites parameters destined for {@link DynaNode DynaNodes} (as we want to avoid having to create parameters like 
-     *  person.address[street1] instead of person.address.street1)</li>
-     *  <li>registers suitable {@link PropertyEditor PropertyEditors} for {@link PropertyType#REFERENCE references} and simple properties</li>
-     *  <li>maintains the full parameter path from root in order to find the correct params for the given item</li>
+     * <li>instantiate {@link PropertyType#LIST List} and
+     * {@link PropertyType#COMPONENT Component} type child objects if required</li>
+     * <li>sizes {@link PropertyType#LIST List} objects according to the given
+     * set of request parameters</li>
+     * <li>rewrites parameters destined for {@link DynaNode DynaNodes} (as we
+     * want to avoid having to create parameters like person.address[street1]
+     * instead of person.address.street1)</li>
+     * <li>registers suitable {@link PropertyEditor PropertyEditors} for
+     * {@link PropertyType#REFERENCE references} and simple properties</li>
+     * <li>maintains the full parameter path from root in order to find the
+     * correct params for the given item</li>
      * </ul>
      * 
-     * It always uses the passed in typeDef to calculate the property paths to use with {@link PropertyUtils} for getting and setting objects on the graph.
+     * It always uses the passed in typeDef to calculate the property paths to
+     * use with {@link PropertyUtils} for getting and setting objects on the
+     * graph.
+     * 
      * @param item
      * @param typeDef
      * @param rootPathPrefix
@@ -123,59 +136,74 @@ public class BindServiceImpl implements BindService
             if (correspondingParamPresent)
             {
                 // deal with lists
-                if (propertyDef.getType().equals("list")) //TODO the type should clearly be a constant or enum of sorts
+                if (propertyDef.getType().equals("list")) // TODO the type
+                // should clearly be a
+                // constant or enum of
+                // sorts
                 {
                     // instantiate list? ensure capacity?
                     List<Object> list = (List<Object>) getValue(item, path);
-                    if (list != null)
+                    if (this.request.getParameter(rootPath + "_") != null && matchingParams.size() == 1)
                     {
-                        list.clear();
+                        // If the list field only contains the placeholder
+                        // hidder field ("fieldName_")
+                        // then the list contains no entries so we nullify it.
+                        setValue(item, path, null);
                     }
                     else
                     {
-                        list = new ArrayList<Object>();
-                        setValue(item, path, list);
-                    }
+                        if (list != null)
+                        {
+                            list.clear();
+                        }
+                        else
+                        {
+                            list = new ArrayList<Object>();
+                            setValue(item, path, list);
+                        }
 
-                    ListProps listProps = calcListProps(rootPath, matchingParams);
-                    sizeList(list, listProps.getRequiredSize());
+                        ListProps listProps = calcListProps(rootPath, matchingParams);
+                        sizeList(list, listProps.getRequiredSize());
 
-                    if (propertyDef.getCollectionElementType().equals("reference"))
-                    {
-                        // register suitable PropertyEditor
-                        String relatedType = propertyDef.getRelatedType();
-                        Class<?> clazz = Class.forName(relatedType);
-                        String store = propertyDef.getRelatedTypeDef().getStore();
-                        if (store.equals(TypeDef.HIBERNATE))
+                        if (propertyDef.getCollectionElementType().equals("reference"))
                         {
-                            this.binder.registerCustomEditor(clazz, rootPath, new EntityReferenceEditor(this.daoService, clazz));
+                            // register suitable PropertyEditor
+                            String relatedType = propertyDef.getRelatedType();
+                            String store = propertyDef.getRelatedTypeDef().getStore();
+                            if (store.equals(TypeDef.HIBERNATE))
+                            {
+                                Class<? extends Serializable> clazz = (Class<? extends Serializable>) Class.forName(relatedType);
+                                this.binder.registerCustomEditor(clazz, rootPath, new EntityReferenceEditor(this.daoService, clazz));
+                            }
+                            else if (store.equals(TypeDef.JACKRABBIT))
+                            {
+                                this.binder.registerCustomEditor(CmsNode.class, rootPath, new CmsNodeReferenceEditor(this.daoService, relatedType));
+                            }
                         }
-                        else if (store.equals(TypeDef.JACKRABBIT))
+                        else if (propertyDef.getCollectionElementType().equals("component"))
                         {
-                            this.binder.registerCustomEditor(CmsNode.class, rootPath, new CmsNodeReferenceEditor(this.daoService, relatedType));
+                            // populate each used list index with a component
+                            // instance if none there
+                            for (Integer ind : listProps.getUsedIndices())
+                            {
+                                prepareComponent(item, propertyDef, ind, rootPathPrefix);
+                            }
                         }
-                    }
-                    else if (propertyDef.getCollectionElementType().equals("component"))
-                    {
-                        // populate each used list index with a component instance if none there
-                        for (Integer ind : listProps.getUsedIndices())
+                        else
                         {
-                            prepareComponent(item, propertyDef, ind, rootPathPrefix);
+                            this.binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), rootPath, propertyDef.getPropertyEditor());
                         }
-                    }
-                    else
-                    {
-                        this.binder.registerCustomEditor(Class.forName(propertyDef.getClassName()), rootPath, propertyDef.getPropertyEditor());
                     }
                 }
-                else if (propertyDef.getType().equals("reference")) // deal with references
+                else if (propertyDef.getType().equals("reference")) // deal with
+                // references
                 {
                     // register suitable PropertyEditor
                     String relatedType = propertyDef.getRelatedType();
                     TypeDef relatedTypeDef = propertyDef.getRelatedTypeDef();
                     if (relatedTypeDef.getStore().equals(TypeDef.HIBERNATE))
                     {
-                        Class<?> clazz = Class.forName(relatedType);
+                        Class<? extends Serializable> clazz = (Class<? extends Serializable>) Class.forName(relatedType);
                         this.binder.registerCustomEditor(Object.class, rootPath, new EntityReferenceEditor(this.daoService, clazz));
                     }
                     else if (relatedTypeDef.getStore().equals(TypeDef.JACKRABBIT))
@@ -183,7 +211,8 @@ public class BindServiceImpl implements BindService
                         this.binder.registerCustomEditor(CmsNode.class, rootPath, new CmsNodeReferenceEditor(this.daoService, relatedType));
                     }
                 }
-                else if (propertyDef.getType().equals("component"))// deal with components
+                else if (propertyDef.getType().equals("component"))// deal with
+                // components
                 {
                     prepareComponent(item, propertyDef, rootPathPrefix);
                 }
@@ -215,7 +244,7 @@ public class BindServiceImpl implements BindService
 
         if (component == null)
         {
-            // Create object if null 
+            // Create object if null
             component = createComponent(propertyDef);
             setValue(parent, propertyPath, component);
         }
@@ -225,16 +254,30 @@ public class BindServiceImpl implements BindService
     }
 
     /**
-     * Finds all request parameters that are relevant to the list property referenced by path
-     *  
-     * @param path - path refering to a list property
-     * @param matchingParams - params that start with path (not including path itself)
+     * Finds all request parameters that are relevant to the list property
+     * referenced by path
+     * 
+     * @param path
+     *            - path refering to a list property
+     * @param matchingParams
+     *            - params that start with path (not including path itself)
      * @return
      */
     public ListProps calcListProps(String path, Map<String, Object> matchingParams)
     {
         ListProps listProps = new ListProps();
-        Pattern pattern = Pattern.compile("^" + path.replaceAll("\\.", "\\\\.").replaceAll("\\[", "\\\\[").replaceAll("\\]", "\\\\]") + "\\[(\\d+)\\]"); // replace .[] which have special meaning in a regex with escaped constructs
+        Pattern pattern = Pattern.compile("^" + path.replaceAll("\\.", "\\\\.").replaceAll("\\[", "\\\\[").replaceAll("\\]", "\\\\]") + "\\[(\\d+)\\]"); // replace
+        // .[]
+        // which
+        // have
+        // special
+        // meaning
+        // in
+        // a
+        // regex
+        // with
+        // escaped
+        // constructs
 
         for (String paramName : matchingParams.keySet())
         {
@@ -247,16 +290,16 @@ public class BindServiceImpl implements BindService
         return listProps;
     }
 
-//    private Object createObject(PropertyDef propertyDef)
-//    {
-//        // FIXME Allow DynaNode creation here
-//        // TODO Are types arways class names?
-//
-//        TypeDef typeDef = propertyDef.getRelatedTypeDef();
-//        DataStore store = getDataStore(typeDef.getStore());
-//        return store.create(typeDef, null);
-//
-//    }
+    // private Object createObject(PropertyDef propertyDef)
+    // {
+    // // FIXME Allow DynaNode creation here
+    // // TODO Are types arways class names?
+    //
+    // TypeDef typeDef = propertyDef.getRelatedTypeDef();
+    // DataStore store = getDataStore(typeDef.getStore());
+    // return store.create(typeDef, null);
+    //
+    // }
 
     /**
      * FIXME Merge this with FormController/TypeService
@@ -277,6 +320,7 @@ public class BindServiceImpl implements BindService
 
     /**
      * Adds null values to the given list until list size matches size
+     * 
      * @param list
      * @param size
      */
@@ -324,30 +368,32 @@ public class BindServiceImpl implements BindService
 
     }
 
-//    /**
-//     * FIXME This must merge with code in WorkbenchController.
-//     * 
-//     * @param store
-//     * @return
-//     */
-//    private DataStore getDataStore(String store)
-//    {
-//        if (store.equals(TypeDef.JACKRABBIT))
-//            return this.jackrabbitDataStore;
-//        else if (store.equals(TypeDef.HIBERNATE))
-//            return this.hibernateDataStore;
-//        else
-//            throw new OtherObjectsException("No dataStore configured for: " + store);
-//    }
+    // /**
+    // * FIXME This must merge with code in WorkbenchController.
+    // *
+    // * @param store
+    // * @return
+    // */
+    // private DataStore getDataStore(String store)
+    // {
+    // if (store.equals(TypeDef.JACKRABBIT))
+    // return this.jackrabbitDataStore;
+    // else if (store.equals(TypeDef.HIBERNATE))
+    // return this.hibernateDataStore;
+    // else
+    // throw new OtherObjectsException("No dataStore configured for: " + store);
+    // }
 
-//    protected void setHibernateDataStore(HibernateDataStore hibernateDataStore)
-//    {
-//        this.hibernateDataStore = hibernateDataStore;
-//    }
-//
-//    protected void setJackrabbitDataStore(JackrabbitDataStore jackrabbitDataStore)
-//    {
-//        this.jackrabbitDataStore = jackrabbitDataStore;
-//    }
+    // protected void setHibernateDataStore(HibernateDataStore
+    // hibernateDataStore)
+    // {
+    // this.hibernateDataStore = hibernateDataStore;
+    // }
+    //
+    // protected void setJackrabbitDataStore(JackrabbitDataStore
+    // jackrabbitDataStore)
+    // {
+    // this.jackrabbitDataStore = jackrabbitDataStore;
+    // }
 
 }

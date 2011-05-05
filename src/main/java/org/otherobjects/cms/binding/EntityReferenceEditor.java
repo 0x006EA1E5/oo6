@@ -1,6 +1,7 @@
 package org.otherobjects.cms.binding;
 
 import java.beans.PropertyEditorSupport;
+import java.io.Serializable;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.dao.DaoService;
@@ -10,10 +11,10 @@ import org.springframework.util.StringUtils;
 
 public class EntityReferenceEditor extends PropertyEditorSupport
 {
-    private Class<?> type;
+    private Class<? extends Serializable> type;
     private DaoService daoService;
 
-    public EntityReferenceEditor(DaoService daoService, Class<?> type)
+    public EntityReferenceEditor(DaoService daoService, Class<? extends Serializable> type)
     {
         this.daoService = daoService;
         this.type = type;
@@ -22,7 +23,6 @@ public class EntityReferenceEditor extends PropertyEditorSupport
     /**
      * Lookup an Entity from an id string.
      */
-    @SuppressWarnings("unchecked")
     public void setAsText(String id) throws IllegalArgumentException
     {
         if (!StringUtils.hasText(id))

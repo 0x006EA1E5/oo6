@@ -1,11 +1,13 @@
 package org.otherobjects.cms.tools;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.security.SecurityUtil;
 import org.otherobjects.cms.views.Tool;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.taglibs.velocity.Authz;
 import org.springframework.security.taglibs.velocity.AuthzImpl;
-import org.springframework.security.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,6 +35,26 @@ public class SecurityTool
         return all && any && none;
     }
 
+    
+    /**
+     * Determines if the user has or doesn't have certain roles.
+     *           
+     * @param ifAnyGranted A comma separated list of roles, one of which the user must possess
+     */
+    public boolean authorize(List <String> ifAnyGranted)
+    {
+        StringBuilder buf=new StringBuilder();
+        for (String auth:ifAnyGranted)
+        {
+            buf.append(auth+",");
+        }
+        //delete last comma
+        buf.deleteCharAt(buf.length()-1);
+        Authz a = new AuthzImpl();
+        boolean any = StringUtils.isNotEmpty(buf.toString()) ? a.anyGranted(buf.toString()) : true;
+        return any;
+    }
+    
     /**
      * Returns the current user.
      * 

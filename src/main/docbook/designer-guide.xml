@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3CR3//EN"
-"http://www.oasis-open.org/docbook/xml/4.3CR3/docbookx.dtd">
+<!-- This document was created with Syntext Serna Free. -->
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 <book lang="en">
   <bookinfo>
     <title>OTHERobjects CMS</title>
@@ -95,15 +96,13 @@ iMac:~ rich$
 
         <para>Check out the project from SVN:</para>
 
-        <programlisting>iMac:~ rich$ <emphasis role="bold">svn checkout svn+ssh://svn.otherobjects.org/data/svn/repos-ng/otherobjects/trunk otherobjects
-</emphasis></programlisting>
+        <programlisting>iMac:~ rich$ <emphasis role="bold">svn checkout svn+ssh://svn.otherobjects.org/data/svn/repos-ng/otherobjects/trunk otherobjects </emphasis></programlisting>
 
         <para>Set the OTHEROBJECTS_HOME environment variable in your .profile
         or .bash_profile file and add the bin directory to your path.</para>
 
-        <programlisting>iMac:~ rich$ <emphasis role="bold">cat &gt;&gt; .profile
-export OTHEROBJECTS_HOME</emphasis><emphasis role="bold">=/Developer/otherobjects
-export PATH=$OTHEROBJECTS_HOME/bin:$PATH</emphasis>
+        <programlisting>iMac:~ rich$ <emphasis role="bold">cat &gt;&gt; .profile export OTHEROBJECTS_HOME</emphasis><emphasis
+            role="bold">=/Developer/otherobjects export PATH=$OTHEROBJECTS_HOME/bin:$PATH</emphasis>
 iMac:~ rich$
 </programlisting>
 
@@ -542,9 +541,9 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
               </row>
 
               <row>
-                <entry></entry>
+                <entry>reference</entry>
 
-                <entry></entry>
+                <entry>popup-select</entry>
               </row>
             </tbody>
           </tgroup>
@@ -552,6 +551,9 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
 
         <para>Note: string based fields are automatically trimmed and turned
         to nulls if empty via StringTrimmerEditor.</para>
+
+        <para>You can also specify custom fields. TODO Explain how to do this
+        in advaced section.</para>
       </section>
 
       <section>
@@ -584,6 +586,35 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
 
         <para>TODO: How to validate emails, dates (relative)</para>
       </section>
+    </chapter>
+
+    <chapter>
+      <title>Understanding page rendering</title>
+
+      <para>The HTTP request handling framework that underlies OTHERobjects
+      (SpringMVC) makes use of the Front Controller Pattern where incoming
+      requests are dispatched to controllers that then handle the requests.
+      OTHERobjects adds another dispatch level in that the main controller
+      (SiteController) dispatches to ResourceRenderers which are chosen
+      depending on the type of resource being rendered.</para>
+
+      <para>SiteController is responsible to determine the resourceObject from
+      the request path. Once it has loaded that resourceObject it dispatches
+      its rendition to a suitable ResourceRenderer.</para>
+
+      <para>In most cases this will be the PageRenderer. It si responsible to
+      find out the template used to render the resourceObject. A
+      resourceObject either has the template to be used for rendition set as a
+      property of its publishingOptions or a standard template is used which
+      is determinded by the type of the resourceObject, i.e if the type is
+      calles 'Article', PageRenderer will try to find a template called
+      'article' in the path '/designer/templates/'</para>
+
+      <para>A template in turn has to know about which template to use with
+      it. All three objects, the resourceObject, the template and the layout
+      are then put into the context and the rendition is handed to the layout
+      template which in turn should output various aspects of the
+      resourceObject using oo macros.</para>
     </chapter>
 
     <chapter>
@@ -734,6 +765,14 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
         <para>Show current user details: security.user</para>
 
         <para>Test if user has role: security.athorize ifAllGranted</para>
+
+        <para>There is an oo.authorize macro which takes three arguments:
+        ifAllGranted, ifAnyGranted and ifNoneGranted. Each of these arguments
+        can take a comma separated list of role/authority strings which are
+        then evaluated against the current user. Only the ifAllGranted
+        argument is mandatory (freemarker wise) but can be left as the empty
+        string. The arguments can be combined so that you can formulate
+        complex authorization requirements.</para>
       </section>
 
       <section>
@@ -764,6 +803,29 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
         <title>Navigation elements (breakout)</title>
 
         <para>Describe standard blockn and macros. See chapter ??</para>
+      </section>
+
+      <section>
+        <title>Themes</title>
+
+        <para>Themes allow your templates to present altenative designs. The
+        most commonly used types of themes are for print and mobile specific
+        versions. The theme system provides a set of theme specific messages
+        that can be used in your templates to switch CSS includes, change
+        image path, and alter textual content.</para>
+
+        <para>Theme property files should be put in the themes folder in your
+        site's resources folder. The default theme name is 'default' so, if
+        you are using themes, you should make sure to include at least a
+        themes/default.properties files. Theme files, like other message
+        files, can be localised by adding the language code before the file
+        extension, for example: print_de.properties.</para>
+
+        <para>Theme resolution occurs per request on the first time a themed
+        message is requested. To include a themed message in your template use
+        the Freemarker function</para>
+
+        <para>&lt;@oo.css oo.themeMessage("main.css") /&gt;</para>
       </section>
     </chapter>
 
@@ -800,6 +862,45 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
 
       <para>How to register urls from other controllers (subclass
       NavService)</para>
+    </chapter>
+
+    <chapter>
+      <title>Search Engine Optimization</title>
+
+      <section>
+        <title>Meta Tags</title>
+
+        <para>All site objects should inculde a metaData component to allow
+        the user to set key SEO data (page title, description, keywords). You
+        can use the built macros to help you do this:</para>
+
+        <para>&lt;@oo.pageTitle resourceObject oo.msg("site.name")
+        /&gt;</para>
+
+        <para>&lt;@oo.metaData resourceObject /&gt;</para>
+      </section>
+
+      <section>
+        <title>sitemap.xml</title>
+
+        <para>Site map files are now used by all the major search engines to
+        highlight content that should be indexed. We provide an automatically
+        generated sitemap.xml file which lists every page in the site (except
+        those marked an hidden) together with its last modification date. You
+        can override the SiteMapController to add in additonal dynamic pages
+        if necessary.</para>
+      </section>
+
+      <section>
+        <title>robots.txt</title>
+
+        <para>We ship a default robots.txt in the root of the site that allows
+        access to all content. The file is served as static content and you
+        are free to edit its content to restrict search engine
+        crawling.</para>
+
+        <para>For more information see: http://www.robotstxt.org/</para>
+      </section>
     </chapter>
 
     <chapter>
@@ -1027,12 +1128,14 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
       without any security context (remember that these jobs are run
       asynchronously outside of any http reqest scope).</para>
 
-      <para>To create a Java job, write a java class extending above mentioned
-      AbstractSpringQuartzJob. In your class you can get access to the root
-      web application context by calling getApplicationContext(). Then create
-      a Scheduled Job in the scheduler folder in workbench and fill in the
-      fully qualified class name in the 'Name of job class' field. The job
-      only gets added to the scheduler once you publish it.</para>
+      <para>To create a Java job, write a java class extending the above
+      mentioned AbstractSpringQuartzJob. In your class you can get access to
+      the root web application context by calling getApplicationContext().</para>
+
+      <para>Then create a Scheduled Job in the scheduler folder in workbench
+      and fill in the fully qualified class name in the 'Name of job class'
+      field. The job only gets added to the scheduler once you publish it.
+      (still in development)</para>
 
       <para>To create a groovy job, follow the same steps aas above but
       instead of filling in the 'Name of job class' field, type or paste your
@@ -1042,8 +1145,38 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
       <para>The jobs are always run under the security context of the user
       that created them.</para>
 
-      <para>How to configuer timings. See:
+      <para>How to configure timings. See:
       http://quartz.sourceforge.net/javadoc/org/quartz/CronTrigger.html</para>
+
+      <para></para>
+
+      <section>
+        <title>Java jobs</title>
+
+        <para></para>
+
+        <section>
+          <title>Non persistent Java jobs</title>
+
+          <para>First you need to create a helper class in your project to
+          inject your job into the
+          org.otherobjects.cms.scheduler.ScheduledJobProvider which schedules
+          the jobs (see JobsPublisher in example site) and add this bean to
+          the site-servlet.xml file.</para>
+
+          <para>In order to be injected into this class, your job class should
+          be marked with the @ScheduledJob annotation, which also defines the
+          job label, creator user name and cron expression (if any), if the
+          cron expression is not defined the job will be run just once.</para>
+
+          <para>Your job should be marked as a @Component as well.</para>
+
+          <para>In order to be able to stop the job from the /debug/scheduler
+          view, your job will have to implement the
+          org.quartz.InterruptableJob interface (see ExampleJob in example
+          site).</para>
+        </section>
+      </section>
     </chapter>
 
     <chapter>
@@ -1223,6 +1356,12 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
       <para>mvn release:prepare</para>
 
       <para>mvn release:perform</para>
+
+      <para>Make sure that you have the correct auth for the maven repo in
+      maven settings file:</para>
+
+      <para>(If you need a snapshot build to deploy then use mvn:install to
+      insert latest build into local storage first)</para>
     </chapter>
 
     <chapter>
@@ -1234,6 +1373,55 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
       <para>Item: Any object managed by the CMS.</para>
 
       <para>Folder: Contains Items</para>
+    </chapter>
+
+    <chapter>
+      <title>Encoding and Content type</title>
+
+      <para>OTHERobjects uses UTF-8 encoding throughout. To ensure that
+      textual content is left as intended correct settings for encoding and
+      content type need to be ensured in various places.</para>
+
+      <para></para>
+
+      <itemizedlist>
+        <listitem>
+          <para>WEB-INF/web.xml needs to contain a characterEncodingFilter (as
+          is already the case with the defaut provided web.xml from
+          site-template).</para>
+        </listitem>
+
+        <listitem>
+          <para>The values of url_escaping_charset and default_encoding of the
+          Freemarker configuration are set to 'UTF-8' in
+          applicationContext-freemarker.xml</para>
+        </listitem>
+
+        <listitem>
+          <para>The FreemarkerViewResolver is set to use a default content
+          type of 'text/html;charset=UTF-8'</para>
+        </listitem>
+
+        <listitem>
+          <para>The maven jetty plugin is configured to set the default file
+          encoding to 'UTF-8'</para>
+        </listitem>
+
+        <listitem>
+          <para>If your IDE is eclipse it should be set to use UTF-8 as the
+          default file encoding rather than the platform default. This is set
+          in Preferences &gt; General &gt; Workspace &gt; Text File
+          encoding</para>
+        </listitem>
+
+        <listitem>
+          <para>Maven should be forced to use UTF-8 encoding as well. This can
+          be achieved by putting something like this into your ~/.bash_profile
+          or /etc/profile:</para>
+
+          <programlisting>MAVEN_OPTS=-Dfile.encoding=UTF-8</programlisting>
+        </listitem>
+      </itemizedlist>
     </chapter>
   </part>
 
@@ -1454,7 +1642,56 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
       <section>
         <title>Getting your project into Eclipse</title>
 
-        <para>Import</para>
+        <para>To import the newly created OOCMS project follow these
+        steps.</para>
+
+        <orderedlist>
+          <listitem>
+            <para>Go to File -&gt; Import. The following dialog will
+            appear.<figure>
+                <title>Import Dialog</title>
+
+                <mediaobject>
+                  <imageobject>
+                    <imagedata fileref="images/Screenshot-Import.png" />
+                  </imageobject>
+                </mediaobject>
+              </figure></para>
+          </listitem>
+
+          <listitem>
+            <para>Select <emphasis role="bold">Maven
+            Projects</emphasis>.</para>
+          </listitem>
+
+          <listitem>
+            <para>click the Browse button on the following dialog.<figure>
+                <title>Import Maven Projects Dialog</title>
+
+                <mediaobject>
+                  <imageobject>
+                    <imagedata fileref="images/Screenshot-Import-Maven-projects.png" />
+                  </imageobject>
+                </mediaobject>
+              </figure></para>
+          </listitem>
+
+          <listitem>
+            <para>Find the project's root folder on your hard disk. Click
+            <emphasis role="bold">Open</emphasis> to select it.</para>
+          </listitem>
+
+          <listitem>
+            <para>If you have selected a project containing a Maven config
+            file (pom.xml), the project name will appear in the box below,
+            already checked. Click Finish to perform the import.</para>
+          </listitem>
+
+          <listitem>
+            <para>Congratulations, the project should now appear in your
+            Project Explorer view!</para>
+          </listitem>
+        </orderedlist>
 
         <para>Add maven nature. How?</para>
       </section>
@@ -1481,7 +1718,7 @@ INFO  [o.o.cms.util.StartupMessage] ********************************************
         gone well you should see a message stating that OTHERobjects is
         running and you will be given the URL to both the site homepage and
         the administration workbench. <emphasis></emphasis> <programlisting>************************************************************** ___ _____ _ _ _____ ____ _ _ _ / _ \_ _| | | | ____| _
-						\ ___ | |__ (_) ___ ___| |_ ___ | | | || | | |_| | _| | |_) / _ \| '_ \| |/ _ \/ __| __/ __| | |_| || | | _ | |___| _ &lt; (_) | |_) | |  __/ (__| |_\__ \
+      \ ___ | |__ (_) ___ ___| |_ ___ | | | || | | |_| | _| | |_) / _ \| '_ \| |/ _ \/ __| __/ __| | |_| || | | _ | |___| _ &lt; (_) | |_) | |  __/ (__| |_\__ \
  \___/ |_| |_| |_|_____|_| \_\___/|_.__// |\___|\___|\__|___/
                                       |__/                   
                                       
@@ -1497,6 +1734,50 @@ Admin : http://localhost:8080/go/workbench/
         username and <emphasis role="bold">mustchangethis</emphasis> as the
         password.</para>
       </section>
+
+      <section>
+        <title>Configuring Eclipse</title>
+
+        <para>We recommend importing the OTHERobjects code formatter settings
+        and the code templates. Useful templates include:</para>
+
+        <para>logger</para>
+
+        <para></para>
+      </section>
+      
+      <section>
+      	<title>How to use the STS Spring tools</title>
+      
+       <para>
+      	In the Spring perspective, open the four views  Spring Explorer, AOP Event Trace, @Request Mappings 
+      	and Beans cross References. The four of them should appear empty. 
+ 		</para>
+ 		
+ 		<para>Right click on your otherobject project and select Spring tools, add Spring project nature.
+ 		 It appears in the Spring Explorer window.</para>
+ 		 
+ 		<para>Right click on it in the Spring explorer window, and choose properties, Beans support, then Scan. 
+ 		It detects automatically all your Spring config files. Select them and click Ok	</para>
+ 		
+ 		<para>You should now be able to see all the beans declared in the XML files and all the annotation based beans.
+ 		 Right click on them, and you can now directly go to their code, open their dependency graph, create new beans via a form,
+ 		  (select New bean definition).</para>
+ 		  
+ 		<para>The AOP event trace shows you when the beans are created or accessed. </para>
+ 		
+ 		<para>- Right click on any of the config files and choose "show requests mappings". It populates 
+		the request mapping window with all the controllers' request mappings.
+ 		</para>
+ 		
+ 		<para>
+ 		You can see the links a bean has with the others in the specific view (beans cross references) 
+ 		when you select a java file containing a bean (tick link with editor). From that view, you can also 
+ 		inspect the AOP advices for this bean.		
+ 		</para>
+ 		
+      </section>
+      
     </chapter>
 
     <chapter>
@@ -1712,7 +1993,30 @@ Admin : http://localhost:8080/go/workbench/
     <chapter>
       <title>Event handling</title>
 
-      <para>Events that get sent:</para>
+      <para>Spring has its own eventing scheme by which one can publish events
+      and listen to events published by other beans. The main event in
+      OTHERobjectsCMS is the PublishEvent which is published when any BaseNode
+      object is published. Events published in one context don't travel down
+      to all child contexts, which means that in order to receive events
+      published in the root application context some further plumbing is
+      needed. OTHERobjectsCMS provides an EventProxy that can be injected into
+      any bean whishing to receive events in the site-servlet context (or any
+      other child context). All that is needed is an
+      org.otherobjects.cms.events.EventProxy instance variable (and
+      potentially the accompanying setter or alternatively the @Resource
+      annotation on that variable) and implementing the
+      org.otherobjects.cms.events.RootEventListener interface. Code like the
+      following at an appropriate place (e.g afterPropertiesSet()) sets up the
+      bean for event receiving</para>
+
+      <programlisting>this.eventProxy.addRootEventListener(this);</programlisting>
+
+      <para>EventProxy will handle the events in an asynchronous
+      fashion.</para>
+
+      <para></para>
+
+      <para>Events that get sent</para>
 
       <para>Publsh</para>
 

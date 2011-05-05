@@ -14,9 +14,9 @@ import org.otherobjects.cms.model.User;
 import org.otherobjects.cms.model.UserDao;
 import org.otherobjects.cms.util.ResourceScanner;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.security.Authentication;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * Ensures that the OTHERobjects datastores are correctly initialised
@@ -127,7 +127,7 @@ public class OoBootstrapper implements InitializingBean
         try
         {
             String privateDataPath = otherObjectsConfigurator.getProperty("site.private.data.path");
-            File f = new File(privateDataPath + BOOTSTRAP_PROPERTIES_FILENAME);
+            File f = new File(privateDataPath + BOOTSTRAP_PROPERTIES_FILENAME).getAbsoluteFile();
             fis = new FileInputStream(f);
             boostrapProperties.load(fis);
         }
@@ -153,7 +153,7 @@ public class OoBootstrapper implements InitializingBean
         try
         {
             String privateDataPath = otherObjectsConfigurator.getProperty("site.private.data.path");
-            File f = new File(privateDataPath + BOOTSTRAP_PROPERTIES_FILENAME);
+            File f = new File(privateDataPath + BOOTSTRAP_PROPERTIES_FILENAME).getAbsoluteFile();
             fis = new FileOutputStream(f);
             boostrapProperties.store(fis, "OO Bootstrap Properties");
         }

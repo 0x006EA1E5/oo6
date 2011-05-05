@@ -1,7 +1,9 @@
 package org.otherobjects.cms.security;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.otherobjects.cms.model.AccessControlled;
 import org.slf4j.Logger;
@@ -9,12 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.security.AccessDeniedException;
-import org.springframework.security.Authentication;
-import org.springframework.security.ConfigAttribute;
-import org.springframework.security.ConfigAttributeDefinition;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.afterinvocation.AfterInvocationProvider;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.AfterInvocationProvider;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+
 
 /**
  * This AfterInvocationProvider can be used on all domain objects that implement the {@link AccessControlled} interface and 
@@ -44,9 +46,9 @@ public class OwnershipAfterInvocationProvider implements AfterInvocationProvider
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public Object decide(Authentication authentication, Object object, ConfigAttributeDefinition config, Object returnedObject) throws AccessDeniedException
+    public Object decide(Authentication authentication, Object object, List<ConfigAttribute> config, Object returnedObject) throws AccessDeniedException
     {
-        Iterator iter = config.getConfigAttributes().iterator();
+        Iterator iter = config.iterator();
 
         while (iter.hasNext())
         {
@@ -106,9 +108,8 @@ public class OwnershipAfterInvocationProvider implements AfterInvocationProvider
      * this provider supports all classes implementing the {@link AccessControlled} interface
      * 
      */
-
-    public boolean supports(Class clazz)
-    {
+    public boolean supports(Class arg0) {
+        // TODO Auto-generated method stub
         return true;
     }
 
@@ -121,5 +122,15 @@ public class OwnershipAfterInvocationProvider implements AfterInvocationProvider
     {
         this.processDomainObjectClass = processDomainObjectClass;
     }
+
+    public Object decide(Authentication arg0, Object arg1,
+            Collection<ConfigAttribute> arg2, Object arg3)
+            throws AccessDeniedException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
+
 
 }

@@ -68,8 +68,7 @@ public class BlockController
     @RequestMapping("/block/create/**")
     public ModelAndView create(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
-
+        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao(BaseNode.class);
         String blockName = RequestUtils.getId(request);
         String resourceObjectId = request.getParameter("resourceObjectId");
         String templateId = request.getParameter("templateId");
@@ -131,7 +130,7 @@ public class BlockController
     @RequestMapping("/block/get/**")
     public ModelAndView get(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
+        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao(BaseNode.class);
         String blockRefId = RequestUtils.getId(request);
         String resourceObjectId = request.getParameter("resourceObjectId");
         TemplateBlockReference blockRef = (TemplateBlockReference) dao.get(blockRefId);
@@ -165,7 +164,7 @@ public class BlockController
     @RequestMapping("/block/publish/**")
     public ModelAndView publish(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
+        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao(BaseNode.class);
         String blockRefId = RequestUtils.getId(request);
         String resourceObjectId = request.getParameter("resourceObjectId");
         TemplateBlockReference blockRef = (TemplateBlockReference) dao.get(blockRefId);
@@ -214,7 +213,7 @@ public class BlockController
     @RequestMapping("/block/form/**")
     public ModelAndView form(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
+        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao(BaseNode.class);
         ModelAndView view = new ModelAndView("/otherobjects/templates/hud/blocks/block-form");
 
         String blockRefId = RequestUtils.getId(request);

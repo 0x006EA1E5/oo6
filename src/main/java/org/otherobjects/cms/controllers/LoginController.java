@@ -11,11 +11,13 @@ import org.otherobjects.cms.Url;
 import org.otherobjects.cms.mail.EmailAddress;
 import org.otherobjects.cms.mail.FreemarkerMail;
 import org.otherobjects.cms.mail.MailService;
+import org.otherobjects.cms.model.User;
+import org.otherobjects.cms.model.UserDao;
 import org.otherobjects.cms.security.PasswordService;
 import org.otherobjects.cms.tools.FlashMessageTool;
 import org.otherobjects.cms.util.FlashMessage;
-import org.springframework.security.AuthenticationException;
-import org.springframework.security.ui.AbstractProcessingFilter;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.ServletRequestBindingException;
@@ -34,6 +36,9 @@ public class LoginController
     private PasswordService passwordService;
     
     @Resource
+    private UserDao userDao;
+    
+    @Resource
     private MailService mailService;
 
     @Resource
@@ -48,13 +53,13 @@ public class LoginController
         // FIXME If already logged in then redirect
 
         ModelAndView mav = new ModelAndView("/otherobjects/templates/workbench/user-management/login");
-        AuthenticationException authenticationException = (AuthenticationException) WebUtils.getSessionAttribute(request, AbstractProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY);
+        AuthenticationException authenticationException = (AuthenticationException) WebUtils.getSessionAttribute(request, AbstractAuthenticationProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY);
         if (authenticationException != null)
         {
             FlashMessageTool flashMessageTool = new FlashMessageTool(request);
             flashMessageTool.flashMessage(FlashMessage.ERROR, "Login failed. " + authenticationException.getMessage());
             // Clear message so we do not see it again
-            WebUtils.setSessionAttribute(request, AbstractProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY, null);
+            WebUtils.setSessionAttribute(request, AbstractAuthenticationProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY, null);
         }
         return mav;
     }
@@ -77,13 +82,13 @@ public class LoginController
 
         ModelAndView mav = new ModelAndView("otherobjects/login/login");
 
-        AuthenticationException authenticationException = (AuthenticationException) WebUtils.getSessionAttribute(request, AbstractProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY);
+        AuthenticationException authenticationException = (AuthenticationException) WebUtils.getSessionAttribute(request, AbstractAuthenticationProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY);
         if (authenticationException != null)
         {
             FlashMessageTool flashMessageTool = new FlashMessageTool(request);
             flashMessageTool.flashMessage(FlashMessage.ERROR, "Login failed. " + authenticationException.getMessage());
             // Clear message so we do not see it again
-            WebUtils.setSessionAttribute(request, AbstractProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY, null);
+            WebUtils.setSessionAttribute(request, AbstractAuthenticationProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY, null);
         }
         return mav;
 
@@ -97,12 +102,23 @@ public class LoginController
     @RequestMapping(value = {"/login/request-password-change"}, method = RequestMethod.POST)
     public ModelAndView requestPasswordChange(@RequestParam("username") String username, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
+        FlashMessageTool flashMessageTool = new FlashMessageTool(request);
+        // Lookup user
+        
+        User user = (User) userDao.loadUserByUsername(username);
+        if(user==null) {
+            ModelAndView mav = new ModelAndView("/otherobjects/templates/workbench/user-management/login");
+            flashMessageTool.flashMessage(FlashMessage.WARNING, "password.reset.missing.user.error");
+            return mav; 
+        }
+        
         // Send password change email
         String passwordChangeRequestCode = passwordService.generatePasswordChangeRequestCode(username);
 
+        
         FreemarkerMail mail = new FreemarkerMail();
-        mail.setFromAddress(new EmailAddress("rich@othermedia.com"));
-        mail.addToRecipient(new EmailAddress("rich@othermedia.com"));
+        mail.setFromAddress(new EmailAddress("admin@otherobjects.org")); // FIXME Allow this to be customised
+        mail.addToRecipient(new EmailAddress(user.getEmail()));
         mail.setBodyTemplateResourcePath("/otherobjects/templates/emails/password-change.ftl");
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("link", new Url("/otherobjects/password-change").getAbsoluteLink() + "?crc=" + passwordChangeRequestCode);
@@ -112,11 +128,8 @@ public class LoginController
         mailService.send(mail);
 
         ModelAndView mav = new ModelAndView("/otherobjects/templates/workbench/user-management/login");
-        FlashMessageTool flashMessageTool = new FlashMessageTool(request);
-        flashMessageTool.flashMessage(FlashMessage.INFO, "You have been sent an email with password change instructions.");
+        flashMessageTool.flashMessage(FlashMessage.INFO, "password.reset.email.sent");
         return mav;
-
-        // REDIRECT!
     }
     /*
         @RequestMapping(value = {"/login/password-change"}, method = RequestMethod.GET)

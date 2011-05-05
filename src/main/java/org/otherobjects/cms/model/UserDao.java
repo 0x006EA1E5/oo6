@@ -1,10 +1,11 @@
 package org.otherobjects.cms.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.UsernameNotFoundException;
 import org.otherobjects.cms.dao.GenericDao;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -12,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  */
-public interface UserDao extends GenericDao<User, Long>
+public interface UserDao extends GenericDao<User, Serializable>
 {
 
     /**

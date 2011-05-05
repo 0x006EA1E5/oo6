@@ -33,7 +33,7 @@ public class OOFreeMarkerView extends FreeMarkerView
         try
         {
             model.put(SPRING_MACRO_REQUEST_CONTEXT_ATTRIBUTE, new OORequestContext(request, response, 
-            		getServletContext(), model));
+                    getServletContext(), model));
             super.doRender(model, request, response);
         }
         catch (Exception e)

@@ -3,7 +3,7 @@
 	
 	
 	<!-- Types -->
-	<bean name="typeService" class="org.otherobjects.cms.types.TypeServiceImpl">
+	<bean name="typeService" class="org.otherobjects.cms.types.TypeServiceImpl" depends-on="otherObjectsConfigurator">
 		<property name="annotationBasedTypeDefBuilder" ref="annotationBasedTypeDefBuilder"></property>
 		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
 		<property name="scanner" ref="annotatedClassesScanner" />
@@ -27,4 +27,14 @@
 		<property name="defaultValidator" ref="typeDefConfiguredValidator" />
 	</bean>
 	
+	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean" >
+	    <property name="converters">
+	        <list>
+	            <bean class="org.otherobjects.cms.types.convert.StringToTypeDefConverter" >
+	             	<property name="typeService" ref="typeService" />
+	            </bean>
+	        </list>
+	    </property>
+	</bean>
+
 </beans>

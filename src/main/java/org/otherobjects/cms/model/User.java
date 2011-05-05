@@ -2,9 +2,12 @@ package org.otherobjects.cms.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -24,8 +27,8 @@ import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * This class represents the basic "user" object in AppFuse that allows for authentication
@@ -57,12 +60,15 @@ public class User implements Serializable, UserDetails, Editable
     protected String passwordHint;
     protected String firstName; // required
     protected String lastName; // required
-    protected List<Role> roles = new ArrayList<Role>();
+    protected List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
     protected boolean enabled;
     protected boolean accountExpired;
     protected boolean accountLocked;
     protected boolean credentialsExpired;
+    protected Date lastLogin;
+    protected String lastIpAddress;
 
+   
     protected TypeDef typeDef;
 
     public User()
@@ -77,8 +83,13 @@ public class User implements Serializable, UserDetails, Editable
     @Transient
     public String getOoLabel()
     {
-        // FIXME Move this to an superclass? Fetch via annotation?
-        return getEmail();
+        return getUsername() + " (" + getEmail() + ")";
+    }
+
+    @Transient
+    public String getOoIcon()
+    {
+        return "/otherobjects/static/icons/user.png";
     }
 
     @Id
@@ -88,8 +99,8 @@ public class User implements Serializable, UserDetails, Editable
         return this.id;
     }
 
-    @Column(nullable = false, length = 50, unique = true)
-    @Property(type = PropertyType.STRING, required = true, label = "Username", order = 1)
+    @Column(nullable = false, length = 25, unique = true)
+    @Property(type = PropertyType.STRING, required = true, label = "Username", order = 1, help="field.username.help", size=25, valang = "{username: ? IS NOT NULL AND matches('[a-z0-9_]*',?) == YES : '' : 'field.username.pattern.error'}")
     public String getUsername()
     {
         return this.username;
@@ -126,7 +137,7 @@ public class User implements Serializable, UserDetails, Editable
     }
 
     @Column(nullable = false, unique = true)
-    @Property(required = true, type = PropertyType.STRING, label = "Email", order = 0)
+    @Property(required = true, type = PropertyType.STRING, label = "Email", order = 0, valang="{email : ? IS NOT NULL AND email(?) == YES : '' : 'field.email.error'}")
     public String getEmail()
     {
         return this.email;
@@ -143,10 +154,11 @@ public class User implements Serializable, UserDetails, Editable
     }
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @ElementCollection(targetClass=Role.class)
     @org.hibernate.annotations.IndexColumn(name = "index")
     @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = @JoinColumn(name = "role_id"))
     @Property(type = PropertyType.LIST, label = "Roles", collectionElementType = PropertyType.REFERENCE, relatedType = "org.otherobjects.cms.model.Role", order = 6)
-    public List<Role> getRoles()
+    public List<GrantedAuthority> getRoles()
     {
         return this.roles;
     }
@@ -164,9 +176,9 @@ public class User implements Serializable, UserDetails, Editable
      * @see org.acegisecurity.userdetails.UserDetails#getAuthorities()
      */
     @Transient
-    public GrantedAuthority[] getAuthorities()
+    public Collection<GrantedAuthority> getAuthorities()
     {
-        return this.roles.toArray(new GrantedAuthority[0]);
+        return this.roles;
     }
 
     @Version
@@ -217,6 +229,20 @@ public class User implements Serializable, UserDetails, Editable
     {
         return this.credentialsExpired;
     }
+    
+    @Column(name="last_login", nullable = true)
+    @Property(type = PropertyType.TIMESTAMP, required = false, label = "Last Login", fieldType = "none", order = 10)
+    public Date getLastLogin()
+    {
+        return lastLogin;
+    }
+    
+    @Column(name="last_ip_address", nullable = true)
+    @Property(type = PropertyType.STRING, required = false, label = "Last IP Address", fieldType = "none", order = 11)
+    public String getLastIpAddress()
+    {
+        return lastIpAddress;
+    }
 
     /**
      * @see org.acegisecurity.userdetails.UserDetails#isCredentialsNonExpired()
@@ -262,7 +288,7 @@ public class User implements Serializable, UserDetails, Editable
         this.email = email;
     }
 
-    public void setRoles(List<Role> roles)
+    public void setRoles(List<GrantedAuthority> roles)
     {
         this.roles = roles;
     }
@@ -292,6 +318,16 @@ public class User implements Serializable, UserDetails, Editable
         this.credentialsExpired = credentialsExpired;
     }
 
+    public void setLastLogin(Date lastLogin)
+    {
+        this.lastLogin = lastLogin;
+    }
+    
+    public void setLastIpAddress(String lastIpAddress)
+    {
+        this.lastIpAddress = lastIpAddress;
+    }
+
     @Override
     public boolean equals(Object o)
     {
@@ -318,18 +354,18 @@ public class User implements Serializable, UserDetails, Editable
         ToStringBuilder sb = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE).append("username", this.username).append("enabled", this.enabled).append("accountExpired", this.accountExpired)
                 .append("credentialsExpired", this.credentialsExpired).append("accountLocked", this.accountLocked);
 
-        GrantedAuthority[] auths = getAuthorities();
+        List<GrantedAuthority> auths = (List<GrantedAuthority>) getAuthorities();
         if (auths != null)
         {
             sb.append("Granted Authorities: ");
 
-            for (int i = 0; i < auths.length; i++)
+            for (int i = 0; i < auths.size(); i++)
             {
                 if (i > 0)
                 {
                     sb.append(", ");
                 }
-                sb.append(auths[i].toString());
+                sb.append(auths.get(i).toString());
             }
         }
         else

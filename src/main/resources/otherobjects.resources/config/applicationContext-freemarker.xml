@@ -28,7 +28,10 @@
 		</property>
 		<property name="freemarkerSettings">
 			<props>
+				<prop key="number_format">0.######</prop>
 				<prop key="datetime_format">d MMM yyyy</prop>
+				<prop key="url_escaping_charset">UTF-8</prop>
+				<prop key="default_encoding">UTF-8</prop>
 				<!-- 
 				<prop key="auto_import">/spring.ftl as spring, /includes/library.ftl as aaa</prop>
 				 -->
@@ -49,5 +52,6 @@
 		<property name="exposeSpringMacroHelpers" value="false" /> <!-- We'll expose our own thanks. -->
 		<property name="viewClass" value="org.otherobjects.cms.views.OOFreeMarkerView" />
 		<property name="order" value="10000" />
+		<property name="contentType" value="text/html;charset=UTF-8" />
 	</bean>
 </beans>

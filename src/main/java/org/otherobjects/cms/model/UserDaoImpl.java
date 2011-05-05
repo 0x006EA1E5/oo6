@@ -1,10 +1,11 @@
 package org.otherobjects.cms.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.UserDetailsService;
-import org.springframework.security.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.otherobjects.cms.hibernate.GenericDaoHibernate;
 
 /**
@@ -17,7 +18,7 @@ import org.otherobjects.cms.hibernate.GenericDaoHibernate;
  *   Modified by <a href="mailto:bwnoll@gmail.com">Bryan Noll</a> to work with 
  *   the new BaseDaoHibernate implementation that uses generics.
 */
-public class UserDaoImpl extends GenericDaoHibernate<User, Long> implements UserDao, UserDetailsService
+public class UserDaoImpl extends GenericDaoHibernate<User, Serializable> implements UserDao, UserDetailsService
 {
 
     public UserDaoImpl()

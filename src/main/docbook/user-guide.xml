@@ -39,7 +39,7 @@
       <title>Link library</title>
 
       <para>You can put links in without using the library. This is preferred
-      for links that are not used more than once. Advantages: easyily change +
+      for links that are not used more than once. Advantages: easily change +
       easily select.</para>
     </section>
   </chapter>
@@ -48,17 +48,81 @@
     <title>Publishing and workflow</title>
 
     <para></para>
+
+    <section>
+      <title>Publishing/Unpublishing task</title>
+
+      <para>This OO task is run automatically, publishing all content which
+      has not been published and where the embargo date is before the current
+      date and time (at the moment when the task runs) or is not set, and the
+      expiry date is after the current date and time or is not set. </para>
+
+      <para>This task also unpublishes all expired content, i.e., all
+      published content where the expiry date is set and is &lt;= current date
+      and time. </para>
+    </section>
   </chapter>
 
   <chapter>
     <title>Creating content</title>
 
-    <para></para>
+    <para>Creating content is easy.</para>
+
+    <section>
+      <title>Wiki Syntax</title>
+
+      <para>We use a simplified wiki syntax to control the formatting of
+      textual. This has several advantages (realiable cross browser, standards
+      compliant markup, reliable copy and paste, create offline, repuprose as
+      non-HTML).</para>
+
+      <para>We use the Textile syntax. A full reference is available here:
+      http://hobix.com/textile/ or see our quick reference card TODO.</para>
+
+      <para>The features that are not supported as of July 2009 are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Table cell alignment: center, bottom</para>
+        </listitem>
+
+        <listitem>
+          <para>Some entity replacement doesn't work (eg dashes, elipsis,
+          smart quotes)</para>
+        </listitem>
+
+        <listitem>
+          <para>Alt text on images is buggy</para>
+        </listitem>
+
+        <listitem>
+          <para>Link aliases work but leave the link definition visible</para>
+        </listitem>
+      </itemizedlist>
+    </section>
   </chapter>
 
   <chapter>
     <title>Editing content</title>
 
     <para></para>
+  </chapter>
+
+  <chapter>
+    <title>Maintenance and information</title>
+
+    <para></para>
+
+    <sect1>
+      <title>Running Jobs</title>
+
+      <para>On the debug view, specifically /otherobjects/debug/scheduler, you
+      can see the currently active job triggers and running jobs.</para>
+
+      <para>Triggers can be stopped and restarted, preventing or scheduling
+      the next fire of the job.</para>
+
+      <para>Running jobs can be stopped.</para>
+    </sect1>
   </chapter>
 </book>

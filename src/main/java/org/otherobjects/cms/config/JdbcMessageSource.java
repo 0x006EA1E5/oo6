@@ -47,14 +47,24 @@ public class JdbcMessageSource extends AbstractMessageSource implements Initiali
 {
     private static class CacheKey
     {
-        public String code;
+        private String code;
 
-        public Locale locale;
+        private Locale locale;
 
         public CacheKey(String code, Locale locale)
         {
             this.code = code;
             this.locale = locale;
+        }
+        
+        @Override
+        public boolean equals(Object obj)
+        {
+            if(!(obj instanceof CacheKey))
+                return false;
+            
+            CacheKey ck = (CacheKey) obj;
+            return this.code.equals(ck.code) && this.locale.equals(ck.locale) ;
         }
     }
 
@@ -81,7 +91,8 @@ public class JdbcMessageSource extends AbstractMessageSource implements Initiali
         if (cachedMilliSecond == 0 || ((result = (MessageFormat) cachedMessages.get(new CacheKey(code, locale))) == null) || lastQuery + cachedMilliSecond < System.currentTimeMillis())
         {
             result = resolveCodeInternal(code, locale);
-            cachedMessages.put(new CacheKey(code, locale), result);
+            // FIXME Enable caching properly
+            //cachedMessages.put(new CacheKey(code, locale), result);
         }
 
         if (result != null)

@@ -1,3 +1,22 @@
+/*
+ * This file is part of the OTHERobjects Content Management System.
+ * 
+ * Copyright 2007-2009 OTHER works Limited.
+ * 
+ * OTHERobjects is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OTHERobjects is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OTHERobjects.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.otherobjects.cms.controllers;
 
 import groovy.lang.Binding;
@@ -14,7 +33,9 @@ import java.net.UnknownHostException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -53,11 +74,16 @@ import org.otherobjects.cms.io.ObjectXmlEncoder;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.Selector;
+import org.otherobjects.cms.security.SecurityUtil;
 import org.otherobjects.cms.tools.SecurityTool;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.HtmlLogger;
 import org.otherobjects.cms.util.ResourceScanner;
 import org.otherobjects.cms.util.Version;
+import org.quartz.InterruptableJob;
+import org.quartz.JobExecutionContext;
+import org.quartz.Scheduler;
+import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -66,13 +92,12 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.StatementCallback;
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.anonymous.AnonymousAuthenticationProvider;
-import org.springframework.security.providers.anonymous.AnonymousAuthenticationToken;
-import org.springframework.security.util.AuthorityUtils;
+import org.springframework.security.authentication.AnonymousAuthenticationProvider;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.ServletContextAware;
@@ -124,9 +149,23 @@ public class DebugController implements ServletContextAware, ApplicationContextA
     @Resource
     private ResourceScanner resourceScanner;
 
+    @Resource
+    private Scheduler scheduler;
+
+    public Scheduler getScheduler()
+    {
+        return scheduler;
+    }
+
+    public void setScheduler(Scheduler scheduler)
+    {
+        this.scheduler = scheduler;
+    }
+
     @RequestMapping({"/debug", "/debug/"})
     public ModelAndView debug(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
+
         // Determine imageMagick status
         String imageMagickError = null;
         String imageMagickVersion = null;
@@ -216,7 +255,7 @@ public class DebugController implements ServletContextAware, ApplicationContextA
     public ModelAndView database(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         final String sql = request.getParameter("sql");
-        String rowsHtml = (String) jdbcTemplate.execute(new StatementCallback()
+        String rowsHtml = (String) jdbcTemplate.execute(new StatementCallback<Object>()
         {
             public Object doInStatement(Statement stmt) throws SQLException, DataAccessException
             {
@@ -446,7 +485,7 @@ public class DebugController implements ServletContextAware, ApplicationContextA
 
         String liveNodesHtml = null;
         String editNodesHtml = null;
-        if (AuthorityUtils.userHasAuthority("ROLE_ADMIN"))
+        if (SecurityUtil.userHasAuthority("ROLE_ADMIN"))
         {
             // we will get the default workspace (edit) so lets temporarily 
             editNodesHtml = getJcrContents(xpath);
@@ -456,7 +495,7 @@ public class DebugController implements ServletContextAware, ApplicationContextA
 
             AnonymousAuthenticationProvider anonymousAuthenticationProvider = new AnonymousAuthenticationProvider();
             anonymousAuthenticationProvider.setKey("testkey");
-            AnonymousAuthenticationToken anonymousAuthenticationToken = new AnonymousAuthenticationToken("testkey", "anonymous", new GrantedAuthority[]{new GrantedAuthorityImpl("ROLE_ANONYMOUS")});
+            AnonymousAuthenticationToken anonymousAuthenticationToken = new AnonymousAuthenticationToken("testkey", "anonymous", Arrays.asList(new GrantedAuthority[]{new GrantedAuthorityImpl("ROLE_ANONYMOUS")}));
             SecurityContextHolder.getContext().setAuthentication(anonymousAuthenticationProvider.authenticate(anonymousAuthenticationToken));
 
             liveNodesHtml = getJcrContents(xpath);
@@ -509,7 +548,7 @@ public class DebugController implements ServletContextAware, ApplicationContextA
             return;
 
         html.append("\n<ul>");
-        html.append("<li><strong>" + node.getPath()  +" (" +  node.getPrimaryNodeType().getName()  + ")"+ "</strong><span class=\"properties-area\"");
+        html.append("<li><strong>" + node.getPath() + " (" + node.getPrimaryNodeType().getName() + ")" + "</strong><span class=\"properties-area\"");
         html.append("<br/>");
 
         PropertyIterator properties = node.getProperties();
@@ -652,5 +691,170 @@ public class DebugController implements ServletContextAware, ApplicationContextA
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
     {
         this.applicationContext = applicationContext;
+    }
+
+    /**
+     * Returns scheduler debug information.
+     * 
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    @RequestMapping("/debug/scheduler")
+    public ModelAndView scheduler(HttpServletRequest request, HttpServletResponse response) throws Exception
+    {
+        logger.debug(" cgg :  " + request.toString());
+        String[] columns = {"Name", "Status", "Last Run", "Next Run", "Action"};
+
+        String[] groups = scheduler.getTriggerGroupNames();
+        List runningJobs = scheduler.getCurrentlyExecutingJobs();
+
+        StringBuffer html = new StringBuffer();
+
+        html.append("<h2>Active Triggers</h2>");
+
+        html.append("<table>");
+
+        // Add in header rows
+        html.append("\n<tr>");
+        for (int col = 0; col < columns.length; col++)
+            html.append("<td>" + columns[col] + "</td>");
+        html.append("</tr>");
+        SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss");
+        for (String group : groups)
+        {
+            String[] names = scheduler.getTriggerNames(group);
+            if (names.length > 0)
+            {
+                for (String name : names)
+                {
+                    boolean run = false;
+                    Trigger t = scheduler.getTrigger(name, group);
+                    html.append("\n<tr>");
+                    html.append("<td>" + t.getFullJobName() + "</td>");
+
+                    for (Object jec : runningJobs)
+                    {
+                        if (t.equals(((JobExecutionContext) jec).getTrigger()))
+                        {
+                            html.append("<td>" + t.getFullJobName() + " is running" + "</td>");
+                            run = true;
+                            break;
+                        }
+
+                    }
+                    if (!run)
+                    {
+                        html.append("<td>" + t.getFullJobName() + " is not running" + "</td>");
+                    }
+                    if (t.getPreviousFireTime() != null)
+                        html.append("<td>" + format.format(t.getPreviousFireTime()) + "</td>");
+                    else
+                        html.append("<td>" + "Has not been fired yet" + "</td>");
+                    if (t.getNextFireTime() != null)
+                        html.append("<td>" + format.format(t.getNextFireTime()) + "</td>");
+                    else
+                        html.append("<td>" + "Will not be fired again" + "</td>");
+
+                    String jobName = t.getJobName();
+                    String groupName = t.getGroup();
+                    if (run)
+                    {
+
+                        if (StringUtils.equals(request.getParameter("job_name"), jobName) && StringUtils.equals(request.getParameter("action_method"), "stop_trigger"))
+                        {
+                            scheduler.interrupt(request.getParameter("job_name"), request.getParameter("group_name"));
+                            scheduler.pauseTrigger(t.getName(), t.getGroup());
+                            try
+                            {
+                                Thread.sleep(1000L);
+                            }
+                            catch (Exception ignore)
+                            {
+                                ignore.printStackTrace();
+                            }
+
+                            html.append("<td class=\"oo-action\"><form action=\"/otherobjects/debug/scheduler\" method=\"post\">" + "<input name=\"group_name\" value=" + groupName
+                                    + " type=\"hidden\">" + "<input name=\"job_name\" value=" + jobName + " type=\"hidden\">"
+                                    + "<input name=\"action_method\" value=\"start_trigger\" type=\"hidden\">" + "<input value=\"Start\" type=\"submit\">" + "</form>" + "</td>");
+                        }
+                        else
+                        {
+                            html.append("<td class=\"oo-action\"><form action=\"/otherobjects/debug/scheduler\" method=\"post\">" + "<input name=\"group_name\" value=" + groupName
+                                    + " type=\"hidden\">" + "<input name=\"job_name\" value=" + jobName + " type=\"hidden\">" + "<input name=\"action_method\" value=\"stop_trigger\" type=\"hidden\">"
+                                    + "<input value=\"Stop\" type=\"submit\">" + "</form>" + "</td>");
+                        }
+
+                    }
+                    else
+                    {
+
+                        if (StringUtils.equals(request.getParameter("job_name"), jobName) && StringUtils.equals(request.getParameter("action_method"), "start_trigger"))
+                        {
+                            scheduler.resumeTrigger(t.getName(), groupName);
+                            //scheduler.triggerJob(request.getParameter("job_name"), groupName);
+                            html.append("<td class=\"oo-action\"><form action=\"/otherobjects/debug/scheduler\" method=\"post\">" + "<input name=\"group_name\" value=" + groupName
+                                    + " type=\"hidden\">" + "<input name=\"job_name\" value=" + jobName + " type=\"hidden\">" + "<input name=\"action_method\" value=\"stop_trigger\" type=\"hidden\">"
+                                    + "<input value=\"Stop\" type=\"submit\">" + "</form>" + "</td>");
+                        }
+                        else
+                        {
+                            html.append("<td class=\"oo-action\"><form action=\"/otherobjects/debug/scheduler\" method=\"post\">" + "<input name=\"group_name\" value=" + groupName
+                                    + " type=\"hidden\">" + "<input name=\"job_name\" value=" + jobName + " type=\"hidden\">"
+                                    + "<input name=\"action_method\" value=\"start_trigger\" type=\"hidden\">" + "<input value=\"Start\" type=\"submit\">" + "</form>" + "</td>");
+                        }
+                    }
+                    html.append("</tr>");
+
+                }
+            }
+            else
+                html.append(("<p> No jobs found in group. " + group + " </p>"));
+
+        }
+
+        html.append("</table>");
+        html.append("<h2>Currently Executed Jobs</h2>");
+        html.append("<table>");
+        String jobName, groupName;
+        for (Object jec : runningJobs)
+        {
+            Trigger t = ((JobExecutionContext) jec).getTrigger();
+            InterruptableJob job = (InterruptableJob) ((JobExecutionContext) jec).getJobInstance();
+            jobName = job.toString();
+            groupName = t.getGroup();
+            html.append("\n<tr>");
+            html.append("<td>" + t.getFullJobName() + "</td>");
+            html.append("<td>" + t.getFullJobName() + " is running" + "</td>");
+            html.append("<td>" + format.format(t.getPreviousFireTime()) + "</td>");
+            if (t.getNextFireTime() != null)
+                html.append("<td>" + format.format(t.getNextFireTime()) + "</td>");
+            else
+                html.append("<td>" + "Will not be fired again" + "</td>");
+            if (StringUtils.equals(request.getParameter("job_name"), jobName) && StringUtils.equals(request.getParameter("action_method"), "stop_job"))
+            {
+                job.interrupt();
+                html.append("<td> Stopping... </td>");
+            }
+            else
+            {
+                html.append("<td class=\"oo-action\"><form action=\"/otherobjects/debug/scheduler\" method=\"post\">" + "<input name=\"group_name\" value=" + groupName + " type=\"hidden\">"
+                        + "<input name=\"job_name\" value=" + jobName + " type=\"hidden\">" + "<input name=\"action_method\" value=\"stop_job\" type=\"hidden\">"
+                        + "<input value=\"Stop\" type=\"submit\">" + "</form>" + "</td>");
+            }
+            html.append("</tr>");
+
+        }
+        html.append("</table>");
+
+        String rowsHtml = html.toString();
+
+        ModelAndView mav = new ModelAndView("/debug/scheduler");
+        mav.addObject("rowsHtml", rowsHtml);
+        mav.addObject("groups", groups);
+        return mav;
+
     }
 }

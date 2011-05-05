@@ -10,15 +10,17 @@ import org.otherobjects.cms.model.UserDao;
 import org.otherobjects.cms.util.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.providers.dao.SaltSource;
-import org.springframework.security.providers.encoding.PasswordEncoder;
+import org.springframework.security.authentication.dao.SaltSource;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
+import org.springframework.security.core.GrantedAuthority;
+
 
 public class OtherObjectsAdminUserCreator
 {
     private final Logger logger = LoggerFactory.getLogger(OtherObjectsAdminUserCreator.class);
     public static final String DEFAULT_ADMIN_USER_NAME = "admin";
     public static final String DEFAULT_ADMIN_ROLE_NAME = "ROLE_ADMIN";
-    public static final String DEFAULT_USER_ROLE_NAME = "ROLE_USER";
+    public static final String DEFAULT_EDITOR_ROLE_NAME = "ROLE_EDITOR";
     private static final int GENERATED_PASSWORD_LENGTH = 6;
 
     private UserDao userDao;
@@ -37,10 +39,10 @@ public class OtherObjectsAdminUserCreator
         logger.debug("Creating Admin user and roles.");
         Role role = new Role(DEFAULT_ADMIN_ROLE_NAME, "Adminstrator role");
         role = roleDao.save(role);
-        Role role2 = new Role(DEFAULT_USER_ROLE_NAME, "User role");
+        Role role2 = new Role(DEFAULT_EDITOR_ROLE_NAME, "User role");
         role2 = roleDao.save(role2);
 
-        List<Role> roles = new ArrayList<Role>();
+        List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
         roles.add(role);
         roles.add(role2);
 
