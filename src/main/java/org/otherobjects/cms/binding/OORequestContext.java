@@ -4,15 +4,15 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.support.BindStatus;
 import org.springframework.web.servlet.support.RequestContext;
 
-@SuppressWarnings("unchecked")
 public class OORequestContext extends RequestContext
 {
-    private final Map model;
+    private final Map<String, Object> model;
     private final HttpServletRequest request;
 
     public OORequestContext(HttpServletRequest request, ModelMap model)
@@ -22,9 +22,10 @@ public class OORequestContext extends RequestContext
         this.model = model;
     }
 
-    public OORequestContext(HttpServletRequest request, ServletContext servletContext, Map model)
+    public OORequestContext(HttpServletRequest request, HttpServletResponse response, ServletContext servletContext, 
+    		Map<String, Object> model)
     {
-        super(request, servletContext, model);
+        super(request, response, servletContext, model);
         this.request = request;
         this.model = model;
     }

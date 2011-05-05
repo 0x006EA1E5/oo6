@@ -116,7 +116,7 @@ public class BindServiceImpl implements BindService
             String rootPath = rootPathPrefix + path;
 
             // Check if we have matching parameters
-            Map<String, String> matchingParams = WebUtils.getParametersStartingWith(this.request, rootPath);
+            Map<String, Object> matchingParams = WebUtils.getParametersStartingWith(this.request, rootPath);
 
             boolean correspondingParamPresent = matchingParams.size() > 0;
 
@@ -228,15 +228,15 @@ public class BindServiceImpl implements BindService
      * Finds all request parameters that are relevant to the list property referenced by path
      *  
      * @param path - path refering to a list property
-     * @param listParams - params that start with path (not including path itself)
+     * @param matchingParams - params that start with path (not including path itself)
      * @return
      */
-    public ListProps calcListProps(String path, Map<String, String> listParams)
+    public ListProps calcListProps(String path, Map<String, Object> matchingParams)
     {
         ListProps listProps = new ListProps();
         Pattern pattern = Pattern.compile("^" + path.replaceAll("\\.", "\\\\.").replaceAll("\\[", "\\\\[").replaceAll("\\]", "\\\\]") + "\\[(\\d+)\\]"); // replace .[] which have special meaning in a regex with escaped constructs
 
-        for (String paramName : listParams.keySet())
+        for (String paramName : matchingParams.keySet())
         {
             Matcher matcher = pattern.matcher(path + paramName);
             if (matcher.lookingAt())

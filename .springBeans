@@ -1,46 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beansProjectDescription>
 	<version>1</version>
-	<pluginVersion><![CDATA[2.0.6.v200806241357]]></pluginVersion>
+	<pluginVersion><![CDATA[2.3.2.201003220227-RELEASE]]></pluginVersion>
 	<configSuffixes>
 		<configSuffix><![CDATA[xml]]></configSuffix>
 	</configSuffixes>
-	<enableImports><![CDATA[false]]></enableImports>
+	<enableImports><![CDATA[true]]></enableImports>
 	<configs>
 		<config>src/main/resources/otherobjects.resources/config/applicationContext-bootstrap.xml</config>
+		<config>src/main/resources/otherobjects.resources/config/applicationContext-configuration.xml</config>
 		<config>src/main/resources/otherobjects.resources/config/applicationContext-freemarker.xml</config>
 		<config>src/main/resources/otherobjects.resources/config/applicationContext-hibernate.xml</config>
 		<config>src/main/resources/otherobjects.resources/config/applicationContext-jackrabbit.xml</config>
 		<config>src/main/resources/otherobjects.resources/config/applicationContext-javamail.xml</config>
 		<config>src/main/resources/otherobjects.resources/config/applicationContext-messages.xml</config>
-		<config>src/main/resources/otherobjects.resources/config/applicationContext-types.xml</config>
-		<config>src/main/resources/otherobjects.resources/config/applicationContext-configuration.xml</config>
+		<config>src/main/resources/otherobjects.resources/config/applicationContext-scheduler.xml</config>
 		<config>src/main/resources/otherobjects.resources/config/applicationContext-security.xml</config>
+		<config>src/main/resources/otherobjects.resources/config/applicationContext-types.xml</config>
+		<config>src/test/java/org/otherobjects/cms/jcr/jcr-test-context.xml</config>
 		<config>src/main/resources/otherobjects.resources/config/otherobjects-servlet.xml</config>
 	</configs>
 	<configSets>
 		<configSet>
-			<name><![CDATA[Test]]></name>
+			<name><![CDATA[oo]]></name>
 			<allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
-			<incomplete>false</incomplete>
-			<configs>
-			</configs>
-		</configSet>
-		<configSet>
-			<name><![CDATA[Main]]></name>
-			<allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
-			<incomplete>false</incomplete>
+			<incomplete>true</incomplete>
 			<configs>
 				<config>src/main/resources/otherobjects.resources/config/applicationContext-bootstrap.xml</config>
+				<config>src/main/resources/otherobjects.resources/config/applicationContext-configuration.xml</config>
 				<config>src/main/resources/otherobjects.resources/config/applicationContext-freemarker.xml</config>
 				<config>src/main/resources/otherobjects.resources/config/applicationContext-hibernate.xml</config>
 				<config>src/main/resources/otherobjects.resources/config/applicationContext-jackrabbit.xml</config>
 				<config>src/main/resources/otherobjects.resources/config/applicationContext-javamail.xml</config>
 				<config>src/main/resources/otherobjects.resources/config/applicationContext-messages.xml</config>
-				<config>src/main/resources/otherobjects.resources/config/applicationContext-types.xml</config>
-				<config>src/main/resources/otherobjects.resources/config/applicationContext-configuration.xml</config>
+				<config>src/main/resources/otherobjects.resources/config/applicationContext-scheduler.xml</config>
 				<config>src/main/resources/otherobjects.resources/config/applicationContext-security.xml</config>
+				<config>src/main/resources/otherobjects.resources/config/applicationContext-types.xml</config>
 				<config>src/main/resources/otherobjects.resources/config/otherobjects-servlet.xml</config>
+				<config>src/test/java/org/otherobjects/cms/jcr/jcr-test-context.xml</config>
 			</configs>
 		</configSet>
 	</configSets>

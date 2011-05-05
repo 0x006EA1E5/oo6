@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerView;
 
+import freemarker.template.SimpleHash;
 import freemarker.template.TemplateException;
 
 /**
@@ -26,13 +27,13 @@ public class OOFreeMarkerView extends FreeMarkerView
     private static final String DEFAULT_ERROR_TEMPLATE_PATH = "/site/templates/pages/500.ftl";
     private static final String DEFAULT_EXCEPTION_ATTRIBUTE = "exception";
 
-    @SuppressWarnings("unchecked")
     @Override
-    protected void doRender(Map model, HttpServletRequest request, HttpServletResponse response) throws Exception
+    protected void doRender(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         try
         {
-            model.put(SPRING_MACRO_REQUEST_CONTEXT_ATTRIBUTE, new OORequestContext(request, getServletContext(), model));
+            model.put(SPRING_MACRO_REQUEST_CONTEXT_ATTRIBUTE, new OORequestContext(request, response, 
+            		getServletContext(), model));
             super.doRender(model, request, response);
         }
         catch (Exception e)
@@ -47,7 +48,7 @@ public class OOFreeMarkerView extends FreeMarkerView
             response.reset();
             model.put(DEFAULT_EXCEPTION_ATTRIBUTE, e);
             Locale locale = RequestContextUtils.getLocale(request);
-            processTemplate(getTemplate(DEFAULT_ERROR_TEMPLATE_PATH, locale), model, response);
+            processTemplate(getTemplate(DEFAULT_ERROR_TEMPLATE_PATH, locale), new SimpleHash(model), response);
         }
     }
     

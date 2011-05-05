@@ -18,6 +18,7 @@ package org.otherobjects.cms.binding;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -102,9 +103,9 @@ public class MockWebApplicationContext implements WebApplicationContext, Seriali
      * @see org.springframework.beans.factory.BeanFactory#getBean(java.lang.String,
      *      java.lang.Class)
      */
-    public Object getBean(String name, Class requiredType) throws BeansException
-    {
-        Object bean = getBean(name);
+    public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
+    
+        T bean = (T) getBean(name);
         if (!(requiredType.isAssignableFrom(bean.getClass())))
         {
             throw new BeanNotOfRequiredTypeException(name, requiredType, bean.getClass());
@@ -115,8 +116,7 @@ public class MockWebApplicationContext implements WebApplicationContext, Seriali
     /**
      * @see org.springframework.beans.factory.ListableBeanFactory#getBeansOfType(java.lang.Class)
      */
-    public Map getBeansOfType(Class type) throws BeansException
-    {
+	public <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException {
         Map found = new HashMap();
 
         Iterator it = beans.entrySet().iterator();
@@ -222,7 +222,7 @@ public class MockWebApplicationContext implements WebApplicationContext, Seriali
      * @see org.springframework.beans.factory.ListableBeanFactory#getBeansOfType(java.lang.Class,
      *      boolean, boolean)
      */
-    public Map getBeansOfType(Class type, boolean includePrototypes, boolean includeFactoryBeans) throws BeansException
+    public <T> Map<String, T> getBeansOfType(Class<T> type, boolean includeNonSingletons, boolean allowEagerInit)
     {
         throw new UnsupportedOperationException();
     }
@@ -363,5 +363,59 @@ public class MockWebApplicationContext implements WebApplicationContext, Seriali
         // TODO Auto-generated method stub
         return null;
     }
+
+	/**
+	 *
+	 * <hr/>
+	 * Date: 5 May 2011
+	 *
+	 * @see org.springframework.beans.factory.ListableBeanFactory#getBeansWithAnnotation(java.lang.Class)
+	 * @param annotationType
+	 * @return
+	 * @throws BeansException
+	 * @author geales
+	 */
+	@Override
+	public Map<String, Object> getBeansWithAnnotation(Class<? extends Annotation> annotationType) throws BeansException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 *
+	 * <hr/>
+	 * Date: 5 May 2011
+	 *
+	 * @see org.springframework.beans.factory.ListableBeanFactory#findAnnotationOnBean(java.lang.String, java.lang.Class)
+	 * @param <A>
+	 * @param beanName
+	 * @param annotationType
+	 * @return
+	 * @author geales
+	 */
+	@Override
+	public <A extends Annotation> A findAnnotationOnBean(String beanName, Class<A> annotationType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	/**
+	 *
+	 * <hr/>
+	 * Date: 5 May 2011
+	 *
+	 * @see org.springframework.beans.factory.BeanFactory#getBean(java.lang.Class)
+	 * @param <T>
+	 * @param requiredType
+	 * @return
+	 * @throws BeansException
+	 * @author geales
+	 */
+	@Override
+	public <T> T getBean(Class<T> requiredType) throws BeansException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
