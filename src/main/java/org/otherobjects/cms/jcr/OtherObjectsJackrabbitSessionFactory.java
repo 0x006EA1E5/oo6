@@ -20,6 +20,10 @@ public class OtherObjectsJackrabbitSessionFactory extends JackrabbitSessionFacto
     public static final String LIVE_WORKSPACE_NAME = "live";
     public static final String EDIT_WORKSPACE_NAME = "default";
     
+    // HACK bad - this bean is getting initialised twice but it should be a singleton
+    private Session liveSession;
+    private Session defaultSession;
+    
     private String workspaceName;
 
     private Credentials credentials;
@@ -27,7 +31,18 @@ public class OtherObjectsJackrabbitSessionFactory extends JackrabbitSessionFacto
     @Override
     public Session getSession() throws RepositoryException
     {
-        return getSession(SecurityUtil.isEditor() ? EDIT_WORKSPACE_NAME : LIVE_WORKSPACE_NAME);
+    	if(SecurityUtil.isEditor()) {
+    		if(liveSession == null || !liveSession.isLive()) {
+    			liveSession = getSession(LIVE_WORKSPACE_NAME);;
+    		}
+    		return liveSession;
+    	}
+    	else {
+    		if(defaultSession == null || !defaultSession.isLive()) {
+    			defaultSession = getSession(EDIT_WORKSPACE_NAME);
+    		}
+    		return defaultSession;
+    	}
     }
 
     public Session getSession(String workspaceName) throws RepositoryException
