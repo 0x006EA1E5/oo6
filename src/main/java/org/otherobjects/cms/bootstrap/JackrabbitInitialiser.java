@@ -12,14 +12,16 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Workspace;
 
+import org.apache.jackrabbit.commons.cnd.CndImporter;
+import org.apache.jackrabbit.commons.cnd.CompactNodeTypeDefReader;
+import org.apache.jackrabbit.commons.cnd.ParseException;
 import org.apache.jackrabbit.core.WorkspaceImpl;
 import org.apache.jackrabbit.core.nodetype.InvalidNodeTypeDefException;
-import org.apache.jackrabbit.core.nodetype.NodeTypeDef;
 import org.apache.jackrabbit.core.nodetype.NodeTypeManagerImpl;
 import org.apache.jackrabbit.core.nodetype.NodeTypeRegistry;
-import org.apache.jackrabbit.core.nodetype.compact.CompactNodeTypeDefReader;
-import org.apache.jackrabbit.core.nodetype.compact.ParseException;
+import org.apache.jackrabbit.spi.QNodeTypeDefinition;
 import org.apache.jackrabbit.spi.commons.namespace.NamespaceMapping;
+import org.apache.jackrabbit.spi.commons.nodetype.QDefinitionBuilderFactory;
 import org.otherobjects.cms.jcr.OtherObjectsJackrabbitSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +49,9 @@ public class JackrabbitInitialiser
     {
         Session session = this.jcrSessionFactory.getSession();
         // register namespaces and nodetypes
-        prepareRepository(session);
+//        prepareRepository(session);
+        Reader fileReader = new InputStreamReader(this.nodeTypesConfig.getInputStream());
+        CndImporter.registerNodeTypes(fileReader, session);
         // Create live workspace
         createWorkspace(session, OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
     }
@@ -62,17 +66,18 @@ public class JackrabbitInitialiser
      * @throws IOException
      */
     @SuppressWarnings("unchecked")
-    private void prepareRepository(Session session) throws RepositoryException, ParseException, InvalidNodeTypeDefException, IOException
+    private void prepareRepository(Session session) throws RepositoryException, InvalidNodeTypeDefException, IOException, ParseException
     {
         Workspace ws = session.getWorkspace();
         NamespaceRegistry namespaceRegistry = ws.getNamespaceRegistry();
 
         // Read in the CND file
         Reader fileReader = new InputStreamReader(this.nodeTypesConfig.getInputStream());
-        CompactNodeTypeDefReader cndReader = new CompactNodeTypeDefReader(fileReader, "systemId"); //FIXME What is systemId for?
+        CompactNodeTypeDefReader cndReader = 
+            new CompactNodeTypeDefReader(fileReader, "cnd input stream", new QDefinitionBuilderFactory()); //FIXME What is systemId for?
 
         // Register all un-registered namespaces
-        NamespaceMapping namespaceMapping = cndReader.getNamespaceMapping();
+        NamespaceMapping namespaceMapping = (NamespaceMapping) cndReader.getNamespaceMapping();
         Map uriToPrefixMapping = namespaceMapping.getURIToPrefixMapping();
         Iterator iterator = uriToPrefixMapping.keySet().iterator();
         while (iterator.hasNext())
@@ -94,7 +99,7 @@ public class JackrabbitInitialiser
         }
 
         // Get the List of NodeTypeDef objects
-        List ntdList = cndReader.getNodeTypeDefs();
+        List ntdList = cndReader.getNodeTypeDefinitions();
         NodeTypeManagerImpl ntmgr = (NodeTypeManagerImpl) ws.getNodeTypeManager();
         NodeTypeRegistry ntreg = ntmgr.getNodeTypeRegistry();
 
@@ -102,7 +107,7 @@ public class JackrabbitInitialiser
         for (Iterator i = ntdList.iterator(); i.hasNext();)
         {
             // Get the NodeTypeDef...
-            NodeTypeDef ntd = (NodeTypeDef) i.next();
+            QNodeTypeDefinition ntd = (QNodeTypeDefinition) i.next();
 
             try
             {

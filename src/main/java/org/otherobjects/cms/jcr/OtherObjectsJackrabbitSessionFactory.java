@@ -4,8 +4,8 @@ import javax.jcr.Credentials;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.apache.jackrabbit.ocm.spring.JackrabbitSessionFactory;
 import org.otherobjects.cms.security.SecurityUtil;
+import org.springmodules.jcr.jackrabbit.JackrabbitSessionFactory;
 
 /**
  * This class overrides {@link JackrabbitSessionFactory} / {@link org.springmodules.jcr.JcrSessionFactory} respectively just to allow for 
@@ -31,18 +31,18 @@ public class OtherObjectsJackrabbitSessionFactory extends JackrabbitSessionFacto
     @Override
     public Session getSession() throws RepositoryException
     {
-    	if(SecurityUtil.isEditor()) {
-    		if(liveSession == null || !liveSession.isLive()) {
-    			liveSession = getSession(LIVE_WORKSPACE_NAME);;
-    		}
-    		return liveSession;
-    	}
-    	else {
-    		if(defaultSession == null || !defaultSession.isLive()) {
-    			defaultSession = getSession(EDIT_WORKSPACE_NAME);
-    		}
-    		return defaultSession;
-    	}
+        if(SecurityUtil.isEditor()) {
+            if(liveSession == null || !liveSession.isLive()) {
+                liveSession = getSession(LIVE_WORKSPACE_NAME);;
+            }
+            return liveSession;
+        }
+        else {
+            if(defaultSession == null || !defaultSession.isLive()) {
+                defaultSession = getSession(EDIT_WORKSPACE_NAME);
+            }
+            return defaultSession;
+        }
     }
 
     public Session getSession(String workspaceName) throws RepositoryException

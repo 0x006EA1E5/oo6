@@ -3,9 +3,8 @@
 
 <#assign pageTitle = "History: ${oo.msg(item.label)}" />
 
-<#include "/otherobjects/templates/legacy/blocks/header.ftl" />
-
-<#include "/otherobjects/templates/legacy/blocks/nav-folders.ftl" />
+<#include "/otherobjects/templates/workbench/shared/header.ftl" />
+<#include "/otherobjects/templates/workbench/shared/nav-folders.ftl" />
 
 <div class="oo-content">
 <h2>
@@ -28,9 +27,9 @@ ${pageTitle}
  <tr>
 	<td><a class="oo-<#if version.published?? && version.published>live<#else>edited</#if>" href="${oo.url('/otherobjects/workbench/view/${version.editableId}')}">${version.label!}</a></td>
 	<td><p>${item.modificationTimestamp?datetime?string("HH:mm 'on' d MMM yyyy")}</p></td>	
-	<td><p>${item.userName}</p></td>	
-	<td class="oo-action"><a href="${oo.url('/otherobjects/workbench/diff/${item.editableId}?version=${version.changeNumber}')}">Diff</a></td>
-	<td class="oo-action"><a href="${oo.url('/otherobjects/workbench/restore/${item.editableId}?version=${version.changeNumber}')}">Restore</a></td>
+	<td><p>${item.modifier}</p></td>	
+	<td class="oo-action"><a href="${oo.url('/otherobjects/workbench/diff/${item.editableId}?version=${version.version}')}">Diff</a></td>
+	<td class="oo-action"><a href="${oo.url('/otherobjects/workbench/restore/${item.editableId}?version=${version.version}')}">Restore</a></td>
 </tr>
 </#list>
 </tbody>
@@ -47,5 +46,5 @@ ${pageTitle}
  </ul>
 </div>
 
-<#include "/otherobjects/templates/legacy/blocks/footer.ftl" />
+<#include "/otherobjects/templates/workbench/shared/footer.ftl" />
 

@@ -3,9 +3,8 @@
 
 <#assign pageTitle = "Comparing: ${oo.msg(item1.label)} and ${oo.msg(item2.label)}" />
 
-<#include "/otherobjects/templates/legacy/blocks/header.ftl" />
-
-<#include "/otherobjects/templates/legacy/blocks/nav-folders.ftl" />
+<#include "/otherobjects/templates/workbench/shared/header.ftl" />
+<#include "/otherobjects/templates/workbench/shared/nav-folders.ftl" />
 
 <div class="oo-content">
 <h2>
@@ -41,5 +40,5 @@ ${pageTitle}
  </ul>
 </div>
 
-<#include "/otherobjects/templates/legacy/blocks/footer.ftl" />
+<#include "/otherobjects/templates/workbench/shared/footer.ftl" />
 

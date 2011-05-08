@@ -42,6 +42,7 @@
 		<constructor-arg index="0" value="classpath:otherobjects.resources/config/jcr-mapping.xml" />
 		<property name="typeService" ref="typeService" />
 	</bean>
+<!-- 	<bean id="jcrMappingTemplate" class="org.apache.jackrabbit.ocm.spring.JcrMappingTemplate"> -->
 	<bean id="jcrMappingTemplate" class="org.apache.jackrabbit.ocm.spring.JcrMappingTemplate">
 		<constructor-arg index="0" ref="jcrSessionFactory" />
 		<constructor-arg index="1" ref="jcrMappingDescriptor" />

@@ -58,9 +58,9 @@ public class JsonView implements View
         else
         {
             if (deep)
-                writer.write(serializer.serialize(model));
-            else
                 writer.write(serializer.deepSerialize(model));
+            else
+                writer.write(serializer.serialize(model));
         }
         String json = writer.toString();
 

@@ -12,7 +12,7 @@
 	<!-- *Required!* -->
 	<mvc:annotation-driven conversion-service="conversionService" />
 
-<context:component-scan base-package="org.otherobjects.cms.site" />
+	<context:component-scan base-package="org.otherobjects.cms.site" />
 
 	
 	<!-- 
@@ -79,6 +79,8 @@
 	</context:component-scan>
 	<context:component-scan base-package="org.otherobjects.cms.util" />
 	
+	<context:component-scan base-package="org.otherobjects.cms.dao" />
+	
 	<!-- Content negotiation, xml, json, html views -->
 	<bean id="contentNegotiatingViewResolver"
 		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver"
@@ -104,13 +106,13 @@
 		</property>
 		-->
 	</bean>
-	
+<!-- 	
 	<bean id="jsonViewResolver" class="org.otherobjects.cms.views.SingleViewViewResolver"
 		p:order="#{contentNegotiatingViewResolver.order+1}">
 		<constructor-arg>
 			<bean class="org.otherobjects.cms.views.JsonView" />
 		</constructor-arg>
-	</bean>
+	</bean> -->
 	
 
 
@@ -125,10 +127,10 @@
 		</property>
 	</bean>
 
-	<bean id="jsonView" class="org.otherobjects.cms.views.JsonView">
+<!-- 	<bean id="jsonView" class="org.otherobjects.cms.views.JsonView">
 		<property name="messageSource" ref="messageSource" />
 	</bean>
-
+ -->
 	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
 		<property name="defaultLocale">
 			<value>en_GB</value>

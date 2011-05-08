@@ -1,8 +1,9 @@
-package org.otherobjects.cms.controllers;
+package org.otherobjects.cms.controllers.site;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -32,13 +33,15 @@ public class SiteController extends AbstractController
 {
     private final Logger logger = LoggerFactory.getLogger(SiteController.class);
 
+    @Resource
     private DaoService daoService;
 
+    @Resource
     private Map<String, ResourceRenderer> renderers = new HashMap<String, ResourceRenderer>();
 
     @RequestMapping(value="**")
-    public @ResponseBody String get(HttpServletRequest request) {
-        return "hello world " + request.getPathInfo();
+    public ModelAndView get(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return handleRequestInternal(request, response);
     }
     
     @Override
@@ -108,7 +111,7 @@ public class SiteController extends AbstractController
         // Pass control to renderer
         ResourceRenderer handler = renderers.get(resourceObject.getClass().getName());
         if (handler == null)
-            handler = renderers.get("*");
+            handler = renderers.get("pageRenderer");
         return handler.handleRequest(resourceObject, request, response);
     }
 

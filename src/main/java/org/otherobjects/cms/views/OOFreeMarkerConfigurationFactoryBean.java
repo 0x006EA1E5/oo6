@@ -30,13 +30,13 @@ public class OOFreeMarkerConfigurationFactoryBean extends FreeMarkerConfiguratio
         if(otherObjectsConfigurator.getEnvironmentName().equals("dev"))
         {
             logger.info("Configuring Freemarker for development.");
-            config.setSetting("template_update_delay", "0"); // Don't cache templates            
+            config.setSetting(Configuration.TEMPLATE_UPDATE_DELAY_KEY, "0"); // Don't cache templates            
             config.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER); // Print error to page
         }
         else
         {
             logger.info("Configuring Freemarker for production.");
-            config.setSetting("template_update_delay", "600"); // Cache templates for 5 mins            
+            config.setSetting(Configuration.TEMPLATE_UPDATE_DELAY_KEY, "600"); // Cache templates for 5 mins            
             config.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER); // TODO Throw error 
             
         }
