@@ -616,6 +616,10 @@
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
 				</exclusion>
+				<exclusion>
+					<artifactId>jackrabbit-spi-commons</artifactId>
+					<groupId>org.apache.jackrabbit</groupId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -983,9 +987,14 @@
  		</dependency>
  		<dependency>
  			<groupId>org.apache.jackrabbit</groupId>
- 			<artifactId>jackrabbit-spi-commons</artifactId>
+ 			<artifactId>jackrabbit-spi-commons-othermedia</artifactId>
  			<version>2.2.5</version>
  			<scope>compile</scope>
+ 		</dependency>
+ 		<dependency>
+ 			<groupId>asm</groupId>
+ 			<artifactId>asm</artifactId>
+ 			<version>1.5.3</version>
  		</dependency>
 		</dependencies>
 </project>

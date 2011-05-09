@@ -65,7 +65,7 @@ a.setLabelProperty("data.title");
 if(typeService)
 	typeService.registerType(a);
 
-/*
+
 // FIXME Create base structure
 //createFolder(dao, "/smart", "\${smartFolders.label}", "smart-folders", ["org.otherobjects.cms.model.SmartFolder"])
 createFolder(dao, "/site", "\${site.label}", "site", ["ArticlePage","CompositePage"])
@@ -88,5 +88,5 @@ createFolder(dao, "/blocks", "Block Data", "datatypes")
 //createFolder(dao, "/scheduler", "\${scheduler.label}", "scheduler")
 //createFolder(dao, "/trash", "\${trash.label}","trash")
 createArticle(dao, "/site/welcome.html", "Welcome","<p>Welcome to OTHERobjects.</p>")
-
+/*
 */

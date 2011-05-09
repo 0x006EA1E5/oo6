@@ -32,16 +32,17 @@ public class OtherObjectsJackrabbitSessionFactory extends JackrabbitSessionFacto
     public Session getSession() throws RepositoryException
     {
         if(SecurityUtil.isEditor()) {
-            if(liveSession == null || !liveSession.isLive()) {
-                liveSession = getSession(LIVE_WORKSPACE_NAME);;
-            }
-            return liveSession;
-        }
-        else {
             if(defaultSession == null || !defaultSession.isLive()) {
                 defaultSession = getSession(EDIT_WORKSPACE_NAME);
             }
             return defaultSession;
+            
+        }
+        else {
+            if(liveSession == null || !liveSession.isLive()) {
+                liveSession = getSession(LIVE_WORKSPACE_NAME);;
+            }
+            return liveSession;
         }
     }
 

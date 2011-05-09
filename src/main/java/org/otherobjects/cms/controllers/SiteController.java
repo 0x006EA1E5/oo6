@@ -26,8 +26,7 @@ import org.springframework.web.servlet.mvc.AbstractController;
  * 
  * @author rich
  */
-@Controller
-@RequestMapping(value="/")
+
 public class SiteController extends AbstractController
 {
     private final Logger logger = LoggerFactory.getLogger(SiteController.class);
@@ -36,11 +35,6 @@ public class SiteController extends AbstractController
 
     private Map<String, ResourceRenderer> renderers = new HashMap<String, ResourceRenderer>();
 
-    @RequestMapping(value="**")
-    public @ResponseBody String get(HttpServletRequest request) {
-        return "hello world " + request.getPathInfo();
-    }
-    
     @Override
     protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
