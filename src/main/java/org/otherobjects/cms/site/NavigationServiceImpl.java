@@ -22,11 +22,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationEvent;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 /**
  * @author rich
  */
+
+@Service
 @SuppressWarnings("unchecked")
 public class NavigationServiceImpl implements NavigationService, RootEventListener, InitializingBean
 {

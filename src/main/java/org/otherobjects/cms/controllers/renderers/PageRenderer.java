@@ -20,7 +20,9 @@ public class PageRenderer implements ResourceRenderer
 {
     //    private NavigatorService navigatorService;
     //    private SiteNavigatorService siteNavigatorService;
-    private DaoService daoService;
+    @Resource
+	private DaoService daoService;
+    
     @Resource
     private UniversalJcrDao universalJcrDao;
 
