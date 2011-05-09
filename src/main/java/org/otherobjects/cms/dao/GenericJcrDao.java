@@ -1,5 +1,6 @@
 package org.otherobjects.cms.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
  * 
  * @author rich
  */
-public interface GenericJcrDao<T> extends GenericDao<T, String>
+public interface GenericJcrDao<T> extends GenericDao<T, Serializable>
 {
     String REORDER_BELOW = "below";
     String REORDER_ABOVE = "above";
@@ -63,7 +64,7 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
     /**
      * Publishes the object to the live workspace.
      * 
-     * <p>A message can be provided to provide aditional information about the 
+     * <p>A message can be provided to supply additional information about the 
      * publishing reason which will be stored with the published object. The message
      * should be a single sentence and not contain line breaks.
      * 
@@ -73,6 +74,18 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
      * @param message an optional message
      */
     void publish(T object, String message);
+    
+    /**
+     * Unpublishes the object from the live workspace.
+     * 
+     * <p>A message can be provided to supply additional information about the 
+     * unpublishing reason which will be stored with the unpublished object. The message
+     * should be a single sentence and not contain line breaks.
+     * 
+     * @param object the object to be unpublished
+     * @param message an optional message
+     */
+     void unpublish(T object, String message);
 
     /**
      * Returns a list of all published versions for the provided object.
@@ -117,6 +130,7 @@ public interface GenericJcrDao<T> extends GenericDao<T, String>
     T getByJcrExpression(String expression);
 
     List<T> getAllByJcrExpression(String expression);
+    List<T> getAllByJcrExpression(String expression, final boolean useEdit);
 
     PagedList<T> pageByJcrExpression(String expression, int pageSize, int pageNo);
 

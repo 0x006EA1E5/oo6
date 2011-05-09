@@ -1,11 +1,13 @@
 package org.otherobjects.cms.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.Url;
+import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.StringUtils;
@@ -18,8 +20,11 @@ import org.springframework.util.Assert;
  * 
  * @author rich
  */
-public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
+public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable, Serializable
 {
+    /** Default icon path. */
+    private static final String ICON_PATH = "/otherobjects/static/icons/page.png";
+
     /** GUID */
     private String id;
 
@@ -32,7 +37,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
     /** Indication of whether this node is published or not. */
     private boolean published = false;
 
-    /** TODO Why store this? Indication of whether this node is a folder or not. */
+    /** FIXME Why store this? Indication of whether this node is a folder or not. */
     private boolean folder = false;
 
     private String creator;
@@ -51,6 +56,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
     {
     }
 
+    @Deprecated
     public Url getHref()
     {
         // FIXME This should be in SitePage
@@ -79,6 +85,23 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
     }
 
     /**
+     * Returns an image that represents this object.
+     * 
+     * <p>The property that is read is specified by <code>imageProperty</code>;
+     * 
+     * @return
+     */
+    public CmsNode getOoImage()
+    {
+        if (StringUtils.isEmpty(getTypeDef().getImageProperty()))
+            return null;
+        else if (getTypeDef().getImageProperty().equals("self"))
+            return this;
+        else
+            return (CmsNode) getPropertyValue(getTypeDef().getImageProperty());
+    }
+
+    /**
      * Sets the human readable label for this object.
      * 
      * <p>The property that is set is specified by <code>labelProperty</code>;
@@ -98,17 +121,7 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
      */
     public String getOoIcon()
     {
-        return null;
-    }
-
-    /**
-     * Returns the path to an image representing this object.
-     * 
-     * @return
-     */
-    public String getOoImage()
-    {
-        return null;
+        return ICON_PATH;
     }
 
     /**
@@ -279,6 +292,11 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
         return linkPath;
     }
 
+    public Url getOoUrl()
+    {
+        return new Url(getOoUrlPath());
+    }
+
     public String getLabelProperty()
     {
         Assert.notNull(getTypeDef(), "No TypeDef found for object: " + getClass().getName());
@@ -398,6 +416,11 @@ public abstract class BaseNode implements CmsNode, Audited, Editable, Linkable
     public void setCreationTimestamp(Date creationTimestamp)
     {
         this.creationTimestamp = creationTimestamp;
+    }
+
+    public<T extends BaseNode> BaseNode getParentNode(UniversalJcrDao universalJcrDao)
+    {
+        return universalJcrDao.getByPath(getPath());
     }
 
 }

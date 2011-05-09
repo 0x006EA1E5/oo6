@@ -29,6 +29,7 @@ import org.otherobjects.cms.model.DbFolder;
 import org.otherobjects.cms.model.Editable;
 import org.otherobjects.cms.model.Folder;
 import org.otherobjects.cms.model.FolderDao;
+import org.otherobjects.cms.model.FolderDaoImpl;
 import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.cms.model.SmartFolder;
 import org.otherobjects.cms.types.TypeDef;
@@ -45,7 +46,9 @@ import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.Validator;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -113,10 +116,46 @@ public class WorkbenchController
         return mav;
     }
 
-    @RequestMapping({"/workbench/edit/*"})
-    public ModelAndView edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    @RequestMapping({"/workbench/list-popup-multi-select/**"})
+    public ModelAndView editPopup(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        String id = RequestUtils.getId(request);
+        //String id1 = RequestUtils.getId(request);
+        //DataStore store = getDataStore(detectStore(id1));
+        //Object item = store.get(id1);
+        String view = "/otherobjects/templates/workbench/editor/list-popup-multi-select";
+        String id = null;
+        @SuppressWarnings("unused")
+        Object container = request.getParameter("parentObject");
+        String pathInfo = request.getPathInfo();
+
+        id = pathInfo.split("/")[3];
+        @SuppressWarnings("unused")
+        int requestedPage = RequestUtils.getInt(request, "page", 1);
+        @SuppressWarnings("unused")
+        String q = null; // TODO 
+
+        List<BaseNode> items = null;
+        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
+        items = universalJcrDao.getAllByType(id);
+        ModelAndView mav = new ModelAndView(view);
+        mav.addObject("id", id);
+
+        if (items != null)
+        {
+            mav.addObject("items", items);
+            mav.addObject("type", typeService.getType(id));
+            //mav.addObject("selectedItems", );
+
+        }
+        else
+            throw new OtherObjectsException("no thingies , promos?.");
+
+        return mav;
+    }
+
+    @RequestMapping(value = {"/workbench/edit/{id}"}, method = RequestMethod.GET)
+    public ModelAndView edit(@PathVariable String id, HttpServletResponse response) throws ServletException, IOException
+    {
         DataStore store = getDataStore(detectStore(id));
         Object item = store.get(id);
         ModelAndView mav = new ModelAndView("/otherobjects/templates/workbench/editor/edit");

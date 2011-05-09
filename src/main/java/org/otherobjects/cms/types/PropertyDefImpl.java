@@ -133,10 +133,7 @@ public class PropertyDefImpl implements PropertyDef, Ordered
      */
     public PropertyDefImpl(String name, String propertyType, String relatedType, String collectionElementType, boolean required)
     {
-        setName(name);
-        setType(propertyType);
-        setRelatedType(relatedType);
-        setCollectionElementType(collectionElementType);
+        this(name, propertyType, relatedType, collectionElementType);
         setRequired(required);
     }
 
@@ -150,12 +147,24 @@ public class PropertyDefImpl implements PropertyDef, Ordered
      */
     public PropertyDefImpl(String name, String propertyType, String relatedType, String collectionElementType, boolean required, boolean dynamic)
     {
-        setName(name);
-        setType(propertyType);
-        setRelatedType(relatedType);
-        setCollectionElementType(collectionElementType);
-        setRequired(required);
+        this(name, propertyType, relatedType, collectionElementType, required);
         setDynamic(dynamic);
+    }
+
+    /**
+     * 
+     * @param name
+     * @param propertyType - oo type: simple props, component, reference or list
+     * @param relatedType - for components and references or lists thereof, type of component/reference
+     * @param fieldType - field to render for property in workbench
+     * @param collectionElementType - for lists only: type of elements of the list: simple, component, reference
+     * @param required
+     */
+    public PropertyDefImpl(String name, String propertyType, String relatedType, String collectionElementType, String fieldType, boolean required, boolean dynamic)
+    {
+        this(name, propertyType, relatedType, collectionElementType, required, dynamic);
+        setFieldType(fieldType);
+
     }
 
     /**
@@ -182,6 +191,8 @@ public class PropertyDefImpl implements PropertyDef, Ordered
         String className;
         if (getType().equals(LIST))
             className = ArrayList.class.getName();
+        //        else if (getType().equals(MAP))
+        //            className = HashMap.class.getName();
         else if (getType().equals(REFERENCE) || getType().equals(COMPONENT))
             className = getRelatedTypeDef().getClassName();
         else
@@ -268,8 +279,7 @@ public class PropertyDefImpl implements PropertyDef, Ordered
         else
             return name;
     }
-    
-    
+
     /**
      * Returns the correct field type for this property. If fieldType is set then this
      * is returned, otherwise the default type is used.
@@ -485,7 +495,7 @@ public class PropertyDefImpl implements PropertyDef, Ordered
     {
         this.fieldType = fieldType;
     }
-    
+
     @Override
     public boolean equals(Object obj)
     {

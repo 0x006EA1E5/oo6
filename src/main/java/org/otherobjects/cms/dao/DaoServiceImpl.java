@@ -1,9 +1,9 @@
 package org.otherobjects.cms.dao;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.persistence.Entity;
 
 import org.apache.commons.lang.StringUtils;
@@ -15,24 +15,24 @@ import org.otherobjects.cms.types.TypeService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.stereotype.Component;
 
-@Component
 @SuppressWarnings("unchecked")
 public class DaoServiceImpl implements DaoService, BeanFactoryAware
 {
     private static final String UNIVERSAL_JCR_DAO_KEY = "universalJcrDao";
     private Map<String, GenericDao> daoMap = new HashMap<String, GenericDao>();
     private BeanFactory beanFactory;
-    
-    @Resource
     private TypeService typeService;
-    
-    @Resource
     private SessionFactory sessionFactory;
 
-    public GenericDao getDao(Class clazz)
+    public <T extends Serializable> GenericDao<T, Serializable> getDao(Class<T> clazz)
     {
+        return getDao(clazz.getName());
+    }
+
+    public <T extends Serializable> GenericDao<T, Serializable> getDao2(Class<T> clazz)
+    {
+        //this.getClass().getCanonicalName()
         return getDao(clazz.getName());
     }
 
@@ -45,9 +45,9 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
      * Returns a Dao for provided type. First looks in daoMap and then in the application context. If nothing found return UniversalJcrDao (for Jcr objects) 
      * or GenericDaoHibernate for database objects.
      */
-    public GenericDao getDao(String type)
+    public <T extends Serializable> GenericDao<T, Serializable> getDao(String type)
     {
-        GenericDao dao = null;
+        GenericDao<T, Serializable> dao = null;
 
         // Look in configured map first
         if (daoMap != null && daoMap.containsKey(type))
@@ -59,26 +59,26 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
 
             //then try find named bean in context
             if (beanFactory.containsBean(daoBeanName))
-                dao = (GenericDao) beanFactory.getBean(daoBeanName);
+                dao = (GenericDao<T, Serializable>) beanFactory.getBean(daoBeanName);
             else if (beanFactory.containsBean(daoBeanName + "Impl"))
-                dao = (GenericDao) beanFactory.getBean(daoBeanName + "Impl");
+                dao = (GenericDao<T, Serializable>) beanFactory.getBean(daoBeanName + "Impl");
             else
             {
                 // then return universal jcr dao for types extending baseNode
                 //FIXME Should we support this? Need a better way of getting DAOs for objects.
                 if (type.equalsIgnoreCase("baseNode"))
-                    return (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
+                    return (GenericDao<T, Serializable>) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
 
                 // then return universal jcr dao for types extending baseNode
                 if (type.equalsIgnoreCase("jcr"))
-                    return (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
+                    return (GenericDao<T, Serializable>) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
 
                 try
                 {
                     Class cls = Class.forName(type);
                     if (BaseNode.class.isAssignableFrom(cls))
                     {
-                        dao = (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
+                        dao = (GenericDao<T, Serializable>) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
 
                     }
                     else if (cls.getAnnotation(Entity.class) != null) // then return GenericDaoHibernate for hibernate entities
@@ -100,7 +100,7 @@ public class DaoServiceImpl implements DaoService, BeanFactoryAware
                 {
                     // Check to see if this a DynaNode -- no class but should be registered in typeService.
                     if (typeService.getType(type) != null)
-                        return (GenericDao) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
+                        return (GenericDao<T, Serializable>) beanFactory.getBean(UNIVERSAL_JCR_DAO_KEY);
                     throw new OtherObjectsException("Could not fetch DAO for non-instantiatable type: " + type, e);
                 }
             }

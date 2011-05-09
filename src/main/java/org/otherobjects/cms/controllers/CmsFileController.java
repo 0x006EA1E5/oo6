@@ -77,9 +77,11 @@ public class CmsFileController
 
         CmsFile cmsFile = null;
         GenericJcrDao genericDao = (GenericJcrDao) jackrabbitDataStore.getDao(typeDef);
-
+        
+        boolean isNew = true;
         if (StringUtils.isNotBlank(id))
         {
+            isNew = false;
             cmsFile = (CmsFile) jackrabbitDataStore.get(id);
         }
         else
@@ -102,17 +104,17 @@ public class CmsFileController
         if (StringUtils.isBlank(id))
         {
             // FIXME This should be done in the validation
-            Assert.notNull(cmsFile.getNewFile(), "A file must be uploaded when creating new images.");
+            Assert.notNull(cmsFile.getNewFile(), "A file must be uploaded when creating new files.");
             cmsFile.setOriginalFileName(cmsFile.getNewFile().getOriginalFilename());
 
             // Check if we have a image with the same name already stored
             int suffix = 2;
-            Object existingImage = genericDao.getByPath(cmsFile.getJcrPath());
+            Object existingFile = genericDao.getByPath(cmsFile.getJcrPath());
             String fileStem = StringUtils.substringBeforeLast(cmsFile.getCode(), ".");
-            while (existingImage != null)
+            while (existingFile != null)
             {
                 cmsFile.setCode(fileStem + "-" + (suffix++) + "." + cmsFile.getExtension());
-                existingImage = genericDao.getByPath(cmsFile.getJcrPath());
+                existingFile = genericDao.getByPath(cmsFile.getJcrPath());
             }
 
             // Make sure we always have a label
@@ -120,29 +122,39 @@ public class CmsFileController
                 cmsFile.setLabel(cmsFile.getCode());
 
         }
-
+        
+        boolean readyToSave = !(errors != null && errors.hasErrors());
+        
+        
         if (cmsFile.getNewFile() != null)
         {
-            // FIXME Merge this with code below
-            OoResource resource = ooResourceLoader.getResource("/data/files/" + cmsFile.getCode());
+            OoResource resource = ooResourceLoader.getResource("/data/" + CmsFile.DATA_FILE_COLLECTION_NAME + "/" + cmsFile.getCode());
             cmsFile.setMimeType(getMimeType(cmsFile.getCode()).toString());
-            cmsFile.setFileSize(resource.getFile().length());
+            if(readyToSave)
+            {
+                if(!isNew) // delete old version
+                {
+                    try{
+                        resource.getFile().delete();
+                    }
+                    catch(IOException e)
+                    {
+                        logger.warn("Couldn't cleanup old version", e);
+                    }
+                }
+                cmsFile.getNewFile().transferTo(resource.getFile());
+                cmsFile.setFileSize(resource.getFile().length());
+            }
+                
         }
         
         // Save
         boolean success = false;
-        if (!(errors != null && errors.hasErrors()))
+        if (readyToSave)
         {
             // Save new object
             cmsFile = (CmsFile) genericDao.save(cmsFile, false);
             success = true;
-        }
-
-        if (cmsFile.getNewFile() != null)
-        {
-
-            OoResource resource = ooResourceLoader.getResource("/data/files/" + cmsFile.getCode());
-            cmsFile.getNewFile().transferTo(resource.getFile());
         }
 
         // Prepare return data

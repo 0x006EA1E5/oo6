@@ -13,12 +13,14 @@ import org.otherobjects.cms.types.annotation.Type;
  * @author rich
  */
 @Type
-public class TemplateBlockReference extends BaseNode {
+public class TemplateBlockReference extends BaseNode
+{
     private String code;
     private TemplateBlock block;
     private DynaNode blockData;
 
-    public TemplateBlockReference() {
+    public TemplateBlockReference()
+    {
         this.code = String.valueOf(new Date().getTime());
     }
 
@@ -27,7 +29,8 @@ public class TemplateBlockReference extends BaseNode {
      *  
      * @return
      */
-    public boolean isFullyPublished() {
+    public boolean isFullyPublished()
+    {
         if (!isPublished())
             return false;
         if (blockData != null && !blockData.isPublished())
@@ -35,29 +38,35 @@ public class TemplateBlockReference extends BaseNode {
         return true;
     }
 
-    public String getCode() {
+    public String getCode()
+    {
         return this.code;
     }
 
-    public void setCode(String code) {
+    public void setCode(String code)
+    {
         this.code = code;
     }
 
     @Property(order = 10, type = PropertyType.REFERENCE)
-    public TemplateBlock getBlock() {
+    public TemplateBlock getBlock()
+    {
         return block;
     }
 
-    public void setBlock(TemplateBlock block) {
+    public void setBlock(TemplateBlock block)
+    {
         this.block = block;
     }
 
     @Property(order = 20, type = PropertyType.COMPONENT, fieldType = "none")
-    public DynaNode getBlockData() {
+    public DynaNode getBlockData()
+    {
         return blockData;
     }
 
-    public void setBlockData(DynaNode blockData) {
+    public void setBlockData(DynaNode blockData)
+    {
         this.blockData = blockData;
     }
 

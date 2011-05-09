@@ -1,5 +1,6 @@
 package org.otherobjects.cms.model;
 
+import org.otherobjects.cms.Url;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
@@ -7,7 +8,7 @@ import org.otherobjects.cms.util.StringUtils;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 // FIXME Sets size to OLD file size not new file!
-@Type(labelProperty = "label", adminControllerUrl="/otherobjects/file")
+@Type(labelProperty = "label", adminControllerUrl = "/otherobjects/file")
 public class CmsFile extends BaseNode
 {
     public static final String DATA_FILE_COLLECTION_NAME = "files";
@@ -32,10 +33,10 @@ public class CmsFile extends BaseNode
     @Override
     public String getCode()
     {
-        String fileStem = StringUtils.substringBeforeLast(getOriginalFileName(),".");
+        String fileStem = StringUtils.substringBeforeLast(getOriginalFileName(), ".");
         return this.code != null ? this.code : StringUtils.generateUrlCode(fileStem) + "." + getExtension();
     }
-    
+
     @Override
     @Property(order = 10, required = false)
     public String getLabel()
@@ -103,9 +104,8 @@ public class CmsFile extends BaseNode
     {
         this.originalFileName = originalFileName;
     }
-    
-    
-    @Property(order = 70)
+
+    @Property(order = 70, fieldType = "none")
     public Long getFileSize()
     {
         return fileSize;
@@ -115,9 +115,8 @@ public class CmsFile extends BaseNode
     {
         this.fileSize = fileSize;
     }
-    
 
-    @Property(order = 5, type=PropertyType.TRANSIENT)
+    @Property(order = 5, type = PropertyType.TRANSIENT)
     public CommonsMultipartFile getNewFile()
     {
         return newFile;
@@ -134,11 +133,34 @@ public class CmsFile extends BaseNode
      */
     public String getExtension()
     {
-        if(getOriginalFileName() == null)
+        if (getOriginalFileName() == null)
             return null;
-        
+
         String extension = getOriginalFileName().substring(getOriginalFileName().lastIndexOf(".") + 1).toLowerCase();
         return extension;
     }
     
+    /**
+     * Returns the correct syntax for inserting this file in the wiki editor.
+     * 
+     * @return the wiki syntax
+     */
+    public String getWikiCode()
+    {
+        return "[FILE:" + getCode() + "]";
+    }
+
+
+    @Override
+    public Url getOoUrl()
+    {
+        return new Url("/public-data/" + DATA_FILE_COLLECTION_NAME + "/" + getCode()); //FIXME should honor site.public.data.url setting
+    }
+
+    @Override
+    public String getOoIcon()
+    {
+        return "/otherobjects/static/icons/file-" + getExtension() + ".gif";
+    }
+
 }

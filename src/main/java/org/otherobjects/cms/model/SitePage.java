@@ -50,24 +50,10 @@ public abstract class SitePage extends BaseNode //implements SiteItem
         return (org.apache.commons.lang.StringUtils.isNotBlank(getExtraNavigationLabel())) ? getExtraNavigationLabel() : getLabel();
     }
 
-    // FIXME Move to PublishingOptions object?
-    private Template template;
-
     @Override
     public String getCode()
     {
         return StringUtils.generateUrlCode(getLabel()) + ".html";
-    }
-
-    @Property(order = 100)
-    public Template getTemplate()
-    {
-        return template;
-    }
-
-    public void setTemplate(Template template)
-    {
-        this.template = template;
     }
 
     @JSON(include = false)

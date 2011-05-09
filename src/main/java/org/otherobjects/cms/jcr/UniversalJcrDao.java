@@ -7,10 +7,10 @@ import org.otherobjects.cms.model.BaseNode;
 
 public interface UniversalJcrDao extends GenericJcrDao<BaseNode>
 {
-    List<BaseNode> getAllByType(String type);
-    List<BaseNode> getAllByType(Class<?> type);
+    <X extends BaseNode> List<X> getAllByType(String type);
+    <X extends BaseNode> List<X> getAllByType(Class<X> type);
 
-    List<BaseNode> getByPathAndType(String path, String type);
+    <X extends BaseNode> List<X> getByPathAndType(String path, String type);
     
     BaseNode create(String type);
     BaseNode copy(String id, String newPath);

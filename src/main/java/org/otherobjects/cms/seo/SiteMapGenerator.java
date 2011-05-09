@@ -1,3 +1,22 @@
+/*
+ * This file is part of the OTHERobjects Content Management System.
+ * 
+ * Copyright 2007-2009 OTHER works Limited.
+ * 
+ * OTHERobjects is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OTHERobjects is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OTHERobjects.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.otherobjects.cms.seo;
 
 import java.util.Date;
@@ -44,13 +63,7 @@ public class SiteMapGenerator
         
         urlset.addAttribute("xmlns:xsi","http://www.w3.org/2001/XMLSchema-instance");
         urlset.addAttribute("xsi:schemaLocation","http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd");
-        
-//        //<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-//            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-//            xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-//            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-        
-        
+    
         for (TreeNode item : items)
         {
             // FIXME We should store URLs in the TreeNode?
@@ -78,8 +91,6 @@ public class SiteMapGenerator
      * <p>See <a href="http://www.w3.org/TR/NOTE-datetime">http://www.w3.org/TR/NOTE-datetime</a> for the specification.
      * 
      * <p>Note that this will always return the time in UTC.
-     * 
-     * TODO Move to a utility package?
      * 
      * @param date
      * @return

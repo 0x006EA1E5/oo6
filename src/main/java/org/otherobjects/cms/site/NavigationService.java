@@ -13,4 +13,6 @@ public interface NavigationService
     List<TreeNode> getAllNodes();
 
     TreeNode getNode(String path, String currentPath);
+    
+    List<String> getRolesForPath(String path);
 }

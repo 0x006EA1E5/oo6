@@ -68,10 +68,11 @@ public class UniversalJcrDaoJackrabbit extends GenericJcrDaoJackrabbit<BaseNode>
         }
     }
 
-    public List<BaseNode> getAllByType(String typeName)
+    @SuppressWarnings("unchecked")
+    public <T extends BaseNode> List<T> getAllByType(String typeName)
     {
         // TODO Is this the most performant query method?
-        return getAllByJcrExpression("/jcr:root//element(*) [@ooType='" + typeName + "']");
+        return (List<T>) getAllByJcrExpression("/jcr:root//element(*) [@ooType='" + typeName + "']");
     }
 
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
@@ -84,14 +85,17 @@ public class UniversalJcrDaoJackrabbit extends GenericJcrDaoJackrabbit<BaseNode>
         this.typeService = typeService;
     }
 
-    public List<BaseNode> getAllByType(Class<?> type)
+    @SuppressWarnings("unchecked")
+    public <T extends BaseNode> List<T> getAllByType(Class<T> type)
     {
-        return getAllByType(type.getName());
+        return (List<T>) getAllByType(type.getName());
     }
 
-    public List<BaseNode> getByPathAndType(String path, String type)
+    public <T extends BaseNode> List<T> getByPathAndType(String path, String type)
     {
         // TODO Auto-generated method stub
         return null;
     }
+    
+
 }

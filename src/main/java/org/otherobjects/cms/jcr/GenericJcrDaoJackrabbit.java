@@ -2,6 +2,7 @@ package org.otherobjects.cms.jcr;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,7 +35,9 @@ import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.dao.PagedList;
 import org.otherobjects.cms.dao.PagedListImpl;
+import org.otherobjects.cms.events.ModificationEvent;
 import org.otherobjects.cms.events.PublishEvent;
+import org.otherobjects.cms.events.UnpublishEvent;
 import org.otherobjects.cms.model.Audited;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.model.User;
@@ -50,7 +53,6 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.springmodules.jcr.JcrCallback;
-import org.springmodules.jcr.JcrTemplate;
 
 /**
  * Base class for all JCR DAOs.
@@ -94,6 +96,11 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     public GenericJcrDaoJackrabbit(Class<T> persistentClass)
     {
         this.persistentClass = persistentClass;
+    }
+
+    public Class<T> getPersistentClass()
+    {
+        return this.persistentClass;
     }
 
     public String getPersistentClassName()
@@ -141,9 +148,8 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         // PERF Extra lookup required to check path change
         if (object.getId() != null)
             existingObj = get(object.getId());
-        if(object.getId() != null && existingObj == null)
+        if (object.getId() != null && existingObj == null)
             existingObj = getByPath(object.getJcrPath());
-            
 
         if (existingObj == null)
         {
@@ -151,6 +157,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
             Assert.notNull(object.getJcrPath(), "jcrPath must not be null when saving.");
             jcrMappingTemplate.insert(object);
             jcrMappingTemplate.save();
+            applicationContext.publishEvent(new ModificationEvent(this, object));
             return object;
         }
         else
@@ -161,8 +168,10 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
             // Update
             jcrMappingTemplate.update(object);
             jcrMappingTemplate.save();
+            applicationContext.publishEvent(new ModificationEvent(this, object));
             return object;
         }
+
     }
 
     private boolean canSaveWithRepositoryCheck(T object)
@@ -180,6 +189,13 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         // if the changeNumber has changed something else has saved the baseNode while we were working on it. So it shouldn't be saved.
         if (compareNode != null && compareNode.getVersion() == object.getVersion())
             return true;
+
+        // Update version when importing new content
+        if (compareNode != null && object.getVersion() == 0) // FIXME Use another value to identify imported nodes
+        {
+            object.setVersion(compareNode.getVersion());
+            return true;
+        }
 
         // change number is fine so check for the rest 
         if (object.isPublished())
@@ -212,6 +228,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         return false;
     }
 
+    //TODO check that this method differentiates correctly between user roles/workspaces when querying
     @SuppressWarnings("unchecked")
     public T getByPath(String path)
     {
@@ -225,8 +242,11 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         if (SecurityUtil.isEditor())
             return (T) jcrMappingTemplate.getObject(path);
 
-        //        return  (T) jcrMappingTemplate.getObject(path);
-        Element element = cache.get(path);
+        Element element = null;
+        if (this.cache == null)
+            logger.warn("CacheManager not set, running in test mode?");
+        else
+            element = this.cache.get(path);
 
         if (element == null)
         {
@@ -235,7 +255,8 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
             {
                 // Only put published objects in the cache
                 element = new Element(path, object);
-                cache.put(element);
+                if (this.cache != null)
+                    this.cache.put(element);
             }
             return object;
         }
@@ -245,7 +266,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         }
     }
 
-    public boolean exists(String id)
+    public boolean exists(Serializable id)
     {
         // If there is no id then this object hasn't been saved
         Assert.notNull(id, "id must not be null.");
@@ -328,7 +349,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     }
 
     @SuppressWarnings("unchecked")
-    public T get(final String id)
+    public T get(final Serializable id)
     {
         try
         {
@@ -337,7 +358,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                 public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
                 {
 
-                    Object o = manager.getObjectByUuid(id);
+                    Object o = manager.getObjectByUuid((String) id);
 
                     return o;
                 }
@@ -348,10 +369,15 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
             return null;
         }
     }
+    
+    public CmsNode getById(Serializable id) {
+        return get(id);
+    }
+    
 
-    public void remove(final String id)
+    public void remove(final Serializable id)
     {
-        String path = convertIdToPath(id);
+        String path = convertIdToPath((String) id);
         jcrMappingTemplate.remove(path);
         // FIXME Do we need these explicit saves? They break transcations?
         jcrMappingTemplate.save();
@@ -370,7 +396,7 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                         liveSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
                         try
                         {
-                            Node liveNode = liveSession.getNodeByUUID(id);
+                            Node liveNode = liveSession.getNodeByUUID((String) id);
                             liveNode.remove();
                             liveSession.save();
                         }
@@ -783,8 +809,12 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
                         Node n = nodes.nextNode();
                         //FIXME Extra lookup is bad. Can we avoid UUID requirement too
                         //FIXME Avoid jcr: nodes better...
+                        //FIXME nullifying a node like could have unexpected consequences 
+                        try {
                         if (!n.getName().startsWith("jcr:") && n.getPrimaryNodeType().getName().equals("oo:node"))
                             list.add((T) manager.getObjectByUuid(n.getUUID()));
+                        } 
+                        catch ( Exception e) { logger.warn("problem with the node: " +n.toString( ) + " try to nullify it "); n=null ; }
                     }
                     return list;
                 }
@@ -831,54 +861,10 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
         });
     }
 
-    @SuppressWarnings("unchecked")
     public List<T> getAllByJcrExpression(final String jcrExpression)
     {
-        return (List<T>) jcrMappingTemplate.execute(new JcrMappingCallback()
-        {
-            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
-            {
-                try
-                {
-                    String selector = null;
-                    String jcr = jcrExpression;
-                    if (jcrExpression.contains("{"))
-                    {
-                        int selectorStart = jcrExpression.lastIndexOf("{");
-                        jcr = jcr.substring(0, selectorStart);
-                        selector = jcrExpression.substring(selectorStart);
-                    }
+        return getAllByJcrExpression(jcrExpression, false);
 
-                    javax.jcr.query.QueryManager queryManager = manager.getSession().getWorkspace().getQueryManager();
-                    javax.jcr.query.Query query = queryManager.createQuery(jcr, javax.jcr.query.Query.XPATH);
-                    javax.jcr.query.QueryResult queryResult = query.execute();
-                    NodeIterator nodeIterator = queryResult.getNodes();
-                    List<T> results = new ArrayList<T>();
-                    //FIXME This is a double lookup. Can we convert node directly?
-                    while (nodeIterator.hasNext())
-                    {
-                        Node nextNode = nodeIterator.nextNode();
-                        try
-                        {
-                            results.add((T) manager.getObjectByUuid(nextNode.getUUID()));
-                        }
-                        catch (Exception e)
-                        {
-                            logger.warn("Could not export: " + nextNode.getPath());
-                        }
-                    }
-
-                    if (selector != null)
-                        return new RangeSelector<T>(selector, results).getSelected();
-                    else
-                        return results;
-                }
-                catch (Exception e)
-                {
-                    throw new JcrMappingException(e);
-                }
-            }
-        });
     }
 
     @SuppressWarnings("unchecked")
@@ -1118,4 +1104,107 @@ public class GenericJcrDaoJackrabbit<T extends CmsNode & Audited> implements Gen
     //    {
     //        this.ruleExecutor = ruleExecutor;
     //    }
+
+    //removes the node from the live workspace
+    public void unpublish(final T baseNode, final String message)
+    {
+        if (this.cache != null)
+            this.cache.put(new Element(baseNode.getJcrPath(), baseNode));
+        jcrMappingTemplate.execute(new JcrMappingCallback()
+        {
+            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+            {
+                try
+                {
+                    Session liveSession = null;
+                    try
+                    {
+
+                        // get an edit workspace session
+                        liveSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.LIVE_WORKSPACE_NAME);
+                        Workspace liveWorkspace = liveSession.getWorkspace();
+                        try
+                        {
+                            liveWorkspace.move(baseNode.getJcrPath(), "/unpublished");
+                        }
+                        catch (Exception e)
+                        {
+                            throw new OtherObjectsException("There was a problem unpublishing the node with path: " + baseNode.getJcrPath());
+                        }
+
+                    }
+                    finally
+                    {
+                        if (liveSession != null)
+                            liveSession.logout();
+                    }
+                    return null;
+                }
+                catch (Exception e)
+                {
+                    throw new JcrMappingException(e);
+                }
+            }
+        }, true);
+        applicationContext.publishEvent(new UnpublishEvent(this, baseNode));
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<T> getAllByJcrExpression(final String jcrExpression, final boolean useEdit)
+    {
+        return (List<T>) jcrMappingTemplate.execute(new JcrMappingCallback()
+        {
+            public Object doInJcrMapping(ObjectContentManager manager) throws JcrMappingException
+            {
+                try
+                {
+                    Workspace workspace = manager.getSession().getWorkspace();
+                    String selector = null;
+                    String jcr = jcrExpression;
+                    if (jcrExpression.contains("{"))
+                    {
+                        int selectorStart = jcrExpression.lastIndexOf("{");
+                        jcr = jcr.substring(0, selectorStart);
+                        selector = jcrExpression.substring(selectorStart);
+                    }
+                    if (useEdit)
+                    {
+                        // get an edit workspace session
+                        Session editSession = sessionFactory.getSession(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME);
+                        workspace = editSession.getWorkspace();
+                        workspace.getAccessibleWorkspaceNames();
+                    }
+                    javax.jcr.query.QueryManager queryManager = workspace.getQueryManager();
+                    javax.jcr.query.Query query = queryManager.createQuery(jcr, javax.jcr.query.Query.XPATH);
+                    javax.jcr.query.QueryResult queryResult = query.execute();
+                    NodeIterator nodeIterator = queryResult.getNodes();
+                    List<T> results = new ArrayList<T>();
+                    //FIXME This is a double lookup. Can we convert node directly?
+                    while (nodeIterator.hasNext())
+                    {
+                        Node nextNode = nodeIterator.nextNode();
+                        try
+                        {
+                            results.add((T) manager.getObjectByUuid(nextNode.getUUID()));
+                        }
+                        catch (Exception e)
+                        {
+                            logger.warn("Could not export: " + nextNode.getPath());
+                        }
+                    }
+
+                    if (selector != null)
+                        return new RangeSelector<T>(selector, results).getSelected();
+                    else
+                        return results;
+                }
+                catch (Exception e)
+                {
+                    throw new JcrMappingException(e);
+                }
+            }
+        });
+    }
+
 }

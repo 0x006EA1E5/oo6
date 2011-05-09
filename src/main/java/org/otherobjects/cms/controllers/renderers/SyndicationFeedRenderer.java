@@ -103,7 +103,7 @@ public class SyndicationFeedRenderer implements ResourceRenderer
 
                 entry = new SyndEntryImpl();
 
-                String permaLink = ((Linkable) node).getHref().getAbsoluteLink();
+                String permaLink = ((Linkable) node).getOoUrl().getAbsoluteLink();
                 entry.setLink(permaLink);
 
                 entry.setUri("urn:uuid:" + node.getId());

@@ -23,7 +23,7 @@ import freemarker.template.TemplateException;
 public class OOFreeMarkerView extends FreeMarkerView
 {
     private final Logger logger = LoggerFactory.getLogger(OOFreeMarkerView.class);
-    
+
     private static final String DEFAULT_ERROR_TEMPLATE_PATH = "/site/templates/pages/500.ftl";
     private static final String DEFAULT_EXCEPTION_ATTRIBUTE = "exception";
 
@@ -32,17 +32,16 @@ public class OOFreeMarkerView extends FreeMarkerView
     {
         try
         {
-            model.put(SPRING_MACRO_REQUEST_CONTEXT_ATTRIBUTE, new OORequestContext(request, response, 
-                    getServletContext(), model));
+            model.put(SPRING_MACRO_REQUEST_CONTEXT_ATTRIBUTE, new OORequestContext(request, getServletContext(), model));
             super.doRender(model, request, response);
         }
         catch (Exception e)
         {
             // Render error page on exception
-            logger.error("Error whilst rendering view.", e);
-            if(e instanceof TemplateException)
+            logger.error("Error whilst rendering view: " + e.getMessage());
+            if (e instanceof TemplateException)
             {
-                TemplateException te = (TemplateException)e;
+                TemplateException te = (TemplateException) e;
                 System.out.println(te.getFTLInstructionStack());
             }
             response.reset();
@@ -51,19 +50,19 @@ public class OOFreeMarkerView extends FreeMarkerView
             processTemplate(getTemplate(DEFAULT_ERROR_TEMPLATE_PATH, locale), new SimpleHash(model), response);
         }
     }
-    
-//  @SuppressWarnings("unchecked")
-//  //@Override
-//  protected void xprocessTemplate(Template template, Map model, HttpServletResponse response) throws IOException, TemplateException
-//  {
-//      /* Write via StringWriter so that if an exception
-//       * is thrown during rendering we have not already
-//       * sent a response to the browser. This allows us
-//       * to reliably send an error page.
-//       */
-//      StringWriter writer = new StringWriter();
-//      template.process(model, writer);
-//      //FIXME Test performance of StringWriter in this example
-//      response.getWriter().write(writer.toString());
-//  }  
+
+    //  @SuppressWarnings("unchecked")
+    //  //@Override
+    //  protected void xprocessTemplate(Template template, Map model, HttpServletResponse response) throws IOException, TemplateException
+    //  {
+    //      /* Write via StringWriter so that if an exception
+    //       * is thrown during rendering we have not already
+    //       * sent a response to the browser. This allows us
+    //       * to reliably send an error page.
+    //       */
+    //      StringWriter writer = new StringWriter();
+    //      template.process(model, writer);
+    //      //FIXME Test performance of StringWriter in this example
+    //      response.getWriter().write(writer.toString());
+    //  }  
 }

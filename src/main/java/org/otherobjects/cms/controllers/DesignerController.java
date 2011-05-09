@@ -43,7 +43,7 @@ public class DesignerController
     @RequestMapping("/designer/saveArrangement/**")
     public ModelAndView saveArrangement(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
+        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao(BaseNode.class);
         String templateId = request.getParameter("templateId");
 
         String arrangement = request.getParameter("arrangement");
@@ -96,7 +96,7 @@ public class DesignerController
     @RequestMapping("/designer/publishTemplate/**")
     public ModelAndView publishTemplate(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
+        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao(BaseNode.class);
         String templateId = RequestUtils.getId(request);
 
         // Load existing template
@@ -132,7 +132,7 @@ public class DesignerController
     @RequestMapping("/designer/createTemplate/**")
     public ModelAndView createTemplate(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao("baseNode");
+        UniversalJcrDao dao = (UniversalJcrDao) daoService.getDao(BaseNode.class);
         String resourceObjectId = RequestUtils.getId(request);
         BaseNode resourceObject = dao.get(resourceObjectId);
 

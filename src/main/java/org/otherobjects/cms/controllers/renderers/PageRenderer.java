@@ -1,5 +1,6 @@
 package org.otherobjects.cms.controllers.renderers;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -7,8 +8,10 @@ import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsNode;
+import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.cms.model.Template;
 import org.otherobjects.cms.model.TemplateLayout;
+import org.otherobjects.cms.model.TemplateMapping;
 import org.otherobjects.cms.util.StringUtils;
 import org.springframework.util.Assert;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,6 +21,8 @@ public class PageRenderer implements ResourceRenderer
     //    private NavigatorService navigatorService;
     //    private SiteNavigatorService siteNavigatorService;
     private DaoService daoService;
+    @Resource
+    private UniversalJcrDao universalJcrDao;
 
     public ModelAndView handleRequest(CmsNode o, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
@@ -49,9 +54,9 @@ public class PageRenderer implements ResourceRenderer
         view.addObject("ooTemplate", template);
 
         // TODO Would be good to have a flag to enable this for testing
-//         ActionUtils actionUtils = new ActionUtils(request, response, null, null);
-//         actionUtils.flashWarning("Hey guys! How is it going?");
-        
+        //         ActionUtils actionUtils = new ActionUtils(request, response, null, null);
+        //         actionUtils.flashWarning("Hey guys! How is it going?");
+
         return view;
     }
 
@@ -78,9 +83,9 @@ public class PageRenderer implements ResourceRenderer
     }
 
     /**
-     * FIXME Classes for TemplateDao and Template?
      * @param resourceObject
-     * @return
+     * determines which template to render with the resource object
+     * @return Template
      */
     private Template determineTemplate(BaseNode resourceObject)
     {
@@ -94,15 +99,55 @@ public class PageRenderer implements ResourceRenderer
                 return template;
         }
 
-        UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);
+        if (resourceObject.hasProperty("publishingOptions") && resourceObject.getPropertyValue("publishingOptions") != null)
+        {
+            template = (Template) resourceObject.getPropertyValue("publishingOptions.template");
+            if (template != null)
+                return template;
+        }
 
+        //check for template in parent folder 
+        String typeName = resourceObject.getTypeDef().getName();
+        SiteFolder folder = (SiteFolder) resourceObject.getParentNode(universalJcrDao);
+        Template t = getTemplateFromFolder(typeName, folder);
+        if (t != null)
+            return t;
+        return getTemplateByName(typeName);
+    }
+
+    /**
+     * @param resourceObject
+     * @return Template
+     * 
+     */
+    private Template getTemplateByName(String typeName)
+    {
+        Template template;
         String templateCode = "";
-        if (resourceObject.getTypeDef().getName().contains("."))
-            templateCode = StringUtils.substringAfterLast(resourceObject.getTypeDef().getName(), ".").toLowerCase();
+        if (typeName.contains("."))
+            templateCode = StringUtils.substringAfterLast(typeName, ".").toLowerCase();
         else
-            templateCode = resourceObject.getTypeDef().getName().toLowerCase();
-
+            templateCode = typeName.toLowerCase();
         template = (Template) universalJcrDao.getByPath("/designer/templates/" + templateCode);
         return template;
     }
+
+    /**
+     * @param resourceObject
+     * @param folder
+     */
+    private Template getTemplateFromFolder(String typeName, SiteFolder folder)
+    {
+        TemplateMapping tm = folder.getTemplateMapping(typeName);
+        if (tm != null)
+            return tm.getTemplate();
+        else
+        {
+            if (folder.getParentFolder(universalJcrDao) == null)
+                return null;
+            else
+                return getTemplateFromFolder(typeName, folder.getParentFolder(universalJcrDao));
+        }
+    }
+
 }

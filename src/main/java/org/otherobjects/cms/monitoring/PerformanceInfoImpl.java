@@ -19,7 +19,6 @@ public class PerformanceInfoImpl implements PerformanceInfo
 
     public PerformanceInfoImpl()
     {
-        System.err.println("Creating Performance Info");
     }
     
     public void registerEvent(String details, long time)

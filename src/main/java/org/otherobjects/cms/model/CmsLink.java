@@ -22,22 +22,19 @@ package org.otherobjects.cms.model;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
-import org.otherobjects.cms.util.StringUtils;
 
 /**
- * MetaData for site pages. This data augments the publishing and audit information already
- * stored and is primarily for SEO (internal search and external engines).
+ * CmsLinks used to reference elements of the site, these are specific to the node that contains them 
  */
-@Type(codeProperty = "")
-public class MetaData extends BaseComponent
+@Type(codeProperty = "title")
+public class CmsLink extends BaseComponent
 {
     private String title;
-    private String description;
-    private String keywords;
+    private String url;
 
     public String getOoLabel()
     {
-        return "MetaData (title = " + StringUtils.trim(this.title, 30) + ", description = " + StringUtils.trim(this.description, 30) + ", keywords = " + StringUtils.trim(this.keywords, 30) + ")";
+        return "CmsLink to "+this.title+")";
     }
 
     /**
@@ -66,10 +63,10 @@ public class MetaData extends BaseComponent
      * 
      * @return
      */
-    @Property(order = 20, type = PropertyType.TEXT, size = 1000)
-    public String getDescription()
+    @Property(order = 20, type = PropertyType.TEXT, size = 150)
+    public String getUrl()
     {
-        return description;
+        return url;
     }
 
     /**
@@ -77,39 +74,19 @@ public class MetaData extends BaseComponent
      * 
      * @param description
      */
-    public void setDescription(String description)
+    public void setUrl(String url)
     {
-        this.description = description;
+        this.url = url;
     }
 
-    /**
-     * Returns meta keywords.
-     * 
-     * @return
-     */
-    @Property(order = 30, type = PropertyType.TEXT, size = 1000)
-    public String getKeywords()
-    {
-        return keywords;
-    }
-
-    /**
-     * Sets the meta keywords.
-     * 
-     * @param keywords
-     */
-    public void setKeywords(String keywords)
-    {
-        this.keywords = keywords;
-    }
+ 
 
     @Override
     public int hashCode()
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((description == null) ? 0 : description.hashCode());
-        result = prime * result + ((keywords == null) ? 0 : keywords.hashCode());
+        result = prime * result + ((url == null) ? 0 : url.hashCode());
         result = prime * result + ((title == null) ? 0 : title.hashCode());
         return result;
     }
@@ -123,20 +100,13 @@ public class MetaData extends BaseComponent
             return false;
         if (getClass() != obj.getClass())
             return false;
-        MetaData other = (MetaData) obj;
-        if (description == null)
+        CmsLink other = (CmsLink) obj;
+        if (url == null)
         {
-            if (other.description != null)
+            if (other.url != null)
                 return false;
         }
-        else if (!description.equals(other.description))
-            return false;
-        if (keywords == null)
-        {
-            if (other.keywords != null)
-                return false;
-        }
-        else if (!keywords.equals(other.keywords))
+        else if (!url.equals(other.url))
             return false;
         if (title == null)
         {

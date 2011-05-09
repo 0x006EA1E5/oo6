@@ -52,6 +52,9 @@ public class TypeDefImpl implements TypeDef
     /** Stores which property should be used for the label. */
     private String labelProperty;
     
+    /** Stores which property should be used for the thumbnail image. */
+    private String imageProperty;
+    
     /** Stores which property should be used for the code */
     private String codeProperty;
 
@@ -262,5 +265,15 @@ public class TypeDefImpl implements TypeDef
     public void setCodeProperty(String codeProperty)
     {
         this.codeProperty = codeProperty;
+    }
+
+    public String getImageProperty()
+    {
+        return imageProperty;
+    }
+
+    public void setImageProperty(String imageProperty)
+    {
+        this.imageProperty = imageProperty;
     }
 }

@@ -37,6 +37,12 @@ public class LocalizedMessage implements Serializable, Editable
     {
         return getId();
     }
+    
+    @Transient
+    public String getOoIcon()
+    {
+        return "/otherobjects/static/icons/comment.png";
+    }
 
     @Transient
     public String getEditableId()

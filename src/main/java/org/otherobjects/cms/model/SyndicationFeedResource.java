@@ -24,7 +24,7 @@ import flexjson.JSON;
 @Type(label = "Syndication Feed")
 public class SyndicationFeedResource extends BaseNode
 {
-    private static final String ICON_PATH = "otherobjects.resources/static/icons/feed.png";
+    private static final String ICON_PATH = "/otherobjects/static/icons/feed.png";
 
     private String label;
     private String description;

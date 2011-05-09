@@ -7,7 +7,7 @@ import org.otherobjects.cms.types.annotation.Type;
 @Type
 public class RedirectResource extends BaseNode
 {
-    private static final String ICON_PATH = "otherobjects.resources/static/icons/page-white-go.png";
+    private static final String ICON_PATH = "/otherobjects/static/icons/redirect.png";
 
     private String label;
     private String url;

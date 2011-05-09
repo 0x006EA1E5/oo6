@@ -99,7 +99,7 @@ public class SetupController
         if (bindingResult.hasErrors())
         {
             actionUtils.flashWarning("Your object could not be saved. See below for errors.");
-            return "/otherobjects/templates/otherobjects/login/setup";
+            return "/otherobjects/templates/workbench/user-management/setup";
         }
         else
         {

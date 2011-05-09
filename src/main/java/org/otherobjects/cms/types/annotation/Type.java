@@ -27,5 +27,7 @@ public @interface Type
     String store() default TypeDef.JACKRABBIT;
 
     String codeProperty() default "code";
-
+    
+    String imageProperty() default "";
+    
 }

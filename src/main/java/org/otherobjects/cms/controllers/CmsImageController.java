@@ -1,15 +1,43 @@
+/*
+ * This file is part of the OTHERobjects Content Management System.
+ * 
+ * Copyright 2007-2009 OTHER works Limited.
+ * 
+ * OTHERobjects is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OTHERobjects is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OTHERobjects.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.otherobjects.cms.controllers;
 
 import java.awt.Dimension;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.filefilter.NameFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.Url;
 import org.otherobjects.cms.binding.BindService;
@@ -85,9 +113,10 @@ public class CmsImageController
 
         CmsImage cmsImage = null;
         GenericJcrDao genericDao = (GenericJcrDao) jackrabbitDataStore.getDao(typeDef);
-
+        boolean isNew = true;
         if (StringUtils.isNotBlank(id))
         {
+            isNew = false;
             cmsImage = (CmsImage) jackrabbitDataStore.get(id);
         }
         else
@@ -166,8 +195,11 @@ public class CmsImageController
         if (cmsImage.getNewFile() != null)
         {
             // Store image in originals folder
-            // FIXME Delete previous one if needed
-            OoResource resource = ooResourceLoader.getResource("/data/images/originals/" + cmsImage.getCode());
+            if (!isNew) // clean up old image resource - we are replacing an existing image
+            {
+                cleanupExisting(cmsImage);
+            }
+            OoResource resource = ooResourceLoader.getResource(CmsImage.DEFAULT_FOLDER + CmsImage.ORIGINALS_PATH + cmsImage.getCode());
             cmsImage.getNewFile().transferTo(resource.getFile());
 
             // Create thumbnail
@@ -224,6 +256,103 @@ public class CmsImageController
             }
         }
 
+    }
+
+    /**
+     * Imports an image from a POST. Used for Picnik integration.
+     * 
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping({"/image/import"})
+    public ModelAndView importImage(HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+
+        RequestUtils.logParameters(logger, request);
+
+
+        // Prepare object (create or fetch)
+        String id = request.getParameter("id");
+        String imageUrl = request.getParameter("img");
+
+        InputStream in = new URL(imageUrl).openStream();
+        byte[] imageData = null;
+        try
+        {
+            imageData = IOUtils.toByteArray(in);
+        }
+        finally
+        {
+            IOUtils.closeQuietly(in);
+        }
+
+        String typeName = CmsImage.class.getName();
+        Assert.notNull(typeName, "Type name not specified in _oo_type parameter.");
+        TypeDef typeDef = typeService.getType(typeName);
+        Assert.notNull(typeDef, "No typeDef found for type: " + typeName);
+
+        CmsImage cmsImage = null;
+        GenericJcrDao genericDao = (GenericJcrDao) jackrabbitDataStore.getDao(typeDef);
+        cmsImage = (CmsImage) jackrabbitDataStore.get(id);
+        cmsImage.setId(null);
+
+        // Check if we have a image with the same name already stored
+        int suffix = 2;
+        Object existingImage = genericDao.getByPath(cmsImage.getJcrPath());
+        String fileStem = StringUtils.substringBeforeLast(cmsImage.getCode(), ".");
+        while (existingImage != null)
+        {
+            cmsImage.setCode(fileStem + "-" + (suffix++) + "." + cmsImage.getExtension());
+            existingImage = genericDao.getByPath(cmsImage.getJcrPath());
+        }
+
+        // Save image information
+        Dimension imageDimensions = ImageUtils.getImageDimensions(new ByteArrayInputStream(imageData));
+        cmsImage.setOriginalWidth(new Double(imageDimensions.getWidth()).longValue());
+        cmsImage.setOriginalHeight(new Double(imageDimensions.getHeight()).longValue());
+
+        // Make sure we always have a label
+        if (cmsImage.getLabel() == null)
+            cmsImage.setLabel(cmsImage.getCode());
+
+        // Save
+        cmsImage = (CmsImage) genericDao.save(cmsImage, false);
+
+        OoResource resource = ooResourceLoader.getResource(CmsImage.DEFAULT_FOLDER + CmsImage.ORIGINALS_PATH + cmsImage.getCode());
+        FileUtils.writeByteArrayToFile(resource.getFile(), imageData);
+
+        // Create thumbnail
+        this.cmsImageTool.getThumbnail(cmsImage);
+
+        // Prepare return data
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("success", true);
+        data.put("formObject", cmsImage);
+
+        ActionUtils actionUtils = new ActionUtils(request, response, null, null);
+        actionUtils.flashInfo("Your object was saved.");
+        Url u = new Url("/otherobjects/workbench/view/" + cmsImage.getEditableId());
+        response.sendRedirect(u.toString());
+        return null;
+
+    }
+
+    private void cleanupExisting(CmsImage cmsImage)
+    {
+        try
+        {
+            OoResource imageDir = ooResourceLoader.getResource(CmsImage.DEFAULT_FOLDER);
+            for (File oldImage : (Collection<File>) FileUtils.listFiles(imageDir.getFile(), new NameFileFilter(cmsImage.getCode()), TrueFileFilter.INSTANCE))
+            {
+                oldImage.delete();
+            }
+        }
+        catch (IOException e)
+        {
+            logger.warn("Couldn't cleanup preexisting image files", e);
+        }
     }
 
     public void setTypeService(TypeService typeService)

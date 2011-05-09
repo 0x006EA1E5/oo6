@@ -21,7 +21,7 @@ public interface GenericDao<T, PK extends Serializable>
     T save(T object, boolean validate);
     
     /**
-     * If PK is null an assertion exceprtion is thrown.
+     * If PK is null an assertion exception is thrown.
      * 
      * @param id
      * @return
@@ -43,4 +43,6 @@ public interface GenericDao<T, PK extends Serializable>
     List<T> getAll();
     PagedList<T> getAllPaged(int pageSize, int pageNo, String filterQuery, String sortField, boolean asc);
     PagedList<T> getPagedByQuery(String query, int pageSize, int pageNo, String filterQuery, String sortField, boolean asc);
+    
+    Class<T> getPersistentClass();
 }

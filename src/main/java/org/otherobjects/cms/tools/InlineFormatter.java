@@ -1,5 +1,6 @@
 package org.otherobjects.cms.tools;
 
+import java.io.FileNotFoundException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
@@ -131,7 +132,17 @@ public class InlineFormatter
 
             /* Get or create a template */
             String templateName = "/otherobjects/templates/inline/" + tagName + ".ftl";
-            Template temp = configuration.getTemplate(templateName);
+            Template temp;
+            try
+            {
+                temp = configuration.getTemplate(templateName);
+            }
+            catch (FileNotFoundException e)
+            {
+                // If we don't find an OTHERobjects inline template try for a site one
+                templateName = "/site/templates/inline/" + tagName + ".ftl";
+                temp = configuration.getTemplate(templateName);
+            }
 
             /* Create a data-model */
             Map<String, Object> context = new HashMap<String, Object>();

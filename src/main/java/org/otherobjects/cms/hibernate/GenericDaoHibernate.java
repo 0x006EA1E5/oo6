@@ -45,18 +45,22 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
         this.persistentClass = persistentClass;
     }
 
+
+    public Class<T> getPersistentClass()
+    {
+        return persistentClass;
+    }
+    
     public String getPersistentClassName()
     {
         return this.persistentClass.getName();
     }
 
-    @SuppressWarnings("unchecked")
     public List<T> getAll()
     {
         return super.getHibernateTemplate().loadAll(this.persistentClass);
     }
 
-    @SuppressWarnings("unchecked")
     public T get(PK id)
     {
         T entity = (T) super.getHibernateTemplate().get(this.persistentClass, id);
@@ -70,7 +74,6 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
         return entity;
     }
 
-    @SuppressWarnings("unchecked")
     public boolean exists(PK id)
     {
         T entity = (T) super.getHibernateTemplate().get(this.persistentClass, id);
@@ -82,7 +85,6 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
         return save(object, true);
     }
 
-    @SuppressWarnings("unchecked")
     public T save(T object, boolean validate)
     {
         return (T) super.getHibernateTemplate().merge(object);
@@ -170,5 +172,4 @@ public class GenericDaoHibernate<T, PK extends Serializable> extends HibernateDa
             throw new OtherObjectsException("Unable to create new class of type: " + persistentClass, e);
         }
     }
-
 }

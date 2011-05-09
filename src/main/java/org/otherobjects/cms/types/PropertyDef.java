@@ -44,6 +44,7 @@ public interface PropertyDef
     // FIXME These are also in PropertyType enum 
     Object TRANSIENT = "transient";
     Object LIST = "list";
+    //    Object MAP = "map";
     Object REFERENCE = "reference";
     Object COMPONENT = "component";
 
@@ -85,9 +86,9 @@ public interface PropertyDef
     TypeDef getParentTypeDef();
 
     PropertyEditor getPropertyEditor();
-    
+
     String getFieldName();
-    
+
     String getPropertyPath();
 
 }

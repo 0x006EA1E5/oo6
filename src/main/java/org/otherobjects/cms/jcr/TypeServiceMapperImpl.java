@@ -169,6 +169,37 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
 
                     cd.addCollectionDescriptor(cld);
                 }
+                //                else if (propertyType.equals(PropertyDef.MAP))
+                //                {
+                //                    String collectionElementType = propDef.getCollectionElementType();
+                //                    Assert.isTrue(StringUtils.isNotEmpty(collectionElementType), "If this property is a collection the collectionElementType needs to have been set: " + typeDef.getName() + "."
+                //                            + propertyName);
+                //                    CollectionDescriptor cld = new CollectionDescriptor();
+                //                    cld.setFieldName(propDef.getName());
+                //                    cld.setJcrName(propDef.getName());
+                //
+                //                    if (collectionElementType.equals(PropertyDef.COMPONENT))
+                //                    {
+                //                        Assert.isTrue(StringUtils.isNotEmpty(propDef.getRelatedType()), "If this property is a component the relatedType needs to have been set: " + typeDef.getName() + "."
+                //                                + propertyName);
+                //                        cld.setElementClassName(propDef.getRelatedTypeDef().getClassName());
+                //                        cld.setCollectionConverter(DefaultCollectionConverterImpl.class.getName());
+                //                    }
+                //                    else if (collectionElementType.equals(PropertyDef.REFERENCE))
+                //                    {
+                //                        Assert.isTrue(StringUtils.isNotEmpty(propDef.getRelatedType()), "If this property is a reference the relatedType needs to have been set: " + typeDef.getName() + "."
+                //                                + propertyName);
+                //                        cld.setElementClassName(propDef.getRelatedTypeDef().getClassName());
+                //                        cld.setCollectionConverter(BeanReferenceCollectionConverterImpl.class.getName());
+                //                    }
+                //                    else
+                //                    {
+                //                        cld.setElementClassName(((TypeServiceImpl) typeService).getJcrClassMapping(collectionElementType).getName());
+                //                        cld.setCollectionConverter(MultiValueCollectionConverterImpl.class.getName());
+                //                    }
+                //
+                //                    cd.addCollectionDescriptor(cld);
+                //                }
                 else if (propertyType.equals(PropertyDef.COMPONENT))
                 {
                     Assert

@@ -43,7 +43,7 @@ public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
         //TODO Add methods to validate required properties to the configuratsor. Including paths or regexps.
         Assert.notNull(dataDirPath, "Property site.public.data.path has not been set. Add it to your properties file");
 
-        uploadDirPath = otherObjectsConfigurator.getProperty("site.private.data.path") + "uploads/";
+        uploadDirPath = otherObjectsConfigurator.getProperty("site.private.data.path") + "/uploads";
 
         // set some static props on DefautOoResource as a kind of poor DI
         DefaultOoResource.setDataDirPath(dataDirPath);

@@ -1,5 +1,6 @@
 package org.otherobjects.cms.model;
 
+import org.otherobjects.cms.Url;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
@@ -21,7 +22,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
  * 
  * @author rich
  */
-@Type(labelProperty = "label", adminControllerUrl="/otherobjects/image")
+@Type(labelProperty = "label", adminControllerUrl = "/otherobjects/image", imageProperty = "self" )
 public class CmsImage extends BaseNode
 {
     public static final String DEFAULT_FOLDER = "/data/images/";
@@ -41,7 +42,7 @@ public class CmsImage extends BaseNode
     private String originalProvider;
     private String providerId;
 
-    // Temporary holder for new and relacement files
+    // Temporary holder for new and replacement files
     private CommonsMultipartFile newFile;
     private String thumbnailPath;
 
@@ -56,9 +57,25 @@ public class CmsImage extends BaseNode
             return this.thumbnailPath;
 
         if (getOriginalFileName() != null)
-            return "/public-data" + getOriginalFileName().replaceAll("originals", "100x100-FFFFFF");
+            return "/public-data/images/100x100-FFFFFF/" + getCode();
         else
             return null;
+    }
+
+    /**
+     * Returns the correct syntax for inserting this image in the wiki editor.
+     * 
+     * @return the wiki syntax
+     */
+    public String getWikiCode()
+    {
+        return "[IMAGE:" + getCode() + "]";
+    }
+
+    @Override
+    public Url getOoUrl()
+    {
+        return new Url("/public-data/images/" + ORIGINALS_PATH + getCode()); //FIXME should honor site.public.data.url setting
     }
 
     /**
@@ -67,7 +84,7 @@ public class CmsImage extends BaseNode
     @Override
     public String getCode()
     {
-        String fileStem = StringUtils.substringBeforeLast(getOriginalFileName(),".");
+        String fileStem = StringUtils.substringBeforeLast(getOriginalFileName(), ".");
         return this.code != null ? this.code : StringUtils.generateUrlCode(fileStem) + "." + getExtension();
     }
 
@@ -170,7 +187,7 @@ public class CmsImage extends BaseNode
         this.newFile = newFile;
     }
 
-    @Property(order=5, type=PropertyType.TRANSIENT)
+    @Property(order = 5, type = PropertyType.TRANSIENT)
     public CommonsMultipartFile getNewFile()
     {
         return this.newFile;
@@ -235,9 +252,9 @@ public class CmsImage extends BaseNode
      */
     public String getExtension()
     {
-        if(getOriginalFileName() == null)
+        if (getOriginalFileName() == null)
             return null;
-        
+
         String extension = getOriginalFileName().substring(getOriginalFileName().lastIndexOf(".") + 1).toLowerCase();
         return extension;
     }

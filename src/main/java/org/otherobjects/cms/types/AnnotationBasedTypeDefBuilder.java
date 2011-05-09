@@ -45,7 +45,6 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder, Initializi
         PropertyDefImpl.setTimestampFormat(otherObjectsConfigurator.getProperty("otherobjects.default.timestamp.format"));
     }
 
-    @SuppressWarnings("unchecked")
     public TypeDef getTypeDef(Class<?> clazz) throws Exception
     {
         if (!clazz.isAnnotationPresent(Type.class))
@@ -57,11 +56,12 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder, Initializi
 
         if (BaseComponent.class.isAssignableFrom(clazz))
             typeDef.setComponent(true);
-        
+
         typeDef.setName(clazz.getName());
         typeDef.setClassName(clazz.getName());
         typeDef.setSuperClassName(typeDefAnnotation.superClassName());
         typeDef.setStore(typeDefAnnotation.store());
+        typeDef.setImageProperty(typeDefAnnotation.imageProperty());
         if (StringUtils.isNotBlank(typeDefAnnotation.adminControllerUrl()))
             typeDef.setCustomAdminController(typeDefAnnotation.adminControllerUrl());
 
@@ -170,6 +170,43 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder, Initializi
                         }
                     }
                 }
+                //                if (propertyDef.getType().equals(PropertyType.MAP.value()))
+                //                {
+                //                    // Get generic return type
+                //                    Class<?> mapTypeClass = null;
+                //                    ParameterizedType genericReturnType = (ParameterizedType) method.getGenericReturnType();
+                //                    if (genericReturnType != null)
+                //                        mapTypeClass = (Class<?>) genericReturnType.getActualTypeArguments()[0];
+                //
+                //                    // Infer collection type from map parametized type
+                //                    if (propertyDefAnnotation.collectionElementType().equals(PropertyType.UNDEFINED))
+                //                    {
+                //                        Assert.notNull(mapTypeClass, "Could not infer collectionElementType (Map is a raw type) for: " + method.getName());
+                //                        PropertyType collectionElementType = getDefaultTypeForClass(mapTypeClass);
+                //                        Assert.notNull(collectionElementType, "Could not infer collectionElementType (unknown List type) for: " + method.getName());
+                //                        propertyDef.setCollectionElementType(collectionElementType.value());
+                //                    }
+                //                    else
+                //                    {
+                //                        propertyDef.setCollectionElementType(propertyDefAnnotation.collectionElementType().value());
+                //                    }
+                //
+                //                    // If collection type is reference or list then infer relatedType
+                //                    if (propertyDef.getCollectionElementType().equals(PropertyType.COMPONENT.value()) || propertyDef.getCollectionElementType().equals(PropertyType.REFERENCE.value()))
+                //                    {
+                //                        // Infer collection type from list parametized type
+                //                        if (StringUtils.isEmpty(propertyDefAnnotation.relatedType()))
+                //                        {
+                //                            Assert.notNull(mapTypeClass, "Could not infer collectionElementType (Map is a raw type) for: " + method.getName());
+                //                            propertyDef.setRelatedType(mapTypeClass.getName());
+                //                        }
+                //                        else
+                //                        {
+                //                            propertyDef.setRelatedType(propertyDefAnnotation.relatedType());
+                //                        }
+                //                    }
+                //
+                //                }
                 propDefs.add(propertyDef);
             }
         }
@@ -206,6 +243,9 @@ public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder, Initializi
 
         else if (List.class.isAssignableFrom(type))
             return PropertyType.LIST;
+
+        //        else if (Map.class.isAssignableFrom(type))
+        //            return PropertyType.MAP;
 
         else if (OoResource.class.isAssignableFrom(type))
             return PropertyType.OORESOURCE;

@@ -1,6 +1,7 @@
 package org.otherobjects.cms.jcr.dynamic;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -26,6 +27,7 @@ import org.apache.jackrabbit.ocm.manager.collectionconverter.ManageableObjects;
 import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.AbstractCollectionConverterImpl;
 import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.BeanReferenceCollectionConverterImpl;
 import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.DefaultCollectionConverterImpl;
+import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.ManageableCollectionImpl;
 import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.ManageableMapImpl;
 import org.apache.jackrabbit.ocm.manager.collectionconverter.impl.MultiValueCollectionConverterImpl;
 import org.apache.jackrabbit.ocm.manager.objectconverter.ObjectConverter;
@@ -97,7 +99,7 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
                 }
                 else if (propertyType.equals(PropertyDef.COMPONENT))
                 {
-                    if(parentNode.hasNode(propertyName))
+                    if (parentNode.hasNode(propertyName))
                         parentNode.getNode(propertyName).remove();
                     insertComponentProperty(session, dataNode, propertyName, fieldValue);
                 }
@@ -124,7 +126,7 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
         CollectionDescriptor collectionDescriptor = new CollectionDescriptor();
         collectionDescriptor.setFieldName(propertyName);
         collectionDescriptor.setJcrName(propertyName);
-        String propertyType = property.getType();
+        String propertyType = property.getRelatedType();
 
         CollectionConverter collectionConverter = null;
         String elementClassName = null;
@@ -145,7 +147,11 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
 
         collectionDescriptor.setElementClassName(elementClassName);
         //ManageableCollection manageableCollection = ManageableObjectsUtil.getManageableCollection(collection);
-        collectionConverter.insertCollection(session, dataNode, collectionDescriptor, new ManageableMapImpl((Map) collection));
+        if (collection != null)
+            collectionConverter.insertCollection(session, dataNode, collectionDescriptor, new ManageableCollectionImpl((Collection) collection));
+        else
+            collectionConverter.insertCollection(session, dataNode, collectionDescriptor, null);
+
     }
 
     private void insertReferenceProperty(Session session, Node dataNode, String key, Object fieldValue)
@@ -203,10 +209,10 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
     {
         try
         {
-//            if (!parentNode.hasNode(jcrName))
-//            {
-//                return null;
-//            }
+            //            if (!parentNode.hasNode(jcrName))
+            //            {
+            //                return null;
+            //            }
 
             String ooType = parentNode.getProperty("ooType").getString();
             TypeDef type = typeService.getType(ooType);
@@ -253,7 +259,8 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
         CollectionDescriptor collectionDescriptor = new CollectionDescriptor();
         collectionDescriptor.setFieldName(property.getName());
         collectionDescriptor.setJcrName(property.getName());
-        String propertyType = property.getType();
+        //FIXME test this change!
+        String propertyType = property.getCollectionElementType();
 
         String elementClassName = null;
         CollectionConverter collectionConverter = null;
@@ -310,9 +317,9 @@ public class DynaNodeDataMapConverterImpl extends AbstractCollectionConverterImp
         try
         {
             // FIXME Clean up this method
-            String propertyName = property.getFieldName().replaceAll("data\\[","").replaceAll("\\]","");
-            if(!dataNode.hasProperty(propertyName + "/ocm_classname"))
-                return null;    
+            String propertyName = property.getFieldName().replaceAll("data\\[", "").replaceAll("\\]", "");
+            if (!dataNode.hasProperty(propertyName + "/ocm_classname"))
+                return null;
             Property classNameProperty = dataNode.getProperty(propertyName + "/ocm_classname");
             String className = classNameProperty.getString();
             clazz = Class.forName(className);

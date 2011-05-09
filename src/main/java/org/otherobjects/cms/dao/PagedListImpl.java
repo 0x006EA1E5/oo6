@@ -189,5 +189,4 @@ public class PagedListImpl<T> implements PagedList<T>
     {
         throw new UnsupportedOperationException("PageResult iterators are not supposed to be modified");
     }
-
 }

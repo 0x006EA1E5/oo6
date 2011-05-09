@@ -44,6 +44,10 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
                 modelAndView.addObject("counter", counter);
                 modelAndView.addObject("sessionId", session.getId());
             }
+            
+            // Add boolean to indicate secure connections
+            modelAndView.addObject("ssl", request.isSecure());
+            
             // tools
             //modelAndView.addObject("navigationTool", new NavigationTool(navigationService));
             modelAndView.addObject("flash", new FlashMessageTool(request));
@@ -75,7 +79,6 @@ public class ModelModifierInterceptor extends HandlerInterceptorAdapter
                 modelAndView.addAllObjects(this.freeMarkerToolProvider.getTools());
             }
         }
-
     }
 
     public void setDaoService(DaoService daoService)

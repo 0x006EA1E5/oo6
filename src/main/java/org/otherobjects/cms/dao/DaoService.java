@@ -1,13 +1,15 @@
 package org.otherobjects.cms.dao;
 
-@SuppressWarnings("unchecked")
+import java.io.Serializable;
+
 public interface DaoService
 {
-    GenericDao getDao(Class clazz);
+    <T extends Serializable> GenericDao<T, Serializable> getDao(Class<T> clazz);
 
-    GenericDao getDao(String type);
+    <T extends Serializable> GenericDao<T, Serializable> getDao(String type);
     
     boolean hasDao(String type);
 
-    void addDao(GenericDao dao);
+    <T extends Serializable> void addDao(String name, GenericDao<T, Serializable> dao);
+    <T extends Serializable> void addDao(GenericDao<T, Serializable> dao);
 }

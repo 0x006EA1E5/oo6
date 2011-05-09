@@ -13,7 +13,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
  * 
  * @author rich
  */
-public class StartupMessage implements ApplicationListener
+public class StartupMessage implements ApplicationListener<ApplicationEvent>
 {
     private final Logger logger = LoggerFactory.getLogger(StartupMessage.class);
 

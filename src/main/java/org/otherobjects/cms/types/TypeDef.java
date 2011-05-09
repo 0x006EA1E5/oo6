@@ -30,6 +30,8 @@ public interface TypeDef
     
     String getAdminControllerUrl();
 
+    String getImageProperty();
+
     boolean isComponent();
     
     boolean hasClass();

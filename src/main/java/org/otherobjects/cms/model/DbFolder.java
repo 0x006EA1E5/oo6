@@ -12,7 +12,7 @@ import flexjson.JSON;
 
 @SuppressWarnings("unchecked")
 @Type(labelProperty="label")
-public class DbFolder extends BaseNode implements Folder
+public class DbFolder extends Folder
 {
     private String label;
     private String mainType;
@@ -34,6 +34,16 @@ public class DbFolder extends BaseNode implements Folder
     public List getAllAllowedTypes()
     {
         return getAllowedTypes();
+    }
+    
+    /**
+     * Returns the view to use when listing objects. Currently we only support lists for DbFolders.
+     * 
+     * @return the view to use
+     */
+    public String getView()
+    {
+        return "list";
     }
 
     @JSON(include = false)

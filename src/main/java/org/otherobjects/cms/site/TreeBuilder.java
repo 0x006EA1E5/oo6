@@ -1,10 +1,9 @@
 package org.otherobjects.cms.site;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-
-import edu.emory.mathcs.backport.java.util.Collections;
 
 public class TreeBuilder
 {

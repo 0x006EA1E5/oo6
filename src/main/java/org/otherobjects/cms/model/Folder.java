@@ -1,23 +1,24 @@
 package org.otherobjects.cms.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.otherobjects.cms.types.TypeDef;
 
 @SuppressWarnings("unchecked")
-public interface Folder
+public abstract class Folder extends BaseNode implements Serializable
 {
-    String getLabel();
+    public abstract String getLabel();
 
-    void setLabel(String label);
+    public abstract void setLabel(String label);
 
-    List getAllowedTypes();
+    abstract List getAllowedTypes();
 
-    void setAllowedTypes(List<String> allowedTypes);
+    abstract void setAllowedTypes(List<String> allowedTypes);
 
-    List<TypeDef> getAllAllowedTypes();
+    abstract List<TypeDef> getAllAllowedTypes();
 
-    String getCssClass();
+    abstract String getCssClass();
 
-    void setCssClass(String cssClass);
+    abstract void setCssClass(String cssClass);
 }

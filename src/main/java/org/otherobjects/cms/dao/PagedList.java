@@ -12,6 +12,8 @@ import java.util.List;
  */
 public interface PagedList<T> extends Iterable<T>
 {
+    public static final int DEFAULT_ITEMS_PER_PAGE = 25;
+    
     /** Max no. of items to display on a page. */
     int getPageSize();
 

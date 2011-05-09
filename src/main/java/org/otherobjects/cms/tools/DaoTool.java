@@ -1,5 +1,7 @@
 package org.otherobjects.cms.tools;
 
+import java.io.Serializable;
+
 import javax.annotation.Resource;
 
 import org.otherobjects.cms.dao.DaoService;
@@ -9,18 +11,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Tool
-@SuppressWarnings("unchecked")
 public class DaoTool
 {
     @Resource
     private DaoService daoService;
 
-    public GenericDao get(String name)
+    public GenericDao<Serializable, Serializable> get(String name)
     {
         return getDao(name);
     }
 
-    public GenericDao getDao(String name)
+    public GenericDao<Serializable, Serializable> getDao(String name)
     {
         return daoService.getDao(name);
     }
