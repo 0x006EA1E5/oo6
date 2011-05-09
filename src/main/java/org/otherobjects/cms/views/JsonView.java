@@ -2,14 +2,18 @@ package org.otherobjects.cms.views;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.otherobjects.cms.dao.PagedList;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.servlet.View;
@@ -29,6 +33,9 @@ public class JsonView implements View
     //TODO Make this configurable?
     private static final String ENCODING = "UTF-8";
 
+    @Resource
+    private OtherObjectsConfigurator otherObjectsConfigurator;
+    
     @SuppressWarnings("unchecked")
     public void render(Map model, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
@@ -36,11 +43,16 @@ public class JsonView implements View
         StringWriter writer = new StringWriter();
         JSONSerializer serializer = new JSONSerializer();
 
+        if(! "true".equalsIgnoreCase(otherObjectsConfigurator.getProperty("otherobjects.view.json.show.class", "false")))
+        {
+            serializer.exclude("class");
+        }
+        
         if (model.containsKey(JSON_MIME_OVERRIDE))
         {
             this.mimeOverride = (String) model.get(JSON_MIME_OVERRIDE);
         }
-
+        
         boolean deep = false;
         if (model.containsKey(JSON_DEEP_SERIALIZE))
             deep = (Boolean) model.get(JSON_DEEP_SERIALIZE);
@@ -50,17 +62,13 @@ public class JsonView implements View
             if (model.containsKey(JSON_INCLUDES_KEY))
                 serializer = serializer.include((String[]) model.get(JSON_INCLUDES_KEY));
 
-            if (deep)
-                writer.write(serializer.deepSerialize(model.get(JSON_DATA_KEY)));
-            else
-                writer.write(serializer.serialize(model.get(JSON_DATA_KEY)));
+            writer.write(serializeData(serializer, model.get(JSON_DATA_KEY), deep));
         }
         else
         {
-            if (deep)
-                writer.write(serializer.deepSerialize(model));
-            else
-                writer.write(serializer.serialize(model));
+            Object item = model.get("item");
+            writer.write(serializeData(serializer,item, deep));
+
         }
         String json = writer.toString();
 
@@ -74,6 +82,25 @@ public class JsonView implements View
         //logger.debug(json);
         response.setCharacterEncoding(ENCODING);
         output.write(json);
+    }
+    
+    private String serializeData(JSONSerializer serializer, Object data, boolean deep)
+    {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("data", data);
+        Map<String, Object> metaData = new HashMap<String, Object>();
+        
+        if(data instanceof PagedList<?>)
+        {
+            metaData.put("pageData", new JSONPagedListMetaData((PagedList<?>) data));
+        }
+        
+        map.put("metaData", metaData); 
+
+        if(deep)
+            return serializer.deepSerialize(map);
+        else
+            return serializer.serialize(map);
     }
 
     protected String localiseString(String text, MessageSource messageSource, Locale locale)
@@ -105,4 +132,29 @@ public class JsonView implements View
         return (mimeOverride == null) ? MIME_TYPE : mimeOverride;
     }
 
+    public class JSONPagedListMetaData 
+    {
+        public JSONPagedListMetaData(PagedList<?> pagedList)
+        {
+            currentPage = pagedList.getCurrentPage();
+            itemTotal = pagedList.getItemTotal();
+            pageCount = pagedList.getPageCount();
+            pageSize = pagedList.getPageSize();
+        }
+    
+        public int currentPage;
+        public int itemTotal;
+        public int pageCount;
+        public int pageSize;
+        
+    }
+
+    /**
+     * @param otherObjectsConfigurator the otherObjectsConfigurator to set
+     */
+    public void setOtherObjectsConfigurator(
+            OtherObjectsConfigurator otherObjectsConfigurator) {
+        this.otherObjectsConfigurator = otherObjectsConfigurator;
+    };
+    
 }
