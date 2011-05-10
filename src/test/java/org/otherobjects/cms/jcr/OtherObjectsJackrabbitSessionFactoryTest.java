@@ -1,18 +1,20 @@
 package org.otherobjects.cms.jcr;
 
+import java.util.Arrays;
+
 import javax.jcr.Session;
 import javax.jcr.Workspace;
 
 import org.apache.jackrabbit.core.WorkspaceImpl;
-import org.otherobjects.cms.security.SecurityUtil;
+import org.otherobjects.cms.authentication.MockAuthenticationManager;
+import org.otherobjects.cms.bootstrap.OtherObjectsAdminUserCreator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.MockAuthenticationManager;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
-import org.springframework.security.providers.anonymous.AnonymousAuthenticationProvider;
-import org.springframework.security.providers.anonymous.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.AnonymousAuthenticationProvider;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 public class OtherObjectsJackrabbitSessionFactoryTest extends BaseJcrTestCase
 {
@@ -43,8 +45,8 @@ public class OtherObjectsJackrabbitSessionFactoryTest extends BaseJcrTestCase
     public void testAdminGetsEditSession() throws Exception
     {
         // mock admin login
-        new MockAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken("admin", "admin", new GrantedAuthority[]{new GrantedAuthorityImpl(
-                SecurityUtil.EDITOR_ROLE_NAME)}));
+        new MockAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken("admin", "admin", Arrays.asList(new GrantedAuthority[]{new GrantedAuthorityImpl(
+                OtherObjectsAdminUserCreator.DEFAULT_ADMIN_ROLE_NAME)})));
         System.out.println("workspace: " + jcrSessionFactory.getSession().getWorkspace().getName());
         assertTrue(jcrSessionFactory.getSession().getWorkspace().getName().equals(OtherObjectsJackrabbitSessionFactory.EDIT_WORKSPACE_NAME));
         SecurityContextHolder.clearContext();
@@ -54,7 +56,7 @@ public class OtherObjectsJackrabbitSessionFactoryTest extends BaseJcrTestCase
     {
         AnonymousAuthenticationProvider anonymousAuthenticationProvider = new AnonymousAuthenticationProvider();
         anonymousAuthenticationProvider.setKey("testkey");
-        AnonymousAuthenticationToken anonymousAuthenticationToken = new AnonymousAuthenticationToken("testkey", "anonymous", new GrantedAuthority[]{new GrantedAuthorityImpl("ROLE_ANONYMOUS")});
+        AnonymousAuthenticationToken anonymousAuthenticationToken = new AnonymousAuthenticationToken("testkey", "anonymous", Arrays.asList(new GrantedAuthority[]{new GrantedAuthorityImpl("ROLE_ANONYMOUS")}));
         SecurityContextHolder.getContext().setAuthentication(anonymousAuthenticationProvider.authenticate(anonymousAuthenticationToken));
 
         System.out.println("workspace: " + jcrSessionFactory.getSession().getWorkspace().getName());

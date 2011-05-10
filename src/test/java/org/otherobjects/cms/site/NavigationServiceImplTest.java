@@ -34,7 +34,7 @@ public class NavigationServiceImplTest extends TestCase
 
         this.navigationService = new NavigationServiceImpl();
         this.navigationService.testMode = true;
-        this.navigationService.tree = tree;
+        this.navigationService.setTree(tree);
     }
 
     public void testGetNavigation()

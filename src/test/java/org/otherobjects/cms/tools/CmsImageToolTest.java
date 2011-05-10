@@ -4,10 +4,10 @@ import java.io.IOException;
 
 import junit.framework.TestCase;
 
-import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.io.OoResourceLoader;
 import org.otherobjects.cms.model.CmsImage;
 import org.otherobjects.cms.model.CmsImageSize;
+import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.springframework.core.io.DefaultResourceLoader;
 
 public class CmsImageToolTest extends TestCase

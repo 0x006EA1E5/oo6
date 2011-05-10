@@ -8,15 +8,21 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
-public class MockGenericDao implements GenericDao
+public class MockGenericDao implements GenericDao<Serializable, Serializable>
 {
-    private Object mockObject;
+    private Serializable mockObject;
     private List<Object> allObjects;
-    private Map<Serializable, Object> keyedObjects = Collections.EMPTY_MAP;
+    private Map<Serializable, Serializable> keyedObjects = Collections.EMPTY_MAP;
 
     public MockGenericDao()
     {
         allObjects = new ArrayList<Object>();
+    }
+    
+
+    public Class<Serializable> getPersistentClass()
+    {
+        return (Class<Serializable>) mockObject.getClass();
     }
     
     public String getPersistentClassName()
@@ -25,7 +31,7 @@ public class MockGenericDao implements GenericDao
         return mockObject.getClass().getName();
     }
     
-    public MockGenericDao(Object mockObject)
+    public MockGenericDao(Serializable mockObject)
     {
         this.mockObject = mockObject;
         allObjects = new ArrayList<Object>();
@@ -47,7 +53,7 @@ public class MockGenericDao implements GenericDao
         return this.mockObject != null;
     }
 
-    public Object get(Serializable id)
+    public Serializable get(Serializable id)
     {
         if (keyedObjects.containsKey(id))
             return keyedObjects.get(id);
@@ -75,7 +81,7 @@ public class MockGenericDao implements GenericDao
 
     }
 
-    public Object save(Object object)
+    public Serializable save(Serializable object)
     {
         try
         {
@@ -93,12 +99,12 @@ public class MockGenericDao implements GenericDao
         return object;
     }
 
-    public Object save(Object object, boolean validate)
+    public Serializable save(Serializable object, boolean validate)
     {
         return save(object);
     }
 
-    public Object create()
+    public Serializable create()
     {
         // TODO Auto-generated method stub
         return null;

@@ -11,7 +11,7 @@ import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.binding.TestComponentObject;
 import org.otherobjects.cms.binding.TestObject;
 import org.otherobjects.cms.binding.TestReferenceObject;
-import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.MockDaoService;
 import org.otherobjects.cms.dao.MockGenericJcrDao;
 import org.otherobjects.cms.dao.UniversalJcrDaoJackrabbit;

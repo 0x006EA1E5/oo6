@@ -7,7 +7,6 @@ import java.util.Map;
 import junit.framework.TestCase;
 
 import org.otherobjects.cms.SingletonBeanLocator;
-import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.MockDaoService;
 import org.otherobjects.cms.dao.MockGenericDao;
 import org.otherobjects.cms.dao.UniversalJcrDaoJackrabbit;
@@ -20,6 +19,7 @@ import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeDefImpl;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.types.TypeServiceImpl;
+import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockMultipartHttpServletRequest;

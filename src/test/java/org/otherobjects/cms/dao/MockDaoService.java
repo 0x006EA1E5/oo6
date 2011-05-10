@@ -29,4 +29,8 @@ public class MockDaoService implements DaoService
     {
     }
 
+    public void addDao(String name, GenericDao dao)
+    {
+    }
+    
 }

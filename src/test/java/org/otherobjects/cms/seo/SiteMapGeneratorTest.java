@@ -16,7 +16,7 @@ import org.jaxen.dom4j.Dom4jXPath;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.otherobjects.cms.SingletonBeanLocator;
-import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.site.TreeNode;
 
 public class SiteMapGeneratorTest extends TestCase

@@ -1,6 +1,6 @@
 package org.otherobjects.cms.test;
 
-import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.otherobjects.framework.config.OtherObjectsConfigurator;
 
 /**
  * 

@@ -5,7 +5,7 @@ import java.lang.annotation.Annotation;
 import junit.framework.TestCase;
 
 import org.otherobjects.cms.tools.GravatarTool;
-import org.otherobjects.cms.tools.NavigationTool;
+import org.otherobjects.cms.tools.site.NavigationTool;
 
 public class FreeMarkerToolProviderTest extends TestCase
 {

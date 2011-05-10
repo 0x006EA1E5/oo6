@@ -10,7 +10,7 @@ import java.util.Map;
 import org.otherobjects.cms.model.CmsNode;
 
 @SuppressWarnings("unchecked")
-public class MockGenericJcrDao implements GenericJcrDao
+public class MockGenericJcrDao implements GenericJcrDao<CmsNode>
 {
     private CmsNode mockObject;
     private List<CmsNode> allObjects;
@@ -19,6 +19,11 @@ public class MockGenericJcrDao implements GenericJcrDao
     public MockGenericJcrDao()
     {
         allObjects = new ArrayList<CmsNode>();
+    }
+    
+    public Class<CmsNode> getPersistentClass()
+    {
+        return (Class<CmsNode>) mockObject.getClass();
     }
     
     public String getPersistentClassName()
@@ -49,7 +54,7 @@ public class MockGenericJcrDao implements GenericJcrDao
         return this.mockObject != null;
     }
 
-    public Object get(Serializable id)
+    public CmsNode get(Serializable id)
     {
         if (keyedObjects.containsKey(id))
             return keyedObjects.get(id);
@@ -77,7 +82,7 @@ public class MockGenericJcrDao implements GenericJcrDao
 
     }
 
-    public Object save(Object object)
+    public CmsNode save(CmsNode object)
     {
         try
         {
@@ -95,12 +100,12 @@ public class MockGenericJcrDao implements GenericJcrDao
         return object;
     }
 
-    public Object save(Object object, boolean validate)
+    public CmsNode save(CmsNode object, boolean validate)
     {
         return save(object);
     }
 
-    public Object create()
+    public CmsNode create()
     {
         // TODO Auto-generated method stub
         return null;
@@ -117,6 +122,12 @@ public class MockGenericJcrDao implements GenericJcrDao
         // TODO Auto-generated method stub
         return null;
     }
+    
+    public List getAllByJcrExpression(String expression, final boolean useEdit)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     public List getAllByPath(String path)
     {
@@ -124,13 +135,13 @@ public class MockGenericJcrDao implements GenericJcrDao
         return null;
     }
 
-    public Object getByJcrExpression(String expression)
+    public CmsNode getByJcrExpression(String expression)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
-    public Object getByPath(String path)
+    public CmsNode getByPath(String path)
     {
         for(CmsNode o : allObjects)
         {
@@ -152,13 +163,13 @@ public class MockGenericJcrDao implements GenericJcrDao
         return null;
     }
 
-    public Object getVersionByChangeNumber(Object object, int changeNumber)
+    public CmsNode getVersionByChangeNumber(CmsNode object, int changeNumber)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
-    public List getVersions(Object object)
+    public List getVersions(CmsNode object)
     {
         // TODO Auto-generated method stub
         return null;
@@ -170,13 +181,19 @@ public class MockGenericJcrDao implements GenericJcrDao
         return null;
     }
 
-    public void publish(Object object, String message)
+    public void publish(CmsNode object, String message)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+    
+    public void unpublish(CmsNode object, String message)
     {
         // TODO Auto-generated method stub
         
     }
 
-    public Object rename(Object node, String path)
+    public CmsNode rename(CmsNode node, String path)
     {
         // TODO Auto-generated method stub
         return null;
@@ -188,13 +205,13 @@ public class MockGenericJcrDao implements GenericJcrDao
         
     }
 
-    public Object reorder(Object object, Object target, String position)
+    public CmsNode reorder(CmsNode object, CmsNode target, String position)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
-    public Object restoreVersionByChangeNumber(Object object, int changeNumber)
+    public CmsNode restoreVersionByChangeNumber(CmsNode object, int changeNumber)
     {
         // TODO Auto-generated method stub
         return null;
