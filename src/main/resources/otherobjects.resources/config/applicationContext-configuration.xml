@@ -11,12 +11,15 @@ http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 	<bean id="annotatedClassesScanner" class="org.otherobjects.cms.discovery.AnnotatedClassesScannerImpl" />
 
 	<!-- For properties -->
-	<bean id="otherObjectsConfigurator" class="org.otherobjects.cms.config.OtherObjectsConfigurator">
+	<bean id="otherObjectsConfigurator" class="org.otherobjects.framework.config.OtherObjectsConfigurator">
 		<property name="ignoreResourceNotFound" value="false" />
 		<property name="locations">
 			<list>
 				<value>classpath:otherobjects.resources/config/otherobjects.properties</value>
-				<value>classpath:otherobjects.properties</value>
+				<value>classpath:project.properties</value>
+				<value>classpath:project-datastore.properties</value>
+<!-- 				<value>classpath:project-stage.properties</value>
+				<value>classpath:project-local.properties</value> -->
 			</list>
 		</property>
 	</bean>
