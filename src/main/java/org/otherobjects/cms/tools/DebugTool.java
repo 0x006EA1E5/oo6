@@ -15,8 +15,8 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Statistics;
 
 import org.apache.commons.lang.StringUtils;
-import org.otherobjects.cms.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.views.Tool;
+import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

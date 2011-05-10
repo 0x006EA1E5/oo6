@@ -16,7 +16,7 @@ import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.Date2LongTypeC
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.LongTypeConverterImpl;
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.impl.StringTypeConverterImpl;
 import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.discovery.AnnotatedClassesScanner;
 import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.jcr.BigDecimalTypeConverterImpl;

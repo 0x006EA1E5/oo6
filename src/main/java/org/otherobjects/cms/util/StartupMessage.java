@@ -1,7 +1,7 @@
 package org.otherobjects.cms.util;
 
 import org.otherobjects.cms.bootstrap.OtherObjectsAdminUserCreator;
-import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEvent;

@@ -6,7 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 
-import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.discovery.AnnotatedClassesScanner;
 import org.otherobjects.cms.util.StringUtils;
 import org.slf4j.Logger;

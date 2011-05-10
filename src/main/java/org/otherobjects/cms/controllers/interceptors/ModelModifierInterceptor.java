@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.monitoring.PerformanceInfo;
 import org.otherobjects.cms.tools.FlashMessageTool;

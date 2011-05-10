@@ -57,7 +57,7 @@ import org.springframework.util.Assert;
  * @author joerg
  * @author geales
  */
-public class OtherObjectsConfigurator extends PropertyPlaceholderConfigurer implements ResourceLoaderAware
+public class OtherObjectsConfiguratorOLD extends PropertyPlaceholderConfigurer implements ResourceLoaderAware
 {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     public static final String ENVIRONMENT_SYSPROP_KEY = "otherobjects.environment";

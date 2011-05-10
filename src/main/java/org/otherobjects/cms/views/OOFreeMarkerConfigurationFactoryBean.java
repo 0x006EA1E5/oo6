@@ -2,7 +2,7 @@ package org.otherobjects.cms.views;
 
 import java.io.IOException;
 
-import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean;

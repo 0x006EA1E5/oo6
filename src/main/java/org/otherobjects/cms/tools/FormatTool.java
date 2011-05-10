@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 import org.eclipse.mylyn.wikitext.core.parser.MarkupParser;
 import org.eclipse.mylyn.wikitext.core.parser.builder.HtmlDocumentBuilder;
 import org.eclipse.mylyn.wikitext.textile.core.TextileLanguage;
-import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.util.StringUtils;
 import org.otherobjects.cms.views.Tool;
 import org.springframework.context.MessageSource;

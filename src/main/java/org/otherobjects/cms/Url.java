@@ -8,7 +8,7 @@ import java.net.URLEncoder;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.otherobjects.cms.config.OtherObjectsConfigurator;
+import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.context.RequestContextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
