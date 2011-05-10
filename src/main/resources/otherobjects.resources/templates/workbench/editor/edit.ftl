@@ -23,6 +23,7 @@
   <input type="hidden" name="_oo_type" value="${typeDef.name}">
   <input type="hidden" name="_oo_containerId" value="${containerId}">
 </#if>
+ <input type="hidden" id="oo-preview-flag" name="_oo_preview" value="false">
 
 <@forms.renderForm typeDef />
 
@@ -34,15 +35,17 @@ $('#oo-form').on('submit', function(element, e) {
 	disableFormTemplates();
 });
 
-function formSubmit()
+function formSubmit(preview)
 {
 	disableFormTemplates();
+	if(preview)
+		Ojay('#oo-preview-flag').node.value = 'true';
 	$('#oo-form').node.submit();
 }
 
 function disableFormTemplates()
 {
-	// Disable add the elements that are in the list element template
+	// Disable the elements that are in the list element template
 	$('.oo-list-template').descendants("input").set({disabled:true});
 	$('.oo-list-template').descendants("textarea").set({disabled:true});
 	$('.oo-list-template').descendants("select").set({disabled:true});
@@ -52,16 +55,15 @@ function disableFormTemplates()
 }
 </script>
 
-
 </div>
 </div>
 
 <div class="oo-actions">
 <h2>Actions</h2>
 <ul>
-<li><a href="javascript:formSubmit();">Save</a></li>
+<li><a href="javascript:formSubmit(false);">Save</a></li>
+<li><a href="javascript:formSubmit(true);">Save and preview</a></li>
 </ul>
 </div>
-
 
 <#include "/otherobjects/templates/workbench/shared/footer.ftl" />

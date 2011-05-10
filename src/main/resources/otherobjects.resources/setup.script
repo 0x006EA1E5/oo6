@@ -23,6 +23,20 @@ def createFolder(dao, path, label, cssClass, allowedTypes) {
 	return f
 }
 
+def updateFolder(dao, path, label, cssClass, allowedTypes) {
+	def f = dao.getByPath(path)
+	if(!f) return;
+	
+	f.jcrPath=path
+	f.label=label
+	f.cssClass=cssClass
+	if(allowedTypes)
+            f.allowedTypes = allowedTypes
+	f = dao.save(f)
+	dao.publish(f, null)
+	return f
+}
+
 def createDbFolder(dao, path, label, mainType) {
 	def f = dao.getByPath(path)
 	if(f) return f;
@@ -68,7 +82,7 @@ if(typeService)
 
 // FIXME Create base structure
 //createFolder(dao, "/smart", "\${smartFolders.label}", "smart-folders", ["org.otherobjects.cms.model.SmartFolder"])
-createFolder(dao, "/site", "\${site.label}", "site", ["ArticlePage","CompositePage"])
+createFolder(dao, "/site", "\${site.label}", "site", ["ArticlePage","CompositePage","HCCmsPage"])
 createFolder(dao, "/libraries", "\${libraries.label}", "libraries", [])
 createFolder(dao, "/libraries/images", "\${libraries.images.label}", null, ["org.otherobjects.cms.model.CmsImage"])
 createFolder(dao, "/libraries/files", "\${libraries.files.label}", null, ["org.otherobjects.cms.model.CmsFile"])
@@ -90,3 +104,4 @@ createFolder(dao, "/blocks", "Block Data", "datatypes")
 createArticle(dao, "/site/welcome.html", "Welcome","<p>Welcome to OTHERobjects.</p>")
 /*
 */
+updateFolder(dao, "/site", "\${site.label}", "site", ["ArticlePage","CompositePage","com.othermedia.hccms.model.HCCmsPage"])

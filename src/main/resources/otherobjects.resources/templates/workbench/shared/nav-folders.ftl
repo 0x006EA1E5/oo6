@@ -13,11 +13,17 @@
 	#end>
 	#else
 	-->
-	
-	<li class="<#if f.children?has_content>oo-folder-empty<#else>oo-folder-empty</#if> <#if f.object.published!>oo-folder-published<#else>oo-folder-in-progress</#if>">
-	<span></span><a href="${oo.url("/otherobjects/workbench/list/"+f.id)}">${oo.msg(f.label)}</a>	
-	<@ooFolderNavList f/>
-	</li>
+	<#if f.object.requiredEditorRoles ??>
+	<@oo.authorizeIfAny f.object.requiredEditorRoles >
+			<li class="<#if f.children?has_content>oo-folder-empty<#else>oo-folder-empty</#if> <#if f.object.published!>oo-folder-published<#else>oo-folder-in-progress</#if>">
+			<span></span><a href="${oo.url("/otherobjects/workbench/list/"+f.id)}">${oo.msg(f.label)}</a>	
+			<@ooFolderNavList f/>
+	</@oo.authorizeIfAny>
+	<#else>
+		<li class="<#if f.children?has_content>oo-folder-empty<#else>oo-folder-empty</#if> <#if f.object.published!>oo-folder-published<#else>oo-folder-in-progress</#if>">
+		<span></span><a href="${oo.url("/otherobjects/workbench/list/"+f.id)}">${oo.msg(f.label)}</a>	
+		<@ooFolderNavList f/>
+	</#if>
 
 </#list>
 </ul>

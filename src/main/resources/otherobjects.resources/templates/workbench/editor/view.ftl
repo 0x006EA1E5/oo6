@@ -1,4 +1,5 @@
 <#import "/spring.ftl" as spring />
+<#import "/workbench.ftl" as workbench />
 <#import "/oo.ftl" as oo />
 <#assign object = item />
 
@@ -6,7 +7,7 @@
 <tr>
 <td class="oo-label">${prop.label}</td>
 <td class="oo-field-none">
-<@oo.renderPropertyValue prop object />
+<@workbench.renderPropertyValue prop object />
 </td>
 </tr>
 </#macro>
@@ -31,7 +32,7 @@
 <tr>
 <td class="oo-label">ID</td>
 <td class="oo-field-none">
-${object.id!}
+${object.id!} <#if object.version?has_content>(version ${object.version!})</#if>
 </td>
 </tr>
 <#if item.published??>
@@ -49,29 +50,32 @@ ${object.jcrPath!}
 <tr>
 <td class="oo-label">Created</td>
 <td class="oo-field-none">
-${object.creationTimestamp!?datetime?string("long")}
-by
-${object.creator!}
+<img src="${gravatarTool.getUrl(object.creator,32,ssl)}"/ style="float:left; padding:0 5px 0 0;" width="32" height="32">
+<abbr class="relative-time" title="${object.creationTimestamp!?datetime?string("long")}">${formatTool.formatRelativeTimestamp(object.creationTimestamp)}</abbr>
+<br>by <strong>${object.creator!}</strong>
 </td>
 </tr>
 <tr>
 <td class="oo-label">Last Modified</td>
 <td class="oo-field-none">
-${object.modificationTimestamp!?datetime?string("long")}
-by
-${object.modifier!}
+<abbr class="relative-time" title="${object.modificationTimestamp!?datetime?string("long")}">${formatTool.formatRelativeTimestamp(object.modificationTimestamp)}</abbr>
+<img src="${gravatarTool.getUrl(object.modifier,32,ssl)}"/ style="float:left; padding:0 5px 0 0;" width="32" height="32">
+<br>by <strong>${object.modifier!}</strong>
 </td>
 </tr>
 </#if>	
 </tbody>
 </table>
+
+
+
 </div>
 </div>
 
 <div class="oo-actions">
 <h2>Actions</h2>
 <ul>
-<#-- <li><a href="${oo.url('/otherobjects/workbench/list/${folder.editableId}')}">Back to listing</a></li> -->
+<#if object.path??><li class="divider"><a href="${oo.url('/otherobjects/workbench/list${object.path}')}">Back to listing</a></li></#if>
 <li class="divider"><a href="${oo.url('/otherobjects/workbench/edit/${object.editableId}')}">Edit</a></li>
 <#if item.published??>
 <li class="divider"><a href="${oo.url('/otherobjects/workbench/history/${object.editableId}')}">View history</a></li>
@@ -87,7 +91,7 @@ ${object.modifier!}
 </#if> -->
 
 <#if item.linkPath??>
-<li class="divider"><a href="${oo.url(item.linkPath)}">Preview</a></li>
+<li class="divider"><a href="${item.ooUrl}">Preview</a></li>
 </#if>
 </ul>
 </div>

@@ -16,6 +16,7 @@ Renders the form parts for a typeDef. Used for main form and also for components
 <th>Field</th>
 <th>Value</th>
 <th>Help</th>
+<th></th>
 </tr>
 </thead>
 <tbody>
@@ -32,14 +33,21 @@ Renders a property for the form.
 <#macro renderProperty prop prefix empty>
 <tr>
 <td class="oo-label"><p>${prop.label} <#if prop.required><span class="oo-required">*</span></#if></p></td>
-<td>
+<td class="oo-field">
 <p>
 	<@renderField prop prop.defaultFieldType "${prefix}${prop.fieldName}" empty /> 
 </p>
 </td>
+<td class="oo-help">
+
+<#if prop.help??>
+<span class="oo-help-symbol" onmouseover="ooShowTip(this,'${prop.help}')" onmouseout="ooHideTip(this)">&nbsp;?&nbsp;</span>
+</#if>
+</td>
+
 <td style="color:red; font-weight:normal!important;">
 <#if ooStatus??>
-<p><@showErrors ooStatus "<br>"/></p>
+<p><@showErrors "<br>" "" /></p>
 </#if>
 </td>
 </tr>
@@ -49,11 +57,12 @@ Renders a property for the form.
 Renders a field inputter by choosing the correct inputter renderer. Also handles lists and components.
 -->
 <#macro renderField prop type path empty=false>
-	<#if type == "list" >
+ 	<#if type == "list" >
   		<@bind path />
   		<#assign listOoStatus = ooStatus />
   		<#assign nextIndex = 0 />
-  		<p><a href="javascript:addToList();">add</a> | <a href="javascript:removeFromList();">remove</a></p>
+	  	<input type="hidden" name="${path?substring(7)}_" value="" /> <#-- Hidden field to inditify list even when no values submitted. -->
+  		<div><a class="list-add" onclick="javascript:addToList(this, '${path}');" href="#"><em>add</em></a> <a class="list-remove" onclick="javascript:removeFromList(this, '${path}');" href="#"><em>remove</em></a></div>
 		<#if listOoStatus.actualValue?? && listOoStatus.actualValue?is_enumerable>
 			<#list listOoStatus.actualValue as item>
 	  			<p class="oo-list-last-field"><@renderField prop prop.collectionElementType "${path}[${item_index}]" /></p>
@@ -61,9 +70,11 @@ Renders a field inputter by choosing the correct inputter renderer. Also handles
 	  		<#assign nextIndex = listOoStatus.actualValue?size />
   		</#if>
   		<div style="display:none;" class="oo-list-empty-field oo-list-template">
+  		<p>
   		<@renderField prop prop.collectionElementType "${path}[${nextIndex}]" true/>
+  		</p>
   		</div>
-  		<script>var nextIndex = ${nextIndex};</script>
+  		<script>fieldIndex['${path}'] = ${nextIndex};</script>
   	<#elseif type == "component" >	
   		<#if !empty>
 	  		<@bind path />
@@ -86,18 +97,24 @@ Renders a field inputter by choosing the correct inputter renderer. Also handles
   		<@formTime "${path}" "" empty/>
 	<#elseif type == "timestamp" >
   		<@formTimestamp "${path}" "" empty/>
-  	<#elseif type == "text" >
-  		<@formTextarea "${path}" "" empty/>
+    <#elseif type == "text" >
+	        <@formTextarea "${path}" "" empty/>
+	
+    <#elseif type == "wiki" >
+		   <@formWikiTextarea "${path}" "" empty/> 
 	<#elseif type == "boolean" >
   		<@formCheckbox "${path}" "" empty/>
 	<#elseif type == "transient" >
 		<@formFile "${path}" "" empty/>
-	<#elseif type == "string" >
-  		<@formInput "${path}" "" "text" empty />  		
+	<#elseif type == "string" || type == "number">
+  		<@formInput "${path}" "" "text" empty />	
 	<#elseif type == "none" >
   		-  		
 	<#else>
-  		<@formInput "${path}" "" "text" empty />
+	    <#assign fieldPath = path>
+	    <#assign fieldType = type>
+	    <#assign fieldProperty = prop>
+		<#include "/otherobjects/templates/fields/${type}.ftl"/>
   	</#if>
 </#macro>
 
@@ -125,11 +142,11 @@ Renders a standard input field with cusomisable type.
 	<#if empty>
 		<#assign expression = path?substring(7) />
   		<input type="${fieldType}" name="${expression}" id="${expression}" class="${fieldType}" ${attributes}
-	    <@spring.closeTag/>
+	    <@closeTag/>
 	<#else>
 		<@bind path />
 		<input type="${fieldType}" name="${ooStatus.expression}" id="${ooStatus.expression}" class="${fieldType}<#if ooStatus.errorMessages?size &gt; 0> errors</#if>" value="<#if fieldType!="password">${stringStatusValue}</#if>" ${attributes}
-    	<@spring.closeTag/>
+    	<@closeTag/>
 	</#if>  	
 </#macro>
 
@@ -154,9 +171,33 @@ Renders a textarea field.
 	<#if empty>
 		<#assign expression = path?substring(7) />
   		<textarea name="${expression}" id="${expression}" class="textarea" ${attributes}></textarea>
+  	
+  		
+  <#--		<textarea class="wikitextarea" id="${expression}" name="${expression}" onselect="ooStoreCaretPosition(this);" onkeyup="ooStoreCaretPosition(this);" ondblclick="ooStoreCaretPosition(this);" onclick="ooActivateWikiArea(this);"  id="${attributes}">${attributes}</textarea>
+        <#include "/otherobjects/templates/workbench/editor/edit-tools.ftl" />
+-->	
 	<#else>
 		<@bind path />
   		<textarea name="${ooStatus.expression}" id="${ooStatus.expression}" class="textarea<#if ooStatus.errorMessages?size &gt; 0> errors</#if>" ${attributes}>${stringStatusValue}</textarea>
+	    
+	</#if>  	
+</#macro>
+
+<#--
+Renders a wiki textarea field.
+-->
+<#macro formWikiTextarea path attributes="" empty=false>
+	<#if empty>
+		<#assign expression = path?substring(7) />
+ 	  		
+  	<textarea class="wikitextarea" id="${expression}" name="${expression}" onselect="ooStoreCaretPosition(this);" onkeyup="ooStoreCaretPosition(this);" ondblclick="ooStoreCaretPosition(this);" onclick="ooActivateWikiArea(this);"  id="${attributes}">${attributes}</textarea>
+        <#include "/otherobjects/templates/workbench/editor/edit-tools.ftl" />
+	
+	<#else>
+		<@bind path />
+		<#assign expression = ooStatus.expression />
+  		<textarea name="${ooStatus.expression}" id="${ooStatus.expression}" class="wikitextarea" onselect="ooStoreCaretPosition(this);" onkeyup="ooStoreCaretPosition(this);" ondblclick="ooStoreCaretPosition(this);" onclick="ooActivateWikiArea(this);"<#if ooStatus.errorMessages?size &gt; 0> errors</#if>" ${attributes}>${stringStatusValue}</textarea>
+  		<#include "/otherobjects/templates/workbench/editor/edit-tools.ftl" />	   
 	</#if>  	
 </#macro>
 
@@ -169,15 +210,15 @@ Note: when values come back they may be strings (and not typed)
     <#if empty>
 		<#assign expression = path?substring(7) />
 	    <input type="checkbox" class="checkbox" id="${expression}" name="${expression}" value="true"
-	    <@spring.closeTag/>
-	    <input type="hidden" name="_${expression}" value="false" <@spring.closeTag/>
+	    <@closeTag/>
+	    <input type="hidden" name="_${expression}" value="false" <@closeTag/>
 	<#else>
 		<@bind path />
 	    <input type="checkbox" class="checkbox" id="${ooStatus.expression}" name="${ooStatus.expression}" value="true"
 	    <#if ooStatus.value?? && ((ooStatus.value?is_boolean && ooStatus.value) || (!ooStatus.value?is_boolean && ooStatus.value == "true"))> checked="checked" </#if> ${attributes}
-	    <@spring.closeTag/>
+	    <@closeTag/>
 	    <#-- Hidden field to set value to false when checkbox not checked -->
-	    <input type="hidden" name="_${ooStatus.expression}" value="false" <@spring.closeTag/>
+	    <input type="hidden" name="_${ooStatus.expression}" value="false" <@closeTag/>
     </#if>
 </#macro>
 
@@ -303,5 +344,16 @@ Renders form validation error messages.
     </#if>
     <#if error_has_next>${separator}</#if>
     </#list>
+</#macro>
+
+<#--
+ * closeTag
+ *
+ * Simple macro to close an HTML tag that has no body with '>' or '/>',
+ * depending on the value of a 'xhtmlCompliant' variable in the namespace
+ * of this library.
+-->
+<#macro closeTag>
+    <#if xhtmlCompliant?exists && xhtmlCompliant>/><#else>></#if>
 </#macro>
  

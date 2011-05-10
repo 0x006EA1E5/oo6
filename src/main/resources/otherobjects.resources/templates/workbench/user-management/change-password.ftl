@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title>Change password | <@spring.message "site.name" /> | OTHERobjects</title>
+<title>Change password | ${oo.msg("site.name")} | OTHERobjects</title>
 <@oo.css "/otherobjects/static/workbench/workbench.css" />
 <style>
 BODY {height:2000px; background:#006DA8 url(${oo.resourceUrl("/otherobjects/static/workbench/assets/admin-bg.gif")});}

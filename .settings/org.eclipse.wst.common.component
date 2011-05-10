@@ -3,5 +3,6 @@
     <wb-module deploy-name="otherobjects_RC_cms">
         <wb-resource deploy-path="/" source-path="/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/src/main/resources"/>
+        <property name="java-output-path" />
     </wb-module>
 </project-modules>

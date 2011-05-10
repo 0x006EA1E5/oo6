@@ -12,6 +12,7 @@ import flexjson.JSON;
  * @author rich
  *
  */
+@SuppressWarnings("serial")
 public abstract class SitePage extends BaseNode //implements SiteItem
 {
     private Url url;

@@ -2,10 +2,13 @@
 Renders an image.
 -->
 <#macro image image width=0 class="" id="">
+
+<#if image.title ??>
 <#if width == 0>
 <img src="${cmsImageTool.getOriginal(image).image.url}" class="${class!}" alt="${image.description!}" title="${image.description!}"/>
 <#else>
 <img src="${cmsImageTool.getSize(image, width).image.url}" class="${class!}" alt="${image.description!}" title="${image.description!}"/>
+</#if>
 </#if>
 </#macro>
 
@@ -87,7 +90,7 @@ Inserts page metaData.
 Renders an exception stack trace. Output is not wrapped in a block element.
 -->
 <#macro renderException exception>
-<strong>${exception.class.name} : ${exception.message}</strong><br/>
+<strong>${exception.class.name} : {exception.message}</strong><br/>
 <#list exception.stackTrace as trace>
 ${trace}<br/>
 </#list>
@@ -148,6 +151,15 @@ Renders the contents of the block if the roles match.
 </#macro>
 
 <#-- 
+Renders the contents of the block if any of the roles in the sequence match.
+-->
+<#macro authorizeIfAny ifAnyGranted>
+<#if securityTool.authorize(ifAnyGranted) >
+<#nested>
+</#if>
+</#macro>
+
+<#-- 
 Displays flash messages.
 -->
 <#macro showFlashMessages>
@@ -159,35 +171,6 @@ Displays flash messages.
 </#list>
 </div>
 </#if>
-</#macro>
-
-<#-- 
-Workbench: displays property value as string.
--->
-<#macro renderPropertyValue prop object>
-<#if beanTool.getPropertyValue(object, prop.propertyPath)?? >
-	<#if prop.type == "component" >
-		${beanTool.getPropertyValue(object, prop.propertyPath)!}
-	<#elseif prop.type == "date" >
-		${beanTool.getPropertyValue(object, prop.propertyPath)?date?string("d MMM yyyy")}
-	<#elseif prop.type == "time" >
-		${beanTool.getPropertyValue(object, prop.propertyPath)?time?string("HH:mm")}
-	<#elseif prop.type == "timestamp" >
-		${beanTool.getPropertyValue(object, prop.propertyPath)?datetime?string("HH:mm 'on' d MMM yyyy")}
-	<#elseif prop.type == "boolean" >
-		${beanTool.getPropertyValue(object, prop.propertyPath)?string("Yes", "No")}	
-	<#elseif prop.type == "list" >
-		<ul>
-		<#list beanTool.getPropertyValue(object, prop.propertyPath) as item>
-		<li>${item}</li>
-		</#list>
-		</ul>	
-  	<#else>
-		${beanTool.getPropertyValue(object, prop.propertyPath)!}
-  	</#if>
-<#else>
-	<span style="color:#888">No value</span>
-</#if>  
 </#macro>
 
 <#--
@@ -233,6 +216,11 @@ Functions
 <#return url("/_action/${actionName}") >
 </#function>
 
+<#function jcrParentPath  path>
+<#return "${urlTool.getJcrParentPath(path)}">
+</#function>
+
+
 <#function url path>
 <#return "${urlTool.getUrl(path)}">
 </#function>
@@ -241,44 +229,17 @@ Functions
 <#return "${urlTool.getResourceUrl(path)}">
 </#function>
 
-<#function msg message>
+<#function message message>
 <#return "${formatTool.getMessage(message)}">
 </#function>
 
+<#function msg message>
+<#-- Deprecated -->
+<#return "${formatTool.getMessage(message)}">
+</#function>
 
-
-
-
-
-
-
-
-<#--
-OO Interface Integration macros
--->
-
-<#-- 
-Macro to insert OO interface headers
--->
-<#macro head>
-<@oo.js "/otherobjects/static/hud/hud.js" />
-<@oo.css "/otherobjects/static/hud/hud.css" />
-<@oo.css "/otherobjects/static/workbench/toolbar.css" />
-</#macro>
-
-<#-- 
-Macro to insert toolbar code
--->
-<#macro toolbar>
-<@authorize "ROLE_ADMIN"> 
-<#include "/otherobjects/templates/hud/toolbar.ftl" />
-</@authorize>
-</#macro>
-
-
-
-
-
-
+<#function themeMessage code>
+<#return springMacroRequestContext.getThemeMessage(code) />
+</#function>
 
 

@@ -1,9 +1,11 @@
 <#import "/spring.ftl" as spring />
 <#import "/oo.ftl" as oo />
+<#import "/workbench.ftl" as workbench />
 
 <#assign pageTitle = "Comparing: ${oo.msg(item1.label)} and ${oo.msg(item2.label)}" />
 
 <#include "/otherobjects/templates/workbench/shared/header.ftl" />
+
 <#include "/otherobjects/templates/workbench/shared/nav-folders.ftl" />
 
 <div class="oo-content">
@@ -15,15 +17,17 @@ ${pageTitle}
 <table class="oo-listing">
 <thead>
 <tr>
-<th>Version 1</th>
-<th>Version 2</th>
+<th>Property</th>
+<th>Version ${item1.version}</th>
+<th>Version ${item2.version}</th>
 </tr>
 </thead>
 <tbody>
 <#list typeDef.properties as property>
  <tr <#if ! beanTool.equals(beanTool.getPropertyValue(item1, property.propertyPath), beanTool.getPropertyValue(item2, property.propertyPath))>class="oo-diff"</#if>>
-	<td><p><@oo.renderPropertyValue property item1 /></p></td>	
-	<td><p><@oo.renderPropertyValue property item2 /></p></td>	
+	<td><p>${property.label} </p> </td>	
+	<td><p><@workbench.renderPropertyValue property item1 /></p></td>	
+	<td><p><@workbench.renderPropertyValue property item2 /></p></td>	
 </tr>
 </#list>
 </tbody>

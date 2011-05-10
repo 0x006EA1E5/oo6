@@ -138,9 +138,29 @@ function ooToggleDesignMode(el, e) {
 	
 }
 
-function ooPublishTemplate(id) {
-	Ojay.HTTP.POST(ooBaseUrl + 'otherobjects/designer/publishTemplate/' + id);
+function ooPublish(id) {
+	Ojay.HTTP.POST(ooBaseUrl + 'otherobjects/workbench/publish/' + id, {}, {
+	   onSuccess: function(response) {
+		  Ojay("#oo-publish-button").node.innerHTML="";
+		  Ojay("#oo-toolbar-object").addClass("oo-live").removeClass("oo-edited");;
+       },
+       onFailure: function(response) {
+    	  alert('Error publishing object. Check the error log.');
+	   }
+    });
 }
+
+function ooPublishTemplate(id) {
+	Ojay.HTTP.POST(ooBaseUrl + 'otherobjects/designer/publishTemplate/' + id, {}, {
+		   onSuccess: function(response) {
+			  Ojay("#oo-publish-template-button").node.innerHTML="";
+	       },
+	       onFailure: function(response) {
+	    	  alert('Error publishing object. Check the error log.');
+		   }
+	});
+}
+
 /**
  * ooSaveTemplateDesign
  * 

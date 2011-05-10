@@ -27,7 +27,8 @@ public class OOFreeMarkerConfigurationFactoryBean extends FreeMarkerConfiguratio
     @Override
     protected void postProcessConfiguration(Configuration config) throws IOException, TemplateException
     {
-        if(otherObjectsConfigurator.getEnvironmentName().equals("dev"))
+        if(otherObjectsConfigurator.getEnvironmentName().equals("dev") || 
+                otherObjectsConfigurator.getEnvironmentName().equals("local"))
         {
             logger.info("Configuring Freemarker for development.");
             config.setSetting(Configuration.TEMPLATE_UPDATE_DELAY_KEY, "0"); // Don't cache templates            

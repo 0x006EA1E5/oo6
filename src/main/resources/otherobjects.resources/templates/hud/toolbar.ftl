@@ -19,7 +19,7 @@
 </p>
 
 <p class="oo-divider">
-	<a class="oo-<#if resourceObject.published>live<#else>edited</#if>" href="${oo.url('/otherobjects/workbench/view/${resourceObject.id}')}">${resourceObject.typeDef.label}: ${resourceObject.ooLabel}</a>
+	<a id="oo-toolbar-object" class="oo-<#if resourceObject.published>live<#else>edited</#if>" href="${oo.url('/otherobjects/workbench/view/${resourceObject.id}')}">${resourceObject.typeDef.label}: ${formatTool.trim(resourceObject.ooLabel,50)}</a>
 </p>
 
 <ul>
@@ -27,7 +27,10 @@
 	<li><a href="javascript:ooToggleEditMode()">Edit blocks</a></li>	
 	<li><a href="javascript:ooToggleDesignMode()">Arrange blocks<#-- (${ooTemplate.ooLabel} : ${ooTemplate.layout.ooLabel})--></a></li>	
 	<#if ! ooTemplate.published>
-	<li><a href="javascript:ooPublishTemplate('${ooTemplate.id}')">Publish template (${ooTemplate.ooLabel})</a></li>
+	<li id="oo-publish-template-button"><a href="javascript:ooPublishTemplate('${ooTemplate.id}')">Publish template (${ooTemplate.ooLabel})</a></li>
+	</#if>	
+	<#if ! resourceObject.published>
+	<li id="oo-publish-button"><a href="javascript:ooPublish('${resourceObject.id}')">Publish</a></li>
 	</#if>	
 </ul>
 <#else>
