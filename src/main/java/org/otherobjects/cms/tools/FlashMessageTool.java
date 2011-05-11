@@ -6,12 +6,12 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.FlashMessage;
+import org.otherobjects.framework.OtherObjectsException;
+import org.otherobjects.framework.SingletonBeanLocator;
 import org.springframework.util.Assert;
 
 /**

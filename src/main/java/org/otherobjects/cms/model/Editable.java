@@ -1,6 +1,8 @@
 package org.otherobjects.cms.model;
 
-public interface Editable
+import java.io.Serializable;
+
+public interface Editable extends Serializable
 {
     String getEditableId();
 }

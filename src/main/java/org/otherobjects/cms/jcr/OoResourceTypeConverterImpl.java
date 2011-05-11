@@ -4,9 +4,9 @@ import javax.jcr.Value;
 import javax.jcr.ValueFactory;
 
 import org.apache.jackrabbit.ocm.manager.atomictypeconverter.AtomicTypeConverter;
-import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.io.OoResourceLoader;
+import org.otherobjects.framework.SingletonBeanLocator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

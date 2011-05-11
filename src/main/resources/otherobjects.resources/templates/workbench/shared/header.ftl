@@ -10,6 +10,9 @@
 <@oo.css "/otherobjects/static/workbench/toolbar.css" />
 <@oo.css "/otherobjects/static/workbench/workbench.css" />
 
+
+<script type="text/javascript" src="/public-data/ckeditor/ckeditor.js"></script>
+
 <@oo.js "/otherobjects/static/libraries/yui-2.7.0/build/utilities/utilities.js" />
 <@oo.js "/otherobjects/static/libraries/yui-2.7.0/build/cookie/cookie-min.js" />
 <@oo.js "/otherobjects/static/libraries/yui-2.7.0/build/datasource/datasource-min.js" />

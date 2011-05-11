@@ -2,10 +2,10 @@ package org.otherobjects.cms.model;
 
 import junit.framework.TestCase;
 
-import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.types.TypeServiceImpl;
+import org.otherobjects.framework.SingletonBeanLocator;
 
 public class SiteFolderTest extends TestCase
 {

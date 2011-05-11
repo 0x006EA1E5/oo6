@@ -8,7 +8,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.io.OoResourceLoader;
@@ -22,6 +21,7 @@ import org.otherobjects.cms.model.TemplateBlockReference;
 import org.otherobjects.cms.model.TemplateLayout;
 import org.otherobjects.cms.model.TemplateRegion;
 import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.framework.OtherObjectsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -2,7 +2,6 @@ package org.otherobjects.cms.validation;
 
 import junit.framework.TestCase;
 
-import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.binding.TestObject;
 import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder;
@@ -10,6 +9,7 @@ import org.otherobjects.cms.types.PropertyDefImpl;
 import org.otherobjects.cms.types.TypeDefBuilder;
 import org.otherobjects.cms.types.TypeDefImpl;
 import org.otherobjects.cms.types.TypeServiceImpl;
+import org.otherobjects.framework.SingletonBeanLocator;
 import org.springframework.validation.Validator;
 
 public class ValidatorServiceImplTest extends TestCase

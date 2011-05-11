@@ -15,7 +15,7 @@ import org.jaxen.SimpleNamespaceContext;
 import org.jaxen.dom4j.Dom4jXPath;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.otherobjects.cms.SingletonBeanLocator;
+import org.otherobjects.framework.SingletonBeanLocator;
 import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.site.TreeNode;
 

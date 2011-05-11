@@ -11,13 +11,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.model.BaseComponent;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
+import org.otherobjects.framework.OtherObjectsException;
 import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.OrderComparator;

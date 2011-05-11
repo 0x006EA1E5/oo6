@@ -3,10 +3,11 @@ package org.otherobjects.cms.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.otherobjects.cms.SingletonBeanLocator;
+import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.Type;
+import org.otherobjects.framework.SingletonBeanLocator;
 
 import flexjson.JSON;
 
@@ -48,10 +49,10 @@ public class DbFolder extends Folder
 
     @JSON(include = false)
     //@Property(order = 50, collectionElementType = PropertyType.STRING)
-    public List<String> getAllowedTypes()
+    public List<TypeDef> getAllowedTypes()
     {
         // Only allowed type is the main type...    
-        List types = new ArrayList();
+        List<TypeDef> types = new ArrayList<TypeDef>();
         types.add(((TypeService) SingletonBeanLocator.getBean("typeService")).getType(this.mainType));
         return types;
     }

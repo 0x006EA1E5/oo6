@@ -17,8 +17,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.lang.StringUtils;
-import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.io.OoResourceLoader;
+import org.otherobjects.framework.OtherObjectsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;

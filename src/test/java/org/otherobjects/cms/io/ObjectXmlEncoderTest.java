@@ -7,10 +7,10 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.dom4j.Document;
-import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.binding.TestComponentObject;
 import org.otherobjects.cms.binding.TestObject;
 import org.otherobjects.cms.binding.TestReferenceObject;
+import org.otherobjects.framework.SingletonBeanLocator;
 import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.MockDaoService;
 import org.otherobjects.cms.dao.MockGenericJcrDao;

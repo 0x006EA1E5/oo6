@@ -11,11 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.model.CmsNode;
 import org.otherobjects.cms.model.Script;
 import org.otherobjects.cms.model.ScriptResource;
+import org.otherobjects.framework.OtherObjectsException;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

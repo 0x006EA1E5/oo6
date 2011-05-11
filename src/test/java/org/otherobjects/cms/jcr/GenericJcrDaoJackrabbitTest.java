@@ -2,12 +2,12 @@ package org.otherobjects.cms.jcr;
 
 import java.util.ArrayList;
 
-import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.binding.TestComponentObject;
 import org.otherobjects.cms.binding.TestObject;
 import org.otherobjects.cms.binding.TestReferenceObject;
 import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.model.SiteFolder;
+import org.otherobjects.framework.SingletonBeanLocator;
 
 @SuppressWarnings("unchecked")
 // FIXME Test for no results in all these mehods

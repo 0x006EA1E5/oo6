@@ -21,10 +21,10 @@ import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
 import org.apache.commons.beanutils.MethodUtils;
-import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.util.StringUtils;
+import org.otherobjects.framework.OtherObjectsException;
+import org.otherobjects.framework.SingletonBeanLocator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;

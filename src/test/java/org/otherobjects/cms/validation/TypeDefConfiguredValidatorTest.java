@@ -2,12 +2,12 @@ package org.otherobjects.cms.validation;
 
 import junit.framework.TestCase;
 
-import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.types.PropertyDefImpl;
 import org.otherobjects.cms.types.TypeDefImpl;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.types.TypeServiceImpl;
+import org.otherobjects.framework.SingletonBeanLocator;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 

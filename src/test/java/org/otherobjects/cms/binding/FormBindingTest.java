@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import junit.framework.TestCase;
 
-import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder;
 import org.otherobjects.cms.types.PropertyDefImpl;
 import org.otherobjects.cms.types.TypeDefBuilder;
@@ -17,6 +16,7 @@ import org.otherobjects.cms.types.TypeServiceImpl;
 import org.otherobjects.cms.util.ActionUtils;
 import org.otherobjects.cms.validation.TypeDefConfiguredValidator;
 import org.otherobjects.cms.validation.ValidatorServiceImpl;
+import org.otherobjects.framework.SingletonBeanLocator;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;

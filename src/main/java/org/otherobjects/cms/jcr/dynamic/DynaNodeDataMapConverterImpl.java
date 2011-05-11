@@ -35,11 +35,11 @@ import org.apache.jackrabbit.ocm.manager.objectconverter.impl.ObjectConverterImp
 import org.apache.jackrabbit.ocm.mapper.Mapper;
 import org.apache.jackrabbit.ocm.mapper.model.BeanDescriptor;
 import org.apache.jackrabbit.ocm.mapper.model.CollectionDescriptor;
-import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeServiceImpl;
+import org.otherobjects.framework.OtherObjectsException;
+import org.otherobjects.framework.SingletonBeanLocator;
 import org.springframework.util.Assert;
 
 @SuppressWarnings("unchecked")

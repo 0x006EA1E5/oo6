@@ -9,7 +9,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.events.EventProxy;
 import org.otherobjects.cms.events.ModificationEvent;
@@ -18,6 +17,7 @@ import org.otherobjects.cms.events.RootEventListener;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.security.SecurityUtil;
+import org.otherobjects.framework.OtherObjectsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;

@@ -3,7 +3,7 @@ Renders an image.
 -->
 <#macro image image width=0 class="" id="">
 
-<#if image.title ??>
+<#if image.label ??>
 <#if width == 0>
 <img src="${cmsImageTool.getOriginal(image).image.url}" class="${class!}" alt="${image.description!}" title="${image.description!}"/>
 <#else>

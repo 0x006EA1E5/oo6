@@ -11,7 +11,6 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
-import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.jcr.dynamic.DynaNode;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.model.CmsNode;
@@ -21,6 +20,7 @@ import org.otherobjects.cms.types.PropertyDef;
 import org.otherobjects.cms.types.PropertyDefImpl;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.annotation.PropertyType;
+import org.otherobjects.framework.OtherObjectsException;
 
 public class ObjectXmlEncoder
 {

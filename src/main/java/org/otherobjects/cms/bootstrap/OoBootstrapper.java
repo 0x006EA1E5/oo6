@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
-import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.framework.OtherObjectsException;
 import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.model.User;
 import org.otherobjects.cms.model.UserDao;

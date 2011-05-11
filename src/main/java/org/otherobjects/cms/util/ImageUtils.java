@@ -6,7 +6,7 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
-import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.framework.OtherObjectsException;
 
 import com.drew.imaging.jpeg.JpegMetadataReader;
 import com.drew.metadata.Metadata;

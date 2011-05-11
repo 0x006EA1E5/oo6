@@ -4,12 +4,12 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.dao.GenericDao;
 import org.otherobjects.cms.model.CompositeDatabaseId;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.util.IdentifierUtils;
+import org.otherobjects.framework.OtherObjectsException;
 
 @SuppressWarnings("unchecked")
 public class HibernateDataStore implements DataStore

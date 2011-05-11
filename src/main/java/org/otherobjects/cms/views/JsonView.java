@@ -36,8 +36,7 @@ public class JsonView implements View
     @Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
     
-    @SuppressWarnings("unchecked")
-    public void render(Map model, HttpServletRequest request, HttpServletResponse response) throws Exception
+    public void render(Map<String, ?> model, HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         PrintWriter output = response.getWriter();
         StringWriter writer = new StringWriter();
@@ -45,7 +44,9 @@ public class JsonView implements View
 
         if(! "true".equalsIgnoreCase(otherObjectsConfigurator.getProperty("otherobjects.view.json.show.class", "false")))
         {
-            serializer.exclude("class");
+            serializer.exclude("*.class");
+            serializer.exclude("*.typeDef");
+            serializer.exclude("*.jcrPath");
         }
         
         if (model.containsKey(JSON_MIME_OVERRIDE))
@@ -67,7 +68,7 @@ public class JsonView implements View
         else
         {
             Object item = model.get("item");
-            writer.write(serializeData(serializer,item, deep));
+            writer.write(serializeData(serializer, item, deep));
 
         }
         String json = writer.toString();

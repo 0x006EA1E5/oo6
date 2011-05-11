@@ -6,7 +6,7 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
-import org.otherobjects.cms.SingletonBeanLocator;
+import org.otherobjects.framework.SingletonBeanLocator;
 import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.MockDaoService;
 import org.otherobjects.cms.dao.MockGenericDao;

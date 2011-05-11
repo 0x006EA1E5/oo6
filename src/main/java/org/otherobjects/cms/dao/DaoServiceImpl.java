@@ -8,10 +8,10 @@ import javax.persistence.Entity;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.SessionFactory;
-import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.hibernate.GenericDaoHibernate;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.types.TypeService;
+import org.otherobjects.framework.OtherObjectsException;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;

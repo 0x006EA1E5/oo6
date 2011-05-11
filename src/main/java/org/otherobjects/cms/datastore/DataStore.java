@@ -1,5 +1,6 @@
 package org.otherobjects.cms.datastore;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.otherobjects.cms.dao.GenericDao;
@@ -16,8 +17,8 @@ import org.otherobjects.cms.types.TypeDef;
  */
 public interface DataStore
 {
-    @SuppressWarnings("unchecked")
-    GenericDao getDao(TypeDef typeDef);
+    
+    GenericDao<Serializable, Serializable> getDao(TypeDef typeDef);
 
     List<Object> list(String query);
 

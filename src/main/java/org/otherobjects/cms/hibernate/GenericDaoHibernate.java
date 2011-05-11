@@ -6,10 +6,10 @@ import java.util.Map;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.GenericDao;
 import org.otherobjects.cms.dao.PagedList;
 import org.otherobjects.cms.dao.PagedListImpl;
+import org.otherobjects.framework.OtherObjectsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.orm.ObjectRetrievalFailureException;

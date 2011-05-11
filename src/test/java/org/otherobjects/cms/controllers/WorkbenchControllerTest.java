@@ -2,9 +2,9 @@ package org.otherobjects.cms.controllers;
 
 import junit.framework.TestCase;
 
-import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.binding.BindServiceImpl;
 import org.otherobjects.cms.binding.MockWebApplicationContext;
+import org.otherobjects.framework.SingletonBeanLocator;
 import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.dao.DaoServiceImpl;
 import org.otherobjects.cms.dao.MockGenericDao;

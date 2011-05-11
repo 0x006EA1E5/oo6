@@ -2,7 +2,7 @@ package org.otherobjects.cms.util;
 
 import java.security.MessageDigest;
 
-import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.framework.OtherObjectsException;
 
 /**
  * FIXME Confused with SecurityUtil

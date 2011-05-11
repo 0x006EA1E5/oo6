@@ -82,7 +82,7 @@ public class RequestUtils
     }
 
     /**
-     * Logs query string and all paramters from the request to the provider logger.
+     * Logs query string and all parameters from the request to the provider logger.
      * 
      * <p>Note: be careful using this with controllers that handle sensitive data,
      * that should not end up in log files (passwords, credit card details etc).
@@ -90,16 +90,16 @@ public class RequestUtils
      * @param log
      * @param request
      */
-    @SuppressWarnings("unchecked")
     public static void logParameters(Logger log, HttpServletRequest request)
     {
         // Debug parameters
-        Enumeration parameterNames = request.getParameterNames();
+        @SuppressWarnings("unchecked")
+        Enumeration<String> parameterNames = request.getParameterNames();
         log.debug("Query String: ", request.getQueryString());
         while (parameterNames.hasMoreElements())
         {
             String name = (String) parameterNames.nextElement();
-            log.error("Parameter: {} = {}", name, request.getParameter(name));
+            log.info("Parameter: {} = {}", name, request.getParameter(name));
         }
     }
 

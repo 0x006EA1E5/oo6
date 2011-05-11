@@ -1,10 +1,15 @@
 package org.otherobjects.cms.model;
 
+import javax.annotation.Resource;
+
 import org.otherobjects.cms.Url;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
 import org.otherobjects.cms.util.StringUtils;
+import org.otherobjects.framework.OtherObjectsException;
+import org.otherobjects.framework.SingletonBeanLocator;
+import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 /**
@@ -46,6 +51,9 @@ public class CmsImage extends BaseNode
     private CommonsMultipartFile newFile;
     private String thumbnailPath;
 
+    @Resource
+    private OtherObjectsConfigurator otherObjectsConfigurator;
+    
     /**
      * FIXME Temp hack to allow thumbnails in Workbench interface.
      * 
@@ -75,7 +83,9 @@ public class CmsImage extends BaseNode
     @Override
     public Url getOoUrl()
     {
-        return new Url("/public-data/images/" + ORIGINALS_PATH + getCode()); //FIXME should honor site.public.data.url setting
+        String publicDataUrl = OtherObjectsConfigurator.getOtherObjectsConfigurator().getProperty(
+        		"site.public.data.url");
+        return new Url(publicDataUrl + "/images/" + ORIGINALS_PATH + getCode());
     }
 
     /**
@@ -268,5 +278,5 @@ public class CmsImage extends BaseNode
     {
         return DEFAULT_FOLDER + ORIGINALS_PATH + getCode();
     }
-
+    
 }

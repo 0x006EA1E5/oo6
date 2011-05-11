@@ -10,9 +10,9 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.dao.PagedList;
 import org.otherobjects.cms.dao.PagedListImpl;
+import org.otherobjects.framework.OtherObjectsException;
 
 /**
  * Wrapper/Utility to build hibernate queries without having to do string concatenation while maintaining the individual parts

@@ -102,6 +102,8 @@ Renders a field inputter by choosing the correct inputter renderer. Also handles
 	
     <#elseif type == "wiki" >
 		   <@formWikiTextarea "${path}" "" empty/> 
+    <#elseif type == "ckeditor" >
+		   <@formCkEditorTextarea "${path}" "" empty/> 
 	<#elseif type == "boolean" >
   		<@formCheckbox "${path}" "" empty/>
 	<#elseif type == "transient" >
@@ -198,6 +200,20 @@ Renders a wiki textarea field.
 		<#assign expression = ooStatus.expression />
   		<textarea name="${ooStatus.expression}" id="${ooStatus.expression}" class="wikitextarea" onselect="ooStoreCaretPosition(this);" onkeyup="ooStoreCaretPosition(this);" ondblclick="ooStoreCaretPosition(this);" onclick="ooActivateWikiArea(this);"<#if ooStatus.errorMessages?size &gt; 0> errors</#if>" ${attributes}>${stringStatusValue}</textarea>
   		<#include "/otherobjects/templates/workbench/editor/edit-tools.ftl" />	   
+	</#if>  	
+</#macro>
+
+<#macro formCkEditorTextarea path attributes="" empty=false>
+	<#if empty>
+		<#assign expression = path?substring(7) />
+ 	  		
+  	<textarea class="ckeditor" id="${expression}" name="${expression}" ></textarea>
+    
+    <#else>
+		<@bind path />
+		<#assign expression = ooStatus.expression />
+  		<textarea name="${ooStatus.expression}" id="${ooStatus.expression}" class="ckeditor" >${stringStatusValue}</textarea>
+  	
 	</#if>  	
 </#macro>
 

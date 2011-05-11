@@ -1,9 +1,9 @@
 package org.otherobjects.cms.model;
 
-import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.types.annotation.Type;
+import org.otherobjects.framework.SingletonBeanLocator;
 
 /**
  * Publishing options for site pages.

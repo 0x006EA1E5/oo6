@@ -4,7 +4,7 @@ import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
 
-@Type
+@Type(labelProperty = "code")
 public class TemplateLayout extends BaseNode
 {
     private String code;

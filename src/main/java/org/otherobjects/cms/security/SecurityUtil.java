@@ -7,11 +7,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.bootstrap.OtherObjectsAdminUserCreator;
 import org.otherobjects.cms.model.Role;
 import org.otherobjects.cms.model.User;
 import org.otherobjects.cms.model.UserDao;
+import org.otherobjects.framework.OtherObjectsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

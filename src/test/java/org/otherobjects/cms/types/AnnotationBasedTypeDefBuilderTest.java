@@ -2,7 +2,6 @@ package org.otherobjects.cms.types;
 
 import junit.framework.TestCase;
 
-import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.binding.TestComponentObject;
 import org.otherobjects.cms.binding.TestDbObject;
 import org.otherobjects.cms.binding.TestObject;
@@ -10,6 +9,7 @@ import org.otherobjects.cms.binding.TestReferenceObject;
 import org.otherobjects.cms.types.annotation.Property;
 import org.otherobjects.cms.types.annotation.PropertyType;
 import org.otherobjects.cms.types.annotation.Type;
+import org.otherobjects.framework.OtherObjectsException;
 
 public class AnnotationBasedTypeDefBuilderTest extends TestCase
 {

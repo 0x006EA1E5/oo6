@@ -7,7 +7,6 @@ import java.io.IOException;
 
 import javax.annotation.Resource;
 
-import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.io.OoResourceLoader;
 import org.otherobjects.cms.model.CmsImage;
@@ -15,6 +14,7 @@ import org.otherobjects.cms.model.CmsImageSize;
 import org.otherobjects.cms.util.ImageResizer;
 import org.otherobjects.cms.util.ImageUtils;
 import org.otherobjects.cms.views.Tool;
+import org.otherobjects.framework.OtherObjectsException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 

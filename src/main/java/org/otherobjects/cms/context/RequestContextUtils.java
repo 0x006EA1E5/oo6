@@ -4,8 +4,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.SingletonBeanLocator;
+import org.otherobjects.framework.OtherObjectsException;
+import org.otherobjects.framework.SingletonBeanLocator;
 import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestAttributes;
@@ -51,7 +51,8 @@ public class RequestContextUtils
             }
         }
         // if there is no servlet context ask OtherObjectsConfigurator for the context path
-        return getOtherObjectsConfigurator().getProperty(OtherObjectsConfigurator.CONTEXT_PATH_KEY, "");
+        return OtherObjectsConfigurator.getOtherObjectsConfigurator().getProperty(
+        		OtherObjectsConfigurator.CONTEXT_PATH_KEY, "");
     }
 
     /**
@@ -65,7 +66,8 @@ public class RequestContextUtils
         if (httpServletRequest != null)
             return httpServletRequest.getServerName();
 
-        return getOtherObjectsConfigurator().getProperty(OtherObjectsConfigurator.SERVER_NAME_KEY, "localhost");
+        return OtherObjectsConfigurator.getOtherObjectsConfigurator().getProperty(
+        		OtherObjectsConfigurator.SERVER_NAME_KEY, "localhost");
     }
 
     /**
@@ -112,22 +114,5 @@ public class RequestContextUtils
     public static boolean isSecureRequest()
     {
         return (getHttpServletRequest() != null && getHttpServletRequest().isSecure());
-    }
-
-    //TODO this is a duplication of org.otherobjects.cms.Url.getOtherObjectsConfigurator - merge into one utility method somewhere
-    public static OtherObjectsConfigurator getOtherObjectsConfigurator()
-    {
-        OtherObjectsConfigurator otherObjectsConfigurator = null;
-        try
-        {
-            otherObjectsConfigurator = (OtherObjectsConfigurator) SingletonBeanLocator.getBean("otherObjectsConfigurator");
-            if (otherObjectsConfigurator == null)
-                throw new OtherObjectsException("No otherObjectConfigurator bean found in current context. Somthing must have gone wrong at startup");
-        }
-        catch (Exception e)
-        {
-            throw new OtherObjectsException("Problems accessing applicationContext to get otherObjectConfigurator", e);
-        }
-        return otherObjectsConfigurator;
     }
 }

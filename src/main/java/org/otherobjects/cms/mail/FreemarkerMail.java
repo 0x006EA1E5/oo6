@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.lang.StringUtils;
-import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.framework.OtherObjectsException;
 
 /**
  * Simple but hopefully powerful mail class. It can send simpe plain text emails as well as multipart mails with plain text, html and attachment parts.

@@ -104,4 +104,3 @@ createFolder(dao, "/blocks", "Block Data", "datatypes")
 createArticle(dao, "/site/welcome.html", "Welcome","<p>Welcome to OTHERobjects.</p>")
 /*
 */
-updateFolder(dao, "/site", "\${site.label}", "site", ["ArticlePage","CompositePage","com.othermedia.hccms.model.HCCmsPage"])

@@ -10,7 +10,6 @@ import java.util.Map;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
-import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.binding.CmsNodeReferenceEditor;
 import org.otherobjects.cms.dao.DaoService;
 import org.otherobjects.cms.datastore.JackrabbitDataStore;
@@ -20,6 +19,7 @@ import org.otherobjects.cms.types.PropertyDefImpl;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.types.annotation.PropertyType;
+import org.otherobjects.framework.OtherObjectsException;
 
 public class ObjectXmlDecoder
 {
@@ -225,7 +225,7 @@ public class ObjectXmlDecoder
             int counter = 0;
             List<Element> elements = element.elements("property");
 
-            List list = new ArrayList(elements.size());
+            List<Object> list = new ArrayList<Object>(elements.size());
             for (int i = 0; i < (elements.size()); i++)
             {
                 list.add(null);

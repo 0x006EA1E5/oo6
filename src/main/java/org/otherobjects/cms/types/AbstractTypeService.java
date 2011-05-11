@@ -1,16 +1,16 @@
 package org.otherobjects.cms.types;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.otherobjects.cms.OtherObjectsException;
+import org.otherobjects.framework.OtherObjectsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SuppressWarnings("unchecked")
 public abstract class AbstractTypeService implements TypeService
 {
     private final Logger logger = LoggerFactory.getLogger(AbstractTypeService.class);

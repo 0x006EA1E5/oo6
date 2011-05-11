@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.otherobjects.cms.OtherObjectsException;
-import org.otherobjects.cms.SingletonBeanLocator;
 import org.otherobjects.cms.Url;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.types.TypeDef;
 import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.cms.util.StringUtils;
+import org.otherobjects.framework.OtherObjectsException;
+import org.otherobjects.framework.SingletonBeanLocator;
 import org.springframework.util.Assert;
 
 /**

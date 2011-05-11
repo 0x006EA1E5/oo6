@@ -8,6 +8,8 @@ import java.net.URLEncoder;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.otherobjects.framework.OtherObjectsException;
+import org.otherobjects.framework.SingletonBeanLocator;
 import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.context.RequestContextUtils;
 import org.slf4j.Logger;
@@ -168,9 +170,11 @@ public class Url
         }
 
         if (isSsl())
-            return Integer.parseInt(getOtherObjectsConfigurator().getProperty(OtherObjectsConfigurator.DEFAULT_SECURE_PORT_KEY));
+            return Integer.parseInt(OtherObjectsConfigurator.getOtherObjectsConfigurator().getProperty(
+            		OtherObjectsConfigurator.DEFAULT_SECURE_PORT_KEY));
         else
-            return Integer.parseInt(getOtherObjectsConfigurator().getProperty(OtherObjectsConfigurator.DEFAULT_PORT_KEY));
+            return Integer.parseInt(OtherObjectsConfigurator.getOtherObjectsConfigurator().getProperty(
+            		OtherObjectsConfigurator.DEFAULT_PORT_KEY));
     }
 
     private HttpServletRequest getOngoingRequest()
@@ -179,8 +183,10 @@ public class Url
     }
 
     /**
-     * Returns a URL that is suitable for use in an href attribute of the A tag. If this was set to be immutable the link given at creation time will be returned no matter what.
-     * If this was not set to be immutable the absolute link will only be returned, if the link was created as absolute or if it is a secure link but the current request isn't secure.
+     * Returns a URL that is suitable for use in an href attribute of the A tag. If this was set to be immutable the 
+     * link given at creation time will be returned no matter what.
+     * If this was not set to be immutable the absolute link will only be returned, if the link was created as absolute
+     * or if it is a secure link but the current request isn't secure.
      */
     @Override
     public String toString()
@@ -309,22 +315,6 @@ public class Url
         if (!modifieable)
             throw new OtherObjectsException(ILLEGAL_MODIFIATION_MESSAGE);
         this.ssl = ssl;
-    }
-
-    public static OtherObjectsConfigurator getOtherObjectsConfigurator()
-    {
-        OtherObjectsConfigurator otherObjectsConfigurator = null;
-        try
-        {
-            otherObjectsConfigurator = (OtherObjectsConfigurator) SingletonBeanLocator.getBean("otherObjectsConfigurator");
-            if (otherObjectsConfigurator == null)
-                throw new OtherObjectsException("No otherObjectConfigurator bean found in applicationContext.");
-        }
-        catch (Exception e)
-        {
-            throw new OtherObjectsException("Could not access applicationContext to get otherObjectConfigurator.", e);
-        }
-        return otherObjectsConfigurator;
     }
 
 }

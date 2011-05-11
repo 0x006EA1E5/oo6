@@ -1,6 +1,7 @@
 package org.otherobjects.cms.controllers;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
-import org.otherobjects.cms.OtherObjectsException;
 import org.otherobjects.cms.Url;
 import org.otherobjects.cms.binding.BindService;
 import org.otherobjects.cms.dao.DaoService;
@@ -29,7 +29,6 @@ import org.otherobjects.cms.model.DbFolder;
 import org.otherobjects.cms.model.Editable;
 import org.otherobjects.cms.model.Folder;
 import org.otherobjects.cms.model.FolderDao;
-import org.otherobjects.cms.model.FolderDaoImpl;
 import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.cms.model.SmartFolder;
 import org.otherobjects.cms.types.TypeDef;
@@ -39,6 +38,7 @@ import org.otherobjects.cms.util.IdentifierUtils;
 import org.otherobjects.cms.util.RequestUtils;
 import org.otherobjects.cms.validation.ValidatorService;
 import org.otherobjects.cms.views.JsonView;
+import org.otherobjects.framework.OtherObjectsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -193,7 +193,6 @@ public class WorkbenchController
      * @throws ServletException
      * @throws IOException
      */
-    @SuppressWarnings("unchecked")
     @RequestMapping({"/workbench/list/*"})
     public ModelAndView list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -226,7 +225,7 @@ public class WorkbenchController
             String dbType = dbFolder.getMainType();
             String dbQuery = dbFolder.getMainTypeQuery();
 
-            GenericDao genericDao = this.daoService.getDao(dbType);
+            GenericDao<Serializable, Serializable> genericDao = this.daoService.getDao(dbType);
 
             Assert.notNull(genericDao, "No DAO found for: " + dbType);
             Assert.isTrue(!(genericDao instanceof GenericJcrDao), "Dao must be defined for this database object.");
@@ -307,8 +306,7 @@ public class WorkbenchController
     }
 
     /* Actions */
-
-    @SuppressWarnings("unchecked")
+    
     @RequestMapping({"/workbench/save"})
     public ModelAndView save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -326,7 +324,7 @@ public class WorkbenchController
 
         Editable item = null;
         DataStore store = getDataStore(typeDef.getStore());
-        GenericDao genericDao = store.getDao(typeDef);
+        GenericDao<Serializable, Serializable> genericDao = store.getDao(typeDef);
 
         if (StringUtils.isNotBlank(id))
         {
