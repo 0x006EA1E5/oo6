@@ -91,7 +91,7 @@ A.button {background: #cccccc; padding:3px; color:#000000;}
 
 <table>
     <tr><td class="label">User</td><td class="info"> ${(security.user.username)!} [<a href="${oo.url("/otherobjects/logout.html")}">Logout</a>]  </td></tr>
-    <tr><td class="label">Admin?</td><td class="info">${security.authorize("ROLE_ADMIN",null,"ROLE_GUEST")?string("Yes","No")}</td></tr>
+    <tr><td class="label">Admin?</td><td class="info">${security.authorize("ROLE_ADMIN","","ROLE_GUEST")?string("Yes","No")}</td></tr>
 </table>
 
 <h2>Session</h2>
