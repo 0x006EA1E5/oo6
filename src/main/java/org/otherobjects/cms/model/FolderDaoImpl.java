@@ -22,7 +22,7 @@ public class FolderDaoImpl extends GenericJcrDaoJackrabbit<Folder> implements Fo
     public List<Folder> getFolders()
     {
         // FIXME Need folder indicator
-        return (List<Folder>)getAllByJcrExpression("/jcr:root//element(*) [jcr:like(@ooType,'%SiteFolder')] order by @creationTimestamp");
+        return (List<Folder>)getAllByJcrExpression("/jcr:root//element(*) [jcr:like(@ooType,'%Folder')] order by @creationTimestamp");
     }
 
     public TreeNode getFolderTree(String rootPath)
