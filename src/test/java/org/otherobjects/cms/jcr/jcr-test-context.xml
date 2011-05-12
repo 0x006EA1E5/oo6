@@ -10,6 +10,8 @@
 		<property name="locations">
 			<list>
 				<value>classpath:otherobjects.resources/config/otherobjects.properties</value>
+				<value>classpath:project-test.properties</value>
+				<value>classpath:project-datastore-test.properties</value>
 			</list>
 		</property>
 	</bean>
