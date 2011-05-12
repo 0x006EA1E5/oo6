@@ -94,7 +94,7 @@ public class SecurityUtil
             Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             if (user instanceof User)
                 return (User) user;
-            else if (user instanceof String && ((String) user).equals("roleAnonymous"))
+            else if (user instanceof String && ((String) user).equals("anonymousUser"))
                 // Anonymous user detected
                 return null;
             else
