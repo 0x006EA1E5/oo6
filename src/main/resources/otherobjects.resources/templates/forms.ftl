@@ -204,6 +204,7 @@ Renders a wiki textarea field.
 </#macro>
 
 <#macro formCkEditorTextarea path attributes="" empty=false>
+	<@oo.addFooterJs "/otherobjects/static/libraries/ckeditor/ckeditor.js" />
 	<#if empty>
 		<#assign expression = path?substring(7) />
  	  		
