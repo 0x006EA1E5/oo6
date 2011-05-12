@@ -4,5 +4,7 @@
 </div>
 <@hud.toolbar  />
 </#if>
+
+<@oo.showFooterJs />
 </body>
 </html>

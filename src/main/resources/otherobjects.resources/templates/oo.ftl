@@ -242,4 +242,21 @@ Functions
 <#return springMacroRequestContext.getThemeMessage(code) />
 </#function>
 
+<#--
+ Footer JavaScript includes
+-->
+<#macro addFooterJs url>
+	<#if !footerJs?? >
+		<#assign footerJs = [url] />
+	<#elseif !footerJs?seq_contains(url) >
+		<#assign footerJs = footerJs + [url] />
+	</#if>	
+</#macro>
 
+<#macro showFooterJs >
+	<#if footerJs?? >
+		<#list footerJs as url>
+			<@js url />
+		</#list>
+	</#if>
+</#macro>
