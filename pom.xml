@@ -55,7 +55,7 @@
 	</developers>
 	
 	<!-- *********************************************************************************************************** -->
-	<!-- ** Maven repos etc***************************************************************************************** -->
+	<!-- ** Maven repos etc **************************************************************************************** -->
 	<!-- *********************************************************************************************************** -->
 	<distributionManagement>
 		<repository>
@@ -809,6 +809,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>3.8.2</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
@@ -977,5 +978,11 @@
 			<version>3.1</version>
 		</dependency> 
 
+ 		<dependency>
+ 			<groupId>junit</groupId>
+ 			<artifactId>junit</artifactId>
+ 			<version>4.8.2</version>
+ 			<scope>test</scope>
+ 		</dependency>
 	</dependencies>
 </project>

@@ -83,6 +83,6 @@ public class WorkbenchControllerTest extends TestCase
         request.addParameter("name","My Role");
         request.addParameter("description","My description");
         ModelAndView mav = controller.save(request, response);
-        assertNull(mav);
+        assertNotNull(mav);
     }
 }
