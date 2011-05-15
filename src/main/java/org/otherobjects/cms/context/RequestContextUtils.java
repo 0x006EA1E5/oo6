@@ -52,7 +52,7 @@ public class RequestContextUtils
         }
         // if there is no servlet context ask OtherObjectsConfigurator for the context path
         return OtherObjectsConfigurator.getOtherObjectsConfigurator().getProperty(
-        		OtherObjectsConfigurator.CONTEXT_PATH_KEY, "");
+                OtherObjectsConfigurator.CONTEXT_PATH_KEY, "");
     }
 
     /**
@@ -67,7 +67,7 @@ public class RequestContextUtils
             return httpServletRequest.getServerName();
 
         return OtherObjectsConfigurator.getOtherObjectsConfigurator().getProperty(
-        		OtherObjectsConfigurator.SERVER_NAME_KEY, "localhost");
+                OtherObjectsConfigurator.SERVER_NAME_KEY, "localhost");
     }
 
     /**

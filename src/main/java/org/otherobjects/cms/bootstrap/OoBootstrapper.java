@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.framework.OtherObjectsException;
 import org.otherobjects.framework.config.OtherObjectsConfigurator;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 /**
  * Ensures that the OTHERobjects datastores are correctly initialised
@@ -26,14 +29,21 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * 
  * @author rich
  */
-public class OoBootstrapper implements InitializingBean
-{
+@Component
+public class OoBootstrapper implements InitializingBean {
+    
+    @Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
+    @Resource
     private DbSchemaInitialiser dbSchemaInitialiser;
+    @Resource
     private JackrabbitInitialiser jackrabbitInitialiser;
+    @Resource
     private OtherObjectsAdminUserCreator otherObjectsAdminUserCreator;
+    @Resource
     private JackrabbitPopulater jackrabbitPopulater;
     //private ResourceScanner resourceScanner;
+    @Resource
     private UserDao userDao;
 
     private static final String BOOTSTRAP_PROPERTIES_FILENAME = "/bootstrap.properties";

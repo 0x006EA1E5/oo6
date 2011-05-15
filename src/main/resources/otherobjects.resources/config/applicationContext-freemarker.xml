@@ -14,9 +14,8 @@
 		</property>
 		<property name="preTemplateLoaders">
 			<list>
-				<bean class="org.otherobjects.cms.io.OoResourceFreemarkerTemplateLoader">
-					<constructor-arg ref="ooResourceLoader" />
-				</bean>
+				<bean class="org.otherobjects.cms.io.OoResourceFreemarkerTemplateLoader" />
+					
 				<!-- Default TemplateLoader allows loading of spring.ftl macros -->
 				<bean class="org.springframework.ui.freemarker.SpringTemplateLoader">
 					<constructor-arg>

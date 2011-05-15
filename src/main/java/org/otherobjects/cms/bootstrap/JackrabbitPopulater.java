@@ -14,6 +14,7 @@ import org.otherobjects.cms.util.ResourceScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 
 /**
  * Runs repository setup scripts.
@@ -22,15 +23,20 @@ import org.springframework.core.io.Resource;
  * 
  * @author joerg
  */
+@Component
 public class JackrabbitPopulater
 {
     private final Logger logger = LoggerFactory.getLogger(JackrabbitPopulater.class);
 
+    @javax.annotation.Resource
     private DaoService daoService;
+    @javax.annotation.Resource
     private UniversalJcrDao universalJcrDao;
     private Resource bootstrapScript;
     private Resource siteBootstrapScript;
+    @javax.annotation.Resource
     private TypeService typeService;
+    @javax.annotation.Resource
     private ResourceScanner resourceScanner;
 
     public void populateRepository() throws Exception

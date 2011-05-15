@@ -11,9 +11,10 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- *Required!* -->
-	<mvc:annotation-driven conversion-service="conversionService" />
+	<context:annotation-config conversion-service="conversionService" />
 
 	<context:component-scan base-package="org.otherobjects.cms.site" />
+	<context:component-scan base-package="org.otherobjects.cms.binding" />
 
 	
 	<!-- 
@@ -24,10 +25,7 @@
 			<list>
 				<ref bean="localeChangeInterceptor" />
 				<bean class="org.otherobjects.cms.controllers.interceptors.ModelModifierInterceptor">
-					<property name="daoService" ref="daoService" />
-					<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
-					<property name="freeMarkerToolProvider" ref="freeMarkerToolProvider" />
-					<property name="performanceInfo" ref="performanceInfo" />
+
 				</bean>
 				<ref bean="openSessionInViewInterceptor" />
 			</list>
@@ -39,10 +37,7 @@
 		</bean>
 	<mvc:interceptors>
 		<bean class="org.otherobjects.cms.controllers.interceptors.ModelModifierInterceptor">
-				<property name="daoService" ref="daoService" />
-				<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
-				<property name="freeMarkerToolProvider" ref="freeMarkerToolProvider" />
-				<property name="performanceInfo" ref="performanceInfo" />
+
 		</bean>
 		<!-- <bean name="openSessionInViewInterceptor"/> -->
 	
@@ -78,10 +73,7 @@
 	<context:component-scan base-package="org.otherobjects.cms.controllers">
 		<context:exclude-filter type="regex" expression="org.otherobjects.cms.controllers.site.*"/>
 	</context:component-scan>
-	<context:component-scan base-package="org.otherobjects.cms.util" />
-	
-	<context:component-scan base-package="org.otherobjects.cms.dao" />
-	
+		
 	<!-- Content negotiation, xml, json, html views -->
 	<bean id="contentNegotiatingViewResolver"
 		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver"
@@ -110,13 +102,14 @@
 		-->
 	</bean>
 
-	<bean id="jsonViewResolver" class="org.otherobjects.cms.views.SingleViewViewResolver"
+	<!-- this is duff
+	 <bean id="jsonViewResolver" class="org.otherobjects.cms.views.SingleViewViewResolver"
 		p:order="#{contentNegotiatingViewResolver.order+1}">
 		<constructor-arg>
 			<bean class="org.otherobjects.cms.views.JsonView" />
 		</constructor-arg>
 	</bean>
-	
+	 -->
 
 
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

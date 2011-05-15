@@ -29,8 +29,10 @@ import org.otherobjects.cms.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+@Service("typeService")
 public class TypeServiceImpl extends AbstractTypeService implements InitializingBean
 {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -38,11 +40,13 @@ public class TypeServiceImpl extends AbstractTypeService implements Initializing
     private Map<String, AtomicTypeConverter> jcrAtomicConverters;
     private Map<String, Class<?>> jcrClassMappings;
 
+    @Resource
     private AnnotationBasedTypeDefBuilder annotationBasedTypeDefBuilder;
 
     @Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
 
+    @Resource
     private AnnotatedClassesScanner scanner;
 
     public void setScanner(AnnotatedClassesScanner scanner)

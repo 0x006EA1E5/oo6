@@ -3,6 +3,9 @@ package org.otherobjects.cms.io;
 import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 /**
@@ -11,8 +14,9 @@ import org.springframework.util.Assert;
  * @author joerg
  *
  */
-public class OoResourceEditor extends PropertyEditorSupport
-{
+@Component
+public class OoResourceEditor extends PropertyEditorSupport {
+    @Resource
     private OoResourceLoader ooResourceLoader;
 
     public void setOoResourceLoader(OoResourceLoader ooResourceLoader)

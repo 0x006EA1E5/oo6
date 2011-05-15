@@ -1,38 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 	
-	
+	<context:annotation-config />
+
 	<!-- Types -->
-	<bean name="typeService" class="org.otherobjects.cms.types.TypeServiceImpl" depends-on="otherObjectsConfigurator">
-		<property name="annotationBasedTypeDefBuilder" ref="annotationBasedTypeDefBuilder"></property>
-		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
-		<property name="scanner" ref="annotatedClassesScanner" />
-	</bean>
-	<bean id="annotationBasedTypeDefBuilder" class="org.otherobjects.cms.types.AnnotationBasedTypeDefBuilder">
-		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator"></property>
-	</bean>
-	
-	<!-- Binder -->
-	<bean id="bindService" class="org.otherobjects.cms.binding.BindServiceImpl" scope="prototype">
-		<property name="daoService" ref="daoService" />
-	</bean>
-	<bean name="daoService" class="org.otherobjects.cms.dao.DaoServiceImpl">
-		<property name="typeService" ref="typeService" />
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-	<bean id="typeDefConfiguredValidator" class="org.otherobjects.cms.validation.TypeDefConfiguredValidator">
-		<property name="typeService" ref="typeService" />
-	</bean>
-	<bean id="validatorService" class="org.otherobjects.cms.validation.ValidatorServiceImpl">
-		<property name="defaultValidator" ref="typeDefConfiguredValidator" />
-	</bean>
+	<context:component-scan base-package="org.otherobjects.cms.dao" />
+	<context:component-scan base-package="otherobjects.cms.binding" />
+	<context:component-scan base-package="org.otherobjects.cms.types" />
+	<context:component-scan base-package="org.otherobjects.cms.validation" />
 	
 	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean" >
 	    <property name="converters">
 	        <list>
-	            <bean class="org.otherobjects.cms.types.convert.StringToTypeDefConverter" >
-	             	<property name="typeService" ref="typeService" />
-	            </bean>
+	            <bean class="org.otherobjects.cms.types.convert.StringToTypeDefConverter" />
 	        </list>
 	    </property>
 	</bean>

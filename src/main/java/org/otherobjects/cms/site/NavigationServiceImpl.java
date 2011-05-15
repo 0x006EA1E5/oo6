@@ -29,7 +29,7 @@ import org.springframework.util.Assert;
  * @author rich
  */
 
-@Service
+@Service("navigationService")
 @SuppressWarnings("unchecked")
 public class NavigationServiceImpl implements NavigationService, RootEventListener, InitializingBean
 {
@@ -297,7 +297,7 @@ public class NavigationServiceImpl implements NavigationService, RootEventListen
      * 
      * @return
      */
-    private List getSiteNodes()
+    private List<BaseNode> getSiteNodes()
     {
         // FIXME Need folder indicator
         UniversalJcrDao universalJcrDao = (UniversalJcrDao) this.daoService.getDao(BaseNode.class);

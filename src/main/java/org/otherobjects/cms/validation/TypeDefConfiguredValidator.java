@@ -11,6 +11,7 @@ import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.framework.OtherObjectsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -22,6 +23,7 @@ import org.springmodules.validation.valang.ValangValidator;
  * Validates objects using their TypeDef.
  *
  */
+@Component
 @SuppressWarnings("unchecked")
 public class TypeDefConfiguredValidator implements Validator
 {

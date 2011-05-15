@@ -26,7 +26,7 @@ import org.otherobjects.framework.OtherObjectsException;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.core.convert.ConversionService;
+import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.util.WebUtils;
@@ -44,6 +44,7 @@ import org.springframework.web.util.WebUtils;
  * 
  * It must be used prototype scoped when used as a Spring bean (as is intended).
  */
+@Service("bindService")
 @Scope("prototype")
 public class BindServiceImpl implements BindService
 {

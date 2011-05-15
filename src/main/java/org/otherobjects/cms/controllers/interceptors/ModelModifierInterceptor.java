@@ -1,5 +1,6 @@
 package org.otherobjects.cms.controllers.interceptors;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,11 +14,15 @@ import org.otherobjects.cms.views.FreeMarkerToolProvider;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-public class ModelModifierInterceptor extends HandlerInterceptorAdapter
-{
+public class ModelModifierInterceptor extends HandlerInterceptorAdapter {
+    
+    @Resource
     private DaoService daoService;
+    @Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
+    @Resource
     private FreeMarkerToolProvider freeMarkerToolProvider;
+    @Resource
     private PerformanceInfo performanceInfo;
 
     @Override

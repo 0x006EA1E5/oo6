@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns="http://www.springframework.org/schema/beans" 
 	xmlns:aop="http://www.springframework.org/schema/aop"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd ">
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation=
+	"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
+	<context:annotation-config />
+	
+	<context:component-scan base-package="org.otherobjects.cms.mail" />
+	
 	<!-- Mail -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="${otherobjects.mail.server}" />
 		<property name="port" value="25"></property>
 	</bean>
-	
-	
-	<bean id="mailService" class="org.otherobjects.cms.mail.MailService">
-		<property name="configuration" ref="freemarkerConfiguration" />
-		<property name="ooResourceLoader" ref="ooResourceLoader"></property>
-		<property name="mailSender" ref="mailSender" />
-	</bean>
+
 </beans>

@@ -1,43 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd ">
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<bean id="dbSchemaInitialiser" class="org.otherobjects.cms.bootstrap.DbSchemaInitialiser">
-		<property name="sessionFactoryBean" ref="&amp;sessionFactory"></property>
-	</bean>
+	<context:annotation-config />
+	<context:component-scan base-package="org.otherobjects.cms.bootstrap" />
 
 	<bean id="jackrabbitInitialiser" class="org.otherobjects.cms.bootstrap.JackrabbitInitialiser">
-		<property name="jcrSessionFactory" ref="jcrSessionFactory" />
 		<property name="nodeTypesConfig" value="classpath:otherobjects.resources/config/node-types.cnd" />
-	</bean>
-
-	<bean id="ooAdminUserCreator" class="org.otherobjects.cms.bootstrap.OtherObjectsAdminUserCreator">
-		<property name="userDao" ref="userDao"></property>
-		<property name="roleDao" ref="roleDao"></property>
-		<property name="passwordEncoder" ref="passwordEncoder"></property>
-		<property name="saltSource" ref="saltSource"></property>
 	</bean>
 
 	<bean id="jackrabbitPopulater" class="org.otherobjects.cms.bootstrap.JackrabbitPopulater">
 		<!-- TODO Need script array? Populated by site? -->
 		<property name="bootstrapScript" value="classpath:otherobjects.resources/setup.script" />
 		<property name="siteBootstrapScript" value="classpath:setup.script" />
-		<property name="universalJcrDao" ref="universalJcrDao" />
-		<property name="daoService" ref="daoService" />
-		<property name="resourceScanner" ref="resourceScanner" />
-		<property name="typeService" ref="typeService" />
 	</bean>
 
-	<bean id="resourceScanner" class="org.otherobjects.cms.util.ResourceScanner" />
-
-	<bean id="ooBootstrapper" class="org.otherobjects.cms.bootstrap.OoBootstrapper">
-		<property name="otherObjectsConfigurator" ref="otherObjectsConfigurator" />
-		<property name="dbSchemaInitialiser" ref="dbSchemaInitialiser" />
-		<property name="jackrabbitInitialiser" ref="jackrabbitInitialiser" />
-		<property name="otherObjectsAdminUserCreator" ref="ooAdminUserCreator" />
-		<property name="jackrabbitPopulater" ref="jackrabbitPopulater" />
-		<property name="userDao" ref="userDao" />
-		<property name="resourceScanner" ref="resourceScanner" />
-	</bean>
 </beans>

@@ -22,6 +22,7 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.SimpleApplicationEventMulticaster;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.stereotype.Component;
 
 /**
  * Simple event proxy that can be defined in the root application context and
@@ -36,6 +37,7 @@ import org.springframework.core.task.SimpleAsyncTaskExecutor;
  * @author joerg
  * 
  */
+@Component
 public class EventProxy extends SimpleApplicationEventMulticaster implements ApplicationListener<ApplicationEvent>
 {
     public EventProxy()

@@ -12,9 +12,11 @@ import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 /**
@@ -24,11 +26,12 @@ import org.springframework.util.Assert;
  * @author joerg
  *
  */
+@Component
 public class OoResourceLoader implements ResourceLoaderAware, InitializingBean
 {
     private final Logger logger = LoggerFactory.getLogger(OoResourceLoader.class);
 
-    @javax.annotation.Resource
+    @Autowired
     private OtherObjectsConfigurator otherObjectsConfigurator;
     private ResourceLoader resourceLoader;
     private OoResourceMetaDataHelper metaDataHelper = new OoResourceMetaDataHelper();

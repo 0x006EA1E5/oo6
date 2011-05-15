@@ -8,8 +8,11 @@ import org.otherobjects.cms.dao.GenericDao;
 import org.otherobjects.cms.jcr.UniversalJcrDao;
 import org.otherobjects.cms.model.BaseNode;
 import org.otherobjects.cms.types.TypeDef;
+import org.springframework.stereotype.Component;
 
 @SuppressWarnings("unchecked")
+
+@Component
 public class JackrabbitDataStore implements DataStore
 {
     @Resource

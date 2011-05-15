@@ -84,7 +84,7 @@ public class CmsImage extends BaseNode
     public Url getOoUrl()
     {
         String publicDataUrl = OtherObjectsConfigurator.getOtherObjectsConfigurator().getProperty(
-        		"site.public.data.url");
+                "site.public.data.url");
         return new Url(publicDataUrl + "/images/" + ORIGINALS_PATH + getCode());
     }
 

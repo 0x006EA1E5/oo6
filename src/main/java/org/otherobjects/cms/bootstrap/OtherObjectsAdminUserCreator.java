@@ -3,6 +3,8 @@ package org.otherobjects.cms.bootstrap;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.otherobjects.cms.model.Role;
 import org.otherobjects.cms.model.RoleDao;
 import org.otherobjects.cms.model.User;
@@ -13,8 +15,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class OtherObjectsAdminUserCreator
 {
     private final Logger logger = LoggerFactory.getLogger(OtherObjectsAdminUserCreator.class);
@@ -23,9 +26,13 @@ public class OtherObjectsAdminUserCreator
     public static final String DEFAULT_EDITOR_ROLE_NAME = "ROLE_EDITOR";
     private static final int GENERATED_PASSWORD_LENGTH = 6;
 
+    @Resource
     private UserDao userDao;
+    @Resource
     private RoleDao roleDao;
+    @Resource
     private PasswordEncoder passwordEncoder;
+    @Resource
     private SaltSource saltSource;
     private String generatedAdminPassword;
 

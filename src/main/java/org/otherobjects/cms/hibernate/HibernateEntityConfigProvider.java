@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Resource;
 import javax.persistence.Entity;
 
 import org.otherobjects.framework.config.OtherObjectsConfigurator;
@@ -14,12 +15,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
-@SuppressWarnings("unchecked")
 public class HibernateEntityConfigProvider implements InitializingBean
 {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private AnnotatedClassesScanner scanner;
+    @Resource
+    private AnnotatedClassesScanner annotatedClassesScanner;
+    
+    @Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
 
     private Set<String> annotatedClasses;
@@ -27,12 +30,12 @@ public class HibernateEntityConfigProvider implements InitializingBean
 
     public void setScanner(AnnotatedClassesScanner scanner)
     {
-        this.scanner = scanner;
+        this.annotatedClassesScanner = scanner;
     }
 
     public void afterPropertiesSet() throws Exception
     {
-        Assert.notNull(scanner, "class path scanner must be set");
+        Assert.notNull(annotatedClassesScanner, "class path scanner must be set");
         Assert.notNull(otherObjectsConfigurator, "OtherObjectsConfigurator must be set");
         List<String> packages = new ArrayList<String>();
         packages.add(otherObjectsConfigurator.getProperty("otherobjects.model.packages"));
@@ -42,7 +45,7 @@ public class HibernateEntityConfigProvider implements InitializingBean
 
         logger.info("Scanning the following packages: " + StringUtils.join(annotatedPackages, ','));
 
-        annotatedClasses = scanner.findAnnotatedClasses(annotatedPackages, Entity.class);
+        annotatedClasses = annotatedClassesScanner.findAnnotatedClasses(annotatedPackages, Entity.class);
 
         logger.info("Found the following entities: " + StringUtils.join(annotatedClasses, ','));
     }

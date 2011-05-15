@@ -1,12 +1,17 @@
 package org.otherobjects.cms.bootstrap;
 
+import javax.annotation.Resource;
+
 import org.otherobjects.cms.util.LoggerUtils;
 import org.springframework.orm.hibernate3.LocalSessionFactoryBean;
+import org.springframework.stereotype.Component;
 
 import ch.qos.logback.classic.Level;
 
-public class DbSchemaInitialiser
-{
+@Component
+public class DbSchemaInitialiser {
+    
+    @Resource
     private LocalSessionFactoryBean sessionFactoryBean;
 
     public void setSessionFactoryBean(LocalSessionFactoryBean sessionFactoryBean)

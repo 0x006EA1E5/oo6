@@ -50,8 +50,9 @@ import org.springframework.util.Assert;
  * 
  * @author rich
  */
-public class TypeServiceMapperImpl implements Mapper, InitializingBean
-{
+public class TypeServiceMapperImpl implements Mapper, InitializingBean {
+    
+    @javax.annotation.Resource
     private TypeService typeService;
     private MappingDescriptor mappingDescriptor;
     private Mapper staticMapper;
@@ -324,8 +325,7 @@ public class TypeServiceMapperImpl implements Mapper, InitializingBean
     *
     * @see org.apache.jackrabbit.ocm.mapper.Mapper#getClassDescriptorByClass(java.lang.Class)
     */
-    @SuppressWarnings("unchecked")
-    public ClassDescriptor getClassDescriptorByClass(Class clazz)
+    public ClassDescriptor getClassDescriptorByClass(@SuppressWarnings("rawtypes") Class clazz)
     {
         // Try config file mappings first
         try

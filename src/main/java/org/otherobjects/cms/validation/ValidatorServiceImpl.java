@@ -1,5 +1,8 @@
 package org.otherobjects.cms.validation;
 
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
 import org.springframework.validation.Validator;
 
 /**
@@ -8,8 +11,10 @@ import org.springframework.validation.Validator;
  * @author rich
  *
  */
-public class ValidatorServiceImpl implements ValidatorService
-{
+@Service("validatorService")
+public class ValidatorServiceImpl implements ValidatorService {
+    
+    @Resource
     private Validator defaultValidator;
 
     public Validator getValidator(Object objectToValidate)

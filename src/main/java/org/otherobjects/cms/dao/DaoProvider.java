@@ -1,11 +1,16 @@
 package org.otherobjects.cms.dao;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
-public class DaoProvider implements ApplicationContextAware
-{
+@Component
+public class DaoProvider implements ApplicationContextAware {
+    
+    @Resource
     private DaoService daoService;
     
     private ApplicationContext applicationContext;

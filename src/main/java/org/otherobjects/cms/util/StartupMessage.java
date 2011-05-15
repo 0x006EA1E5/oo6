@@ -1,29 +1,37 @@
 package org.otherobjects.cms.util;
 
+import javax.annotation.Resource;
+
 import org.otherobjects.cms.bootstrap.OtherObjectsAdminUserCreator;
 import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.Component;
 
 /**
  * Displays the OTHERobjects startup message if all beans have been initialised successfully.
  * 
  * @author rich
  */
-public class StartupMessage implements ApplicationListener<ApplicationEvent>
+@Component
+public class StartupMessage implements ApplicationListener<ContextRefreshedEvent>
 {
     private final Logger logger = LoggerFactory.getLogger(StartupMessage.class);
 
+    @Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
-    private OtherObjectsAdminUserCreator ooAdminUserCreator;
+    
+    @Resource
+    private OtherObjectsAdminUserCreator otherObjectsAdminUserCreator;
 
-    public void onApplicationEvent(ApplicationEvent e)
+    public void onApplicationEvent(ContextRefreshedEvent e)
     {
         // Only do for root context refreshes
-        if (e instanceof ContextRefreshedEvent) // && ((ContextRefreshedEvent)e).getApplicationContext().getParent() == null) 
+        if (((ContextRefreshedEvent)e).getApplicationContext().getParent() == null) 
         {
             this.logger.info("**************************************************************");
             this.logger.info("**************************************************************");
@@ -48,10 +56,10 @@ public class StartupMessage implements ApplicationListener<ApplicationEvent>
                 this.logger.warn("OtherObjectsConfigurator not correctly created.");
             this.logger.info("");
 
-            if (ooAdminUserCreator != null && ooAdminUserCreator.getGeneratedAdminPassword() != null)
+            if (otherObjectsAdminUserCreator != null && otherObjectsAdminUserCreator.getGeneratedAdminPassword() != null)
             {
                 this.logger.info("Please visit /otherobjects/setup to configure admin user");
-                this.logger.info("Temporary admin password: " + ooAdminUserCreator.getGeneratedAdminPassword());
+                this.logger.info("Temporary admin password: " + otherObjectsAdminUserCreator.getGeneratedAdminPassword());
                 this.logger.info("");
             }
 
@@ -69,6 +77,6 @@ public class StartupMessage implements ApplicationListener<ApplicationEvent>
 
     public void setOoAdminUserCreator(OtherObjectsAdminUserCreator ooAdminUserCreator)
     {
-        this.ooAdminUserCreator = ooAdminUserCreator;
+        this.otherObjectsAdminUserCreator = ooAdminUserCreator;
     }
 }

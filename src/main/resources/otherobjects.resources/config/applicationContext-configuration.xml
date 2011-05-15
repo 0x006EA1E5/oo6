@@ -1,14 +1,21 @@
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:aop="http://www.springframework.org/schema/aop"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
-http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-http://www.springframework.org/schema/context
-http://www.springframework.org/schema/context/spring-context-2.5.xsd
-http://www.springframework.org/schema/aop
-http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+	xsi:schemaLocation=
+		"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+	
 	<context:annotation-config />
+
+	<context:component-scan base-package="org.otherobjects.cms.discovery" />
+	<context:component-scan base-package="org.otherobjects.cms.io" />
+	<context:component-scan base-package="org.otherobjects.cms.util" />
+	<context:component-scan base-package="org.otherobjects.cms.events" />
+	<context:component-scan base-package="org.otherobjects.cms.config" />
+	
 	<bean name="singletonBeanLocator" class="org.otherobjects.framework.SingletonBeanLocator" />
-	<bean id="annotatedClassesScanner" class="org.otherobjects.cms.discovery.AnnotatedClassesScannerImpl" />
 
 	<!-- For properties -->
 	<bean id="otherObjectsConfigurator" class="org.otherobjects.framework.config.OtherObjectsConfigurator">
@@ -49,15 +56,11 @@ http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 		<property name="customEditors">
 			<map>
 				<entry key="org.otherobjects.cms.io.OoResource">
-					<bean class="org.otherobjects.cms.io.OoResourceEditor">
-						<property name="ooResourceLoader" ref="ooResourceLoader" />
-					</bean>
+					<bean class="org.otherobjects.cms.io.OoResourceEditor" />
 				</entry>
 			</map>
 		</property>
 	</bean>
-	<bean id="eventLogger" class="org.otherobjects.cms.events.EventLogger" />
-	<bean id="eventProxy" class="org.otherobjects.cms.events.EventProxy" />
 	
 	<!-- Performance Monitoring -->
 	<aop:aspectj-autoproxy />
@@ -70,6 +73,4 @@ http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 		</aop:aspect>
 	</aop:config>
 	
-	<!-- Image resizing -->
-	<bean id="imageResizer" class="org.otherobjects.cms.util.ImageMagickResizer" />
 </beans>

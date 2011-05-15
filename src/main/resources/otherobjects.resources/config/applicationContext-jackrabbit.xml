@@ -40,9 +40,8 @@
 	<!-- Mapping -->
 	<bean id="jcrMappingDescriptor" class="org.otherobjects.cms.jcr.TypeServiceMapperImpl">
 		<constructor-arg index="0" value="classpath:otherobjects.resources/config/jcr-mapping.xml" />
-		<property name="typeService" ref="typeService" />
 	</bean>
-<!-- 	<bean id="jcrMappingTemplate" class="org.apache.jackrabbit.ocm.spring.JcrMappingTemplate"> -->
+
 	<bean id="jcrMappingTemplate" class="org.apache.jackrabbit.ocm.spring.JcrMappingTemplate">
 		<constructor-arg index="0" ref="jcrSessionFactory" />
 		<constructor-arg index="1" ref="jcrMappingDescriptor" />
@@ -60,7 +59,6 @@
 		<property name="target">
 			<bean class="org.otherobjects.cms.dao.UniversalJcrDaoJackrabbit">
 				<property name="jcrMappingTemplate" ref="jcrMappingTemplate" />
-				<property name="typeService" ref="typeService" />
 				<property name="sessionFactory" ref="jcrSessionFactory" />
 				<!-- FIXME Temp disabled for testing <property name="validator" ref="typeDefConfiguredValidator" /> -->
 				
@@ -68,6 +66,7 @@
 			</bean>
 		</property>
 	</bean>
+	
 	<bean id="folderDao" parent="baseTransactionProxy">
 		<property name="target">
 			<bean class="org.otherobjects.cms.model.FolderDaoImpl">

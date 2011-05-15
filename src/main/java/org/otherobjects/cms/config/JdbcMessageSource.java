@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.support.AbstractMessageSource;
@@ -43,8 +45,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * @author rich
  * @author Olivier Jolly
  */
-public class JdbcMessageSource extends AbstractMessageSource implements InitializingBean
-{
+public class JdbcMessageSource extends AbstractMessageSource implements InitializingBean {
+    
     private static class CacheKey
     {
         private String code;
@@ -67,7 +69,8 @@ public class JdbcMessageSource extends AbstractMessageSource implements Initiali
             return this.code.equals(ck.code) && this.locale.equals(ck.locale) ;
         }
     }
-
+    
+    @Resource
     private JdbcTemplate jdbcTemplate;
 
     private String sqlStatement;

@@ -19,12 +19,17 @@ package org.otherobjects.cms.config;
 import java.util.List;
 import java.util.Locale;
 
+import javax.annotation.Resource;
+
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.NoSuchMessageException;
+import org.springframework.stereotype.Component;
 
-public class CompositeMessageSource implements MessageSource
-{
+@Component
+public class CompositeMessageSource implements MessageSource {
+    
+    @Resource
     private List<MessageSource> messageSources;
 
     public String getMessage(MessageSourceResolvable arg0, Locale arg1) throws NoSuchMessageException

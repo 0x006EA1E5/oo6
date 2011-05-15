@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.StringUtils;
 import org.otherobjects.cms.io.OoResource;
 import org.otherobjects.cms.model.BaseComponent;
@@ -21,6 +23,7 @@ import org.otherobjects.framework.OtherObjectsException;
 import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.OrderComparator;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 /**
@@ -28,8 +31,10 @@ import org.springframework.util.Assert;
  * 
  * @author rich
  */
+@Component
 public class AnnotationBasedTypeDefBuilder implements TypeDefBuilder, InitializingBean
 {
+    @Resource
     private OtherObjectsConfigurator otherObjectsConfigurator;
 
     public TypeDef getTypeDef(String type) throws Exception

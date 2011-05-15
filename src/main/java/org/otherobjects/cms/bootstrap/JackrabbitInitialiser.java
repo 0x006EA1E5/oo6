@@ -42,6 +42,7 @@ public class JackrabbitInitialiser
 {
     private final Logger logger = LoggerFactory.getLogger(JackrabbitInitialiser.class);
 
+    @javax.annotation.Resource
     private JcrSessionFactory jcrSessionFactory;
     private Resource nodeTypesConfig;
 

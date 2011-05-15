@@ -2,6 +2,8 @@ package org.otherobjects.cms.dao;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.jackrabbit.ocm.query.Filter;
 import org.apache.jackrabbit.ocm.query.Query;
 import org.apache.jackrabbit.ocm.query.QueryManager;
@@ -17,8 +19,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 
-public class UniversalJcrDaoJackrabbit extends GenericJcrDaoJackrabbit<BaseNode> implements UniversalJcrDao, ApplicationContextAware
-{
+public class UniversalJcrDaoJackrabbit extends GenericJcrDaoJackrabbit<BaseNode> 
+        implements UniversalJcrDao, ApplicationContextAware {
+    
+    @Resource
     private TypeService typeService;
     
     public UniversalJcrDaoJackrabbit()

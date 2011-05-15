@@ -171,10 +171,10 @@ public class Url
 
         if (isSsl())
             return Integer.parseInt(OtherObjectsConfigurator.getOtherObjectsConfigurator().getProperty(
-            		OtherObjectsConfigurator.DEFAULT_SECURE_PORT_KEY));
+                    OtherObjectsConfigurator.DEFAULT_SECURE_PORT_KEY));
         else
             return Integer.parseInt(OtherObjectsConfigurator.getOtherObjectsConfigurator().getProperty(
-            		OtherObjectsConfigurator.DEFAULT_PORT_KEY));
+                    OtherObjectsConfigurator.DEFAULT_PORT_KEY));
     }
 
     private HttpServletRequest getOngoingRequest()

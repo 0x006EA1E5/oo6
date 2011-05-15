@@ -11,7 +11,7 @@ import org.otherobjects.framework.SingletonBeanLocator;
 
 import flexjson.JSON;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("serial")
 @Type(labelProperty="label")
 public class DbFolder extends Folder
 {
@@ -32,7 +32,7 @@ public class DbFolder extends Folder
         super.setCode(code);
     }
 
-    public List getAllAllowedTypes()
+    public List<TypeDef> getAllAllowedTypes()
     {
         return getAllowedTypes();
     }
@@ -57,7 +57,7 @@ public class DbFolder extends Folder
         return types;
     }
 
-    public void setAllowedTypes(List allowedTypes)
+    public void setAllowedTypes(List<String> allowedTypes)
     {
         // Not relevant for Database backed folders
     }

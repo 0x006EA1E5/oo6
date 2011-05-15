@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.persistence.Entity;
 
 import org.apache.commons.lang.StringUtils;
@@ -15,13 +16,16 @@ import org.otherobjects.framework.OtherObjectsException;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.stereotype.Service;
 
-@SuppressWarnings("unchecked")
+@Service("daoService")
 public class DaoServiceImpl implements DaoService, BeanFactoryAware
 {
     private static final String UNIVERSAL_JCR_DAO_KEY = "universalJcrDao";
     private Map<String, GenericDao> daoMap = new HashMap<String, GenericDao>();
     private BeanFactory beanFactory;
+    
+    @Resource
     private TypeService typeService;
     private SessionFactory sessionFactory;
 

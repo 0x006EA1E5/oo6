@@ -8,6 +8,7 @@ import org.otherobjects.cms.util.StringUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.stereotype.Component;
 
 /**
  * Thin wrapper around Spring's {@link ClassPathScanningCandidateComponentProvider} that 'abuses' it to find the names of classes bearing arbitrary
@@ -16,6 +17,7 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
  * @author joerg
  *
  */
+@Component("annotatedClassesScanner")
 public class AnnotatedClassesScannerImpl implements AnnotatedClassesScanner
 {
 

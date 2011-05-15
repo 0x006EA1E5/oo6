@@ -24,6 +24,7 @@ import org.otherobjects.cms.types.TypeService;
 import org.otherobjects.framework.OtherObjectsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * Scans resources on disk and updates their meta data in the data store.
@@ -33,6 +34,7 @@ import org.slf4j.LoggerFactory;
  * @author rich
  *
  */
+@Component
 public class ResourceScanner
 {
     private final Logger logger = LoggerFactory.getLogger(ResourceScanner.class);

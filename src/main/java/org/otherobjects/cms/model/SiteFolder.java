@@ -15,6 +15,7 @@ import org.otherobjects.framework.SingletonBeanLocator;
 
 import flexjson.JSON;
 
+@SuppressWarnings("serial")
 @Type(labelProperty = "label")
 public class SiteFolder extends Folder
 {

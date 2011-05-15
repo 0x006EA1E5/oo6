@@ -13,12 +13,14 @@ import org.otherobjects.framework.OtherObjectsException;
 import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * TODO Are paths an issue on Windows/Linux?
  * 
  * <p><strong>Class depends on an installed version of ImageMagick</strong>
  */
+@Component
 public class ImageMagickResizer implements ImageResizer
 {
     private static final int DEFAULT_QUALITY = 75;
