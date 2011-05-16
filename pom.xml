@@ -218,6 +218,19 @@
 					<wtpversion>1.5</wtpversion>
 				</configuration>
 			</plugin> -->
+			
+			<!-- Make 'clean' goal delete private_data folder (created by test) -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>private_data</directory>
+						</fileset>
+					</filesets>
+				</configuration>
+        	</plugin>
 		</plugins>
 		<resources>
 			<resource>
