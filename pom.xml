@@ -5,7 +5,7 @@
 	<artifactId>otherobjects</artifactId>
 	<name>OTHERobjects CMS</name>
 	<packaging>jar</packaging>
-	<version>0.5.12</version>
+	<version>0.6.0-SNAPSHOT</version>
 	<description>OTHERobjects Content Management System.</description>
 	<inceptionYear>2007</inceptionYear>
 	
@@ -130,9 +130,8 @@
 		-->
 	</pluginRepositories>
 	<scm>
-		<connection>scm:svn:svn+ssh://svn.otherobjects.org/data/svn/repos-ng/otherobjects/tags/otherobjects-0.5.12</connection>
-		<developerConnection>scm:svn:svn+ssh://svn.otherobjects.org/data/svn/repos-ng/otherobjects/tags/otherobjects-0.5.12</developerConnection>
-		<url>http://svn.otherobjects.org/viewvc/otherobjects/tags/otherobjects-0.5.12</url>
+		<connection>scm:git:git://github.com/magic-teacup/oo6.git</connection>
+		<url>https://github.com/magic-teacup/oo6</url>
 	</scm>
 	
 	<!-- *********************************************************************************************************** -->
