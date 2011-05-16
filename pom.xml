@@ -220,10 +220,40 @@
 				</configuration>
 			</plugin> -->
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.jsp</include>
+					<include>**/*.xsl</include>
+                </includes>
+            </resource>
+		</resources> 
+		<testResources>
+			<!-- include this dir -->
+			<testResource>
+				<directory>${project.basedir}/src/test/java</directory>
+				<!-- don't copy java files -->
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</testResource>
+			
+			<!-- As we are specifying testResources we override any defaults, so now we need to make sure we include 
+			/src/test/resources. This is added last so it takes highest precedence -->
+			<testResource>
+				<directory>${project.basedir}/src/test/resources</directory>
+			</testResource>
+		</testResources>
 		<!--
-			<resources> <resource> <directory>src/main/resources</directory> <filtering>false</filtering> </resource> </resources> <testResources> <testResource> <directory>src/test/resources</directory>
-			<filtering>true</filtering> </testResource> <testResource> <directory>src/main/webapp</directory> <filtering>true</filtering> <includes> <include>**/*.xml</include> </includes> </testResource>
-			</testResources>
 		-->
 	</build>
 	<reporting>
