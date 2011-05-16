@@ -19,7 +19,7 @@
 
 	<mvc:annotation-driven/>
 
-	<context:component-scan base-package="org.otherobjects.framework.config" />
-	<context:component-scan base-package="org.otherobjects.cms.util" />
+	<bean class="org.otherobjects.framework.config.OtherObjectsConfigurator" />
+	<bean class="org.otherobjects.cms.util.StartupMessage" />
 	
 </beans>

@@ -1,13 +1,21 @@
 package org.otherobjects.cms.jcr;
 
+import static org.junit.Assert.*;
+
 import java.util.ArrayList;
 
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.otherobjects.cms.binding.TestComponentObject;
 import org.otherobjects.cms.binding.TestObject;
 import org.otherobjects.cms.binding.TestReferenceObject;
 import org.otherobjects.cms.dao.GenericJcrDao;
 import org.otherobjects.cms.model.SiteFolder;
 import org.otherobjects.framework.SingletonBeanLocator;
+import org.otherobjects.framework.config.OtherObjectsConfigurator;
 
 @SuppressWarnings("unchecked")
 // FIXME Test for no results in all these mehods
@@ -16,11 +24,15 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
 {
     protected GenericJcrDao genericJcrDao;
 
-    @Override
-    protected void setUp() throws Exception
+    
+    @Before
+    public void setUp() throws Exception
     {
+        if(System.getProperty(OtherObjectsConfigurator.ENVIRONMENT_SYSPROP_KEY) == null) {
+            System.setProperty(OtherObjectsConfigurator.ENVIRONMENT_SYSPROP_KEY, "test");
+        }
         // FIXME Need to clear down any data in db
-        super.setUp();
+        
         typeService.registerType(typeDefBuilder.getTypeDef(TestComponentObject.class));
         typeService.registerType(typeDefBuilder.getTypeDef(TestReferenceObject.class));
         typeService.registerType(typeDefBuilder.getTypeDef(TestObject.class));
@@ -28,11 +40,11 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
         SingletonBeanLocator.registerTestBean("typeService", typeService);
     }
 
-    @Override
-    protected void tearDown() throws Exception
+    @After
+    public void tearDown() throws Exception
     {
         SingletonBeanLocator.registerTestBean("typeSevice", null);
-        super.tearDown();
+        
     }
 
     private TestObject createTestObject(String path, String code, String name)
@@ -56,6 +68,7 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
         return (SiteFolder) genericJcrDao.save(folder);
     }
 
+    @Test
     public void testSave() throws Exception
     {
         TestObject t1 = new TestObject();
@@ -73,6 +86,7 @@ public class GenericJcrDaoJackrabbitTest extends BaseJcrTestCase
         assertEquals(t1.getName(), t1s.getName());
     }
 
+    @Test
     public void testSaveComplex() throws Exception
     {
         TestObject t1 = new TestObject();

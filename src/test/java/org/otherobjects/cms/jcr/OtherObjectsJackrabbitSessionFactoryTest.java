@@ -1,11 +1,15 @@
 package org.otherobjects.cms.jcr;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
 
 import javax.jcr.Session;
 import javax.jcr.Workspace;
 
 import org.apache.jackrabbit.core.WorkspaceImpl;
+import org.junit.Before;
+import org.junit.Test;
 import org.otherobjects.cms.authentication.MockAuthenticationManager;
 import org.otherobjects.cms.bootstrap.OtherObjectsAdminUserCreator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +25,10 @@ public class OtherObjectsJackrabbitSessionFactoryTest extends BaseJcrTestCase
     @Autowired
     private OtherObjectsJackrabbitSessionFactory jcrSessionFactory;
 
-    @Override
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
+        
         Session session = jcrSessionFactory.getSession(null);
         boolean liveWorkspaceCreated = false;
         for (String wsp : session.getWorkspace().getAccessibleWorkspaceNames())
@@ -42,6 +46,7 @@ public class OtherObjectsJackrabbitSessionFactoryTest extends BaseJcrTestCase
         }
     }
 
+    @Test
     public void testAdminGetsEditSession() throws Exception
     {
         // mock admin login
@@ -52,6 +57,7 @@ public class OtherObjectsJackrabbitSessionFactoryTest extends BaseJcrTestCase
         SecurityContextHolder.clearContext();
     }
 
+    @Test
     public void testAnonymousUserGetsLiveSession() throws Exception
     {
         AnonymousAuthenticationProvider anonymousAuthenticationProvider = new AnonymousAuthenticationProvider();
