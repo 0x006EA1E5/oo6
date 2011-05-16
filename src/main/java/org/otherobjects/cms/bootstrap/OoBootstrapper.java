@@ -7,15 +7,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import javax.annotation.Resource;
-
 import org.apache.commons.lang.StringUtils;
-import org.otherobjects.framework.OtherObjectsException;
-import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.otherobjects.cms.model.User;
 import org.otherobjects.cms.model.UserDao;
 import org.otherobjects.cms.util.ResourceScanner;
+import org.otherobjects.framework.OtherObjectsException;
+import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,18 +31,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class OoBootstrapper implements InitializingBean {
     
-    @Resource
+    @Autowired
     private OtherObjectsConfigurator otherObjectsConfigurator;
-    @Resource
+    @Autowired(required = false)
     private DbSchemaInitialiser dbSchemaInitialiser;
-    @Resource
+    @Autowired
     private JackrabbitInitialiser jackrabbitInitialiser;
-    @Resource
+    @Autowired(required = false)
     private OtherObjectsAdminUserCreator otherObjectsAdminUserCreator;
-    @Resource
+    @Autowired(required = false)
     private JackrabbitPopulater jackrabbitPopulater;
     //private ResourceScanner resourceScanner;
-    @Resource
+    @Autowired(required = false)
     private UserDao userDao;
 
     private static final String BOOTSTRAP_PROPERTIES_FILENAME = "/bootstrap.properties";
@@ -123,6 +122,10 @@ public class OoBootstrapper implements InitializingBean {
             // Save properties
             storeProperties();
 
+        } else {
+            // Defaults (for test)
+            boostrapProperties.setProperty(DB_SCHEMA_VERSION_KEY, "1");
+            boostrapProperties.setProperty(JCR_SCHEMA_VERSION_KEY, "1");
         }
 
         // Copy properties to main configurator

@@ -82,6 +82,6 @@ public class StringUtils extends org.apache.commons.lang.StringUtils
     }
 
     public static String getExtension(String string) {
-    	return substringAfterLast(string, ".");
+        return substringAfterLast(string, ".");
     }
 }

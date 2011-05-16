@@ -1,13 +1,10 @@
 package org.otherobjects.cms.util;
 
-import javax.annotation.Resource;
-
 import org.otherobjects.cms.bootstrap.OtherObjectsAdminUserCreator;
 import org.otherobjects.framework.config.OtherObjectsConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -22,10 +19,10 @@ public class StartupMessage implements ApplicationListener<ContextRefreshedEvent
 {
     private final Logger logger = LoggerFactory.getLogger(StartupMessage.class);
 
-    @Resource
+    @Autowired
     private OtherObjectsConfigurator otherObjectsConfigurator;
     
-    @Resource
+    @Autowired(required = false)
     private OtherObjectsAdminUserCreator otherObjectsAdminUserCreator;
 
     public void onApplicationEvent(ContextRefreshedEvent e)
